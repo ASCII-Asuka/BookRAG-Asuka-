@@ -4,17 +4,31 @@ import json
 import os
 from pathlib import Path
 import logging
+from collections import defaultdict
 
 # os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
 
-from mineru.cli.common import (
-    convert_pdf_bytes_to_bytes_by_pypdfium2,
-    read_fn,
-)
+from mineru.cli.common import read_fn
+
+try:
+    from mineru.cli.common import convert_pdf_bytes_to_bytes_by_pypdfium2
+except ImportError:
+    from mineru.cli.common import (
+        convert_pdf_bytes_to_bytes as convert_pdf_bytes_to_bytes_by_pypdfium2,
+    )
+
 from mineru.data.data_reader_writer import FileBasedDataWriter
 from mineru.utils.enum_class import MakeMode
 from mineru.backend.vlm.vlm_analyze import doc_analyze as vlm_doc_analyze
-from mineru.backend.pipeline.pipeline_analyze import doc_analyze as pipeline_doc_analyze
+
+try:
+    from mineru.backend.pipeline.pipeline_analyze import doc_analyze as pipeline_doc_analyze
+except ImportError:
+    pipeline_doc_analyze = None
+    from mineru.backend.pipeline.pipeline_analyze import (
+        doc_analyze_streaming as pipeline_doc_analyze_streaming,
+    )
+
 from mineru.utils.draw_bbox import draw_layout_bbox
 from mineru.backend.pipeline.pipeline_middle_json_mkcontent import (
     union_make as pipeline_union_make,
@@ -56,7 +70,7 @@ def do_parse(
     )
     image_dir = str(os.path.basename(local_image_dir))
 
-    if backend == "pipeline":
+    if backend == "pipeline" and pipeline_doc_analyze is not None:
         infer_results, all_image_lists, all_pdf_docs, lang_list, ocr_enabled_list = (
             pipeline_doc_analyze(
                 [new_pdf_bytes],
@@ -83,6 +97,32 @@ def do_parse(
             p_formula_enable,
         )
 
+        pdf_info = middle_json["pdf_info"]
+        md_content_str = pipeline_union_make(pdf_info, MakeMode.MM_MD, image_dir)
+        content_list = pipeline_union_make(pdf_info, MakeMode.CONTENT_LIST, image_dir)
+
+    elif backend == "pipeline":
+        parsed_result = {}
+
+        def on_doc_ready(doc_index, model_list, middle_json, ocr_enable):
+            parsed_result["middle_json"] = middle_json
+            parsed_result["model_list"] = model_list
+            parsed_result["ocr_enable"] = ocr_enable
+
+        pipeline_doc_analyze_streaming(
+            [new_pdf_bytes],
+            [image_writer],
+            [p_lang],
+            on_doc_ready,
+            parse_method=parse_method,
+            formula_enable=p_formula_enable,
+            table_enable=p_table_enable,
+        )
+
+        if "middle_json" not in parsed_result:
+            raise RuntimeError("MinerU pipeline did not return parsed PDF content.")
+
+        middle_json = parsed_result["middle_json"]
         pdf_info = middle_json["pdf_info"]
         md_content_str = pipeline_union_make(pdf_info, MakeMode.MM_MD, image_dir)
         content_list = pipeline_union_make(pdf_info, MakeMode.CONTENT_LIST, image_dir)
@@ -194,12 +234,23 @@ def merge_middle_content(
         para_blocks = info.get("para_blocks", [])
         middle_json_para_list.extend(para_blocks)
     if len(middle_json_para_list) != len(content_list):
-        log.error(
-            f"Error: The number of items in middle_json ({len(middle_json_para_list)}) does not match the number of content items ({len(content_list)})."
+        log.warning(
+            f"The number of items in middle_json ({len(middle_json_para_list)}) does not match the number of content items ({len(content_list)}). "
+            "Falling back to lightweight middle_json blocks built from content_list."
         )
-        raise ValueError(
-            f"The number of items in middle_json ({len(middle_json_para_list)}) does not match the number of content items ({len(content_list)})."
-        )
+        page_counters = defaultdict(int)
+        middle_json_para_list = []
+        for content in content_list:
+            page_idx = content.get("page_idx", -1)
+            middle_block = {
+                "bbox": content.get("bbox", []),
+                "index": page_counters[page_idx],
+                "type": content.get("type", ""),
+            }
+            if "text_level" in content:
+                middle_block["level"] = content["text_level"]
+            page_counters[page_idx] += 1
+            middle_json_para_list.append(middle_block)
 
     res_pdf_info_list = []
     for i in range(len(content_list)):

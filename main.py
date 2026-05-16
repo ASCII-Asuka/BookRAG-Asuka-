@@ -21,6 +21,18 @@ from Core.provider.TokenTracker import TokenTracker
 log = logging.getLogger(__name__)  # Get logger for main
 
 
+def redact_secrets(obj):
+    """Return a copy of nested config data with secret values masked."""
+    if isinstance(obj, dict):
+        return {
+            key: "***REDACTED***" if "api_key" in key.lower() else redact_secrets(value)
+            for key, value in obj.items()
+        }
+    if isinstance(obj, list):
+        return [redact_secrets(item) for item in obj]
+    return obj
+
+
 def create_args():
     """
     Configures the command-line arguments for the project.
@@ -206,7 +218,7 @@ def setup_logging(save_path: str, config_to_log: SystemConfig):
     log.info(f"Logging initialized. Log file will be saved to: {log_file}")
 
     # Prettify the config output using yaml.dump
-    config_dict = config_to_log.model_dump()
+    config_dict = redact_secrets(config_to_log.model_dump())
     config_yaml_string = yaml.dump(
         config_dict, allow_unicode=True, default_flow_style=False
     )
@@ -339,7 +351,7 @@ def main():
                 # For indexing, save the general run_config.yaml
                 config_snapshot_path = output_full_path / "run_config.yaml"
                 with open(config_snapshot_path, "w", encoding="utf-8") as f:
-                    yaml.dump(current_config.model_dump(), f, allow_unicode=True)
+                    yaml.dump(redact_secrets(current_config.model_dump()), f, allow_unicode=True)
                 log.info(f"  - Saved index config snapshot to: {config_snapshot_path}")
 
                 try:
@@ -359,7 +371,7 @@ def main():
                 config_snapshot_path = output_full_path / config_snapshot_filename
 
                 with open(config_snapshot_path, "w", encoding="utf-8") as f:
-                    yaml.dump(current_config.model_dump(), f, allow_unicode=True)
+                    yaml.dump(redact_secrets(current_config.model_dump()), f, allow_unicode=True)
                 log.info(f"  - Saved RAG config snapshot to: {config_snapshot_path}")
 
                 dataset_name = dataset_cfg.dataset_name

@@ -1,0 +1,74 @@
+# Local smoke-test configuration for running one PDF through the lightest path.
+# Replace llm.api_base/api_key/model_name with a reachable OpenAI-compatible endpoint.
+# On Windows, prefer: $env:MINERU_MODEL_SOURCE='modelscope'
+
+pdf_path: D:/Else/Study/git/else/BookRAG-Asuka-/BOOKRAG_VLDB_2026_full.pdf
+save_path: D:/Else/Study/git/else/BookRAG-Asuka-/runs/smoke/bookrag-paper
+
+llm:
+  model_name: Qwen/Qwen3-VL-8B-Instruct
+  api_key: sk-pgnrgwfsncfirfqxxgtbqbxwadjtaxlqppzfllbbegaktwzy
+  api_base: https://api.siliconflow.cn/v1
+  backend: openai
+  max_tokens: 5000
+  temperature: 0.1
+  frequency_penalty: 0.0
+  presence_penalty: 0.0
+  max_workers: 1
+
+vlm:
+  model_name: qwen2.5vl:6k
+  api_key: openai
+  api_base: http://localhost:11434
+  temperature: 0.1
+  max_tokens: 6000
+  backend: ollama
+
+mineru:
+  backend: pipeline
+  method: auto
+  server_url: http://127.0.0.1:30000
+  lang: en
+
+tree:
+  node_keywords: true
+  node_summary: true
+  use_vlm: false
+
+graph:
+  extractor_type: "llm"
+  local_model_name: "en_core_web_sm"
+  image_description_force: false
+  max_gleaning: 0
+  refine_type: "advanced"
+  g: 0.6
+  embedding_config:
+    model_name: Qwen3-Embedding-0.6B
+    backend: openai
+    max_length: 4096
+    device: "cpu"
+    api_base: "http://localhost:8007/v1"
+  reranker_config:
+    model_name: Qwen3-Reranker-4B
+    max_length: 4096
+    device: "cpu"
+    backend: vllm
+    api_base: "http://localhost:8011/v1"
+
+vdb:
+  mm_embedding: false
+  vdb_dir_name: "Tree_vdb"
+  collection_name: "TreeVDB"
+  embedding_config:
+    model_name: Qwen3-Embedding-0.6B
+    backend: openai
+    max_length: 4096
+    device: "cpu"
+    api_base: "http://localhost:8007/v1"
+  force_rebuild: true
+
+rag_force_reprocess: true
+
+rag:
+  strategy: traverse
+  max_depth: 3
