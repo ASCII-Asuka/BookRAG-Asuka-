@@ -27,6 +27,21 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
         log.info(f"Successfully loaded tree index from {tree_index_path}")
         dependencies["tree_index"] = tree_index
 
+    elif strategy_name == "hri":
+        from Core.Index.Tree import DocumentTree
+        from Core.Index.HRIIndex import HRIIndex
+
+        tree_index_path = DocumentTree.get_save_path(cfg.save_path)
+        tree_index = DocumentTree.load_from_file(tree_index_path)
+        hri_index = HRIIndex.load_from_dir(cfg.save_path)
+        bm25 = HRIIndex.load_bm25(cfg.save_path)
+        log.info(f"Successfully loaded tree index from {tree_index_path}")
+        log.info(f"Successfully loaded HRI index from {HRIIndex.get_index_path(cfg.save_path)}")
+        log.info(f"Successfully loaded HRI BM25 from {HRIIndex.get_bm25_path(cfg.save_path)}")
+        dependencies["tree_index"] = tree_index
+        dependencies["hri_index"] = hri_index
+        dependencies["bm25"] = bm25
+
     elif strategy_name == "gbc":
         from Core.Index.GBCIndex import GBC
 

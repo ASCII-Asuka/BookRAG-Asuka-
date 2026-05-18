@@ -12,6 +12,7 @@ from Core.configs.rag.gbc_config import GBCRAGConfig
 from Core.configs.rag.graph_config import GraphRAGConfig
 from Core.configs.rag.vanilla_config import VanillaConfig
 from Core.configs.rag.gbc_vanilla_config import GBCVanillaConfig
+from Core.configs.rag.hri_config import HRIRAGConfig
 
 from Core.rag.traverse_agent import TraverseAgent
 from Core.rag.gbc_rag import GBCRAG
@@ -19,6 +20,7 @@ from Core.rag.mm_rag import MMRAG
 from Core.rag.graph_rag import GraphRAG
 from Core.rag.vanilla_rag import VanillaRAG
 from Core.rag.gbc_vanilla_rag import GBCVanillaRAG
+from Core.rag.hri_rag import HRIRAG
 
 from Core.provider.llm import LLM
 from Core.provider.vlm import VLM
@@ -113,6 +115,20 @@ def create_rag_agent(
             vlm=vlm_client,
             vector_store=vector_store,
             topk=strategy_config.topk if hasattr(strategy_config, 'topk') else 3,
+        )
+    elif isinstance(strategy_config, HRIRAGConfig):
+        tree_index = dependencies.get("tree_index")
+        hri_index = dependencies.get("hri_index")
+        bm25 = dependencies.get("bm25")
+        if not tree_index or not hri_index or not bm25:
+            raise ValueError("HRIRAG requires 'tree_index', 'hri_index', and 'bm25'.")
+
+        return HRIRAG(
+            config=strategy_config,
+            llm=llm_client,
+            tree_index=tree_index,
+            hri_index=hri_index,
+            bm25=bm25,
         )
 
     else:

@@ -1,0 +1,63 @@
+# 水利 HRI 最小可用配置模板。
+# 运行前请填充本地 PDF 路径、输出目录和兼容 OpenAI 接口的大模型地址。
+
+pdf_path: TODO
+save_path: TODO
+
+llm:
+  model_name: TODO
+  api_key: TODO
+  api_base: TODO
+  backend: openai
+  max_tokens: 5000
+  temperature: 0.1
+  frequency_penalty: 0.0
+  presence_penalty: 0.0
+  max_workers: 1
+
+vlm:
+  model_name: qwen2.5vl:6k
+  api_key: openai
+  api_base: http://localhost:11434
+  temperature: 0.1
+  max_tokens: 6000
+  backend: ollama
+
+mineru:
+  backend: pipeline
+  method: auto
+  server_url: http://127.0.0.1:30000
+  # MinerU 的简体中文语言代码是 ch，不是 zh。
+  lang: ch
+
+tree:
+  node_keywords: true
+  # HRI 检索不依赖 tree.summary。关闭后可避免树构建阶段为每个节点调用 LLM。
+  node_summary: false
+  use_vlm: false
+
+graph:
+  extractor_type: "llm"
+  # 仅 extractor_type 为 local 时使用；中文本地抽取需先安装对应 spaCy 模型。
+  local_model_name: "zh_core_web_sm"
+  image_description_force: false
+  max_gleaning: 0
+  refine_type: "advanced"
+
+vdb:
+  mm_embedding: false
+  vdb_dir_name: "Tree_vdb"
+  collection_name: "TreeVDB"
+  force_rebuild: true
+
+rag_force_reprocess: true
+
+rag:
+  strategy: hri
+  topk: 8
+  expand_depth: 1
+  # 默认只使用 HRI BM25 命中证据，避免上下文过长导致在线 LLM 空响应。
+  context_window: 0
+  enable_relation_expansion: false
+  output_evidence_chain: true
+  max_context_nodes: 8

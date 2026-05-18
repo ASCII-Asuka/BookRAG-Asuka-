@@ -46,7 +46,7 @@ class SystemConfig(BaseModel):
 
 
 def load_system_config(path: str = "../configs/default.yaml") -> SystemConfig:
-    with open(path, "r") as f:
+    with open(path, "r", encoding="utf-8") as f:
         raw_config = yaml.safe_load(f)
 
     if "rag" in raw_config:

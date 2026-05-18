@@ -11,6 +11,7 @@ from Core.Index.GBCIndex import GBC
 from Core.configs.system_config import SystemConfig
 from Core.pipelines.doc_tree_builder import build_tree_from_pdf
 from Core.pipelines.kg_builder import build_knowledge_graph
+from Core.pipelines.hri_builder import build_hri_index
 from Core.pipelines.vdb_index import (
     build_other_vdb_index,
     build_vdb_index,
@@ -85,6 +86,25 @@ def rebuild_graph_vdb(cfg: SystemConfig):
     gbc_index = GBC.load_gbc_index(cfg)
     gbc_index.rebuild_vdb()
     log.info("Rebuilt graph VDB successfully.")
+
+
+def construct_hri_index(cfg: SystemConfig):
+    token_tracker = TokenTracker.get_instance()
+    token_tracker.reset()
+
+    current_run_stats = {}
+    tree_start_time = time.time()
+    tree_index = build_tree_from_pdf(cfg)
+    tree_duration = time.time() - tree_start_time
+    current_run_stats["build_tree_time"] = round(tree_duration, 2)
+
+    hri_start_time = time.time()
+    build_hri_index(tree_index=tree_index, cfg=cfg)
+    hri_duration = time.time() - hri_start_time
+    current_run_stats["build_hri_time"] = round(hri_duration, 2)
+    current_run_stats["token_stage_history"] = token_tracker.stage_history
+    save_indexing_stats(save_path=cfg.save_path, new_stats=current_run_stats)
+    log.info("Hydro HRI index constructed in %.2f seconds.", hri_duration)
 
 
 def construct_vdb(cfg: SystemConfig):

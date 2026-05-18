@@ -10,7 +10,7 @@ class DatasetConfig(BaseModel):
 
 def load_dataset_config(path: str) -> DatasetConfig:
     # ... standard YAML loading logic ...
-    with open(path, "r") as f:
+    with open(path, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
 
     data_cfg = DatasetConfig(**data)

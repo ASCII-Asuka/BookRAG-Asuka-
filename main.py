@@ -11,6 +11,7 @@ from Core.configs.system_config import load_system_config, SystemConfig
 from Core.configs.dataset_config import load_dataset_config, DatasetConfig
 from Core.construct_index import (
     construct_GBC_index,
+    construct_hri_index,
     construct_vdb,
     compute_mm_reranker,
     rebuild_graph_vdb,
@@ -118,11 +119,12 @@ def create_args():
         "--stage",
         type=str,
         default="all",
-        choices=["tree", "graph", "vdb", "all", "mm_reranker", "rebuild_graph_vdb"],
+        choices=["tree", "graph", "vdb", "hri", "all", "mm_reranker", "rebuild_graph_vdb"],
         help="Specify which stage of the indexing pipeline to run: "
         "'tree' - Build and save the document tree only. "
         "'graph' - Build and save the knowledge graph (requires a tree). "
         "'vdb' - Build and save the vector database (requires a tree). "
+        "'hri' - Build and save the hydro HRI index (requires a tree). "
         "'all' - Run all stages sequentially."
         "'mm_reranker' - Build and save the multi-modal reranker (requires a tree). "
         "'rebuild_graph_vdb' - Rebuild the graph and vector database (requires GBC Index).",
@@ -154,6 +156,10 @@ def build_index(config: SystemConfig, stage: str = "all", data_df: pd.DataFrame 
         log.info("  - STAGE: Building Vector Database...")
         # This function should LOAD the pre-existing tree and then build/save the VDB
         construct_vdb(config)
+
+    if stage == "hri":
+        log.info("  - STAGE: Building Hydro HRI Index...")
+        construct_hri_index(config)
 
     if stage == "mm_reranker":
         log.info("  - STAGE: Building MM Reranker Embedding...")
@@ -426,7 +432,7 @@ def main():
         log.info(f"  - Using paths and settings from '{args.config}'")
 
         if args.command == "index":
-            build_index(config=base_system_cfg)
+            build_index(config=base_system_cfg, stage=args.stage)
 
         elif args.command == "rag":
             # Check if the --query argument was provided

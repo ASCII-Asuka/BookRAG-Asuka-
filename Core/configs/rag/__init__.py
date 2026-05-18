@@ -6,6 +6,7 @@ from .mm_config import MMConfig
 from .graph_config import GraphRAGConfig
 from .gbc_vanilla_config import GBCVanillaConfig
 from .vanilla_config import VanillaConfig
+from .hri_config import HRIRAGConfig
 
 ALL_STRATEGY_CONFIGS = (
     TraverseRAGConfig,
@@ -14,4 +15,5 @@ ALL_STRATEGY_CONFIGS = (
     GraphRAGConfig,
     VanillaConfig,
     GBCVanillaConfig,
+    HRIRAGConfig,
 )

@@ -36,7 +36,7 @@ def save_indexing_stats(save_path: str, new_stats: Dict[str, Any]):
     # 2. Intelligently merge new stats into the final dictionary
 
     # Handle timing fields: only add if not present
-    for time_key in ["build_tree_time", "build_kg_time"]:
+    for time_key in ["build_tree_time", "build_kg_time", "build_hri_time"]:
         if time_key in new_stats and time_key not in final_stats:
             final_stats[time_key] = new_stats[time_key]
 
