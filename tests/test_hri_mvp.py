@@ -41,10 +41,22 @@ class HRIMVPTests(unittest.TestCase):
 
         chapter = add_node(tree.root_node, NodeType.TITLE, "第3章 调度管理", page_idx=1)
         add_node(chapter, NodeType.TEXT, "汛限水位是指水库在汛期允许兴利蓄水的上限水位。", page_idx=2)
+        add_node(
+            chapter,
+            NodeType.TEXT,
+            "相关文件要求等标准制定工作由主管部门统筹推进。",
+            page_idx=2,
+        )
         article = add_node(
             chapter,
             NodeType.TEXT,
             "第3.2条 当水位超过汛限水位时，应开启泄洪设施，具体下泄流量见表3-1。",
+            page_idx=3,
+        )
+        add_node(
+            chapter,
+            NodeType.TEXT,
+            "第3.3条 除特殊情况外，应及时报送调度结果，同时还应补充记录会商意见。",
             page_idx=3,
         )
         table = add_node(
@@ -53,6 +65,31 @@ class HRIMVPTests(unittest.TestCase):
             "表3-1 下泄流量参数",
             page_idx=4,
             table_body="水位 | 下泄流量\n超过汛限水位 | 500 m3/s",
+        )
+        add_node(
+            chapter,
+            NodeType.TEXT,
+            "第3.4条 调度参数详见附录A；预警分级见下表。",
+            page_idx=4,
+        )
+        next_table = add_node(
+            chapter,
+            NodeType.TABLE,
+            "表3-2 预警分级参数",
+            page_idx=5,
+            table_body="等级 | 水位\n红色 | 超保证水位",
+        )
+        appendix = add_node(
+            tree.root_node,
+            NodeType.TITLE,
+            "附录A 调度参数说明",
+            page_idx=6,
+        )
+        add_node(
+            appendix,
+            NodeType.TEXT,
+            "附录A用于补充说明调度参数的计算口径。",
+            page_idx=6,
         )
         return tmp, tree, article.index_id, table.index_id
 
@@ -111,6 +148,14 @@ class HRIMVPTests(unittest.TestCase):
         self.assertTrue(
             any(anchor.node_type == "Requirement" and "开启泄洪设施" in anchor.text for anchor in requirement_targets)
         )
+        self.assertTrue(
+            any(
+                anchor.attributes.get("trigger") == "应"
+                and anchor.attributes.get("action")
+                and anchor.attributes.get("object")
+                for anchor in requirement_targets
+            )
+        )
 
         condition_sources = [
             hri.anchors[rel.source_id]
@@ -120,6 +165,50 @@ class HRIMVPTests(unittest.TestCase):
         self.assertTrue(
             any(anchor.node_type == "Condition" and "水位超过汛限水位" in anchor.text for anchor in condition_sources)
         )
+
+    def test_hri_filters_false_requirements_and_extracts_extra_relation_types(self):
+        tmp, tree, _, _ = self._build_tree()
+        self.addCleanup(tmp.cleanup)
+
+        hri = HRIIndex.from_tree(tree, save_dir=tmp.name)
+        requirement_texts = [
+            anchor.text
+            for anchor in hri.anchors.values()
+            if anchor.node_type == "Requirement"
+        ]
+        self.assertFalse(any("要求等标准制定" in text for text in requirement_texts))
+
+        relation_types = {rel.relation_type for rel in hri.relations}
+        self.assertIn("exception_to", relation_types)
+        self.assertIn("supplements", relation_types)
+
+        exception_targets = [
+            hri.anchors[rel.source_id]
+            for rel in hri.relations
+            if rel.relation_type == "exception_to"
+        ]
+        self.assertTrue(any(anchor.node_type == "Exception" and "特殊情况" in anchor.text for anchor in exception_targets))
+
+        supplement_targets = [
+            hri.anchors[rel.target_id]
+            for rel in hri.relations
+            if rel.relation_type == "supplements"
+        ]
+        self.assertTrue(any(anchor.node_type == "Supplement" and "会商意见" in anchor.text for anchor in supplement_targets))
+
+    def test_hri_links_appendix_and_following_table_references(self):
+        tmp, tree, _, _ = self._build_tree()
+        self.addCleanup(tmp.cleanup)
+
+        hri = HRIIndex.from_tree(tree, save_dir=tmp.name)
+        referenced_targets = [
+            hri.anchors[rel.target_id]
+            for rel in hri.relations
+            if rel.relation_type == "refers_to"
+        ]
+
+        self.assertTrue(any(anchor.node_type == "Appendix" and "附录A" in anchor.text for anchor in referenced_targets))
+        self.assertTrue(any(anchor.node_type == "Table" and "表3-2" in anchor.text for anchor in referenced_targets))
 
     def test_hri_bm25_retrieves_chinese_term_node(self):
         tmp, tree, _, _ = self._build_tree()

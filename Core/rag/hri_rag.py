@@ -239,6 +239,7 @@ class HRIRAG(BaseRAG):
                         "section_id": anchor["section_id"],
                         "page": anchor["page"],
                         "content": anchor["text"],
+                        "attributes": anchor.get("attributes", {}),
                         "relations": item["relations"],
                     },
                     f,
@@ -266,6 +267,12 @@ class HRIRAG(BaseRAG):
                     for rel in item["relations"]
                 ]
                 lines.append("关系：" + "；".join(relation_texts))
+            if anchor.attributes:
+                attrs = "；".join(
+                    f"{key}：{value}" for key, value in anchor.attributes.items() if value
+                )
+                if attrs:
+                    lines.append("结构化属性：" + attrs)
             lines.append("原文：" + text)
         return "\n".join(lines)
 
@@ -281,6 +288,8 @@ class HRIRAG(BaseRAG):
                 "Requirement": 0.25,
                 "Condition": 0.2,
                 "Concept": 0.2,
+                "Exception": 0.2,
+                "Supplement": 0.15,
                 "Appendix": 0.2,
             }
         return {
@@ -289,6 +298,8 @@ class HRIRAG(BaseRAG):
             "Requirement": 0.35,
             "Article": 0.35,
             "Condition": 0.25,
+            "Exception": 0.2,
+            "Supplement": 0.15,
             "Table": 0.2,
         }
 
@@ -297,7 +308,15 @@ class HRIRAG(BaseRAG):
         if question_type == "statistical":
             return ["refers_to", "parameter_of"]
         if question_type == "comprehensive":
-            return ["defines", "condition_of", "requires", "refers_to", "parameter_of"]
+            return [
+                "defines",
+                "condition_of",
+                "requires",
+                "refers_to",
+                "parameter_of",
+                "supplements",
+                "exception_to",
+            ]
         return ["defines", "refers_to", "parameter_of"]
 
     @staticmethod
@@ -313,6 +332,10 @@ class HRIRAG(BaseRAG):
             return "规范要求对象"
         if anchor.node_type == "Condition":
             return "适用条件对象"
+        if anchor.node_type == "Exception":
+            return "例外限制对象"
+        if anchor.node_type == "Supplement":
+            return "补充说明对象"
         if anchor.node_type == "TermDefinition":
             return "术语定义"
         if anchor.node_type == "Table":
