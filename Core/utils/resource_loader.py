@@ -28,6 +28,7 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
         dependencies["tree_index"] = tree_index
 
     elif strategy_name == "hri":
+        import os
         from Core.Index.Tree import DocumentTree
         from Core.Index.HRIIndex import HRIIndex
 
@@ -41,6 +42,30 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
         dependencies["tree_index"] = tree_index
         dependencies["hri_index"] = hri_index
         dependencies["bm25"] = bm25
+        if getattr(rag_config, "enable_vector_recall", False):
+            from Core.provider.embedding import TextEmbeddingProvider
+            from Core.provider.vdb import VectorStore
+
+            vdb_cfg = rag_config.hri_vdb_config
+            embed_cfg = vdb_cfg.embedding_config
+            hri_vdb_path = vdb_cfg.vdb_dir_name
+            if not os.path.isabs(hri_vdb_path) and cfg.save_path not in hri_vdb_path:
+                hri_vdb_path = os.path.join(cfg.save_path, hri_vdb_path)
+            embed_model = TextEmbeddingProvider(
+                model_name=embed_cfg.model_name,
+                backend=embed_cfg.backend,
+                device=embed_cfg.device,
+                max_length=embed_cfg.max_length,
+                api_base=embed_cfg.api_base,
+                api_key=embed_cfg.api_key,
+            )
+            hri_vector_store = VectorStore(
+                embedding_model=embed_model,
+                db_path=hri_vdb_path,
+                collection_name=vdb_cfg.collection_name,
+            )
+            log.info(f"Successfully loaded HRI vector store from {hri_vdb_path}")
+            dependencies["hri_vector_store"] = hri_vector_store
 
     elif strategy_name == "gbc":
         from Core.Index.GBCIndex import GBC
@@ -84,6 +109,7 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
                 device=embed_cfg.device,
                 max_length=embed_cfg.max_length,
                 api_base=embed_cfg.api_base,
+                api_key=embed_cfg.api_key,
             )
             
             vdb = VectorStore(
@@ -119,6 +145,7 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
             device=embed_cfg.device,
             max_length=embed_cfg.max_length,
             api_base=embed_cfg.api_base,
+            api_key=embed_cfg.api_key,
         )
         
         tree_vdb = VectorStore(
@@ -152,6 +179,7 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
                 device=embed_cfg.device,
                 max_length=embed_cfg.max_length,
                 api_base=embed_cfg.api_base,
+                api_key=embed_cfg.api_key,
             )
         elif embed_model_type == "gme":
             from Core.provider.embedding import GmeEmbeddingProvider

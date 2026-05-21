@@ -67,6 +67,7 @@ class KGRefiner:
             max_length=graph_config.embedding_config.max_length,
             device=graph_config.embedding_config.device,
             api_base=graph_config.embedding_config.api_base,
+            api_key=graph_config.embedding_config.api_key,
         )
         self.reranker = TextRerankerProvider(
             model_name=graph_config.reranker_config.model_name,

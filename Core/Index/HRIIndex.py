@@ -241,6 +241,27 @@ class HRIIndex:
         self.bm25_node_ids = node_ids
         return bm25
 
+    def iter_vector_documents(self) -> List[Dict[str, Any]]:
+        documents: List[Dict[str, Any]] = []
+        for node_id, anchor in sorted(self.anchors.items(), key=lambda item: item[0]):
+            documents.append(
+                {
+                    "node_id": node_id,
+                    "text": self._vector_document(anchor),
+                    "metadata": {
+                        "node_id": node_id,
+                        "node_type": anchor.node_type,
+                        "source_node_id": anchor.source_node_id
+                        if anchor.source_node_id is not None
+                        else node_id,
+                        "section_id": anchor.section_id,
+                        "page": anchor.page if anchor.page is not None else -1,
+                        "anchor_kind": anchor.anchor_kind,
+                    },
+                }
+            )
+        return documents
+
     def save_bm25(self, bm25: HydroBM25) -> None:
         os.makedirs(self.save_dir, exist_ok=True)
         with open(self.get_bm25_path(self.save_dir), "wb") as f:
@@ -738,4 +759,21 @@ class HRIIndex:
                 " > ".join(anchor.title_path),
                 anchor.text,
             ]
+        )
+
+    @staticmethod
+    def _vector_document(anchor: EvidenceAnchor) -> str:
+        attributes = "；".join(
+            f"{key}：{value}" for key, value in anchor.attributes.items() if value
+        )
+        return "\n".join(
+            part
+            for part in [
+                anchor.node_type,
+                anchor.section_id,
+                " > ".join(anchor.title_path),
+                attributes,
+                anchor.text,
+            ]
+            if part
         )

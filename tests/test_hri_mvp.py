@@ -1,11 +1,13 @@
 import tempfile
 import unittest
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
 from Core.Index.Tree import DocumentTree, NodeType, TreeNode
 from Core.Index.HRIIndex import HRIIndex
 from Core.configs.rag.hri_config import HRIRAGConfig
+from Core.rag.hri_plan import HRIQueryPlanner
 from Core.rag.hri_rag import HRIRAG
 from Core.rag.hri_rag import classify_question_type
 
@@ -13,6 +15,29 @@ from Core.rag.hri_rag import classify_question_type
 class FakeLLM:
     def get_completion(self, prompt, json_response=False):
         return "应开启泄洪设施。依据：第3.2条和表3-1。"
+
+
+class FakePlannerLLM(FakeLLM):
+    def __init__(self, json_result=None, raise_json=False):
+        self.json_result = json_result
+        self.raise_json = raise_json
+        self.json_calls = 0
+        self.prompts = []
+
+    def get_json_completion(self, prompt, schema, images=None, think_mode=False):
+        self.json_calls += 1
+        self.prompts.append(prompt)
+        if self.raise_json:
+            raise RuntimeError("bad planner response")
+        return schema(**self.json_result)
+
+
+class FakeVectorStore:
+    def __init__(self, results):
+        self.results = results
+
+    def search(self, query_text, top_k=3):
+        return self.results[:top_k]
 
 
 class HRIMVPTests(unittest.TestCase):
@@ -227,6 +252,59 @@ class HRIMVPTests(unittest.TestCase):
         self.assertEqual(classify_question_type("超过汛限水位时应采取哪些措施，并依据哪个参数表？"), "comprehensive")
         self.assertEqual(classify_question_type("第3章中一共有多少条调度要求？"), "statistical")
 
+    def test_hri_query_planner_rule_high_confidence_definition(self):
+        llm = FakePlannerLLM()
+        planner = HRIQueryPlanner(llm=llm, confidence_threshold=0.7)
+
+        plan = planner.analyze("什么是数字底板？")
+
+        self.assertEqual(plan.query_type, "locating")
+        self.assertEqual(plan.intent, "definition_lookup")
+        self.assertIn("definition", plan.evidence_roles)
+        self.assertIn("defines", plan.relation_types)
+        self.assertEqual(llm.json_calls, 0)
+
+    def test_hri_query_planner_uses_llm_structured_plan_for_ambiguous_query(self):
+        llm = FakePlannerLLM(
+            json_result={
+                "query_type": "comprehensive",
+                "intent": "condition_requirement",
+                "confidence": 0.82,
+                "evidence_roles": ["condition", "requirement", "table"],
+                "relation_types": ["condition_of", "requires", "parameter_of"],
+                "retrieval_focus": ["预警风险", "指标"],
+                "sub_questions": [
+                    {"question": "预警风险出现时有哪些条件？", "type": "retrieval"},
+                    {"question": "对应需要采取哪些措施？", "type": "retrieval"},
+                ],
+                "aggregation": None,
+                "rationale": "需要条件、要求和参数证据共同回答。",
+            }
+        )
+        planner = HRIQueryPlanner(llm=llm, question_classifier="llm")
+
+        plan = planner.analyze("出现风险后处置方案怎么确定？")
+
+        self.assertEqual(plan.query_type, "comprehensive")
+        self.assertEqual(plan.intent, "condition_requirement")
+        self.assertEqual(len(plan.sub_questions), 2)
+        self.assertEqual(llm.json_calls, 1)
+        self.assertIn("只输出一个合法 JSON 对象", llm.prompts[0])
+
+    def test_hri_query_planner_falls_back_when_llm_plan_is_invalid(self):
+        planner = HRIQueryPlanner(
+            llm=FakePlannerLLM(raise_json=True),
+            question_classifier="llm",
+        )
+
+        plan = planner.analyze("第1.3节有多少项预警要求？")
+
+        self.assertEqual(plan.query_type, "statistical")
+        self.assertEqual(plan.intent, "aggregation")
+        self.assertIsNotNone(plan.aggregation)
+        self.assertEqual(plan.aggregation.operation, "COUNT")
+        self.assertEqual(plan.source, "fallback")
+
     def test_hri_rag_writes_retrieval_and_evidence_chain_files(self):
         tmp, tree, _, _ = self._build_tree()
         self.addCleanup(tmp.cleanup)
@@ -246,6 +324,128 @@ class HRIMVPTests(unittest.TestCase):
         self.assertGreaterEqual(len(node_ids), 1)
         self.assertTrue((Path(tmp.name) / "retrieval_res.json").exists())
         self.assertTrue((Path(tmp.name) / "evidence_chain.json").exists())
+        retrieval = json.loads((Path(tmp.name) / "retrieval_res.json").read_text(encoding="utf-8"))
+        self.assertEqual(retrieval["query_plan"]["query_type"], "comprehensive")
+        self.assertIn("requirement", retrieval["query_plan"]["evidence_roles"])
+
+    def test_hri_hybrid_recall_merges_vector_candidates_with_bm25(self):
+        tmp, tree, _, _ = self._build_tree()
+        self.addCleanup(tmp.cleanup)
+        hri = HRIIndex.from_tree(tree, save_dir=tmp.name)
+        bm25 = hri.build_bm25()
+        vector_only_anchor = next(
+            anchor
+            for anchor in hri.anchors.values()
+            if anchor.node_type == "Table" and "预警分级" in anchor.text
+        )
+        vector_store = FakeVectorStore(
+            [
+                {
+                    "id": "vector-hit",
+                    "distance": 0.05,
+                    "content": vector_only_anchor.text,
+                    "metadata": {"node_id": vector_only_anchor.node_id},
+                }
+            ]
+        )
+        rag = HRIRAG(
+            config=HRIRAGConfig(
+                enable_vector_recall=True,
+                bm25_topk=1,
+                embedding_topk=1,
+                max_context_nodes=4,
+            ),
+            llm=FakeLLM(),
+            tree_index=tree,
+            hri_index=hri,
+            bm25=bm25,
+            hri_vector_store=vector_store,
+        )
+
+        retrieval_info = rag._retrieve("人员转移安置方案")
+
+        hybrid_ids = [item["node_id"] for item in retrieval_info["hybrid_results"]]
+        self.assertIn(vector_only_anchor.node_id, hybrid_ids)
+        vector_item = next(
+            item
+            for item in retrieval_info["hybrid_results"]
+            if item["node_id"] == vector_only_anchor.node_id
+        )
+        self.assertIn(vector_item["source"], {"vector", "hybrid"})
+
+    def test_hri_evidence_budget_keeps_relation_roles_before_truncation(self):
+        tmp, tree, article_id, table_id = self._build_tree()
+        self.addCleanup(tmp.cleanup)
+        hri = HRIIndex.from_tree(tree, save_dir=tmp.name)
+        bm25 = hri.build_bm25()
+        rag = HRIRAG(
+            config=HRIRAGConfig(
+                topk=6,
+                max_context_nodes=4,
+                enable_relation_expansion=True,
+                evidence_budgets={
+                    "comprehensive": {
+                        "definition": 1,
+                        "condition": 1,
+                        "requirement": 1,
+                        "table": 1,
+                        "exception": 0,
+                        "supplement": 0,
+                        "article": 1,
+                    }
+                },
+            ),
+            llm=FakeLLM(),
+            tree_index=tree,
+            hri_index=hri,
+            bm25=bm25,
+        )
+        ranked_results = [
+            {"node_id": article_id, "rerank_score": 1.0},
+            {"node_id": table_id, "rerank_score": 0.9},
+        ]
+        relations = rag._collect_relations([article_id, table_id], "comprehensive")
+
+        selected_ids = rag._select_budgeted_nodes(
+            ranked_results=ranked_results,
+            relations=relations,
+            question_type="comprehensive",
+        )
+        selected_types = {hri.anchors[node_id].node_type for node_id in selected_ids}
+
+        self.assertIn("Condition", selected_types)
+        self.assertIn("Requirement", selected_types)
+        self.assertIn("Table", selected_types)
+        self.assertLessEqual(len(selected_ids), 4)
+
+    def test_hri_evidence_chain_uses_logical_order_for_prompt(self):
+        tmp, tree, article_id, table_id = self._build_tree()
+        self.addCleanup(tmp.cleanup)
+        hri = HRIIndex.from_tree(tree, save_dir=tmp.name)
+        bm25 = hri.build_bm25()
+        rag = HRIRAG(
+            config=HRIRAGConfig(topk=6, max_context_nodes=8, enable_relation_expansion=True),
+            llm=FakeLLM(),
+            tree_index=tree,
+            hri_index=hri,
+            bm25=bm25,
+        )
+        relations = rag._collect_relations([article_id, table_id], "comprehensive")
+        unordered_ids = [table_id, article_id]
+        unordered_ids.extend(rel.target_id for rel in relations)
+        unordered_ids.extend(rel.source_id for rel in relations)
+        deduped_ids = list(dict.fromkeys(unordered_ids))
+
+        chain = rag._build_evidence_chain(
+            selected_ids=deduped_ids,
+            seed_ids=[article_id, table_id],
+            relations=relations,
+            question_type="comprehensive",
+        )
+        ordered_types = [item["anchor"]["node_type"] for item in chain]
+
+        self.assertLess(ordered_types.index("Condition"), ordered_types.index("Requirement"))
+        self.assertLess(ordered_types.index("Requirement"), ordered_types.index("Table"))
 
 
 if __name__ == "__main__":

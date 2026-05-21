@@ -120,6 +120,7 @@ def create_rag_agent(
         tree_index = dependencies.get("tree_index")
         hri_index = dependencies.get("hri_index")
         bm25 = dependencies.get("bm25")
+        hri_vector_store = dependencies.get("hri_vector_store")
         if not tree_index or not hri_index or not bm25:
             raise ValueError("HRIRAG requires 'tree_index', 'hri_index', and 'bm25'.")
 
@@ -129,6 +130,7 @@ def create_rag_agent(
             tree_index=tree_index,
             hri_index=hri_index,
             bm25=bm25,
+            hri_vector_store=hri_vector_store,
         )
 
     else:

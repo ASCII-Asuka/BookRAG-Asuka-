@@ -453,6 +453,7 @@ class TextEmbeddingProvider(BaseEmbedder):
         device: str = "auto",
         max_length: int = 8192,
         api_base: str = None,
+        api_key: str = None,
     ):
 
         self.model_name = model_name
@@ -486,10 +487,10 @@ class TextEmbeddingProvider(BaseEmbedder):
         elif self.backend == "ollama":
             self.device = "ollama_service"
         elif self.backend == "openai":
-            self.client = openai.OpenAI(api_key="empty", base_url=api_base)
+            self.client = openai.OpenAI(api_key=api_key or "empty", base_url=api_base)
         else:
             raise ValueError(
-                f"Unsupported backend: '{self.backend}'. Choose 'local' or 'ollama'."
+                f"Unsupported backend: '{self.backend}'. Choose 'local', 'ollama', or 'openai'."
             )
 
     @classmethod

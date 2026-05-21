@@ -54,7 +54,33 @@ rag_force_reprocess: true
 
 rag:
   strategy: hri
+  question_classifier: hybrid
+  classification_model: llm
+  classification_confidence_threshold: 0.7
+  enable_query_decomposition: true
+  max_sub_questions: 4
+  # 兼容旧配置：topk 仍可作为 BM25 和向量召回默认 top-k。
   topk: 8
+  # 启用后 index --stage hri 会额外构建 HRI_vdb，rag 会执行 BM25 + embedding 混合召回。
+  # 如果没有可用 embedding 服务，请保持 false。
+  enable_vector_recall: false
+  bm25_topk: 8
+  embedding_topk: 8
+  hybrid_bm25_weight: 0.55
+  hybrid_vector_weight: 0.45
+  hri_vdb_config:
+    mm_embedding: false
+    vdb_dir_name: "HRI_vdb"
+    collection_name: "HRIAnchorVDB"
+    force_rebuild: true
+    embedding_config:
+      type: text
+      backend: openai
+      model_name: TODO
+      api_key: TODO
+      api_base: TODO
+      max_length: 4096
+      device: cpu
   expand_depth: 1
   # 默认只使用 HRI BM25 命中证据，避免上下文过长导致在线 LLM 空响应。
   context_window: 0

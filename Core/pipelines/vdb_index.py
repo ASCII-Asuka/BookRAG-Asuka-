@@ -96,6 +96,7 @@ def build_vdb_index(tree: DocumentTree, vdb_cfg: VDBConfig):
             device=vdb_cfg.embedding_config.device,
             backend=vdb_cfg.embedding_config.backend,
             api_base=vdb_cfg.embedding_config.api_base,
+            api_key=vdb_cfg.embedding_config.api_key,
             max_length=vdb_cfg.embedding_config.max_length,
         )
         log.info("Using text embedding model for vector database.")
@@ -152,6 +153,7 @@ def get_all_chunks(cfg: SystemConfig):
             device=embed_cfg.device,
             backend=embed_cfg.backend,
             api_base=embed_cfg.api_base,
+            api_key=embed_cfg.api_key,
             max_length=embed_cfg.max_length,
         )
 
@@ -196,6 +198,7 @@ def build_other_vdb_index(cfg: SystemConfig):
                 device=vdb_config.embedding_config.device,
                 backend=vdb_config.embedding_config.backend,
                 api_base=vdb_config.embedding_config.api_base,
+                api_key=vdb_config.embedding_config.api_key,
                 max_length=vdb_config.embedding_config.max_length,
             ),
             db_path=vdb_dir,
