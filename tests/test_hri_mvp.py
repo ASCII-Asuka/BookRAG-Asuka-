@@ -447,6 +447,116 @@ class HRIMVPTests(unittest.TestCase):
         self.assertLess(ordered_types.index("Condition"), ordered_types.index("Requirement"))
         self.assertLess(ordered_types.index("Requirement"), ordered_types.index("Table"))
 
+    def test_hri_wo_relation_disables_normative_relation_expansion(self):
+        tmp, tree, article_id, table_id = self._build_tree()
+        self.addCleanup(tmp.cleanup)
+        hri = HRIIndex.from_tree(tree, save_dir=tmp.name)
+        bm25 = hri.build_bm25()
+        rag = HRIRAG(
+            config=HRIRAGConfig(
+                ablation_variant="wo_relation",
+                enable_relation_expansion=True,
+            ),
+            llm=FakeLLM(),
+            tree_index=tree,
+            hri_index=hri,
+            bm25=bm25,
+        )
+
+        relations = rag._collect_relations([article_id, table_id], "comprehensive")
+
+        self.assertEqual(relations, [])
+
+    def test_hri_wo_tree_uses_flat_retrieval_without_tree_context(self):
+        tmp, tree, article_id, _ = self._build_tree()
+        self.addCleanup(tmp.cleanup)
+        hri = HRIIndex.from_tree(tree, save_dir=tmp.name)
+        bm25 = hri.build_bm25()
+        rag = HRIRAG(
+            config=HRIRAGConfig(
+                ablation_variant="wo_tree",
+                max_context_nodes=4,
+                context_window=2,
+                enable_relation_expansion=True,
+            ),
+            llm=FakeLLM(),
+            tree_index=tree,
+            hri_index=hri,
+            bm25=bm25,
+        )
+        ranked_results = [{"node_id": article_id, "rerank_score": 1.0}]
+
+        selected_ids = rag._select_budgeted_nodes(
+            ranked_results=ranked_results,
+            relations=[],
+            question_type="comprehensive",
+        )
+
+        self.assertEqual(selected_ids, [article_id])
+        self.assertEqual(rag._collect_relations([article_id], "comprehensive"), [])
+
+    def test_hri_wo_planner_uses_static_plan_without_llm_classification(self):
+        tmp, tree, _, _ = self._build_tree()
+        self.addCleanup(tmp.cleanup)
+        hri = HRIIndex.from_tree(tree, save_dir=tmp.name)
+        bm25 = hri.build_bm25()
+        llm = FakePlannerLLM(
+            json_result={
+                "query_type": "locating",
+                "intent": "definition_lookup",
+                "confidence": 0.99,
+                "evidence_roles": ["definition"],
+                "relation_types": ["defines"],
+                "retrieval_focus": [],
+                "sub_questions": [],
+                "aggregation": None,
+                "rationale": "unused",
+            }
+        )
+        rag = HRIRAG(
+            config=HRIRAGConfig(
+                ablation_variant="wo_planner",
+                question_classifier="llm",
+                topk=2,
+                max_context_nodes=3,
+            ),
+            llm=llm,
+            tree_index=tree,
+            hri_index=hri,
+            bm25=bm25,
+        )
+
+        retrieval_info = rag._retrieve("definition query")
+
+        self.assertEqual(llm.json_calls, 0)
+        self.assertEqual(retrieval_info["question_type"], "comprehensive")
+        self.assertEqual(retrieval_info["query_plan"].intent, "multi_evidence_synthesis")
+        self.assertEqual(retrieval_info["query_plan"].sub_questions, [])
+
+    def test_hri_wo_evidence_chain_outputs_answer_without_trace_files(self):
+        tmp, tree, _, _ = self._build_tree()
+        self.addCleanup(tmp.cleanup)
+        hri = HRIIndex.from_tree(tree, save_dir=tmp.name)
+        bm25 = hri.build_bm25()
+        rag = HRIRAG(
+            config=HRIRAGConfig(
+                ablation_variant="wo_evidence_chain",
+                topk=3,
+                max_context_nodes=5,
+            ),
+            llm=FakeLLM(),
+            tree_index=tree,
+            hri_index=hri,
+            bm25=bm25,
+        )
+
+        answer, node_ids = rag.generation("condition requirement query", tmp.name)
+
+        self.assertTrue(answer)
+        self.assertEqual(node_ids, [])
+        self.assertFalse((Path(tmp.name) / "retrieval_res.json").exists())
+        self.assertFalse((Path(tmp.name) / "evidence_chain.json").exists())
+
 
 if __name__ == "__main__":
     unittest.main()

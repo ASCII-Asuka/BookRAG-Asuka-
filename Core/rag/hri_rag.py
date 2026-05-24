@@ -51,8 +51,47 @@ class HRIRAG(BaseRAG):
             max_sub_questions=config.max_sub_questions,
         )
 
+    def _ablation_variant(self) -> str:
+        return getattr(self.config, "ablation_variant", "full") or "full"
+
+    def _uses_tree_structure(self) -> bool:
+        return self._ablation_variant() != "wo_tree"
+
+    def _uses_relation_graph(self) -> bool:
+        return self._ablation_variant() not in {"wo_tree", "wo_relation"}
+
+    def _uses_query_planner(self) -> bool:
+        return self._ablation_variant() != "wo_planner"
+
+    def _outputs_evidence_trace(self) -> bool:
+        return self._ablation_variant() != "wo_evidence_chain"
+
+    def _analyze_query(self, query: str) -> HRIPlanResult:
+        if self._uses_query_planner():
+            return self.planner.analyze(query)
+        return HRIPlanResult(
+            query_type="comprehensive",
+            intent="multi_evidence_synthesis",
+            confidence=1.0,
+            evidence_roles=[
+                "definition",
+                "condition",
+                "requirement",
+                "table",
+                "exception",
+                "supplement",
+                "article",
+            ],
+            relation_types=list(self._relation_types("comprehensive")),
+            retrieval_focus=[query],
+            sub_questions=[],
+            aggregation=None,
+            rationale="Ablation wo_planner: use one static comprehensive retrieval plan for all questions.",
+            source="fallback",
+        )
+
     def _retrieve(self, query: str, **kwargs) -> Dict[str, Any]:
-        query_plan = self.planner.analyze(query)
+        query_plan = self._analyze_query(query)
         question_type = query_plan.query_type
         bm25_results, vector_results, hybrid_results = self._hybrid_recall(query, query_plan=query_plan)
         ranked_results = self._structure_rerank(
@@ -199,6 +238,7 @@ class HRIRAG(BaseRAG):
         queries = [query]
         if (
             query_plan
+            and self._uses_query_planner()
             and query_plan.query_type == "comprehensive"
             and self.config.enable_query_decomposition
         ):
@@ -288,6 +328,14 @@ class HRIRAG(BaseRAG):
         coarse_results: List[Dict[str, Any]],
         query_plan: Optional[HRIPlanResult] = None,
     ) -> List[Dict[str, Any]]:
+        if not self._uses_tree_structure():
+            reranked = []
+            for rank, item in enumerate(coarse_results):
+                score = float(item.get("hybrid_score", item.get("score", 0.0))) - rank * 0.01
+                reranked.append({**item, "rerank_score": score})
+            reranked.sort(key=lambda item: item["rerank_score"], reverse=True)
+            return reranked
+
         query_tokens = set(hydro_tokenize(query))
         type_weight = self._type_weights(question_type)
         seed_source_ids = [
@@ -321,6 +369,8 @@ class HRIRAG(BaseRAG):
     def _tree_feature_score(
         self, query: str, anchor: EvidenceAnchor, seed_source_ids: List[int]
     ) -> float:
+        if not self._uses_tree_structure():
+            return 0.0
         score = 0.0
         source_id = self._tree_source_id(anchor)
         node = self.tree_index.get_node_by_index_id(source_id) if source_id is not None else None
@@ -391,7 +441,7 @@ class HRIRAG(BaseRAG):
         question_type: QuestionType,
         query_plan: Optional[HRIPlanResult] = None,
     ) -> List[HydroRelation]:
-        if not self.config.enable_relation_expansion:
+        if not self.config.enable_relation_expansion or not self._uses_relation_graph():
             return []
         relation_types = self._planned_relation_types(question_type, query_plan)
         relations = self.hri_index.get_related_relations(
@@ -435,6 +485,16 @@ class HRIRAG(BaseRAG):
         question_type: QuestionType,
         query_plan: Optional[HRIPlanResult] = None,
     ) -> List[int]:
+        if not self._uses_tree_structure():
+            selected: List[int] = []
+            for item in ranked_results:
+                node_id = item["node_id"]
+                if node_id in self.hri_index.anchors and node_id not in selected:
+                    selected.append(node_id)
+                if len(selected) >= self.config.max_context_nodes:
+                    break
+            return selected
+
         candidates: Dict[int, Dict[str, Any]] = {}
         order = 0
 
@@ -497,7 +557,7 @@ class HRIRAG(BaseRAG):
         return selected
 
     def _add_tree_context_candidates(self, node_id: int, score: float, add_candidate):
-        if self.config.context_window <= 0:
+        if self.config.context_window <= 0 or not self._uses_tree_structure():
             return
         tree_node_id = self._relation_tree_id(node_id)
         node = self.tree_index.get_node_by_index_id(tree_node_id)
@@ -630,6 +690,10 @@ class HRIRAG(BaseRAG):
     ) -> List[Any]:
         query_output_dir.mkdir(parents=True, exist_ok=True)
         retrieval_ids = retrieval_info["selected_node_ids"]
+        if not self._outputs_evidence_trace():
+            log.info("HRI evidence trace output disabled by ablation variant.")
+            return []
+
         query_plan = retrieval_info.get("query_plan")
         serializable = {
             "question_type": retrieval_info["question_type"],

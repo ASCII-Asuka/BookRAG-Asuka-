@@ -4,6 +4,7 @@ from Core.configs.system_config import load_system_config, SystemConfig
 from Core.provider.TokenTracker import TokenTracker
 from Core.rag import create_rag_agent
 from Core.rag.base_rag import BaseRAG
+from Core.utils.json_safety import make_json_safe
 from Core.utils.resource_loader import prepare_rag_dependencies
 
 import json
@@ -77,19 +78,26 @@ def run_rag(
             "output": answer,
             "retrieved_node_ids": retrieved_node_ids,
         }
+        current_result = make_json_safe(current_result)
         with open(query_result_file, "w", encoding="utf-8") as f:
-            json.dump(current_result, f, indent=2, ensure_ascii=False)
+            json.dump(current_result, f, indent=2, ensure_ascii=False, allow_nan=False)
 
         results_list.append(current_result)
 
     end_time = time.time()
     total_time = end_time - start_time
-    log.info(f"✅ RAG processing complete in {total_time:.2f} seconds.")
+    log.info(f"RAG processing complete in {total_time:.2f} seconds.")
     final_res_path = output_dir / "final_results.json"
     with open(final_res_path, "w", encoding="utf-8") as f:
-        json.dump(results_list, f, indent=2, ensure_ascii=False)
+        json.dump(
+            make_json_safe(results_list),
+            f,
+            indent=2,
+            ensure_ascii=False,
+            allow_nan=False,
+        )
 
-    log.info(f"✅ RAG complete. All results are saved to {final_res_path}")
+    log.info(f"RAG complete. All results are saved to {final_res_path}")
     rag_agent.close()
 
     token_tracker = TokenTracker.get_instance()
@@ -170,7 +178,12 @@ def create_log_handler(cfg: SystemConfig, dataset_path: str):
     log.info(f"Using RAG strategy: {rag_strategy}")
 
     dataset_file = Path(dataset_path)
-    output_dir = Path(cfg.save_path) / f"eval_{dataset_file.stem}_{rag_strategy}"
+    method_suffix = rag_strategy
+    if rag_strategy == "hri":
+        ablation_variant = getattr(cfg.rag.strategy_config, "ablation_variant", "full")
+        if ablation_variant and ablation_variant != "full":
+            method_suffix = f"hri_{ablation_variant}"
+    output_dir = Path(cfg.save_path) / f"eval_{dataset_file.stem}_{method_suffix}"
     output_dir.mkdir(parents=True, exist_ok=True)
     log_file_path = output_dir / "evaluation.log"
 
@@ -232,6 +245,14 @@ def inference(cfg: SystemConfig, data_df: pd.DataFrame, dataset_name: str):
         variant = cfg.rag.strategy_config.variant
         output_dir = output_dir = (
             Path(cfg.save_path) / f"eval_{dataset_name}_{rag_strategy}_{variant}"
+        )
+    elif rag_strategy == "hri":
+        ablation_variant = getattr(cfg.rag.strategy_config, "ablation_variant", "full")
+        method_suffix = rag_strategy
+        if ablation_variant and ablation_variant != "full":
+            method_suffix = f"hri_{ablation_variant}"
+        output_dir = output_dir = (
+            Path(cfg.save_path) / f"eval_{dataset_name}_{method_suffix}"
         )
     else:
         output_dir = output_dir = (

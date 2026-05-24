@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Any, Dict, List, Tuple
 
 from Core.provider.llm import LLM
 from Core.provider.embedding import TextEmbeddingProvider
@@ -155,9 +155,9 @@ def batch_generate_summary(prompts: List[str], llm: LLM) -> List[str]:
     return res_summaries
 
 
-def cluster_one_layer(
+def cluster_one_layer_with_indices(
     input_texts: List[str], embedder: TextEmbeddingProvider, llm: LLM
-) -> List[str]:
+) -> Tuple[List[str], List[List[int]]]:
 
     embeddings = get_embedding(input_texts, embedder)
     labels, n = GMM_cluster(embeddings)
@@ -165,18 +165,84 @@ def cluster_one_layer(
     print(f"Clustered into {n} groups.")
 
     summaries = []
+    cluster_groups = []
     for cluster_id in range(n):
-        # cluster_indices = [i for i, label in enumerate(labels) if label == cluster_id]
         cluster_indices = [i for i, label in enumerate(labels) if cluster_id in label]
+        cluster_groups.append(cluster_indices)
 
         cluster_texts = [input_texts[i] for i in cluster_indices]
         summary_prompt = get_summary_prompt(cluster_texts)
         summaries.append(summary_prompt)
     summaries = batch_generate_summary(summaries, llm)
+    return summaries, cluster_groups
+
+
+def cluster_one_layer(
+    input_texts: List[str], embedder: TextEmbeddingProvider, llm: LLM
+) -> List[str]:
+    summaries, _ = cluster_one_layer_with_indices(input_texts, embedder, llm)
     return summaries
 
 
-def get_meta_data(texts: List[str], depth: int, base_num: int) -> List[dict]:
+def _without_none(metadata: Dict[str, Any]) -> Dict[str, Any]:
+    return {key: value for key, value in metadata.items() if value is not None}
+
+
+def _unique_join(values: List[Any], sep: str = ",") -> str:
+    seen = []
+    for value in values:
+        if value is None or value == "":
+            continue
+        value = str(value)
+        if value not in seen:
+            seen.append(value)
+    return sep.join(seen)
+
+
+def build_summary_metadata(
+    child_metadatas: List[Dict[str, Any]], depth: int, chunk_id: int
+) -> Dict[str, Any]:
+    pages = [meta.get("page") for meta in child_metadatas]
+    sections = [meta.get("section_id") or meta.get("section") for meta in child_metadatas]
+    node_ids = [
+        meta.get("source_node_id") or meta.get("node_id") for meta in child_metadatas
+    ]
+    title_paths = [meta.get("title_path") for meta in child_metadatas]
+    first_page = next((page for page in pages if page is not None), None)
+    first_section = next((section for section in sections if section), None)
+    first_title_path = next((title_path for title_path in title_paths if title_path), None)
+    return _without_none(
+        {
+            "source": "raptor_summary",
+            "chunk_id": chunk_id,
+            "raptor_depth": depth,
+            "node_type": "raptor_summary",
+            "page": first_page,
+            "section_id": first_section,
+            "section": first_section,
+            "title_path": first_title_path,
+            "child_source_node_ids": _unique_join(node_ids),
+            "child_pages": _unique_join(pages),
+            "child_sections": _unique_join(sections, sep=" | "),
+        }
+    )
+
+
+def get_meta_data(
+    texts: List[str],
+    depth: int,
+    base_num: int,
+    base_metadatas: List[Dict[str, Any]] | None = None,
+) -> List[dict]:
+    if depth == 0 and base_metadatas:
+        meta_datas = []
+        for i in range(len(texts)):
+            metadata = dict(base_metadatas[i]) if i < len(base_metadatas) else {}
+            metadata.setdefault("source", "document")
+            metadata["chunk_id"] = base_num + i
+            metadata.setdefault("raptor_depth", 0)
+            meta_datas.append(_without_none(metadata))
+        return meta_datas
 
     source = "document" if depth == 0 else f"depth_{depth}"
     meta_datas = [
@@ -186,16 +252,23 @@ def get_meta_data(texts: List[str], depth: int, base_num: int) -> List[dict]:
 
 
 def raptor_tree(
-    chunks: List[str], embedder: TextEmbeddingProvider, llm: LLM, max_depth=20
+    chunks: List[str],
+    embedder: TextEmbeddingProvider,
+    llm: LLM,
+    max_depth=20,
+    base_metadatas: List[Dict[str, Any]] | None = None,
 ):
     current_texts = chunks
+    current_metadatas = get_meta_data(
+        current_texts, depth=0, base_num=0, base_metadatas=base_metadatas
+    )
     tree_text = []
     meta_data = []
     base_num = 0
 
     # add the original chunks as depth 0
     tree_text.extend(current_texts)
-    meta_data.extend(get_meta_data(current_texts, depth=0, base_num=base_num))
+    meta_data.extend(current_metadatas)
     base_num += len(current_texts)
 
     for depth in range(max_depth):
@@ -203,12 +276,23 @@ def raptor_tree(
             break
 
         print(f"Clustering depth {depth+1} with {len(current_texts)} texts")
-        summaries = cluster_one_layer(current_texts, embedder, llm)
+        summaries, cluster_groups = cluster_one_layer_with_indices(
+            current_texts, embedder, llm
+        )
+        summary_metadatas = []
+        for i, cluster_indices in enumerate(cluster_groups):
+            child_metadatas = [current_metadatas[idx] for idx in cluster_indices]
+            summary_metadatas.append(
+                build_summary_metadata(
+                    child_metadatas=child_metadatas,
+                    depth=depth + 1,
+                    chunk_id=base_num + i,
+                )
+            )
         tree_text.extend(summaries)
         current_texts = summaries
-        meta_data.extend(
-            get_meta_data(current_texts, depth=depth + 1, base_num=base_num)
-        )
+        current_metadatas = summary_metadatas
+        meta_data.extend(summary_metadatas)
         base_num += len(current_texts)
 
     return tree_text, meta_data

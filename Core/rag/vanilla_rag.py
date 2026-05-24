@@ -10,6 +10,7 @@ from Core.rag.base_rag import BaseRAG
 from Core.configs.rag.vanilla_config import VanillaConfig
 from Core.utils.bm25 import BM25
 from Core.utils.utils import TextProcessor
+from Core.utils.json_safety import make_json_safe
 
 from typing import Dict, Any, List
 import json
@@ -63,7 +64,11 @@ class VanillaRAG(BaseRAG):
 
         context_text += "\n--- Retrieved Documents ---\n"
         for i, doc in enumerate(retrieved_docs):
-            context_text += f"Text {i+1}: {doc['content']}\n"
+            source = self._format_source(doc)
+            if source:
+                context_text += f"Text {i+1} ({source}): {doc['content']}\n"
+            else:
+                context_text += f"Text {i+1}: {doc['content']}\n"
 
         context_text = TextProcessor.split_text_into_chunks(
             text=context_text, max_length=self.max_tokens-400
@@ -71,11 +76,26 @@ class VanillaRAG(BaseRAG):
         context_text = context_text[0]  # take the first chunk only
         return context_text
 
+    @staticmethod
+    def _format_source(doc: Dict[str, Any]) -> str:
+        meta = doc.get("metadata") or {}
+        source_parts = []
+        page = meta.get("page") or doc.get("page")
+        section = meta.get("section_id") or meta.get("section") or doc.get("section_id")
+        title_path = meta.get("title_path") or doc.get("title_path")
+        if page:
+            source_parts.append(f"page={page}")
+        if section:
+            source_parts.append(f"section={section}")
+        elif title_path:
+            source_parts.append(f"title_path={title_path}")
+        return ", ".join(source_parts)
+
     def _save_retrieval_res(self, context_nodes, query_output_dir) -> List[Dict]:
         retrieval_ids = []
         for doc in context_nodes:
+            meta = doc.get("metadata", {}) if isinstance(doc.get("metadata"), dict) else {}
             if "metadata" in doc:
-                meta = doc.get("metadata", {})
                 if "node_id" in meta:
                     node_id = meta["node_id"]
                 elif "chunk_id" in meta:
@@ -90,10 +110,31 @@ class VanillaRAG(BaseRAG):
                 "id": node_id,
                 "content": doc["content"],
             }
+            for key in [
+                "source",
+                "chunk_id",
+                "source_chunk_index",
+                "source_node_id",
+                "node_id",
+                "pdf_id",
+                "page",
+                "node_type",
+                "section_id",
+                "section",
+                "title_path",
+            ]:
+                if key in meta:
+                    meta_info_dict[key] = meta[key]
             retrieval_ids.append(node_id)
             node_file_path = query_output_dir / f"{node_id}.json"
             with open(node_file_path, "w", encoding="utf-8") as f:
-                json.dump(meta_info_dict, f, indent=2, ensure_ascii=False)
+                json.dump(
+                    make_json_safe(meta_info_dict),
+                    f,
+                    indent=2,
+                    ensure_ascii=False,
+                    allow_nan=False,
+                )
 
         log.info("Saved retrieval results to output directory.")
 

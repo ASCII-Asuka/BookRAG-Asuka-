@@ -1,7 +1,15 @@
+from pathlib import Path
+import sys
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 from Core.configs.dataset_config import DatasetConfig, load_dataset_config
 from Eval.utils.m3doc_eval import eval_m3doc
 from Eval.utils.mmlong_eval import eval_mmlong
 from Eval.utils.qasper_eval import eval_qasper
+from Eval.utils.hydro_eval import eval_hydro
 
 import pandas as pd
 import argparse
@@ -33,6 +41,17 @@ def create_args():
         default=16,
         help="Number of parallel workers for processing.",
     )
+    parser.add_argument(
+        "--api_config",
+        type=str,
+        default="Eval/utils/api.txt",
+        help="Path to the OpenAI-compatible API config used by LLM-as-judge.",
+    )
+    parser.add_argument(
+        "--skip_llm_judge",
+        action="store_true",
+        help="Skip LLM-as-judge and compute deterministic metrics only.",
+    )
 
     return parser.parse_args()
 
@@ -61,6 +80,17 @@ def eval(args):
     if data_cfg.dataset_name.lower() == "qasper":
         eval_qasper(data_df, data_cfg, args.method, max_workers=args.max_workers)
         print("QASPER dataset evaluation completed.")
+
+    if data_cfg.dataset_name.lower() == "hri_four_predictions":
+        eval_hydro(
+            data_df,
+            data_cfg,
+            args.method,
+            max_workers=args.max_workers,
+            skip_llm_judge=args.skip_llm_judge,
+            api_config_path=args.api_config,
+        )
+        print("Hydro HRI dataset evaluation completed.")
 
 
 if __name__ == "__main__":

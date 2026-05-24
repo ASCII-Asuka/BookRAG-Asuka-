@@ -40,6 +40,16 @@ DEFAULT_EVIDENCE_BUDGETS = {
 
 class HRIRAGConfig(BaseRAGStrategyConfig):
     strategy: Literal["hri"] = "hri"
+    ablation_variant: Literal[
+        "full",
+        "wo_tree",
+        "wo_relation",
+        "wo_planner",
+        "wo_evidence_chain",
+    ] = Field(
+        default="full",
+        description="HRI ablation variant. 'full' keeps all HRI modules enabled.",
+    )
     topk: int = Field(default=8, description="Backward-compatible coarse retrieval top-k.")
     question_classifier: Literal["rule", "llm", "hybrid"] = Field(
         default="hybrid", description="Question planning mode for HRI retrieval."
