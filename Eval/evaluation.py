@@ -81,7 +81,7 @@ def eval(args):
         eval_qasper(data_df, data_cfg, args.method, max_workers=args.max_workers)
         print("QASPER dataset evaluation completed.")
 
-    if data_cfg.dataset_name.lower() == "hri_four_predictions":
+    if data_cfg.dataset_name.lower().startswith("hri_"):
         eval_hydro(
             data_df,
             data_cfg,

@@ -406,9 +406,10 @@ class HRIRAG(BaseRAG):
     @staticmethod
     def _marker_matches_query(query: str, anchor: EvidenceAnchor) -> bool:
         marker_pattern = re.compile(
-            r"(第\s*[\d一二三四五六七八九十百千万.．\-－—]+\s*条|"
-            r"表\s*[\dA-Za-z一二三四五六七八九十百千万]+(?:[-－—.．]\d+)*|"
-            r"\b\d+(?:[.．\-－]\d+)+\b)"
+            r"(第\s*[\d一二三四五六七八九十百千万.．\-]+条|"
+            r"表\s*[\dA-Za-z一二三四五六七八九十百千万]+(?:[-－.．]\d+)*|"
+            r"附录\s*[A-Za-z]?|"
+            r"\b\d+(?:[.．]\d+)+\b)"
         )
         markers = marker_pattern.findall(query or "")
         if not markers:
@@ -782,7 +783,6 @@ class HRIRAG(BaseRAG):
                     lines.append("结构化属性：" + attrs)
             lines.append("原文：" + text)
         return "\n".join(lines)
-
     @staticmethod
     def _type_weights(question_type: QuestionType) -> Dict[str, float]:
         if question_type == "statistical":
@@ -857,6 +857,5 @@ class HRIRAG(BaseRAG):
         if is_seed:
             return f"{question_type}问题命中证据"
         return "上下文证据"
-
     def close(self):
         return None
