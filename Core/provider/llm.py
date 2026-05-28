@@ -78,9 +78,11 @@ class OpenAIController(BaseLLMController):
         )
 
         if base_url is not None:
-            self.client = OpenAI(api_key=llm_config.api_key, base_url=base_url)
+            self.client = OpenAI(
+                api_key=llm_config.api_key, base_url=base_url, timeout=120
+            )
         else:
-            self.client = OpenAI(api_key=llm_config.api_key)
+            self.client = OpenAI(api_key=llm_config.api_key, timeout=120)
 
     def _prepare_messages(
         self, prompt_or_memory: Union[str, Memory], add_system_prompt: bool = True
