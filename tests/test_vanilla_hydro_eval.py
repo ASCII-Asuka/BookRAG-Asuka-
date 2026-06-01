@@ -261,7 +261,115 @@ class VanillaMarkdownInputTests(unittest.TestCase):
         self.assertIn("5.2预警", summary_metadata["child_sections"])
 
 
+class VanillaRetrievalOrderTests(unittest.TestCase):
+    def test_vanilla_retrieval_res_preserves_ranked_order(self):
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        with tempfile.TemporaryDirectory() as tmp:
+            query_dir = Path(tmp)
+            rag = VanillaRAG.__new__(VanillaRAG)
+
+            retrieved_ids = rag._save_retrieval_res(
+                [
+                    {
+                        "id": "first",
+                        "content": "first evidence",
+                        "metadata": {"node_id": 42, "page": 1, "section_id": "A"},
+                    },
+                    {
+                        "id": "second",
+                        "content": "second evidence",
+                        "metadata": {"node_id": 7, "page": 2, "section_id": "B"},
+                    },
+                ],
+                query_dir,
+            )
+
+            self.assertEqual(retrieved_ids, [42, 7])
+            retrieval_res = json.loads(
+                (query_dir / "retrieval_res.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(
+                [item["id"] for item in retrieval_res["ranked_results"]],
+                [42, 7],
+            )
+            self.assertEqual(
+                [item["content"] for item in retrieval_res["ranked_results"]],
+                ["first evidence", "second evidence"],
+            )
+
+
 class HydroEvalMetricTests(unittest.TestCase):
+    def test_collect_retrieval_items_uses_final_result_order_when_no_retrieval_res(self):
+        from Eval.utils.hydro_eval import collect_retrieval_items
+
+        with tempfile.TemporaryDirectory() as tmp:
+            query_dir = Path(tmp)
+            (query_dir / "7.json").write_text(
+                json.dumps({"id": 7, "content": "second evidence"}),
+                encoding="utf-8",
+            )
+            (query_dir / "42.json").write_text(
+                json.dumps({"id": 42, "content": "first evidence"}),
+                encoding="utf-8",
+            )
+
+            items = collect_retrieval_items(query_dir, retrieval_ids=[42, 7])
+
+            self.assertEqual([item["text"] for item in items], ["first evidence", "second evidence"])
+
+    def test_hydro_judge_content_includes_gold_retrieval_and_chain_evidence(self):
+        from Eval.utils.hydro_eval import build_hydro_judge_content
+
+        item = {
+            "question": "What should be done when warning risk occurs?",
+            "answer": "Publish warnings and take defensive measures.",
+            "answer_keypoints": ["warning", "defensive measures"],
+            "gold_evidence_keywords": [["warning threshold"], ["inspection"]],
+            "gold_evidence_pages": [8, 9],
+            "gold_evidence_sections": ["5.2 warning"],
+            "gold_relations": ["condition_of", "requires"],
+            "gold_path_relations": ["condition_of"],
+            "gold_relation_support": ["requires"],
+            "output": "Warnings should be published with page 8 evidence.",
+        }
+        retrieval_items = [
+            {
+                "text": "warning threshold and inspection",
+                "role": "requirement",
+                "node_type": "Requirement",
+                "page": 8,
+                "section": "5.2 warning",
+                "relations": [{"relation_type": "requires"}],
+            }
+        ]
+        evidence_chain_items = [
+            {
+                "text": "when warning threshold is reached",
+                "role": "condition",
+                "node_type": "Condition",
+                "page": 8,
+                "section": "5.2 warning",
+                "relations": [{"relation_type": "condition_of"}],
+            }
+        ]
+
+        content = build_hydro_judge_content(
+            item,
+            retrieval_items=retrieval_items,
+            evidence_chain_items=evidence_chain_items,
+            query_relations=[{"relation_type": "requires"}],
+        )
+
+        self.assertIn("Gold Evidence Pages", content)
+        self.assertIn("Gold Evidence Sections", content)
+        self.assertIn("Gold Evidence Keywords", content)
+        self.assertIn("Gold Relations", content)
+        self.assertIn("Retrieved Evidence", content)
+        self.assertIn("Evidence Chain", content)
+        self.assertIn("warning threshold and inspection", content)
+        self.assertIn("condition_of", content)
+
     def test_hydro_deterministic_metrics_cover_answer_and_evidence(self):
         from Eval.utils.hydro_eval import evaluate_hydro_result_item
 
@@ -291,6 +399,46 @@ class HydroEvalMetricTests(unittest.TestCase):
         self.assertNotIn("char_f1", evaluated)
         self.assertNotIn("rouge_l", evaluated)
         self.assertEqual(evaluated["retrieved_count"], 2)
+
+    def test_hydro_retrieval_metrics_use_multiple_k_and_noise_ratio(self):
+        from Eval.utils.hydro_eval import evaluate_hydro_result_item
+
+        item = {
+            "question": "Which evidence supports warning requirements?",
+            "answer": "Use alpha, beta, and gamma evidence.",
+            "gold_evidence_keywords": [["alpha"], ["beta"], ["gamma"]],
+            "gold_evidence_pages": [2, 5],
+            "gold_evidence_sections": ["section alpha", "section beta"],
+            "output": "alpha beta gamma",
+        }
+        retrieval_items = [
+            {"text": "alpha evidence", "page": 2, "section": "section alpha"},
+            {"text": "unrelated flood narrative", "page": 9, "section": "noise"},
+            {"text": "beta evidence", "page": 5, "section": "section beta"},
+            {"text": "unrelated scheduling text"},
+            {"text": "another unrelated chunk"},
+            {"text": "gamma evidence", "page": 7, "section": "section gamma"},
+        ]
+
+        evaluated = evaluate_hydro_result_item(
+            item=item,
+            retrieval_texts=[entry["text"] for entry in retrieval_items],
+            retrieval_items=retrieval_items,
+            llm_score=None,
+            extracted_res=None,
+        )
+
+        self.assertAlmostEqual(evaluated["evidence_recall@1"], 1 / 3, places=6)
+        self.assertAlmostEqual(evaluated["evidence_recall@3"], 2 / 3, places=6)
+        self.assertAlmostEqual(evaluated["evidence_recall@5"], 2 / 3, places=6)
+        self.assertEqual(evaluated["evidence_recall@8"], 1.0)
+        self.assertEqual(evaluated["perfect_evidence_recall@5"], 0.0)
+        self.assertEqual(evaluated["perfect_evidence_recall@8"], 1.0)
+        self.assertAlmostEqual(evaluated["irrelevant_evidence_ratio@3"], 1 / 3, places=6)
+        self.assertEqual(evaluated["irrelevant_evidence_ratio@5"], 0.6)
+        self.assertEqual(evaluated["mrr"], 1.0)
+        self.assertEqual(evaluated["page_section_hit_rate@1"], 0.5)
+        self.assertEqual(evaluated["page_section_hit_rate@3"], 1.0)
 
     def test_hydro_chain_and_explainability_metrics(self):
         from Eval.utils.hydro_eval import evaluate_hydro_result_item
@@ -436,13 +584,21 @@ class HydroEvalMetricTests(unittest.TestCase):
             self.assertNotIn("NaN", score_path.read_text(encoding="utf-8"))
             score = json.loads(score_path.read_text(encoding="utf-8"))
             self.assertEqual(score["Total samples"], 1)
-            self.assertEqual(score["Avg keypoint_recall"], 1.0)
-            self.assertEqual(score["Avg evidence_keyword_recall"], 1.0)
+            self.assertNotIn("Avg keypoint_recall", score)
+            self.assertNotIn("Avg evidence_keyword_recall", score)
             self.assertEqual(score["Avg Evidence Recall@5"], 1.0)
+            self.assertEqual(score["Avg Perfect Evidence Recall@5"], 1.0)
+            self.assertEqual(score["Avg Irrelevant Evidence Ratio@5"], 0.0)
             self.assertEqual(score["Avg MRR"], 1.0)
             self.assertEqual(score["Avg Evidence Chain Coverage"], 1.0)
-            self.assertEqual(score["Avg Page Hit Rate"], 1.0)
-            self.assertEqual(score["Avg Section Hit Rate"], 1.0)
+            self.assertEqual(score["Avg Page/Section Hit@5"], 1.0)
+            self.assertNotIn("Avg Page Hit Rate", score)
+            self.assertNotIn("Avg Section Hit Rate", score)
+            self.assertNotIn("Avg Relation Hit Rate", score)
+            self.assertNotIn("Avg Path Completeness", score)
+            self.assertNotIn("Avg Relation Support Rate", score)
+            self.assertNotIn("Avg Evidence-aware LLM Judge Score", score)
+            self.assertNotIn("Avg llm_score", score)
             self.assertNotIn("Avg char_f1", score)
             self.assertNotIn("Avg rouge_l", score)
             self.assertEqual(score["total_tokens"], 7)

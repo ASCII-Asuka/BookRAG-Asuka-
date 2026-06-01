@@ -93,6 +93,7 @@ class VanillaRAG(BaseRAG):
 
     def _save_retrieval_res(self, context_nodes, query_output_dir) -> List[Dict]:
         retrieval_ids = []
+        ranked_results = []
         for doc in context_nodes:
             meta = doc.get("metadata", {}) if isinstance(doc.get("metadata"), dict) else {}
             if "metadata" in doc:
@@ -126,6 +127,7 @@ class VanillaRAG(BaseRAG):
                 if key in meta:
                     meta_info_dict[key] = meta[key]
             retrieval_ids.append(node_id)
+            ranked_results.append(meta_info_dict)
             node_file_path = query_output_dir / f"{node_id}.json"
             with open(node_file_path, "w", encoding="utf-8") as f:
                 json.dump(
@@ -135,6 +137,15 @@ class VanillaRAG(BaseRAG):
                     ensure_ascii=False,
                     allow_nan=False,
                 )
+
+        with open(query_output_dir / "retrieval_res.json", "w", encoding="utf-8") as f:
+            json.dump(
+                make_json_safe({"ranked_results": ranked_results}),
+                f,
+                indent=2,
+                ensure_ascii=False,
+                allow_nan=False,
+            )
 
         log.info("Saved retrieval results to output directory.")
 

@@ -14,6 +14,9 @@ from Core.utils.json_safety import make_json_safe
 from Eval.utils.utils import get_all_cost
 
 
+EVIDENCE_K_VALUES = (1, 3, 5, 8, 10, 15)
+
+
 def _normalize_text(text: Any) -> str:
     text = "" if text is None else str(text)
     text = text.lower()
@@ -228,7 +231,31 @@ def collect_query_relations(query_dir: Path) -> List[Any]:
     return relations
 
 
-def collect_retrieval_items(query_dir: Path) -> List[Dict[str, Any]]:
+def collect_evidence_chain_items(query_dir: Path) -> List[Dict[str, Any]]:
+    evidence_path = query_dir / "evidence_chain.json"
+    if not evidence_path.exists():
+        return []
+    payload = _load_json(evidence_path)
+    if isinstance(payload, dict):
+        for key in ["evidence_chain", "chain", "items", "nodes"]:
+            values = payload.get(key)
+            if isinstance(values, list) and values:
+                return [
+                    item
+                    for item in (_payload_to_retrieval_item(value) for value in values)
+                    if item is not None
+                ]
+    values = payload if isinstance(payload, list) else [payload]
+    return [
+        item
+        for item in (_payload_to_retrieval_item(value) for value in values)
+        if item is not None
+    ]
+
+
+def collect_retrieval_items(
+    query_dir: Path, retrieval_ids: Optional[List[Any]] = None
+) -> List[Dict[str, Any]]:
     retrieval_path = query_dir / "retrieval_res.json"
     if retrieval_path.exists():
         retrieval_payload = _load_json(retrieval_path)
@@ -254,8 +281,28 @@ def collect_retrieval_items(query_dir: Path) -> List[Dict[str, Any]]:
             if item is not None
         ]
 
-    retrieval_items: List[Dict[str, Any]] = []
     ignored_names = {"result.json", "retrieval_res.json", "evidence_chain.json"}
+    if retrieval_ids:
+        ordered_items: List[Dict[str, Any]] = []
+        seen_paths = set()
+        for retrieval_id in retrieval_ids:
+            json_path = query_dir / f"{retrieval_id}.json"
+            if not json_path.exists():
+                continue
+            item = _payload_to_retrieval_item(_load_json(json_path))
+            if item is not None:
+                ordered_items.append(item)
+                seen_paths.add(json_path.name)
+        for json_path in sorted(query_dir.glob("*.json"), key=_json_sort_key):
+            if json_path.name in ignored_names or json_path.name in seen_paths:
+                continue
+            item = _payload_to_retrieval_item(_load_json(json_path))
+            if item is not None:
+                ordered_items.append(item)
+        if ordered_items:
+            return ordered_items
+
+    retrieval_items: List[Dict[str, Any]] = []
     for json_path in sorted(query_dir.glob("*.json"), key=_json_sort_key):
         if json_path.name in ignored_names:
             continue
@@ -277,6 +324,36 @@ def _evidence_recall_at_k(
         return None
     evidence_text = "\n".join(_item_text(item) for item in retrieval_items[:k])
     return _coverage_ratio(groups, evidence_text)
+
+
+def _retrieval_item_matches_any_group(
+    item: Dict[str, Any], groups: List[List[str]]
+) -> bool:
+    text = _item_text(item)
+    return any(_matches_keyword_group(text, group) for group in groups)
+
+
+def _perfect_evidence_recall_at_k(
+    groups: List[List[str]], retrieval_items: List[Dict[str, Any]], k: int
+) -> Optional[float]:
+    recall = _evidence_recall_at_k(groups, retrieval_items, k)
+    if recall is None:
+        return None
+    return 1.0 if recall >= 1.0 else 0.0
+
+
+def _irrelevant_evidence_ratio_at_k(
+    groups: List[List[str]], retrieval_items: List[Dict[str, Any]], k: int
+) -> Optional[float]:
+    if not groups:
+        return None
+    top_items = retrieval_items[:k]
+    if not top_items:
+        return 0.0
+    irrelevant = sum(
+        1 for item in top_items if not _retrieval_item_matches_any_group(item, groups)
+    )
+    return irrelevant / len(top_items)
 
 
 def _mrr(groups: List[List[str]], retrieval_items: List[Dict[str, Any]]) -> Optional[float]:
@@ -379,6 +456,59 @@ def _relation_hit_rate(
     return hits / len(gold_relations)
 
 
+def _truncate_for_judge(text: Any, limit: int = 700) -> str:
+    value = "" if text is None else str(text)
+    value = re.sub(r"\s+", " ", value).strip()
+    if len(value) <= limit:
+        return value
+    return value[: limit - 3] + "..."
+
+
+def _format_judge_evidence_items(
+    items: List[Dict[str, Any]], max_items: int = 8
+) -> str:
+    formatted_items: List[Dict[str, Any]] = []
+    for rank, item in enumerate(items[:max_items], start=1):
+        formatted_items.append(
+            {
+                "rank": rank,
+                "role": item.get("role"),
+                "node_type": item.get("node_type"),
+                "page": item.get("page"),
+                "section": _truncate_for_judge(item.get("section"), 220),
+                "relations": _as_relation_types(item.get("relations")),
+                "text": _truncate_for_judge(_item_text(item)),
+            }
+        )
+    return json.dumps(formatted_items, ensure_ascii=False)
+
+
+def build_hydro_judge_content(
+    item: Dict[str, Any],
+    retrieval_items: Optional[List[Dict[str, Any]]] = None,
+    evidence_chain_items: Optional[List[Dict[str, Any]]] = None,
+    query_relations: Optional[List[Any]] = None,
+) -> str:
+    retrieval_items = retrieval_items or []
+    evidence_chain_items = evidence_chain_items or []
+    keypoints = item.get("answer_keypoints") or []
+    return (
+        f"Question: {item.get('question', '')}\n"
+        f"Reference Answer: {item.get('answer', '')}\n"
+        f"Reference Key Points: {json.dumps(keypoints, ensure_ascii=False)}\n"
+        f"Gold Evidence Keywords: {json.dumps(item.get('gold_evidence_keywords') or [], ensure_ascii=False)}\n"
+        f"Gold Evidence Pages: {json.dumps(item.get('gold_evidence_pages') or [], ensure_ascii=False)}\n"
+        f"Gold Evidence Sections: {json.dumps(item.get('gold_evidence_sections') or [], ensure_ascii=False)}\n"
+        f"Gold Relations: {json.dumps(_as_relation_types(item.get('gold_relations')), ensure_ascii=False)}\n"
+        f"Gold Path Relations: {json.dumps(_as_relation_types(item.get('gold_path_relations')), ensure_ascii=False)}\n"
+        f"Gold Support Relations: {json.dumps(_as_relation_types(item.get('gold_relation_support')), ensure_ascii=False)}\n"
+        f"Retrieved Evidence: {_format_judge_evidence_items(retrieval_items)}\n"
+        f"Evidence Chain: {_format_judge_evidence_items(evidence_chain_items)}\n"
+        f"Retrieved Relation Types: {json.dumps(_as_relation_types(query_relations or []), ensure_ascii=False)}\n"
+        f"Model Response: {item.get('output', '')}\n"
+    )
+
+
 class HydroAnswerJudge:
     def __init__(self, api_config_path: str):
         config_path = Path(api_config_path)
@@ -413,13 +543,18 @@ class HydroAnswerJudge:
             score,
         )
 
-    def judge(self, item: Dict[str, Any]) -> Tuple[str, str, float, str]:
-        keypoints = item.get("answer_keypoints") or []
-        content = (
-            f"Question: {item.get('question', '')}\n"
-            f"Reference Answer: {item.get('answer', '')}\n"
-            f"Reference Key Points: {json.dumps(keypoints, ensure_ascii=False)}\n"
-            f"Model Response: {item.get('output', '')}\n"
+    def judge(
+        self,
+        item: Dict[str, Any],
+        retrieval_items: Optional[List[Dict[str, Any]]] = None,
+        evidence_chain_items: Optional[List[Dict[str, Any]]] = None,
+        query_relations: Optional[List[Any]] = None,
+    ) -> Tuple[str, str, float, str]:
+        content = build_hydro_judge_content(
+            item,
+            retrieval_items=retrieval_items,
+            evidence_chain_items=evidence_chain_items,
+            query_relations=query_relations,
         )
         response = self.client.chat.completions.create(
             model=self.model_name,
@@ -467,17 +602,39 @@ def evaluate_hydro_result_item(
     evaluated["pred"] = extracted_res if extracted_res is not None else output
     evaluated["pred_format"] = pred_format or item.get("answer_format", "KeyPoints")
     evaluated["llm_score"] = llm_score
+    evaluated["evidence_aware_llm_score"] = llm_score
     evaluated["extracted_res"] = judge_raw or extracted_res
     evaluated["keypoint_recall"] = round(_coverage_ratio(keypoint_groups, output), 6)
     evaluated["evidence_keyword_recall"] = round(
         _coverage_ratio(evidence_groups, evidence_text), 6
     )
-    evaluated["evidence_recall@5"] = (
-        round(value, 6)
-        if (value := _evidence_recall_at_k(evidence_groups, retrieval_items, 5))
-        is not None
-        else None
-    )
+    for k in EVIDENCE_K_VALUES:
+        evaluated[f"evidence_recall@{k}"] = (
+            round(value, 6)
+            if (value := _evidence_recall_at_k(evidence_groups, retrieval_items, k))
+            is not None
+            else None
+        )
+        evaluated[f"perfect_evidence_recall@{k}"] = (
+            round(value, 6)
+            if (
+                value := _perfect_evidence_recall_at_k(
+                    evidence_groups, retrieval_items, k
+                )
+            )
+            is not None
+            else None
+        )
+        evaluated[f"irrelevant_evidence_ratio@{k}"] = (
+            round(value, 6)
+            if (
+                value := _irrelevant_evidence_ratio_at_k(
+                    evidence_groups, retrieval_items, k
+                )
+            )
+            is not None
+            else None
+        )
     evaluated["mrr"] = (
         round(value, 6)
         if (value := _mrr(evidence_groups, retrieval_items)) is not None
@@ -495,26 +652,34 @@ def evaluate_hydro_result_item(
         is not None
         else None
     )
-    evaluated["page_hit_rate"] = (
-        round(value, 6)
-        if (value := _page_hit_rate(gold_pages, retrieval_items)) is not None
-        else None
-    )
-    evaluated["section_hit_rate"] = (
-        round(value, 6)
-        if (value := _section_hit_rate(gold_sections, retrieval_items)) is not None
-        else None
-    )
-    evaluated["page_section_hit_rate"] = (
-        round(value, 6)
-        if (
-            value := _mean_optional(
-                [evaluated["page_hit_rate"], evaluated["section_hit_rate"]]
-            )
+    for k in EVIDENCE_K_VALUES:
+        evaluated[f"page_hit_rate@{k}"] = (
+            round(value, 6)
+            if (value := _page_hit_rate(gold_pages, retrieval_items[:k])) is not None
+            else None
         )
-        is not None
-        else None
-    )
+        evaluated[f"section_hit_rate@{k}"] = (
+            round(value, 6)
+            if (value := _section_hit_rate(gold_sections, retrieval_items[:k]))
+            is not None
+            else None
+        )
+        evaluated[f"page_section_hit_rate@{k}"] = (
+            round(value, 6)
+            if (
+                value := _mean_optional(
+                    [
+                        evaluated[f"page_hit_rate@{k}"],
+                        evaluated[f"section_hit_rate@{k}"],
+                    ]
+                )
+            )
+            is not None
+            else None
+        )
+    evaluated["page_hit_rate"] = evaluated.get("page_hit_rate@5")
+    evaluated["section_hit_rate"] = evaluated.get("section_hit_rate@5")
+    evaluated["page_section_hit_rate"] = evaluated.get("page_section_hit_rate@5")
     evaluated["relation_hit_rate"] = (
         round(value, 6)
         if (value := _relation_hit_rate(gold_relations, predicted_relations)) is not None
@@ -550,7 +715,10 @@ def eval_single_file(
     evaluated_items = []
     for idx, item in enumerate(res_data, start=1):
         query_dir = res_dir / f"query_{idx:03d}"
-        retrieval_items = collect_retrieval_items(query_dir)
+        retrieval_items = collect_retrieval_items(
+            query_dir, retrieval_ids=item.get("retrieved_node_ids")
+        )
+        evidence_chain_items = collect_evidence_chain_items(query_dir)
         retrieval_texts = [_item_text(entry) for entry in retrieval_items]
         query_relations = collect_query_relations(query_dir)
         extracted = None
@@ -558,7 +726,12 @@ def eval_single_file(
         llm_score = None
         judge_raw = None
         if judge is not None:
-            extracted, pred_format, llm_score, judge_raw = judge.judge(item)
+            extracted, pred_format, llm_score, judge_raw = judge.judge(
+                item,
+                retrieval_items=retrieval_items,
+                evidence_chain_items=evidence_chain_items,
+                query_relations=query_relations,
+            )
         evaluated_items.append(
             evaluate_hydro_result_item(
                 item=item,
@@ -610,52 +783,39 @@ def eval_hydro(
         item for item in result if item.get("gold_evidence_keywords")
     ]
     chain_available = [item for item in result if item.get("gold_chain_roles")]
-    page_available = [item for item in result if item.get("gold_evidence_pages")]
-    section_available = [item for item in result if item.get("gold_evidence_sections")]
     page_section_available = [
         item
         for item in result
         if item.get("gold_evidence_pages") or item.get("gold_evidence_sections")
     ]
-    relation_available = [item for item in result if item.get("gold_relations")]
-    path_available = [item for item in result if item.get("gold_path_relations")]
-    support_available = [
-        item
-        for item in result
-        if item.get("gold_relation_support")
-        or item.get("gold_path_relations")
-        or item.get("gold_relations")
-    ]
-    score_dict = {
-        "Avg llm_score": _mean(result, "llm_score"),
-        "Avg keypoint_recall": _mean(result, "keypoint_recall"),
-        "Avg evidence_keyword_recall": _mean(
-            evidence_available, "evidence_keyword_recall"
-        ),
-        "Avg Evidence Recall@5": _mean(evidence_available, "evidence_recall@5"),
-        "Avg MRR": _mean(evidence_available, "mrr"),
-        "Avg Evidence Chain Coverage": _mean(
-            chain_available, "evidence_chain_coverage"
-        ),
-        "Avg Page Hit Rate": _mean(page_available, "page_hit_rate"),
-        "Avg Section Hit Rate": _mean(section_available, "section_hit_rate"),
-        "Avg Page/Section Hit Rate": _mean(
-            page_section_available, "page_section_hit_rate"
-        ),
-        "Avg Relation Hit Rate": _mean(relation_available, "relation_hit_rate"),
-        "Avg Path Completeness": _mean(path_available, "path_completeness"),
-        "Avg Relation Support Rate": _mean(
-            support_available, "relation_support_rate"
-        ),
-        "Avg retrieved_count": _mean(result, "retrieved_count"),
-        "Evidence available samples": len(evidence_available),
-        "Chain available samples": len(chain_available),
-        "Page available samples": len(page_available),
-        "Section available samples": len(section_available),
-        "Relation available samples": len(relation_available),
-        "Path available samples": len(path_available),
-        "Total samples": len(result),
-    }
+    score_dict: Dict[str, Any] = {}
+    for k in EVIDENCE_K_VALUES:
+        score_dict[f"Avg Evidence Recall@{k}"] = _mean(
+            evidence_available, f"evidence_recall@{k}"
+        )
+    score_dict.update(
+        {
+            "Avg MRR": _mean(evidence_available, "mrr"),
+            "Avg Evidence Chain Coverage": _mean(
+                chain_available, "evidence_chain_coverage"
+            ),
+            "Avg retrieved_count": _mean(result, "retrieved_count"),
+            "Evidence available samples": len(evidence_available),
+            "Chain available samples": len(chain_available),
+            "Page/Section available samples": len(page_section_available),
+            "Total samples": len(result),
+        }
+    )
+    for k in EVIDENCE_K_VALUES:
+        score_dict[f"Avg Perfect Evidence Recall@{k}"] = _mean(
+            evidence_available, f"perfect_evidence_recall@{k}"
+        )
+        score_dict[f"Avg Irrelevant Evidence Ratio@{k}"] = _mean(
+            evidence_available, f"irrelevant_evidence_ratio@{k}"
+        )
+        score_dict[f"Avg Page/Section Hit@{k}"] = _mean(
+            page_section_available, f"page_section_hit_rate@{k}"
+        )
     cost_dict = get_all_cost(data_df, data_cfg, method)
     score_dict.update({k: v for k, v in cost_dict.items() if k not in score_dict})
 
@@ -668,21 +828,34 @@ def eval_hydro(
         "question",
         "answer",
         "pred",
+        "evidence_aware_llm_score",
         "llm_score",
         "keypoint_recall",
         "evidence_keyword_recall",
-        "evidence_recall@5",
-        "mrr",
-        "evidence_chain_coverage",
-        "page_hit_rate",
-        "section_hit_rate",
-        "page_section_hit_rate",
-        "relation_hit_rate",
-        "path_completeness",
-        "relation_support_rate",
-        "retrieved_count",
-        "output",
     ]
+    for k in EVIDENCE_K_VALUES:
+        priority_keys.extend(
+            [
+                f"evidence_recall@{k}",
+                f"perfect_evidence_recall@{k}",
+                f"irrelevant_evidence_ratio@{k}",
+                f"page_section_hit_rate@{k}",
+            ]
+        )
+    priority_keys.extend(
+        [
+            "mrr",
+            "evidence_chain_coverage",
+            "page_hit_rate",
+            "section_hit_rate",
+            "page_section_hit_rate",
+            "relation_hit_rate",
+            "path_completeness",
+            "relation_support_rate",
+            "retrieved_count",
+            "output",
+        ]
+    )
     sorted_result = []
     for item in result:
         sorted_item = {k: item[k] for k in priority_keys if k in item}
@@ -696,18 +869,19 @@ def eval_hydro(
 
     print("--------------------------------------")
     print(f"total samples: {len(result)}")
-    print(f"Avg llm_score: {score_dict['Avg llm_score']:.6f}")
-    print(f"Avg keypoint_recall: {score_dict['Avg keypoint_recall']:.6f}")
-    print(
-        f"Avg evidence_keyword_recall: {score_dict['Avg evidence_keyword_recall']:.6f}"
-    )
     print(f"Avg Evidence Recall@5: {score_dict['Avg Evidence Recall@5']:.6f}")
     print(f"Avg MRR: {score_dict['Avg MRR']:.6f}")
     print(
-        f"Avg Evidence Chain Coverage: {score_dict['Avg Evidence Chain Coverage']:.6f}"
+        "Avg Perfect Evidence Recall@5: "
+        f"{score_dict['Avg Perfect Evidence Recall@5']:.6f}"
     )
     print(
-        f"Avg Page/Section Hit Rate: {score_dict['Avg Page/Section Hit Rate']:.6f}"
+        "Avg Irrelevant Evidence Ratio@5: "
+        f"{score_dict['Avg Irrelevant Evidence Ratio@5']:.6f}"
     )
+    print(
+        f"Avg Evidence Chain Coverage: {score_dict['Avg Evidence Chain Coverage']:.6f}"
+    )
+    print(f"Avg Page/Section Hit@5: {score_dict['Avg Page/Section Hit@5']:.6f}")
     print(f"Saved detailed results to {detail_path}")
     print(f"Saved score summary to {score_path}")
