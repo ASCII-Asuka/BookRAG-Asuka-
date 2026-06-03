@@ -1,4 +1,4 @@
-from typing import Dict, Literal, Optional
+from typing import Dict, List, Literal, Optional
 
 from pydantic import Field
 
@@ -44,6 +44,11 @@ class EviBridgeRAGConfig(BaseRAGStrategyConfig):
     ppr_max_iter: int = 50
     enable_shortest_path_connector: bool = True
     connector_max_paths: int = 3
+    preserve_seed_topk: int = 40
+    final_evidence_types: List[str] = Field(default_factory=lambda: ["paragraph", "table", "caption", "figure"])
+    bridge_auxiliary_types: List[str] = Field(default_factory=lambda: ["entity", "summary", "patch", "title"])
+    paragraph_quota: int = 4
+    auxiliary_quota: int = 2
     max_context_blocks: int = 10
     max_context_tokens: int = 4000
     max_iterations: int = 2

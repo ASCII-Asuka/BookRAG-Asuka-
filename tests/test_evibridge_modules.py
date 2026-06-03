@@ -95,20 +95,42 @@ class EviBridgeModuleTests(unittest.TestCase):
 
     def test_demand_parser_returns_controlled_vector_and_weights(self):
         _stub_rag_provider_imports()
-        from Core.rag.evibridge_demand import DemandParser, weights_for_demand
+        from Core.rag.evibridge_demand import DemandParser, EvidenceDemand, sanitize_demand, weights_for_demand
 
         parser = DemandParser(llm=None, mode="rule")
 
         table_demand = parser.parse("Which table reports the accuracy results?")
         compare_demand = parser.parse("Compare Method A and Method B using supporting evidence.")
         global_demand = parser.parse("Summarize the whole document.")
+        fact_demand = parser.parse("Which datasets did they experiment with?")
+        dirty_demand = EvidenceDemand(
+            intent="fact",
+            scope="document",
+            modality=["text"],
+            granularity="entity",
+            bridge_need=["yes", "language_pairs"],
+        )
+        fallback = EvidenceDemand(bridge_need=["context", "semantic"])
+        sanitized = sanitize_demand(dirty_demand, fallback=fallback)
 
         self.assertEqual(table_demand.intent, "table-figure")
         self.assertIn("table", table_demand.modality)
         self.assertEqual(compare_demand.intent, "comparison")
         self.assertIn("semantic", compare_demand.bridge_need)
         self.assertEqual(global_demand.scope, "document")
+        self.assertEqual(fact_demand.granularity, "block")
+        self.assertEqual(sanitized.bridge_need, ["context", "semantic"])
         self.assertEqual(weights_for_demand(table_demand), {"context": 0.65, "semantic": 0.2, "hierarchy": 0.15})
+
+    def test_entity_extraction_filters_question_words(self):
+        entities = EvidenceBridgeIndex._extract_entities(
+            "Which models did they use for the Stanford NER and MNMT experiments?"
+        )
+
+        self.assertNotIn("which", entities)
+        self.assertNotIn("they", entities)
+        self.assertIn("stanford ner", entities)
+        self.assertIn("mnmt", entities)
 
     def test_typed_ppr_uses_query_adaptive_bridge_weights(self):
         _stub_rag_provider_imports()
@@ -163,6 +185,39 @@ class EviBridgeModuleTests(unittest.TestCase):
         self.assertIn(2, selected_ids)
         self.assertLessEqual(len(selected), 3)
         self.assertTrue(all(item.score_parts["cost"] >= 0 for item in selected))
+
+    def test_selector_prioritizes_paragraph_answer_evidence_over_auxiliary_blocks(self):
+        _stub_rag_provider_imports()
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_selector import select_budgeted_evidence
+
+        index = self._build_index()
+        demand = EvidenceDemand(
+            intent="fact",
+            scope="document",
+            modality=["text"],
+            granularity="block",
+            bridge_need=["context", "semantic"],
+        )
+
+        selected = select_budgeted_evidence(
+            index=index,
+            query="Which retrieval method is evaluated?",
+            candidate_scores={1: 0.3, 2: 0.25, 4: 0.95, 5: 0.9},
+            demand=demand,
+            max_blocks=3,
+            max_tokens=200,
+            final_evidence_types=["paragraph"],
+            bridge_auxiliary_types=["summary", "entity", "patch", "title"],
+            paragraph_quota=2,
+            auxiliary_quota=1,
+        )
+
+        selected_ids = [item.block.block_id for item in selected]
+        selected_roles = [item.evidence_role for item in selected]
+        self.assertIn(1, selected_ids)
+        self.assertIn(2, selected_ids)
+        self.assertLessEqual(selected_roles.count("bridge_auxiliary"), 1)
 
     def test_rule_verifier_detects_missing_table_and_disconnected_evidence(self):
         _stub_rag_provider_imports()
@@ -272,6 +327,48 @@ class EviBridgeModuleTests(unittest.TestCase):
         self.assertTrue(any(item.get("seed_family") == "summary" for item in seeds))
         self.assertTrue(any(item.get("seed_family") == "entity" for item in seeds))
         self.assertFalse(any(item.get("seed_family") in {"summary", "entity"} for item in ablated_seeds))
+
+    def test_evibridge_rag_preserves_direct_paragraph_seed_after_ppr(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+
+        with tempfile.TemporaryDirectory() as tmp:
+            index = self._build_index()
+            index.save_dir = tmp
+            bm25 = index.build_bm25()
+            rag = EviBridgeRAG(
+                config=EviBridgeRAGConfig(
+                    bm25_topk=5,
+                    ppr_topk=1,
+                    preserve_seed_topk=2,
+                    max_context_blocks=3,
+                    paragraph_quota=2,
+                    enable_llm_verifier=False,
+                ),
+                llm=FakeLLM(),
+                evibridge_index=index,
+                bm25=bm25,
+            )
+
+            demand = EvidenceDemand(
+                intent="fact",
+                scope="document",
+                modality=["text"],
+                granularity="block",
+                bridge_need=["context", "semantic"],
+            )
+            retrieval_info = rag._retrieve_with_demand(
+                "retrieval graph reasoning",
+                demand,
+            )
+
+        selected_ids = retrieval_info["selected_block_ids"]
+        selected_payload = retrieval_info["selected_payload"]
+        self.assertTrue({1, 2}.issubset(set(selected_ids)))
+        self.assertTrue(all("direct_seed_rank" in item for item in selected_payload))
+        self.assertTrue(all("selection_rank" in item for item in selected_payload))
 
     def test_evibridge_config_is_part_of_rag_discriminator(self):
         parsed = RAGConfig(strategy_config={"strategy": "evibridge"})

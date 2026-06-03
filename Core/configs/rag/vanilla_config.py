@@ -14,3 +14,11 @@ class VanillaConfig(BaseRAGStrategyConfig):
         default="vanilla",
         description="The retrieval method to use: vanilla (text-only), bm25, raptor (text-only), pdf_vanilla (supports PDF documents).",
     )
+    bm25_corpus: Literal["chunk", "paragraph"] = Field(
+        default="chunk",
+        description="BM25 corpus unit. Use paragraph for Qasper official evidence alignment.",
+    )
+    answer_style: Literal["default", "short"] = Field(
+        default="default",
+        description="Answer generation style for vanilla baselines.",
+    )

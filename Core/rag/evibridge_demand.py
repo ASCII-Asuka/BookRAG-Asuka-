@@ -29,6 +29,10 @@ class EvidenceDemand(BaseModel):
     rationale: str = ""
 
 
+ALLOWED_BRIDGE_NEEDS = {"context", "semantic", "hierarchy"}
+ALLOWED_MODALITIES = {"text", "table", "figure", "caption"}
+
+
 _TABLE_RE = re.compile(r"\b(table|tab\.|figure|fig\.|chart|caption|row|column)\b|表|图|图片|图表|图注", re.I)
 _COMPARE_RE = re.compile(r"\b(compare|difference|versus|vs\.?|better|worse)\b|比较|区别|差异|相比|对比", re.I)
 _MULTIHOP_RE = re.compile(r"\b(why|how|relationship|connect|supporting|evidence)\b|关系|联系|依据|为什么|如何", re.I)
@@ -50,18 +54,20 @@ class DemandParser:
     def parse(self, query: str) -> EvidenceDemand:
         rule_demand = self._parse_rule(query)
         if self.mode == "rule" or rule_demand.confidence >= self.confidence_threshold:
-            return rule_demand
+            return sanitize_demand(rule_demand, fallback=rule_demand)
         if self.llm is None or self.mode not in {"llm", "hybrid"}:
-            return rule_demand
+            return sanitize_demand(rule_demand, fallback=rule_demand)
         try:
-            return self.llm.get_json_completion(
+            llm_demand = self.llm.get_json_completion(
                 prompt_or_memory=self._prompt(query),
                 schema=EvidenceDemand,
             )
+            return sanitize_demand(llm_demand, fallback=rule_demand)
         except TypeError:
-            return self.llm.get_json_completion(self._prompt(query), EvidenceDemand)
+            llm_demand = self.llm.get_json_completion(self._prompt(query), EvidenceDemand)
+            return sanitize_demand(llm_demand, fallback=rule_demand)
         except Exception:
-            return rule_demand
+            return sanitize_demand(rule_demand, fallback=rule_demand)
 
     def _parse_rule(self, query: str) -> EvidenceDemand:
         text = query or ""
@@ -121,9 +127,54 @@ class DemandParser:
     def _prompt(query: str) -> str:
         return (
             "Parse the question into an evidence demand JSON with fields intent, "
-            "scope, modality, granularity, bridge_need, confidence, source, rationale.\n"
+            "scope, modality, granularity, bridge_need, confidence, source, rationale. "
+            "bridge_need must only contain context, semantic, or hierarchy.\n"
             f"Question: {query}"
         )
+
+
+def sanitize_demand(demand: EvidenceDemand, fallback: Optional[EvidenceDemand] = None) -> EvidenceDemand:
+    fallback = fallback or EvidenceDemand()
+    bridge_need = [
+        str(item).strip().lower()
+        for item in (demand.bridge_need or [])
+        if str(item).strip().lower() in ALLOWED_BRIDGE_NEEDS
+    ]
+    if not bridge_need:
+        bridge_need = [
+            str(item).strip().lower()
+            for item in (fallback.bridge_need or [])
+            if str(item).strip().lower() in ALLOWED_BRIDGE_NEEDS
+        ]
+    if not bridge_need:
+        bridge_need = ["context", "semantic"]
+
+    modality = [
+        str(item).strip().lower()
+        for item in (demand.modality or [])
+        if str(item).strip().lower() in ALLOWED_MODALITIES
+    ]
+    if not modality:
+        modality = [
+            str(item).strip().lower()
+            for item in (fallback.modality or ["text"])
+            if str(item).strip().lower() in ALLOWED_MODALITIES
+        ] or ["text"]
+
+    granularity = demand.granularity
+    if demand.intent == "fact":
+        granularity = "block"
+
+    return EvidenceDemand(
+        intent=demand.intent,
+        scope=demand.scope,
+        modality=list(dict.fromkeys(modality)),
+        granularity=granularity,
+        bridge_need=list(dict.fromkeys(bridge_need)),
+        confidence=max(0.0, min(float(demand.confidence), 1.0)),
+        source=demand.source,
+        rationale=demand.rationale,
+    )
 
 
 def weights_for_demand(

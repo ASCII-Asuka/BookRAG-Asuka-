@@ -4,17 +4,10 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
-from Core.provider.embedding import (
-    TextEmbeddingProvider,
-    GmeEmbeddingProvider,
-)
-from Core.provider.llm import LLM
-from Core.provider.vdb import VectorStore
 from Core.Index.Tree import DocumentTree, NodeType
 from Core.configs.vdb_config import VDBConfig
 from Core.configs.system_config import SystemConfig
 from Core.utils.utils import TextProcessor
-from Core.utils.raptor_utils import raptor_tree
 from Core.utils.bm25 import BM25
 import json
 import logging
@@ -84,6 +77,9 @@ def process_tree_nodes(tree: DocumentTree) -> Tuple[Dict[str, List], Dict[str, L
 
 
 def build_vdb_index(tree: DocumentTree, vdb_cfg: VDBConfig):
+    from Core.provider.embedding import GmeEmbeddingProvider, TextEmbeddingProvider
+    from Core.provider.vdb import VectorStore
+
     if vdb_cfg.mm_embedding:
         embedder = GmeEmbeddingProvider(
             model_name=vdb_cfg.embedding_config.model_name,
@@ -191,12 +187,65 @@ def _metadata_without_none(metadata: Dict[str, Any]) -> Dict[str, Any]:
     return {key: value for key, value in metadata.items() if value is not None}
 
 
+def _strategy_config(cfg: SystemConfig) -> Any:
+    return getattr(getattr(cfg, "rag", None), "strategy_config", None)
+
+
+def _use_paragraph_bm25_corpus(cfg: SystemConfig) -> bool:
+    strategy_config = _strategy_config(cfg)
+    return (
+        getattr(cfg, "index_type", None) == "bm25"
+        and getattr(strategy_config, "bm25_corpus", "chunk") == "paragraph"
+    )
+
+
+def _get_tree_paragraphs(tree: DocumentTree) -> Tuple[List[str], List[Dict[str, Any]]]:
+    paragraphs: List[str] = []
+    metadatas: List[Dict[str, Any]] = []
+    chunk_id = 0
+    for node in tree.get_nodes(hasRoot=False):
+        if node.type != NodeType.TEXT:
+            continue
+        text = str(node.meta_info.content or "")
+        if not text.strip():
+            continue
+        title_path = _title_path(tree, node)
+        section_id = title_path[-1] if title_path else ""
+        paragraph_id = node.index_id
+        paragraphs.append(text)
+        metadatas.append(
+            _metadata_without_none(
+                {
+                    "source": "qasper_paragraph",
+                    "chunk_id": chunk_id,
+                    "source_chunk_index": 0,
+                    "node_id": node.index_id,
+                    "source_node_id": node.index_id,
+                    "paragraph_id": paragraph_id,
+                    "evidence_id": paragraph_id,
+                    "pdf_id": node.meta_info.pdf_id,
+                    "page": _page_number(node.meta_info.page_idx),
+                    "node_type": _node_type_value(node.type),
+                    "section_id": section_id,
+                    "section": section_id,
+                    "title_path": " > ".join(title_path),
+                    "qasper_evidence_text": text,
+                }
+            )
+        )
+        chunk_id += 1
+    return paragraphs, metadatas
+
+
 def get_tree_chunks(cfg: SystemConfig) -> Tuple[List[str], List[Dict[str, Any]]]:
     tree_path = DocumentTree.get_save_path(cfg.save_path)
     if not os.path.exists(tree_path):
         return [], []
 
     tree = DocumentTree.load_from_file(tree_path)
+    if _use_paragraph_bm25_corpus(cfg):
+        return _get_tree_paragraphs(tree)
+
     chunks: List[str] = []
     metadatas: List[Dict[str, Any]] = []
     chunk_id = 0
@@ -262,6 +311,10 @@ def get_all_chunks(cfg: SystemConfig):
         meta_datas = [{"source": "document", "chunk_id": i} for i in range(len(chunks))]
         return chunks, meta_datas
     elif index_type == "raptor":
+        from Core.provider.embedding import TextEmbeddingProvider
+        from Core.provider.llm import LLM
+        from Core.utils.raptor_utils import raptor_tree
+
         llm = LLM(cfg.llm)
         embed_cfg = cfg.vdb.embedding_config
         embedder = TextEmbeddingProvider(
@@ -309,6 +362,9 @@ def build_other_vdb_index(cfg: SystemConfig):
         bm25.save(save_path)
         log.info(f"BM25 index saved to {save_path}")
     else:
+        from Core.provider.embedding import TextEmbeddingProvider
+        from Core.provider.vdb import VectorStore
+
         vdb_config = cfg.vdb
         vdb = VectorStore(
             embedding_model=TextEmbeddingProvider(
@@ -343,6 +399,8 @@ def load_pdf_lists_from_dir(save_dir):
 
 
 def compute_mm_embedding(cfg: SystemConfig, tree_index: DocumentTree):
+    from Core.provider.embedding import GmeEmbeddingProvider
+
     embedder_cfg = cfg.vdb.embedding_config
     embedder = GmeEmbeddingProvider(
         model_name=embedder_cfg.model_name,
@@ -454,6 +512,8 @@ def compute_mm_embedding(cfg: SystemConfig, tree_index: DocumentTree):
 
 
 def compute_mm_embedding_question(cfg: SystemConfig, group: pd.DataFrame):
+    from Core.provider.embedding import GmeEmbeddingProvider
+
     embedder_cfg = cfg.vdb.embedding_config
     embedder = GmeEmbeddingProvider(
         model_name=embedder_cfg.model_name,

@@ -1,20 +1,18 @@
-import os
+from typing import TYPE_CHECKING
 
-from zmq import ContextTerminated
-
-# os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
-from Core.provider.vdb import VectorStore
-from Core.provider.vlm import VLM
-from Core.provider.llm import LLM
 from Core.rag.base_rag import BaseRAG
 from Core.configs.rag.vanilla_config import VanillaConfig
 from Core.utils.bm25 import BM25
 from Core.utils.utils import TextProcessor
 from Core.utils.json_safety import make_json_safe
 
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Tuple
 import json
 import logging
+
+if TYPE_CHECKING:
+    from Core.provider.llm import LLM
+    from Core.provider.vdb import VectorStore
 
 log = logging.getLogger(__name__)
 
@@ -28,8 +26,8 @@ class VanillaRAG(BaseRAG):
     def __init__(
         self,
         config: VanillaConfig,
-        vector_store: VectorStore,
-        llm: LLM,
+        vector_store: "VectorStore",
+        llm: "LLM",
         bm25: BM25 = None,
     ):
         super().__init__(
@@ -41,6 +39,9 @@ class VanillaRAG(BaseRAG):
         self.max_tokens = self.llm.config.max_tokens - 200
         log.info("Vanilla RAG initialized.")
         self.topk = self.cfg.topk
+        self.last_answer_short = ""
+        self.last_answer_rationale = ""
+        self.last_supporting_block_ids = []
 
         if self.cfg.retrieval_method == "bm25":
             self.bm25: BM25 = bm25
@@ -54,8 +55,18 @@ class VanillaRAG(BaseRAG):
             return self.vdb.search(query_text=query, top_k=top_k)
 
     def _create_augmented_prompt(self, query: str, retrieved_docs=None) -> str:
-        # context_text = "Please refer to the following background information to answer the question.\n\n--- Background Information ---\n"
-        context_text = "Please refer to the following background information to answer the question. You should base your answer strictly on the provided information and not supplement it with outside knowledge. If the background information is insufficient to answer the question, please state that the provided information is not enough.\n\n--- Background Information ---\n"
+        short_answer = getattr(self.cfg, "answer_style", "default") == "short"
+        if short_answer:
+            context_text = (
+                "You answer Qasper-style document questions using only the provided retrieved documents.\n"
+                "Return only a JSON object with keys answer_short and answer_rationale.\n"
+                "answer_short must be concise: use exact spans when possible, answer Yes or No for boolean questions, "
+                "and use Not answerable only when evidence is insufficient. Do not include evidence bullets or explanations in answer_short.\n\n"
+                "--- Background Information ---\n"
+            )
+        else:
+            # context_text = "Please refer to the following background information to answer the question.\n\n--- Background Information ---\n"
+            context_text = "Please refer to the following background information to answer the question. You should base your answer strictly on the provided information and not supplement it with outside knowledge. If the background information is insufficient to answer the question, please state that the provided information is not enough.\n\n--- Background Information ---\n"
         question_text = f"--- User Question ---\n{query}\n\n"
         context_text += question_text
         if retrieved_docs is None:
@@ -111,12 +122,17 @@ class VanillaRAG(BaseRAG):
                 "id": node_id,
                 "content": doc["content"],
             }
+            if "score" in doc:
+                meta_info_dict["score"] = doc["score"]
             for key in [
                 "source",
                 "chunk_id",
                 "source_chunk_index",
                 "source_node_id",
                 "node_id",
+                "paragraph_id",
+                "evidence_id",
+                "qasper_evidence_text",
                 "pdf_id",
                 "page",
                 "node_type",
@@ -161,16 +177,48 @@ class VanillaRAG(BaseRAG):
         if not retrieved_docs:
             # not found any relevant documents, fallback to LLM generation
             final_answer = self.llm.get_completion(query, json_response=False)
+            answer_short, answer_rationale = self._parse_answer_payload(final_answer)
+            self.last_answer_short = answer_short
+            self.last_answer_rationale = answer_rationale
+            self.last_supporting_block_ids = []
             return final_answer, []
 
         context_text = self._create_augmented_prompt(query, retrieved_docs)
 
         final_answer = self.llm.get_completion(context_text, json_response=False)
+        answer_short, answer_rationale = self._parse_answer_payload(final_answer)
 
         retrieval_ids = self._save_retrieval_res(
             retrieved_docs, query_output_dir=query_output_dir
         )
+        self.last_answer_short = answer_short
+        self.last_answer_rationale = answer_rationale
+        self.last_supporting_block_ids = retrieval_ids
         return final_answer, retrieval_ids
+
+    @staticmethod
+    def _parse_answer_payload(answer: Any) -> Tuple[str, str]:
+        text = str(answer or "").strip()
+        cleaned = text
+        if cleaned.startswith("```"):
+            cleaned = cleaned.strip("`").strip()
+            if cleaned.lower().startswith("json"):
+                cleaned = cleaned[4:].strip()
+        try:
+            payload = json.loads(cleaned)
+            if isinstance(payload, dict):
+                answer_short = str(payload.get("answer_short") or payload.get("answer") or "").strip()
+                answer_rationale = str(payload.get("answer_rationale") or payload.get("rationale") or "").strip()
+                if answer_short:
+                    return answer_short, answer_rationale
+        except Exception:
+            pass
+        for marker in ["Final Answer:", "Answer:", "answer_short:"]:
+            if marker.lower() in text.lower():
+                parts = text.split(marker, 1)
+                if len(parts) == 2 and parts[1].strip():
+                    return parts[1].strip(), ""
+        return text, ""
 
     def close(self):
         if self.cfg.retrieval_method == "bm25":

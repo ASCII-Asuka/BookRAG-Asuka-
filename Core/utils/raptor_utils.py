@@ -1,9 +1,12 @@
-from typing import Any, Dict, List, Tuple
+from __future__ import annotations
 
-from Core.provider.llm import LLM
-from Core.provider.embedding import TextEmbeddingProvider
+from typing import TYPE_CHECKING, Any, Dict, List, Tuple
 from Core.utils.utils import TextProcessor, num_tokens
 import logging
+
+if TYPE_CHECKING:
+    from Core.provider.embedding import TextEmbeddingProvider
+    from Core.provider.llm import LLM
 
 logger = logging.getLogger(__name__)
 

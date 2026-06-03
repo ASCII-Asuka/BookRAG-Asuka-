@@ -175,6 +175,7 @@ def _evidence_texts_from_payload(payload: Any) -> list[str]:
         values = (
             payload.get("evidence_chain")
             or payload.get("selected")
+            or payload.get("ranked_results")
             or payload.get("retrieval_results")
             or payload.get("nodes")
             or []
@@ -186,7 +187,12 @@ def _evidence_texts_from_payload(payload: Any) -> list[str]:
         if isinstance(item, str):
             texts.append(item)
         elif isinstance(item, dict):
-            text = item.get("text") or item.get("content") or item.get("evidence")
+            text = (
+                item.get("qasper_evidence_text")
+                or item.get("text")
+                or item.get("content")
+                or item.get("evidence")
+            )
             if text:
                 texts.append(str(text))
     return texts
@@ -204,6 +210,7 @@ def _evidence_ids_from_payload(payload: Any) -> list[str]:
         values = (
             payload.get("evidence_chain")
             or payload.get("selected")
+            or payload.get("ranked_results")
             or payload.get("retrieval_results")
             or payload.get("nodes")
             or []

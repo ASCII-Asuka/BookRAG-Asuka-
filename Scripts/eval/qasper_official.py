@@ -430,6 +430,8 @@ def _prediction_answer(
         return eval_answer_by_qid.get(question_id, str(result.get("output", "")))
     if answer_source == "auto" and question_id in eval_answer_by_qid:
         return eval_answer_by_qid[question_id]
+    if answer_source == "output" and result.get("answer_short"):
+        return str(result.get("answer_short", ""))
     return str(result.get("output", ""))
 
 
@@ -438,18 +440,29 @@ def _prediction_evidence(
     paragraph_evidence_only: bool,
     top_k_evidence: int,
 ) -> List[str]:
-    payload = _load_json_if_exists(query_dir / "evidence_chain.json")
+    payload = _load_json_if_exists(query_dir / "retrieval_res.json")
     values = _evidence_values(payload)
     if not values:
-        payload = _load_json_if_exists(query_dir / "retrieval_res.json")
+        payload = _load_json_if_exists(query_dir / "evidence_chain.json")
         values = _evidence_values(payload)
+    values = sorted(
+        values,
+        key=lambda item: item.get("selection_rank", item.get("rank", 10**9))
+        if isinstance(item, dict)
+        else 10**9,
+    )
     evidence = []
     for item in values:
         if not isinstance(item, dict):
             continue
         if paragraph_evidence_only and item.get("block_type") not in (None, "paragraph"):
             continue
-        text = item.get("text") or item.get("content") or item.get("evidence")
+        text = (
+            item.get("qasper_evidence_text")
+            or item.get("text")
+            or item.get("content")
+            or item.get("evidence")
+        )
         if text and text not in evidence:
             evidence.append(str(text))
         if top_k_evidence > 0 and len(evidence) >= top_k_evidence:
@@ -460,8 +473,9 @@ def _prediction_evidence(
 def _evidence_values(payload: Any) -> List[Any]:
     if isinstance(payload, dict):
         return (
-            payload.get("evidence_chain")
-            or payload.get("selected")
+            payload.get("selected")
+            or payload.get("evidence_chain")
+            or payload.get("ranked_results")
             or payload.get("retrieval_results")
             or payload.get("nodes")
             or []

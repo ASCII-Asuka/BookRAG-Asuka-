@@ -37,9 +37,37 @@ class QasperOfficialEvalTests(unittest.TestCase):
                     {
                         "question": "What is the answer?",
                         "qasper_question_id": "q1",
-                        "output": "The answer",
+                        "output": "The answer with a long explanation that should not be used when answer_short exists.",
+                        "answer_short": "The answer",
                     }
                 ]
+            ),
+            encoding="utf-8",
+        )
+        (query_dir / "retrieval_res.json").write_text(
+            json.dumps(
+                {
+                    "selected": [
+                        {
+                            "block_id": 9,
+                            "block_type": "summary",
+                            "text": "Summary text should not be exported by default.",
+                            "selection_rank": 1,
+                        },
+                        {
+                            "block_id": 7,
+                            "block_type": "paragraph",
+                            "text": "Gold evidence paragraph.",
+                            "selection_rank": 2,
+                        },
+                        {
+                            "block_id": 8,
+                            "block_type": "paragraph",
+                            "text": "Later paragraph.",
+                            "selection_rank": 3,
+                        },
+                    ]
+                }
             ),
             encoding="utf-8",
         )
@@ -86,7 +114,72 @@ class QasperOfficialEvalTests(unittest.TestCase):
         self.assertEqual(predictions, saved)
         self.assertEqual(saved[0]["question_id"], "q1")
         self.assertEqual(saved[0]["predicted_answer"], "The answer")
-        self.assertEqual(saved[0]["predicted_evidence"], ["Gold evidence paragraph."])
+        self.assertEqual(saved[0]["predicted_evidence"], ["Gold evidence paragraph.", "Later paragraph."])
+
+    def test_top_k_evidence_uses_selector_order(self):
+        from Scripts.eval.qasper_official import export_predictions
+
+        with tempfile.TemporaryDirectory() as tmp:
+            dataset_path, working_dir = self._write_sample_outputs(tmp)
+            output_path = Path(tmp) / "official" / "predictions.jsonl"
+
+            predictions = export_predictions(
+                dataset_path=str(dataset_path),
+                working_dir=str(working_dir),
+                dataset_name="qasper",
+                method="evibridge",
+                output_path=str(output_path),
+                top_k_evidence=1,
+            )
+
+        self.assertEqual(predictions[0]["predicted_evidence"], ["Gold evidence paragraph."])
+
+    def test_exports_bm25_ranked_results_as_evidence(self):
+        from Scripts.eval.qasper_official import export_predictions
+
+        with tempfile.TemporaryDirectory() as tmp:
+            dataset_path, working_dir = self._write_sample_outputs(tmp)
+            evibridge_dir = working_dir / "paper-1" / "eval_qasper_evibridge"
+            bm25_dir = working_dir / "paper-1" / "eval_qasper_bm25"
+            bm25_query_dir = bm25_dir / "query_001"
+            bm25_query_dir.mkdir(parents=True)
+            (bm25_dir / "final_results.json").write_text(
+                (evibridge_dir / "final_results.json").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            (bm25_query_dir / "retrieval_res.json").write_text(
+                json.dumps(
+                    {
+                        "ranked_results": [
+                            {
+                                "id": 1,
+                                "content": "Gold evidence paragraph.",
+                                "rank": 1,
+                            },
+                            {
+                                "id": 2,
+                                "content": "BM25 second paragraph.",
+                                "rank": 2,
+                            },
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            output_path = Path(tmp) / "official" / "bm25_predictions.jsonl"
+
+            predictions = export_predictions(
+                dataset_path=str(dataset_path),
+                working_dir=str(working_dir),
+                dataset_name="qasper",
+                method="bm25",
+                output_path=str(output_path),
+            )
+
+        self.assertEqual(
+            predictions[0]["predicted_evidence"],
+            ["Gold evidence paragraph.", "BM25 second paragraph."],
+        )
 
     def test_evaluates_predictions_with_official_qasper_metrics(self):
         from Scripts.eval.qasper_official import (
@@ -103,6 +196,7 @@ class QasperOfficialEvalTests(unittest.TestCase):
                 dataset_name="qasper",
                 method="evibridge",
                 output_path=str(predictions_path),
+                top_k_evidence=1,
             )
 
             scores = evaluate_predictions_file(

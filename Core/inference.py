@@ -83,6 +83,15 @@ def run_rag(
         retrieved_block_ids = getattr(rag_agent, "last_retrieved_block_ids", None)
         if retrieved_block_ids is not None:
             current_result["retrieved_block_ids"] = retrieved_block_ids
+        answer_short = getattr(rag_agent, "last_answer_short", None)
+        if answer_short:
+            current_result["answer_short"] = answer_short
+        answer_rationale = getattr(rag_agent, "last_answer_rationale", None)
+        if answer_rationale:
+            current_result["answer_rationale"] = answer_rationale
+        supporting_block_ids = getattr(rag_agent, "last_supporting_block_ids", None)
+        if supporting_block_ids is not None:
+            current_result["supporting_block_ids"] = supporting_block_ids
         current_result = make_json_safe(current_result)
         with open(query_result_file, "w", encoding="utf-8") as f:
             json.dump(current_result, f, indent=2, ensure_ascii=False, allow_nan=False)
