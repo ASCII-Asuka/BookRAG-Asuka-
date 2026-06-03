@@ -67,6 +67,45 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
             log.info(f"Successfully loaded HRI vector store from {hri_vdb_path}")
             dependencies["hri_vector_store"] = hri_vector_store
 
+    elif strategy_name == "evibridge":
+        import os
+        from Core.Index.EvidenceBridgeIndex import EvidenceBridgeIndex
+
+        evibridge_index = EvidenceBridgeIndex.load_from_dir(cfg.save_path)
+        bm25 = EvidenceBridgeIndex.load_bm25(cfg.save_path)
+        log.info(
+            f"Successfully loaded EviBridge index from {EvidenceBridgeIndex.get_index_path(cfg.save_path)}"
+        )
+        log.info(
+            f"Successfully loaded EviBridge BM25 from {EvidenceBridgeIndex.get_bm25_path(cfg.save_path)}"
+        )
+        dependencies["evibridge_index"] = evibridge_index
+        dependencies["bm25"] = bm25
+        if getattr(rag_config, "enable_vector_recall", False):
+            from Core.provider.embedding import TextEmbeddingProvider
+            from Core.provider.vdb import VectorStore
+
+            vdb_cfg = rag_config.evibridge_vdb_config
+            embed_cfg = vdb_cfg.embedding_config
+            evibridge_vdb_path = vdb_cfg.vdb_dir_name
+            if not os.path.isabs(evibridge_vdb_path) and cfg.save_path not in evibridge_vdb_path:
+                evibridge_vdb_path = os.path.join(cfg.save_path, evibridge_vdb_path)
+            embed_model = TextEmbeddingProvider(
+                model_name=embed_cfg.model_name,
+                backend=embed_cfg.backend,
+                device=embed_cfg.device,
+                max_length=embed_cfg.max_length,
+                api_base=embed_cfg.api_base,
+                api_key=embed_cfg.api_key,
+            )
+            evibridge_vector_store = VectorStore(
+                embedding_model=embed_model,
+                db_path=evibridge_vdb_path,
+                collection_name=vdb_cfg.collection_name,
+            )
+            log.info(f"Successfully loaded EviBridge vector store from {evibridge_vdb_path}")
+            dependencies["evibridge_vector_store"] = evibridge_vector_store
+
     elif strategy_name == "gbc":
         from Core.Index.GBCIndex import GBC
 

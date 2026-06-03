@@ -11,6 +11,7 @@ from Core.configs.system_config import load_system_config, SystemConfig
 from Core.configs.dataset_config import load_dataset_config, DatasetConfig
 from Core.construct_index import (
     construct_GBC_index,
+    construct_evibridge_index,
     construct_hri_index,
     construct_vdb,
     compute_mm_reranker,
@@ -119,12 +120,22 @@ def create_args():
         "--stage",
         type=str,
         default="all",
-        choices=["tree", "graph", "vdb", "hri", "all", "mm_reranker", "rebuild_graph_vdb"],
+        choices=[
+            "tree",
+            "graph",
+            "vdb",
+            "hri",
+            "evibridge",
+            "all",
+            "mm_reranker",
+            "rebuild_graph_vdb",
+        ],
         help="Specify which stage of the indexing pipeline to run: "
         "'tree' - Build and save the document tree only. "
         "'graph' - Build and save the knowledge graph (requires a tree). "
         "'vdb' - Build and save the vector database (requires a tree). "
         "'hri' - Build and save the hydro HRI index (requires a tree). "
+        "'evibridge' - Build and save the EviBridge evidence bridge index (requires a tree). "
         "'all' - Run all stages sequentially."
         "'mm_reranker' - Build and save the multi-modal reranker (requires a tree). "
         "'rebuild_graph_vdb' - Rebuild the graph and vector database (requires GBC Index).",
@@ -160,6 +171,10 @@ def build_index(config: SystemConfig, stage: str = "all", data_df: pd.DataFrame 
     if stage == "hri":
         log.info("  - STAGE: Building Hydro HRI Index...")
         construct_hri_index(config)
+
+    if stage == "evibridge":
+        log.info("  - STAGE: Building EviBridge Index...")
+        construct_evibridge_index(config)
 
     if stage == "mm_reranker":
         log.info("  - STAGE: Building MM Reranker Embedding...")

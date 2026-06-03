@@ -19,7 +19,7 @@ def get_all_cost(data_df: pd.DataFrame, data_cfg: DatasetConfig, method: str):
 
     for (doc_uuid, doc_path), group in document_groups:
         dir_name = f"eval_{data_cfg.dataset_name}_{method}"
-        doc_res_dir = os.path.join(data_cfg.working_dir, doc_uuid, dir_name)
+        doc_res_dir = os.path.join(data_cfg.working_dir, str(doc_uuid), dir_name)
         costs = load_cost(doc_res_dir)
         all_cost.append(costs)
 

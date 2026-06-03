@@ -28,6 +28,8 @@ def run_rag(
     dataset_path: str = None,
     data_df: pd.DataFrame = None,
 ):
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
     log.info(f"Results will be saved to: {output_dir}")
 
     # load dataset
@@ -78,6 +80,9 @@ def run_rag(
             "output": answer,
             "retrieved_node_ids": retrieved_node_ids,
         }
+        retrieved_block_ids = getattr(rag_agent, "last_retrieved_block_ids", None)
+        if retrieved_block_ids is not None:
+            current_result["retrieved_block_ids"] = retrieved_block_ids
         current_result = make_json_safe(current_result)
         with open(query_result_file, "w", encoding="utf-8") as f:
             json.dump(current_result, f, indent=2, ensure_ascii=False, allow_nan=False)
@@ -183,6 +188,10 @@ def create_log_handler(cfg: SystemConfig, dataset_path: str):
         ablation_variant = getattr(cfg.rag.strategy_config, "ablation_variant", "full")
         if ablation_variant and ablation_variant != "full":
             method_suffix = f"hri_{ablation_variant}"
+    if rag_strategy == "evibridge":
+        ablation_variant = getattr(cfg.rag.strategy_config, "ablation_variant", "full")
+        if ablation_variant and ablation_variant != "full":
+            method_suffix = f"evibridge_{ablation_variant}"
     output_dir = Path(cfg.save_path) / f"eval_{dataset_file.stem}_{method_suffix}"
     output_dir.mkdir(parents=True, exist_ok=True)
     log_file_path = output_dir / "evaluation.log"
@@ -251,6 +260,14 @@ def inference(cfg: SystemConfig, data_df: pd.DataFrame, dataset_name: str):
         method_suffix = rag_strategy
         if ablation_variant and ablation_variant != "full":
             method_suffix = f"hri_{ablation_variant}"
+        output_dir = output_dir = (
+            Path(cfg.save_path) / f"eval_{dataset_name}_{method_suffix}"
+        )
+    elif rag_strategy == "evibridge":
+        ablation_variant = getattr(cfg.rag.strategy_config, "ablation_variant", "full")
+        method_suffix = rag_strategy
+        if ablation_variant and ablation_variant != "full":
+            method_suffix = f"evibridge_{ablation_variant}"
         output_dir = output_dir = (
             Path(cfg.save_path) / f"eval_{dataset_name}_{method_suffix}"
         )

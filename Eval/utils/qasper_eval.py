@@ -117,6 +117,9 @@ def get_answers_and_evidence(qa_info: list[dict[Any]], text_evidence_only: bool)
                     "evidence": evidence,
                     "type": answer_type,
                     "answer_raw": answer_raw,
+                    "evidence_block_ids": answer_info.get("evidence_block_ids", []),
+                    "evidence_paragraph_ids": answer_info.get("evidence_paragraph_ids", []),
+                    "evidence_ids": answer_info.get("evidence_ids", []),
                 }
             )
 
@@ -152,12 +155,186 @@ def eval_single_res(pred, gold_answer: list):
     return accuracy_score, f1_score
 
 
+def _normalize_evidence_text(text: Any) -> str:
+    return normalize_answer(str(text or ""))
+
+
+def _load_json_if_exists(path: str) -> Any:
+    if not os.path.exists(path):
+        return None
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _evidence_texts_from_payload(payload: Any) -> list[str]:
+    if payload is None:
+        return []
+    if isinstance(payload, list):
+        values = payload
+    elif isinstance(payload, dict):
+        values = (
+            payload.get("evidence_chain")
+            or payload.get("selected")
+            or payload.get("retrieval_results")
+            or payload.get("nodes")
+            or []
+        )
+    else:
+        values = []
+    texts = []
+    for item in values:
+        if isinstance(item, str):
+            texts.append(item)
+        elif isinstance(item, dict):
+            text = item.get("text") or item.get("content") or item.get("evidence")
+            if text:
+                texts.append(str(text))
+    return texts
+
+
+def _evidence_ids_from_payload(payload: Any) -> list[str]:
+    if payload is None:
+        return []
+    ids = []
+    values = []
+    if isinstance(payload, dict):
+        for key in ("retrieved_block_ids", "retrieved_node_ids"):
+            for item in payload.get(key) or []:
+                ids.append(str(item))
+        values = (
+            payload.get("evidence_chain")
+            or payload.get("selected")
+            or payload.get("retrieval_results")
+            or payload.get("nodes")
+            or []
+        )
+    elif isinstance(payload, list):
+        values = payload
+    for item in values:
+        if not isinstance(item, dict):
+            continue
+        for key in ("block_id", "node_id", "paragraph_id", "evidence_id"):
+            if item.get(key) is not None:
+                ids.append(str(item[key]))
+    return list(dict.fromkeys(ids))
+
+
+def _bridge_types_from_payload(payload: Any) -> set[str]:
+    if payload is None:
+        return set()
+    values = []
+    if isinstance(payload, dict):
+        values = payload.get("evidence_chain") or payload.get("selected") or []
+    elif isinstance(payload, list):
+        values = payload
+    bridge_types = set()
+    for item in values:
+        if not isinstance(item, dict):
+            continue
+        for bridge_type in item.get("bridge_types") or []:
+            bridge_types.add(str(bridge_type))
+    return bridge_types
+
+
+def _verification_from_payload(payload: Any) -> dict:
+    if isinstance(payload, dict) and isinstance(payload.get("verification"), dict):
+        return payload["verification"]
+    return {}
+
+
+def _gold_evidence_ids(gold_answers: list[dict]) -> list[str]:
+    ids = []
+    for answer in gold_answers:
+        for key in ("evidence_block_ids", "evidence_paragraph_ids", "evidence_ids"):
+            for item in answer.get(key) or []:
+                ids.append(str(item))
+    return list(dict.fromkeys(ids))
+
+
+def _id_f1_score(predicted_ids: list[str], gold_ids: list[str]) -> tuple[float, float]:
+    pred_set = set(predicted_ids)
+    gold_set = set(gold_ids)
+    if not pred_set and not gold_set:
+        return 1.0, 1.0
+    if not pred_set or not gold_set:
+        return 0.0, 0.0
+    matched = pred_set & gold_set
+    precision = len(matched) / len(pred_set)
+    recall = len(matched) / len(gold_set)
+    f1 = 0.0 if precision + recall == 0 else (2 * precision * recall) / (precision + recall)
+    return round(f1, 6), round(recall, 6)
+
+
+def _evidence_scores(
+    predicted_texts: list[str],
+    gold_answers: list[dict],
+    predicted_ids: list[str] | None = None,
+) -> tuple[float, float]:
+    gold_ids = _gold_evidence_ids(gold_answers)
+    if gold_ids and predicted_ids:
+        return _id_f1_score(predicted_ids, gold_ids)
+
+    gold_texts = []
+    for answer in gold_answers:
+        gold_texts.extend(answer.get("evidence") or [])
+    gold_norm = [_normalize_evidence_text(text) for text in gold_texts if _normalize_evidence_text(text)]
+    pred_norm = [_normalize_evidence_text(text) for text in predicted_texts if _normalize_evidence_text(text)]
+    if not gold_norm and not pred_norm:
+        return 1.0, 1.0
+    if not gold_norm or not pred_norm:
+        return 0.0, 0.0
+    matched_gold = set()
+    matched_pred = set()
+    for pred_idx, pred in enumerate(pred_norm):
+        for gold_idx, gold in enumerate(gold_norm):
+            if gold in pred or pred in gold:
+                matched_gold.add(gold_idx)
+                matched_pred.add(pred_idx)
+    precision = len(matched_pred) / len(pred_norm) if pred_norm else 0.0
+    recall = len(matched_gold) / len(gold_norm) if gold_norm else 0.0
+    f1 = 0.0 if precision + recall == 0 else (2 * precision * recall) / (precision + recall)
+    return round(f1, 6), round(recall, 6)
+
+
+def _load_evibridge_metrics(res_path: str, query_idx: int, gold_answers: list[dict]) -> dict:
+    query_dir = os.path.join(res_path, f"query_{query_idx + 1:03d}")
+    chain_payload = _load_json_if_exists(os.path.join(query_dir, "evidence_chain.json"))
+    retrieval_payload = _load_json_if_exists(os.path.join(query_dir, "retrieval_res.json"))
+    predicted_texts = _evidence_texts_from_payload(chain_payload)
+    if not predicted_texts:
+        predicted_texts = _evidence_texts_from_payload(retrieval_payload)
+    predicted_ids = _evidence_ids_from_payload(chain_payload)
+    if not predicted_ids:
+        predicted_ids = _evidence_ids_from_payload(retrieval_payload)
+    evidence_f1, evidence_recall = _evidence_scores(predicted_texts, gold_answers, predicted_ids)
+    verification = _verification_from_payload(chain_payload) or _verification_from_payload(retrieval_payload)
+    bridge_types = _bridge_types_from_payload(chain_payload) | _bridge_types_from_payload(retrieval_payload)
+    iterations = retrieval_payload.get("iterations", []) if isinstance(retrieval_payload, dict) else []
+    return {
+        "evidence_f1": evidence_f1,
+        "evidence_recall": evidence_recall,
+        "path_connectivity": round(float(verification.get("connectivity", 0.0)), 6)
+        if verification
+        else None,
+        "noise_ratio": round(float(verification.get("noise", 0.0)), 6)
+        if verification
+        else None,
+        "bridge_coverage": round(len(bridge_types & {"context", "semantic", "hierarchy"}) / 3, 6),
+        "verifier_iterations": len(iterations) if iterations else (1 if verification else 0),
+    }
+
+
+def _doc_result_dir(data_cfg: DatasetConfig, doc_uuid: Any, method: str) -> str:
+    dir_name = f"eval_{data_cfg.dataset_name}_{method}"
+    return os.path.join(data_cfg.working_dir, str(doc_uuid), dir_name)
+
+
 def eval_single_file(res_path: str, extractor: AnswerExtractor):
     res_file = os.path.join(res_path, "final_results.json")
     with open(res_file, "r", encoding="utf-8") as f:
         res_data = json.load(f)
 
-    for item in res_data:
+    for query_idx, item in enumerate(res_data):
         question = item["question"]
         output = item["output"]
         gold_answers = get_answers_and_evidence(item["answer"], text_evidence_only=True)
@@ -174,6 +351,7 @@ def eval_single_file(res_path: str, extractor: AnswerExtractor):
         acc, f1 = eval_single_res(pred_ans, gold_answers)
         item["acc"] = acc
         item["f1"] = f1
+        item.update(_load_evibridge_metrics(res_path, query_idx, gold_answers))
 
     # Save results to output_dir
     save_path = os.path.join(res_path, "eval.json")
@@ -184,11 +362,15 @@ def eval_single_file(res_path: str, extractor: AnswerExtractor):
 
 
 def eval_qasper(
-    data_df: pd.DataFrame, data_cfg: DatasetConfig, method: str, max_workers=4
+    data_df: pd.DataFrame,
+    data_cfg: DatasetConfig,
+    method: str,
+    max_workers=4,
+    api_config_path: str | None = None,
 ):
     document_groups = data_df.groupby(["doc_uuid", "doc_path"])
 
-    extractor = AnswerExtractor()
+    extractor = AnswerExtractor(api_config_path=api_config_path)
     result = []
 
     if max_workers > 1:
@@ -196,8 +378,7 @@ def eval_qasper(
         # We create a list of the 'doc_res_dir' paths that will be processed.
         doc_res_dirs = []
         for (doc_uuid, doc_path), group in document_groups:
-            dir_name = f"eval_{data_cfg.dataset_name}_{method}"
-            doc_res_dir = os.path.join(data_cfg.working_dir, doc_uuid, dir_name)
+            doc_res_dir = _doc_result_dir(data_cfg, doc_uuid, method)
             doc_res_dirs.append(doc_res_dir)
 
         # Step 2: Execute `eval_single_file` in parallel using ThreadPoolExecutor.map
@@ -221,8 +402,7 @@ def eval_qasper(
                 result.extend(doc_res)
     else:
         for (doc_uuid, doc_path), group in tqdm(document_groups):
-            dir_name = f"eval_{data_cfg.dataset_name}_{method}"
-            doc_res_dir = os.path.join(data_cfg.working_dir, doc_uuid, dir_name)
+            doc_res_dir = _doc_result_dir(data_cfg, doc_uuid, method)
 
             doc_res = eval_single_file(doc_res_dir, extractor)
             result.extend(doc_res)
@@ -246,6 +426,18 @@ def eval_qasper(
         "Avg llm_score": avg_llm_score,
         "Total samples": len(result),
     }
+    evibridge_metric_keys = [
+        "evidence_f1",
+        "evidence_recall",
+        "path_connectivity",
+        "noise_ratio",
+        "bridge_coverage",
+        "verifier_iterations",
+    ]
+    for key in evibridge_metric_keys:
+        values = [item[key] for item in result if item.get(key) is not None]
+        if values:
+            score_dict[f"Avg {key}"] = round(float(np.mean(values)), 6)
     
     # answerable average score
     answerable_acc = []
@@ -285,6 +477,12 @@ def eval_qasper(
         "acc",
         "f1",
         "llm_score",
+        "evidence_f1",
+        "evidence_recall",
+        "path_connectivity",
+        "noise_ratio",
+        "bridge_coverage",
+        "verifier_iterations",
         "extracted_res",
         "output",
     ]

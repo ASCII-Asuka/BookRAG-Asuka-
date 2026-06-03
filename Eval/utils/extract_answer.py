@@ -9,6 +9,11 @@ def load_prompt():
     return prompt
 
 
+def _supports_enable_thinking(model_name: str) -> bool:
+    model_name = (model_name or "").lower()
+    return "qwen" in model_name and "vl" not in model_name
+
+
 class AnswerExtractor:
     def __init__(self, api_config_path=None):
         print("Initializing AnswerExtractor and reading API config...")
@@ -95,7 +100,7 @@ Model Response: {output}
             "max_tokens": 512,
             # "extra_body": {"enable_thinking": False},
         }
-        if "qwen" in model.lower():
+        if _supports_enable_thinking(model):
             parameters["extra_body"] = {"enable_thinking": False}
 
         try:
