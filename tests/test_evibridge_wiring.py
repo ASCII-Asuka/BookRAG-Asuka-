@@ -12,8 +12,12 @@ from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
 
 
 def _stub_runtime_imports():
+    class FakeOpenAIClient:
+        def __init__(self, *args, **kwargs):
+            pass
+
     openai_module = types.ModuleType("openai")
-    openai_module.OpenAI = object
+    openai_module.OpenAI = FakeOpenAIClient
     tiktoken_module = types.ModuleType("tiktoken")
     tiktoken_module.Encoding = object
     tiktoken_module.get_encoding = lambda name: types.SimpleNamespace(
@@ -84,6 +88,39 @@ class EviBridgeWiringTests(unittest.TestCase):
         self.assertIn("evibridge_index", deps)
         self.assertIn("bm25", deps)
         self.assertEqual(deps["evibridge_index"].blocks[1].text, "retrieval evidence")
+
+    def test_resource_loader_loads_evibridge_reranker_when_candidate_rerank_enabled(self):
+        _stub_runtime_imports()
+        from Core.utils.resource_loader import prepare_rag_dependencies
+
+        with tempfile.TemporaryDirectory() as tmp:
+            index = EvidenceBridgeIndex(
+                save_dir=tmp,
+                blocks={
+                    1: EvidenceBlock(
+                        block_id=1,
+                        block_type="paragraph",
+                        text="retrieval evidence",
+                    )
+                },
+            )
+            bm25 = index.build_bm25()
+            index.save_to_dir()
+            index.save_bm25(bm25)
+            cfg = SimpleNamespace(
+                save_path=tmp,
+                rag=SimpleNamespace(
+                    strategy_config=EviBridgeRAGConfig(
+                        enable_vector_recall=False,
+                        enable_candidate_rerank=True,
+                    )
+                ),
+            )
+            with patch("Core.provider.rerank.TextRerankerProvider", return_value="reranker") as provider:
+                deps = prepare_rag_dependencies(cfg)
+
+        self.assertEqual(deps["reranker"], "reranker")
+        provider.assert_called_once()
 
     def test_run_rag_preserves_node_ids_and_adds_block_ids(self):
         _stub_runtime_imports()

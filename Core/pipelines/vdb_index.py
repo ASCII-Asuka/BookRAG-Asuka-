@@ -199,6 +199,14 @@ def _use_paragraph_bm25_corpus(cfg: SystemConfig) -> bool:
     )
 
 
+def _use_paragraph_corpus(cfg: SystemConfig) -> bool:
+    strategy_config = _strategy_config(cfg)
+    return _use_paragraph_bm25_corpus(cfg) or (
+        getattr(cfg, "index_type", None) in {"vanilla", "raptor"}
+        and getattr(strategy_config, "corpus_unit", "chunk") == "paragraph"
+    )
+
+
 def _get_tree_paragraphs(tree: DocumentTree) -> Tuple[List[str], List[Dict[str, Any]]]:
     paragraphs: List[str] = []
     metadatas: List[Dict[str, Any]] = []
@@ -243,7 +251,7 @@ def get_tree_chunks(cfg: SystemConfig) -> Tuple[List[str], List[Dict[str, Any]]]
         return [], []
 
     tree = DocumentTree.load_from_file(tree_path)
-    if _use_paragraph_bm25_corpus(cfg):
+    if _use_paragraph_corpus(cfg):
         return _get_tree_paragraphs(tree)
 
     chunks: List[str] = []

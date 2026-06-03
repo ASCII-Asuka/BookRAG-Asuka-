@@ -134,6 +134,53 @@ class QasperOfficialEvalTests(unittest.TestCase):
 
         self.assertEqual(predictions[0]["predicted_evidence"], ["Gold evidence paragraph."])
 
+    def test_supporting_evidence_takes_precedence_over_selected_for_official_export(self):
+        from Scripts.eval.qasper_official import export_predictions
+
+        with tempfile.TemporaryDirectory() as tmp:
+            dataset_path, working_dir = self._write_sample_outputs(tmp)
+            query_dir = working_dir / "paper-1" / "eval_qasper_evibridge" / "query_001"
+            (query_dir / "retrieval_res.json").write_text(
+                json.dumps(
+                    {
+                        "supporting_evidence": [
+                            {
+                                "block_id": 3,
+                                "block_type": "summary",
+                                "text": "Summary should not be exported.",
+                                "supporting_rank": 1,
+                            },
+                            {
+                                "block_id": 7,
+                                "block_type": "paragraph",
+                                "text": "Gold evidence paragraph.",
+                                "supporting_rank": 2,
+                            },
+                        ],
+                        "selected": [
+                            {
+                                "block_id": 8,
+                                "block_type": "paragraph",
+                                "text": "Selected fallback should not be used.",
+                                "selection_rank": 1,
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            output_path = Path(tmp) / "official" / "predictions.jsonl"
+
+            predictions = export_predictions(
+                dataset_path=str(dataset_path),
+                working_dir=str(working_dir),
+                dataset_name="qasper",
+                method="evibridge",
+                output_path=str(output_path),
+            )
+
+        self.assertEqual(predictions[0]["predicted_evidence"], ["Gold evidence paragraph."])
+
     def test_exports_bm25_ranked_results_as_evidence(self):
         from Scripts.eval.qasper_official import export_predictions
 

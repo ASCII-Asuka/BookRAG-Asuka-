@@ -447,7 +447,7 @@ def _prediction_evidence(
         values = _evidence_values(payload)
     values = sorted(
         values,
-        key=lambda item: item.get("selection_rank", item.get("rank", 10**9))
+        key=lambda item: item.get("supporting_rank", item.get("selection_rank", item.get("rank", 10**9)))
         if isinstance(item, dict)
         else 10**9,
     )
@@ -473,7 +473,11 @@ def _prediction_evidence(
 def _evidence_values(payload: Any) -> List[Any]:
     if isinstance(payload, dict):
         return (
-            payload.get("selected")
+            payload.get("supporting_evidence")
+            or payload.get("supporting")
+            or payload.get("official_evidence")
+            or payload.get("supporting_blocks")
+            or payload.get("selected")
             or payload.get("evidence_chain")
             or payload.get("ranked_results")
             or payload.get("retrieval_results")

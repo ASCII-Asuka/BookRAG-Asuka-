@@ -1,6 +1,5 @@
 from Core.Index.Graph import Entity
 import torch
-from modelscope import AutoModelForCausalLM, AutoTokenizer
 from typing import List, Dict, Optional
 import math
 from tqdm import tqdm
@@ -28,6 +27,7 @@ class TextRerankerProvider:
         torch_dtype: torch.dtype = torch.bfloat16,
         backend: str = "local",
         api_base: str = None,
+        api_key: str = None,
     ):
         """
         初始化Reranker Provider。
@@ -58,11 +58,21 @@ class TextRerankerProvider:
                 self.rerank_url = f"{api_base.strip('/')}/rerank"
             # 创建一个 session 以复用连接，提升性能
             self.session = requests.Session()
+            if api_key:
+                self.session.headers.update({"Authorization": f"Bearer {api_key}"})
             log.info(f"Using vLLM backend. Rerank endpoint: {self.rerank_url}")
         # ==========================================================
         # 本地后端逻辑 (将原有代码移入此分支)
         # ==========================================================
         elif self.backend == "local":
+            try:
+                from modelscope import AutoModelForCausalLM, AutoTokenizer
+            except ImportError as exc:
+                raise ImportError(
+                    "The local reranker backend requires 'modelscope'. "
+                    "Install modelscope or set reranker backend to 'vllm'."
+                ) from exc
+
             if device == "auto":
                 self.device = "cuda" if torch.cuda.is_available() else "cpu"
             else:
@@ -269,16 +279,18 @@ class TextRerankerProvider:
                 # 使用默认的 instruction
                 instruction = "Given a web search query, retrieve relevant passages that answer the query"
 
-            # 格式化查询 (注意 API 可能需要列表，所以我们把单个查询放入列表)
-            formatted_query = self.query_template.format(
-                prefix=self.prefix, instruction=instruction, query=query
-            )
-
-            # 1. 构建 payload，使用原始文本，无需客户端模板
-            all_formatted_documents = [
-                self.document_template.format(doc=doc, suffix=self.suffix)
-                for doc in documents
-            ]
+            use_qwen_prompt = "qwen" in self.model_name.lower()
+            if use_qwen_prompt:
+                formatted_query = self.query_template.format(
+                    prefix=self.prefix, instruction=instruction, query=query
+                )
+                all_formatted_documents = [
+                    self.document_template.format(doc=doc, suffix=self.suffix)
+                    for doc in documents
+                ]
+            else:
+                formatted_query = query
+                all_formatted_documents = documents
 
             
             all_results = []
@@ -300,6 +312,8 @@ class TextRerankerProvider:
                         "model": self.model_name,
                         "query": formatted_query,
                         "documents": batch_formatted_documents, # 使用已格式化的批次
+                        "top_n": len(batch_formatted_documents),
+                        "return_documents": False,
                     }
                     
                     # 3. 发送 API 请求

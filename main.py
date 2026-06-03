@@ -194,6 +194,14 @@ def run_inference(config: SystemConfig, data_df: pd.DataFrame, dataset_name: str
     )
 
 
+def read_dataset_dataframe(dataset_path: str) -> pd.DataFrame:
+    df = pd.read_json(dataset_path, dtype={"doc_uuid": str, "doc_path": str})
+    for column in ["doc_uuid", "doc_path"]:
+        if column in df.columns:
+            df[column] = df[column].astype(str)
+    return df
+
+
 def setup_logging(save_path: str, config_to_log: SystemConfig):
     """
     Sets up the root logger to output to both a Rich console and a timestamped file.
@@ -300,7 +308,7 @@ def main():
         # 1. Load the entire dataset from the JSON file into a pandas DataFrame
         log.info(f"  - Loading dataset from: {dataset_cfg.dataset_path}")
         try:
-            df = pd.read_json(dataset_cfg.dataset_path)
+            df = read_dataset_dataframe(dataset_cfg.dataset_path)
             print(f"Dataset shape: {df.shape}")
         except FileNotFoundError:
             log.error(f"ERROR: Dataset file not found at '{dataset_cfg.dataset_path}'")

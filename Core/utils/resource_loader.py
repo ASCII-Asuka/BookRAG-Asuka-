@@ -105,6 +105,24 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
             )
             log.info(f"Successfully loaded EviBridge vector store from {evibridge_vdb_path}")
             dependencies["evibridge_vector_store"] = evibridge_vector_store
+        if getattr(rag_config, "enable_candidate_rerank", False) or getattr(
+            rag_config,
+            "enable_supporting_rerank",
+            False,
+        ):
+            from Core.provider.rerank import TextRerankerProvider
+
+            reranker_cfg = rag_config.reranker_config
+            reranker = TextRerankerProvider(
+                model_name=reranker_cfg.model_name,
+                device=reranker_cfg.device,
+                max_length=reranker_cfg.max_length,
+                backend=reranker_cfg.backend,
+                api_base=reranker_cfg.api_base,
+                api_key=reranker_cfg.api_key,
+            )
+            log.info(f"Successfully loaded EviBridge reranker: {reranker_cfg.model_name}")
+            dependencies["reranker"] = reranker
 
     elif strategy_name == "gbc":
         from Core.Index.GBCIndex import GBC
@@ -121,27 +139,32 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
 
     elif strategy_name == "vanilla":
         import os
+        from Core.Index.Tree import DocumentTree
         from Core.configs.vdb_config import VDBConfig
+
         retrieval_method = rag_config.retrieval_method
-        
-        vdb_cfg: VDBConfig = rag_config.vdb_config
-        vdb_store_path = vdb_cfg.vdb_dir_name
-        if cfg.save_path not in vdb_store_path:
-            vdb_store_path = os.path.join(cfg.save_path, vdb_store_path)
-        
-        if retrieval_method == "bm25":
+
+        def _resolve_store_path(path: str) -> str:
+            resolved = path
+            if not os.path.isabs(resolved) and cfg.save_path not in resolved:
+                resolved = os.path.join(cfg.save_path, resolved)
+            return resolved
+
+        def _load_bm25(vdb_dir_name: str):
             from Core.utils.bm25 import BM25
-            bm25_path = os.path.join(vdb_store_path, "bm25_index.pkl")
+
+            bm25_dir = _resolve_store_path(vdb_dir_name)
+            bm25_path = os.path.join(bm25_dir, "bm25_index.pkl")
             bm25 = BM25.load(bm25_path)
             log.info(f"Successfully loaded BM25 index from {bm25_path}")
-            dependencies["bm25"] = bm25
-        else:
-            from Core.configs.embedding_config import EmbeddingConfig
-            from Core.provider.vdb import VectorStore
+            return bm25
+
+        def _load_vector_store(vdb_cfg: VDBConfig):
             from Core.provider.embedding import TextEmbeddingProvider
+            from Core.provider.vdb import VectorStore
 
-            embed_cfg: EmbeddingConfig = rag_config.vdb_config.embedding_config
-
+            vdb_store_path = _resolve_store_path(vdb_cfg.vdb_dir_name)
+            embed_cfg = vdb_cfg.embedding_config
             embed_model = TextEmbeddingProvider(
                 model_name=embed_cfg.model_name,
                 backend=embed_cfg.backend,
@@ -150,14 +173,41 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
                 api_base=embed_cfg.api_base,
                 api_key=embed_cfg.api_key,
             )
-            
             vdb = VectorStore(
                 embedding_model=embed_model,
                 db_path=vdb_store_path,
                 collection_name=vdb_cfg.collection_name,
             )
             log.info(f"Successfully loaded vector store from {vdb_store_path}")
-            dependencies["vector_store"] = vdb
+            return vdb
+
+        if retrieval_method == "bm25":
+            dependencies["bm25"] = _load_bm25(rag_config.vdb_config.vdb_dir_name)
+        elif retrieval_method == "hybrid":
+            dependencies["bm25"] = _load_bm25(rag_config.bm25_vdb_dir_name)
+            dependencies["vector_store"] = _load_vector_store(rag_config.vdb_config)
+        elif retrieval_method == "bm25_rerank":
+            from Core.provider.rerank import TextRerankerProvider
+
+            dependencies["bm25"] = _load_bm25(rag_config.bm25_vdb_dir_name)
+            reranker_cfg = rag_config.reranker_config
+            reranker = TextRerankerProvider(
+                model_name=reranker_cfg.model_name,
+                device=reranker_cfg.device,
+                max_length=reranker_cfg.max_length,
+                backend=reranker_cfg.backend,
+                api_base=reranker_cfg.api_base,
+                api_key=reranker_cfg.api_key,
+            )
+            log.info(f"Successfully loaded reranker: {reranker_cfg.model_name}")
+            dependencies["reranker"] = reranker
+        elif retrieval_method == "abstract_only":
+            tree_index_path = DocumentTree.get_save_path(cfg.save_path)
+            tree_index = DocumentTree.load_from_file(tree_index_path)
+            log.info(f"Successfully loaded tree index from {tree_index_path}")
+            dependencies["tree_index"] = tree_index
+        else:
+            dependencies["vector_store"] = _load_vector_store(rag_config.vdb_config)
 
     elif strategy_name == "gbcvanilla":
         import os

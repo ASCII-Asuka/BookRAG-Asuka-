@@ -19,6 +19,7 @@ class EviBridgeRAG(BaseRAG):
         evibridge_index: EvidenceBridgeIndex,
         bm25: Any,
         evibridge_vector_store: Any = None,
+        reranker: Any = None,
     ):
         super().__init__(
             llm=llm,
@@ -29,10 +30,14 @@ class EviBridgeRAG(BaseRAG):
         self.evibridge_index = evibridge_index
         self.bm25 = bm25
         self.evibridge_vector_store = evibridge_vector_store
+        self.reranker = reranker
         self.demand_parser = DemandParser(
             llm=llm,
             mode=config.demand_parser,
             confidence_threshold=config.demand_confidence_threshold,
+            qasper_demand_mode=config.qasper_demand_mode,
+            enable_boolean_answer_hint=config.enable_boolean_answer_hint,
+            multi_hop_requires_explicit_bridge=config.multi_hop_requires_explicit_bridge,
         )
         self.verifier = EvidenceSufficiencyVerifier(
             llm=llm,
@@ -109,6 +114,12 @@ class EviBridgeRAG(BaseRAG):
                             block_id,
                             {"context": 0.0, "semantic": 0.0, "hierarchy": 0.0},
                         )["connector"] = round(float(score), 8)
+                self._expand_auxiliary_candidates(candidate_scores, candidate_score_parts)
+                candidate_scores = self._rerank_candidate_scores(
+                    query=query,
+                    candidate_scores=candidate_scores,
+                    candidate_score_parts=candidate_score_parts,
+                )
 
             if self._ablation_variant() == "wo_budgeted_selector":
                 selected = self._top_selected(candidate_scores)
@@ -165,6 +176,8 @@ class EviBridgeRAG(BaseRAG):
         selected_ids = [item.block.block_id for item in selected]
         evidence_chain = self._build_evidence_chain(selected, demand, verdict)
         selected_payload = self._selected_payload(selected, candidate_score_parts)
+        supporting_evidence = self._supporting_evidence_payload(selected_payload)
+        supporting_block_ids = [item["block_id"] for item in supporting_evidence]
         return {
             "query": query,
             "demand": demand,
@@ -178,6 +191,8 @@ class EviBridgeRAG(BaseRAG):
             "selected_bridges": selected_bridges,
             "selected_block_ids": selected_ids,
             "retrieved_block_ids": selected_ids,
+            "supporting_evidence": supporting_evidence,
+            "supporting_block_ids": supporting_block_ids,
             "evidence_chain": evidence_chain,
             "verification": verdict,
             "iterations": iteration_records,
@@ -203,10 +218,11 @@ class EviBridgeRAG(BaseRAG):
         verdict_text = verification.model_dump_json() if verification else "{}"
         return (
             "You answer complex document questions using only the provided bridged evidence.\n"
-            "Return only a JSON object with keys answer_short and answer_rationale.\n"
+            "Return only a JSON object with keys answer_short, answer_rationale, and supporting_block_ids.\n"
             "answer_short must be a concise Qasper-style answer: use exact spans when possible, "
-            "answer Yes or No for boolean questions, and use Not answerable only when evidence is insufficient. "
+            "answer exactly Yes or No for boolean questions, and use Unanswerable only when evidence is insufficient. "
             "Do not include evidence bullets or explanations in answer_short.\n"
+            "supporting_block_ids must contain 1 to 4 block_id values from the evidence chain that best support answer_short.\n"
             f"Question: {query}\n"
             f"Evidence demand: {demand_text}\n"
             f"Sufficiency verdict: {verdict_text}\n"
@@ -226,21 +242,26 @@ class EviBridgeRAG(BaseRAG):
             answer = self.llm.get_completion(prompt=prompt, json_response=False)
         except TypeError:
             answer = self.llm.get_completion(prompt)
-        answer_short, answer_rationale = self._parse_answer_payload(answer)
+        answer_short, answer_rationale, answer_supporting_ids = self._parse_answer_payload(answer)
+        answer_short = self._normalize_answer_short(answer_short, retrieval_info["demand"])
+        self._apply_answer_supporting_ids(retrieval_info, answer_supporting_ids)
 
         output_dir = Path(query_output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
         self._save_retrieval_outputs(retrieval_info, output_dir)
         retrieved_ids = retrieval_info["retrieved_block_ids"]
+        supporting_ids = retrieval_info["supporting_block_ids"]
         self.last_retrieved_block_ids = retrieved_ids
         self.last_answer_short = answer_short
         self.last_answer_rationale = answer_rationale
-        self.last_supporting_block_ids = retrieved_ids
+        self.last_supporting_block_ids = supporting_ids
         return answer, retrieved_ids
 
     def close(self):
         if hasattr(self.evibridge_vector_store, "close"):
             self.evibridge_vector_store.close()
+        if hasattr(self.reranker, "close"):
+            self.reranker.close()
 
     def _hybrid_seed_retrieval(self, query: str, demand: EvidenceDemand) -> List[Dict[str, Any]]:
         bm25_results = self.evibridge_index.search_bm25(
@@ -462,6 +483,128 @@ class EviBridgeRAG(BaseRAG):
             candidate_scores[block_id] = max(float(candidate_scores.get(block_id, 0.0)), seed_score)
         return dict(sorted(candidate_scores.items(), key=lambda item: item[1], reverse=True))
 
+    def _expand_auxiliary_candidates(
+        self,
+        candidate_scores: Dict[int, float],
+        candidate_score_parts: Dict[int, Dict[str, float]],
+    ) -> None:
+        for block_id, score in list(candidate_scores.items()):
+            block = self.evibridge_index.blocks.get(block_id)
+            if not block or block.block_type not in set(self.config.bridge_auxiliary_types):
+                continue
+            for target_id in self._answer_targets_for_auxiliary(block):
+                target = self.evibridge_index.blocks.get(target_id)
+                if not target or target.block_type not in set(self.config.final_evidence_types):
+                    continue
+                expanded_score = float(score) * 0.85
+                if expanded_score > float(candidate_scores.get(target_id, 0.0)):
+                    candidate_scores[target_id] = expanded_score
+                    parts = candidate_score_parts.setdefault(
+                        target_id,
+                        {"context": 0.0, "semantic": 0.0, "hierarchy": 0.0},
+                    )
+                    parts["expanded_from_auxiliary"] = block.block_id
+                    parts["auxiliary_seed"] = round(float(score), 8)
+
+    def _rerank_candidate_scores(
+        self,
+        query: str,
+        candidate_scores: Dict[int, float],
+        candidate_score_parts: Dict[int, Dict[str, float]],
+    ) -> Dict[int, float]:
+        if not self.config.enable_candidate_rerank or self.reranker is None:
+            return candidate_scores
+        topk = max(int(getattr(self.config, "candidate_rerank_topk", 0) or 0), 0)
+        if topk <= 0:
+            return candidate_scores
+
+        final_types = set(getattr(self.config, "final_evidence_types", []) or [])
+        candidates: List[Tuple[int, EvidenceBlock, float]] = []
+        for block_id, score in sorted(candidate_scores.items(), key=lambda item: item[1], reverse=True):
+            block = self.evibridge_index.blocks.get(block_id)
+            if not block or block.block_type not in final_types:
+                continue
+            candidates.append((block_id, block, float(score)))
+            if len(candidates) >= topk:
+                break
+        if not candidates:
+            return candidate_scores
+
+        documents = [self._rerank_document_text(block) for _, block, _ in candidates]
+        scores = self.reranker.rerank(
+            query=query,
+            documents=documents,
+            batch_size=max(int(getattr(self.config, "rerank_batch_size", 1) or 1), 1),
+        )
+        if len(scores) != len(candidates):
+            return candidate_scores
+
+        rerank_by_id = {
+            block_id: float(score)
+            for (block_id, _, _), score in zip(candidates, scores)
+        }
+        base_norm = self._normalized_score_map({block_id: score for block_id, _, score in candidates})
+        rerank_norm = self._normalized_score_map(rerank_by_id)
+        rerank_ranks = {
+            block_id: rank
+            for rank, block_id in enumerate(
+                sorted(rerank_by_id, key=lambda item_id: rerank_by_id[item_id], reverse=True),
+                1,
+            )
+        }
+        weight = min(max(float(getattr(self.config, "candidate_rerank_weight", 0.0) or 0.0), 0.0), 1.0)
+        reranked = dict(candidate_scores)
+        for block_id, score in rerank_by_id.items():
+            blended = (1.0 - weight) * base_norm.get(block_id, 0.0) + weight * rerank_norm.get(block_id, 0.0)
+            reranked[block_id] = blended
+            parts = candidate_score_parts.setdefault(
+                block_id,
+                {"context": 0.0, "semantic": 0.0, "hierarchy": 0.0},
+            )
+            parts["pre_rerank_score"] = round(float(candidate_scores.get(block_id, 0.0)), 8)
+            parts["rerank_score"] = round(float(score), 8)
+            parts["rerank_norm"] = round(float(rerank_norm.get(block_id, 0.0)), 8)
+            parts["rerank_rank"] = rerank_ranks[block_id]
+        return dict(sorted(reranked.items(), key=lambda item: item[1], reverse=True))
+
+    @staticmethod
+    def _rerank_document_text(block: EvidenceBlock) -> str:
+        section = " > ".join(block.title_path) or block.section_id
+        return f"section={section}\ntype={block.block_type}\n{block.text}"
+
+    def _answer_targets_for_auxiliary(self, block: EvidenceBlock) -> List[int]:
+        targets: List[int] = []
+        if block.block_type == "patch":
+            targets.extend(
+                int(item)
+                for item in block.metadata.get("contains_block_ids", [])
+                if isinstance(item, int)
+            )
+        if block.block_type == "entity":
+            targets.extend(
+                int(item)
+                for item in block.metadata.get("mentioned_by", [])
+                if isinstance(item, int)
+            )
+        if block.block_type == "summary":
+            for value in (block.metadata.get("summary_of"), block.parent_id):
+                if isinstance(value, int):
+                    targets.append(value)
+        for bridge in self.evibridge_index.get_related_bridges([block.block_id], expand_depth=1):
+            if bridge.relation_type in {
+                "patch_contains",
+                "contained_in_patch",
+                "mentioned_by",
+                "summary_of",
+                "has_summary",
+            }:
+                targets.extend([bridge.source_id, bridge.target_id])
+        unique: List[int] = []
+        for target_id in targets:
+            if target_id != block.block_id and target_id not in unique:
+                unique.append(target_id)
+        return unique
+
     def _top_selected(self, candidate_scores: Dict[int, float]) -> List[SelectedEvidence]:
         selected: List[SelectedEvidence] = []
         for block_id, score in sorted(candidate_scores.items(), key=lambda item: item[1], reverse=True)[
@@ -542,6 +685,55 @@ class EviBridgeRAG(BaseRAG):
             )
         return payload
 
+    def _supporting_evidence_payload(
+        self,
+        selected_payload: List[Dict[str, Any]],
+        preferred_ids: Optional[List[int]] = None,
+    ) -> List[Dict[str, Any]]:
+        allowed_types = set(self.config.supporting_evidence_types)
+        topk = max(int(self.config.supporting_evidence_topk or 0), 0)
+        by_id = {int(item["block_id"]): item for item in selected_payload if item.get("block_id") is not None}
+        ordered: List[Dict[str, Any]] = []
+        for block_id in preferred_ids or []:
+            item = by_id.get(block_id)
+            if item is not None:
+                ordered.append(item)
+        remaining = [item for item in selected_payload if item not in ordered]
+        if self.config.enable_supporting_rerank:
+            remaining = sorted(remaining, key=self._supporting_order_key)
+        else:
+            remaining = sorted(remaining, key=lambda value: value.get("selection_rank", 10**9))
+        ordered.extend(remaining)
+
+        supporting: List[Dict[str, Any]] = []
+        seen = set()
+        for item in ordered:
+            block_id = int(item["block_id"])
+            if block_id in seen:
+                continue
+            if item.get("block_type") not in allowed_types:
+                continue
+            if item.get("evidence_role") == "bridge_auxiliary":
+                continue
+            seen.add(block_id)
+            payload = dict(item)
+            payload["supporting_rank"] = len(supporting) + 1
+            supporting.append(payload)
+            if topk > 0 and len(supporting) >= topk:
+                break
+        return supporting
+
+    def _apply_answer_supporting_ids(
+        self,
+        retrieval_info: Dict[str, Any],
+        supporting_ids: List[int],
+    ) -> None:
+        selected_payload = retrieval_info.get("selected_payload", [])
+        preferred_ids = supporting_ids if self.config.trust_answer_supporting_ids else None
+        supporting_evidence = self._supporting_evidence_payload(selected_payload, preferred_ids=preferred_ids)
+        retrieval_info["supporting_evidence"] = supporting_evidence
+        retrieval_info["supporting_block_ids"] = [item["block_id"] for item in supporting_evidence]
+
     def _save_retrieval_outputs(self, retrieval_info: Dict[str, Any], output_dir: Path) -> None:
         retrieval_payload = {
             "query": retrieval_info["query"],
@@ -552,6 +744,8 @@ class EviBridgeRAG(BaseRAG):
             "connector_paths": retrieval_info["connector_paths"],
             "connector_edges": retrieval_info["connector_edges"],
             "retrieved_block_ids": retrieval_info["retrieved_block_ids"],
+            "supporting_block_ids": retrieval_info.get("supporting_block_ids", []),
+            "supporting_evidence": retrieval_info.get("supporting_evidence", []),
             "selected": retrieval_info.get("selected_payload", []),
             "selected_bridges": self._bridge_payloads(retrieval_info.get("selected_bridges", [])),
             "verification": retrieval_info["verification"].model_dump()
@@ -596,6 +790,8 @@ class EviBridgeRAG(BaseRAG):
             "selected_bridges": [],
             "selected_block_ids": [],
             "retrieved_block_ids": [],
+            "supporting_block_ids": [],
+            "supporting_evidence": [],
             "evidence_chain": [],
             "verification": verdict,
             "iterations": [],
@@ -686,6 +882,37 @@ class EviBridgeRAG(BaseRAG):
         }
 
     @staticmethod
+    def _normalized_score_map(scores: Dict[int, float]) -> Dict[int, float]:
+        if not scores:
+            return {}
+        values = [float(value) for value in scores.values()]
+        min_value = min(values)
+        max_value = max(values)
+        if max_value <= min_value:
+            return {block_id: 1.0 for block_id in scores}
+        return {
+            block_id: (float(score) - min_value) / (max_value - min_value)
+            for block_id, score in scores.items()
+        }
+
+    @staticmethod
+    def _supporting_order_key(item: Dict[str, Any]) -> Tuple[int, float, int]:
+        score_parts = item.get("score_parts") or {}
+        rank = score_parts.get("rerank_rank")
+        score = score_parts.get("rerank_score")
+        if rank is not None:
+            try:
+                return (0, float(rank), int(item.get("selection_rank", 10**9)))
+            except (TypeError, ValueError):
+                pass
+        if score is not None:
+            try:
+                return (1, -float(score), int(item.get("selection_rank", 10**9)))
+            except (TypeError, ValueError):
+                pass
+        return (2, 0.0, int(item.get("selection_rank", 10**9)))
+
+    @staticmethod
     def _coerce_int(value: Any) -> Optional[int]:
         try:
             return int(value)
@@ -693,7 +920,7 @@ class EviBridgeRAG(BaseRAG):
             return None
 
     @staticmethod
-    def _parse_answer_payload(answer: Any) -> Tuple[str, str]:
+    def _parse_answer_payload(answer: Any) -> Tuple[str, str, List[int]]:
         text = str(answer or "").strip()
         cleaned = text
         if cleaned.startswith("```"):
@@ -705,16 +932,44 @@ class EviBridgeRAG(BaseRAG):
             if isinstance(payload, dict):
                 answer_short = str(payload.get("answer_short") or payload.get("answer") or "").strip()
                 answer_rationale = str(payload.get("answer_rationale") or payload.get("rationale") or "").strip()
+                supporting_ids = EviBridgeRAG._parse_supporting_ids(payload.get("supporting_block_ids"))
                 if answer_short:
-                    return answer_short, answer_rationale
+                    return answer_short, answer_rationale, supporting_ids
         except Exception:
             pass
         for marker in ["Final Answer:", "Answer:", "answer_short:"]:
             if marker.lower() in text.lower():
                 parts = text.split(marker, 1)
                 if len(parts) == 2 and parts[1].strip():
-                    return parts[1].strip(), ""
-        return text, ""
+                    return parts[1].strip(), "", []
+        return text, "", []
+
+    @staticmethod
+    def _parse_supporting_ids(value: Any) -> List[int]:
+        if value is None:
+            return []
+        raw_items = value if isinstance(value, list) else [value]
+        ids: List[int] = []
+        for item in raw_items:
+            try:
+                block_id = int(item)
+            except (TypeError, ValueError):
+                continue
+            if block_id not in ids:
+                ids.append(block_id)
+        return ids
+
+    @staticmethod
+    def _normalize_answer_short(answer_short: str, demand: EvidenceDemand) -> str:
+        text = str(answer_short or "").strip()
+        if demand.intent != "boolean":
+            return text
+        normalized = text.lower()
+        if normalized.startswith("yes") or normalized in {"true", "correct"}:
+            return "Yes"
+        if normalized.startswith("no") or normalized in {"false", "incorrect"}:
+            return "No"
+        return text
 
     @staticmethod
     def _role(block: EvidenceBlock, demand: EvidenceDemand) -> str:

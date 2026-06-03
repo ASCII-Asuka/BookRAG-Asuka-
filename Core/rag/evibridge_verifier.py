@@ -9,6 +9,19 @@ from pydantic import BaseModel, Field
 from Core.Index.EvidenceBridgeIndex import EvidenceBlock, EvidenceBridge, evidence_tokenize
 from Core.rag.evibridge_demand import EvidenceDemand
 
+ALLOWED_MISSING_TYPES = {"evidence", "table", "summary", "context", "entity", "noise"}
+ALLOWED_BRIDGE_TYPES = {"context", "semantic", "hierarchy"}
+ALLOWED_NEXT_ACTIONS = {
+    "accept",
+    "expand_context",
+    "expand_semantic_bridge",
+    "expand_hierarchy_context",
+    "expand_table_caption",
+    "reduce_noise",
+    "expand_relevant_evidence",
+}
+HARD_RULE_MISSING = {"evidence", "table_or_caption_context", "too_noisy"}
+
 
 class SufficiencyVerdict(BaseModel):
     sufficient: bool
@@ -154,6 +167,8 @@ class RuleBasedSufficiencyVerifier:
 
     @staticmethod
     def _next_bridge(missing: List[str], demand: EvidenceDemand) -> List[str]:
+        if "table_or_caption_context" in missing:
+            return ["context"]
         next_bridge: List[str] = []
         if any(item in missing for item in ["table_or_caption_context", "demand_coverage"]):
             next_bridge.append("context")
@@ -204,9 +219,56 @@ class EvidenceSufficiencyVerifier:
             return rule_verdict
         try:
             prompt = self._prompt(query, demand, evidence, rule_verdict)
-            return self.llm.get_json_completion(prompt, SufficiencyVerdict)
+            llm_verdict = self.llm.get_json_completion(prompt, SufficiencyVerdict)
+            return self._sanitize_llm_verdict(llm_verdict, rule_verdict)
         except Exception:
             return rule_verdict
+
+    @staticmethod
+    def _sanitize_llm_verdict(
+        llm_verdict: SufficiencyVerdict,
+        rule_verdict: SufficiencyVerdict,
+    ) -> SufficiencyVerdict:
+        if set(rule_verdict.missing) & HARD_RULE_MISSING:
+            return rule_verdict
+
+        missing_types = [
+            item
+            for item in (llm_verdict.missing_types or [])
+            if str(item).strip().lower() in ALLOWED_MISSING_TYPES
+        ]
+        missing_bridge_types = [
+            item
+            for item in (llm_verdict.missing_bridge_types or [])
+            if str(item).strip().lower() in ALLOWED_BRIDGE_TYPES
+        ]
+        next_bridge = [
+            item
+            for item in (llm_verdict.next_bridge or [])
+            if str(item).strip().lower() in ALLOWED_BRIDGE_TYPES
+        ]
+        next_action = str(llm_verdict.next_action or "accept").strip()
+        if next_action not in ALLOWED_NEXT_ACTIONS:
+            next_action = rule_verdict.next_action if rule_verdict.missing else "accept"
+        missing = list(dict.fromkeys(str(item) for item in (llm_verdict.missing or [])))
+        sufficient = bool(llm_verdict.sufficient) and not missing
+        if sufficient:
+            next_action = "accept"
+        return SufficiencyVerdict(
+            sufficient=sufficient,
+            missing=[] if sufficient else missing,
+            missing_types=list(dict.fromkeys(str(item).strip().lower() for item in missing_types)),
+            missing_bridge_types=list(dict.fromkeys(str(item).strip().lower() for item in missing_bridge_types)),
+            relevance=max(0.0, min(float(llm_verdict.relevance), 1.0)),
+            connectivity=max(0.0, min(float(llm_verdict.connectivity), 1.0)),
+            coverage=max(0.0, min(float(llm_verdict.coverage), 1.0)),
+            specificity=max(0.0, min(float(llm_verdict.specificity), 1.0)),
+            noise=max(0.0, min(float(llm_verdict.noise), 1.0)),
+            noise_warning=bool(llm_verdict.noise_warning),
+            next_bridge=list(dict.fromkeys(str(item).strip().lower() for item in next_bridge)),
+            next_action=next_action,
+            reason=str(llm_verdict.reason or ("sufficient" if sufficient else rule_verdict.reason)),
+        )
 
     @staticmethod
     def _prompt(

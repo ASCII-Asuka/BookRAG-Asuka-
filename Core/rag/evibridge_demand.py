@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 
 EvidenceIntent = Literal[
     "fact",
+    "boolean",
     "multi-hop",
     "comparison",
     "table-figure",
@@ -34,10 +35,17 @@ ALLOWED_MODALITIES = {"text", "table", "figure", "caption"}
 
 
 _TABLE_RE = re.compile(r"\b(table|tab\.|figure|fig\.|chart|caption|row|column)\b|表|图|图片|图表|图注", re.I)
-_COMPARE_RE = re.compile(r"\b(compare|difference|versus|vs\.?|better|worse)\b|比较|区别|差异|相比|对比", re.I)
+_COMPARE_RE = re.compile(r"\b(compare(?:d|s|ing)?|difference|versus|vs\.?|better|worse)\b|比较|区别|差异|相比|对比", re.I)
 _MULTIHOP_RE = re.compile(r"\b(why|how|relationship|connect|supporting|evidence)\b|关系|联系|依据|为什么|如何", re.I)
+_EXPLICIT_MULTIHOP_RE = re.compile(
+    r"\b(relationship|connect(?:ion|ed)?|supporting evidence|evidence for|link(?:ed)?|bridge)\b|关系|联系|依据",
+    re.I,
+)
 _GLOBAL_RE = re.compile(r"\b(summarize|summary|overall|entire|whole|global)\b|总结|概括|全文|整体|全局", re.I)
 _AGG_RE = re.compile(r"\b(how many|count|average|total|all|list)\b|多少|几个|统计|列出|全部", re.I)
+_BOOLEAN_RE = re.compile(r"^\s*(is|are|do|does|did|can|was|were|has|have|should|would|could)\b", re.I)
+_NUMERIC_FACT_RE = re.compile(r"^\s*(how many|how much|what (?:is|was) the size|what size)\b", re.I)
+_LOCAL_HOW_FACT_RE = re.compile(r"^\s*how\s+(?:was|were|is|are|did|do|does)\b", re.I)
 
 
 class DemandParser:
@@ -46,10 +54,16 @@ class DemandParser:
         llm: Optional[Any] = None,
         mode: Literal["rule", "llm", "hybrid"] = "hybrid",
         confidence_threshold: float = 0.7,
+        qasper_demand_mode: Literal["default", "conservative"] = "default",
+        enable_boolean_answer_hint: bool = True,
+        multi_hop_requires_explicit_bridge: bool = False,
     ):
         self.llm = llm
         self.mode = mode
         self.confidence_threshold = confidence_threshold
+        self.qasper_demand_mode = qasper_demand_mode
+        self.enable_boolean_answer_hint = enable_boolean_answer_hint
+        self.multi_hop_requires_explicit_bridge = multi_hop_requires_explicit_bridge
 
     def parse(self, query: str) -> EvidenceDemand:
         rule_demand = self._parse_rule(query)
@@ -78,6 +92,12 @@ class DemandParser:
         granularity: EvidenceGranularity = "block"
         confidence = 0.68
         rationale = "default fact demand"
+        conservative = self.qasper_demand_mode == "conservative"
+        multihop_match = (
+            _EXPLICIT_MULTIHOP_RE.search(text)
+            if self.multi_hop_requires_explicit_bridge or conservative
+            else _MULTIHOP_RE.search(text)
+        )
 
         if _TABLE_RE.search(text):
             intent = "table-figure"
@@ -85,6 +105,16 @@ class DemandParser:
             bridge_need = ["context"]
             confidence = 0.9
             rationale = "explicit table or figure signal"
+        elif conservative and self.enable_boolean_answer_hint and _BOOLEAN_RE.search(text):
+            intent = "boolean"
+            bridge_need = ["context"]
+            confidence = 0.9
+            rationale = "boolean question signal"
+        elif conservative and (_NUMERIC_FACT_RE.search(text) or _LOCAL_HOW_FACT_RE.search(text)):
+            intent = "fact"
+            bridge_need = ["context", "semantic"]
+            confidence = 0.9
+            rationale = "qasper local fact question signal"
         elif _COMPARE_RE.search(text):
             intent = "comparison"
             bridge_need = ["semantic", "context"]
@@ -98,13 +128,13 @@ class DemandParser:
             bridge_need = ["hierarchy", "context"]
             confidence = 0.88
             rationale = "global summary signal"
-        elif _AGG_RE.search(text):
+        elif _AGG_RE.search(text) and not (conservative and _NUMERIC_FACT_RE.search(text)):
             intent = "aggregation"
             scope = "section"
             bridge_need = ["hierarchy", "context"]
             confidence = 0.82
             rationale = "aggregation signal"
-        elif _MULTIHOP_RE.search(text):
+        elif multihop_match:
             intent = "multi-hop"
             scope = "multi-document"
             granularity = "entity"
@@ -162,7 +192,7 @@ def sanitize_demand(demand: EvidenceDemand, fallback: Optional[EvidenceDemand] =
         ] or ["text"]
 
     granularity = demand.granularity
-    if demand.intent == "fact":
+    if demand.intent in {"fact", "boolean"}:
         granularity = "block"
 
     return EvidenceDemand(
@@ -186,6 +216,7 @@ def weights_for_demand(
         return {"context": 1 / 3, "semantic": 1 / 3, "hierarchy": 1 / 3}
     defaults = {
         "fact": {"context": 0.45, "semantic": 0.35, "hierarchy": 0.2},
+        "boolean": {"context": 0.5, "semantic": 0.25, "hierarchy": 0.25},
         "multi-hop": {"context": 0.25, "semantic": 0.55, "hierarchy": 0.2},
         "comparison": {"context": 0.25, "semantic": 0.55, "hierarchy": 0.2},
         "table-figure": {"context": 0.65, "semantic": 0.2, "hierarchy": 0.15},

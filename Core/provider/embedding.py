@@ -10,10 +10,6 @@ import json
 
 from abc import ABC, abstractmethod
 
-from modelscope import AutoTokenizer, AutoModel
-from transformers import AutoModel as transformer_AutoModel
-import ollama
-import openai
 import torch.nn.functional as F
 import logging
 import gc
@@ -71,6 +67,8 @@ class GmeEmbeddingProvider(BaseEmbedder):
         log.info(f"Loading model: {self.model_name}...")
 
         try:
+            from transformers import AutoModel as transformer_AutoModel
+
             self.model = transformer_AutoModel.from_pretrained(
                 self.model_name,
                 torch_dtype="auto",
@@ -461,6 +459,14 @@ class TextEmbeddingProvider(BaseEmbedder):
         self.max_length = max_length
 
         if self.backend == "local":
+            try:
+                from modelscope import AutoTokenizer, AutoModel
+            except ImportError as exc:
+                raise ImportError(
+                    "The local embedding backend requires 'modelscope'. "
+                    "Install modelscope or set embedding backend to 'openai'/'ollama'."
+                ) from exc
+
             if device == "auto":
                 self.device = "cuda" if torch.cuda.is_available() else "cpu"
             else:
@@ -485,8 +491,12 @@ class TextEmbeddingProvider(BaseEmbedder):
             log.info("Local model loaded successfully.")
 
         elif self.backend == "ollama":
+            import ollama
+
             self.device = "ollama_service"
         elif self.backend == "openai":
+            import openai
+
             self.client = openai.OpenAI(api_key=api_key or "empty", base_url=api_base)
         else:
             raise ValueError(

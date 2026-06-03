@@ -72,18 +72,13 @@ def create_rag_agent(
     if isinstance(strategy_config, VanillaConfig):
         from Core.rag.vanilla_rag import VanillaRAG
 
-        if strategy_config.retrieval_method == "bm25":
-            return VanillaRAG(
-                config=strategy_config,
-                llm=llm_client,
-                bm25=dependencies.get("bm25"),
-                vector_store=None,
-            )
         return VanillaRAG(
             config=strategy_config,
             llm=llm_client,
             vector_store=dependencies.get("vector_store"),
-            bm25=None,
+            bm25=dependencies.get("bm25"),
+            reranker=dependencies.get("reranker"),
+            tree_index=dependencies.get("tree_index"),
         )
 
     if isinstance(strategy_config, GBCVanillaConfig):
@@ -135,6 +130,7 @@ def create_rag_agent(
         evibridge_index = dependencies.get("evibridge_index")
         bm25 = dependencies.get("bm25")
         evibridge_vector_store = dependencies.get("evibridge_vector_store")
+        reranker = dependencies.get("reranker")
         if not evibridge_index or not bm25:
             raise ValueError("EviBridgeRAG requires 'evibridge_index' and 'bm25'.")
         return EviBridgeRAG(
@@ -143,6 +139,7 @@ def create_rag_agent(
             evibridge_index=evibridge_index,
             bm25=bm25,
             evibridge_vector_store=evibridge_vector_store,
+            reranker=reranker,
         )
 
     raise NotImplementedError(
