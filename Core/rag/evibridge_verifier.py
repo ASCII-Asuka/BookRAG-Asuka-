@@ -89,6 +89,11 @@ class RuleBasedSufficiencyVerifier:
             missing.append("hierarchy_context")
             missing_types.append("summary")
             missing_bridge_types.append("hierarchy")
+        if demand.intent in {"global-summary", "aggregation"} and not self._has_abstractive_coverage(evidence):
+            missing.append("abstractive_coverage")
+            missing_types.append("summary")
+            missing_types.append("context")
+            missing_bridge_types.append("hierarchy")
         if noise > self.noise_threshold:
             missing.append("too_noisy")
 
@@ -164,6 +169,18 @@ class RuleBasedSufficiencyVerifier:
             if query_terms and not (query_terms & block_terms):
                 irrelevant += 1
         return irrelevant / len(evidence)
+
+    @staticmethod
+    def _has_abstractive_coverage(evidence: List[EvidenceBlock]) -> bool:
+        if any(block.block_type in {"summary", "title"} for block in evidence):
+            return True
+        sections = set()
+        for block in evidence:
+            if block.title_path:
+                sections.add(" > ".join(block.title_path))
+            elif block.section_id:
+                sections.add(block.section_id)
+        return len(sections) >= 2
 
     @staticmethod
     def _next_bridge(missing: List[str], demand: EvidenceDemand) -> List[str]:

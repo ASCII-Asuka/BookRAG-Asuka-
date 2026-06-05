@@ -70,6 +70,7 @@ def export_predictions(
     answer_source: str = "output",
     paragraph_evidence_only: bool = True,
     top_k_evidence: int = 0,
+    dynamic_evidence_topk: bool = False,
 ) -> List[Dict[str, Any]]:
     rows = _load_json(dataset_path)
     eval_answer_by_qid = _load_eval_answers(
@@ -90,18 +91,21 @@ def export_predictions(
             )
             if not question_id:
                 continue
+            predicted_answer = _prediction_answer(
+                result=result,
+                question_id=question_id,
+                eval_answer_by_qid=eval_answer_by_qid,
+                answer_source=answer_source,
+            )
             prediction = {
                 "question_id": question_id,
-                "predicted_answer": _prediction_answer(
-                    result=result,
-                    question_id=question_id,
-                    eval_answer_by_qid=eval_answer_by_qid,
-                    answer_source=answer_source,
-                ),
+                "predicted_answer": predicted_answer,
                 "predicted_evidence": _prediction_evidence(
                     query_dir=result_dir / f"query_{query_idx:03d}",
                     paragraph_evidence_only=paragraph_evidence_only,
                     top_k_evidence=top_k_evidence,
+                    answer_text=predicted_answer,
+                    dynamic_evidence_topk=dynamic_evidence_topk,
                 ),
             }
             predictions.append(prediction)
@@ -276,6 +280,7 @@ def run_export_and_eval(
     text_evidence_only: bool = False,
     include_nonparagraph_evidence: bool = False,
     top_k_evidence: int = 0,
+    dynamic_evidence_topk: bool = False,
 ) -> Dict[str, Any]:
     data_cfg = load_dataset_config(dataset_config_path)
     official_dir = Path(output_dir) if output_dir else Path(data_cfg.working_dir) / "0_results" / f"qasper_official_{method}"
@@ -290,6 +295,7 @@ def run_export_and_eval(
         answer_source=answer_source,
         paragraph_evidence_only=not include_nonparagraph_evidence,
         top_k_evidence=top_k_evidence,
+        dynamic_evidence_topk=dynamic_evidence_topk,
     )
     scores = evaluate_predictions_file(
         dataset_path=data_cfg.dataset_path,
@@ -311,6 +317,7 @@ def run_export_and_external_official_eval(
     text_evidence_only: bool = False,
     include_nonparagraph_evidence: bool = False,
     top_k_evidence: int = 0,
+    dynamic_evidence_topk: bool = False,
     official_evaluator_path: str = "",
 ) -> Dict[str, Any]:
     data_cfg = load_dataset_config(dataset_config_path)
@@ -329,6 +336,7 @@ def run_export_and_external_official_eval(
         answer_source=answer_source,
         paragraph_evidence_only=not include_nonparagraph_evidence,
         top_k_evidence=top_k_evidence,
+        dynamic_evidence_topk=dynamic_evidence_topk,
     )
     export_gold_for_official_evaluator(
         dataset_path=data_cfg.dataset_path,
@@ -439,6 +447,8 @@ def _prediction_evidence(
     query_dir: Path,
     paragraph_evidence_only: bool,
     top_k_evidence: int,
+    answer_text: str = "",
+    dynamic_evidence_topk: bool = False,
 ) -> List[str]:
     payload = _load_json_if_exists(query_dir / "retrieval_res.json")
     values = _evidence_values(payload)
@@ -451,23 +461,162 @@ def _prediction_evidence(
         if isinstance(item, dict)
         else 10**9,
     )
+    evidence_limit = _evidence_limit(
+        payload=payload,
+        answer_text=answer_text,
+        top_k_evidence=top_k_evidence,
+        dynamic_evidence_topk=dynamic_evidence_topk,
+    )
+    if evidence_limit == 0:
+        return []
+
     evidence = []
+    tree_text_cache: Optional[Dict[int, str]] = None
     for item in values:
         if not isinstance(item, dict):
             continue
-        if paragraph_evidence_only and item.get("block_type") not in (None, "paragraph"):
-            continue
-        text = (
-            item.get("qasper_evidence_text")
-            or item.get("text")
-            or item.get("content")
-            or item.get("evidence")
-        )
-        if text and text not in evidence:
-            evidence.append(str(text))
-        if top_k_evidence > 0 and len(evidence) >= top_k_evidence:
+        expanded_texts: List[str] = []
+        if _is_raptor_summary(item):
+            if tree_text_cache is None:
+                tree_text_cache = _load_tree_paragraph_texts(query_dir)
+            expanded_texts = _raptor_child_evidence_texts(item, tree_text_cache)
+        block_type = _item_block_type(item)
+        if not expanded_texts:
+            if paragraph_evidence_only and block_type not in (None, "", "paragraph"):
+                continue
+            text = (
+                item.get("qasper_evidence_text")
+                or item.get("text")
+                or item.get("content")
+                or item.get("evidence")
+            )
+            if text:
+                expanded_texts = [str(text)]
+        for text in expanded_texts:
+            if text and text not in evidence:
+                evidence.append(str(text))
+            if evidence_limit > 0 and len(evidence) >= evidence_limit:
+                break
+        if evidence_limit > 0 and len(evidence) >= evidence_limit:
             break
     return evidence
+
+
+def _item_block_type(item: Dict[str, Any]) -> Optional[str]:
+    explicit = item.get("block_type")
+    if explicit is not None:
+        return str(explicit).strip().lower()
+    node_type = str(item.get("node_type") or "").strip().lower()
+    source = str(item.get("source") or "").strip().lower()
+    if source == "raptor_summary" or node_type == "raptor_summary":
+        return "summary"
+    if source == "qasper_paragraph" or node_type in {"text", "paragraph"}:
+        return "paragraph"
+    return None
+
+
+def _is_raptor_summary(item: Dict[str, Any]) -> bool:
+    return (
+        _item_block_type(item) == "summary"
+        and bool(item.get("child_source_node_ids") or item.get("child_qasper_evidence_texts"))
+    )
+
+
+def _raptor_child_evidence_texts(
+    item: Dict[str, Any],
+    tree_text_cache: Dict[int, str],
+) -> List[str]:
+    inline_texts = _parse_inline_child_evidence_texts(item.get("child_qasper_evidence_texts"))
+    if inline_texts:
+        return inline_texts
+    texts: List[str] = []
+    for node_id in _parse_int_list(item.get("child_source_node_ids")):
+        text = tree_text_cache.get(node_id)
+        if text and text not in texts:
+            texts.append(text)
+    return texts
+
+
+def _parse_inline_child_evidence_texts(value: Any) -> List[str]:
+    if not value:
+        return []
+    if isinstance(value, list):
+        return [str(item) for item in value if str(item).strip()]
+    raw = str(value)
+    try:
+        parsed = json.loads(raw)
+        if isinstance(parsed, list):
+            return [str(item) for item in parsed if str(item).strip()]
+    except Exception:
+        pass
+    return [item.strip() for item in raw.split("\n") if item.strip()]
+
+
+def _parse_int_list(value: Any) -> List[int]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        values = value
+    else:
+        values = re.findall(r"-?\d+", str(value))
+    ids: List[int] = []
+    for item in values:
+        try:
+            ids.append(int(item))
+        except (TypeError, ValueError):
+            continue
+    return ids
+
+
+def _load_tree_paragraph_texts(query_dir: Path) -> Dict[int, str]:
+    doc_dir = query_dir.parent.parent
+    try:
+        from Core.Index.Tree import DocumentTree, NodeType
+
+        tree_path = DocumentTree.get_save_path(str(doc_dir))
+        if not Path(tree_path).exists():
+            return {}
+        tree = DocumentTree.load_from_file(tree_path)
+    except Exception:
+        return {}
+
+    texts: Dict[int, str] = {}
+    for node in tree.get_nodes(hasRoot=False):
+        if getattr(node, "type", None) != NodeType.TEXT:
+            continue
+        text = str(getattr(node.meta_info, "content", "") or "").strip()
+        if text:
+            texts[int(node.index_id)] = text
+    return texts
+
+
+def _evidence_limit(
+    payload: Any,
+    answer_text: str,
+    top_k_evidence: int,
+    dynamic_evidence_topk: bool,
+) -> int:
+    if not dynamic_evidence_topk:
+        return int(top_k_evidence) if top_k_evidence > 0 else -1
+    dynamic_limit = _dynamic_evidence_topk(payload=payload, answer_text=answer_text)
+    if top_k_evidence > 0:
+        return min(int(top_k_evidence), dynamic_limit)
+    return dynamic_limit
+
+
+def _dynamic_evidence_topk(payload: Any, answer_text: str) -> int:
+    normalized = normalize_answer(answer_text)
+    if normalized in {"unanswerable", "not answerable", "not enough information"}:
+        return 0
+    demand = payload.get("demand", {}) if isinstance(payload, dict) else {}
+    intent = str(demand.get("intent", "") if isinstance(demand, dict) else "").strip().lower()
+    if normalized in {"yes", "no"} or intent == "boolean":
+        return 3
+    if intent in {"global-summary", "aggregation"}:
+        return 2
+    if len(normalized.split()) > 12:
+        return 2
+    return 3
 
 
 def _evidence_values(payload: Any) -> List[Any]:
@@ -567,6 +716,11 @@ def main() -> None:
         help="Keep only the first K exported evidence paragraphs. 0 means keep all.",
     )
     parser.add_argument(
+        "--dynamic-evidence-topk",
+        action="store_true",
+        help="Use a non-gold dynamic evidence count based on predicted answer and retrieval demand.",
+    )
+    parser.add_argument(
         "--use-external-official-evaluator",
         action="store_true",
         help="Call the official qasper_evaluator.py script instead of the in-repo metric copy.",
@@ -587,6 +741,7 @@ def main() -> None:
             text_evidence_only=args.text_evidence_only,
             include_nonparagraph_evidence=args.include_nonparagraph_evidence,
             top_k_evidence=args.top_k_evidence,
+            dynamic_evidence_topk=args.dynamic_evidence_topk,
             official_evaluator_path=args.official_evaluator_path,
         )
     else:
@@ -598,6 +753,7 @@ def main() -> None:
             text_evidence_only=args.text_evidence_only,
             include_nonparagraph_evidence=args.include_nonparagraph_evidence,
             top_k_evidence=args.top_k_evidence,
+            dynamic_evidence_topk=args.dynamic_evidence_topk,
         )
 
 

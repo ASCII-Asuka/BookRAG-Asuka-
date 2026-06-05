@@ -134,6 +134,128 @@ class QasperOfficialEvalTests(unittest.TestCase):
 
         self.assertEqual(predictions[0]["predicted_evidence"], ["Gold evidence paragraph."])
 
+    def test_dynamic_evidence_topk_uses_prediction_and_demand_without_gold_answer_type(self):
+        from Scripts.eval.qasper_official import export_predictions
+
+        with tempfile.TemporaryDirectory() as tmp:
+            dataset_path, working_dir = self._write_sample_outputs(tmp)
+            result_dir = working_dir / "paper-1" / "eval_qasper_evibridge"
+            query_dir = result_dir / "query_001"
+            (result_dir / "final_results.json").write_text(
+                json.dumps(
+                    [
+                        {
+                            "question": "Is the model realistic?",
+                            "qasper_question_id": "q1",
+                            "output": "Yes",
+                            "answer_short": "Yes",
+                        }
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            (query_dir / "retrieval_res.json").write_text(
+                json.dumps(
+                    {
+                        "demand": {"intent": "boolean"},
+                        "supporting_evidence": [
+                            {"block_type": "paragraph", "text": "p1", "supporting_rank": 1},
+                            {"block_type": "paragraph", "text": "p2", "supporting_rank": 2},
+                            {"block_type": "paragraph", "text": "p3", "supporting_rank": 3},
+                            {"block_type": "paragraph", "text": "p4", "supporting_rank": 4},
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            predictions = export_predictions(
+                dataset_path=str(dataset_path),
+                working_dir=str(working_dir),
+                dataset_name="qasper",
+                method="evibridge",
+                output_path=str(Path(tmp) / "official" / "predictions.jsonl"),
+                dynamic_evidence_topk=True,
+            )
+
+        self.assertEqual(predictions[0]["predicted_evidence"], ["p1", "p2", "p3"])
+
+    def test_dynamic_evidence_topk_exports_empty_evidence_for_predicted_unanswerable(self):
+        from Scripts.eval.qasper_official import export_predictions
+
+        with tempfile.TemporaryDirectory() as tmp:
+            dataset_path, working_dir = self._write_sample_outputs(tmp)
+            result_dir = working_dir / "paper-1" / "eval_qasper_evibridge"
+            query_dir = result_dir / "query_001"
+            (result_dir / "final_results.json").write_text(
+                json.dumps(
+                    [
+                        {
+                            "question": "What is not answered?",
+                            "qasper_question_id": "q1",
+                            "output": "Unanswerable",
+                            "answer_short": "Unanswerable",
+                        }
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            (query_dir / "retrieval_res.json").write_text(
+                json.dumps(
+                    {
+                        "demand": {"intent": "fact"},
+                        "supporting_evidence": [
+                            {"block_type": "paragraph", "text": "p1", "supporting_rank": 1},
+                            {"block_type": "paragraph", "text": "p2", "supporting_rank": 2},
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            predictions = export_predictions(
+                dataset_path=str(dataset_path),
+                working_dir=str(working_dir),
+                dataset_name="qasper",
+                method="evibridge",
+                output_path=str(Path(tmp) / "official" / "predictions.jsonl"),
+                dynamic_evidence_topk=True,
+            )
+
+        self.assertEqual(predictions[0]["predicted_evidence"], [])
+
+    def test_fixed_top_k_evidence_caps_dynamic_evidence_policy(self):
+        from Scripts.eval.qasper_official import export_predictions
+
+        with tempfile.TemporaryDirectory() as tmp:
+            dataset_path, working_dir = self._write_sample_outputs(tmp)
+            query_dir = working_dir / "paper-1" / "eval_qasper_evibridge" / "query_001"
+            (query_dir / "retrieval_res.json").write_text(
+                json.dumps(
+                    {
+                        "demand": {"intent": "boolean"},
+                        "supporting_evidence": [
+                            {"block_type": "paragraph", "text": "p1", "supporting_rank": 1},
+                            {"block_type": "paragraph", "text": "p2", "supporting_rank": 2},
+                            {"block_type": "paragraph", "text": "p3", "supporting_rank": 3},
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            predictions = export_predictions(
+                dataset_path=str(dataset_path),
+                working_dir=str(working_dir),
+                dataset_name="qasper",
+                method="evibridge",
+                output_path=str(Path(tmp) / "official" / "predictions.jsonl"),
+                top_k_evidence=1,
+                dynamic_evidence_topk=True,
+            )
+
+        self.assertEqual(predictions[0]["predicted_evidence"], ["p1"])
+
     def test_supporting_evidence_takes_precedence_over_selected_for_official_export(self):
         from Scripts.eval.qasper_official import export_predictions
 
@@ -227,6 +349,62 @@ class QasperOfficialEvalTests(unittest.TestCase):
             predictions[0]["predicted_evidence"],
             ["Gold evidence paragraph.", "BM25 second paragraph."],
         )
+
+    def test_exports_raptor_summary_as_child_paragraph_evidence(self):
+        from Core.Index.Tree import DocumentTree, NodeType, TreeNode
+        from Scripts.eval.qasper_official import export_predictions
+
+        with tempfile.TemporaryDirectory() as tmp:
+            dataset_path, working_dir = self._write_sample_outputs(tmp)
+            evibridge_dir = working_dir / "paper-1" / "eval_qasper_evibridge"
+            raptor_dir = working_dir / "paper-1" / "eval_qasper_raptor"
+            raptor_query_dir = raptor_dir / "query_001"
+            raptor_query_dir.mkdir(parents=True)
+            tree = DocumentTree(
+                meta_dict={"content": "paper-1", "file_name": "paper-1"},
+                cfg=type("Cfg", (), {"save_path": str(working_dir / "paper-1")})(),
+            )
+            section = TreeNode({"content": "Section", "pdf_id": 1})
+            section.type = NodeType.TITLE
+            section.outline_node = True
+            tree.root_node.add_child(section)
+            tree.add_node(section)
+            paragraph = TreeNode({"content": "Gold evidence paragraph.", "pdf_id": 2})
+            paragraph.type = NodeType.TEXT
+            section.add_child(paragraph)
+            tree.add_node(paragraph)
+            tree.save_to_file()
+            (raptor_dir / "final_results.json").write_text(
+                (evibridge_dir / "final_results.json").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            (raptor_query_dir / "retrieval_res.json").write_text(
+                json.dumps(
+                    {
+                        "ranked_results": [
+                            {
+                                "id": 10,
+                                "content": "Summary should map back to its paragraph.",
+                                "rank": 1,
+                                "block_type": "summary",
+                                "source": "raptor_summary",
+                                "child_source_node_ids": str(paragraph.index_id),
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            predictions = export_predictions(
+                dataset_path=str(dataset_path),
+                working_dir=str(working_dir),
+                dataset_name="qasper",
+                method="raptor",
+                output_path=str(Path(tmp) / "official" / "raptor_predictions.jsonl"),
+            )
+
+        self.assertEqual(predictions[0]["predicted_evidence"], ["Gold evidence paragraph."])
 
     def test_evaluates_predictions_with_official_qasper_metrics(self):
         from Scripts.eval.qasper_official import (

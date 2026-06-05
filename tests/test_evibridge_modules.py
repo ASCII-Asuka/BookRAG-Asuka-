@@ -371,6 +371,34 @@ class EviBridgeModuleTests(unittest.TestCase):
         self.assertEqual(verdict.missing_bridge_types, ["context"])
         self.assertEqual(verdict.next_action, "expand_table_caption")
 
+    def test_rule_verifier_requires_broader_coverage_for_global_summary(self):
+        _stub_rag_provider_imports()
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_verifier import RuleBasedSufficiencyVerifier
+
+        index = self._build_index()
+        verifier = RuleBasedSufficiencyVerifier()
+        demand = EvidenceDemand(
+            intent="global-summary",
+            scope="document",
+            modality=["text"],
+            granularity="block",
+            bridge_need=["hierarchy", "context"],
+        )
+
+        verdict = verifier.verify(
+            "Summarize the retrieval method.",
+            demand,
+            [index.blocks[1]],
+            [],
+        )
+
+        self.assertFalse(verdict.sufficient)
+        self.assertIn("abstractive_coverage", verdict.missing)
+        self.assertIn("summary", verdict.missing_types)
+        self.assertIn("hierarchy", verdict.missing_bridge_types)
+        self.assertEqual(verdict.next_action, "expand_hierarchy_context")
+
     def test_shortest_path_connector_returns_nodes_edges_and_paths(self):
         _stub_rag_provider_imports()
         from Core.rag.evibridge_ppr import shortest_path_connector_with_paths
@@ -670,6 +698,44 @@ class EviBridgeModuleTests(unittest.TestCase):
         self.assertEqual(normalized, "Yes")
         self.assertEqual(rationale, "The evidence says it is realistic.")
         self.assertEqual(supporting_ids, [2, 3])
+
+    def test_evibridge_prompt_guides_abstractive_answers_to_concise_synthesis(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+        from Core.rag.evibridge_verifier import SufficiencyVerdict
+
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(enable_llm_verifier=False),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+        )
+        demand = EvidenceDemand(
+            intent="global-summary",
+            scope="document",
+            modality=["text"],
+            granularity="block",
+            bridge_need=["hierarchy", "context"],
+        )
+        prompt = rag._create_augmented_prompt(
+            query="What is the paper's main contribution?",
+            evidence_chain=[
+                {
+                    "block_id": 1,
+                    "block_type": "paragraph",
+                    "page": 1,
+                    "section_path": "Abstract",
+                    "text": "The paper proposes a retrieval method.",
+                }
+            ],
+            demand=demand,
+            verification=SufficiencyVerdict(sufficient=True),
+        )
+
+        self.assertIn("one concise synthesis sentence", prompt)
+        self.assertIn("strongest supporting_block_ids", prompt)
 
     def test_evibridge_config_is_part_of_rag_discriminator(self):
         parsed = RAGConfig(strategy_config={"strategy": "evibridge"})

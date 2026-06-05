@@ -80,6 +80,94 @@ class QasperAnalyzerTests(unittest.TestCase):
         self.assertEqual(report["topk_curve"]["evibridge"]["1"]["Evidence F1"], 1.0)
         self.assertEqual(report["comparison"]["answer_wins"]["evibridge"], 1)
 
+    def test_analyzer_accepts_additional_baselines_like_raptor(self):
+        from Scripts.eval.analyze_qasper_evibridge import analyze_qasper_runs
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            gold_path = root / "gold.json"
+            bm25_dir = root / "bm25"
+            raptor_dir = root / "raptor"
+            evibridge_dir = root / "evibridge"
+            bm25_dir.mkdir()
+            raptor_dir.mkdir()
+            evibridge_dir.mkdir()
+            gold_path.write_text(
+                json.dumps(
+                    {
+                        "paper-1": {
+                            "title": "Paper",
+                            "abstract": "",
+                            "full_text": [],
+                            "figures_and_tables": [],
+                            "qas": [
+                                {
+                                    "question_id": "q1",
+                                    "question": "What is the answer?",
+                                    "answers": [
+                                        {
+                                            "answer": {
+                                                "unanswerable": False,
+                                                "extractive_spans": ["The answer"],
+                                                "free_form_answer": "",
+                                                "yes_no": None,
+                                                "evidence": ["Gold paragraph."],
+                                            }
+                                        }
+                                    ],
+                                }
+                            ],
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (bm25_dir / "predictions.jsonl").write_text(
+                json.dumps(
+                    {
+                        "question_id": "q1",
+                        "predicted_answer": "wrong",
+                        "predicted_evidence": ["Wrong paragraph."],
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            (raptor_dir / "predictions.jsonl").write_text(
+                json.dumps(
+                    {
+                        "question_id": "q1",
+                        "predicted_answer": "The answer",
+                        "predicted_evidence": ["Wrong paragraph."],
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            (evibridge_dir / "predictions.jsonl").write_text(
+                json.dumps(
+                    {
+                        "question_id": "q1",
+                        "predicted_answer": "The answer",
+                        "predicted_evidence": ["Gold paragraph."],
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            report = analyze_qasper_runs(
+                gold_path=str(gold_path),
+                bm25_predictions_path=str(bm25_dir / "predictions.jsonl"),
+                evibridge_predictions_path=str(evibridge_dir / "predictions.jsonl"),
+                baseline_predictions={"raptor": str(raptor_dir / "predictions.jsonl")},
+                topk_values=[1],
+            )
+
+        self.assertIn("raptor", report["overall"])
+        self.assertEqual(report["topk_curve"]["raptor"]["1"]["Answer F1"], 1.0)
+        self.assertEqual(report["comparison"]["raptor_vs_evibridge"]["evidence_wins"]["evibridge"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -58,6 +58,38 @@ class EviBridgeWiringTests(unittest.TestCase):
         build_tree.assert_called_once_with(cfg)
         build_evibridge.assert_called_once_with(tree_index=tree, cfg=cfg)
 
+    def test_construct_evibridge_index_skips_existing_complete_index(self):
+        _stub_runtime_imports()
+        from Core.construct_index import construct_evibridge_index
+
+        with tempfile.TemporaryDirectory() as tmp:
+            index = EvidenceBridgeIndex(
+                save_dir=tmp,
+                blocks={
+                    1: EvidenceBlock(
+                        block_id=1,
+                        block_type="paragraph",
+                        text="retrieval evidence",
+                    )
+                },
+            )
+            bm25 = index.build_bm25()
+            index.save_to_dir()
+            index.save_bm25(bm25)
+            cfg = SimpleNamespace(
+                save_path=tmp,
+                rag=SimpleNamespace(
+                    strategy_config=EviBridgeRAGConfig(enable_vector_recall=False)
+                ),
+            )
+            with patch("Core.construct_index.build_tree_from_pdf") as build_tree, patch(
+                "Core.pipelines.evibridge_builder.build_evibridge_index"
+            ) as build_evibridge:
+                construct_evibridge_index(cfg)
+
+        build_tree.assert_not_called()
+        build_evibridge.assert_not_called()
+
     def test_resource_loader_loads_evibridge_index_and_bm25(self):
         _stub_runtime_imports()
         from Core.utils.resource_loader import prepare_rag_dependencies

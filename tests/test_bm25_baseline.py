@@ -206,6 +206,36 @@ class BM25BaselineTests(unittest.TestCase):
             "Original Qasper paragraph.",
         )
 
+    def test_vanilla_retrieval_res_preserves_raptor_summary_traceability(self):
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        with tempfile.TemporaryDirectory() as tmp:
+            query_dir = Path(tmp)
+            rag = VanillaRAG.__new__(VanillaRAG)
+            rag._save_retrieval_res(
+                [
+                    {
+                        "id": 99,
+                        "score": 0.42,
+                        "content": "RAPTOR summary.",
+                        "metadata": {
+                            "chunk_id": 99,
+                            "source": "raptor_summary",
+                            "node_type": "raptor_summary",
+                            "raptor_depth": 1,
+                            "child_source_node_ids": "7,8",
+                        },
+                    }
+                ],
+                query_dir,
+            )
+            payload = json.loads((query_dir / "retrieval_res.json").read_text(encoding="utf-8"))
+
+        result = payload["ranked_results"][0]
+        self.assertEqual(result["block_type"], "summary")
+        self.assertEqual(result["raptor_depth"], 1)
+        self.assertEqual(result["child_source_node_ids"], "7,8")
+
     def test_official_export_prefers_qasper_evidence_text_over_chunk_content(self):
         from Scripts.eval.qasper_official import _prediction_evidence
 

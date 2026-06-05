@@ -222,6 +222,8 @@ class EviBridgeRAG(BaseRAG):
             "answer_short must be a concise Qasper-style answer: use exact spans when possible, "
             "answer exactly Yes or No for boolean questions, and use Unanswerable only when evidence is insufficient. "
             "Do not include evidence bullets or explanations in answer_short.\n"
+            "For global-summary or abstractive questions, answer_short may be one concise synthesis sentence; "
+            "synthesize only the strongest supporting_block_ids and do not add background knowledge.\n"
             "supporting_block_ids must contain 1 to 4 block_id values from the evidence chain that best support answer_short.\n"
             f"Question: {query}\n"
             f"Evidence demand: {demand_text}\n"

@@ -255,12 +255,19 @@ class VanillaRAG(BaseRAG):
                 "pdf_id",
                 "page",
                 "node_type",
+                "raptor_depth",
+                "child_source_node_ids",
+                "child_pages",
+                "child_sections",
                 "section_id",
                 "section",
                 "title_path",
             ]:
                 if key in meta:
                     meta_info_dict[key] = meta[key]
+            block_type = self._block_type_from_metadata(meta, doc)
+            if block_type:
+                meta_info_dict["block_type"] = block_type
             retrieval_ids.append(node_id)
             ranked_results.append(meta_info_dict)
             node_file_path = query_output_dir / f"{node_id}.json"
@@ -285,6 +292,18 @@ class VanillaRAG(BaseRAG):
         log.info("Saved retrieval results to output directory.")
 
         return retrieval_ids
+
+    @staticmethod
+    def _block_type_from_metadata(meta: Dict[str, Any], doc: Dict[str, Any]) -> str:
+        source = str(meta.get("source") or doc.get("source") or "").lower()
+        node_type = str(meta.get("node_type") or "").lower()
+        if source == "raptor_summary" or node_type == "raptor_summary":
+            return "summary"
+        if source == "qasper_paragraph" or node_type in {"text", "paragraph"}:
+            return "paragraph"
+        if node_type in {"table", "figure", "caption", "title", "summary", "entity", "patch"}:
+            return node_type
+        return ""
 
     def generation(self, query: str, query_output_dir: str) -> tuple:
         """

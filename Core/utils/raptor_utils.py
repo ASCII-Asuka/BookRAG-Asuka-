@@ -32,9 +32,12 @@ def GMM_cluster(
         Tuple[List, int]: 一个元组，包含每个样本的聚类标签列表和最优的聚类数量。
     """
     import numpy as np
-    import umap
     from sklearn.mixture import GaussianMixture
     import random
+    try:
+        import umap
+    except ImportError:
+        umap = None
 
     random.seed(224)
     
@@ -59,11 +62,15 @@ def GMM_cluster(
         labels = [np.array([0]) for _ in embeddings]
         return labels, 1
 
-    reduced_embeddings_global = umap.UMAP(
-        n_neighbors=max(2, int((len(embeddings) - 1) ** 0.5)),  # n_neighbors >= 2
-        n_components=n_components_umap,
-        metric="cosine",
-    ).fit_transform(embeddings)
+    if umap is not None:
+        reduced_embeddings_global = umap.UMAP(
+            n_neighbors=max(2, int((len(embeddings) - 1) ** 0.5)),  # n_neighbors >= 2
+            n_components=n_components_umap,
+            metric="cosine",
+        ).fit_transform(embeddings)
+    else:
+        logger.warning("umap is not installed; using PCA fallback for RAPTOR clustering.")
+        reduced_embeddings_global = _pca_reduce(embeddings, n_components_umap)
 
     # 3. 确定一个更保守和安全的聚类数量搜索范围
     if len(reduced_embeddings_global) > 5000:
@@ -123,6 +130,19 @@ def GMM_cluster(
     labels = [np.where(prob > threshold)[0] for prob in probs]
 
     return labels, optimal_clusters
+
+
+def _pca_reduce(embeddings, n_components: int):
+    import numpy as np
+
+    if len(embeddings) == 0:
+        return embeddings
+    n_components = max(1, min(int(n_components), embeddings.shape[0] - 1, embeddings.shape[1]))
+    centered = embeddings - embeddings.mean(axis=0, keepdims=True)
+    if centered.shape[1] <= n_components:
+        return centered[:, :n_components]
+    _, _, vt = np.linalg.svd(centered, full_matrices=False)
+    return centered @ vt[:n_components].T
 
 
 def get_embedding(texts: List[str], embedder: TextEmbeddingProvider):

@@ -497,7 +497,11 @@ class TextEmbeddingProvider(BaseEmbedder):
         elif self.backend == "openai":
             import openai
 
-            self.client = openai.OpenAI(api_key=api_key or "empty", base_url=api_base)
+            self.client = openai.OpenAI(
+                api_key=api_key or "empty",
+                base_url=api_base,
+                timeout=120,
+            )
         else:
             raise ValueError(
                 f"Unsupported backend: '{self.backend}'. Choose 'local', 'ollama', or 'openai'."

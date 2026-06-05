@@ -20,6 +20,7 @@ def analyze_qasper_runs(
     gold_path: str,
     bm25_predictions_path: str,
     evibridge_predictions_path: str,
+    baseline_predictions: Dict[str, str] | None = None,
     topk_values: Iterable[int] = (1, 2, 3, 4, 5, 10),
     output_path: str = "",
 ) -> Dict[str, Any]:
@@ -27,17 +28,36 @@ def analyze_qasper_runs(
     gold = _gold_by_question(gold_data)
     bm25 = _load_predictions(bm25_predictions_path)
     evibridge = _load_predictions(evibridge_predictions_path)
+    predictions_by_method: Dict[str, Dict[str, Dict[str, Any]]] = {"bm25": bm25}
+    for method, path in (baseline_predictions or {}).items():
+        method_name = str(method).strip()
+        if method_name and method_name not in predictions_by_method:
+            predictions_by_method[method_name] = _load_predictions(path)
+    predictions_by_method["evibridge"] = evibridge
+    comparison = _comparison(gold, bm25, evibridge)
+    for method, predictions in predictions_by_method.items():
+        if method == "evibridge":
+            continue
+        comparison[f"{method}_vs_evibridge"] = _comparison_named(
+            gold=gold,
+            baseline_name=method,
+            baseline=predictions,
+            evibridge=evibridge,
+        )
     report = {
         "overall": {
             "num_questions": len(gold),
-            "bm25": evaluate_qasper_official(gold, bm25),
-            "evibridge": evaluate_qasper_official(gold, evibridge),
+            **{
+                method: evaluate_qasper_official(gold, predictions)
+                for method, predictions in predictions_by_method.items()
+            },
         },
         "by_answer_type": _by_answer_type(gold, bm25, evibridge),
-        "comparison": _comparison(gold, bm25, evibridge),
+        "by_answer_type_all": _by_answer_type_all(gold, predictions_by_method),
+        "comparison": comparison,
         "topk_curve": {
-            "bm25": _topk_curve(gold, bm25, topk_values),
-            "evibridge": _topk_curve(gold, evibridge, topk_values),
+            method: _topk_curve(gold, predictions, topk_values)
+            for method, predictions in predictions_by_method.items()
         },
         "loss_cases": _loss_cases(gold, bm25, evibridge),
     }
@@ -128,6 +148,27 @@ def _comparison(
     return {"answer_wins": answer_wins, "evidence_wins": evidence_wins}
 
 
+def _comparison_named(
+    gold: Dict[str, List[Dict[str, Any]]],
+    baseline_name: str,
+    baseline: Dict[str, Dict[str, Any]],
+    evibridge: Dict[str, Dict[str, Any]],
+) -> Dict[str, Any]:
+    answer_wins = {baseline_name: 0, "evibridge": 0, "tie": 0}
+    evidence_wins = {baseline_name: 0, "evibridge": 0, "tie": 0}
+    for qid, references in gold.items():
+        baseline_score = _score_one(baseline.get(qid, {"answer": "", "evidence": []}), references)
+        evibridge_score = _score_one(evibridge.get(qid, {"answer": "", "evidence": []}), references)
+        _count_win_named(answer_wins, baseline_name, baseline_score["answer_f1"], evibridge_score["answer_f1"])
+        _count_win_named(
+            evidence_wins,
+            baseline_name,
+            baseline_score["evidence_f1"],
+            evibridge_score["evidence_f1"],
+        )
+    return {"answer_wins": answer_wins, "evidence_wins": evidence_wins}
+
+
 def _by_answer_type(
     gold: Dict[str, List[Dict[str, Any]]],
     bm25: Dict[str, Dict[str, Any]],
@@ -148,6 +189,28 @@ def _by_answer_type(
             "bm25_evidence_f1": _mean(row["bm25"]["evidence_f1"] for row in rows),
             "evibridge_evidence_f1": _mean(row["evibridge"]["evidence_f1"] for row in rows),
         }
+    return report
+
+
+def _by_answer_type_all(
+    gold: Dict[str, List[Dict[str, Any]]],
+    predictions_by_method: Dict[str, Dict[str, Dict[str, Any]]],
+) -> Dict[str, Any]:
+    groups: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    for qid, references in gold.items():
+        method_scores = {
+            method: _score_one(predictions.get(qid, {"answer": "", "evidence": []}), references)
+            for method, predictions in predictions_by_method.items()
+        }
+        answer_type = method_scores.get("evibridge", next(iter(method_scores.values())))["type"]
+        groups[answer_type].append(method_scores)
+    report: Dict[str, Any] = {}
+    for answer_type, rows in groups.items():
+        type_report: Dict[str, Any] = {"count": len(rows)}
+        for method in predictions_by_method:
+            type_report[f"{method}_answer_f1"] = _mean(row[method]["answer_f1"] for row in rows)
+            type_report[f"{method}_evidence_f1"] = _mean(row[method]["evidence_f1"] for row in rows)
+        report[answer_type] = type_report
     return report
 
 
@@ -207,6 +270,20 @@ def _count_win(counter: Dict[str, int], bm25_score: float, evibridge_score: floa
         counter["tie"] += 1
 
 
+def _count_win_named(
+    counter: Dict[str, int],
+    baseline_name: str,
+    baseline_score: float,
+    evibridge_score: float,
+) -> None:
+    if evibridge_score > baseline_score:
+        counter["evibridge"] += 1
+    elif baseline_score > evibridge_score:
+        counter[baseline_name] += 1
+    else:
+        counter["tie"] += 1
+
+
 def _mean(values: Iterable[float]) -> float:
     items = list(values)
     return sum(items) / len(items) if items else 0.0
@@ -217,18 +294,31 @@ def _load_json(path: str) -> Any:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Analyze BM25 vs EviBridge Qasper official-format outputs.")
+    parser = argparse.ArgumentParser(description="Analyze Qasper official-format baseline outputs.")
     parser.add_argument("--gold", required=True, help="Official gold JSON path.")
     parser.add_argument("--bm25-predictions", required=True, help="BM25 predictions.jsonl path.")
     parser.add_argument("--evibridge-predictions", required=True, help="EviBridge predictions.jsonl path.")
+    parser.add_argument(
+        "--baseline-predictions",
+        action="append",
+        default=[],
+        help="Additional baseline spec in METHOD=path/to/predictions.jsonl form, e.g. raptor=...",
+    )
     parser.add_argument("--output", default="", help="Optional JSON report output path.")
     parser.add_argument("--topk", default="1,2,3,4,5,10", help="Comma-separated evidence top-k values.")
     args = parser.parse_args()
     topk_values = [int(item) for item in args.topk.split(",") if item.strip()]
+    extra_baselines = {}
+    for spec in args.baseline_predictions:
+        if "=" not in spec:
+            raise SystemExit("--baseline-predictions must use METHOD=PATH.")
+        method, path = spec.split("=", 1)
+        extra_baselines[method.strip()] = path.strip()
     report = analyze_qasper_runs(
         gold_path=args.gold,
         bm25_predictions_path=args.bm25_predictions,
         evibridge_predictions_path=args.evibridge_predictions,
+        baseline_predictions=extra_baselines,
         topk_values=topk_values,
         output_path=args.output,
     )

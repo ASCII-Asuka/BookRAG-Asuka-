@@ -120,6 +120,10 @@ def construct_evibridge_index(cfg: SystemConfig):
     token_tracker.reset()
     os.makedirs(cfg.save_path, exist_ok=True)
 
+    if _evibridge_index_complete(cfg):
+        log.info("Existing complete EviBridge index found at %s. Skip construction.", cfg.save_path)
+        return
+
     current_run_stats = {}
     tree_start_time = time.time()
     tree_index = build_tree_from_pdf(cfg)
@@ -135,6 +139,31 @@ def construct_evibridge_index(cfg: SystemConfig):
     current_run_stats["token_stage_history"] = token_tracker.stage_history
     save_indexing_stats(save_path=cfg.save_path, new_stats=current_run_stats)
     log.info("EviBridge index constructed in %.2f seconds.", evibridge_duration)
+
+
+def _evibridge_index_complete(cfg: SystemConfig) -> bool:
+    from Core.Index.EvidenceBridgeIndex import EvidenceBridgeIndex
+
+    if not os.path.exists(EvidenceBridgeIndex.get_index_path(cfg.save_path)):
+        return False
+    if not os.path.exists(EvidenceBridgeIndex.get_bm25_path(cfg.save_path)):
+        return False
+
+    rag_config = getattr(getattr(cfg, "rag", None), "strategy_config", None)
+    if not getattr(rag_config, "enable_vector_recall", False):
+        return True
+
+    vdb_cfg = getattr(rag_config, "evibridge_vdb_config", None)
+    vdb_dir_name = getattr(vdb_cfg, "vdb_dir_name", "EviBridge_vdb")
+    vdb_path = (
+        vdb_dir_name
+        if os.path.isabs(vdb_dir_name) or cfg.save_path in vdb_dir_name
+        else os.path.join(cfg.save_path, vdb_dir_name)
+    )
+    if not os.path.isdir(vdb_path):
+        return False
+    with os.scandir(vdb_path) as entries:
+        return any(entries)
 
 
 def construct_vdb(cfg: SystemConfig):

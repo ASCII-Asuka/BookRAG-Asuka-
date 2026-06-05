@@ -20,7 +20,7 @@ embedding_config:
   max_length: 32768
   device: cpu
   api_base: https://api.siliconflow.cn/v1
-  api_key: sk-pgnrgwfsncfirfqxxgtbqbxwadjtaxlqppzfllbbegaktwzy
+  api_key: TODO
 ```
 
 可选模型包括 `Qwen/Qwen3-Embedding-0.6B`、`Qwen/Qwen3-Embedding-4B`、`Qwen/Qwen3-Embedding-8B` 和 `BAAI/bge-m3`。第一轮 Qasper 100Q 建议先用 `Qwen/Qwen3-Embedding-0.6B`：成本低、速度快，足够作为 dense baseline；若它明显弱于 BM25，再补一次 `Qwen/Qwen3-Embedding-4B` 或 `BAAI/bge-m3` 作为强 dense baseline。
