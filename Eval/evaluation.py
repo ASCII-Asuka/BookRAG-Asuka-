@@ -89,6 +89,17 @@ def eval(args):
         )
         print("QASPER dataset evaluation completed.")
 
+    if data_cfg.dataset_name.lower() == "hotpotqa":
+        from Eval.utils.hotpotqa_eval import eval_hotpotqa
+
+        eval_hotpotqa(
+            data_df,
+            data_cfg,
+            args.method,
+            max_workers=args.max_workers,
+        )
+        print("HotpotQA dataset evaluation completed.")
+
     if data_cfg.dataset_name.lower().startswith("hri_"):
         from Eval.utils.hydro_eval import eval_hydro
 
