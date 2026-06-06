@@ -115,11 +115,44 @@ class VanillaRAG(BaseRAG):
         if not candidates or self.reranker is None:
             return candidates[:top_k]
         documents = [item.get("content", "") for item in candidates]
-        scores = self.reranker.rerank(
-            query=query,
-            documents=documents,
-            batch_size=int(getattr(self.cfg, "rerank_batch_size", 50) or 50),
-        )
+        try:
+            scores = self.reranker.rerank(
+                query=query,
+                documents=documents,
+                batch_size=int(getattr(self.cfg, "rerank_batch_size", 50) or 50),
+            )
+        except Exception as exc:
+            log.warning("BM25 reranker failed; falling back to BM25 order: %s", exc)
+            fallback = []
+            for item in candidates[:top_k]:
+                fallback.append(
+                    {
+                        **item,
+                        "bm25_score": float(item.get("score", 0.0)),
+                        "rerank_failed": True,
+                        "rerank_error": str(exc)[:300],
+                        "source": "bm25_rerank_fallback",
+                    }
+                )
+            return fallback
+        if len(scores) != len(candidates):
+            log.warning(
+                "BM25 reranker returned %s scores for %s candidates; falling back to BM25 order.",
+                len(scores),
+                len(candidates),
+            )
+            fallback = []
+            for item in candidates[:top_k]:
+                fallback.append(
+                    {
+                        **item,
+                        "bm25_score": float(item.get("score", 0.0)),
+                        "rerank_failed": True,
+                        "rerank_error": f"score count mismatch: got {len(scores)}, expected {len(candidates)}",
+                        "source": "bm25_rerank_fallback",
+                    }
+                )
+            return fallback
         reranked = []
         for item, score in zip(candidates, scores):
             reranked.append(

@@ -110,11 +110,45 @@ class QasperOfficialEvalTests(unittest.TestCase):
                 json.loads(line)
                 for line in output_path.read_text(encoding="utf-8").splitlines()
             ]
+            summary = json.loads((output_path.parent / "export_summary.json").read_text(encoding="utf-8"))
 
         self.assertEqual(predictions, saved)
         self.assertEqual(saved[0]["question_id"], "q1")
         self.assertEqual(saved[0]["predicted_answer"], "The answer")
         self.assertEqual(saved[0]["predicted_evidence"], ["Gold evidence paragraph.", "Later paragraph."])
+        self.assertEqual(summary["num_predictions"], 1)
+        self.assertEqual(summary["evidence_counts"], [2])
+        self.assertFalse(summary["dynamic_evidence_topk"])
+
+    def test_export_predictions_rejects_partial_run_before_writing_official_file(self):
+        from Scripts.eval.qasper_official import export_predictions
+        from Scripts.eval.qasper_run_validator import QasperRunValidationError
+
+        with tempfile.TemporaryDirectory() as tmp:
+            dataset_path, working_dir = self._write_sample_outputs(tmp)
+            rows = json.loads(dataset_path.read_text(encoding="utf-8"))
+            rows.append(
+                {
+                    "question": "Missing question?",
+                    "answer": [],
+                    "doc_uuid": "paper-1",
+                    "doc_path": "qasper://paper-1",
+                    "qasper_question_id": "q2",
+                }
+            )
+            dataset_path.write_text(json.dumps(rows), encoding="utf-8")
+            output_path = Path(tmp) / "official" / "predictions.jsonl"
+
+            with self.assertRaises(QasperRunValidationError):
+                export_predictions(
+                    dataset_path=str(dataset_path),
+                    working_dir=str(working_dir),
+                    dataset_name="qasper",
+                    method="evibridge",
+                    output_path=str(output_path),
+                )
+
+        self.assertFalse(output_path.exists())
 
     def test_top_k_evidence_uses_selector_order(self):
         from Scripts.eval.qasper_official import export_predictions

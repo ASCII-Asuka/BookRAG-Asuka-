@@ -14,6 +14,7 @@ from Scripts.eval.qasper_official import (
     paragraph_f1_score,
     token_f1_score,
 )
+from Scripts.eval.qasper_run_validator import validate_prediction_coverage
 
 
 def analyze_qasper_runs(
@@ -34,6 +35,16 @@ def analyze_qasper_runs(
         if method_name and method_name not in predictions_by_method:
             predictions_by_method[method_name] = _load_predictions(path)
     predictions_by_method["evibridge"] = evibridge
+    for method, predictions_path in {
+        "bm25": bm25_predictions_path,
+        **(baseline_predictions or {}),
+        "evibridge": evibridge_predictions_path,
+    }.items():
+        validate_prediction_coverage(
+            gold_question_ids=gold.keys(),
+            predictions_path=predictions_path,
+            label=str(method),
+        )
     comparison = _comparison(gold, bm25, evibridge)
     for method, predictions in predictions_by_method.items():
         if method == "evibridge":

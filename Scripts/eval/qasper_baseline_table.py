@@ -39,27 +39,33 @@ def parse_eval_spec(spec: str) -> Tuple[Optional[str], Path]:
     return None, Path(spec)
 
 
-def collect_rows(eval_specs: Iterable[str]) -> List[Dict[str, Any]]:
+def collect_rows(eval_specs: Iterable[str], allow_missing: bool = False) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     for spec in eval_specs:
         method, path = parse_eval_spec(spec)
         with path.open("r", encoding="utf-8") as f:
             payload = json.load(f)
+        missing = _read_missing(payload)
+        if not allow_missing and missing not in (None, 0):
+            raise ValueError(
+                f"{path} reports Missing predictions={missing}. "
+                "Refusing to generate a paper table from a partial run."
+            )
         rows.append(
             {
                 "Method": method or _method_from_path(path),
                 "Answer F1": _read_metric(payload, "Answer F1", "answer_f1"),
                 "Evidence F1": _read_metric(payload, "Evidence F1", "evidence_f1"),
-                "Missing": _read_missing(payload),
+                "Missing": missing,
                 "Path": str(path),
             }
         )
     return rows
 
 
-def collect_from_root(root: Path) -> List[Dict[str, Any]]:
+def collect_from_root(root: Path, allow_missing: bool = False) -> List[Dict[str, Any]]:
     specs = [str(path) for path in sorted(root.rglob("official_eval.json"))]
-    return collect_rows(specs)
+    return collect_rows(specs, allow_missing=allow_missing)
 
 
 def format_markdown_table(rows: List[Dict[str, Any]]) -> str:
@@ -100,13 +106,18 @@ def main() -> None:
         type=Path,
         help="Optional JSON output path for the parsed rows.",
     )
+    parser.add_argument(
+        "--allow-missing",
+        action="store_true",
+        help="Allow official_eval.json files with Missing predictions > 0.",
+    )
     args = parser.parse_args()
 
     rows: List[Dict[str, Any]] = []
     if args.root:
-        rows.extend(collect_from_root(args.root))
+        rows.extend(collect_from_root(args.root, allow_missing=args.allow_missing))
     if args.eval:
-        rows.extend(collect_rows(args.eval))
+        rows.extend(collect_rows(args.eval, allow_missing=args.allow_missing))
     if not rows:
         raise SystemExit("Provide at least one --eval or --root.")
 

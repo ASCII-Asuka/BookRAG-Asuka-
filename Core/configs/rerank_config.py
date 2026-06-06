@@ -10,3 +10,6 @@ class RerankerConfig:
     backend: str = "local"  # Options: 'local', 'vllm'
     api_base: str = "http://localhost:8011/v1"
     api_key: Optional[str] = None
+    max_retries: int = 3
+    retry_backoff: float = 0.5
+    request_timeout: float = 60.0

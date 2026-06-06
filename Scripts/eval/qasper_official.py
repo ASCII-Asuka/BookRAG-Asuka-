@@ -14,6 +14,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from Core.configs.dataset_config import load_dataset_config
+from Scripts.eval.qasper_run_validator import validate_qasper_run
 
 OFFICIAL_EVALUATOR_URL = (
     "https://huggingface.co/datasets/albertgong1/qasper/resolve/"
@@ -73,6 +74,13 @@ def export_predictions(
     dynamic_evidence_topk: bool = False,
 ) -> List[Dict[str, Any]]:
     rows = _load_json(dataset_path)
+    validate_qasper_run(
+        dataset_path=dataset_path,
+        working_dir=working_dir,
+        dataset_name=dataset_name,
+        method=method,
+        require_query_outputs=False,
+    )
     eval_answer_by_qid = _load_eval_answers(
         working_dir=working_dir,
         dataset_name=dataset_name,
@@ -115,7 +123,47 @@ def export_predictions(
     with output.open("w", encoding="utf-8") as f:
         for prediction in predictions:
             f.write(json.dumps(prediction, ensure_ascii=False) + "\n")
+    _write_export_summary(
+        output_path=output.parent / "export_summary.json",
+        predictions=predictions,
+        answer_source=answer_source,
+        paragraph_evidence_only=paragraph_evidence_only,
+        top_k_evidence=top_k_evidence,
+        dynamic_evidence_topk=dynamic_evidence_topk,
+    )
+    validate_qasper_run(
+        dataset_path=dataset_path,
+        working_dir=working_dir,
+        dataset_name=dataset_name,
+        method=method,
+        predictions_path=str(output),
+        require_query_outputs=False,
+    )
     return predictions
+
+
+def _write_export_summary(
+    output_path: Path,
+    predictions: List[Dict[str, Any]],
+    answer_source: str,
+    paragraph_evidence_only: bool,
+    top_k_evidence: int,
+    dynamic_evidence_topk: bool,
+) -> None:
+    evidence_counts = [
+        len(prediction.get("predicted_evidence") or [])
+        for prediction in predictions
+    ]
+    payload = {
+        "num_predictions": len(predictions),
+        "answer_source": answer_source,
+        "paragraph_evidence_only": paragraph_evidence_only,
+        "top_k_evidence": int(top_k_evidence or 0),
+        "dynamic_evidence_topk": bool(dynamic_evidence_topk),
+        "evidence_counts": evidence_counts,
+        "evidence_count_distribution": dict(Counter(evidence_counts)),
+    }
+    output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def evaluate_predictions_file(

@@ -30,6 +30,31 @@ class QasperBaselineTableTests(unittest.TestCase):
         self.assertEqual(rows[0]["Evidence F1"], 0.18)
         self.assertEqual(rows[0]["Missing"], 0)
 
+    def test_collect_rows_rejects_missing_predictions_by_default(self):
+        from Scripts.eval.qasper_baseline_table import collect_rows
+
+        with tempfile.TemporaryDirectory() as tmp:
+            eval_dir = Path(tmp) / "qasper_official_partial_output"
+            eval_dir.mkdir()
+            eval_path = eval_dir / "official_eval.json"
+            eval_path.write_text(
+                json.dumps(
+                    {
+                        "Answer F1": 0.1,
+                        "Evidence F1": 0.2,
+                        "Missing predictions": 1,
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            with self.assertRaises(ValueError):
+                collect_rows([str(eval_path)])
+
+            rows = collect_rows([str(eval_path)], allow_missing=True)
+
+        self.assertEqual(rows[0]["Missing"], 1)
+
     def test_format_markdown_table(self):
         from Scripts.eval.qasper_baseline_table import format_markdown_table
 

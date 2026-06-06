@@ -1,4 +1,5 @@
 import json
+import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -9,6 +10,8 @@ from Core.rag.evibridge_demand import DemandParser, EvidenceDemand
 from Core.rag.evibridge_ppr import TypedPPRResult, run_typed_ppr_with_details, shortest_path_connector_with_paths
 from Core.rag.evibridge_selector import SelectedEvidence, select_budgeted_evidence
 from Core.rag.evibridge_verifier import EvidenceSufficiencyVerifier, SufficiencyVerdict
+
+log = logging.getLogger(__name__)
 
 
 class EviBridgeRAG(BaseRAG):
@@ -533,12 +536,27 @@ class EviBridgeRAG(BaseRAG):
             return candidate_scores
 
         documents = [self._rerank_document_text(block) for _, block, _ in candidates]
-        scores = self.reranker.rerank(
-            query=query,
-            documents=documents,
-            batch_size=max(int(getattr(self.config, "rerank_batch_size", 1) or 1), 1),
-        )
+        try:
+            scores = self.reranker.rerank(
+                query=query,
+                documents=documents,
+                batch_size=max(int(getattr(self.config, "rerank_batch_size", 1) or 1), 1),
+            )
+        except Exception as exc:
+            self._mark_rerank_failure(candidate_score_parts, candidates, str(exc))
+            log.warning("EviBridge candidate rerank failed; falling back to original scores: %s", exc)
+            return candidate_scores
         if len(scores) != len(candidates):
+            self._mark_rerank_failure(
+                candidate_score_parts,
+                candidates,
+                f"score count mismatch: got {len(scores)}, expected {len(candidates)}",
+            )
+            log.warning(
+                "EviBridge candidate rerank returned %s scores for %s candidates; falling back.",
+                len(scores),
+                len(candidates),
+            )
             return candidate_scores
 
         rerank_by_id = {
@@ -568,6 +586,20 @@ class EviBridgeRAG(BaseRAG):
             parts["rerank_norm"] = round(float(rerank_norm.get(block_id, 0.0)), 8)
             parts["rerank_rank"] = rerank_ranks[block_id]
         return dict(sorted(reranked.items(), key=lambda item: item[1], reverse=True))
+
+    @staticmethod
+    def _mark_rerank_failure(
+        candidate_score_parts: Dict[int, Dict[str, float]],
+        candidates: List[Tuple[int, EvidenceBlock, float]],
+        error: str,
+    ) -> None:
+        for block_id, _, _ in candidates:
+            parts = candidate_score_parts.setdefault(
+                block_id,
+                {"context": 0.0, "semantic": 0.0, "hierarchy": 0.0},
+            )
+            parts["rerank_failed"] = True
+            parts["rerank_error"] = str(error)[:300]
 
     @staticmethod
     def _rerank_document_text(block: EvidenceBlock) -> str:

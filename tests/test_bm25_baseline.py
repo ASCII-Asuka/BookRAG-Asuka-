@@ -1,5 +1,6 @@
 import importlib
 import json
+import requests
 import sys
 import tempfile
 import unittest
@@ -74,6 +75,48 @@ class BM25BaselineTests(unittest.TestCase):
         self.assertEqual(reranker.rerank_url, "http://localhost:8011/v1/rerank")
         self.assertEqual(reranker.session.headers.get("Authorization"), "Bearer test-key")
         reranker.close()
+
+    def test_vllm_reranker_retries_transient_request_failure(self):
+        from Core.provider.rerank import TextRerankerProvider
+
+        class FakeResponse:
+            def __init__(self, ok):
+                self.ok = ok
+
+            def raise_for_status(self):
+                if not self.ok:
+                    raise requests.exceptions.HTTPError("temporary")
+
+            def json(self):
+                return {"results": [{"index": 0, "relevance_score": 0.77}]}
+
+        class FakeSession:
+            def __init__(self):
+                self.calls = 0
+                self.headers = {}
+
+            def post(self, url, json=None, timeout=None):
+                self.calls += 1
+                return FakeResponse(ok=self.calls > 1)
+
+            def close(self):
+                pass
+
+        reranker = TextRerankerProvider(
+            model_name="reranker",
+            backend="vllm",
+            api_base="http://localhost:8011/v1",
+            max_retries=2,
+            retry_backoff=0.0,
+            request_timeout=1.0,
+        )
+        fake_session = FakeSession()
+        reranker.session = fake_session
+
+        scores = reranker.rerank("query", ["document"], batch_size=1)
+
+        self.assertEqual(scores, [0.77])
+        self.assertEqual(fake_session.calls, 2)
 
     def test_openai_embedding_backend_does_not_require_modelscope(self):
         sentinel = object()
@@ -378,6 +421,35 @@ class BM25BaselineTests(unittest.TestCase):
         self.assertEqual(results[0]["metadata"]["node_id"], 2)
         self.assertEqual(results[0]["rerank_score"], 0.9)
         self.assertEqual(results[0]["bm25_score"], 4.0)
+
+    def test_vanilla_bm25_rerank_falls_back_to_bm25_order_on_failure(self):
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        class FakeBM25:
+            def search(self, query_text, top_k):
+                return [
+                    {"id": 1, "score": 9.0, "content": "Best BM25.", "metadata": {"node_id": 1}},
+                    {"id": 2, "score": 4.0, "content": "Second BM25.", "metadata": {"node_id": 2}},
+                ]
+
+        class FailingReranker:
+            def rerank(self, query, documents, instruction=None, batch_size=4):
+                raise RuntimeError("reranker down")
+
+        cfg = SimpleNamespace(retrieval_method="bm25_rerank", topk=1, rerank_topk=20, answer_style="short")
+        rag = VanillaRAG(
+            config=cfg,
+            vector_store=None,
+            llm=SimpleNamespace(config=SimpleNamespace(max_tokens=1000)),
+            bm25=FakeBM25(),
+            reranker=FailingReranker(),
+        )
+
+        results = rag._retrieve("query", top_k=1)
+
+        self.assertEqual(results[0]["metadata"]["node_id"], 1)
+        self.assertTrue(results[0]["rerank_failed"])
+        self.assertIn("reranker down", results[0]["rerank_error"])
 
     def test_vanilla_abstract_only_uses_tree_abstract_without_retrieval(self):
         from Core.Index.Tree import DocumentTree, NodeType, TreeNode

@@ -6,6 +6,7 @@ from tqdm import tqdm
 import logging
 import gc
 import requests
+import time
 
 log = logging.getLogger(__name__)
 
@@ -28,6 +29,9 @@ class TextRerankerProvider:
         backend: str = "local",
         api_base: str = None,
         api_key: str = None,
+        max_retries: int = 3,
+        retry_backoff: float = 0.5,
+        request_timeout: float = 60.0,
     ):
         """
         初始化Reranker Provider。
@@ -44,6 +48,9 @@ class TextRerankerProvider:
         self.model_name = model_name
         self.max_length = max_length
         self.backend = backend.lower()
+        self.max_retries = max(1, int(max_retries or 1))
+        self.retry_backoff = max(0.0, float(retry_backoff or 0.0))
+        self.request_timeout = max(1.0, float(request_timeout or 1.0))
 
         # ==========================================================
         # vLLM 后端逻辑
@@ -112,6 +119,33 @@ class TextRerankerProvider:
                 f"Unsupported backend: {self.backend}. Choose 'local' or 'vllm'."
             )
         self._define_prompt_template()
+
+    def _post_rerank_payload(self, payload: Dict) -> requests.Response:
+        last_error = None
+        for attempt in range(1, self.max_retries + 1):
+            try:
+                response = self.session.post(
+                    self.rerank_url,
+                    json=payload,
+                    timeout=self.request_timeout,
+                )
+                response.raise_for_status()
+                return response
+            except requests.exceptions.RequestException as exc:
+                last_error = exc
+                if attempt >= self.max_retries:
+                    break
+                sleep_s = self.retry_backoff * attempt
+                log.warning(
+                    "Reranker API request failed on attempt %s/%s; retrying in %.2fs: %s",
+                    attempt,
+                    self.max_retries,
+                    sleep_s,
+                    exc,
+                )
+                if sleep_s > 0:
+                    time.sleep(sleep_s)
+        raise last_error
 
     def clean_cache(self):
         if self.backend == "local":
@@ -317,8 +351,7 @@ class TextRerankerProvider:
                     }
                     
                     # 3. 发送 API 请求
-                    response = self.session.post(self.rerank_url, json=payload)
-                    response.raise_for_status()
+                    response = self._post_rerank_payload(payload)
                     
                     data = response.json()
                     results = data.get("results")

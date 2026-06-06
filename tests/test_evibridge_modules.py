@@ -80,6 +80,16 @@ class FakeReranker:
         ]
 
 
+class FailingReranker:
+    def rerank(self, query, documents, instruction=None, batch_size=4):
+        raise RuntimeError("temporary reranker failure")
+
+
+class ShortReranker:
+    def rerank(self, query, documents, instruction=None, batch_size=4):
+        return [0.9]
+
+
 class EviBridgeModuleTests(unittest.TestCase):
     def _build_index(self):
         blocks = {
@@ -589,6 +599,105 @@ class EviBridgeModuleTests(unittest.TestCase):
         self.assertEqual(score_parts[2]["rerank_rank"], 1)
         self.assertGreater(score_parts[2]["rerank_score"], score_parts[1]["rerank_score"])
         self.assertEqual(reranker.calls[0]["batch_size"], 8)
+
+    def test_evibridge_candidate_rerank_falls_back_on_failure_and_records_diagnostic(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_rag import EviBridgeRAG
+
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                enable_candidate_rerank=True,
+                candidate_rerank_topk=2,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+            reranker=FailingReranker(),
+        )
+        candidate_scores = {1: 0.8, 2: 0.3, 5: 0.9}
+        score_parts = {1: {}, 2: {}, 5: {}}
+
+        reranked = rag._rerank_candidate_scores(
+            query="Which method compares retrieval with graph reasoning?",
+            candidate_scores=candidate_scores,
+            candidate_score_parts=score_parts,
+        )
+
+        self.assertEqual(reranked, candidate_scores)
+        self.assertTrue(score_parts[1]["rerank_failed"])
+        self.assertIn("temporary reranker failure", score_parts[1]["rerank_error"])
+        self.assertNotIn("rerank_failed", score_parts[5])
+
+    def test_evibridge_candidate_rerank_falls_back_on_score_count_mismatch(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_rag import EviBridgeRAG
+
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                enable_candidate_rerank=True,
+                candidate_rerank_topk=2,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+            reranker=ShortReranker(),
+        )
+        candidate_scores = {1: 0.8, 2: 0.3, 5: 0.9}
+        score_parts = {1: {}, 2: {}, 5: {}}
+
+        reranked = rag._rerank_candidate_scores(
+            query="Which method compares retrieval with graph reasoning?",
+            candidate_scores=candidate_scores,
+            candidate_score_parts=score_parts,
+        )
+
+        self.assertEqual(reranked, candidate_scores)
+        self.assertTrue(score_parts[1]["rerank_failed"])
+        self.assertIn("score count mismatch", score_parts[1]["rerank_error"])
+
+    def test_static_topk_ablation_exports_no_bridge_expansion_diagnostics(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+
+        with tempfile.TemporaryDirectory() as tmp:
+            index = self._build_index()
+            index.save_dir = tmp
+            bm25 = index.build_bm25()
+            rag = EviBridgeRAG(
+                config=EviBridgeRAGConfig(
+                    ablation_variant="static_topk",
+                    bm25_topk=5,
+                    max_context_blocks=3,
+                    enable_llm_verifier=False,
+                ),
+                llm=FakeLLM(),
+                evibridge_index=index,
+                bm25=bm25,
+            )
+            demand = EvidenceDemand(
+                intent="multi-hop",
+                scope="document",
+                modality=["text"],
+                granularity="block",
+                bridge_need=["context", "semantic"],
+            )
+
+            retrieval_info = rag._retrieve_with_demand("retrieval graph reasoning", demand)
+
+        self.assertEqual(retrieval_info["connector_paths"], [])
+        self.assertEqual(retrieval_info["connector_edges"], [])
+        self.assertTrue(
+            all(
+                "connector" not in parts and "ppr_rank" not in parts
+                for parts in retrieval_info["typed_ppr_score_parts"].values()
+            )
+        )
 
     def test_evibridge_supporting_evidence_prefers_rerank_order(self):
         _stub_rag_provider_imports()

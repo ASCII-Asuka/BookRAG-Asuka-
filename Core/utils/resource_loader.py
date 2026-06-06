@@ -120,6 +120,9 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
                 backend=reranker_cfg.backend,
                 api_base=reranker_cfg.api_base,
                 api_key=reranker_cfg.api_key,
+                max_retries=getattr(reranker_cfg, "max_retries", 3),
+                retry_backoff=getattr(reranker_cfg, "retry_backoff", 0.5),
+                request_timeout=getattr(reranker_cfg, "request_timeout", 60.0),
             )
             log.info(f"Successfully loaded EviBridge reranker: {reranker_cfg.model_name}")
             dependencies["reranker"] = reranker
@@ -198,6 +201,9 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
                 backend=reranker_cfg.backend,
                 api_base=reranker_cfg.api_base,
                 api_key=reranker_cfg.api_key,
+                max_retries=getattr(reranker_cfg, "max_retries", 3),
+                retry_backoff=getattr(reranker_cfg, "retry_backoff", 0.5),
+                request_timeout=getattr(reranker_cfg, "request_timeout", 60.0),
             )
             log.info(f"Successfully loaded reranker: {reranker_cfg.model_name}")
             dependencies["reranker"] = reranker

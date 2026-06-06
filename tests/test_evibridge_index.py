@@ -163,6 +163,17 @@ class EviBridgeIndexTests(unittest.TestCase):
             )
         )
 
+    def test_reference_markers_support_chinese_table_and_figure_mentions(self):
+        from Core.Index.EvidenceBridgeIndex import EvidenceBridgeIndex, _FIGURE_REF_RE, _TABLE_REF_RE
+
+        table_markers = EvidenceBridgeIndex._reference_markers("参数见表1和表 2。", _TABLE_REF_RE)
+        figure_markers = EvidenceBridgeIndex._reference_markers("流程见图3和图 4。", _FIGURE_REF_RE)
+
+        self.assertIn("表1", table_markers)
+        self.assertIn("表2", table_markers)
+        self.assertIn("图3", figure_markers)
+        self.assertIn("图4", figure_markers)
+
 
 if __name__ == "__main__":
     unittest.main()
