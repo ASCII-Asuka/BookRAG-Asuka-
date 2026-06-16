@@ -43,6 +43,11 @@ class FakeRAG:
 
 
 class EviBridgeWiringTests(unittest.TestCase):
+    def test_config_accepts_demand_aware_seed_ablation(self):
+        cfg = EviBridgeRAGConfig(ablation_variant="wo_demand_aware_seed_recall")
+
+        self.assertEqual(cfg.ablation_variant, "wo_demand_aware_seed_recall")
+
     def test_construct_evibridge_index_builds_tree_then_evibridge_index(self):
         _stub_runtime_imports()
         from Core.construct_index import construct_evibridge_index

@@ -315,7 +315,11 @@ class EviBridgeRAG(BaseRAG):
                 self.config.hybrid_bm25_weight * item.get("bm25_norm", 0.0)
                 + self.config.hybrid_vector_weight * item.get("vector_norm", 0.0)
             )
-        if self._ablation_variant() != "wo_multi_granularity_seeds":
+        ablation_variant = self._ablation_variant()
+        if ablation_variant == "wo_demand_aware_seed_recall":
+            for item in self._demand_agnostic_seed_results(query):
+                self._merge_seed_item(combined, item)
+        elif ablation_variant != "wo_multi_granularity_seeds":
             for item in self._multigranularity_seed_results(query, demand):
                 self._merge_seed_item(combined, item)
         return sorted(combined.values(), key=lambda item: item.get("score", 0.0), reverse=True)
@@ -388,6 +392,28 @@ class EviBridgeRAG(BaseRAG):
                     score_boost=0.7,
                 )
             )
+        for item in results:
+            item["demand_aware_seed"] = True
+        return results
+
+    def _demand_agnostic_seed_results(self, query: str) -> List[Dict[str, Any]]:
+        fixed_seed_specs = [
+            (["summary"], self.config.patch_topk, "summary"),
+            (["patch"], self.config.patch_topk, "patch"),
+            (["entity"], self.config.entity_topk, "entity"),
+            (["table", "figure", "caption"], self.config.patch_topk, "modality"),
+        ]
+        results: List[Dict[str, Any]] = []
+        for block_types, top_k, seed_family in fixed_seed_specs:
+            for item in self._type_seed_results(
+                query=query,
+                block_types=block_types,
+                top_k=top_k,
+                seed_family=seed_family,
+                score_boost=0.55,
+            ):
+                item["demand_aware_seed"] = False
+                results.append(item)
         return results
 
     def _type_seed_results(
@@ -452,6 +478,8 @@ class EviBridgeRAG(BaseRAG):
         if item.get("seed_family") != "block":
             existing["seed_family"] = item.get("seed_family")
             existing["source"] = item.get("source", existing.get("source"))
+            if "demand_aware_seed" in item:
+                existing["demand_aware_seed"] = item.get("demand_aware_seed")
 
     def _bridge_scores(self, seed_scores: Dict[int, float], demand: EvidenceDemand) -> TypedPPRResult:
         bridge_types = self._enabled_bridge_types()

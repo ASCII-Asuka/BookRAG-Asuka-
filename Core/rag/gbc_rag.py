@@ -71,6 +71,10 @@ class GBCRAG(BaseRAG):
             device=self.cfg.reranker_config.device,
             backend=self.cfg.reranker_config.backend,
             api_base=self.cfg.reranker_config.api_base,
+            api_key=self.cfg.reranker_config.api_key,
+            max_retries=self.cfg.reranker_config.max_retries,
+            retry_backoff=self.cfg.reranker_config.retry_backoff,
+            request_timeout=self.cfg.reranker_config.request_timeout,
         )
         # GBC RAG config
         self.threshold_e = self.cfg.sim_threshold_e

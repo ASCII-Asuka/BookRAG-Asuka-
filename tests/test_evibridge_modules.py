@@ -479,6 +479,101 @@ class EviBridgeModuleTests(unittest.TestCase):
         self.assertTrue(any(item.get("seed_family") == "entity" for item in seeds))
         self.assertFalse(any(item.get("seed_family") in {"summary", "entity"} for item in ablated_seeds))
 
+    def test_demand_aware_seed_ablation_uses_fixed_auxiliary_seed_sources(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+
+        with tempfile.TemporaryDirectory() as tmp:
+            index = self._build_index()
+            index.save_dir = tmp
+            bm25 = index.build_bm25()
+            fact_demand = EvidenceDemand(
+                intent="fact",
+                scope="local",
+                modality=["text"],
+                granularity="block",
+                bridge_need=["context"],
+            )
+            full = EviBridgeRAG(
+                config=EviBridgeRAGConfig(
+                    bm25_topk=1,
+                    patch_topk=2,
+                    entity_topk=2,
+                    enable_llm_verifier=False,
+                ),
+                llm=FakeLLM(),
+                evibridge_index=index,
+                bm25=bm25,
+            )
+            ablated = EviBridgeRAG(
+                config=EviBridgeRAGConfig(
+                    bm25_topk=1,
+                    patch_topk=2,
+                    entity_topk=2,
+                    ablation_variant="wo_demand_aware_seed_recall",
+                    enable_llm_verifier=False,
+                ),
+                llm=FakeLLM(),
+                evibridge_index=index,
+                bm25=bm25,
+            )
+
+            full_seeds = full._hybrid_seed_retrieval(
+                "accuracy retrieval graph reasoning",
+                fact_demand,
+            )
+            ablated_seeds = ablated._hybrid_seed_retrieval(
+                "accuracy retrieval graph reasoning",
+                fact_demand,
+            )
+
+        full_aux_families = {
+            family
+            for item in full_seeds
+            for family in item.get("seed_families", [item.get("seed_family")])
+            if family in {"summary", "patch", "entity", "modality"}
+        }
+        ablated_aux_items = [
+            item
+            for item in ablated_seeds
+            if item.get("seed_family") in {"summary", "patch", "entity", "modality"}
+        ]
+        ablated_aux_families = {item.get("seed_family") for item in ablated_aux_items}
+
+        self.assertEqual(full_aux_families, set())
+        self.assertTrue({"summary", "patch", "entity", "modality"}.issubset(ablated_aux_families))
+        self.assertTrue(all(item.get("demand_aware_seed") is False for item in ablated_aux_items))
+
+    def test_seed_merge_preserves_auxiliary_demand_awareness_diagnostic(self):
+        _stub_rag_provider_imports()
+        from Core.rag.evibridge_rag import EviBridgeRAG
+
+        combined = {
+            4: {
+                "block_id": 4,
+                "score": 0.2,
+                "seed_family": "block",
+                "seed_families": ["block"],
+                "source": "bm25",
+            }
+        }
+        auxiliary_seed = {
+            "block_id": 4,
+            "score": 0.7,
+            "seed_family": "summary",
+            "seed_families": ["summary"],
+            "source": "summary_seed",
+            "demand_aware_seed": False,
+        }
+
+        EviBridgeRAG._merge_seed_item(combined, auxiliary_seed)
+
+        self.assertEqual(combined[4]["seed_family"], "summary")
+        self.assertEqual(combined[4]["source"], "summary_seed")
+        self.assertFalse(combined[4]["demand_aware_seed"])
+
     def test_evibridge_rag_preserves_direct_paragraph_seed_after_ppr(self):
         _stub_rag_provider_imports()
         from Core.configs.rag.evibridge_config import EviBridgeRAGConfig

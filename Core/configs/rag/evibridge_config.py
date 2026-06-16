@@ -24,6 +24,7 @@ class EviBridgeRAGConfig(BaseRAGStrategyConfig):
     ablation_variant: Literal[
         "full",
         "wo_multi_granularity_seeds",
+        "wo_demand_aware_seed_recall",
         "wo_context_edges",
         "wo_semantic_edges",
         "wo_hierarchy_edges",
