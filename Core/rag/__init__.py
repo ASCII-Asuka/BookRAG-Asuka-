@@ -7,6 +7,7 @@ from Core.configs.rag.gbc_config import GBCRAGConfig
 from Core.configs.rag.gbc_vanilla_config import GBCVanillaConfig
 from Core.configs.rag.graph_config import GraphRAGConfig
 from Core.configs.rag.hri_config import HRIRAGConfig
+from Core.configs.rag.hipporag_config import HippoRAGConfig
 from Core.configs.rag.lightrag_config import LightRAGConfig
 from Core.configs.rag.mm_config import MMConfig
 from Core.configs.rag.traverse_config import TraverseRAGConfig
@@ -15,6 +16,7 @@ from Core.configs.vlm_config import VLMConfig
 
 StrategyConfig = Union[*ALL_STRATEGY_CONFIGS]
 LightRAGRAG = None
+HippoRAGRAG = None
 
 
 def create_rag_agent(
@@ -155,6 +157,23 @@ def create_rag_agent(
         if tree_index is None or not save_path:
             raise ValueError("LightRAGRAG requires 'tree_index' and 'save_path'.")
         return LightRAGRAG(
+            config=strategy_config,
+            llm=llm_client,
+            tree_index=tree_index,
+            save_path=save_path,
+        )
+
+    if isinstance(strategy_config, HippoRAGConfig):
+        global HippoRAGRAG
+        if HippoRAGRAG is None:
+            from Core.rag.hipporag_rag import HippoRAGRAG as _HippoRAGRAG
+
+            HippoRAGRAG = _HippoRAGRAG
+        tree_index = dependencies.get("tree_index")
+        save_path = dependencies.get("save_path")
+        if tree_index is None or not save_path:
+            raise ValueError("HippoRAGRAG requires 'tree_index' and 'save_path'.")
+        return HippoRAGRAG(
             config=strategy_config,
             llm=llm_client,
             tree_index=tree_index,

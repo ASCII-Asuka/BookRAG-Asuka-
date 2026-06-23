@@ -136,6 +136,15 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
         dependencies["tree_index"] = tree_index
         dependencies["save_path"] = cfg.save_path
 
+    elif strategy_name == "hipporag":
+        from Core.Index.Tree import DocumentTree
+
+        tree_index_path = DocumentTree.get_save_path(cfg.save_path)
+        tree_index = DocumentTree.load_from_file(tree_index_path)
+        log.info(f"Successfully loaded tree index from {tree_index_path}")
+        dependencies["tree_index"] = tree_index
+        dependencies["save_path"] = cfg.save_path
+
     elif strategy_name == "gbc":
         from Core.Index.GBCIndex import GBC
 

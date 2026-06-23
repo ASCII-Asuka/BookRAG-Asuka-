@@ -9,6 +9,7 @@ from .vanilla_config import VanillaConfig
 from .hri_config import HRIRAGConfig
 from .evibridge_config import EviBridgeRAGConfig
 from .lightrag_config import LightRAGConfig
+from .hipporag_config import HippoRAGConfig
 
 ALL_STRATEGY_CONFIGS = (
     TraverseRAGConfig,
@@ -20,4 +21,5 @@ ALL_STRATEGY_CONFIGS = (
     HRIRAGConfig,
     EviBridgeRAGConfig,
     LightRAGConfig,
+    HippoRAGConfig,
 )
