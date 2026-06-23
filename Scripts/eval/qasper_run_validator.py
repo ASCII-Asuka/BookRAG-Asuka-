@@ -23,6 +23,7 @@ def validate_qasper_run(
     predictions_path: str = "",
     gold_path: str = "",
     require_query_outputs: bool = True,
+    require_lightrag_graph: Optional[bool] = None,
 ) -> Dict[str, Any]:
     rows = _load_json(dataset_path)
     if not isinstance(rows, list):
@@ -32,6 +33,15 @@ def validate_qasper_run(
     groups = _group_rows_by_doc(rows)
     issues: List[str] = []
     final_qids: List[str] = []
+    if require_lightrag_graph is None:
+        require_lightrag_graph = _is_lightrag_method(method)
+    lightrag_graph_checks = {
+        "required": bool(require_lightrag_graph),
+        "checked_queries": 0,
+        "graph_ready_queries": 0,
+        "fallback_used_queries": 0,
+        "missing_retrieval_res_queries": 0,
+    }
 
     for doc_uuid, doc_rows in groups.items():
         result_dir = Path(working_dir) / doc_uuid / f"eval_{dataset_name}_{method}"
@@ -52,10 +62,19 @@ def validate_qasper_run(
                 f"{doc_uuid}: final_results count {len(final_results)} != dataset count {len(doc_rows)}"
             )
         for index, row in enumerate(doc_rows, start=1):
+            query_dir = result_dir / f"query_{index:03d}"
             if require_query_outputs:
-                result_path = result_dir / f"query_{index:03d}" / "result.json"
+                result_path = query_dir / "result.json"
                 if not result_path.exists():
                     issues.append(f"{doc_uuid}: missing query result {result_path}")
+            if require_lightrag_graph:
+                _validate_lightrag_graph_query(
+                    query_dir=query_dir,
+                    doc_uuid=doc_uuid,
+                    index=index,
+                    checks=lightrag_graph_checks,
+                    issues=issues,
+                )
             result = final_results[index - 1] if index - 1 < len(final_results) else {}
             qid = _question_id(result) or _question_id(row)
             if qid:
@@ -104,9 +123,58 @@ def validate_qasper_run(
         "documents": len(groups),
         "issues": issues,
     }
+    if _is_lightrag_method(method) or require_lightrag_graph:
+        summary["lightrag_graph_checks"] = lightrag_graph_checks
     if issues:
         raise QasperRunValidationError(_format_issues(issues))
     return summary
+
+
+def _validate_lightrag_graph_query(
+    query_dir: Path,
+    doc_uuid: str,
+    index: int,
+    checks: Dict[str, int | bool],
+    issues: List[str],
+) -> None:
+    retrieval_path = query_dir / "retrieval_res.json"
+    checks["checked_queries"] = int(checks["checked_queries"]) + 1
+    if not retrieval_path.exists():
+        checks["missing_retrieval_res_queries"] = int(checks["missing_retrieval_res_queries"]) + 1
+        issues.append(f"{doc_uuid}: missing LightRAG retrieval_res.json for query_{index:03d}")
+        return
+    try:
+        payload = _load_json(retrieval_path)
+    except Exception as exc:
+        issues.append(f"{doc_uuid}: cannot load LightRAG retrieval_res.json for query_{index:03d}: {exc}")
+        return
+    if not isinstance(payload, dict):
+        issues.append(f"{doc_uuid}: LightRAG retrieval_res.json for query_{index:03d} is not an object")
+        return
+
+    graph = payload.get("graph_diagnostics") if isinstance(payload.get("graph_diagnostics"), dict) else {}
+    if graph.get("graph_ready") is True:
+        checks["graph_ready_queries"] = int(checks["graph_ready_queries"]) + 1
+    else:
+        issues.append(
+            f"{doc_uuid}: LightRAG graph is not ready for query_{index:03d} "
+            f"(chunks={graph.get('chunks')}, entities={graph.get('entities')}, "
+            f"relationships={graph.get('relationships')}, graph_nodes={graph.get('graph_nodes')})"
+        )
+
+    fallback_used = bool(payload.get("fallback_used"))
+    effective_mode = str(payload.get("effective_mode") or "")
+    requested_mode = str(payload.get("mode") or "")
+    if fallback_used or (requested_mode and effective_mode and effective_mode != requested_mode):
+        checks["fallback_used_queries"] = int(checks["fallback_used_queries"]) + 1
+        issues.append(
+            f"{doc_uuid}: LightRAG fallback was used for query_{index:03d} "
+            f"(mode={requested_mode}, effective_mode={effective_mode}, fallback_used={fallback_used})"
+        )
+
+
+def _is_lightrag_method(method: str) -> bool:
+    return str(method or "").strip().lower().startswith("lightrag")
 
 
 def validate_prediction_coverage(
@@ -245,6 +313,11 @@ def main() -> None:
         action="store_true",
         help="Only validate final_results.json, not per-query result.json files.",
     )
+    parser.add_argument(
+        "--allow-lightrag-fallback",
+        action="store_true",
+        help="Do not require LightRAG graph_ready=true and fallback_used=false.",
+    )
     args = parser.parse_args()
     data_cfg = load_dataset_config(args.dataset_config)
     summary = validate_qasper_run(
@@ -255,6 +328,7 @@ def main() -> None:
         predictions_path=args.predictions,
         gold_path=args.gold,
         require_query_outputs=not args.allow_missing_query_outputs,
+        require_lightrag_graph=False if args.allow_lightrag_fallback else None,
     )
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 

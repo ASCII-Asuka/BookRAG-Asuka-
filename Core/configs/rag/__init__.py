@@ -8,6 +8,7 @@ from .gbc_vanilla_config import GBCVanillaConfig
 from .vanilla_config import VanillaConfig
 from .hri_config import HRIRAGConfig
 from .evibridge_config import EviBridgeRAGConfig
+from .lightrag_config import LightRAGConfig
 
 ALL_STRATEGY_CONFIGS = (
     TraverseRAGConfig,
@@ -18,4 +19,5 @@ ALL_STRATEGY_CONFIGS = (
     GBCVanillaConfig,
     HRIRAGConfig,
     EviBridgeRAGConfig,
+    LightRAGConfig,
 )

@@ -7,12 +7,14 @@ from Core.configs.rag.gbc_config import GBCRAGConfig
 from Core.configs.rag.gbc_vanilla_config import GBCVanillaConfig
 from Core.configs.rag.graph_config import GraphRAGConfig
 from Core.configs.rag.hri_config import HRIRAGConfig
+from Core.configs.rag.lightrag_config import LightRAGConfig
 from Core.configs.rag.mm_config import MMConfig
 from Core.configs.rag.traverse_config import TraverseRAGConfig
 from Core.configs.rag.vanilla_config import VanillaConfig
 from Core.configs.vlm_config import VLMConfig
 
 StrategyConfig = Union[*ALL_STRATEGY_CONFIGS]
+LightRAGRAG = None
 
 
 def create_rag_agent(
@@ -140,6 +142,23 @@ def create_rag_agent(
             bm25=bm25,
             evibridge_vector_store=evibridge_vector_store,
             reranker=reranker,
+        )
+
+    if isinstance(strategy_config, LightRAGConfig):
+        global LightRAGRAG
+        if LightRAGRAG is None:
+            from Core.rag.lightrag_rag import LightRAGRAG as _LightRAGRAG
+
+            LightRAGRAG = _LightRAGRAG
+        tree_index = dependencies.get("tree_index")
+        save_path = dependencies.get("save_path")
+        if tree_index is None or not save_path:
+            raise ValueError("LightRAGRAG requires 'tree_index' and 'save_path'.")
+        return LightRAGRAG(
+            config=strategy_config,
+            llm=llm_client,
+            tree_index=tree_index,
+            save_path=save_path,
         )
 
     raise NotImplementedError(

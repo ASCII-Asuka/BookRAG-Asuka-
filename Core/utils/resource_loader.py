@@ -127,6 +127,15 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
             log.info(f"Successfully loaded EviBridge reranker: {reranker_cfg.model_name}")
             dependencies["reranker"] = reranker
 
+    elif strategy_name == "lightrag":
+        from Core.Index.Tree import DocumentTree
+
+        tree_index_path = DocumentTree.get_save_path(cfg.save_path)
+        tree_index = DocumentTree.load_from_file(tree_index_path)
+        log.info(f"Successfully loaded tree index from {tree_index_path}")
+        dependencies["tree_index"] = tree_index
+        dependencies["save_path"] = cfg.save_path
+
     elif strategy_name == "gbc":
         from Core.Index.GBCIndex import GBC
 
