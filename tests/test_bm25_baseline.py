@@ -451,6 +451,29 @@ class BM25BaselineTests(unittest.TestCase):
         self.assertTrue(results[0]["rerank_failed"])
         self.assertIn("reranker down", results[0]["rerank_error"])
 
+    def test_vanilla_close_prefers_vector_store_close(self):
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        class FakeVector:
+            def __init__(self):
+                self.close_calls = 0
+                self.embedding_model = SimpleNamespace(close=lambda: None)
+
+            def close(self):
+                self.close_calls += 1
+
+        vector = FakeVector()
+        cfg = SimpleNamespace(retrieval_method="vanilla", topk=1, answer_style="short")
+        rag = VanillaRAG(
+            config=cfg,
+            vector_store=vector,
+            llm=SimpleNamespace(config=SimpleNamespace(max_tokens=1000)),
+        )
+
+        rag.close()
+
+        self.assertEqual(vector.close_calls, 1)
+
     def test_vanilla_abstract_only_uses_tree_abstract_without_retrieval(self):
         from Core.Index.Tree import DocumentTree, NodeType, TreeNode
         from Core.rag.vanilla_rag import VanillaRAG

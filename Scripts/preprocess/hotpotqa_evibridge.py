@@ -26,6 +26,20 @@ def convert_hotpotqa_to_unified(
     subset: str = "distractor",
 ) -> List[Dict[str, Any]]:
     raw_rows = _select_rows(_load_hotpotqa_rows(raw_path), sample_size=sample_size, seed=seed)
+    return _write_unified_rows(
+        raw_rows=raw_rows,
+        output_path=output_path,
+        split=split,
+        subset=subset,
+    )
+
+
+def _write_unified_rows(
+    raw_rows: List[Dict[str, Any]],
+    output_path: str,
+    split: str = "validation",
+    subset: str = "distractor",
+) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     for row in raw_rows:
         doc_uuid = _row_id(row)
@@ -164,6 +178,66 @@ def prepare_hotpotqa_sample(
     }
 
 
+def prepare_hotpotqa_exclusive_sample(
+    raw_path: str,
+    output_path: str,
+    working_dir: str,
+    dataset_config_path: str = "",
+    exclude_dataset_paths: Optional[List[str]] = None,
+    sample_size: int = 600,
+    seed: int = 42,
+    split: str = "validation",
+    subset: str = "distractor",
+    report_path: str = "",
+) -> Dict[str, Any]:
+    raw_rows = _load_hotpotqa_rows(raw_path)
+    excluded_ids = _load_question_ids_from_datasets(exclude_dataset_paths or [])
+    candidates = [row for row in raw_rows if _row_id(row) and _row_id(row) not in excluded_ids]
+    selected_rows = _select_rows(candidates, sample_size=sample_size, seed=seed)
+
+    rows = _write_unified_rows(
+        raw_rows=selected_rows,
+        output_path=output_path,
+        split=split,
+        subset=subset,
+    )
+    save_dirs: Dict[str, str] = {}
+    for row in selected_rows:
+        doc_uuid = _row_id(row)
+        save_dir = os.path.join(working_dir, doc_uuid)
+        tree, _ = hotpotqa_row_to_tree(
+            row=row,
+            save_dir=save_dir,
+            doc_path=_hotpotqa_doc_path(doc_uuid, split=split, subset=subset),
+        )
+        tree.save_to_file()
+        save_dirs[doc_uuid] = save_dir
+    if dataset_config_path:
+        _write_dataset_config(
+            dataset_config_path=dataset_config_path,
+            dataset_path=output_path,
+            working_dir=working_dir,
+            dataset_name="hotpotqa",
+        )
+    summary = {
+        "raw_count": len(raw_rows),
+        "excluded_count": len(excluded_ids),
+        "candidate_count": len(candidates),
+        "question_count": len(rows),
+        "document_count": len(save_dirs),
+        "sample_size": sample_size,
+        "seed": seed,
+        "dataset_path": output_path,
+        "working_dir": working_dir,
+        "dataset_config_path": dataset_config_path,
+        "exclude_dataset_paths": list(exclude_dataset_paths or []),
+        "selected_question_ids": [_row_id(row) for row in selected_rows],
+    }
+    if report_path:
+        _write_exclusive_sample_report(report_path, summary)
+    return summary
+
+
 def hotpotqa_row_to_tree(
     row: Dict[str, Any],
     save_dir: str,
@@ -249,6 +323,52 @@ def _select_rows(rows: List[Dict[str, Any]], sample_size: int, seed: int) -> Lis
     rng = random.Random(seed)
     selected_indices = sorted(rng.sample(range(len(rows)), sample_size))
     return [rows[index] for index in selected_indices]
+
+
+def _load_question_ids_from_datasets(dataset_paths: Iterable[str]) -> set[str]:
+    ids: set[str] = set()
+    for dataset_path in dataset_paths:
+        if not dataset_path:
+            continue
+        payload = _load_json(dataset_path)
+        rows = payload if isinstance(payload, list) else []
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            question_id = str(
+                row.get("hotpotqa_question_id")
+                or row.get("question_id")
+                or row.get("doc_uuid")
+                or row.get("id")
+                or row.get("_id")
+                or ""
+            ).strip()
+            if question_id:
+                ids.add(question_id)
+    return ids
+
+
+def _write_exclusive_sample_report(report_path: str, summary: Dict[str, Any]) -> None:
+    os.makedirs(os.path.dirname(report_path) or ".", exist_ok=True)
+    selected_ids = summary.get("selected_question_ids", [])
+    preview = "\n".join(f"- {question_id}" for question_id in selected_ids[:20])
+    if len(selected_ids) > 20:
+        preview += f"\n- ... ({len(selected_ids) - 20} more)"
+    content = (
+        "# HotpotQA Random Exclusive Sample Report\n\n"
+        "This subset is randomly sampled from HotpotQA distractor validation after excluding completed samples.\n\n"
+        f"- Raw validation questions: {summary['raw_count']}\n"
+        f"- Excluded completed questions: {summary['excluded_count']}\n"
+        f"- Remaining candidate pool: {summary['candidate_count']}\n"
+        f"- Selected questions: {summary['question_count']}\n"
+        f"- Random seed: {summary['seed']}\n"
+        f"- Dataset path: `{summary['dataset_path']}`\n"
+        f"- Working dir: `{summary['working_dir']}`\n\n"
+        "## Selected Question IDs Preview\n\n"
+        f"{preview}\n"
+    )
+    with open(report_path, "w", encoding="utf-8") as f:
+        f.write(content)
 
 
 def _supporting_facts(row: Dict[str, Any]) -> List[List[Any]]:

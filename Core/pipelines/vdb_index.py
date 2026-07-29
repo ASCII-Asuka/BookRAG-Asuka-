@@ -103,24 +103,25 @@ def build_vdb_index(tree: DocumentTree, vdb_cfg: VDBConfig):
         collection_name=vdb_cfg.collection_name,
     )
 
-    text_dict, image_dict = process_tree_nodes(tree)
+    try:
+        text_dict, image_dict = process_tree_nodes(tree)
 
-    text, text_meta = text_dict["text"], text_dict["meta"]
-    vdb.add_texts(texts=text, metadatas=text_meta)
+        text, text_meta = text_dict["text"], text_dict["meta"]
+        vdb.add_texts(texts=text, metadatas=text_meta)
 
-    mm_vdb = vdb_cfg.mm_embedding
-    if mm_vdb is True:
-        image, img_meta, img_str = (
-            image_dict["image"],
-            image_dict["meta"],
-            image_dict["image_str"],
-        )
-        vdb.add_images(image_paths=image, metadatas=img_meta, image_str=img_str)
-        log.info("Images added to vector database successfully.")
+        mm_vdb = vdb_cfg.mm_embedding
+        if mm_vdb is True:
+            image, img_meta, img_str = (
+                image_dict["image"],
+                image_dict["meta"],
+                image_dict["image_str"],
+            )
+            vdb.add_images(image_paths=image, metadatas=img_meta, image_str=img_str)
+            log.info("Images added to vector database successfully.")
 
-    log.info("Vector database index built successfully.")
-
-    vdb.embedding_model.close()  # Close the embedding model to free resources
+        log.info("Vector database index built successfully.")
+    finally:
+        vdb.close()  # Close the vector store and embedding model to free resources.
     return
 
 
@@ -386,9 +387,11 @@ def build_other_vdb_index(cfg: SystemConfig):
             db_path=vdb_dir,
             collection_name=vdb_config.collection_name,
         )
-        vdb.add_texts(texts=all_chunks, metadatas=meta_datas)
-        log.info("Vector database index built successfully.")
-        vdb.embedding_model.close()  # Close the embedding model to free resources
+        try:
+            vdb.add_texts(texts=all_chunks, metadatas=meta_datas)
+            log.info("Vector database index built successfully.")
+        finally:
+            vdb.close()  # Close the vector store and embedding model to free resources.
 
 
 def load_pdf_lists_from_dir(save_dir):

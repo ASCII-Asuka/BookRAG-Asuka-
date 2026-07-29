@@ -396,7 +396,10 @@ class VanillaRAG(BaseRAG):
             log.info("Closing BM25 resources...")
             if hasattr(self.bm25, "close"):
                 self.bm25.close()
-        if self.vdb is not None and hasattr(self.vdb, "embedding_model"):
-            self.vdb.embedding_model.close()
+        if self.vdb is not None:
+            if hasattr(self.vdb, "close"):
+                self.vdb.close()
+            elif hasattr(self.vdb, "embedding_model"):
+                self.vdb.embedding_model.close()
         if self.reranker is not None and hasattr(self.reranker, "close"):
             self.reranker.close()

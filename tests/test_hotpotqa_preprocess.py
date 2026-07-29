@@ -115,6 +115,87 @@ class HotpotQAPreprocessTests(unittest.TestCase):
         self.assertIn("Scott Derrickson", contents)
         self.assertIn("Scott Derrickson is an American director.", contents)
 
+    def test_prepares_exclusive_random_subset_with_report(self):
+        from Scripts.preprocess.hotpotqa_evibridge import prepare_hotpotqa_exclusive_sample
+
+        raw_rows = self._raw_rows() + [
+            {
+                "id": "hotpot-3",
+                "question": "Who wrote the book?",
+                "answer": "Ada",
+                "type": "bridge",
+                "level": "hard",
+                "supporting_facts": {
+                    "title": ["Book", "Ada"],
+                    "sent_id": [0, 0],
+                },
+                "context": {
+                    "title": ["Book", "Ada", "Distractor"],
+                    "sentences": [
+                        ["The book was written by Ada."],
+                        ["Ada was a writer."],
+                        ["Noise."],
+                    ],
+                },
+            },
+            {
+                "id": "hotpot-4",
+                "question": "Where was the singer born?",
+                "answer": "Paris",
+                "type": "bridge",
+                "level": "hard",
+                "supporting_facts": {
+                    "title": ["Singer", "Paris"],
+                    "sent_id": [0, 0],
+                },
+                "context": {
+                    "title": ["Singer", "Paris"],
+                    "sentences": [
+                        ["The singer was born in Paris."],
+                        ["Paris is a city."],
+                    ],
+                },
+            },
+        ]
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            raw_path = tmp_path / "hotpotqa_validation.json"
+            exclude_path = tmp_path / "processed" / "done.json"
+            output_path = tmp_path / "processed" / "random2.json"
+            work_dir = tmp_path / "work"
+            cfg_path = tmp_path / "config" / "random2.yaml"
+            report_path = tmp_path / "processed" / "random2_report.md"
+            raw_path.write_text(json.dumps(raw_rows), encoding="utf-8")
+            exclude_path.parent.mkdir(parents=True)
+            exclude_path.write_text(
+                json.dumps([{"hotpotqa_question_id": "hotpot-1"}, {"doc_uuid": "hotpot-2"}]),
+                encoding="utf-8",
+            )
+
+            summary = prepare_hotpotqa_exclusive_sample(
+                raw_path=str(raw_path),
+                output_path=str(output_path),
+                working_dir=str(work_dir),
+                dataset_config_path=str(cfg_path),
+                exclude_dataset_paths=[str(exclude_path)],
+                sample_size=2,
+                seed=42,
+                report_path=str(report_path),
+            )
+            rows = json.loads(output_path.read_text(encoding="utf-8"))
+            cfg_text = cfg_path.read_text(encoding="utf-8")
+            report_text = report_path.read_text(encoding="utf-8")
+            tree_exists = (work_dir / "hotpot-3" / "tree.pkl").exists()
+
+        self.assertEqual(summary["question_count"], 2)
+        self.assertEqual(summary["excluded_count"], 2)
+        self.assertEqual({row["hotpotqa_question_id"] for row in rows}, {"hotpot-3", "hotpot-4"})
+        self.assertTrue(tree_exists)
+        self.assertIn("dataset_name: hotpotqa", cfg_text)
+        self.assertIn("Selected questions: 2", report_text)
+        self.assertIn("Excluded completed questions: 2", report_text)
+
 
 if __name__ == "__main__":
     unittest.main()

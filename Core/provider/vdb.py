@@ -4,6 +4,7 @@ import chromadb
 from typing import List, Dict, Any
 import uuid
 import logging
+import gc
 
 log = logging.getLogger(__name__)
 
@@ -39,6 +40,16 @@ class VectorStore:
             name=self.collection_name, metadata=self.metadata
         )
         log.info(f"Collection '{self.collection_name}' has been reset and is ready.")
+
+    def close(self):
+        """Release embedding and Chroma references after a document-level run."""
+        if getattr(self, "embedding_model", None) is not None and hasattr(
+            self.embedding_model, "close"
+        ):
+            self.embedding_model.close()
+        self.collection = None
+        self.client = None
+        gc.collect()
 
     def add_texts(self, texts: List[str], metadatas: List[dict] = None):
         if not texts:
