@@ -93,6 +93,131 @@ class HotpotQAEvalTests(unittest.TestCase):
         self.assertEqual(scores["sp_em"], 1.0)
         self.assertEqual(saved_score["joint_em"], 1.0)
 
+    def test_full_document_ranked_results_are_not_supporting_fact_fallback(self):
+        from Eval.utils.hotpotqa_eval import eval_hotpotqa
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            dataset_path = root / "hotpotqa.json"
+            working_dir = root / "work"
+            dataset_rows = [
+                {
+                    "question": "What position?",
+                    "answer": "Chief of Protocol",
+                    "doc_uuid": "hotpot-1",
+                    "doc_path": "hotpotqa://distractor/validation/hotpot-1",
+                    "hotpotqa_question_id": "hotpot-1",
+                    "hotpot_supporting_facts": [["Kiss and Tell", 0]],
+                }
+            ]
+            dataset_path.write_text(json.dumps(dataset_rows), encoding="utf-8")
+            result_dir = working_dir / "hotpot-1" / "eval_hotpotqa_full_document"
+            query_dir = result_dir / "query_001"
+            query_dir.mkdir(parents=True)
+            (result_dir / "final_results.json").write_text(
+                json.dumps(
+                    [
+                        {
+                            **dataset_rows[0],
+                            "output": "Chief of Protocol",
+                            "answer_short": "Chief of Protocol",
+                            "supporting_block_ids": [],
+                        }
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            (query_dir / "retrieval_res.json").write_text(
+                json.dumps(
+                    {
+                        "ranked_results": [
+                            {
+                                "title": "Kiss and Tell",
+                                "sent_id": 0,
+                                "metadata": {"source": "full_document"},
+                            },
+                            {
+                                "title": "Shirley Temple",
+                                "sent_id": 1,
+                                "metadata": {"source": "full_document"},
+                            },
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            data_cfg = SimpleNamespace(
+                dataset_path=str(dataset_path),
+                working_dir=str(working_dir),
+                dataset_name="hotpotqa",
+            )
+
+            scores = eval_hotpotqa(dataset_rows, data_cfg, method="full_document")
+
+        self.assertEqual(scores["answer_em"], 1.0)
+        self.assertEqual(scores["sp_f1"], 0.0)
+
+    def test_longrag_ranked_results_are_not_supporting_fact_fallback(self):
+        from Eval.utils.hotpotqa_eval import eval_hotpotqa
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            dataset_path = root / "hotpotqa.json"
+            working_dir = root / "work"
+            dataset_rows = [
+                {
+                    "question": "What position?",
+                    "answer": "Chief of Protocol",
+                    "doc_uuid": "hotpot-1",
+                    "doc_path": "hotpotqa://distractor/validation/hotpot-1",
+                    "hotpotqa_question_id": "hotpot-1",
+                    "hotpot_supporting_facts": [["Kiss and Tell", 0]],
+                }
+            ]
+            dataset_path.write_text(json.dumps(dataset_rows), encoding="utf-8")
+            result_dir = working_dir / "hotpot-1" / "eval_hotpotqa_longrag"
+            query_dir = result_dir / "query_001"
+            query_dir.mkdir(parents=True)
+            (result_dir / "final_results.json").write_text(
+                json.dumps(
+                    [
+                        {
+                            **dataset_rows[0],
+                            "output": "Chief of Protocol",
+                            "answer_short": "Chief of Protocol",
+                            "supporting_block_ids": [],
+                        }
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            (query_dir / "retrieval_res.json").write_text(
+                json.dumps(
+                    {
+                        "ranked_results": [
+                            {
+                                "id": "longrag_0",
+                                "source": "longrag",
+                                "title": "Kiss and Tell",
+                                "sent_id": 0,
+                                "child_hotpot_facts": [["Kiss and Tell", 0]],
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            data_cfg = SimpleNamespace(
+                dataset_path=str(dataset_path),
+                working_dir=str(working_dir),
+                dataset_name="hotpotqa",
+            )
+
+            scores = eval_hotpotqa(dataset_rows, data_cfg, method="longrag")
+
+        self.assertEqual(scores["answer_em"], 1.0)
+        self.assertEqual(scores["sp_f1"], 0.0)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -219,12 +219,19 @@ def _prediction_supporting_facts(
 def _facts_from_payload(payload: Any) -> List[List[Any]]:
     if not isinstance(payload, dict):
         return []
-    values = (
-        payload.get("supporting_evidence")
-        or payload.get("selected")
-        or payload.get("ranked_results")
-        or []
-    )
+    values = payload.get("supporting_evidence") or []
+    facts = _facts_from_items(values)
+    if facts:
+        return facts
+
+    if _is_full_document_payload(payload):
+        return []
+
+    values = payload.get("selected") or payload.get("ranked_results") or []
+    return _facts_from_items(values)
+
+
+def _facts_from_items(values: Any) -> List[List[Any]]:
     facts = []
     for item in values:
         if not isinstance(item, dict):
@@ -238,6 +245,18 @@ def _facts_from_payload(payload: Any) -> List[List[Any]]:
             if fact not in facts:
                 facts.append(fact)
     return facts
+
+
+def _is_full_document_payload(payload: Dict[str, Any]) -> bool:
+    values = payload.get("ranked_results") or payload.get("selected") or []
+    for item in values:
+        if not isinstance(item, dict):
+            continue
+        metadata = item.get("metadata") if isinstance(item.get("metadata"), dict) else {}
+        source = item.get("source") or metadata.get("source")
+        if source in {"full_document", "longrag"}:
+            return True
+    return False
 
 
 def _load_matching_final_result(final_path: Path, qid: str) -> Dict[str, Any]:

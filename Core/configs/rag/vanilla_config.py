@@ -19,6 +19,8 @@ class VanillaConfig(BaseRAGStrategyConfig):
         "hybrid",
         "bm25_rerank",
         "abstract_only",
+        "full_document",
+        "longrag",
     ] = Field(
         default="vanilla",
         description="The retrieval method to use.",
@@ -42,3 +44,15 @@ class VanillaConfig(BaseRAGStrategyConfig):
     rerank_topk: int = Field(default=50, description="BM25 candidate count before reranking.")
     rerank_batch_size: int = Field(default=50, description="Batch size for remote/local reranker calls.")
     reranker_config: RerankerConfig = Field(default_factory=RerankerConfig)
+    full_document_max_context_tokens: int = Field(
+        default=30000,
+        description="Maximum prompt context tokens for the full-document long-context baseline.",
+    )
+    longrag_unit_tokens: int = Field(
+        default=4096,
+        description="Approximate maximum tokens for one LongRAG retrieval unit.",
+    )
+    longrag_max_context_tokens: int = Field(
+        default=30000,
+        description="Maximum prompt context tokens for the LongRAG long-reader baseline.",
+    )

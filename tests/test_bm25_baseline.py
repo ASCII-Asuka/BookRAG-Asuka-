@@ -505,6 +505,184 @@ class BM25BaselineTests(unittest.TestCase):
         self.assertEqual(results[0]["metadata"]["source"], "abstract_only")
         self.assertEqual(results[0]["metadata"]["node_id"], 2)
 
+    def test_vanilla_full_document_uses_tree_nodes_without_retrieval(self):
+        from Core.Index.Tree import DocumentTree, NodeType, TreeNode
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tree = DocumentTree(
+                meta_dict={"file_name": "paper-1.pdf", "file_path": "qasper://paper-1"},
+                cfg=SimpleNamespace(save_path=tmp),
+            )
+            title = TreeNode({"content": "Methods", "page_idx": 0, "pdf_id": 1})
+            title.type = NodeType.TITLE
+            tree.add_node(title)
+            tree.root_node.add_child(title)
+            para = TreeNode({"content": "The full document contains the answer.", "page_idx": 0, "pdf_id": 2})
+            para.type = NodeType.TEXT
+            tree.add_node(para)
+            title.add_child(para)
+
+            cfg = SimpleNamespace(retrieval_method="full_document", topk=0, answer_style="short")
+            rag = VanillaRAG(
+                config=cfg,
+                vector_store=None,
+                llm=SimpleNamespace(config=SimpleNamespace(max_tokens=1000)),
+                tree_index=tree,
+            )
+            results = rag._retrieve("query", top_k=10)
+
+        self.assertEqual([item["metadata"]["node_id"] for item in results], [1, 2])
+        self.assertEqual(results[0]["metadata"]["block_type"], "title")
+        self.assertEqual(results[1]["metadata"]["source"], "full_document")
+        self.assertEqual(results[1]["metadata"]["block_type"], "paragraph")
+        self.assertEqual(
+            results[1]["metadata"]["qasper_evidence_text"],
+            "The full document contains the answer.",
+        )
+
+    def test_vanilla_full_document_preserves_hotpotqa_fact_metadata(self):
+        from Core.Index.Tree import DocumentTree, NodeType, TreeNode
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tree = DocumentTree(
+                meta_dict={"file_name": "hotpot-1.json", "file_path": "hotpotqa://hotpot-1"},
+                cfg=SimpleNamespace(save_path=tmp),
+            )
+            title = TreeNode({"content": "Article A", "page_idx": 0, "pdf_id": 1})
+            title.type = NodeType.TITLE
+            tree.add_node(title)
+            tree.root_node.add_child(title)
+            first = TreeNode({"content": "First sentence.", "page_idx": 0, "pdf_id": 2})
+            first.type = NodeType.TEXT
+            tree.add_node(first)
+            title.add_child(first)
+            second = TreeNode({"content": "Second sentence has the answer.", "page_idx": 0, "pdf_id": 3})
+            second.type = NodeType.TEXT
+            tree.add_node(second)
+            title.add_child(second)
+
+            cfg = SimpleNamespace(retrieval_method="full_document", topk=0, answer_style="short")
+            rag = VanillaRAG(
+                config=cfg,
+                vector_store=None,
+                llm=SimpleNamespace(config=SimpleNamespace(max_tokens=1000)),
+                tree_index=tree,
+            )
+            results = rag._retrieve("query", top_k=10)
+
+        sentence_items = [item for item in results if item["metadata"].get("block_type") == "paragraph"]
+        self.assertEqual(sentence_items[0]["metadata"]["hotpot_title"], "Article A")
+        self.assertEqual(sentence_items[0]["metadata"]["sent_id"], 0)
+        self.assertEqual(sentence_items[1]["metadata"]["hotpot_title"], "Article A")
+        self.assertEqual(sentence_items[1]["metadata"]["sent_id"], 1)
+
+    def test_vanilla_longrag_retrieves_long_units_from_tree(self):
+        from Core.Index.Tree import DocumentTree, NodeType, TreeNode
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tree = DocumentTree(
+                meta_dict={"file_name": "paper-1.pdf", "file_path": "qasper://paper-1"},
+                cfg=SimpleNamespace(save_path=tmp),
+            )
+            methods = TreeNode({"content": "Methods", "page_idx": 0, "pdf_id": 1})
+            methods.type = NodeType.TITLE
+            tree.add_node(methods)
+            tree.root_node.add_child(methods)
+            method_para = TreeNode({"content": "We used alpha beta retrieval units.", "page_idx": 0, "pdf_id": 2})
+            method_para.type = NodeType.TEXT
+            tree.add_node(method_para)
+            methods.add_child(method_para)
+            results_title = TreeNode({"content": "Results", "page_idx": 1, "pdf_id": 3})
+            results_title.type = NodeType.TITLE
+            tree.add_node(results_title)
+            tree.root_node.add_child(results_title)
+            result_para = TreeNode({"content": "The final answer is zephyr bridge.", "page_idx": 1, "pdf_id": 4})
+            result_para.type = NodeType.TEXT
+            tree.add_node(result_para)
+            results_title.add_child(result_para)
+
+            cfg = SimpleNamespace(
+                retrieval_method="longrag",
+                topk=1,
+                answer_style="short",
+                longrag_unit_tokens=100,
+                longrag_max_context_tokens=1000,
+            )
+            rag = VanillaRAG(
+                config=cfg,
+                vector_store=None,
+                llm=SimpleNamespace(config=SimpleNamespace(max_tokens=1200)),
+                tree_index=tree,
+            )
+            retrieved = rag._retrieve("zephyr bridge", top_k=1)
+
+        self.assertEqual(len(retrieved), 1)
+        self.assertEqual(retrieved[0]["metadata"]["source"], "longrag")
+        self.assertEqual(retrieved[0]["metadata"]["section_id"], "Results")
+        self.assertIn("The final answer is zephyr bridge.", retrieved[0]["content"])
+        self.assertIn(4, retrieved[0]["metadata"]["child_source_node_ids"])
+
+    def test_vanilla_longrag_generation_uses_source_ids_for_supporting_evidence(self):
+        from Core.Index.Tree import DocumentTree, NodeType, TreeNode
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        class FakeLLM:
+            config = SimpleNamespace(max_tokens=1400)
+            supporting_id = 0
+
+            def get_completion(self, prompt, json_response=False):
+                self.prompt = prompt
+                return json.dumps(
+                    {
+                        "answer_short": "zephyr bridge",
+                        "answer_rationale": "The text states it.",
+                        "supporting_block_ids": [self.supporting_id],
+                    }
+                )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tree = DocumentTree(
+                meta_dict={"file_name": "paper-1.pdf", "file_path": "qasper://paper-1"},
+                cfg=SimpleNamespace(save_path=tmp),
+            )
+            title = TreeNode({"content": "Results", "page_idx": 1, "pdf_id": 3})
+            title.type = NodeType.TITLE
+            tree.add_node(title)
+            tree.root_node.add_child(title)
+            para = TreeNode({"content": "The final answer is zephyr bridge.", "page_idx": 1, "pdf_id": 4})
+            para.type = NodeType.TEXT
+            tree.add_node(para)
+            title.add_child(para)
+            para_id = para.index_id
+
+            cfg = SimpleNamespace(
+                retrieval_method="longrag",
+                topk=1,
+                answer_style="short",
+                longrag_unit_tokens=100,
+                longrag_max_context_tokens=1000,
+            )
+            llm = FakeLLM()
+            llm.supporting_id = para_id
+            rag = VanillaRAG(
+                config=cfg,
+                vector_store=None,
+                llm=llm,
+                tree_index=tree,
+            )
+            answer, retrieved_ids = rag.generation("What is the answer?", Path(tmp))
+            payload = json.loads((Path(tmp) / "retrieval_res.json").read_text(encoding="utf-8"))
+
+        self.assertIn(f"[source_id={para_id}]", llm.prompt)
+        self.assertEqual(retrieved_ids, [para_id])
+        self.assertEqual(rag.last_answer_short, "zephyr bridge")
+        self.assertEqual(payload["supporting_block_ids"], [para_id])
+        self.assertEqual(payload["supporting_evidence"][0]["qasper_evidence_text"], "The final answer is zephyr bridge.")
+        self.assertIn('"answer_short": "zephyr bridge"', answer)
+
     def test_abstract_only_resource_loader_does_not_require_modelscope(self):
         from Core.Index.Tree import DocumentTree, NodeType, TreeNode
 

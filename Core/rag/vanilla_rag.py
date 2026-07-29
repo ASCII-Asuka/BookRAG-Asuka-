@@ -44,10 +44,12 @@ class VanillaRAG(BaseRAG):
         self.last_answer_short = ""
         self.last_answer_rationale = ""
         self.last_supporting_block_ids = []
+        self.last_retrieved_block_ids = []
         self.bm25 = bm25
         self.vdb = vector_store
         self.reranker = reranker
         self.tree_index = tree_index
+        self._longrag_units = None
 
     def _retrieve(self, query: str, top_k: int = 3):
         if self.cfg.retrieval_method == "bm25":
@@ -58,6 +60,10 @@ class VanillaRAG(BaseRAG):
             return self._bm25_rerank(query, top_k=top_k)
         if self.cfg.retrieval_method == "abstract_only":
             return self._abstract_only_context()
+        if self.cfg.retrieval_method == "full_document":
+            return self._full_document_context()
+        if self.cfg.retrieval_method == "longrag":
+            return self._longrag_retrieve(query, top_k=top_k)
         return self.vdb.search(query_text=query, top_k=top_k)
 
     def _hybrid_retrieve(self, query: str, top_k: int = 3) -> List[Dict[str, Any]]:
@@ -196,6 +202,188 @@ class VanillaRAG(BaseRAG):
                 )
         return docs[: self.topk]
 
+    def _full_document_context(self) -> List[Dict[str, Any]]:
+        if self.tree_index is None:
+            return []
+        docs: List[Dict[str, Any]] = []
+        for rank, node in enumerate(self.tree_index.get_nodes(hasRoot=False), start=1):
+            text = self._node_text(node)
+            if not text:
+                continue
+            node_type = self._node_type_value(node)
+            block_type = "paragraph" if node_type == "text" else node_type
+            metadata = {
+                "source": "full_document",
+                "node_id": node.index_id,
+                "source_node_id": node.index_id,
+                "paragraph_id": node.index_id,
+                "evidence_id": node.index_id,
+                "qasper_evidence_text": text,
+                "node_type": node_type,
+                "block_type": block_type,
+                "page": getattr(node.meta_info, "page_idx", None),
+                "rank": rank,
+            }
+            metadata.update(self._section_metadata(node))
+            metadata.update(self._hotpot_sentence_metadata(node))
+            docs.append(
+                {
+                    "id": node.index_id,
+                    "score": 1.0,
+                    "content": text,
+                    "metadata": metadata,
+                }
+            )
+        return docs
+
+    def _longrag_retrieve(self, query: str, top_k: int = 3) -> List[Dict[str, Any]]:
+        units = self._build_longrag_units()
+        if not units:
+            return []
+        bm25 = BM25([item["content"] for item in units], metadatas=[item["metadata"] for item in units])
+        bm25.initialize()
+        ranked = bm25.search(query_text=query, top_k=min(top_k, len(units)))
+        results: List[Dict[str, Any]] = []
+        for item in ranked:
+            unit = units[int(item["id"])]
+            results.append(
+                {
+                    **unit,
+                    "score": float(item.get("score", 0.0)),
+                }
+            )
+        return results
+
+    def _build_longrag_units(self) -> List[Dict[str, Any]]:
+        if self._longrag_units is not None:
+            return self._longrag_units
+        if self.tree_index is None:
+            self._longrag_units = []
+            return self._longrag_units
+
+        unit_token_limit = int(getattr(self.cfg, "longrag_unit_tokens", 4096) or 4096)
+        unit_token_limit = max(128, unit_token_limit)
+        sections = self._longrag_sections()
+        units: List[Dict[str, Any]] = []
+        for section in sections:
+            lines: List[str] = []
+            child_items: List[Dict[str, Any]] = []
+            token_count = 0
+
+            def flush() -> None:
+                nonlocal lines, child_items, token_count
+                if not lines:
+                    return
+                units.append(self._make_longrag_unit(units, section["section_id"], lines, child_items))
+                lines = []
+                child_items = []
+                token_count = 0
+
+            for item in section["items"]:
+                line = item["line"]
+                line_tokens = self._approx_token_count(line)
+                if lines and token_count + line_tokens > unit_token_limit:
+                    flush()
+                lines.append(line)
+                token_count += line_tokens
+                if item.get("is_evidence"):
+                    child_items.append(item)
+            flush()
+
+        self._longrag_units = units
+        return units
+
+    def _longrag_sections(self) -> List[Dict[str, Any]]:
+        sections: List[Dict[str, Any]] = []
+        current = {"section_id": "", "items": []}
+
+        def flush_current() -> None:
+            nonlocal current
+            if current["items"]:
+                sections.append(current)
+            current = {"section_id": "", "items": []}
+
+        for node in self.tree_index.get_nodes(hasRoot=False):
+            text = self._node_text(node)
+            if not text:
+                continue
+            node_type = self._node_type_value(node)
+            if node_type == "title":
+                flush_current()
+                current = {"section_id": text, "items": []}
+                current["items"].append(
+                    {
+                        "line": f"[Section] {text}",
+                        "node_id": node.index_id,
+                        "text": text,
+                        "block_type": "title",
+                        "is_evidence": False,
+                    }
+                )
+                continue
+
+            metadata = {
+                "node_id": node.index_id,
+                "text": text,
+                "block_type": "paragraph" if node_type == "text" else node_type,
+                "page": getattr(node.meta_info, "page_idx", None),
+            }
+            metadata.update(self._section_metadata(node))
+            metadata.update(self._hotpot_sentence_metadata(node))
+            if not current["section_id"]:
+                current["section_id"] = metadata.get("section_id") or metadata.get("section") or ""
+            current["items"].append(
+                {
+                    **metadata,
+                    "line": f"[source_id={node.index_id}] {text}",
+                    "is_evidence": True,
+                }
+            )
+        flush_current()
+        return sections
+
+    def _make_longrag_unit(
+        self,
+        units: List[Dict[str, Any]],
+        section_id: str,
+        lines: List[str],
+        child_items: List[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        unit_id = f"longrag_{len(units)}"
+        child_ids = [item["node_id"] for item in child_items]
+        child_texts = [item["text"] for item in child_items]
+        child_pages = [item.get("page") for item in child_items]
+        child_sections = [item.get("section_id") or item.get("section") or section_id for item in child_items]
+        child_block_types = [item.get("block_type", "") for item in child_items]
+        child_hotpot_facts = []
+        for item in child_items:
+            title = item.get("hotpot_title") or item.get("title")
+            sent_id = item.get("hotpot_sent_id")
+            if sent_id is None:
+                sent_id = item.get("sent_id")
+            child_hotpot_facts.append([title, sent_id] if title is not None and sent_id is not None else None)
+        metadata = {
+            "source": "longrag",
+            "node_id": unit_id,
+            "longrag_unit_id": unit_id,
+            "block_type": "long_unit",
+            "section_id": section_id,
+            "section": section_id,
+            "title_path": section_id,
+            "child_source_node_ids": child_ids,
+            "child_qasper_evidence_texts": child_texts,
+            "child_pages": child_pages,
+            "child_sections": child_sections,
+            "child_block_types": child_block_types,
+            "child_hotpot_facts": child_hotpot_facts,
+        }
+        return {
+            "id": unit_id,
+            "score": 0.0,
+            "content": "\n".join(lines),
+            "metadata": metadata,
+        }
+
     @staticmethod
     def _is_abstract_node(node: Any) -> bool:
         parent = getattr(node, "parent", None)
@@ -205,7 +393,29 @@ class VanillaRAG(BaseRAG):
 
     def _create_augmented_prompt(self, query: str, retrieved_docs=None) -> str:
         short_answer = getattr(self.cfg, "answer_style", "default") == "short"
-        if short_answer:
+        retrieval_method = getattr(self.cfg, "retrieval_method", "")
+        full_document = retrieval_method == "full_document"
+        longrag = retrieval_method == "longrag"
+        long_context_reader = full_document or longrag
+        if short_answer and full_document:
+            context_text = (
+                "You answer long-context document questions using only the provided full document.\n"
+                "Return only a JSON object with keys answer_short, answer_rationale, and supporting_block_ids.\n"
+                "answer_short must be concise: use exact spans when possible, answer Yes or No for boolean questions, "
+                "and use Not answerable only when the full document is insufficient. Do not include evidence bullets or explanations in answer_short.\n"
+                "supporting_block_ids must be a list of 1 to 4 integer source ids from the provided texts that best support answer_short.\n\n"
+                "--- Background Information ---\n"
+            )
+        elif short_answer and longrag:
+            context_text = (
+                "You answer long-context document questions using only the retrieved long document units.\n"
+                "Return only a JSON object with keys answer_short, answer_rationale, and supporting_block_ids.\n"
+                "answer_short must be concise: use exact spans when possible, answer Yes or No for boolean questions, "
+                "and use Not answerable only when the retrieved long units are insufficient. Do not include evidence bullets or explanations in answer_short.\n"
+                "supporting_block_ids must be a list of 1 to 4 integer source ids from the inline [source_id=...] markers that best support answer_short.\n\n"
+                "--- Background Information ---\n"
+            )
+        elif short_answer:
             context_text = (
                 "You answer Qasper-style document questions using only the provided retrieved documents.\n"
                 "Return only a JSON object with keys answer_short and answer_rationale.\n"
@@ -225,13 +435,24 @@ class VanillaRAG(BaseRAG):
         context_text += "\n--- Retrieved Documents ---\n"
         for i, doc in enumerate(retrieved_docs):
             source = self._format_source(doc)
+            source_id = self._doc_node_id(doc)
+            label = f"Text {i+1}"
+            if long_context_reader and source_id is not None:
+                label += f" [source_id={source_id}]"
             if source:
-                context_text += f"Text {i+1} ({source}): {doc['content']}\n"
+                context_text += f"{label} ({source}): {doc['content']}\n"
             else:
-                context_text += f"Text {i+1}: {doc['content']}\n"
+                context_text += f"{label}: {doc['content']}\n"
 
+        max_context_tokens = self.max_tokens - 400
+        if full_document:
+            configured_limit = int(getattr(self.cfg, "full_document_max_context_tokens", 30000) or 30000)
+            max_context_tokens = max(1000, min(self.max_tokens - 800, configured_limit))
+        elif longrag:
+            configured_limit = int(getattr(self.cfg, "longrag_max_context_tokens", 30000) or 30000)
+            max_context_tokens = max(1000, min(self.max_tokens - 800, configured_limit))
         context_text = TextProcessor.split_text_into_chunks(
-            text=context_text, max_length=self.max_tokens-400
+            text=context_text, max_length=max_context_tokens
         )
         context_text = context_text[0]  # take the first chunk only
         return context_text
@@ -251,10 +472,10 @@ class VanillaRAG(BaseRAG):
             source_parts.append(f"title_path={title_path}")
         return ", ".join(source_parts)
 
-    def _save_retrieval_res(self, context_nodes, query_output_dir) -> List[Dict]:
+    def _save_retrieval_res(self, context_nodes, query_output_dir, supporting_ids=None) -> List[Dict]:
         retrieval_ids = []
         ranked_results = []
-        for doc in context_nodes:
+        for rank, doc in enumerate(context_nodes, start=1):
             meta = doc.get("metadata", {}) if isinstance(doc.get("metadata"), dict) else {}
             if "metadata" in doc:
                 if "node_id" in meta:
@@ -273,6 +494,7 @@ class VanillaRAG(BaseRAG):
             }
             if "score" in doc:
                 meta_info_dict["score"] = doc["score"]
+            meta_info_dict["rank"] = rank
             for key in ["distance", "bm25_score", "rerank_score", "rrf_score", "source", "sources", "source_ranks"]:
                 if key in doc:
                     meta_info_dict[key] = doc[key]
@@ -290,18 +512,33 @@ class VanillaRAG(BaseRAG):
                 "node_type",
                 "raptor_depth",
                 "child_source_node_ids",
+                "child_qasper_evidence_texts",
                 "child_pages",
                 "child_sections",
+                "child_hotpot_facts",
+                "child_block_types",
+                "longrag_unit_id",
                 "section_id",
                 "section",
                 "title_path",
+                "title",
+                "hotpot_title",
+                "sent_id",
+                "hotpot_sent_id",
+                "block_type",
             ]:
                 if key in meta:
                     meta_info_dict[key] = meta[key]
             block_type = self._block_type_from_metadata(meta, doc)
             if block_type:
                 meta_info_dict["block_type"] = block_type
-            retrieval_ids.append(node_id)
+            child_ids = self._parse_int_values(meta.get("child_source_node_ids"))
+            if str(meta.get("source") or doc.get("source") or "").lower() == "longrag" and child_ids:
+                for child_id in child_ids:
+                    if child_id not in retrieval_ids:
+                        retrieval_ids.append(child_id)
+            else:
+                retrieval_ids.append(node_id)
             ranked_results.append(meta_info_dict)
             node_file_path = query_output_dir / f"{node_id}.json"
             with open(node_file_path, "w", encoding="utf-8") as f:
@@ -313,9 +550,14 @@ class VanillaRAG(BaseRAG):
                     allow_nan=False,
                 )
 
+        retrieval_payload = {"ranked_results": ranked_results}
+        supporting_evidence = self._supporting_evidence_from_ranked(ranked_results, supporting_ids)
+        if supporting_evidence:
+            retrieval_payload["supporting_evidence"] = supporting_evidence
+            retrieval_payload["supporting_block_ids"] = [item["id"] for item in supporting_evidence]
         with open(query_output_dir / "retrieval_res.json", "w", encoding="utf-8") as f:
             json.dump(
-                make_json_safe({"ranked_results": ranked_results}),
+                make_json_safe(retrieval_payload),
                 f,
                 indent=2,
                 ensure_ascii=False,
@@ -330,6 +572,8 @@ class VanillaRAG(BaseRAG):
     def _block_type_from_metadata(meta: Dict[str, Any], doc: Dict[str, Any]) -> str:
         source = str(meta.get("source") or doc.get("source") or "").lower()
         node_type = str(meta.get("node_type") or "").lower()
+        if source == "longrag":
+            return "long_unit"
         if source == "raptor_summary" or node_type == "raptor_summary":
             return "summary"
         if source == "qasper_paragraph" or node_type in {"text", "paragraph"}:
@@ -351,6 +595,7 @@ class VanillaRAG(BaseRAG):
             answer_short, answer_rationale = self._parse_answer_payload(final_answer)
             self.last_answer_short = answer_short
             self.last_answer_rationale = answer_rationale
+            self.last_retrieved_block_ids = []
             self.last_supporting_block_ids = []
             return final_answer, []
 
@@ -358,13 +603,17 @@ class VanillaRAG(BaseRAG):
 
         final_answer = self.llm.get_completion(context_text, json_response=False)
         answer_short, answer_rationale = self._parse_answer_payload(final_answer)
+        answer_supporting_ids = self._parse_supporting_ids(final_answer)
 
         retrieval_ids = self._save_retrieval_res(
-            retrieved_docs, query_output_dir=query_output_dir
+            retrieved_docs,
+            query_output_dir=query_output_dir,
+            supporting_ids=answer_supporting_ids,
         )
         self.last_answer_short = answer_short
         self.last_answer_rationale = answer_rationale
-        self.last_supporting_block_ids = retrieval_ids
+        self.last_retrieved_block_ids = retrieval_ids
+        self.last_supporting_block_ids = answer_supporting_ids or retrieval_ids
         return final_answer, retrieval_ids
 
     @staticmethod
@@ -390,6 +639,201 @@ class VanillaRAG(BaseRAG):
                 if len(parts) == 2 and parts[1].strip():
                     return parts[1].strip(), ""
         return text, ""
+
+    @staticmethod
+    def _parse_supporting_ids(answer: Any) -> List[int]:
+        text = str(answer or "").strip()
+        cleaned = text
+        if cleaned.startswith("```"):
+            cleaned = cleaned.strip("`").strip()
+            if cleaned.lower().startswith("json"):
+                cleaned = cleaned[4:].strip()
+        try:
+            payload = json.loads(cleaned)
+        except Exception:
+            return []
+        if not isinstance(payload, dict):
+            return []
+        raw_ids = payload.get("supporting_block_ids") or payload.get("supporting_node_ids") or []
+        if not isinstance(raw_ids, list):
+            raw_ids = [raw_ids]
+        ids: List[int] = []
+        for value in raw_ids:
+            try:
+                node_id = int(value)
+            except (TypeError, ValueError):
+                continue
+            if node_id not in ids:
+                ids.append(node_id)
+        return ids[:4]
+
+    @staticmethod
+    def _supporting_evidence_from_ranked(ranked_results: List[Dict[str, Any]], supporting_ids=None) -> List[Dict[str, Any]]:
+        if not supporting_ids:
+            return []
+        by_id = {str(item.get("id")): item for item in ranked_results if isinstance(item, dict)}
+        supporting = []
+        for rank, node_id in enumerate(supporting_ids, start=1):
+            item = by_id.get(str(node_id))
+            payload = dict(item) if item else {}
+            if not payload:
+                payload = VanillaRAG._child_supporting_evidence_from_ranked(
+                    ranked_results,
+                    node_id,
+                )
+            if not payload:
+                continue
+            payload["supporting_rank"] = rank
+            supporting.append(payload)
+        return supporting
+
+    @staticmethod
+    def _child_supporting_evidence_from_ranked(
+        ranked_results: List[Dict[str, Any]],
+        node_id: Any,
+    ) -> Dict[str, Any]:
+        try:
+            target = int(node_id)
+        except (TypeError, ValueError):
+            return {}
+        for item in ranked_results:
+            if not isinstance(item, dict):
+                continue
+            child_ids = VanillaRAG._parse_int_values(item.get("child_source_node_ids"))
+            if target not in child_ids:
+                continue
+            child_idx = child_ids.index(target)
+            child_texts = VanillaRAG._list_value(item.get("child_qasper_evidence_texts"))
+            child_pages = VanillaRAG._list_value(item.get("child_pages"))
+            child_sections = VanillaRAG._list_value(item.get("child_sections"))
+            child_block_types = VanillaRAG._list_value(item.get("child_block_types"))
+            child_hotpot_facts = VanillaRAG._list_value(item.get("child_hotpot_facts"))
+            text = VanillaRAG._value_at(child_texts, child_idx, "")
+            payload: Dict[str, Any] = {
+                "id": target,
+                "content": text,
+                "qasper_evidence_text": text,
+                "source_node_id": target,
+                "node_id": target,
+                "paragraph_id": target,
+                "evidence_id": target,
+                "source": "longrag_support",
+                "parent_longrag_unit_id": item.get("longrag_unit_id") or item.get("id"),
+                "rank": item.get("rank"),
+                "score": item.get("score"),
+                "block_type": VanillaRAG._value_at(child_block_types, child_idx, "paragraph") or "paragraph",
+                "page": VanillaRAG._value_at(child_pages, child_idx, None),
+                "section_id": VanillaRAG._value_at(child_sections, child_idx, item.get("section_id")),
+                "section": VanillaRAG._value_at(child_sections, child_idx, item.get("section")),
+            }
+            fact = VanillaRAG._value_at(child_hotpot_facts, child_idx, None)
+            if isinstance(fact, list) and len(fact) >= 2 and fact[0] is not None and fact[1] is not None:
+                payload["title"] = str(fact[0])
+                payload["hotpot_title"] = str(fact[0])
+                payload["sent_id"] = int(fact[1])
+                payload["hotpot_sent_id"] = int(fact[1])
+            return payload
+        return {}
+
+    @staticmethod
+    def _doc_node_id(doc: Dict[str, Any]) -> Any:
+        meta = doc.get("metadata") if isinstance(doc.get("metadata"), dict) else {}
+        for key in ("node_id", "source_node_id", "paragraph_id", "evidence_id"):
+            if meta.get(key) is not None:
+                return meta.get(key)
+        return doc.get("id")
+
+    @staticmethod
+    def _node_type_value(node: Any) -> str:
+        node_type = getattr(node, "type", "")
+        return str(getattr(node_type, "value", node_type) or "").lower()
+
+    @staticmethod
+    def _node_text(node: Any) -> str:
+        text = str(getattr(getattr(node, "meta_info", None), "content", "") or "").strip()
+        if text:
+            return text
+        table_body = str(getattr(getattr(node, "meta_info", None), "table_body", "") or "").strip()
+        caption = str(getattr(getattr(node, "meta_info", None), "caption", "") or "").strip()
+        return "\n".join(part for part in [caption, table_body] if part).strip()
+
+    @staticmethod
+    def _approx_token_count(text: str) -> int:
+        return max(1, len(BM25([])._tokenize(str(text or ""))))
+
+    @staticmethod
+    def _parse_int_values(value: Any) -> List[int]:
+        values = VanillaRAG._list_value(value)
+        parsed: List[int] = []
+        for item in values:
+            try:
+                parsed.append(int(item))
+            except (TypeError, ValueError):
+                continue
+        return parsed
+
+    @staticmethod
+    def _list_value(value: Any) -> List[Any]:
+        if value is None:
+            return []
+        if isinstance(value, list):
+            return value
+        if isinstance(value, tuple):
+            return list(value)
+        try:
+            parsed = json.loads(str(value))
+            if isinstance(parsed, list):
+                return parsed
+        except Exception:
+            pass
+        return [item.strip() for item in str(value).split(",") if item.strip()]
+
+    @staticmethod
+    def _value_at(values: List[Any], index: int, default: Any = None) -> Any:
+        return values[index] if 0 <= index < len(values) else default
+
+    @classmethod
+    def _section_metadata(cls, node: Any) -> Dict[str, Any]:
+        titles = []
+        parent = getattr(node, "parent", None)
+        while parent is not None:
+            if cls._node_type_value(parent) == "title":
+                title = cls._node_text(parent)
+                if title:
+                    titles.append(title)
+            parent = getattr(parent, "parent", None)
+        titles.reverse()
+        section = titles[-1] if titles else ""
+        return {
+            "section_id": section,
+            "section": section,
+            "title_path": " > ".join(titles),
+        }
+
+    @classmethod
+    def _hotpot_sentence_metadata(cls, node: Any) -> Dict[str, Any]:
+        if cls._node_type_value(node) != "text":
+            return {}
+        parent = getattr(node, "parent", None)
+        if parent is None or cls._node_type_value(parent) != "title":
+            return {}
+        title = cls._node_text(parent)
+        if not title:
+            return {}
+        sent_id = 0
+        for child in getattr(parent, "children", []) or []:
+            if cls._node_type_value(child) != "text":
+                continue
+            if child is node:
+                break
+            if cls._node_text(child):
+                sent_id += 1
+        return {
+            "title": title,
+            "hotpot_title": title,
+            "sent_id": sent_id,
+            "hotpot_sent_id": sent_id,
+        }
 
     def close(self):
         if self.cfg.retrieval_method in {"bm25", "bm25_rerank"} and self.bm25 is not None:

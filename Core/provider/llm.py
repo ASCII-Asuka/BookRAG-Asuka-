@@ -61,6 +61,11 @@ class OpenAIController(BaseLLMController):
             if llm_config and hasattr(llm_config, "temperature")
             else 0.7
         )
+        self.max_output_tokens = (
+            llm_config.max_output_tokens
+            if llm_config and hasattr(llm_config, "max_output_tokens")
+            else None
+        )
         base_url = (
             llm_config.api_base
             if llm_config and hasattr(llm_config, "api_base")
@@ -108,7 +113,7 @@ class OpenAIController(BaseLLMController):
             "model": self.model,
             "messages": messages,
             "temperature": self.temperature,
-            "max_tokens": get_max_output_tokens(messages, self.max_tokens),
+            "max_tokens": self._max_completion_tokens(messages),
             "frequency_penalty": self.frequency_penalty,
             "presence_penalty": self.presence_penalty,
             "extra_body": {"chat_template_kwargs": {"enable_thinking": False}},
@@ -125,6 +130,12 @@ class OpenAIController(BaseLLMController):
             )
 
         return response.choices[0].message.content
+
+    def _max_completion_tokens(self, messages: List[Dict[str, Any]]) -> int:
+        max_tokens = get_max_output_tokens(messages, self.max_tokens)
+        if self.max_output_tokens is not None:
+            max_tokens = min(max_tokens, int(self.max_output_tokens))
+        return max(max_tokens, 1)
 
     def get_json_completion(
         self,

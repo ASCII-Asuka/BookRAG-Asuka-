@@ -225,7 +225,7 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
             )
             log.info(f"Successfully loaded reranker: {reranker_cfg.model_name}")
             dependencies["reranker"] = reranker
-        elif retrieval_method == "abstract_only":
+        elif retrieval_method in {"abstract_only", "full_document", "longrag"}:
             tree_index_path = DocumentTree.get_save_path(cfg.save_path)
             tree_index = DocumentTree.load_from_file(tree_index_path)
             log.info(f"Successfully loaded tree index from {tree_index_path}")

@@ -7,6 +7,7 @@ class LLMConfig:
     api_base: str = "http://localhost:8003/v1"
     temperature: float = 0.1
     max_tokens: int = 5000
+    max_output_tokens: int | None = None
     frequency_penalty: float = 0.0
     presence_penalty: float = 0.0
     backend: str = "openai"
