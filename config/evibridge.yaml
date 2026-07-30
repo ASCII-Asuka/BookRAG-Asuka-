@@ -55,6 +55,12 @@ rag:
   enable_vector_recall: false
   hybrid_bm25_weight: 0.55
   hybrid_vector_weight: 0.45
+  enable_candidate_rerank: true
+  candidate_rerank_topk: 50
+  candidate_rerank_weight: 0.65
+  enable_supporting_rerank: true
+  rerank_batch_size: 50
+  trust_answer_supporting_ids: true
   ppr_topk: 30
   ppr_restart_alpha: 0.15
   ppr_max_iter: 50
@@ -66,6 +72,8 @@ rag:
   enable_llm_verifier: true
   enable_short_answer_extraction: true
   enable_long_context_fallback: false
+  supporting_evidence_topk: 4
+  dynamic_supporting_evidence_budget: true
   output_evidence_chain: true
   evibridge_vdb_config:
     mm_embedding: false
@@ -80,3 +88,10 @@ rag:
       api_base: TODO
       max_length: 4096
       device: cpu
+  reranker_config:
+    model_name: BAAI/bge-reranker-v2-m3
+    api_key: TODO
+    api_base: TODO
+    backend: vllm
+    max_length: 4096
+    device: cpu

@@ -58,6 +58,19 @@ class EviBridgeWiringTests(unittest.TestCase):
         self.assertEqual(cfg.mineru.backend, "pipeline")
         self.assertEqual(cfg.rag.strategy_config.method_suffix, "evibridge_wo_context_edges")
 
+    def test_main_evibridge_config_enables_validated_evidence_reranking(self):
+        from Core.configs.system_config import load_system_config
+
+        repo_root = Path(__file__).resolve().parents[1]
+        cfg = load_system_config(str(repo_root / "config" / "evibridge.yaml"))
+        rag = cfg.rag.strategy_config
+
+        self.assertTrue(rag.enable_candidate_rerank)
+        self.assertTrue(rag.enable_supporting_rerank)
+        self.assertTrue(rag.trust_answer_supporting_ids)
+        self.assertTrue(rag.dynamic_supporting_evidence_budget)
+        self.assertEqual(rag.candidate_rerank_topk, 50)
+
     def test_construct_evibridge_index_builds_tree_then_evibridge_index(self):
         _stub_runtime_imports()
         from Core.construct_index import construct_evibridge_index
