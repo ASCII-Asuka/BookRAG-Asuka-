@@ -124,3 +124,71 @@ class ReactWiringTests(unittest.TestCase):
         self.assertEqual(retrieval_ids, [1])
         self.assertEqual(chain["supporting_block_ids"], [1])
         self.assertEqual(json.loads(answer)["answer_short"], "London")
+
+    def test_hotpot_react_restores_title_and_sentence_ids_from_page_order(self):
+        class FakeLLM:
+            config = SimpleNamespace(max_tokens=8000)
+
+            def __init__(self):
+                self.responses = [
+                    " I should inspect the film.\n"
+                    "Action 1: Search[La Boheme]",
+                    " The answer is known.\n"
+                    "Action 2: Finish[1988]",
+                ]
+
+            def get_completion(self, prompt, json_response=False):
+                return self.responses.pop(0)
+
+        bm25 = BM25(
+            docs=[
+                "The film was released in 1988.",
+                "It was directed by Luigi Comencini.",
+            ],
+            metadatas=[
+                {
+                    "node_id": 9,
+                    "source_node_id": 9,
+                    "section_id": "La Boheme",
+                    "section": "La Boheme",
+                    "title_path": "La Boheme",
+                    "source": "qasper_paragraph",
+                    "node_type": "text",
+                },
+                {
+                    "node_id": 10,
+                    "source_node_id": 10,
+                    "section_id": "La Boheme",
+                    "section": "La Boheme",
+                    "title_path": "La Boheme",
+                    "source": "qasper_paragraph",
+                    "node_type": "text",
+                },
+            ],
+        )
+        bm25.initialize()
+        rag = VanillaRAG(
+            config=VanillaConfig(
+                retrieval_method="react",
+                react_dataset_name="hotpotqa",
+            ),
+            llm=FakeLLM(),
+            bm25=bm25,
+        )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            rag.generation("When was the film released?", Path(tmp))
+            payload = json.loads(
+                (Path(tmp) / "retrieval_res.json").read_text(
+                    encoding="utf-8",
+                )
+            )
+
+        facts = [
+            [item.get("hotpot_title"), item.get("hotpot_sent_id")]
+            for item in payload["supporting_evidence"]
+        ]
+        self.assertEqual(
+            facts,
+            [["La Boheme", 0], ["La Boheme", 1]],
+        )

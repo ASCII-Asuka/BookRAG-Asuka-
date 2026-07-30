@@ -630,6 +630,12 @@ class VanillaRAG(BaseRAG):
         from Core.rag.react_env import ReactLocalEnvironment
         from Core.rag.react_runner import ReactRunner
 
+        dataset_name = str(
+            getattr(self.cfg, "react_dataset_name", "qasper")
+            or "qasper"
+        )
+        is_hotpotqa = "hotpot" in dataset_name.lower()
+        page_sentence_counts: Dict[str, int] = {}
         docs = []
         for index, content in enumerate(self.bm25.original_docs):
             metadata = (
@@ -638,6 +644,30 @@ class VanillaRAG(BaseRAG):
                 and isinstance(self.bm25.metadatas[index], dict)
                 else {}
             )
+            if is_hotpotqa:
+                title = str(
+                    metadata.get("hotpot_title")
+                    or metadata.get("title")
+                    or metadata.get("section_id")
+                    or metadata.get("section")
+                    or metadata.get("title_path")
+                    or ""
+                ).strip()
+                if title:
+                    sent_id = metadata.get("hotpot_sent_id")
+                    if sent_id is None:
+                        sent_id = metadata.get("sent_id")
+                    if sent_id is None:
+                        sent_id = page_sentence_counts.get(title, 0)
+                    sent_id = int(sent_id)
+                    page_sentence_counts[title] = max(
+                        page_sentence_counts.get(title, 0),
+                        sent_id + 1,
+                    )
+                    metadata["title"] = title
+                    metadata["hotpot_title"] = title
+                    metadata["sent_id"] = sent_id
+                    metadata["hotpot_sent_id"] = sent_id
             docs.append(
                 {
                     "id": index,
@@ -666,11 +696,7 @@ class VanillaRAG(BaseRAG):
         run = ReactRunner(
             llm=self.llm,
             environment=environment,
-            dataset_name=getattr(
-                self.cfg,
-                "react_dataset_name",
-                "qasper",
-            ),
+            dataset_name=dataset_name,
             max_steps=int(
                 getattr(self.cfg, "react_max_steps", 7)
                 or 7
