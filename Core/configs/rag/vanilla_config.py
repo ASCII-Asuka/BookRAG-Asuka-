@@ -21,6 +21,7 @@ class VanillaConfig(BaseRAGStrategyConfig):
         "abstract_only",
         "full_document",
         "longrag",
+        "ircot",
     ] = Field(
         default="vanilla",
         description="The retrieval method to use.",
@@ -56,3 +57,6 @@ class VanillaConfig(BaseRAGStrategyConfig):
         default=30000,
         description="Maximum prompt context tokens for the LongRAG long-reader baseline.",
     )
+    ircot_max_steps: int = Field(default=3, description="Maximum interleaved reasoning-retrieval steps.")
+    ircot_step_topk: int = Field(default=3, description="BM25 evidence count retrieved at each IRCoT step.")
+    ircot_final_topk: int = Field(default=10, description="Maximum deduplicated evidence count used for final IRCoT answer generation.")

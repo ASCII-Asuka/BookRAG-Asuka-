@@ -588,6 +588,9 @@ class VanillaRAG(BaseRAG):
         Returns:
             Tuple[str, List[Any]]: A tuple containing the final answer string and a list of the context nodes.
         """
+        if self.cfg.retrieval_method == "ircot":
+            return self._ircot_generation(query, query_output_dir)
+
         retrieved_docs = self._retrieve(query, top_k=self.topk)
         if not retrieved_docs:
             # not found any relevant documents, fallback to LLM generation
@@ -615,6 +618,191 @@ class VanillaRAG(BaseRAG):
         self.last_retrieved_block_ids = retrieval_ids
         self.last_supporting_block_ids = answer_supporting_ids or retrieval_ids
         return final_answer, retrieval_ids
+
+    def _ircot_generation(self, query: str, query_output_dir: str) -> tuple:
+        if self.bm25 is None:
+            raise ValueError("IRCoT requires a BM25 retriever.")
+        max_steps = max(1, int(getattr(self.cfg, "ircot_max_steps", 3) or 3))
+        step_topk = max(1, int(getattr(self.cfg, "ircot_step_topk", 3) or 3))
+        final_topk = max(1, int(getattr(self.cfg, "ircot_final_topk", self.topk) or self.topk))
+
+        thoughts: List[str] = []
+        steps: List[Dict[str, Any]] = []
+        evidence_by_key: Dict[str, Dict[str, Any]] = {}
+        ranked_docs: List[Dict[str, Any]] = []
+
+        for step_idx in range(1, max_steps + 1):
+            retrieval_query = self._ircot_retrieval_query(query, thoughts)
+            docs = self.bm25.search(query_text=retrieval_query, top_k=step_topk)
+            step_docs = []
+            for doc in docs:
+                key = self._document_key(doc)
+                if key not in evidence_by_key:
+                    evidence_by_key[key] = doc
+                    ranked_docs.append(doc)
+                step_docs.append(self._ircot_doc_trace(doc))
+
+            thought_payload = self._generate_ircot_thought(
+                query=query,
+                thoughts=thoughts,
+                docs=docs,
+                step_idx=step_idx,
+            )
+            thought = str(thought_payload.get("thought") or "").strip()
+            stop = bool(thought_payload.get("stop"))
+            if thought:
+                thoughts.append(thought)
+            steps.append(
+                {
+                    "step": step_idx,
+                    "retrieval_query": retrieval_query,
+                    "thought": thought,
+                    "stop": stop,
+                    "retrieved": step_docs,
+                }
+            )
+            if stop:
+                break
+
+        final_docs = ranked_docs[:final_topk]
+        if not final_docs:
+            final_answer = self.llm.get_completion(query, json_response=False)
+            answer_short, answer_rationale = self._parse_answer_payload(final_answer)
+            self.last_answer_short = answer_short
+            self.last_answer_rationale = answer_rationale
+            self.last_retrieved_block_ids = []
+            self.last_supporting_block_ids = []
+            return final_answer, []
+
+        context_text = self._create_ircot_answer_prompt(query, thoughts, final_docs)
+        final_answer = self.llm.get_completion(context_text, json_response=False)
+        answer_short, answer_rationale = self._parse_answer_payload(final_answer)
+        answer_supporting_ids = self._parse_supporting_ids(final_answer)
+        retrieval_ids = self._save_ircot_retrieval_res(
+            final_docs,
+            query_output_dir=query_output_dir,
+            steps=steps,
+            thoughts=thoughts,
+            supporting_ids=answer_supporting_ids,
+        )
+        self.last_answer_short = answer_short
+        self.last_answer_rationale = answer_rationale
+        self.last_retrieved_block_ids = retrieval_ids
+        self.last_supporting_block_ids = answer_supporting_ids or retrieval_ids
+        return final_answer, retrieval_ids
+
+    @staticmethod
+    def _ircot_retrieval_query(query: str, thoughts: List[str]) -> str:
+        if not thoughts:
+            return query
+        return query + "\n" + "\n".join(f"Thought {idx + 1}: {thought}" for idx, thought in enumerate(thoughts))
+
+    def _generate_ircot_thought(
+        self,
+        query: str,
+        thoughts: List[str],
+        docs: List[Dict[str, Any]],
+        step_idx: int,
+    ) -> Dict[str, Any]:
+        evidence_text = "\n".join(f"[{idx + 1}] {doc.get('content', '')}" for idx, doc in enumerate(docs))
+        previous = "\n".join(f"Thought {idx + 1}: {thought}" for idx, thought in enumerate(thoughts)) or "None"
+        prompt = (
+            "Generate the next reasoning step for iterative retrieval.\n"
+            "Return only JSON with keys thought and stop.\n"
+            "thought should be a concise intermediate reasoning sentence or retrieval clue. "
+            "stop should be true only when the evidence seems sufficient to answer.\n\n"
+            f"Question: {query}\n"
+            f"Previous thoughts:\n{previous}\n\n"
+            f"Newly retrieved evidence at step {step_idx}:\n{evidence_text}\n"
+        )
+        raw = self.llm.get_completion(prompt, json_response=False)
+        try:
+            payload = json.loads(str(raw).strip().strip("`"))
+            if isinstance(payload, dict):
+                return payload
+        except Exception:
+            pass
+        text = str(raw or "").strip()
+        return {"thought": text, "stop": False}
+
+    def _create_ircot_answer_prompt(self, query: str, thoughts: List[str], docs: List[Dict[str, Any]]) -> str:
+        prompt = (
+            "You answer questions using evidence gathered by interleaved retrieval and reasoning.\n"
+            "Return only a JSON object with keys answer_short, answer_rationale, and supporting_block_ids.\n"
+            "answer_short must be concise: use exact spans when possible, answer Yes or No for boolean questions, "
+            "and use Not answerable only when evidence is insufficient.\n"
+            "supporting_block_ids must be a list of 1 to 4 integer source ids from the retrieved documents.\n\n"
+            f"Question: {query}\n\n"
+            "--- Reasoning Trace ---\n"
+        )
+        if thoughts:
+            prompt += "\n".join(f"Thought {idx + 1}: {thought}" for idx, thought in enumerate(thoughts))
+        else:
+            prompt += "None"
+        prompt += "\n\n--- Retrieved Documents ---\n"
+        for idx, doc in enumerate(docs, start=1):
+            source_id = self._doc_node_id(doc)
+            source = self._format_source(doc)
+            label = f"Text {idx}"
+            if source_id is not None:
+                label += f" [source_id={source_id}]"
+            if source:
+                prompt += f"{label} ({source}): {doc.get('content', '')}\n"
+            else:
+                prompt += f"{label}: {doc.get('content', '')}\n"
+        chunks = TextProcessor.split_text_into_chunks(text=prompt, max_length=self.max_tokens - 400)
+        return chunks[0]
+
+    def _save_ircot_retrieval_res(
+        self,
+        docs: List[Dict[str, Any]],
+        query_output_dir: str,
+        steps: List[Dict[str, Any]],
+        thoughts: List[str],
+        supporting_ids=None,
+    ) -> List[Any]:
+        retrieval_ids = self._save_retrieval_res(
+            docs,
+            query_output_dir=query_output_dir,
+            supporting_ids=supporting_ids,
+        )
+        payload_path = query_output_dir / "retrieval_res.json"
+        with open(payload_path, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+        payload["strategy"] = "ircot"
+        payload["ircot_steps"] = steps
+        payload["ircot_thoughts"] = thoughts
+        with open(payload_path, "w", encoding="utf-8") as f:
+            json.dump(make_json_safe(payload), f, indent=2, ensure_ascii=False, allow_nan=False)
+        with open(query_output_dir / "evidence_chain.json", "w", encoding="utf-8") as f:
+            json.dump(
+                make_json_safe(
+                    {
+                        "strategy": "ircot",
+                        "thoughts": thoughts,
+                        "steps": steps,
+                        "retrieved_block_ids": retrieval_ids,
+                        "supporting_block_ids": payload.get("supporting_block_ids", []),
+                    }
+                ),
+                f,
+                indent=2,
+                ensure_ascii=False,
+                allow_nan=False,
+            )
+        return retrieval_ids
+
+    def _ircot_doc_trace(self, doc: Dict[str, Any]) -> Dict[str, Any]:
+        meta = doc.get("metadata", {}) if isinstance(doc.get("metadata"), dict) else {}
+        return {
+            "id": self._doc_node_id(doc),
+            "score": float(doc.get("score", 0.0)),
+            "content": str(doc.get("content", "")),
+            "source": meta.get("source") or doc.get("source") or "bm25",
+            "qasper_evidence_text": meta.get("qasper_evidence_text"),
+            "hotpot_title": meta.get("hotpot_title") or meta.get("title"),
+            "sent_id": meta.get("hotpot_sent_id") if meta.get("hotpot_sent_id") is not None else meta.get("sent_id"),
+        }
 
     @staticmethod
     def _parse_answer_payload(answer: Any) -> Tuple[str, str]:

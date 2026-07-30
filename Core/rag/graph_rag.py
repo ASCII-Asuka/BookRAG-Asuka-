@@ -300,16 +300,88 @@ class GraphRAG(BaseRAG):
 
     def _save_retrieval_res(self, graph_info, query_output_dir: str):
         retrieval_ids = []
+        tree_node_ids = graph_info.get("TreeNode_ids", [])
+        ranked_results = self._ranked_results_from_tree_nodes(tree_node_ids)
+        payload = {
+            **graph_info,
+            "ranked_results": ranked_results,
+        }
 
         # direct save the context to a json file
         retrieval_save_res = query_output_dir / "retrieval_res.json"
         with open(retrieval_save_res, "w", encoding="utf-8") as f:
-            json.dump(graph_info, f, indent=2, ensure_ascii=False)
+            json.dump(payload, f, indent=2, ensure_ascii=False)
         log.info(f"Retrieval results saved to {retrieval_save_res}")
 
         # use the graph nodes as retrieval ids
-        retrieval_ids = graph_info.get("TreeNode_ids", [])
+        retrieval_ids = tree_node_ids
         return retrieval_ids
+
+    def _ranked_results_from_tree_nodes(self, tree_node_ids: List[int]) -> List[Dict[str, Any]]:
+        if not tree_node_ids:
+            return []
+        tree_data = self.gbc_index.TreeIndex.get_nodes_data(tree_node_ids) or []
+        node_data_by_id = {int(item.get("index_id")): item for item in tree_data if item.get("index_id") is not None}
+        ranked_results: List[Dict[str, Any]] = []
+        for rank, node_id in enumerate(tree_node_ids, start=1):
+            node_data = node_data_by_id.get(int(node_id), {})
+            text = str(node_data.get("content", "") or "").strip()
+            node_type = self._node_type_value(node_data.get("type", ""))
+            block_type = "paragraph" if node_type == "text" else node_type
+            item: Dict[str, Any] = {
+                "id": int(node_id),
+                "node_id": int(node_id),
+                "rank": rank,
+                "source": "graph",
+                "node_type": node_type,
+                "block_type": block_type,
+                "page": node_data.get("page"),
+            }
+            if text:
+                item["content"] = text
+                item["text"] = text
+                item["qasper_evidence_text"] = text
+            item.update(self._hotpot_sentence_metadata(int(node_id)))
+            ranked_results.append(item)
+        return ranked_results
+
+    @staticmethod
+    def _node_type_value(node_type: Any) -> str:
+        if hasattr(node_type, "value"):
+            return str(node_type.value).strip().lower()
+        return str(node_type or "").strip().lower()
+
+    def _hotpot_sentence_metadata(self, node_id: int) -> Dict[str, Any]:
+        tree = self.gbc_index.TreeIndex
+        if not hasattr(tree, "get_node_by_index_id"):
+            return {}
+        try:
+            node = tree.get_node_by_index_id(node_id)
+        except Exception:
+            return {}
+        if not node or self._node_type_value(getattr(node, "type", "")) != "text":
+            return {}
+        parent = getattr(node, "parent", None)
+        if parent is None or self._node_type_value(getattr(parent, "type", "")) != "title":
+            return {}
+        title = str(getattr(getattr(parent, "meta_info", None), "content", "") or "").strip()
+        if not title:
+            return {}
+        sent_id = 0
+        for child in getattr(parent, "children", []) or []:
+            if self._node_type_value(getattr(child, "type", "")) != "text":
+                continue
+            if child is node:
+                break
+            content = str(getattr(getattr(child, "meta_info", None), "content", "") or "").strip()
+            if content:
+                sent_id += 1
+        return {
+            "title": title,
+            "hotpot_title": title,
+            "sent_id": sent_id,
+            "hotpot_sent_id": sent_id,
+        }
 
     def close(self):
         self.embedder.close()
