@@ -83,6 +83,7 @@ class HotpotQAPreprocessTests(unittest.TestCase):
         self.assertEqual(saved[0]["evidence_block_ids"], [2, 5])
 
     def test_builds_hotpotqa_document_trees_and_dataset_config(self):
+        from Core.Index.EvidenceBridgeIndex import EvidenceBridgeIndex
         from Core.Index.Tree import DocumentTree
         from Scripts.preprocess.hotpotqa_evibridge import prepare_hotpotqa_sample
 
@@ -103,6 +104,10 @@ class HotpotQAPreprocessTests(unittest.TestCase):
                 seed=42,
             )
             tree = DocumentTree.load_from_file(str(work_dir / "hotpot-1" / "tree.pkl"))
+            index = EvidenceBridgeIndex.from_tree(
+                tree,
+                save_dir=str(work_dir / "hotpot-1"),
+            )
             cfg_text = cfg_path.read_text(encoding="utf-8")
             tree_json_exists = (work_dir / "hotpot-1" / "tree.json").exists()
 
@@ -114,6 +119,9 @@ class HotpotQAPreprocessTests(unittest.TestCase):
         contents = [node.meta_info.content for node in tree.nodes if node.meta_info.content]
         self.assertIn("Scott Derrickson", contents)
         self.assertIn("Scott Derrickson is an American director.", contents)
+        self.assertEqual(index.blocks[2].metadata["hotpot_title"], "Scott Derrickson")
+        self.assertEqual(index.blocks[2].metadata["hotpot_sent_id"], 0)
+        self.assertEqual(index.blocks[2].metadata["source"], "hotpotqa_sentence")
 
     def test_prepares_exclusive_random_subset_with_report(self):
         from Scripts.preprocess.hotpotqa_evibridge import prepare_hotpotqa_exclusive_sample
@@ -184,6 +192,9 @@ class HotpotQAPreprocessTests(unittest.TestCase):
                 report_path=str(report_path),
             )
             rows = json.loads(output_path.read_text(encoding="utf-8"))
+            manifest = json.loads(
+                output_path.with_suffix(".manifest.json").read_text(encoding="utf-8")
+            )
             cfg_text = cfg_path.read_text(encoding="utf-8")
             report_text = report_path.read_text(encoding="utf-8")
             tree_exists = (work_dir / "hotpot-3" / "tree.pkl").exists()
@@ -191,6 +202,9 @@ class HotpotQAPreprocessTests(unittest.TestCase):
         self.assertEqual(summary["question_count"], 2)
         self.assertEqual(summary["excluded_count"], 2)
         self.assertEqual({row["hotpotqa_question_id"] for row in rows}, {"hotpot-3", "hotpot-4"})
+        self.assertEqual(manifest["seed"], 42)
+        self.assertEqual(manifest["selected_question_ids"], ["hotpot-3", "hotpot-4"])
+        self.assertEqual(len(manifest["dataset_sha256"]), 64)
         self.assertTrue(tree_exists)
         self.assertIn("dataset_name: hotpotqa", cfg_text)
         self.assertIn("Selected questions: 2", report_text)

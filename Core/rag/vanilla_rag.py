@@ -404,7 +404,7 @@ class VanillaRAG(BaseRAG):
                 "You answer long-context document questions using only the provided full document.\n"
                 "Return only a JSON object with keys answer_short, answer_rationale, and supporting_block_ids.\n"
                 "answer_short must be concise: use exact spans when possible, answer Yes or No for boolean questions, "
-                "and use Not answerable only when the full document is insufficient. Do not include evidence bullets or explanations in answer_short.\n"
+                "and use Unanswerable only when the full document is insufficient. Do not include evidence bullets or explanations in answer_short.\n"
                 "supporting_block_ids must be a list of 1 to 4 integer source ids from the provided texts that best support answer_short.\n\n"
                 "--- Background Information ---\n"
             )
@@ -413,7 +413,7 @@ class VanillaRAG(BaseRAG):
                 "You answer long-context document questions using only the retrieved long document units.\n"
                 "Return only a JSON object with keys answer_short, answer_rationale, and supporting_block_ids.\n"
                 "answer_short must be concise: use exact spans when possible, answer Yes or No for boolean questions, "
-                "and use Not answerable only when the retrieved long units are insufficient. Do not include evidence bullets or explanations in answer_short.\n"
+                "and use Unanswerable only when the retrieved long units are insufficient. Do not include evidence bullets or explanations in answer_short.\n"
                 "supporting_block_ids must be a list of 1 to 4 integer source ids from the inline [source_id=...] markers that best support answer_short.\n\n"
                 "--- Background Information ---\n"
             )
@@ -422,7 +422,7 @@ class VanillaRAG(BaseRAG):
                 "You answer Qasper-style document questions using only the provided retrieved documents.\n"
                 "Return only a JSON object with keys answer_short and answer_rationale.\n"
                 "answer_short must be concise: use exact spans when possible, answer Yes or No for boolean questions, "
-                "and use Not answerable only when evidence is insufficient. Do not include evidence bullets or explanations in answer_short.\n\n"
+                "and use Unanswerable only when evidence is insufficient. Do not include evidence bullets or explanations in answer_short.\n\n"
                 "--- Background Information ---\n"
             )
         else:
@@ -907,7 +907,7 @@ class VanillaRAG(BaseRAG):
             "You answer questions using evidence gathered by interleaved retrieval and reasoning.\n"
             "Return only a JSON object with keys answer_short, answer_rationale, and supporting_block_ids.\n"
             "answer_short must be concise: use exact spans when possible, answer Yes or No for boolean questions, "
-            "and use Not answerable only when evidence is insufficient.\n"
+            "and use Unanswerable only when evidence is insufficient.\n"
             "supporting_block_ids must be a list of 1 to 4 integer source ids from the retrieved documents.\n\n"
             f"Question: {query}\n\n"
             "--- Reasoning Trace ---\n"

@@ -1,4 +1,5 @@
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -35,6 +36,20 @@ def normalize_answer(text: str) -> str:
         return "".join(ch for ch in value if ch not in exclude)
 
     return white_space_fix(remove_articles(remove_punc(str(text or "").lower())))
+
+
+def canonicalize_qasper_answer(text: Any) -> str:
+    answer = str(text or "").strip()
+    normalized = normalize_answer(answer)
+    if normalized in {
+        "not answerable",
+        "not enough information",
+        "cannot be answered",
+        "no answer",
+        "unknown",
+    }:
+        return "Unanswerable"
+    return answer
 
 
 def token_f1_score(prediction: str, ground_truth: str) -> float:
@@ -99,12 +114,12 @@ def export_predictions(
             )
             if not question_id:
                 continue
-            predicted_answer = _prediction_answer(
+            predicted_answer = canonicalize_qasper_answer(_prediction_answer(
                 result=result,
                 question_id=question_id,
                 eval_answer_by_qid=eval_answer_by_qid,
                 answer_source=answer_source,
-            )
+            ))
             prediction = {
                 "question_id": question_id,
                 "predicted_answer": predicted_answer,
@@ -131,13 +146,24 @@ def export_predictions(
         top_k_evidence=top_k_evidence,
         dynamic_evidence_topk=dynamic_evidence_topk,
     )
-    validate_qasper_run(
+    coverage = validate_qasper_run(
         dataset_path=dataset_path,
         working_dir=working_dir,
         dataset_name=dataset_name,
         method=method,
         predictions_path=str(output),
         require_query_outputs=False,
+    )
+    coverage.update(
+        {
+            "complete": True,
+            "dataset_sha256": _sha256_file(dataset_path),
+            "predictions_sha256": _sha256_file(output),
+        }
+    )
+    (output.parent / "coverage_manifest.json").write_text(
+        json.dumps(coverage, ensure_ascii=False, indent=2),
+        encoding="utf-8",
     )
     return predictions
 
@@ -328,7 +354,7 @@ def run_export_and_eval(
     text_evidence_only: bool = False,
     include_nonparagraph_evidence: bool = False,
     top_k_evidence: int = 0,
-    dynamic_evidence_topk: bool = False,
+    dynamic_evidence_topk: bool = True,
 ) -> Dict[str, Any]:
     data_cfg = load_dataset_config(dataset_config_path)
     official_dir = Path(output_dir) if output_dir else Path(data_cfg.working_dir) / "0_results" / f"qasper_official_{method}"
@@ -365,7 +391,7 @@ def run_export_and_external_official_eval(
     text_evidence_only: bool = False,
     include_nonparagraph_evidence: bool = False,
     top_k_evidence: int = 0,
-    dynamic_evidence_topk: bool = False,
+    dynamic_evidence_topk: bool = True,
     official_evaluator_path: str = "",
 ) -> Dict[str, Any]:
     data_cfg = load_dataset_config(dataset_config_path)
@@ -456,7 +482,7 @@ def _load_predictions(predictions_path: str) -> Dict[str, Dict[str, Any]]:
                 continue
             data = json.loads(line)
             predictions[str(data["question_id"])] = {
-                "answer": data.get("predicted_answer", ""),
+                "answer": canonicalize_qasper_answer(data.get("predicted_answer", "")),
                 "evidence": data.get("predicted_evidence", []) or [],
             }
     return predictions
@@ -715,6 +741,14 @@ def _load_json_if_exists(path: Path) -> Optional[Any]:
     return _load_json(path)
 
 
+def _sha256_file(path: str | Path) -> str:
+    digest = hashlib.sha256()
+    with open(path, "rb") as file:
+        for chunk in iter(lambda: file.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def _download_official_evaluator(output_path: str) -> None:
     try:
         from huggingface_hub import hf_hub_download
@@ -765,8 +799,16 @@ def main() -> None:
     )
     parser.add_argument(
         "--dynamic-evidence-topk",
+        dest="dynamic_evidence_topk",
         action="store_true",
+        default=True,
         help="Use a non-gold dynamic evidence count based on predicted answer and retrieval demand.",
+    )
+    parser.add_argument(
+        "--fixed-evidence-topk",
+        dest="dynamic_evidence_topk",
+        action="store_false",
+        help="Disable the shared dynamic evidence policy for diagnostic runs only.",
     )
     parser.add_argument(
         "--use-external-official-evaluator",

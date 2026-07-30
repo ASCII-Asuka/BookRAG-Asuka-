@@ -84,7 +84,7 @@ class LightRAGRAG(BaseRAG):
             return (
                 "Answer the question using the LightRAG indexed document. "
                 "Return a concise answer only. Use exact spans when possible, "
-                "answer Yes or No for boolean questions, and use Not answerable only if needed.\n\n"
+                "answer Yes or No for boolean questions, and use Unanswerable only if needed.\n\n"
                 f"Question: {query}"
             )
         return query
@@ -102,7 +102,7 @@ class LightRAGRAG(BaseRAG):
             answer = self._rag.query(answer_prompt, param=self._query_param(mode=effective_mode))
         except Exception as exc:
             log.warning("LightRAG query failed: %s", exc)
-            answer = "Not answerable"
+            answer = "Unanswerable"
 
         answer = str(answer or "").strip()
         self.last_answer_short = self._shorten_answer(answer)

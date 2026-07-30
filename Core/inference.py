@@ -198,9 +198,7 @@ def create_log_handler(cfg: SystemConfig, dataset_path: str):
         if ablation_variant and ablation_variant != "full":
             method_suffix = f"hri_{ablation_variant}"
     if rag_strategy == "evibridge":
-        ablation_variant = getattr(cfg.rag.strategy_config, "ablation_variant", "full")
-        if ablation_variant and ablation_variant != "full":
-            method_suffix = f"evibridge_{ablation_variant}"
+        method_suffix = cfg.rag.strategy_config.method_suffix
     output_dir = Path(cfg.save_path) / f"eval_{dataset_file.stem}_{method_suffix}"
     output_dir.mkdir(parents=True, exist_ok=True)
     log_file_path = output_dir / "evaluation.log"
@@ -273,10 +271,7 @@ def inference(cfg: SystemConfig, data_df: pd.DataFrame, dataset_name: str):
             Path(cfg.save_path) / f"eval_{dataset_name}_{method_suffix}"
         )
     elif rag_strategy == "evibridge":
-        ablation_variant = getattr(cfg.rag.strategy_config, "ablation_variant", "full")
-        method_suffix = rag_strategy
-        if ablation_variant and ablation_variant != "full":
-            method_suffix = f"evibridge_{ablation_variant}"
+        method_suffix = cfg.rag.strategy_config.method_suffix
         output_dir = output_dir = (
             Path(cfg.save_path) / f"eval_{dataset_name}_{method_suffix}"
         )

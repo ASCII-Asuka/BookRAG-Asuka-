@@ -199,7 +199,7 @@ class HippoRAGRAG(BaseRAG):
                 "You answer Qasper-style document questions using only the retrieved passages.\n"
                 "Return only a JSON object with keys answer_short and answer_rationale.\n"
                 "answer_short must be concise: use exact spans when possible, answer Yes or No for boolean questions, "
-                "and use Not answerable only when the passages are insufficient.\n\n"
+                "and use Unanswerable only when the passages are insufficient.\n\n"
                 f"Question: {query}\n\n"
                 "Retrieved passages:\n"
             )

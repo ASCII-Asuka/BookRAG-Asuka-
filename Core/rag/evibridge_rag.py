@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -34,17 +35,31 @@ class EviBridgeRAG(BaseRAG):
         self.bm25 = bm25
         self.evibridge_vector_store = evibridge_vector_store
         self.reranker = reranker
+        implicit_multihop_ablated = (
+            config.ablation_variant == "wo_implicit_multihop"
+        )
         self.demand_parser = DemandParser(
             llm=llm,
             mode=config.demand_parser,
             confidence_threshold=config.demand_confidence_threshold,
+            dataset_profile=(
+                "auto" if implicit_multihop_ablated else config.dataset_profile
+            ),
             qasper_demand_mode=config.qasper_demand_mode,
             enable_boolean_answer_hint=config.enable_boolean_answer_hint,
-            multi_hop_requires_explicit_bridge=config.multi_hop_requires_explicit_bridge,
+            multi_hop_requires_explicit_bridge=(
+                True
+                if implicit_multihop_ablated
+                else config.multi_hop_requires_explicit_bridge
+            ),
+            enable_implicit_multihop=not implicit_multihop_ablated,
         )
         self.verifier = EvidenceSufficiencyVerifier(
             llm=llm,
-            enable_llm=config.enable_llm_verifier,
+            enable_llm=(
+                config.enable_llm_verifier
+                and config.ablation_variant != "wo_verifier_repair"
+            ),
         )
         self.last_retrieved_block_ids: List[int] = []
         self.last_answer_short: str = ""
@@ -70,6 +85,10 @@ class EviBridgeRAG(BaseRAG):
         connector_paths: List[Dict[str, Any]] = []
         connector_edges: List[Dict[str, Any]] = []
         selected_bridges = []
+        seen_candidate_ids: set[int] = set()
+        seen_selected_answer_ids: set[int] = set()
+        previous_best_answer_score: Optional[float] = None
+        stopping_reason = "max_iterations"
 
         max_iterations = 1 if self._ablation_variant() == "wo_sufficiency_verifier" else self.config.max_iterations
         for iteration in range(max(max_iterations, 1)):
@@ -89,7 +108,11 @@ class EviBridgeRAG(BaseRAG):
                     demand=demand,
                 )
                 ppr_ranks = {block_id: rank for rank, block_id in enumerate(ppr_result.scores, 1)}
-                candidate_scores = self._seed_preserved_candidate_scores(seed_results, ppr_result.scores)
+                candidate_scores = self._seed_preserved_candidate_scores(
+                    seed_results,
+                    ppr_result.scores,
+                    active_seed_scores=seed_scores,
+                )
                 candidate_score_parts = ppr_result.score_parts
                 for block_id in candidate_scores:
                     parts = candidate_score_parts.setdefault(
@@ -123,6 +146,15 @@ class EviBridgeRAG(BaseRAG):
                     candidate_scores=candidate_scores,
                     candidate_score_parts=candidate_score_parts,
                 )
+            round_candidate_ids = set(candidate_scores)
+            new_candidate_ids = sorted(round_candidate_ids - seen_candidate_ids)
+            final_evidence_types = set(self.config.final_evidence_types)
+            new_answer_candidate_ids = [
+                block_id
+                for block_id in new_candidate_ids
+                if self.evibridge_index.blocks.get(block_id)
+                and self.evibridge_index.blocks[block_id].block_type in final_evidence_types
+            ]
 
             if self._ablation_variant() == "wo_budgeted_selector":
                 selected = self._top_selected(candidate_scores)
@@ -159,22 +191,66 @@ class EviBridgeRAG(BaseRAG):
             else:
                 verdict = self.verifier.verify(query, demand, selected_blocks, selected_bridges)
 
-            iteration_records.append(
-                {
-                    "iteration": iteration + 1,
-                    "candidate_scores": candidate_scores,
-                    "candidate_score_parts": candidate_score_parts,
-                    "selected_block_ids": selected_ids,
-                    "selected": self._selected_payload(selected, candidate_score_parts),
-                    "verification": verdict.model_dump(),
-                    "connector_paths": connector_paths,
-                    "connector_edges": connector_edges,
-                    "next_action": verdict.next_action,
-                }
+            selected_answer_ids = {
+                block.block_id
+                for block in selected_blocks
+                if block.block_type in final_evidence_types
+            }
+            best_answer_score = max(
+                (
+                    float(candidate_scores.get(block_id, 0.0))
+                    for block_id in selected_answer_ids
+                ),
+                default=0.0,
             )
+            evidence_score_improved = (
+                previous_best_answer_score is None
+                or best_answer_score > previous_best_answer_score + 1e-8
+            )
+            evidence_set_expanded = bool(selected_answer_ids - seen_selected_answer_ids)
+            iteration_record = {
+                "iteration": iteration + 1,
+                "candidate_scores": candidate_scores,
+                "candidate_score_parts": candidate_score_parts,
+                "new_candidate_ids": new_candidate_ids,
+                "new_answer_candidate_ids": new_answer_candidate_ids,
+                "selected_block_ids": selected_ids,
+                "selected": self._selected_payload(selected, candidate_score_parts),
+                "verification": verdict.model_dump(),
+                "connector_paths": connector_paths,
+                "connector_edges": connector_edges,
+                "next_action": verdict.next_action,
+                "evidence_score_improved": evidence_score_improved,
+                "evidence_set_expanded": evidence_set_expanded,
+            }
+            iteration_records.append(iteration_record)
+            seen_candidate_ids.update(round_candidate_ids)
             if verdict.sufficient:
+                stopping_reason = "sufficient"
                 break
-            seed_scores = self._refine_seed_scores(query, demand, seed_scores, selected_ids, verdict)
+            if iteration + 1 >= max(max_iterations, 1):
+                stopping_reason = "max_iterations"
+                break
+            if previous_best_answer_score is not None and not (
+                evidence_score_improved or evidence_set_expanded
+            ):
+                stopping_reason = "no_evidence_gain"
+                break
+            refined_scores, refinement = self._refine_seed_scores_with_diagnostics(
+                query=query,
+                demand=demand,
+                seed_scores=seed_scores,
+                selected_ids=selected_ids,
+                verdict=verdict,
+                excluded_candidate_ids=seen_candidate_ids,
+            )
+            iteration_record["refinement"] = refinement
+            if not refinement["new_answer_candidate_ids"]:
+                stopping_reason = "no_new_candidates"
+                break
+            seed_scores = refined_scores
+            seen_selected_answer_ids.update(selected_answer_ids)
+            previous_best_answer_score = best_answer_score
 
         selected_ids = [item.block.block_id for item in selected]
         evidence_chain = self._build_evidence_chain(selected, demand, verdict)
@@ -199,6 +275,7 @@ class EviBridgeRAG(BaseRAG):
             "evidence_chain": evidence_chain,
             "verification": verdict,
             "iterations": iteration_records,
+            "stopping_reason": stopping_reason,
         }
 
     def _create_augmented_prompt(
@@ -247,9 +324,75 @@ class EviBridgeRAG(BaseRAG):
             answer = self.llm.get_completion(prompt=prompt, json_response=False)
         except TypeError:
             answer = self.llm.get_completion(prompt)
+        answer_evidence = list(retrieval_info.get("evidence_chain") or [])
+        fallback_info = {
+            "enabled": bool(self.config.enable_long_context_fallback),
+            "used": False,
+            "trigger": "disabled",
+            "context_block_ids": [],
+            "estimated_tokens": 0,
+        }
+        verdict = retrieval_info.get("verification")
+        if self.config.enable_long_context_fallback:
+            if verdict is not None and not verdict.sufficient:
+                fallback_context = self._build_long_context_fallback(
+                    query=query,
+                    retrieval_info=retrieval_info,
+                )
+                if fallback_context:
+                    fallback_prompt = self._create_fallback_prompt(
+                        query=query,
+                        evidence_items=fallback_context,
+                    )
+                    try:
+                        answer = self.llm.get_completion(
+                            prompt=fallback_prompt,
+                            json_response=False,
+                        )
+                    except TypeError:
+                        answer = self.llm.get_completion(fallback_prompt)
+                    answer_evidence = fallback_context
+                    self._merge_fallback_context(retrieval_info, fallback_context)
+                    fallback_info = {
+                        "enabled": True,
+                        "used": True,
+                        "trigger": "insufficient_evidence",
+                        "context_block_ids": [
+                            item["block_id"] for item in fallback_context
+                        ],
+                        "estimated_tokens": sum(
+                            len(evidence_tokenize(item.get("text", "")))
+                            for item in fallback_context
+                        ),
+                    }
+                else:
+                    fallback_info["trigger"] = "no_fallback_context"
+            else:
+                fallback_info["trigger"] = "sufficient_evidence"
+        retrieval_info["fallback"] = fallback_info
         answer_short, answer_rationale, answer_supporting_ids = self._parse_answer_payload(answer)
         answer_short = self._normalize_answer_short(answer_short, retrieval_info["demand"])
-        self._apply_answer_supporting_ids(retrieval_info, answer_supporting_ids)
+        if self.config.enable_short_answer_extraction:
+            answer_short, extraction_info = self._extract_short_answer_from_evidence(
+                query=query,
+                answer_short=answer_short,
+                demand=retrieval_info["demand"],
+                evidence_items=answer_evidence,
+            )
+        else:
+            extraction_info = {
+                "enabled": False,
+                "applied": False,
+                "source_block_id": None,
+                "original_answer": answer_short,
+                "extracted_answer": answer_short,
+            }
+        retrieval_info["answer_extraction"] = extraction_info
+        self._apply_answer_supporting_ids(
+            retrieval_info,
+            answer_supporting_ids,
+            answer_short=answer_short,
+        )
 
         output_dir = Path(query_output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -262,6 +405,129 @@ class EviBridgeRAG(BaseRAG):
         self.last_supporting_block_ids = supporting_ids
         return answer, retrieved_ids
 
+    def _build_long_context_fallback(
+        self,
+        query: str,
+        retrieval_info: Dict[str, Any],
+    ) -> List[Dict[str, Any]]:
+        query_terms = set(evidence_tokenize(query))
+        selected_ids = set(retrieval_info.get("selected_block_ids") or [])
+        selected_sections = {
+            str(item.get("section_id") or "").strip()
+            for item in retrieval_info.get("selected_payload", [])
+            if str(item.get("section_id") or "").strip()
+        }
+        candidates: List[Tuple[float, EvidenceBlock]] = []
+        final_types = set(self.config.final_evidence_types)
+        for block in self.evibridge_index.blocks.values():
+            if block.block_type not in final_types:
+                continue
+            block_terms = set(
+                evidence_tokenize(
+                    " ".join(
+                        [
+                            block.section_id,
+                            " ".join(block.title_path),
+                            block.text,
+                        ]
+                    )
+                )
+            )
+            lexical = len(query_terms & block_terms) / max(len(query_terms), 1)
+            same_section = bool(
+                block.section_id and block.section_id in selected_sections
+            )
+            score = lexical + (0.75 if same_section else 0.0)
+            if block.block_id in selected_ids:
+                score += 1.0
+            if score > 0:
+                candidates.append((score, block))
+        candidates.sort(
+            key=lambda item: (
+                -item[0],
+                item[1].page if item[1].page is not None else 10**9,
+                item[1].block_id,
+            )
+        )
+        max_blocks = max(int(self.config.fallback_max_context_blocks or 0), 0)
+        max_tokens = max(int(self.config.fallback_max_context_tokens or 0), 0)
+        payload: List[Dict[str, Any]] = []
+        used_tokens = 0
+        for score, block in candidates:
+            token_cost = max(len(evidence_tokenize(block.text)), 1)
+            if max_tokens and used_tokens + token_cost > max_tokens and payload:
+                continue
+            metadata = dict(block.metadata or {})
+            payload.append(
+                {
+                    "block_id": block.block_id,
+                    "block_type": block.block_type,
+                    "page": block.page,
+                    "section_id": block.section_id,
+                    "section_path": " > ".join(block.title_path) or block.section_id,
+                    "metadata": metadata,
+                    "hotpot_title": metadata.get("hotpot_title"),
+                    "hotpot_sent_id": metadata.get("hotpot_sent_id"),
+                    "text": block.text,
+                    "score": round(float(score), 8),
+                    "score_parts": {"fallback_relevance": round(float(score), 8)},
+                    "bridge_types": [],
+                    "evidence_role": "answer_evidence",
+                    "selection_rank": len(payload) + 1,
+                    "fallback_context": True,
+                }
+            )
+            used_tokens += token_cost
+            if max_blocks and len(payload) >= max_blocks:
+                break
+        return payload
+
+    @staticmethod
+    def _create_fallback_prompt(
+        query: str,
+        evidence_items: List[Dict[str, Any]],
+    ) -> str:
+        evidence_text = "\n\n".join(
+            f"[block_id={item['block_id']}] section={item.get('section_path')} "
+            f"page={item.get('page')}\n{item.get('text', '')}"
+            for item in evidence_items
+        )
+        return (
+            "Answer the question using only the chapter-level fallback evidence. "
+            "Return only JSON with answer_short, answer_rationale, and supporting_block_ids. "
+            "Use the shortest exact evidence span for extractive, entity, numeric, and yes/no "
+            "questions; use Unanswerable if the fallback evidence is still insufficient.\n"
+            f"Question: {query}\n"
+            f"Fallback evidence:\n{evidence_text}\n"
+            "Answer:"
+        )
+
+    @staticmethod
+    def _merge_fallback_context(
+        retrieval_info: Dict[str, Any],
+        fallback_context: List[Dict[str, Any]],
+    ) -> None:
+        selected_payload = list(retrieval_info.get("selected_payload") or [])
+        existing_ids = {
+            int(item["block_id"])
+            for item in selected_payload
+            if item.get("block_id") is not None
+        }
+        for item in fallback_context:
+            block_id = int(item["block_id"])
+            if block_id not in existing_ids:
+                payload = dict(item)
+                payload["selection_rank"] = len(selected_payload) + 1
+                selected_payload.append(payload)
+                existing_ids.add(block_id)
+        retrieval_info["selected_payload"] = selected_payload
+        retrieved_ids = list(retrieval_info.get("retrieved_block_ids") or [])
+        for item in fallback_context:
+            block_id = int(item["block_id"])
+            if block_id not in retrieved_ids:
+                retrieved_ids.append(block_id)
+        retrieval_info["retrieved_block_ids"] = retrieved_ids
+
     def close(self):
         if hasattr(self.evibridge_vector_store, "close"):
             self.evibridge_vector_store.close()
@@ -269,11 +535,36 @@ class EviBridgeRAG(BaseRAG):
             self.reranker.close()
 
     def _hybrid_seed_retrieval(self, query: str, demand: EvidenceDemand) -> List[Dict[str, Any]]:
-        bm25_results = self.evibridge_index.search_bm25(
-            self.bm25,
-            query=query,
-            top_k=self._bm25_topk(),
+        retrieval_queries = list(
+            dict.fromkeys(
+                item.strip()
+                for item in [query, *(demand.subqueries or [])]
+                if str(item).strip()
+            )
         )
+        bm25_by_id: Dict[int, Dict[str, Any]] = {}
+        for query_rank, retrieval_query in enumerate(retrieval_queries):
+            for raw_item in self.evibridge_index.search_bm25(
+                self.bm25,
+                query=retrieval_query,
+                top_k=self._bm25_topk(),
+            ):
+                item = dict(raw_item)
+                block_id = int(item["block_id"])
+                existing = bm25_by_id.get(block_id)
+                if existing is None:
+                    item["matched_queries"] = [retrieval_query]
+                    item["matched_query_ranks"] = [query_rank]
+                    bm25_by_id[block_id] = item
+                else:
+                    existing["score"] = max(
+                        float(existing.get("score", 0.0)),
+                        float(item.get("score", 0.0)),
+                    )
+                    if retrieval_query not in existing["matched_queries"]:
+                        existing["matched_queries"].append(retrieval_query)
+                        existing["matched_query_ranks"].append(query_rank)
+        bm25_results = list(bm25_by_id.values())
         for item in bm25_results:
             item["source"] = "bm25"
             item["seed_family"] = "block"
@@ -283,7 +574,32 @@ class EviBridgeRAG(BaseRAG):
 
         vector_results: List[Dict[str, Any]] = []
         if self.config.enable_vector_recall and self.evibridge_vector_store is not None:
-            vector_results = self._search_vector(query, top_k=self._embedding_topk())
+            vector_by_id: Dict[int, Dict[str, Any]] = {}
+            for query_rank, retrieval_query in enumerate(retrieval_queries):
+                for raw_item in self._search_vector(
+                    retrieval_query,
+                    top_k=self._embedding_topk(),
+                ):
+                    item = dict(raw_item)
+                    block_id = int(item["block_id"])
+                    existing = vector_by_id.get(block_id)
+                    if existing is None:
+                        item["matched_queries"] = [retrieval_query]
+                        item["matched_query_ranks"] = [query_rank]
+                        vector_by_id[block_id] = item
+                    else:
+                        existing["vector_score"] = max(
+                            float(existing.get("vector_score", 0.0)),
+                            float(item.get("vector_score", 0.0)),
+                        )
+                        existing["score"] = max(
+                            float(existing.get("score", 0.0)),
+                            float(item.get("score", 0.0)),
+                        )
+                        if retrieval_query not in existing["matched_queries"]:
+                            existing["matched_queries"].append(retrieval_query)
+                            existing["matched_query_ranks"].append(query_rank)
+            vector_results = list(vector_by_id.values())
 
         bm25_norm = self._normalized_scores(bm25_results, "bm25_score")
         vector_norm = self._normalized_scores(vector_results, "vector_score")
@@ -301,6 +617,14 @@ class EviBridgeRAG(BaseRAG):
                 combined[block_id]["source"] = "hybrid"
                 combined[block_id]["vector_score"] = item["vector_score"]
                 combined[block_id]["vector_norm"] = vector_norm.get(block_id, 0.0)
+                combined[block_id]["matched_queries"] = list(
+                    dict.fromkeys(
+                        [
+                            *(combined[block_id].get("matched_queries") or []),
+                            *(item.get("matched_queries") or []),
+                        ]
+                    )
+                )
             else:
                 combined[block_id] = {
                     **item,
@@ -499,20 +823,41 @@ class EviBridgeRAG(BaseRAG):
         self,
         seed_results: List[Dict[str, Any]],
         ppr_scores: Dict[int, float],
+        active_seed_scores: Optional[Dict[int, float]] = None,
     ) -> Dict[int, float]:
         candidate_scores = dict(ppr_scores)
         preserve_limit = max(int(getattr(self.config, "preserve_seed_topk", 0) or 0), 0)
         final_types = set(getattr(self.config, "final_evidence_types", []) or [])
         if preserve_limit <= 0:
             return candidate_scores
-        preserved = [
-            item
-            for item in seed_results
-            if item.get("block_type") in final_types or item.get("block_type") == "paragraph"
-        ][:preserve_limit]
-        for item in preserved:
-            block_id = item["block_id"]
-            seed_score = float(item.get("score", 0.0))
+        preserved_scores: Dict[int, float] = {}
+        ordered_ids: List[int] = []
+        for item in seed_results:
+            block_id = int(item["block_id"])
+            if item.get("block_type") not in final_types and item.get("block_type") != "paragraph":
+                continue
+            if block_id not in ordered_ids:
+                ordered_ids.append(block_id)
+            preserved_scores[block_id] = max(
+                preserved_scores.get(block_id, 0.0),
+                float(item.get("score", 0.0)),
+            )
+        for block_id, score in sorted(
+            (active_seed_scores or {}).items(),
+            key=lambda item: item[1],
+            reverse=True,
+        ):
+            block = self.evibridge_index.blocks.get(block_id)
+            if not block or block.block_type not in final_types:
+                continue
+            if block_id not in ordered_ids:
+                ordered_ids.append(block_id)
+            preserved_scores[block_id] = max(
+                preserved_scores.get(block_id, 0.0),
+                float(score),
+            )
+        for block_id in ordered_ids[:preserve_limit]:
+            seed_score = preserved_scores[block_id]
             candidate_scores[block_id] = max(float(candidate_scores.get(block_id, 0.0)), seed_score)
         return dict(sorted(candidate_scores.items(), key=lambda item: item[1], reverse=True))
 
@@ -735,6 +1080,9 @@ class EviBridgeRAG(BaseRAG):
                     "block_type": block.block_type,
                     "page": block.page,
                     "section_id": block.section_id,
+                    "metadata": dict(block.metadata or {}),
+                    "hotpot_title": (block.metadata or {}).get("hotpot_title"),
+                    "hotpot_sent_id": (block.metadata or {}).get("hotpot_sent_id"),
                     "text": block.text,
                     "score": item.score,
                     "score_parts": score_parts,
@@ -751,9 +1099,14 @@ class EviBridgeRAG(BaseRAG):
         self,
         selected_payload: List[Dict[str, Any]],
         preferred_ids: Optional[List[int]] = None,
+        topk_override: Optional[int] = None,
     ) -> List[Dict[str, Any]]:
         allowed_types = set(self.config.supporting_evidence_types)
         topk = max(int(self.config.supporting_evidence_topk or 0), 0)
+        if topk_override is not None:
+            topk = max(int(topk_override), 0)
+            if topk == 0:
+                return []
         by_id = {int(item["block_id"]): item for item in selected_payload if item.get("block_id") is not None}
         ordered: List[Dict[str, Any]] = []
         for block_id in preferred_ids or []:
@@ -761,7 +1114,10 @@ class EviBridgeRAG(BaseRAG):
             if item is not None:
                 ordered.append(item)
         remaining = [item for item in selected_payload if item not in ordered]
-        if self.config.enable_supporting_rerank:
+        if (
+            self.config.enable_supporting_rerank
+            and self._ablation_variant() != "wo_support_reranker"
+        ):
             remaining = sorted(remaining, key=self._supporting_order_key)
         else:
             remaining = sorted(remaining, key=lambda value: value.get("selection_rank", 10**9))
@@ -789,17 +1145,84 @@ class EviBridgeRAG(BaseRAG):
         self,
         retrieval_info: Dict[str, Any],
         supporting_ids: List[int],
+        answer_short: str = "",
     ) -> None:
         selected_payload = retrieval_info.get("selected_payload", [])
-        preferred_ids = supporting_ids if self.config.trust_answer_supporting_ids else None
-        supporting_evidence = self._supporting_evidence_payload(selected_payload, preferred_ids=preferred_ids)
+        requested_ids = list(dict.fromkeys(int(block_id) for block_id in supporting_ids))
+        allowed_types = set(self.config.supporting_evidence_types)
+        eligible_ids = {
+            int(item["block_id"])
+            for item in selected_payload
+            if item.get("block_id") is not None
+            and item.get("block_type") in allowed_types
+            and item.get("evidence_role") != "bridge_auxiliary"
+        }
+        valid_ids = [block_id for block_id in requested_ids if block_id in eligible_ids]
+        invalid_ids = [block_id for block_id in requested_ids if block_id not in eligible_ids]
+        trust_answer_ids = (
+            self.config.trust_answer_supporting_ids
+            and self._ablation_variant() != "wo_citation_reorder"
+        )
+        preferred_ids = valid_ids if trust_answer_ids else None
+        ignored_ids = invalid_ids if trust_answer_ids else requested_ids
+        budget = self._supporting_evidence_budget(
+            answer_short=answer_short,
+            demand=retrieval_info.get("demand"),
+        )
+        supporting_evidence = self._supporting_evidence_payload(
+            selected_payload,
+            preferred_ids=preferred_ids,
+            topk_override=(
+                budget
+                if answer_short and self.config.dynamic_supporting_evidence_budget
+                else None
+            ),
+        )
         retrieval_info["supporting_evidence"] = supporting_evidence
         retrieval_info["supporting_block_ids"] = [item["block_id"] for item in supporting_evidence]
+        retrieval_info["supporting_evidence_budget"] = budget
+        retrieval_info["citation_validation"] = {
+            "enabled": bool(trust_answer_ids),
+            "requested_ids": requested_ids,
+            "valid_ids": valid_ids,
+            "invalid_ids": invalid_ids,
+            "ignored_ids": ignored_ids,
+            "used_ids": valid_ids if trust_answer_ids else [],
+        }
+
+    def _supporting_evidence_budget(
+        self,
+        answer_short: str,
+        demand: Optional[EvidenceDemand],
+    ) -> int:
+        configured_maximum = max(int(self.config.supporting_evidence_topk or 0), 0)
+        if not self.config.dynamic_supporting_evidence_budget or not answer_short:
+            return configured_maximum
+        maximum = configured_maximum or 4
+        normalized = re.sub(r"[^a-z]+", " ", answer_short.lower()).strip()
+        if normalized in {
+            "unanswerable",
+            "not answerable",
+            "not enough information",
+            "cannot be answered",
+            "no answer",
+            "unknown",
+        }:
+            return 0
+        intent = demand.intent if demand is not None else "fact"
+        if intent == "boolean" or normalized in {"yes", "no"}:
+            return min(maximum, 3)
+        if intent in {"global-summary", "aggregation"} or len(answer_short.split()) > 12:
+            return min(maximum, 2)
+        return min(maximum, 3)
 
     def _save_retrieval_outputs(self, retrieval_info: Dict[str, Any], output_dir: Path) -> None:
         retrieval_payload = {
             "query": retrieval_info["query"],
             "demand": retrieval_info["demand"].model_dump(),
+            "demand_provenance": self._normalized_demand_provenance(
+                retrieval_info["demand"]
+            ),
             "seed_results": retrieval_info["seed_results"],
             "typed_ppr_scores": retrieval_info["typed_ppr_scores"],
             "typed_ppr_score_parts": retrieval_info["typed_ppr_score_parts"],
@@ -808,12 +1231,17 @@ class EviBridgeRAG(BaseRAG):
             "retrieved_block_ids": retrieval_info["retrieved_block_ids"],
             "supporting_block_ids": retrieval_info.get("supporting_block_ids", []),
             "supporting_evidence": retrieval_info.get("supporting_evidence", []),
+            "supporting_evidence_budget": retrieval_info.get("supporting_evidence_budget"),
+            "citation_validation": retrieval_info.get("citation_validation", {}),
+            "answer_extraction": retrieval_info.get("answer_extraction", {}),
+            "fallback": retrieval_info.get("fallback", {}),
             "selected": retrieval_info.get("selected_payload", []),
             "selected_bridges": self._bridge_payloads(retrieval_info.get("selected_bridges", [])),
             "verification": retrieval_info["verification"].model_dump()
             if retrieval_info["verification"]
             else None,
             "iterations": retrieval_info["iterations"],
+            "stopping_reason": retrieval_info.get("stopping_reason"),
         }
         with open(output_dir / "retrieval_res.json", "w", encoding="utf-8") as f:
             json.dump(retrieval_payload, f, ensure_ascii=False, indent=2)
@@ -832,6 +1260,33 @@ class EviBridgeRAG(BaseRAG):
                     ensure_ascii=False,
                     indent=2,
                 )
+
+    @staticmethod
+    def _normalized_demand_provenance(demand: EvidenceDemand) -> Dict[str, Any]:
+        allowed_sources = {"rule", "llm", "hybrid", "fallback"}
+        source = str(demand.source or "").strip().lower()
+        if source not in allowed_sources:
+            source = "fallback"
+        raw_provenance = (
+            demand.provenance if isinstance(demand.provenance, dict) else {}
+        )
+        parser = str(raw_provenance.get("parser") or source).strip().lower()
+        if parser not in allowed_sources:
+            parser = source
+        signals = [
+            str(item).strip()
+            for item in raw_provenance.get("signals", [])
+            if str(item).strip()
+        ]
+        return {
+            "source": source,
+            "parser": parser,
+            "signals": list(dict.fromkeys(signals)),
+            "intent": demand.intent,
+            "confidence": float(demand.confidence),
+            "rationale": str(demand.rationale or ""),
+            "subqueries": list(demand.subqueries or []),
+        }
 
     def _empty_retrieval(self, query: str, demand: EvidenceDemand) -> Dict[str, Any]:
         verdict = SufficiencyVerdict(
@@ -858,6 +1313,7 @@ class EviBridgeRAG(BaseRAG):
             "verification": verdict,
             "iterations": [],
             "selected_payload": [],
+            "stopping_reason": "no_seed_results",
         }
 
     def _enabled_bridge_types(self) -> List[str]:
@@ -876,16 +1332,58 @@ class EviBridgeRAG(BaseRAG):
         selected_ids: List[int],
         verdict: SufficiencyVerdict,
     ) -> Dict[int, float]:
+        refined, _ = self._refine_seed_scores_with_diagnostics(
+            query=query,
+            demand=demand,
+            seed_scores=seed_scores,
+            selected_ids=selected_ids,
+            verdict=verdict,
+            excluded_candidate_ids=set(selected_ids),
+        )
+        return refined
+
+    def _refine_seed_scores_with_diagnostics(
+        self,
+        query: str,
+        demand: EvidenceDemand,
+        seed_scores: Dict[int, float],
+        selected_ids: List[int],
+        verdict: SufficiencyVerdict,
+        excluded_candidate_ids: set[int],
+    ) -> Tuple[Dict[int, float], Dict[str, Any]]:
         refined = seed_scores.copy()
-        for block_id in selected_ids:
-            refined[block_id] = max(refined.get(block_id, 0.0), 0.5)
+        new_sources: Dict[int, List[str]] = {}
+
+        def add_candidate(block_id: int, score: float, source: str) -> None:
+            if (
+                block_id in excluded_candidate_ids
+                or block_id in refined
+                or block_id not in self.evibridge_index.blocks
+            ):
+                return
+            refined[block_id] = float(score)
+            new_sources.setdefault(block_id, []).append(source)
+
+        bridge_types = list(verdict.next_bridge) or self._bridge_types_for_action(verdict.next_action)
         for bridge in self.evibridge_index.get_related_bridges(
             selected_ids,
             expand_depth=1,
-            bridge_types=verdict.next_bridge,
+            bridge_types=bridge_types,
         ):
-            refined[bridge.target_id] = max(refined.get(bridge.target_id, 0.0), 0.35 * bridge.weight)
-            refined[bridge.source_id] = max(refined.get(bridge.source_id, 0.0), 0.35 * bridge.weight)
+            for block_id in (bridge.source_id, bridge.target_id):
+                add_candidate(
+                    block_id,
+                    max(0.35 * float(bridge.weight), 0.05),
+                    f"{bridge.bridge_type}:{bridge.relation_type}",
+                )
+                block = self.evibridge_index.blocks.get(block_id)
+                if block and block.block_type in set(self.config.bridge_auxiliary_types):
+                    for target_id in self._answer_targets_for_auxiliary(block):
+                        add_candidate(
+                            target_id,
+                            max(0.3 * float(bridge.weight), 0.05),
+                            f"auxiliary:{block.block_id}",
+                        )
         target_types = self._target_block_types_for_action(verdict)
         if target_types:
             for item in self._type_seed_results(
@@ -895,8 +1393,39 @@ class EviBridgeRAG(BaseRAG):
                 seed_family=verdict.next_action,
                 score_boost=0.45,
             ):
-                refined[item["block_id"]] = max(refined.get(item["block_id"], 0.0), item["score"])
-        return refined
+                add_candidate(
+                    item["block_id"],
+                    float(item["score"]),
+                    f"targeted:{verdict.next_action}",
+                )
+        final_types = set(self.config.final_evidence_types)
+        new_candidate_ids = sorted(new_sources)
+        new_answer_candidate_ids = [
+            block_id
+            for block_id in new_candidate_ids
+            if self.evibridge_index.blocks[block_id].block_type in final_types
+        ]
+        return refined, {
+            "action": verdict.next_action,
+            "bridge_types": bridge_types,
+            "query": query,
+            "new_candidate_ids": new_candidate_ids,
+            "new_answer_candidate_ids": new_answer_candidate_ids,
+            "candidate_sources": {
+                str(block_id): sources
+                for block_id, sources in sorted(new_sources.items())
+            },
+        }
+
+    @staticmethod
+    def _bridge_types_for_action(next_action: str) -> List[str]:
+        if next_action in {"expand_context", "expand_table_caption"}:
+            return ["context"]
+        if next_action == "expand_semantic_bridge":
+            return ["semantic"]
+        if next_action == "expand_hierarchy_context":
+            return ["hierarchy"]
+        return ["context", "semantic", "hierarchy"]
 
     @staticmethod
     def _target_block_types_for_action(verdict: SufficiencyVerdict) -> List[str]:
@@ -907,6 +1436,8 @@ class EviBridgeRAG(BaseRAG):
         if verdict.next_action == "expand_hierarchy_context":
             return ["summary", "patch", "title"]
         if verdict.next_action == "expand_relevant_evidence":
+            return ["paragraph", "table", "figure", "caption"]
+        if verdict.next_action == "expand_context":
             return ["paragraph", "table", "figure", "caption"]
         return []
 
@@ -1032,6 +1563,95 @@ class EviBridgeRAG(BaseRAG):
         if normalized.startswith("no") or normalized in {"false", "incorrect"}:
             return "No"
         return text
+
+    @staticmethod
+    def _extract_short_answer_from_evidence(
+        query: str,
+        answer_short: str,
+        demand: EvidenceDemand,
+        evidence_items: List[Dict[str, Any]],
+    ) -> Tuple[str, Dict[str, Any]]:
+        original = str(answer_short or "").strip()
+        diagnostics = {
+            "enabled": True,
+            "applied": False,
+            "source_block_id": None,
+            "original_answer": original,
+            "extracted_answer": original,
+            "question": query,
+        }
+        normalized_unanswerable = re.sub(
+            r"[^a-z]+",
+            " ",
+            original.lower(),
+        ).strip()
+        if normalized_unanswerable in {
+            "unanswerable",
+            "not answerable",
+            "not enough information",
+            "cannot be answered",
+            "no answer",
+            "unknown",
+        }:
+            diagnostics["extracted_answer"] = "Unanswerable"
+            diagnostics["applied"] = original != "Unanswerable"
+            return "Unanswerable", diagnostics
+        if demand.intent == "boolean":
+            normalized = EviBridgeRAG._normalize_answer_short(original, demand)
+            diagnostics["extracted_answer"] = normalized
+            diagnostics["applied"] = normalized != original
+            return normalized, diagnostics
+        if demand.intent in {"global-summary", "aggregation"} or not original:
+            return original, diagnostics
+
+        candidates: List[str] = []
+
+        def add_candidate(value: str) -> None:
+            cleaned = str(value or "").strip(" \t\r\n\"'`.,;:")
+            if cleaned and cleaned not in candidates and len(cleaned.split()) <= 12:
+                candidates.append(cleaned)
+
+        stripped = re.sub(
+            r"^\s*(?:the\s+answer\s+is|answer\s*:|it\s+is)\s+",
+            "",
+            original,
+            flags=re.I,
+        )
+        add_candidate(
+            re.split(
+                r"\s*(?:,\s*)?\b(?:because|since|as the evidence|according to)\b",
+                stripped,
+                maxsplit=1,
+                flags=re.I,
+            )[0]
+        )
+        for quoted in re.findall(r"[\"']([^\"']{1,120})[\"']", original):
+            add_candidate(quoted)
+        numeric = re.search(
+            r"\b\d+(?:\.\d+)?(?:\s*%)?(?:\s+(?:participants?|people|"
+            r"samples?|documents?|papers?|years?|months?|days?|points?))?\b",
+            stripped,
+            re.I,
+        )
+        if numeric:
+            add_candidate(numeric.group(0))
+        add_candidate(stripped)
+
+        for candidate in candidates:
+            if candidate == original:
+                continue
+            for item in evidence_items:
+                evidence_text = str(item.get("text") or "")
+                if candidate.lower() in evidence_text.lower():
+                    diagnostics.update(
+                        {
+                            "applied": True,
+                            "source_block_id": item.get("block_id"),
+                            "extracted_answer": candidate,
+                        }
+                    )
+                    return candidate, diagnostics
+        return original, diagnostics
 
     @staticmethod
     def _role(block: EvidenceBlock, demand: EvidenceDemand) -> str:

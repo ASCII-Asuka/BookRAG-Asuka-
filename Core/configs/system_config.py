@@ -1,4 +1,5 @@
 import yaml
+from pathlib import Path
 from Core.configs.mineru_config import MinerU
 from Core.configs.llm_config import LLMConfig
 from Core.configs.tree_config import TreeConfig
@@ -7,7 +8,7 @@ from Core.configs.vlm_config import VLMConfig
 from Core.configs.rag_config import RAGConfig
 from Core.configs.vdb_config import VDBConfig
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Any, Dict, Optional, Set
 
 
 class SystemConfig(BaseModel):
@@ -46,8 +47,7 @@ class SystemConfig(BaseModel):
 
 
 def load_system_config(path: str = "../configs/default.yaml") -> SystemConfig:
-    with open(path, "r", encoding="utf-8") as f:
-        raw_config = yaml.safe_load(f)
+    raw_config = _load_raw_config(Path(path).resolve(), seen=set())
 
     if "rag" in raw_config:
         rag_data = raw_config["rag"]
@@ -55,3 +55,32 @@ def load_system_config(path: str = "../configs/default.yaml") -> SystemConfig:
 
     cfg = SystemConfig(**raw_config)
     return cfg
+
+
+def _load_raw_config(path: Path, seen: Set[Path]) -> Dict[str, Any]:
+    if path in seen:
+        chain = " -> ".join(str(item) for item in [*seen, path])
+        raise ValueError(f"Circular config inheritance detected: {chain}")
+    seen = {*seen, path}
+    with path.open("r", encoding="utf-8") as f:
+        raw_config = yaml.safe_load(f) or {}
+    if not isinstance(raw_config, dict):
+        raise ValueError(f"System config must contain a YAML mapping: {path}")
+    parent_value = raw_config.pop("extends", None)
+    if not parent_value:
+        return raw_config
+    parent_path = Path(str(parent_value))
+    if not parent_path.is_absolute():
+        parent_path = (path.parent / parent_path).resolve()
+    parent_config = _load_raw_config(parent_path, seen=seen)
+    return _deep_merge(parent_config, raw_config)
+
+
+def _deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
+    merged = dict(base)
+    for key, value in override.items():
+        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+            merged[key] = _deep_merge(merged[key], value)
+        else:
+            merged[key] = value
+    return merged

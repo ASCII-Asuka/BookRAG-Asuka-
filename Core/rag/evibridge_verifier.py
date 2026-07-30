@@ -234,6 +234,8 @@ class EvidenceSufficiencyVerifier:
         rule_verdict = self.rule_verifier.verify(query, demand, evidence, bridges)
         if not self.enable_llm or self.llm is None:
             return rule_verdict
+        if rule_verdict.sufficient or set(rule_verdict.missing) & HARD_RULE_MISSING:
+            return rule_verdict
         try:
             prompt = self._prompt(query, demand, evidence, rule_verdict)
             llm_verdict = self.llm.get_json_completion(prompt, SufficiencyVerdict)
@@ -270,10 +272,38 @@ class EvidenceSufficiencyVerifier:
         missing = list(dict.fromkeys(str(item) for item in (llm_verdict.missing or [])))
         sufficient = bool(llm_verdict.sufficient) and not missing
         if sufficient:
-            next_action = "accept"
+            return SufficiencyVerdict(
+                sufficient=True,
+                missing=[],
+                missing_types=[],
+                missing_bridge_types=[],
+                relevance=max(0.0, min(float(llm_verdict.relevance), 1.0)),
+                connectivity=max(0.0, min(float(llm_verdict.connectivity), 1.0)),
+                coverage=max(0.0, min(float(llm_verdict.coverage), 1.0)),
+                specificity=max(0.0, min(float(llm_verdict.specificity), 1.0)),
+                noise=max(0.0, min(float(llm_verdict.noise), 1.0)),
+                noise_warning=False,
+                next_bridge=[],
+                next_action="accept",
+                reason=str(llm_verdict.reason or "sufficient"),
+            )
+        if not missing:
+            missing = list(rule_verdict.missing) or ["insufficient_evidence"]
+        if not missing_types:
+            missing_types = list(rule_verdict.missing_types)
+        if not missing_bridge_types:
+            missing_bridge_types = list(rule_verdict.missing_bridge_types)
+        if not next_bridge:
+            next_bridge = list(rule_verdict.next_bridge)
+        if next_action == "accept":
+            next_action = (
+                rule_verdict.next_action
+                if rule_verdict.next_action != "accept"
+                else "expand_relevant_evidence"
+            )
         return SufficiencyVerdict(
-            sufficient=sufficient,
-            missing=[] if sufficient else missing,
+            sufficient=False,
+            missing=missing,
             missing_types=list(dict.fromkeys(str(item).strip().lower() for item in missing_types)),
             missing_bridge_types=list(dict.fromkeys(str(item).strip().lower() for item in missing_bridge_types)),
             relevance=max(0.0, min(float(llm_verdict.relevance), 1.0)),

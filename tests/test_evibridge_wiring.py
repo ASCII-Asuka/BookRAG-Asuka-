@@ -48,6 +48,16 @@ class EviBridgeWiringTests(unittest.TestCase):
 
         self.assertEqual(cfg.ablation_variant, "wo_demand_aware_seed_recall")
 
+    def test_evibridge_ablation_config_inherits_runnable_base_config(self):
+        from Core.configs.system_config import load_system_config
+
+        repo_root = Path(__file__).resolve().parents[1]
+        cfg = load_system_config(str(repo_root / "config" / "evibridge_wo_context.yaml"))
+
+        self.assertEqual(cfg.rag.strategy_config.ablation_variant, "wo_context_edges")
+        self.assertEqual(cfg.mineru.backend, "pipeline")
+        self.assertEqual(cfg.rag.strategy_config.method_suffix, "evibridge_wo_context_edges")
+
     def test_construct_evibridge_index_builds_tree_then_evibridge_index(self):
         _stub_runtime_imports()
         from Core.construct_index import construct_evibridge_index

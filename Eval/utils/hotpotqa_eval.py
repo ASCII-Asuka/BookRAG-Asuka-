@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 import re
@@ -14,6 +15,10 @@ from Core.configs.dataset_config import DatasetConfig
 
 
 YES_NO_NOANSWER = {"yes", "no", "noanswer"}
+
+
+class HotpotQARunValidationError(ValueError):
+    """Raised when a HotpotQA run is incomplete and cannot be scored fairly."""
 
 
 def normalize_answer(text: Any) -> str:
@@ -148,12 +153,23 @@ def eval_hotpotqa(
     rows = data_df.to_dict(orient="records") if hasattr(data_df, "to_dict") else list(data_df)
     predictions: Dict[str, Dict[str, Any]] = {}
     detailed_rows: List[Dict[str, Any]] = []
+    run_issues: List[str] = []
+    seen_qids = set()
 
     for row in tqdm(rows, desc="Evaluating HotpotQA"):
         doc_uuid = str(row.get("doc_uuid"))
         qid = _question_id(row)
+        if not qid:
+            run_issues.append(f"{doc_uuid}: missing question id in dataset row")
+            continue
+        if qid in seen_qids:
+            run_issues.append(f"duplicate dataset question id: {qid}")
+        seen_qids.add(qid)
         result_dir = Path(data_cfg.working_dir) / doc_uuid / f"eval_{data_cfg.dataset_name}_{method}"
         final_result = _load_matching_final_result(result_dir / "final_results.json", qid)
+        if not final_result:
+            run_issues.append(f"{doc_uuid}/{qid}: missing matching final result")
+            continue
         pred_answer = _prediction_answer(final_result)
         pred_sp = _prediction_supporting_facts(result_dir, final_result, row)
         predictions[qid] = {"answer": pred_answer, "sp": pred_sp}
@@ -163,6 +179,12 @@ def eval_hotpotqa(
             "pred_supporting_facts": pred_sp,
         }
         detailed_rows.append(detail)
+
+    if run_issues:
+        preview = "\n".join(f"- {item}" for item in run_issues[:20])
+        raise HotpotQARunValidationError(
+            f"HotpotQA run validation failed with {len(run_issues)} issue(s):\n{preview}"
+        )
 
     scores = evaluate_hotpotqa_predictions(rows, predictions)
     for detail in detailed_rows:
@@ -176,6 +198,21 @@ def eval_hotpotqa(
     score_path = save_dir / f"final_eval_{data_cfg.dataset_name}_{method}.score.json"
     detail_path.write_text(json.dumps(detailed_rows, ensure_ascii=False, indent=2), encoding="utf-8")
     score_path.write_text(json.dumps(scores, ensure_ascii=False, indent=2), encoding="utf-8")
+    manifest = {
+        "complete": True,
+        "dataset_name": data_cfg.dataset_name,
+        "method": method,
+        "expected_questions": len(rows),
+        "predictions_questions": len(predictions),
+        "documents": len({str(row.get("doc_uuid")) for row in rows}),
+        "dataset_sha256": hashlib.sha256(
+            json.dumps(rows, ensure_ascii=False, sort_keys=True, default=str).encode("utf-8")
+        ).hexdigest(),
+    }
+    (save_dir / f"coverage_{data_cfg.dataset_name}_{method}.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
     print(json.dumps(scores, ensure_ascii=False, indent=2))
     print(f"Saved detailed results to {detail_path}")
     return scores
@@ -236,10 +273,22 @@ def _facts_from_items(values: Any) -> List[List[Any]]:
     for item in values:
         if not isinstance(item, dict):
             continue
-        title = item.get("title") or item.get("hotpot_title") or item.get("section_id")
+        metadata = item.get("metadata") if isinstance(item.get("metadata"), dict) else {}
+        title = (
+            item.get("title")
+            or item.get("hotpot_title")
+            or item.get("section_id")
+            or metadata.get("title")
+            or metadata.get("hotpot_title")
+            or metadata.get("section_id")
+        )
         sent_id = item.get("sent_id")
         if sent_id is None:
             sent_id = item.get("hotpot_sent_id")
+        if sent_id is None:
+            sent_id = metadata.get("sent_id")
+        if sent_id is None:
+            sent_id = metadata.get("hotpot_sent_id")
         if title is not None and sent_id is not None:
             fact = [str(title), int(sent_id)]
             if fact not in facts:

@@ -39,12 +39,58 @@ def parse_eval_spec(spec: str) -> Tuple[Optional[str], Path]:
     return None, Path(spec)
 
 
-def collect_rows(eval_specs: Iterable[str], allow_missing: bool = False) -> List[Dict[str, Any]]:
+def collect_rows(
+    eval_specs: Iterable[str],
+    allow_missing: bool = False,
+    require_manifests: bool = True,
+) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
+    expected_policy: Optional[Dict[str, Any]] = None
     for spec in eval_specs:
         method, path = parse_eval_spec(spec)
         with path.open("r", encoding="utf-8") as f:
             payload = json.load(f)
+        coverage_path = path.parent / "coverage_manifest.json"
+        export_summary_path = path.parent / "export_summary.json"
+        if require_manifests and (
+            not coverage_path.exists() or not export_summary_path.exists()
+        ):
+            raise ValueError(
+                f"{path} is missing coverage_manifest.json or export_summary.json. "
+                "Refusing to build a paper table without reproducibility manifests."
+            )
+        policy = None
+        if coverage_path.exists():
+            coverage = json.loads(coverage_path.read_text(encoding="utf-8"))
+            if not coverage.get("complete"):
+                raise ValueError(f"{coverage_path} does not mark the run complete.")
+            expected = coverage.get("expected_questions")
+            predicted = coverage.get("predictions_questions")
+            if expected is not None and predicted is not None and int(expected) != int(predicted):
+                raise ValueError(
+                    f"{coverage_path} reports expected_questions={expected}, "
+                    f"predictions_questions={predicted}."
+                )
+        if export_summary_path.exists():
+            export_summary = json.loads(
+                export_summary_path.read_text(encoding="utf-8")
+            )
+            policy = {
+                key: export_summary.get(key)
+                for key in (
+                    "answer_source",
+                    "paragraph_evidence_only",
+                    "top_k_evidence",
+                    "dynamic_evidence_topk",
+                )
+            }
+            if expected_policy is None:
+                expected_policy = policy
+            elif policy != expected_policy:
+                raise ValueError(
+                    "All methods in a paper table must use a uniform export policy; "
+                    f"expected {expected_policy}, got {policy} for {path}."
+                )
         missing = _read_missing(payload)
         if not allow_missing and missing not in (None, 0):
             raise ValueError(
@@ -58,14 +104,32 @@ def collect_rows(eval_specs: Iterable[str], allow_missing: bool = False) -> List
                 "Evidence F1": _read_metric(payload, "Evidence F1", "evidence_f1"),
                 "Missing": missing,
                 "Path": str(path),
+                "Export Policy": policy,
             }
+        )
+    if (
+        require_manifests
+        and expected_policy is not None
+        and expected_policy.get("dynamic_evidence_topk") is not True
+    ):
+        raise ValueError(
+            "Paper-table export policy must set dynamic_evidence_topk=true "
+            "for every method."
         )
     return rows
 
 
-def collect_from_root(root: Path, allow_missing: bool = False) -> List[Dict[str, Any]]:
+def collect_from_root(
+    root: Path,
+    allow_missing: bool = False,
+    require_manifests: bool = True,
+) -> List[Dict[str, Any]]:
     specs = [str(path) for path in sorted(root.rglob("official_eval.json"))]
-    return collect_rows(specs, allow_missing=allow_missing)
+    return collect_rows(
+        specs,
+        allow_missing=allow_missing,
+        require_manifests=require_manifests,
+    )
 
 
 def format_markdown_table(rows: List[Dict[str, Any]]) -> str:
@@ -111,13 +175,30 @@ def main() -> None:
         action="store_true",
         help="Allow official_eval.json files with Missing predictions > 0.",
     )
+    parser.add_argument(
+        "--allow-legacy-manifests",
+        action="store_true",
+        help="Allow legacy result directories without coverage/export manifests.",
+    )
     args = parser.parse_args()
 
     rows: List[Dict[str, Any]] = []
     if args.root:
-        rows.extend(collect_from_root(args.root, allow_missing=args.allow_missing))
+        rows.extend(
+            collect_from_root(
+                args.root,
+                allow_missing=args.allow_missing,
+                require_manifests=not args.allow_legacy_manifests,
+            )
+        )
     if args.eval:
-        rows.extend(collect_rows(args.eval, allow_missing=args.allow_missing))
+        rows.extend(
+            collect_rows(
+                args.eval,
+                allow_missing=args.allow_missing,
+                require_manifests=not args.allow_legacy_manifests,
+            )
+        )
     if not rows:
         raise SystemExit("Provide at least one --eval or --root.")
 

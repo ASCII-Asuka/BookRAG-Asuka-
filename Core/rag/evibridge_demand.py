@@ -28,6 +28,8 @@ class EvidenceDemand(BaseModel):
     confidence: float = 1.0
     source: str = "rule"
     rationale: str = ""
+    subqueries: List[str] = Field(default_factory=list)
+    provenance: Dict[str, Any] = Field(default_factory=dict)
 
 
 ALLOWED_BRIDGE_NEEDS = {"context", "semantic", "hierarchy"}
@@ -46,6 +48,15 @@ _AGG_RE = re.compile(r"\b(how many|count|average|total|all|list)\b|多少|几个
 _BOOLEAN_RE = re.compile(r"^\s*(is|are|do|does|did|can|was|were|has|have|should|would|could)\b", re.I)
 _NUMERIC_FACT_RE = re.compile(r"^\s*(how many|how much|what (?:is|was) the size|what size)\b", re.I)
 _LOCAL_HOW_FACT_RE = re.compile(r"^\s*how\s+(?:was|were|is|are|did|do|does)\b", re.I)
+_IMPLICIT_ENTITY_CHAIN_RE = re.compile(
+    r"^\s*(?:what|which|who|where|when)\b.+\b(?:who|whose|that|which)\b",
+    re.I,
+)
+_NESTED_RELATION_RE = re.compile(
+    r"^\s*(?:what|which|who|where|when)\b.+\bof\b.+\bof\b",
+    re.I,
+)
+_PARALLEL_ENTITY_RE = re.compile(r"\b(?:both|same|respectively|versus|vs\.?)\b", re.I)
 
 
 class DemandParser:
@@ -54,16 +65,20 @@ class DemandParser:
         llm: Optional[Any] = None,
         mode: Literal["rule", "llm", "hybrid"] = "hybrid",
         confidence_threshold: float = 0.7,
+        dataset_profile: Literal["auto", "qasper", "hotpotqa"] = "auto",
         qasper_demand_mode: Literal["default", "conservative"] = "default",
         enable_boolean_answer_hint: bool = True,
         multi_hop_requires_explicit_bridge: bool = False,
+        enable_implicit_multihop: bool = True,
     ):
         self.llm = llm
         self.mode = mode
         self.confidence_threshold = confidence_threshold
+        self.dataset_profile = dataset_profile
         self.qasper_demand_mode = qasper_demand_mode
         self.enable_boolean_answer_hint = enable_boolean_answer_hint
         self.multi_hop_requires_explicit_bridge = multi_hop_requires_explicit_bridge
+        self.enable_implicit_multihop = enable_implicit_multihop
 
     def parse(self, query: str) -> EvidenceDemand:
         rule_demand = self._parse_rule(query)
@@ -76,10 +91,24 @@ class DemandParser:
                 prompt_or_memory=self._prompt(query),
                 schema=EvidenceDemand,
             )
-            return sanitize_demand(llm_demand, fallback=rule_demand)
+            parsed = sanitize_demand(llm_demand, fallback=rule_demand)
+            parsed.source = "hybrid" if self.mode == "hybrid" else "llm"
+            parsed.provenance = {
+                **parsed.provenance,
+                "parser": parsed.source,
+                "rule_fallback_intent": rule_demand.intent,
+            }
+            return parsed
         except TypeError:
             llm_demand = self.llm.get_json_completion(self._prompt(query), EvidenceDemand)
-            return sanitize_demand(llm_demand, fallback=rule_demand)
+            parsed = sanitize_demand(llm_demand, fallback=rule_demand)
+            parsed.source = "hybrid" if self.mode == "hybrid" else "llm"
+            parsed.provenance = {
+                **parsed.provenance,
+                "parser": parsed.source,
+                "rule_fallback_intent": rule_demand.intent,
+            }
+            return parsed
         except Exception:
             return sanitize_demand(rule_demand, fallback=rule_demand)
 
@@ -92,12 +121,27 @@ class DemandParser:
         granularity: EvidenceGranularity = "block"
         confidence = 0.68
         rationale = "default fact demand"
-        conservative = self.qasper_demand_mode == "conservative"
-        multihop_match = (
-            _EXPLICIT_MULTIHOP_RE.search(text)
-            if self.multi_hop_requires_explicit_bridge or conservative
-            else _MULTIHOP_RE.search(text)
+        signal = "default_fact"
+        conservative = (
+            self.qasper_demand_mode == "conservative"
+            or self.dataset_profile == "qasper"
         )
+        hotpot_profile = self.dataset_profile == "hotpotqa"
+        explicit_multihop = _EXPLICIT_MULTIHOP_RE.search(text)
+        implicit_multihop = (
+            (
+                _IMPLICIT_ENTITY_CHAIN_RE.search(text)
+                or _NESTED_RELATION_RE.search(text)
+            )
+            if self.enable_implicit_multihop
+            else None
+        )
+        multihop_match = (
+            explicit_multihop or implicit_multihop
+            if self.multi_hop_requires_explicit_bridge or conservative
+            else _MULTIHOP_RE.search(text) or implicit_multihop
+        )
+        subqueries: List[str] = []
 
         if _TABLE_RE.search(text):
             intent = "table-figure"
@@ -105,22 +149,27 @@ class DemandParser:
             bridge_need = ["context"]
             confidence = 0.9
             rationale = "explicit table or figure signal"
-        elif conservative and self.enable_boolean_answer_hint and _BOOLEAN_RE.search(text):
-            intent = "boolean"
-            bridge_need = ["context"]
-            confidence = 0.9
-            rationale = "boolean question signal"
-        elif conservative and (_NUMERIC_FACT_RE.search(text) or _LOCAL_HOW_FACT_RE.search(text)):
-            intent = "fact"
-            bridge_need = ["context", "semantic"]
-            confidence = 0.9
-            rationale = "qasper local fact question signal"
-        elif _COMPARE_RE.search(text):
+            signal = "table_or_figure"
+        elif _COMPARE_RE.search(text) or _PARALLEL_ENTITY_RE.search(text):
             intent = "comparison"
             bridge_need = ["semantic", "context"]
             granularity = "entity"
             confidence = 0.86
             rationale = "comparison signal"
+            signal = "comparison"
+            subqueries = self._decompose_comparison(text)
+        elif conservative and self.enable_boolean_answer_hint and _BOOLEAN_RE.search(text):
+            intent = "boolean"
+            bridge_need = ["context"]
+            confidence = 0.9
+            rationale = "boolean question signal"
+            signal = "boolean"
+        elif conservative and (_NUMERIC_FACT_RE.search(text) or _LOCAL_HOW_FACT_RE.search(text)):
+            intent = "fact"
+            bridge_need = ["context", "semantic"]
+            confidence = 0.9
+            rationale = "qasper local fact question signal"
+            signal = "local_fact"
         elif _GLOBAL_RE.search(text):
             intent = "global-summary"
             scope = "document"
@@ -128,19 +177,35 @@ class DemandParser:
             bridge_need = ["hierarchy", "context"]
             confidence = 0.88
             rationale = "global summary signal"
+            signal = "global_summary"
         elif _AGG_RE.search(text) and not (conservative and _NUMERIC_FACT_RE.search(text)):
             intent = "aggregation"
             scope = "section"
             bridge_need = ["hierarchy", "context"]
             confidence = 0.82
             rationale = "aggregation signal"
-        elif multihop_match:
+            signal = "aggregation"
+        elif multihop_match or hotpot_profile:
             intent = "multi-hop"
             scope = "multi-document"
             granularity = "entity"
             bridge_need = ["semantic", "context"]
             confidence = 0.78
-            rationale = "multi-hop signal"
+            if implicit_multihop and not explicit_multihop:
+                rationale = "implicit entity or attribute chain signal"
+                signal = "implicit_entity_chain"
+                subqueries = self._decompose_implicit_chain(text)
+            elif hotpot_profile and not explicit_multihop:
+                rationale = "HotpotQA implicit multi-hop prior"
+                signal = "hotpotqa_implicit_multihop"
+                subqueries = (
+                    self._decompose_implicit_chain(text)
+                    or self._decompose_hotpot_chain(text)
+                )
+            else:
+                rationale = "explicit multi-hop signal"
+                signal = "explicit_multi_hop"
+                subqueries = self._decompose_implicit_chain(text)
 
         return EvidenceDemand(
             intent=intent,
@@ -151,7 +216,59 @@ class DemandParser:
             confidence=confidence,
             source="rule",
             rationale=rationale,
+            subqueries=subqueries,
+            provenance={"parser": "rule", "signals": [signal]},
         )
+
+    @staticmethod
+    def _decompose_implicit_chain(query: str) -> List[str]:
+        text = str(query or "").strip().rstrip("?")
+        relative = re.search(r"\b(who|whose|that|which)\b", text, re.I)
+        if relative:
+            marker = relative.group(1)
+            inner = f"{marker.capitalize()} {text[relative.end():].strip()}?"
+            outer = f"{text[:relative.start()].strip()}?"
+            return list(dict.fromkeys(item for item in [inner, outer] if len(item) > 2))[:2]
+        of_matches = list(re.finditer(r"\bof\b", text, re.I))
+        if len(of_matches) >= 2:
+            split_at = of_matches[0].end()
+            inner = f"What is known about {text[split_at:].strip()}?"
+            outer = f"{text[:of_matches[0].start()].strip()}?"
+            return list(dict.fromkeys([inner, outer]))[:2]
+        return []
+
+    @staticmethod
+    def _decompose_comparison(query: str) -> List[str]:
+        text = str(query or "").strip().rstrip("?")
+        parts = re.split(r"\b(?:and|versus|vs\.?)\b", text, maxsplit=1, flags=re.I)
+        if len(parts) != 2:
+            return []
+        return [
+            f"What evidence is relevant to {part.strip()}?"
+            for part in parts
+            if part.strip()
+        ][:2]
+
+    @staticmethod
+    def _decompose_hotpot_chain(query: str) -> List[str]:
+        text = str(query or "").strip().rstrip("?")
+        possessive = re.search(
+            r"((?:the\s+)?(?:[A-Za-z][\w'-]*\s+){0,3}"
+            r"[A-Za-z][\w'-]*'s\s+[A-Za-z][\w'-]*)",
+            text,
+            re.I,
+        )
+        if possessive:
+            relation = possessive.group(1).strip()
+            outer = text[: possessive.start()] + "the bridge entity" + text[possessive.end() :]
+            return [
+                f"Who or what is {relation}?",
+                f"{outer.strip()}?",
+            ]
+        return [
+            f"What bridge entity is described in: {text}?",
+            f"What attribute of that bridge entity answers: {text}?",
+        ]
 
     @staticmethod
     def _prompt(query: str) -> str:
@@ -194,6 +311,20 @@ def sanitize_demand(demand: EvidenceDemand, fallback: Optional[EvidenceDemand] =
     granularity = demand.granularity
     if demand.intent in {"fact", "boolean"}:
         granularity = "block"
+    subqueries = []
+    for item in demand.subqueries or fallback.subqueries or []:
+        value = " ".join(str(item).split()).strip()
+        if value and value not in subqueries:
+            subqueries.append(value)
+        if len(subqueries) >= 2:
+            break
+    source = str(demand.source or "").strip().lower()
+    if source not in {"rule", "llm", "hybrid", "fallback"}:
+        source = (
+            str(fallback.source or "").strip().lower()
+            if str(fallback.source or "").strip().lower() in {"rule", "llm", "hybrid", "fallback"}
+            else "fallback"
+        )
 
     return EvidenceDemand(
         intent=demand.intent,
@@ -202,8 +333,10 @@ def sanitize_demand(demand: EvidenceDemand, fallback: Optional[EvidenceDemand] =
         granularity=granularity,
         bridge_need=list(dict.fromkeys(bridge_need)),
         confidence=max(0.0, min(float(demand.confidence), 1.0)),
-        source=demand.source,
+        source=source,
         rationale=demand.rationale,
+        subqueries=subqueries,
+        provenance=dict(demand.provenance or fallback.provenance or {}),
     )
 
 

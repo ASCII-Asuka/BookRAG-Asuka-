@@ -203,6 +203,117 @@ class EviBridgeModuleTests(unittest.TestCase):
         self.assertEqual(collected.granularity, "block")
         self.assertEqual(comparison.intent, "comparison")
 
+    def test_implicit_entity_chain_generates_two_retrieval_subqueries(self):
+        _stub_rag_provider_imports()
+        from Core.rag.evibridge_demand import DemandParser
+
+        parser = DemandParser(
+            llm=None,
+            mode="rule",
+            qasper_demand_mode="conservative",
+            multi_hop_requires_explicit_bridge=True,
+        )
+
+        demand = parser.parse(
+            "What government position was held by the woman who portrayed "
+            "Corliss Archer in the film Kiss and Tell?"
+        )
+
+        self.assertEqual(demand.intent, "multi-hop")
+        self.assertEqual(demand.granularity, "entity")
+        self.assertEqual(len(demand.subqueries), 2)
+        self.assertIn("Corliss Archer", demand.subqueries[0])
+        self.assertIn("government position", demand.subqueries[1])
+        self.assertIn("implicit_entity_chain", demand.provenance["signals"])
+
+    def test_parallel_entity_comparison_generates_independent_subqueries(self):
+        _stub_rag_provider_imports()
+        from Core.rag.evibridge_demand import DemandParser
+
+        parser = DemandParser(
+            llm=None,
+            mode="rule",
+            qasper_demand_mode="conservative",
+            multi_hop_requires_explicit_bridge=True,
+        )
+
+        demand = parser.parse("Were Alice and Bob born in the same country?")
+
+        self.assertEqual(demand.intent, "comparison")
+        self.assertEqual(len(demand.subqueries), 2)
+        self.assertIn("Alice", demand.subqueries[0])
+        self.assertIn("Bob", demand.subqueries[1])
+
+    def test_hotpot_profile_routes_implicit_possessive_chain_as_multihop(self):
+        _stub_rag_provider_imports()
+        from Core.rag.evibridge_demand import DemandParser
+
+        parser = DemandParser(
+            llm=None,
+            mode="rule",
+            dataset_profile="hotpotqa",
+            multi_hop_requires_explicit_bridge=True,
+        )
+
+        demand = parser.parse("Where was the singer's mother born?")
+
+        self.assertEqual(demand.intent, "multi-hop")
+        self.assertEqual(demand.scope, "multi-document")
+        self.assertEqual(len(demand.subqueries), 2)
+        self.assertIn("singer's mother", demand.subqueries[0])
+        self.assertIn("hotpotqa_implicit_multihop", demand.provenance["signals"])
+
+    def test_evibridge_seed_recall_runs_subqueries_independently(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+
+        index = EvidenceBridgeIndex(
+            save_dir="",
+            blocks={
+                1: EvidenceBlock(
+                    block_id=1,
+                    block_type="paragraph",
+                    text="Corliss Archer was portrayed by Shirley Temple.",
+                ),
+                2: EvidenceBlock(
+                    block_id=2,
+                    block_type="paragraph",
+                    text="Shirley Temple served as a United States ambassador.",
+                ),
+            },
+            bridges=[],
+        )
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                bm25_topk=2,
+                enable_vector_recall=False,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=index,
+            bm25=index.build_bm25(),
+        )
+        subqueries = [
+            "Who portrayed Corliss Archer?",
+            "What government position did Shirley Temple hold?",
+        ]
+        demand = EvidenceDemand(
+            intent="multi-hop",
+            granularity="entity",
+            bridge_need=["semantic", "context"],
+            subqueries=subqueries,
+        )
+
+        seeds = rag._hybrid_seed_retrieval("What position did the actor hold?", demand)
+        by_id = {item["block_id"]: item for item in seeds}
+
+        self.assertIn(1, by_id)
+        self.assertIn(2, by_id)
+        self.assertIn(subqueries[0], by_id[1]["matched_queries"])
+        self.assertIn(subqueries[1], by_id[2]["matched_queries"])
+
     def test_entity_extraction_filters_question_words(self):
         entities = EvidenceBridgeIndex._extract_entities(
             "Which models did they use for the Stanford NER and MNMT experiments?"
@@ -380,6 +491,111 @@ class EviBridgeModuleTests(unittest.TestCase):
         self.assertNotIn("next_action", verdict.missing_types)
         self.assertEqual(verdict.missing_bridge_types, ["context"])
         self.assertEqual(verdict.next_action, "expand_table_caption")
+
+    def test_llm_verifier_enforces_consistent_accept_and_expand_states(self):
+        _stub_rag_provider_imports()
+        from Core.rag.evibridge_verifier import EvidenceSufficiencyVerifier, SufficiencyVerdict
+
+        rule_expand = SufficiencyVerdict(
+            sufficient=False,
+            missing=["relevant_evidence"],
+            missing_types=["evidence"],
+            missing_bridge_types=["semantic"],
+            next_bridge=["semantic"],
+            next_action="expand_semantic_bridge",
+            reason="relevant_evidence",
+        )
+        inconsistent_accept = SufficiencyVerdict(
+            sufficient=False,
+            missing=[],
+            missing_types=[],
+            missing_bridge_types=[],
+            next_bridge=[],
+            next_action="accept",
+            reason="not enough",
+        )
+        inconsistent_sufficient = SufficiencyVerdict(
+            sufficient=True,
+            missing=[],
+            missing_types=["summary"],
+            missing_bridge_types=["hierarchy"],
+            next_bridge=["hierarchy"],
+            next_action="expand_hierarchy_context",
+            reason="enough",
+        )
+
+        expand = EvidenceSufficiencyVerifier._sanitize_llm_verdict(
+            inconsistent_accept,
+            rule_expand,
+        )
+        accept = EvidenceSufficiencyVerifier._sanitize_llm_verdict(
+            inconsistent_sufficient,
+            SufficiencyVerdict(sufficient=True, next_action="accept"),
+        )
+
+        self.assertFalse(expand.sufficient)
+        self.assertTrue(expand.missing)
+        self.assertEqual(expand.next_action, "expand_semantic_bridge")
+        self.assertTrue(accept.sufficient)
+        self.assertEqual(accept.missing, [])
+        self.assertEqual(accept.missing_types, [])
+        self.assertEqual(accept.missing_bridge_types, [])
+        self.assertEqual(accept.next_bridge, [])
+        self.assertEqual(accept.next_action, "accept")
+
+    def test_llm_verifier_runs_only_for_rule_uncertainty(self):
+        _stub_rag_provider_imports()
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_verifier import EvidenceSufficiencyVerifier, SufficiencyVerdict
+
+        class CountingVerifierLLM:
+            def __init__(self):
+                self.calls = 0
+
+            def get_json_completion(self, prompt, schema, images=None, think_mode=False):
+                self.calls += 1
+                return SufficiencyVerdict(
+                    sufficient=False,
+                    missing=["semantic_link"],
+                    missing_bridge_types=["semantic"],
+                    next_bridge=["semantic"],
+                    next_action="expand_semantic_bridge",
+                    reason="need a bridge",
+                )
+
+        index = self._build_index()
+        llm = CountingVerifierLLM()
+        verifier = EvidenceSufficiencyVerifier(llm=llm, enable_llm=True)
+        fact_demand = EvidenceDemand(
+            intent="fact",
+            scope="local",
+            modality=["text"],
+            granularity="block",
+        )
+        multi_hop_demand = EvidenceDemand(
+            intent="multi-hop",
+            scope="local",
+            modality=["text"],
+            granularity="block",
+            bridge_need=["semantic"],
+        )
+
+        sufficient = verifier.verify(
+            index.blocks[1].text,
+            fact_demand,
+            [index.blocks[1]],
+            [],
+        )
+        uncertain = verifier.verify(
+            "How are Method A and results connected?",
+            multi_hop_demand,
+            [index.blocks[1], index.blocks[3]],
+            [],
+        )
+
+        self.assertTrue(sufficient.sufficient)
+        self.assertFalse(uncertain.sufficient)
+        self.assertEqual(llm.calls, 1)
 
     def test_rule_verifier_requires_broader_coverage_for_global_summary(self):
         _stub_rag_provider_imports()
@@ -877,6 +1093,421 @@ class EviBridgeModuleTests(unittest.TestCase):
 
         self.assertEqual(retrieval_info["supporting_block_ids"], [2])
 
+    def test_evibridge_new_controller_ablation_variants_disable_one_component(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_rag import EviBridgeRAG
+
+        selected_payload = [
+            {
+                "block_id": 1,
+                "block_type": "paragraph",
+                "selection_rank": 1,
+                "evidence_role": "answer_evidence",
+                "score_parts": {"rerank_score": 0.1, "rerank_rank": 2},
+            },
+            {
+                "block_id": 2,
+                "block_type": "paragraph",
+                "selection_rank": 2,
+                "evidence_role": "answer_evidence",
+                "score_parts": {"rerank_score": 0.9, "rerank_rank": 1},
+            },
+        ]
+        citation_ablation = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                ablation_variant="wo_citation_reorder",
+                supporting_evidence_topk=1,
+                enable_supporting_rerank=True,
+                trust_answer_supporting_ids=True,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+        )
+        citation_retrieval = {"selected_payload": selected_payload}
+        citation_ablation._apply_answer_supporting_ids(
+            citation_retrieval,
+            supporting_ids=[1],
+        )
+        reranker_ablation = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                ablation_variant="wo_support_reranker",
+                supporting_evidence_topk=1,
+                enable_supporting_rerank=True,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+        )
+
+        supporting = reranker_ablation._supporting_evidence_payload(selected_payload)
+
+        self.assertEqual(citation_retrieval["supporting_block_ids"], [2])
+        self.assertFalse(citation_retrieval["citation_validation"]["enabled"])
+        self.assertEqual([item["block_id"] for item in supporting], [1])
+
+    def test_evibridge_verifier_and_implicit_multihop_ablation_variants_are_isolated(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_rag import EviBridgeRAG
+
+        verifier_ablation = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                ablation_variant="wo_verifier_repair",
+                enable_llm_verifier=True,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+        )
+        implicit_ablation = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                ablation_variant="wo_implicit_multihop",
+                dataset_profile="hotpotqa",
+                qasper_demand_mode="default",
+                multi_hop_requires_explicit_bridge=False,
+                demand_parser="rule",
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+        )
+
+        demand = implicit_ablation.demand_parser.parse(
+            "Where was the singer's mother born?"
+        )
+
+        self.assertFalse(verifier_ablation.verifier.enable_llm)
+        self.assertEqual(demand.intent, "fact")
+
+    def test_evibridge_validates_answer_supporting_ids_and_records_diagnostics(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                supporting_evidence_topk=3,
+                enable_supporting_rerank=True,
+                trust_answer_supporting_ids=True,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+        )
+        retrieval_info = {
+            "demand": EvidenceDemand(intent="fact"),
+            "selected_payload": [
+                {
+                    "block_id": 1,
+                    "block_type": "paragraph",
+                    "selection_rank": 1,
+                    "evidence_role": "answer_evidence",
+                    "score_parts": {"rerank_score": 0.1, "rerank_rank": 2},
+                },
+                {
+                    "block_id": 2,
+                    "block_type": "paragraph",
+                    "selection_rank": 2,
+                    "evidence_role": "answer_evidence",
+                    "score_parts": {"rerank_score": 0.95, "rerank_rank": 1},
+                },
+                {
+                    "block_id": 5,
+                    "block_type": "entity",
+                    "selection_rank": 3,
+                    "evidence_role": "bridge_auxiliary",
+                    "score_parts": {"rerank_score": 1.0, "rerank_rank": 0},
+                },
+            ],
+        }
+
+        rag._apply_answer_supporting_ids(
+            retrieval_info,
+            supporting_ids=[1, 999, 5, 1],
+            answer_short="Method A",
+        )
+
+        self.assertEqual(retrieval_info["supporting_block_ids"], [1, 2])
+        self.assertEqual(
+            retrieval_info["citation_validation"],
+            {
+                "enabled": True,
+                "requested_ids": [1, 999, 5],
+                "valid_ids": [1],
+                "invalid_ids": [999, 5],
+                "ignored_ids": [999, 5],
+                "used_ids": [1],
+            },
+        )
+        self.assertEqual(retrieval_info["supporting_evidence_budget"], 3)
+
+    def test_evibridge_uses_dynamic_supporting_evidence_budget(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                supporting_evidence_topk=4,
+                dynamic_supporting_evidence_budget=True,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+        )
+        selected_payload = [
+            {
+                "block_id": block_id,
+                "block_type": "paragraph",
+                "selection_rank": block_id,
+                "evidence_role": "answer_evidence",
+                "score_parts": {},
+            }
+            for block_id in range(1, 5)
+        ]
+
+        unanswerable = {
+            "demand": EvidenceDemand(intent="fact"),
+            "selected_payload": selected_payload,
+        }
+        rag._apply_answer_supporting_ids(
+            unanswerable,
+            supporting_ids=[1, 2],
+            answer_short="Unanswerable",
+        )
+        boolean = {
+            "demand": EvidenceDemand(intent="boolean"),
+            "selected_payload": selected_payload,
+        }
+        rag._apply_answer_supporting_ids(
+            boolean,
+            supporting_ids=[1, 2, 3, 4],
+            answer_short="Yes",
+        )
+        global_summary = {
+            "demand": EvidenceDemand(intent="global-summary"),
+            "selected_payload": selected_payload,
+        }
+        rag._apply_answer_supporting_ids(
+            global_summary,
+            supporting_ids=[1, 2, 3, 4],
+            answer_short="The paper gives a concise summary.",
+        )
+
+        self.assertEqual(unanswerable["supporting_block_ids"], [])
+        self.assertEqual(unanswerable["supporting_evidence_budget"], 0)
+        self.assertEqual(boolean["supporting_block_ids"], [1, 2, 3])
+        self.assertEqual(boolean["supporting_evidence_budget"], 3)
+        self.assertEqual(global_summary["supporting_block_ids"], [1, 2])
+        self.assertEqual(global_summary["supporting_evidence_budget"], 2)
+
+    def test_evibridge_topk_zero_keeps_unlimited_support_when_dynamic_budget_disabled(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                supporting_evidence_topk=0,
+                dynamic_supporting_evidence_budget=False,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+        )
+        retrieval = {
+            "demand": EvidenceDemand(intent="fact"),
+            "selected_payload": [
+                {
+                    "block_id": block_id,
+                    "block_type": "paragraph",
+                    "selection_rank": block_id,
+                    "evidence_role": "answer_evidence",
+                    "score_parts": {},
+                }
+                for block_id in [1, 2]
+            ],
+        }
+
+        rag._apply_answer_supporting_ids(
+            retrieval,
+            supporting_ids=[],
+            answer_short="Method A",
+        )
+
+        self.assertEqual(retrieval["supporting_block_ids"], [1, 2])
+
+    def test_evibridge_selected_payload_preserves_hotpot_sentence_metadata(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_rag import EviBridgeRAG
+        from Core.rag.evibridge_selector import SelectedEvidence
+
+        index = self._build_index()
+        index.blocks[1].metadata = {
+            "hotpot_title": "Method A",
+            "hotpot_sent_id": 7,
+            "source": "hotpotqa_sentence",
+        }
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(enable_llm_verifier=False),
+            llm=FakeLLM(),
+            evibridge_index=index,
+            bm25=None,
+        )
+
+        payload = rag._selected_payload(
+            [
+                SelectedEvidence(
+                    block=index.blocks[1],
+                    score=0.9,
+                    score_parts={},
+                    evidence_role="answer_evidence",
+                    selection_rank=1,
+                )
+            ],
+            candidate_score_parts={},
+        )
+
+        self.assertEqual(payload[0]["metadata"]["hotpot_title"], "Method A")
+        self.assertEqual(payload[0]["metadata"]["hotpot_sent_id"], 7)
+        self.assertEqual(payload[0]["hotpot_title"], "Method A")
+        self.assertEqual(payload[0]["hotpot_sent_id"], 7)
+
+    def test_evibridge_refinement_adds_only_new_answer_bearing_candidates(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+        from Core.rag.evibridge_verifier import SufficiencyVerdict
+
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(enable_llm_verifier=False),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+        )
+        verdict = SufficiencyVerdict(
+            sufficient=False,
+            missing=["semantic_link"],
+            missing_bridge_types=["semantic"],
+            next_bridge=["semantic"],
+            next_action="expand_semantic_bridge",
+        )
+
+        refined, diagnostics = rag._refine_seed_scores_with_diagnostics(
+            query="How does retrieval connect Method A and Method B?",
+            demand=EvidenceDemand(intent="multi-hop", bridge_need=["semantic"]),
+            seed_scores={1: 1.0},
+            selected_ids=[1],
+            verdict=verdict,
+            excluded_candidate_ids={1},
+        )
+
+        self.assertIn(2, refined)
+        self.assertNotIn(1, diagnostics["new_candidate_ids"])
+        self.assertIn(2, diagnostics["new_answer_candidate_ids"])
+        self.assertNotIn(5, diagnostics["new_answer_candidate_ids"])
+        self.assertEqual(diagnostics["action"], "expand_semantic_bridge")
+
+    def test_evibridge_preserves_new_refinement_seeds_in_next_candidate_round(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_rag import EviBridgeRAG
+
+        index = self._build_index()
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                preserve_seed_topk=4,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=index,
+            bm25=None,
+        )
+
+        candidates = rag._seed_preserved_candidate_scores(
+            seed_results=[
+                {
+                    "block_id": 1,
+                    "block_type": "paragraph",
+                    "score": 1.0,
+                }
+            ],
+            ppr_scores={},
+            active_seed_scores={1: 1.0, 2: 0.8},
+        )
+
+        self.assertEqual(candidates[1], 1.0)
+        self.assertEqual(candidates[2], 0.8)
+
+    def test_evibridge_stops_when_verifier_retrieval_finds_no_new_candidates(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+        from Core.rag.evibridge_verifier import SufficiencyVerdict
+
+        class AlwaysExpandVerifier:
+            def verify(self, query, demand, evidence, bridges):
+                return SufficiencyVerdict(
+                    sufficient=False,
+                    missing=["relevant_evidence"],
+                    missing_types=["evidence"],
+                    next_bridge=["context"],
+                    next_action="expand_context",
+                    reason="need new evidence",
+                )
+
+        index = EvidenceBridgeIndex(
+            save_dir="",
+            blocks={
+                1: EvidenceBlock(
+                    block_id=1,
+                    block_type="paragraph",
+                    text="Only isolated answer-bearing evidence.",
+                    title_path=["Only Section"],
+                    page=1,
+                )
+            },
+            bridges=[],
+        )
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                bm25_topk=1,
+                max_context_blocks=1,
+                max_iterations=3,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=index,
+            bm25=index.build_bm25(),
+        )
+        rag.verifier = AlwaysExpandVerifier()
+
+        retrieval = rag._retrieve_with_demand(
+            "isolated answer evidence",
+            EvidenceDemand(intent="fact", bridge_need=["context"]),
+        )
+
+        self.assertEqual(len(retrieval["iterations"]), 1)
+        self.assertEqual(retrieval["stopping_reason"], "no_new_candidates")
+        self.assertEqual(
+            retrieval["iterations"][0]["refinement"]["new_answer_candidate_ids"],
+            [],
+        )
+
     def test_evibridge_answer_payload_parses_supporting_ids_and_normalizes_boolean(self):
         _stub_rag_provider_imports()
         from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
@@ -902,6 +1533,104 @@ class EviBridgeModuleTests(unittest.TestCase):
         self.assertEqual(normalized, "Yes")
         self.assertEqual(rationale, "The evidence says it is realistic.")
         self.assertEqual(supporting_ids, [2, 3])
+
+    def test_evibridge_extracts_short_numeric_span_from_selected_evidence(self):
+        _stub_rag_provider_imports()
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+
+        answer, diagnostics = EviBridgeRAG._extract_short_answer_from_evidence(
+            query="How many participants were included?",
+            answer_short="The answer is 84 participants because the study reports that count.",
+            demand=EvidenceDemand(intent="fact"),
+            evidence_items=[
+                {
+                    "block_id": 1,
+                    "text": "The study included 84 participants in the final analysis.",
+                }
+            ],
+        )
+
+        self.assertEqual(answer, "84 participants")
+        self.assertTrue(diagnostics["applied"])
+        self.assertEqual(diagnostics["source_block_id"], 1)
+
+    def test_evibridge_long_context_fallback_is_conditional_and_auditable(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_rag import EviBridgeRAG
+        from Core.rag.evibridge_verifier import SufficiencyVerdict
+
+        class FallbackLLM:
+            def __init__(self):
+                self.calls = []
+
+            def get_completion(self, prompt, json_response=False):
+                self.calls.append(prompt)
+                if len(self.calls) == 1:
+                    return '{"answer_short": "Unanswerable", "supporting_block_ids": []}'
+                return (
+                    '{"answer_short": "The answer is 84 participants because the evidence '
+                    'states the count.", "supporting_block_ids": [1]}'
+                )
+
+        class AlwaysInsufficientVerifier:
+            def verify(self, query, demand, evidence, bridges):
+                return SufficiencyVerdict(
+                    sufficient=False,
+                    missing=["demand_coverage"],
+                    missing_types=["context"],
+                    missing_bridge_types=["hierarchy"],
+                    next_bridge=["hierarchy"],
+                    next_action="expand_hierarchy_context",
+                    reason="need chapter context",
+                )
+
+        index = EvidenceBridgeIndex(
+            save_dir="",
+            blocks={
+                1: EvidenceBlock(
+                    block_id=1,
+                    block_type="paragraph",
+                    text="The study included 84 participants in the final analysis.",
+                    section_id="Participants",
+                    title_path=["Methods", "Participants"],
+                    page=2,
+                )
+            },
+            bridges=[],
+        )
+        llm = FallbackLLM()
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                demand_parser="rule",
+                bm25_topk=1,
+                max_context_blocks=1,
+                max_iterations=1,
+                enable_llm_verifier=False,
+                enable_long_context_fallback=True,
+                fallback_max_context_blocks=8,
+                fallback_max_context_tokens=1000,
+            ),
+            llm=llm,
+            evibridge_index=index,
+            bm25=index.build_bm25(),
+        )
+        rag.verifier = AlwaysInsufficientVerifier()
+
+        with tempfile.TemporaryDirectory() as tmp:
+            rag.generation("How many participants were included?", tmp)
+            retrieval = json.loads(
+                (Path(tmp) / "retrieval_res.json").read_text(encoding="utf-8")
+            )
+
+        self.assertEqual(len(llm.calls), 2)
+        self.assertEqual(rag.last_answer_short, "84 participants")
+        self.assertEqual(rag.last_supporting_block_ids, [1])
+        self.assertTrue(retrieval["fallback"]["used"])
+        self.assertEqual(retrieval["fallback"]["trigger"], "insufficient_evidence")
+        self.assertEqual(retrieval["fallback"]["context_block_ids"], [1])
+        self.assertTrue(retrieval["answer_extraction"]["applied"])
 
     def test_evibridge_prompt_guides_abstractive_answers_to_concise_synthesis(self):
         _stub_rag_provider_imports()
@@ -943,9 +1672,20 @@ class EviBridgeModuleTests(unittest.TestCase):
 
     def test_evibridge_config_is_part_of_rag_discriminator(self):
         parsed = RAGConfig(strategy_config={"strategy": "evibridge"})
+        fallback = RAGConfig(
+            strategy_config={
+                "strategy": "evibridge",
+                "enable_long_context_fallback": True,
+            }
+        )
 
         self.assertEqual(parsed.strategy_config.strategy, "evibridge")
         self.assertEqual(parsed.strategy_config.max_iterations, 2)
+        self.assertEqual(parsed.strategy_config.method_suffix, "evibridge")
+        self.assertEqual(
+            fallback.strategy_config.method_suffix,
+            "evibridge_fallback",
+        )
 
     def test_evibridge_rag_writes_retrieval_and_evidence_chain_outputs(self):
         _stub_rag_provider_imports()
@@ -984,6 +1724,10 @@ class EviBridgeModuleTests(unittest.TestCase):
             self.assertIn("typed_ppr_score_parts", retrieval_payload)
             self.assertIn("connector_paths", retrieval_payload)
             self.assertIn("verification", retrieval_payload)
+            self.assertEqual(retrieval_payload["demand_provenance"]["source"], "rule")
+            self.assertIn("signals", retrieval_payload["demand_provenance"])
+            self.assertIn("subqueries", retrieval_payload["demand_provenance"])
+            self.assertIn("stopping_reason", retrieval_payload)
             self.assertTrue(chain_payload["evidence_chain"])
             self.assertIn("iterations", chain_payload)
 

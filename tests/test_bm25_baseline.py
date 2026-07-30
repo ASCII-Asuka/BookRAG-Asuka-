@@ -340,6 +340,35 @@ class BM25BaselineTests(unittest.TestCase):
         self.assertEqual(rag.last_answer_short, "No")
         self.assertEqual(rag.last_answer_rationale, "The paragraph says no.")
 
+    def test_vanilla_short_answer_prompt_uses_canonical_unanswerable_label(self):
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        llm = SimpleNamespace(config=SimpleNamespace(max_tokens=4096))
+        cfg = SimpleNamespace(retrieval_method="bm25", topk=2, answer_style="short")
+        rag = VanillaRAG(config=cfg, llm=llm)
+
+        prompt = rag._create_augmented_prompt(
+            "What is not stated?",
+            [{"id": 1, "content": "A paragraph.", "metadata": {"node_id": 1}}],
+        )
+
+        self.assertIn("use Unanswerable only", prompt)
+        self.assertNotIn("use Not answerable only", prompt)
+
+    def test_all_short_answer_rag_prompts_use_canonical_unanswerable_label(self):
+        repo_root = Path(__file__).resolve().parents[1]
+        for relative_path in [
+            "Core/rag/vanilla_rag.py",
+            "Core/rag/hipporag_rag.py",
+            "Core/rag/lightrag_rag.py",
+        ]:
+            source = (repo_root / relative_path).read_text(encoding="utf-8")
+            self.assertNotIn("use Not answerable", source, relative_path)
+        lightrag_source = (repo_root / "Core/rag/lightrag_rag.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertNotIn('answer = "Not answerable"', lightrag_source)
+
     def test_vanilla_hybrid_rrf_merges_bm25_and_dense_rankings(self):
         from Core.rag.vanilla_rag import VanillaRAG
 

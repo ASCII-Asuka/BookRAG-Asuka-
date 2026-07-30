@@ -150,6 +150,61 @@ class QasperOfficialEvalTests(unittest.TestCase):
 
         self.assertFalse(output_path.exists())
 
+    def test_export_predictions_canonicalizes_unanswerable_aliases(self):
+        from Scripts.eval.qasper_official import export_predictions
+
+        with tempfile.TemporaryDirectory() as tmp:
+            dataset_path, working_dir = self._write_sample_outputs(tmp)
+            result_dir = working_dir / "paper-1" / "eval_qasper_evibridge"
+            (result_dir / "final_results.json").write_text(
+                json.dumps(
+                    [
+                        {
+                            "question": "What is not answered?",
+                            "qasper_question_id": "q1",
+                            "output": "Not answerable",
+                            "answer_short": "Not answerable",
+                        }
+                    ]
+                ),
+                encoding="utf-8",
+            )
+
+            predictions = export_predictions(
+                dataset_path=str(dataset_path),
+                working_dir=str(working_dir),
+                dataset_name="qasper",
+                method="evibridge",
+                output_path=str(Path(tmp) / "official" / "predictions.jsonl"),
+            )
+
+        self.assertEqual(predictions[0]["predicted_answer"], "Unanswerable")
+
+    def test_export_predictions_writes_complete_coverage_manifest(self):
+        from Scripts.eval.qasper_official import export_predictions
+
+        with tempfile.TemporaryDirectory() as tmp:
+            dataset_path, working_dir = self._write_sample_outputs(tmp)
+            output_path = Path(tmp) / "official" / "predictions.jsonl"
+
+            export_predictions(
+                dataset_path=str(dataset_path),
+                working_dir=str(working_dir),
+                dataset_name="qasper",
+                method="evibridge",
+                output_path=str(output_path),
+            )
+            manifest = json.loads(
+                (output_path.parent / "coverage_manifest.json").read_text(encoding="utf-8")
+            )
+
+        self.assertTrue(manifest["complete"])
+        self.assertEqual(manifest["expected_questions"], 1)
+        self.assertEqual(manifest["final_results_questions"], 1)
+        self.assertEqual(manifest["predictions_questions"], 1)
+        self.assertEqual(manifest["documents"], 1)
+        self.assertEqual(len(manifest["dataset_sha256"]), 64)
+
     def test_top_k_evidence_uses_selector_order(self):
         from Scripts.eval.qasper_official import export_predictions
 

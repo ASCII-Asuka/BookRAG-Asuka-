@@ -1,5 +1,5 @@
-# EviBridge-RAG Qasper-oriented hybrid + rerank template.
-# Fill pdf_path, save_path, and model endpoints before running.
+# EviBridge+Fallback enhancement template.
+# This uses a separate evibridge_fallback result suffix.
 
 pdf_path: TODO
 save_path: TODO
@@ -47,54 +47,31 @@ rag:
   ablation_variant: full
   demand_parser: hybrid
   demand_confidence_threshold: 0.7
-  dataset_profile: qasper
-  qasper_demand_mode: conservative
-  enable_boolean_answer_hint: true
-  multi_hop_requires_explicit_bridge: true
-  bm25_topk: 40
-  embedding_topk: 50
+  dataset_profile: auto
+  bm25_topk: 20
+  embedding_topk: 20
   patch_topk: 5
   entity_topk: 10
-  enable_vector_recall: true
-  hybrid_bm25_weight: 0.35
-  hybrid_vector_weight: 0.65
-  enable_candidate_rerank: true
-  candidate_rerank_topk: 50
-  candidate_rerank_weight: 0.75
+  enable_vector_recall: false
+  hybrid_bm25_weight: 0.55
+  hybrid_vector_weight: 0.45
   enable_supporting_rerank: true
-  rerank_batch_size: 50
   trust_answer_supporting_ids: true
-  ppr_topk: 60
+  ppr_topk: 30
   ppr_restart_alpha: 0.15
   ppr_max_iter: 50
   enable_shortest_path_connector: true
   connector_max_paths: 3
-  preserve_seed_topk: 60
-  final_evidence_types:
-    - paragraph
-    - table
-    - caption
-    - figure
-  bridge_auxiliary_types:
-    - entity
-    - summary
-    - patch
-    - title
   supporting_evidence_topk: 4
   dynamic_supporting_evidence_budget: true
-  supporting_evidence_types:
-    - paragraph
-    - table
-    - caption
-    - figure
-  paragraph_quota: 4
-  auxiliary_quota: 2
   max_context_blocks: 10
   max_context_tokens: 4000
   max_iterations: 2
   enable_llm_verifier: true
   enable_short_answer_extraction: true
-  enable_long_context_fallback: false
+  enable_long_context_fallback: true
+  fallback_max_context_blocks: 30
+  fallback_max_context_tokens: 12000
   output_evidence_chain: true
   evibridge_vdb_config:
     mm_embedding: false
@@ -107,12 +84,5 @@ rag:
       model_name: TODO
       api_key: TODO
       api_base: TODO
-      max_length: 32768
+      max_length: 4096
       device: cpu
-  reranker_config:
-    model_name: TODO
-    api_key: TODO
-    api_base: TODO
-    backend: vllm
-    max_length: 4096
-    device: cpu

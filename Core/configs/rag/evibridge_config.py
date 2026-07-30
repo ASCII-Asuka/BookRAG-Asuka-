@@ -31,10 +31,15 @@ class EviBridgeRAGConfig(BaseRAGStrategyConfig):
         "wo_typed_weights",
         "wo_budgeted_selector",
         "wo_sufficiency_verifier",
+        "wo_citation_reorder",
+        "wo_support_reranker",
+        "wo_verifier_repair",
+        "wo_implicit_multihop",
         "static_topk",
     ] = "full"
     demand_parser: Literal["rule", "llm", "hybrid"] = "hybrid"
     demand_confidence_threshold: float = 0.7
+    dataset_profile: Literal["auto", "qasper", "hotpotqa"] = "auto"
     qasper_demand_mode: Literal["default", "conservative"] = "conservative"
     enable_boolean_answer_hint: bool = True
     multi_hop_requires_explicit_bridge: bool = True
@@ -60,6 +65,7 @@ class EviBridgeRAGConfig(BaseRAGStrategyConfig):
     final_evidence_types: List[str] = Field(default_factory=lambda: ["paragraph", "table", "caption", "figure"])
     bridge_auxiliary_types: List[str] = Field(default_factory=lambda: ["entity", "summary", "patch", "title"])
     supporting_evidence_topk: int = 4
+    dynamic_supporting_evidence_budget: bool = True
     supporting_evidence_types: List[str] = Field(default_factory=lambda: ["paragraph", "table", "caption", "figure"])
     paragraph_quota: int = 4
     auxiliary_quota: int = 2
@@ -67,6 +73,10 @@ class EviBridgeRAGConfig(BaseRAGStrategyConfig):
     max_context_tokens: int = 4000
     max_iterations: int = 2
     enable_llm_verifier: bool = True
+    enable_short_answer_extraction: bool = True
+    enable_long_context_fallback: bool = False
+    fallback_max_context_blocks: int = 30
+    fallback_max_context_tokens: int = 12000
     output_evidence_chain: bool = True
     evibridge_vdb_config: VDBConfig = Field(default_factory=VDBConfig)
     reranker_config: RerankerConfig = Field(default_factory=RerankerConfig)
@@ -79,3 +89,12 @@ class EviBridgeRAGConfig(BaseRAGStrategyConfig):
         default=None,
         description="Backward-compatible top-k override for BM25 and PPR.",
     )
+
+    @property
+    def method_suffix(self) -> str:
+        suffix = "evibridge"
+        if self.ablation_variant and self.ablation_variant != "full":
+            suffix = f"{suffix}_{self.ablation_variant}"
+        if self.enable_long_context_fallback:
+            suffix = f"{suffix}_fallback"
+        return suffix

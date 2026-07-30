@@ -93,6 +93,76 @@ class HotpotQAEvalTests(unittest.TestCase):
         self.assertEqual(scores["sp_em"], 1.0)
         self.assertEqual(saved_score["joint_em"], 1.0)
 
+    def test_eval_hotpotqa_recovers_supporting_fact_from_nested_metadata(self):
+        from Eval.utils.hotpotqa_eval import eval_hotpotqa
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            working_dir = root / "work"
+            dataset_rows = [
+                {
+                    "question": "What position?",
+                    "answer": "Chief of Protocol",
+                    "doc_uuid": "hotpot-1",
+                    "doc_path": "hotpotqa://distractor/validation/hotpot-1",
+                    "hotpotqa_question_id": "hotpot-1",
+                    "hotpot_supporting_facts": [["Kiss and Tell", 0]],
+                }
+            ]
+            result_dir = working_dir / "hotpot-1" / "eval_hotpotqa_evibridge"
+            query_dir = result_dir / "query_001"
+            query_dir.mkdir(parents=True)
+            (result_dir / "final_results.json").write_text(
+                json.dumps([{**dataset_rows[0], "answer_short": "Chief of Protocol"}]),
+                encoding="utf-8",
+            )
+            (query_dir / "retrieval_res.json").write_text(
+                json.dumps(
+                    {
+                        "supporting_evidence": [
+                            {
+                                "block_id": 7,
+                                "metadata": {
+                                    "hotpot_title": "Kiss and Tell",
+                                    "hotpot_sent_id": 0,
+                                },
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            data_cfg = SimpleNamespace(
+                working_dir=str(working_dir),
+                dataset_name="hotpotqa",
+            )
+
+            scores = eval_hotpotqa(dataset_rows, data_cfg, method="evibridge")
+
+        self.assertEqual(scores["sp_em"], 1.0)
+
+    def test_eval_hotpotqa_rejects_missing_predictions_before_scoring(self):
+        from Eval.utils.hotpotqa_eval import HotpotQARunValidationError, eval_hotpotqa
+
+        dataset_rows = [
+            {
+                "question": "What position?",
+                "answer": "Chief of Protocol",
+                "doc_uuid": "hotpot-1",
+                "doc_path": "hotpotqa://distractor/validation/hotpot-1",
+                "hotpotqa_question_id": "hotpot-1",
+                "hotpot_supporting_facts": [["Kiss and Tell", 0]],
+            }
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            data_cfg = SimpleNamespace(
+                working_dir=str(Path(tmp) / "work"),
+                dataset_name="hotpotqa",
+            )
+
+            with self.assertRaises(HotpotQARunValidationError):
+                eval_hotpotqa(dataset_rows, data_cfg, method="evibridge")
+
     def test_full_document_ranked_results_are_not_supporting_fact_fallback(self):
         from Eval.utils.hotpotqa_eval import eval_hotpotqa
 

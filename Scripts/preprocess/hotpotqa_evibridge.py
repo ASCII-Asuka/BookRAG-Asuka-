@@ -1,4 +1,5 @@
 import argparse
+import hashlib
 import html
 import json
 import os
@@ -233,6 +234,26 @@ def prepare_hotpotqa_exclusive_sample(
         "exclude_dataset_paths": list(exclude_dataset_paths or []),
         "selected_question_ids": [_row_id(row) for row in selected_rows],
     }
+    manifest_path = Path(output_path).with_suffix(".manifest.json")
+    manifest = {
+        "dataset": "hotpotqa",
+        "split": split,
+        "subset": subset,
+        "seed": seed,
+        "sample_size": sample_size,
+        "raw_count": len(raw_rows),
+        "excluded_count": len(excluded_ids),
+        "candidate_count": len(candidates),
+        "question_count": len(rows),
+        "selected_question_ids": summary["selected_question_ids"],
+        "dataset_sha256": hashlib.sha256(Path(output_path).read_bytes()).hexdigest(),
+        "raw_sha256": hashlib.sha256(Path(raw_path).read_bytes()).hexdigest(),
+    }
+    manifest_path.write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    summary["manifest_path"] = str(manifest_path)
     if report_path:
         _write_exclusive_sample_report(report_path, summary)
     return summary
@@ -277,6 +298,11 @@ def hotpotqa_row_to_tree(
                 node_type=NodeType.TEXT,
                 content=sentence_text,
                 page_idx=para_idx,
+                source_metadata={
+                    "hotpot_title": clean_title,
+                    "hotpot_sent_id": sent_idx,
+                    "source": "hotpotqa_sentence",
+                },
             )
             node_lookup[(clean_title, sent_idx)] = sentence_node.index_id
     return tree, node_lookup
@@ -288,12 +314,14 @@ def _add_tree_node(
     node_type: NodeType,
     content: str,
     page_idx: int = 0,
+    source_metadata: Optional[Dict[str, Any]] = None,
 ) -> TreeNode:
     node = TreeNode(
         {
             "content": content,
             "page_idx": page_idx,
             "pdf_id": len(tree.nodes),
+            "pdf_para_block": dict(source_metadata or {}),
         }
     )
     node.type = node_type

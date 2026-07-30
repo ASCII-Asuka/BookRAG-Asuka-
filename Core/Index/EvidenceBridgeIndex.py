@@ -811,6 +811,10 @@ class EvidenceBridgeIndex:
             metadata["footnote"] = meta.footnote
         if meta.table_body:
             metadata["has_table_body"] = True
+        if isinstance(meta.pdf_para_block, dict):
+            for key in ("hotpot_title", "hotpot_sent_id", "source"):
+                if key in meta.pdf_para_block:
+                    metadata[key] = meta.pdf_para_block[key]
         return metadata
 
     @staticmethod
