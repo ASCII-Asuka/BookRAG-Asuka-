@@ -7,8 +7,10 @@ from Core.utils.utils import TextProcessor
 from Core.utils.json_safety import make_json_safe
 
 from typing import Dict, Any, List, Tuple
+from dataclasses import asdict
 import json
 import logging
+from pathlib import Path
 
 if TYPE_CHECKING:
     from Core.provider.llm import LLM
@@ -590,6 +592,8 @@ class VanillaRAG(BaseRAG):
         """
         if self.cfg.retrieval_method == "ircot":
             return self._ircot_generation(query, query_output_dir)
+        if self.cfg.retrieval_method == "react":
+            return self._react_generation(query, query_output_dir)
 
         retrieved_docs = self._retrieve(query, top_k=self.topk)
         if not retrieved_docs:
@@ -618,6 +622,153 @@ class VanillaRAG(BaseRAG):
         self.last_retrieved_block_ids = retrieval_ids
         self.last_supporting_block_ids = answer_supporting_ids or retrieval_ids
         return final_answer, retrieval_ids
+
+    def _react_generation(self, query: str, query_output_dir: str) -> tuple:
+        if self.bm25 is None:
+            raise ValueError("ReAct requires a BM25 retriever.")
+
+        from Core.rag.react_env import ReactLocalEnvironment
+        from Core.rag.react_runner import ReactRunner
+
+        docs = []
+        for index, content in enumerate(self.bm25.original_docs):
+            metadata = (
+                dict(self.bm25.metadatas[index])
+                if index < len(self.bm25.metadatas)
+                and isinstance(self.bm25.metadatas[index], dict)
+                else {}
+            )
+            docs.append(
+                {
+                    "id": index,
+                    "content": str(content or ""),
+                    "score": 0.0,
+                    "metadata": metadata,
+                }
+            )
+
+        environment = ReactLocalEnvironment(
+            docs=docs,
+            bm25=self.bm25,
+            page_observation_units=int(
+                getattr(
+                    self.cfg,
+                    "react_page_observation_units",
+                    5,
+                )
+                or 5
+            ),
+            search_topk=int(
+                getattr(self.cfg, "react_search_topk", 1)
+                or 1
+            ),
+        )
+        run = ReactRunner(
+            llm=self.llm,
+            environment=environment,
+            dataset_name=getattr(
+                self.cfg,
+                "react_dataset_name",
+                "qasper",
+            ),
+            max_steps=int(
+                getattr(self.cfg, "react_max_steps", 7)
+                or 7
+            ),
+            prompt_file=str(
+                getattr(self.cfg, "react_prompt_file", "")
+                or ""
+            ),
+        ).run(query)
+
+        observed_items = []
+        block_ids = []
+        for evidence in run.observed_evidence:
+            metadata = dict(evidence.metadata)
+            metadata["node_id"] = evidence.block_id
+            metadata.setdefault("source_node_id", evidence.block_id)
+            observed_items.append(
+                {
+                    "id": evidence.block_id,
+                    "content": str(
+                        self.bm25.original_docs[evidence.corpus_index]
+                    ),
+                    "score": 0.0,
+                    "metadata": metadata,
+                }
+            )
+            block_ids.append(evidence.block_id)
+
+        query_output_dir = Path(query_output_dir)
+        self._save_retrieval_res(
+            observed_items,
+            query_output_dir=query_output_dir,
+            supporting_ids=block_ids,
+        )
+        retrieval_path = query_output_dir / "retrieval_res.json"
+        with open(retrieval_path, "r", encoding="utf-8") as file:
+            payload = json.load(file)
+        step_payloads = [asdict(step) for step in run.steps]
+        payload.update(
+            {
+                "strategy": "react",
+                "selected": payload.get("ranked_results", []),
+                "supporting_evidence": payload.get(
+                    "supporting_evidence",
+                    [],
+                ),
+                "retrieved_block_ids": block_ids,
+                "supporting_block_ids": block_ids,
+                "react_steps": step_payloads,
+                "react_num_calls": run.num_calls,
+                "react_num_bad_calls": run.num_bad_calls,
+                "react_search_count": run.search_count,
+                "react_lookup_count": run.lookup_count,
+                "react_termination_reason": run.termination_reason,
+            }
+        )
+        with open(retrieval_path, "w", encoding="utf-8") as file:
+            json.dump(
+                make_json_safe(payload),
+                file,
+                indent=2,
+                ensure_ascii=False,
+                allow_nan=False,
+            )
+        with open(
+            query_output_dir / "evidence_chain.json",
+            "w",
+            encoding="utf-8",
+        ) as file:
+            json.dump(
+                make_json_safe(
+                    {
+                        "strategy": "react",
+                        "steps": step_payloads,
+                        "retrieved_block_ids": block_ids,
+                        "supporting_block_ids": block_ids,
+                        "termination_reason": run.termination_reason,
+                    }
+                ),
+                file,
+                indent=2,
+                ensure_ascii=False,
+                allow_nan=False,
+            )
+
+        self.last_answer_short = run.answer
+        self.last_answer_rationale = ""
+        self.last_retrieved_block_ids = block_ids
+        self.last_supporting_block_ids = block_ids
+        answer = json.dumps(
+            {
+                "answer_short": run.answer,
+                "answer_rationale": "",
+                "supporting_block_ids": block_ids,
+            },
+            ensure_ascii=False,
+        )
+        return answer, block_ids
 
     def _ircot_generation(self, query: str, query_output_dir: str) -> tuple:
         if self.bm25 is None:

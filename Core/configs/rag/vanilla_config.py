@@ -22,6 +22,7 @@ class VanillaConfig(BaseRAGStrategyConfig):
         "full_document",
         "longrag",
         "ircot",
+        "react",
     ] = Field(
         default="vanilla",
         description="The retrieval method to use.",
@@ -60,3 +61,8 @@ class VanillaConfig(BaseRAGStrategyConfig):
     ircot_max_steps: int = Field(default=3, description="Maximum interleaved reasoning-retrieval steps.")
     ircot_step_topk: int = Field(default=3, description="BM25 evidence count retrieved at each IRCoT step.")
     ircot_final_topk: int = Field(default=10, description="Maximum deduplicated evidence count used for final IRCoT answer generation.")
+    react_max_steps: int = Field(default=7, ge=1)
+    react_search_topk: int = Field(default=1, ge=1)
+    react_page_observation_units: int = Field(default=5, ge=1)
+    react_prompt_file: str = Field(default="")
+    react_dataset_name: Literal["qasper", "hotpotqa"] = "qasper"
