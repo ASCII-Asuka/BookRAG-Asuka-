@@ -97,7 +97,7 @@ class RuleBasedSufficiencyVerifier:
         if noise > self.noise_threshold:
             missing.append("too_noisy")
 
-        next_bridge = self._next_bridge(missing, demand)
+        next_bridge = self._next_bridge(missing, demand) if missing else []
         for bridge_type in next_bridge:
             if bridge_type not in missing_bridge_types:
                 missing_bridge_types.append(bridge_type)

@@ -288,10 +288,10 @@ class EviBridgeRAG(BaseRAG):
         evidence_chain = evidence_chain or []
         evidence_text = "\n\n".join(
             [
-                f"[{idx}] block_id={item['block_id']} type={item['block_type']} "
+                f"[block_id={item['block_id']}] type={item['block_type']} "
                 f"page={item.get('page')} section={item.get('section_path')}\n"
                 f"{item.get('text', '')}"
-                for idx, item in enumerate(evidence_chain, 1)
+                for item in evidence_chain
             ]
         )
         demand_text = demand.model_dump_json() if demand else "{}"
@@ -305,6 +305,7 @@ class EviBridgeRAG(BaseRAG):
             "For global-summary or abstractive questions, answer_short may be one concise synthesis sentence; "
             "synthesize only the strongest supporting_block_ids and do not add background knowledge.\n"
             "supporting_block_ids must contain 1 to 4 block_id values from the evidence chain that best support answer_short.\n"
+            "Copy the exact integer shown in each [block_id=...] label; never use evidence order numbers.\n"
             f"Question: {query}\n"
             f"Evidence demand: {demand_text}\n"
             f"Sufficiency verdict: {verdict_text}\n"

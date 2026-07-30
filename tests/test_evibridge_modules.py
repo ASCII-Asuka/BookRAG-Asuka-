@@ -450,6 +450,32 @@ class EviBridgeModuleTests(unittest.TestCase):
         self.assertIn("semantic", disconnected.missing_bridge_types)
         self.assertEqual(disconnected.next_action, "expand_semantic_bridge")
 
+    def test_rule_verifier_clears_missing_metadata_when_sufficient(self):
+        _stub_rag_provider_imports()
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_verifier import RuleBasedSufficiencyVerifier
+
+        index = self._build_index()
+        verdict = RuleBasedSufficiencyVerifier().verify(
+            "What does Method A use for retrieval generation?",
+            EvidenceDemand(
+                intent="fact",
+                scope="local",
+                modality=["text"],
+                granularity="block",
+                bridge_need=["context"],
+            ),
+            [index.blocks[1]],
+            [],
+        )
+
+        self.assertTrue(verdict.sufficient)
+        self.assertEqual(verdict.missing, [])
+        self.assertEqual(verdict.missing_types, [])
+        self.assertEqual(verdict.missing_bridge_types, [])
+        self.assertEqual(verdict.next_bridge, [])
+        self.assertEqual(verdict.next_action, "accept")
+
     def test_llm_verifier_sanitizes_invalid_fields_and_preserves_hard_rule_failures(self):
         _stub_rag_provider_imports()
         from Core.rag.evibridge_demand import EvidenceDemand
@@ -1669,6 +1695,12 @@ class EviBridgeModuleTests(unittest.TestCase):
 
         self.assertIn("one concise synthesis sentence", prompt)
         self.assertIn("strongest supporting_block_ids", prompt)
+        self.assertIn("[block_id=1]", prompt)
+        self.assertNotIn("[1] block_id=1", prompt)
+        self.assertIn(
+            "Copy the exact integer shown in each [block_id=...] label",
+            prompt,
+        )
 
     def test_evibridge_config_is_part_of_rag_discriminator(self):
         parsed = RAGConfig(strategy_config={"strategy": "evibridge"})
