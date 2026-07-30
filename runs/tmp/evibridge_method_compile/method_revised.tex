@@ -1,0 +1,245 @@
+% Overleaf preamble requirements:
+% \usepackage{amsmath,amssymb}
+% \usepackage{algorithm}
+% \usepackage{algpseudocode}
+
+\section{方法}
+
+EviBridge-RAG 将复杂文档问答中的检索目标由``返回若干相似片段''改写为``在有限预算下构造足以支撑答案的证据集''。给定问题 $q$、复杂文档集合 $D$、最大证据块数 $B_{\mathrm{blk}}$、最大上下文长度 $B_{\mathrm{tok}}$ 和最大检索轮数 $R_{\max}$，系统同时输出答案 $a$ 与可回溯到原文的支持证据集合 $C_s$。为此，系统首先离线构建多视图证据桥接图；在线阶段依次执行证据需求解析、多粒度种子召回、需求驱动的类型化图传播、路径连接、预算化证据选择和充分性验证。当验证器识别出证据类型或桥接关系缺失时，系统据此更新种子分布并进入下一轮检索。第~\ref{sec:graph_construction} 节介绍证据图，第~\ref{sec:seed_retrieval} 节介绍需求解析与种子召回，第~\ref{sec:typed_bridging} 节介绍类型化传播与路径连接，第~\ref{sec:sufficiency_control} 节介绍预算化选择和闭环控制。
+
+\subsection{多视图证据桥接图构建}
+\label{sec:graph_construction}
+
+\paragraph{节点与溯源映射}
+复杂文档中的证据可能位于段落、表格、图注和不同层级的章节中，单一粒度的固定长度切分难以同时保留局部内容与文档结构。EviBridge-RAG 将文档表示为多视图证据桥接图
+\begin{equation}
+\label{eq:evibridge_graph}
+G_{\mathrm{EB}}=(V,E,M),\qquad
+V=V_b\cup V_p\cup V_e\cup V_h,\qquad
+E=E_c\cup E_s\cup E_h .
+\end{equation}
+其中，$V_b$ 为可直接对齐原文的原子证据节点，包括段落、表格、图片、图注和公式；$V_p$ 为在同一章节内聚合相邻原子块得到的局部证据片段（patch）；$V_e$ 为从原子块中抽取的轻量实体或术语节点；$V_h$ 为标题、章节摘要和文档摘要等层级节点。$E_c$、$E_s$ 和 $E_h$ 分别表示上下文、语义和层级桥接关系。映射 $M:V\rightarrow 2^{\mathcal{S}}$ 保存节点到原始文档位置集合 $\mathcal{S}$ 的映射，包括源文档、页码、章节路径和原始块标识。因而，entity、summary 和 patch 可以参与检索和生成，但最终支持证据仍能回溯到 $V_b$ 中的原始内容。
+
+当前实现采用确定性的轻量构造规则，不依赖额外的知识图谱抽取模型。具体而言，每个章节的 patch 由其后代原子块依次拼接并截断至 $1800$ 个字符；章节摘要由前四个非空子块的截断片段组成，最长为 $900$ 个字符；文档摘要由至多 $12$ 个章节标题组成。实体节点由大写短语和过滤后的内容词产生，每个原子块最多保留 $8$ 个实体。上述节点主要用于建立检索入口和跨块连接，而不被视为独立的事实来源。
+
+\paragraph{桥接关系}
+上下文边 $E_c$ 保存可由文档结构直接确定的关系，包括父子块、前后相邻块、同章节块、正文对表格或图片的显式引用、图表与图注的对应关系，以及 patch 与其原子块之间的包含关系。语义边 $E_s$ 包括原子块与实体之间的提及关系、同一原子块内实体的共现关系以及块间共享术语关系。对于共享术语，仅保留长度不小于 $4$、且出现在 $2$ 至 $20$ 个块中的术语；若两个块共享至少两个术语，或共享术语占两块词项并集的比例不小于 $0.12$，则建立双向语义边。层级边 $E_h$ 连接原子块、章节标题、patch 与摘要节点。
+
+每条边 $e=(u,v,\tau,\rho,w_e)$ 记录源节点 $u$、目标节点 $v$、桥类型 $\tau\in\{\mathrm{context},\mathrm{semantic},\mathrm{hierarchy}\}$、细粒度关系 $\rho$ 和固定权重 $w_e$。权重表示构图规则所提供关系的相对可靠性，而非训练得到的概率。主要关系及其默认权重见表~\ref{tab:bridge_rules}。
+
+\begin{table*}[t]
+\centering
+\caption{证据桥接图中的主要关系与默认权重。箭头两侧的数值依次表示正向和反向边权。}
+\label{tab:bridge_rules}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{1.5cm}p{3.6cm}p{7.5cm}p{1.8cm}}
+\hline
+\textbf{桥类型} & \textbf{关系} & \textbf{构造条件} & \textbf{默认权重} \\
+\hline
+Context
+& parent--child / next--previous
+& 文档树父子关系或同一父节点下的相邻原子块
+& $0.80/0.80$；$0.75/0.75$ \\
+Context
+& reference / caption
+& 正文显式引用表格或图片；图片、表格与生成图注之间的对应关系
+& $0.95/0.70$；$0.90/0.95$ \\
+Context
+& patch--contains / same--section
+& patch 与其后代原子块；同一章节内不超过 $40$ 个块时建立章节内连接
+& $0.72/0.65$；$0.35/0.35$ \\
+Semantic
+& mentions--entity
+& 原子块包含对应实体或术语
+& $0.78/0.60$ \\
+Semantic
+& entity--cooccur
+& 两个实体在同一原子块中共同出现
+& $0.55/0.55$ \\
+Semantic
+& shared--terms
+& 满足共享术语数或词项重叠率阈值
+& $\min(0.85,0.35+\mathrm{overlap})$ \\
+Hierarchy
+& section--membership
+& 原子块与其章节标题之间的归属关系
+& $0.90/0.90$ \\
+Hierarchy
+& summary--of / patch--of
+& 章节或文档摘要、patch 与其来源章节之间的关系
+& $0.85/0.95$；$0.80/0.90$ \\
+\hline
+\end{tabular}
+\end{table*}
+
+\subsection{证据需求感知的种子召回}
+\label{sec:seed_retrieval}
+
+\paragraph{受控证据需求}
+不同问题对证据范围、模态、粒度和桥接关系的需求不同。局部事实问题主要依赖相邻上下文，多跳和比较问题需要跨块语义连接，表格或图片问题需要正文与图表之间的结构关系，全局归纳问题则需要章节级信息。EviBridge-RAG 因此将问题解析为受控证据需求
+\begin{equation}
+\label{eq:evidence_demand}
+d_q=\Psi(q)
+=\bigl(\iota_q,s_q,\mathcal{O}_q,g_q,\mathcal{B}_q,\gamma_q\bigr),
+\end{equation}
+其中，$\iota_q$ 表示问题意图，取值为 fact、boolean、multi-hop、comparison、table-figure、aggregation 或 global-summary；$s_q$ 表示 local、section、document 或 multi-document 范围；$\mathcal{O}_q\subseteq\{\mathrm{text},\mathrm{table},\mathrm{figure},\mathrm{caption}\}$ 表示目标模态；$g_q$ 表示 block、patch、entity 或 summary 粒度；$\mathcal{B}_q\subseteq\{\mathrm{context},\mathrm{semantic},\mathrm{hierarchy}\}$ 表示优先使用的桥类型；$\gamma_q\in[0,1]$ 表示解析置信度。
+
+解析器采用规则与大语言模型相结合的方式。规则首先根据问题中的表格、比较、聚合、全局归纳和显式多跳信号生成 $d_q$；当规则置信度不低于阈值 $\tau_{\Psi}=0.7$ 时直接采用该结果，否则由大语言模型生成相同模式的结构化输出。所有输出均经过类型和取值范围校验；若模型调用或校验失败，则回退到规则结果。因此，$\Psi(\cdot)$ 不生成不可约束的自由式检索计划，而只提供可验证的下游控制变量。
+
+\paragraph{多粒度种子}
+给定 $d_q$，系统同时执行稀疏检索和稠密检索，并对两类分数分别进行 min--max 归一化。对于节点 $v$，基础种子分数为
+\begin{equation}
+\label{eq:hybrid_seed}
+s_0(v)=\beta\,\widehat{s}_{\mathrm{BM25}}(v)
+ (1-\beta)\,\widehat{s}_{\mathrm{dense}}(v).
+\end{equation}
+在主配置中，BM25 和 dense 分别召回 $40$ 和 $50$ 个候选，$\beta=0.35$。随后，系统依据 $d_q$ 补充多粒度入口：文档级或 summary 需求召回 summary 和 patch，multi-hop 或 comparison 需求召回 entity，table-figure 需求召回 table、figure 和 caption。对应的默认附加分分别为 $0.72$（summary需求下的summary）、$0.55$（其他全局summary）、$0.60$（patch）、$0.68$（entity）和 $0.70$（表格或图片模态）；若实体文本在问题中精确出现，额外增加 $0.25$。同一节点由多个通道召回时保留最大分数，并记录其全部种子来源。由此得到
+\begin{equation}
+\label{eq:seed_retrieval}
+Z_0=\mathcal{R}(q,d_q,G_{\mathrm{EB}})
+=\{(v,s_0(v))\}.
+\end{equation}
+原子块种子提供具体答案内容，patch 和 summary 确定检索范围，entity 则提供跨位置连接入口。$Z_0$ 仅作为图传播的个性化起点，不直接等同于最终支持证据。
+
+\subsection{需求驱动的类型化证据桥接}
+\label{sec:typed_bridging}
+
+\paragraph{问题自适应传播图}
+令 $A_c$、$A_s$ 和 $A_h$ 分别为三类桥接关系的带权邻接矩阵，其中 $A_{\tau}[u,v]$ 等于从 $u$ 到 $v$ 的类型为 $\tau$ 的边权之和。证据需求 $d_q$ 被映射为三类非负权重 $\lambda_c(d_q)$、$\lambda_s(d_q)$ 和 $\lambda_h(d_q)$，且三者之和为 $1$。系统先构造问题相关的带权邻接矩阵，再按行归一化为转移矩阵：
+\begin{equation}
+\label{eq:typed_transition}
+\widetilde{A}_q=
+\lambda_c(d_q)A_c+\lambda_s(d_q)A_s+\lambda_h(d_q)A_h,
+\qquad
+W_q=\operatorname{RowNorm}(\widetilde{A}_q).
+\end{equation}
+这一写法与实际实现一致：需求权重首先作用于不同类型的原始边权，随后统一归一化，而不是分别归一化三类矩阵后再简单相加。默认权重见表~\ref{tab:demand_weights}。
+
+\begin{table}[t]
+\centering
+\caption{不同问题意图对应的类型化传播权重。}
+\label{tab:demand_weights}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccc}
+\hline
+\textbf{意图} & $\lambda_c$ & $\lambda_s$ & $\lambda_h$ \\
+\hline
+fact             & 0.45 & 0.35 & 0.20 \\
+boolean          & 0.50 & 0.25 & 0.25 \\
+multi-hop        & 0.25 & 0.55 & 0.20 \\
+comparison       & 0.25 & 0.55 & 0.20 \\
+table-figure     & 0.65 & 0.20 & 0.15 \\
+aggregation      & 0.35 & 0.20 & 0.45 \\
+global-summary   & 0.35 & 0.20 & 0.45 \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{类型化 Personalized PageRank}
+系统将 $Z_0$ 中的非负种子分数归一化为个性化分布 $p^{(0)}$，非种子节点的初始概率为 $0$，并在 $W_q$ 上执行
+\begin{equation}
+\label{eq:typed_ppr}
+p^{(t+1)}
+=\alpha p^{(0)}+(1-\alpha)W_q^{\top}p^{(t)},
+\qquad t=0,\ldots,T_p-1.
+\end{equation}
+其中，$\alpha$ 为回跳概率，$T_p$ 为最大传播次数。主配置设置 $\alpha=0.15$、$T_p=50$，收敛阈值为 $10^{-6}$；若幂迭代未收敛，则增加迭代上限并放宽至 $10^{-5}$，再次失败时回退到 $p^{(0)}$。为避免高质量直接种子被传播稀释，传播结束后对种子节点附加 $0.15p^{(0)}(v)$。系统保留得分最高的 $m=60$ 个传播候选，同时保留至多 $60$ 个可直接作为答案证据的高分种子。
+
+\paragraph{路径连接与候选重排}
+PPR 能发现与种子整体相关的节点，但不保证种子与传播候选之间的中间节点被保留。令 $U_{\mathrm{ppr}}$ 为传播候选与保留种子的并集，系统在仅包含启用桥类型的无向投影图上，计算种子节点到 $U_{\mathrm{ppr}}$ 中非种子候选的无权最短路径，并保留至多 $K=3$ 条长度大于一跳的路径：
+\begin{equation}
+\label{eq:connector}
+U=U_{\mathrm{ppr}}\cup
+\mathcal{P}_K(Z_0,U_{\mathrm{ppr}},G_{\mathrm{EB}}).
+\end{equation}
+路径中第 $\ell$ 个中间节点获得 $1/(\ell+1)$ 的连接器分数；合并候选时该分数乘以 $0.5$，并与节点已有得分取最大值。这里的最短路径只用于补全候选集合及导出可追溯连接，不被解释为已经验证的因果或推理链。
+
+在选择证据前，系统将辅助节点的分数以 $0.85$ 的衰减映射回其关联的原子证据节点。若启用候选重排，则对得分最高的 $50$ 个原子证据块计算重排分数，并与桥接候选分数融合：
+\begin{equation}
+\label{eq:candidate_rerank}
+r_q(v)=(1-\eta)\widehat{s}_{\mathrm{bridge}}(v)
++\eta\widehat{s}_{\mathrm{rerank}}(v),
+\end{equation}
+其中两项均进行 min--max 归一化，主配置取 $\eta=0.75$。对于未进入重排集合的节点，保留原桥接得分。
+
+\subsection{充分性驱动的证据选择与生成}
+\label{sec:sufficiency_control}
+
+\paragraph{预算化贪心选择}
+候选池 $U$ 仍可能包含重复、过宽或仅间接相关的节点。系统在块数预算 $B_{\mathrm{blk}}$ 和 token 预算 $B_{\mathrm{tok}}$ 下进行贪心选择。令 $C_k$ 为第 $k$ 步已选择的节点集合，则
+\begin{equation}
+\label{eq:budgeted_selection}
+v^*=\arg\max_{v\in\mathcal{F}(U,C_k)}
+\Delta(v\mid C_k),
+\end{equation}
+其中，$\mathcal{F}(U,C_k)$ 表示加入后不超过块数和 token 预算的候选集合。为避免单个超长原子块导致空上下文，若 $C_k=\emptyset$，实现允许保留一个超出 token 预算的最高分块；此后严格执行预算约束。节点的实际边际收益定义为
+\begin{equation}
+\label{eq:selector_score}
+\begin{aligned}
+\Delta(v\mid C_k)=&
+\ r_q(v)+\mathrm{Lex}(v,q)+\mathrm{Cov}(v,d_q)
++\mathrm{Conn}(v,C_k)\\
+&+\mathrm{Div}(v,C_k)+\mathrm{BDiv}(v,C_k,d_q)
++\mathrm{Role}(v)\\
+&-\mathrm{Red}(v,C_k)-0.15\,\mathrm{Cost}(v).
+\end{aligned}
+\end{equation}
+其中，$r_q(v)$ 为式~\eqref{eq:candidate_rerank} 的候选分数，未启用重排时使用桥接候选分数；$\mathrm{Lex}$ 为问题词项覆盖率。若节点类型命中需求模态，$\mathrm{Cov}$ 增加 $0.35$；table需求命中 table 或 caption 时再增加 $0.45$；summary粒度命中 summary 时增加 $0.35$；entity粒度命中 entity 或 paragraph 时增加 $0.15$。$\mathrm{Conn}$ 在节点与已选证据存在一跳关系时取 $0.30$；$\mathrm{Div}$ 在首个节点上取 $0.10$，此后按新词项比例计算且最高为 $0.20$；$\mathrm{BDiv}$ 奖励命中需求桥类型以及引入新的桥类型，两个部分的系数分别为 $0.12$ 和 $0.08$；$\mathrm{Role}$ 对可作为答案证据的节点奖励 $0.35$、对辅助桥接节点惩罚 $0.20$，并对 fact 问题中的 paragraph 额外奖励 $0.25$；$\mathrm{Red}$ 为 $0.45$ 乘以节点与任一已选证据的最大 Jaccard 词项重叠率；$\mathrm{Cost}$ 为节点 token 数占 $B_{\mathrm{tok}}$ 的比例。主配置设置 $B_{\mathrm{blk}}=10$、$B_{\mathrm{tok}}=4000$，辅助桥接节点最多为 $2$ 个；对于不要求表格或图片的 fact 问题，在候选充足时优先选择至少 $4$ 个 paragraph。
+
+\paragraph{充分性验证与定向再检索}
+选择完成后，验证器接收问题、证据需求、当前证据集合 $C$ 及其内部桥接关系 $E[C]$：
+\begin{equation}
+\label{eq:sufficiency_verifier}
+\Omega(q,d_q,C,E[C])
+=\bigl(y,\mathcal{M},\mathcal{L},a_{\mathrm{next}},\mathbf{z}\bigr),
+\end{equation}
+其中，$y\in\{0,1\}$ 表示当前证据是否被接受；$\mathcal{M}$ 表示缺失的证据类型或需求；$\mathcal{L}\subseteq\{\mathrm{context},\mathrm{semantic},\mathrm{hierarchy}\}$ 表示建议补充的桥类型；$a_{\mathrm{next}}$ 表示下一步动作；$\mathbf{z}$ 记录相关性、覆盖度、连通性、具体性和噪声等诊断分数。这里的``充分性''是一个用于控制检索停止和修正的可操作判据，不等同于对答案逻辑充分性的形式证明。
+
+规则验证器将问题词项被证据覆盖的比例作为相关性，将需求模态和范围的满足比例作为覆盖度，将参与内部桥接关系的证据节点比例作为连通性，并将与问题不存在词项交集的证据比例作为噪声。默认相关性、覆盖度和噪声阈值分别为 $0.35$、$0.55$ 和 $0.45$。此外，table-figure 问题必须包含 table 或 caption；包含至少两个证据块的 multi-hop 或 comparison 问题要求连通性不低于 $0.5$；当需求粒度为 summary 时，证据中必须出现 summary；global-summary 或 aggregation 问题还必须包含 summary/title，或覆盖至少两个不同章节。
+
+当启用大语言模型验证时，系统将规则结果、$d_q$ 和当前证据传递给模型，要求其输出与式~\eqref{eq:sufficiency_verifier} 一致的结构化结果。模型输出经过字段白名单和取值范围校验；``无证据''、``缺少必要表格/图注''和``噪声过高''三类硬规则不能被模型覆盖，模型调用失败时则直接采用规则结果。
+
+若 $y=0$，系统将已选择节点的种子分数提升至至少 $0.5$，沿 $\mathcal{L}$ 指定的桥类型加入一跳邻居，其分数设为 $0.35w_e$，并根据 $a_{\mathrm{next}}$ 追加类型化种子：table/caption/figure、entity/paragraph、summary/patch/title 或一般原子证据，附加分为 $0.45$。随后重新执行类型化传播、连接和选择。噪声指标在当前实现中作为拒绝和诊断信号，不使用额外的学习式证据压缩模块。主配置最多执行 $R_{\max}=2$ 轮。
+
+检索终止后，完整选择集合用作生成上下文 $C_{\mathrm{gen}}=C$；支持证据 $C_s$ 则从 paragraph、table、caption 和 figure 中选取至多 $4$ 个，排除 entity、summary、patch 和 title 等辅助节点。最终答案由生成器 $\mathcal{G}(q,C_{\mathrm{gen}})$ 产生，并与 $C_s$、桥接关系和检索轮次一同输出。
+
+\begin{algorithm*}[t]
+\caption{EviBridge-RAG Evidence Bridging and Sufficiency Control}
+\label{alg:evibridge}
+\small
+\begin{algorithmic}[1]
+\Require Question $q$, evidence bridge graph $G_{\mathrm{EB}}$, budgets $(B_{\mathrm{blk}},B_{\mathrm{tok}})$, maximum rounds $R_{\max}$
+\Ensure Answer $a$, supporting evidence set $C_s$
+\State $d_q \gets \Psi(q)$
+\State $Z \gets \mathcal{R}(q,d_q,G_{\mathrm{EB}})$
+\If{$Z=\emptyset$}
+    \State \Return $\mathcal{G}(q,\emptyset),\emptyset$
+\EndIf
+\For{$r=1$ to $R_{\max}$}
+    \State $\widetilde{A}_q \gets \lambda_c(d_q)A_c+\lambda_s(d_q)A_s+\lambda_h(d_q)A_h$
+    \State $W_q \gets \operatorname{RowNorm}(\widetilde{A}_q)$
+    \State $p^{(0)} \gets \operatorname{Normalize}(Z)$
+    \State $p \gets \operatorname{TypedPPR}(p^{(0)},W_q)$
+    \State $U_{\mathrm{ppr}} \gets \operatorname{PreserveSeeds}(Z)\cup\operatorname{Top}_m(p)$
+    \State $U \gets U_{\mathrm{ppr}}\cup\mathcal{P}_K(Z,U_{\mathrm{ppr}},G_{\mathrm{EB}})$
+    \State $U \gets \operatorname{MapAuxiliaryToAtomic}(U)$
+    \State $r_q \gets \operatorname{CandidateRerank}(q,U)$
+    \State $C \gets \operatorname{BudgetedSelect}(U,r_q,d_q,B_{\mathrm{blk}},B_{\mathrm{tok}})$
+    \State $(y,\mathcal{M},\mathcal{L},a_{\mathrm{next}},\mathbf{z})
+        \gets \Omega(q,d_q,C,E[C])$
+    \If{$y=1$}
+        \State \textbf{break}
+    \EndIf
+    \State $Z \gets \operatorname{TargetedExpand}(Z,C,\mathcal{M},\mathcal{L},a_{\mathrm{next}})$
+\EndFor
+\State $C_{\mathrm{gen}}\gets C$
+\State $C_s\gets\operatorname{TraceableSupport}(C)$
+\State $a\gets\mathcal{G}(q,C_{\mathrm{gen}})$
+\State \Return $a,C_s$
+\end{algorithmic}
+\end{algorithm*}
+
+\paragraph{在线复杂度}
+设证据桥接图包含 $|V|$ 个节点和 $|E|$ 条边。每轮检索执行一次混合关系 PPR，并额外执行至多三次仅用于记录分类型贡献的诊断性 PPR，因此渐近复杂度仍为 $O(T_p(|V|+|E|))$，常数因子不超过 $4$。当前 connector 依次检查种子与传播候选之间的路径；在最坏情况下，其复杂度为 $O(|Z|\,|U_{\mathrm{ppr}}|(|V|+|E|))$，但主配置通过固定的种子、传播候选和输出路径上限控制实际开销。预算化选择在 $|U|$ 个候选和至多 $B_{\mathrm{blk}}$ 个选择步骤下约为 $O(|U|B_{\mathrm{blk}})$，不计文本分词与可选重排模型的开销。整体在线开销再乘以不超过 $R_{\max}$ 的检索轮数。

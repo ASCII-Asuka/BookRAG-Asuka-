@@ -1,0 +1,61 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Literature Review\n[source_id=8] Breaking away from the non-distributed (high-dimensional, sparse) representations of words, typical of traditional bag-of-words or one-hot-encoding (BIBREF15), BIBREF0 created word2vec. Word2Vec consists of two shallow neural network architectures: continuous skipgram and CBoW. It uses distributed (low-dimensional, dense) representations of words that group similar words. This new model traded the complexity of deep neural network architectures, by other researchers, for more efficient training over large corpora. Its architectures have two training algorithms: negative sampling and hierarchical softmax (BIBREF16). The released model was trained on Google news dataset of 100 billion words. Implementations of the model have been undertaken by researchers in the programming languages Python and C++, though the original was done in C (BIBREF17).\n[source_id=9] Continuous skipgram predicts (by maximizing classification of) words before and after the center word, for a given range. Since distant words are less connected to a center word in a sentence, less weight is assigned to such distant words in training. CBoW, on the other hand, uses words from the history and future in a sequence, with the objective of correctly classifying the target word in the middle. It works by projecting all history or future words within a chosen window into the same position, averaging their vectors. Hence, the order of words in the history or future does not influence the averaged vector. This is similar to the traditional bag-of-words, which is oblivious of the order of words in its sequence. A log-linear classifier is used in both architectures (BIBREF0). In further work, they extended the model to be able to do phrase representations and subsample frequent words (BIBREF16). Being a NNLM, word2vec assigns probabilities to words in a sequence, like other NNLMs such as feedforward networks or recurrent neural networks (BIBREF15). Earlier models like latent dirichlet allocation (LDA) and latent semantic analysis (LSA) exist and effectively achieve low dimensional vectors by matrix factorization (BIBREF18, BIBREF19).\n[source_id=10] It's been shown that word vectors are beneficial for NLP tasks (BIBREF15), such as sentiment analysis and named entity recognition. Besides, BIBREF0 showed with vector space algebra that relationships among words can be evaluated, expressing the quality of vectors produced from the model. The famous, semantic example: vector(\"King\") - vector(\"Man\") + vector(\"Woman\") $\\approx $ vector(\"Queen\") can be verified using cosine distance. Another type of semantic meaning is the relationship between a capital city and its corresponding country. Syntactic relationship examples include plural verbs and past tense, among others. Combination of both syntactic and semantic analyses is possible and provided (totaling over 19,000 questions) as Google analogy test set by BIBREF0. WordSimilarity-353 test set is another analysis tool for word vectors (BIBREF20). Unlike Google analogy score, which is based on vector space algebra, WordSimilarity is based on human expert-assigned semantic similarity on two sets of English word pairs. Both tools rank from 0 (totally dissimilar) to 1 (very much similar or exact, in Google analogy case).\n[source_id=11] A typical artificial neural network (ANN) has very many hyper-parameters which may be tuned. Hyper-parameters are values which may be manually adjusted and include vector dimension size, type of algorithm and learning rate (BIBREF19). BIBREF0 tried various hyper-parameters with both architectures of their model, ranging from 50 to 1,000 dimensions, 30,000 to 3,000,000 vocabulary sizes, 1 to 3 epochs, among others. In our work, we extended research to 3,000 dimensions. Different observations were noted from the many trials. They observed diminishing returns after a certain point, despite additional dimensions or larger, unstructured training data. However, quality increased when both dimensions and data size were increased together. Although BIBREF16 pointed out that choice of optimal hyper-parameter configurations depends on the NLP problem at hand, they identified the most important factors are architecture, dimension size, subsampling rate, and the window size. In addition, it has been observed that variables like size of datasets improve the quality of word vectors and, potentially, performance on downstream tasks (BIBREF21, BIBREF0).",
+  "score": 3.0013276889540434,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    8,
+    9,
+    10,
+    11
+  ],
+  "child_qasper_evidence_texts": [
+    "Breaking away from the non-distributed (high-dimensional, sparse) representations of words, typical of traditional bag-of-words or one-hot-encoding (BIBREF15), BIBREF0 created word2vec. Word2Vec consists of two shallow neural network architectures: continuous skipgram and CBoW. It uses distributed (low-dimensional, dense) representations of words that group similar words. This new model traded the complexity of deep neural network architectures, by other researchers, for more efficient training over large corpora. Its architectures have two training algorithms: negative sampling and hierarchical softmax (BIBREF16). The released model was trained on Google news dataset of 100 billion words. Implementations of the model have been undertaken by researchers in the programming languages Python and C++, though the original was done in C (BIBREF17).",
+    "Continuous skipgram predicts (by maximizing classification of) words before and after the center word, for a given range. Since distant words are less connected to a center word in a sentence, less weight is assigned to such distant words in training. CBoW, on the other hand, uses words from the history and future in a sequence, with the objective of correctly classifying the target word in the middle. It works by projecting all history or future words within a chosen window into the same position, averaging their vectors. Hence, the order of words in the history or future does not influence the averaged vector. This is similar to the traditional bag-of-words, which is oblivious of the order of words in its sequence. A log-linear classifier is used in both architectures (BIBREF0). In further work, they extended the model to be able to do phrase representations and subsample frequent words (BIBREF16). Being a NNLM, word2vec assigns probabilities to words in a sequence, like other NNLMs such as feedforward networks or recurrent neural networks (BIBREF15). Earlier models like latent dirichlet allocation (LDA) and latent semantic analysis (LSA) exist and effectively achieve low dimensional vectors by matrix factorization (BIBREF18, BIBREF19).",
+    "It's been shown that word vectors are beneficial for NLP tasks (BIBREF15), such as sentiment analysis and named entity recognition. Besides, BIBREF0 showed with vector space algebra that relationships among words can be evaluated, expressing the quality of vectors produced from the model. The famous, semantic example: vector(\"King\") - vector(\"Man\") + vector(\"Woman\") $\\approx $ vector(\"Queen\") can be verified using cosine distance. Another type of semantic meaning is the relationship between a capital city and its corresponding country. Syntactic relationship examples include plural verbs and past tense, among others. Combination of both syntactic and semantic analyses is possible and provided (totaling over 19,000 questions) as Google analogy test set by BIBREF0. WordSimilarity-353 test set is another analysis tool for word vectors (BIBREF20). Unlike Google analogy score, which is based on vector space algebra, WordSimilarity is based on human expert-assigned semantic similarity on two sets of English word pairs. Both tools rank from 0 (totally dissimilar) to 1 (very much similar or exact, in Google analogy case).",
+    "A typical artificial neural network (ANN) has very many hyper-parameters which may be tuned. Hyper-parameters are values which may be manually adjusted and include vector dimension size, type of algorithm and learning rate (BIBREF19). BIBREF0 tried various hyper-parameters with both architectures of their model, ranging from 50 to 1,000 dimensions, 30,000 to 3,000,000 vocabulary sizes, 1 to 3 epochs, among others. In our work, we extended research to 3,000 dimensions. Different observations were noted from the many trials. They observed diminishing returns after a certain point, despite additional dimensions or larger, unstructured training data. However, quality increased when both dimensions and data size were increased together. Although BIBREF16 pointed out that choice of optimal hyper-parameter configurations depends on the NLP problem at hand, they identified the most important factors are architecture, dimension size, subsampling rate, and the window size. In addition, it has been observed that variables like size of datasets improve the quality of word vectors and, potentially, performance on downstream tasks (BIBREF21, BIBREF0)."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Literature Review",
+    "Literature Review",
+    "Literature Review",
+    "Literature Review"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Literature Review",
+      0
+    ],
+    [
+      "Literature Review",
+      1
+    ],
+    [
+      "Literature Review",
+      2
+    ],
+    [
+      "Literature Review",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Literature Review",
+  "section": "Literature Review",
+  "title_path": "Literature Review",
+  "block_type": "long_unit"
+}

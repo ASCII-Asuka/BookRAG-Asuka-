@@ -1,0 +1,80 @@
+{
+  "question": "How did the authors find ironic data on twitter?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [],
+      "free_form_answer": "They developed a classifier to find ironic sentences in twitter data",
+      "yes_no": null,
+      "evidence": [
+        "As neural networks are proved effective in irony detection, we decide to implement a neural classifier in order to classify the sentences into ironic and non-ironic sentences. However, the only high-quality irony dataset we can obtain is the dataset of Semeval-2018 Task 3 and the dataset is pretty small, which will cause overfitting to complex models. Therefore, we just implement a simple one-layer RNN with LSTM cell to classify pre-processed sentences into ironic sentences and non-ironic sentences because LSTM networks are widely used in irony detection. We train the model with the dataset of Semeval-2018 Task 3. After classification, we get 262,755 ironic sentences and 399,775 non-ironic sentences. According to our observation, not all non-ironic sentences are suitable to be transferred into ironic sentences. For example, “just hanging out . watching . is it monday yet\" is hard to transfer because it does not have an explicit sentiment polarity. So we remove all interrogative sentences from the non-ironic sentences and only obtain the sentences which have words expressing strong sentiments. We evaluate the sentiment polarity of each word with TextBlob and we view those words with sentiment scores greater than 0.5 or less than -0.5 as words expressing strong sentiments. Finally, we build our irony dataset with 262,755 ironic sentences and 102,330 non-ironic sentences."
+      ],
+      "evidence_block_ids": [
+        19
+      ],
+      "evidence_paragraph_ids": [
+        19
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [],
+      "free_form_answer": "by crawling",
+      "yes_no": null,
+      "evidence": [
+        "In this paper, in order to address the lack of irony data, we first crawl over 2M tweets from twitter to build a dataset with 262,755 ironic and 112,330 non-ironic tweets. Then, due to the lack of parallel data, we propose a novel model to transfer non-ironic sentences to ironic sentences in an unsupervised way. As ironic style is hard to model and describe, we implement our model with the control of classifiers and reinforcement learning. Different from other studies in style transfer, the transformation from non-ironic to ironic sentences has to preserve sentiment polarity as mentioned above. Therefore, we not only design an irony reward to control the irony accuracy and implement denoising auto-encoder and back-translation to control content preservation but also design a sentiment reward to control sentiment preservation."
+      ],
+      "evidence_block_ids": [
+        7
+      ],
+      "evidence_paragraph_ids": [
+        7
+      ]
+    }
+  ],
+  "doc_uuid": "1909.06200",
+  "doc_path": "qasper://1909.06200",
+  "qasper_question_id": "e3a2d8886f03e78ed5e138df870f48635875727e",
+  "title": "A Neural Approach to Irony Generation",
+  "evidence_block_ids": [
+    19,
+    7
+  ],
+  "evidence_paragraph_ids": [
+    19,
+    7
+  ],
+  "output": "{\n  \"answer_short\": \"They crawled over 2M tweets from Twitter to build a dataset.\",\n  \"answer_rationale\": \"The authors addressed the lack of irony data by crawling over 2 million tweets from Twitter to construct a large-scale dataset, as explicitly stated in block_id=7.\",\n  \"supporting_block_ids\": [3, 7]\n}",
+  "retrieved_node_ids": [
+    7,
+    2,
+    16,
+    72,
+    15,
+    46,
+    69,
+    12,
+    32,
+    5
+  ],
+  "retrieved_block_ids": [
+    7,
+    2,
+    16,
+    72,
+    15,
+    46,
+    69,
+    12,
+    32,
+    5
+  ],
+  "answer_short": "They crawled over 2M tweets from Twitter to build a dataset.",
+  "answer_rationale": "The authors addressed the lack of irony data by crawling over 2 million tweets from Twitter to construct a large-scale dataset, as explicitly stated in block_id=7.",
+  "supporting_block_ids": [
+    16,
+    7,
+    2,
+    72
+  ]
+}

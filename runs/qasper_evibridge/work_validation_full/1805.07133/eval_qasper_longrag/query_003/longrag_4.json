@@ -1,0 +1,61 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Vietnamese Tokenization\n[source_id=25] Vietnamese From the linguistic point of view, each sequence of characters between two white spaces in Vietnamese texts cannot be considered as a word since it does not always have a full meaning to stand alone. For example, in the sentence “hôm nay là sinh nhật của tôi” (English equivalence: “Today is my birthday”), “hôm” and “nay” are not two words, they together form a word, which means “today”. Nevertheless, “hôm” and “nay” somehow still bear some meaning: “hôm”-“day”, “nay”-“now”. Similarly, “sinh”-“birth” and “nhật”-“date” also form the word “sinh nhật”-“birthday” but they are not two distinct words. We could also call them subwords.\n[source_id=26] In many Vietnamese processing tasks such as Part-of-Speech Tagging, Syntax Parsing or Chunking, there requires a step to concatenate those subwords to make a word since in those tasks, word is necessarily considered as the smallest unit to be processed. This step is normally referred to as word segmentation. There are various word segmentation methods; The best ones are using machine learning approaches to learn from a labeled corpus. It makes the tasks hard and expensive to be applied in other domains. Furthermore, the translation unit in Machine Translation does not need to be a word but can be a subword or sequence of subwords if it have its own meaning.\n[source_id=27] With this observation in mind, if we consider a subword, i.e. the sequence of characters between two white spaces, as a byte and a sentence as a sequence of bytes, we can apply the BPE algorithm straight-forward: We iteratively find and concatenate the most frequent pair of subwords ( INLINEFORM0 , INLINEFORM1 ) and replace it by an unseen subwords INLINEFORM2 . We do not merge INLINEFORM3 with INLINEFORM4 if one of them are digits or punctuations or other special symbols. The BPE learning algorithm has an arguments which is the minimum value of frequency. In practice, we set the minimum frequency is 2. Listing 1 presents this variant of BPE, which we call VNBPE.\n[source_id=28] mystyle def get_most_freq_pair(text,min_freq): dict = {} dumpWord = {set_of_separate_symbols} for line in text: w1 = the_first_word_in_the_line for w2 = each_word_in_the_line: if w1,w2 not in dumpWord and w1 is not a number: dict[w1,w2] += 1 get_next_pair_in_the_line() w1 = w2 return (all pairs has freq > min_freq) def update_pairs(pair,text,codes_file): original_word = pair[0] + \" \" + pair[1] replaced_word = pair[0] + \"_\" + pair[1] input_file.replace(rew,orw) write_replaced_word_to_codes_file() return input_file ### MAIN PART ### min_freq=2 open(input_file) to read open(codes_file) and (output_file) to write pairs = get_most_freq_pair(input_file,min_freq) arrange_pairs_for_decreasing_of_frequency() for each (freq,pair) in pairs: update_pairs(pair,input_file,codes_file) output_file=input_file close_all_files() Compared to other word segmentation methods which require training on labeled data, our VNBPE is a simple unsupervised method, alike to its original BPE algorithm. Table TABREF7 shows the outputs of one decent word segmentation method and our VNBPE.",
+  "score": 2.928657727287359,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    25,
+    26,
+    27,
+    28
+  ],
+  "child_qasper_evidence_texts": [
+    "Vietnamese From the linguistic point of view, each sequence of characters between two white spaces in Vietnamese texts cannot be considered as a word since it does not always have a full meaning to stand alone. For example, in the sentence “hôm nay là sinh nhật của tôi” (English equivalence: “Today is my birthday”), “hôm” and “nay” are not two words, they together form a word, which means “today”. Nevertheless, “hôm” and “nay” somehow still bear some meaning: “hôm”-“day”, “nay”-“now”. Similarly, “sinh”-“birth” and “nhật”-“date” also form the word “sinh nhật”-“birthday” but they are not two distinct words. We could also call them subwords.",
+    "In many Vietnamese processing tasks such as Part-of-Speech Tagging, Syntax Parsing or Chunking, there requires a step to concatenate those subwords to make a word since in those tasks, word is necessarily considered as the smallest unit to be processed. This step is normally referred to as word segmentation. There are various word segmentation methods; The best ones are using machine learning approaches to learn from a labeled corpus. It makes the tasks hard and expensive to be applied in other domains. Furthermore, the translation unit in Machine Translation does not need to be a word but can be a subword or sequence of subwords if it have its own meaning.",
+    "With this observation in mind, if we consider a subword, i.e. the sequence of characters between two white spaces, as a byte and a sentence as a sequence of bytes, we can apply the BPE algorithm straight-forward: We iteratively find and concatenate the most frequent pair of subwords ( INLINEFORM0 , INLINEFORM1 ) and replace it by an unseen subwords INLINEFORM2 . We do not merge INLINEFORM3 with INLINEFORM4 if one of them are digits or punctuations or other special symbols. The BPE learning algorithm has an arguments which is the minimum value of frequency. In practice, we set the minimum frequency is 2. Listing 1 presents this variant of BPE, which we call VNBPE.",
+    "mystyle def get_most_freq_pair(text,min_freq): dict = {} dumpWord = {set_of_separate_symbols} for line in text: w1 = the_first_word_in_the_line for w2 = each_word_in_the_line: if w1,w2 not in dumpWord and w1 is not a number: dict[w1,w2] += 1 get_next_pair_in_the_line() w1 = w2 return (all pairs has freq > min_freq) def update_pairs(pair,text,codes_file): original_word = pair[0] + \" \" + pair[1] replaced_word = pair[0] + \"_\" + pair[1] input_file.replace(rew,orw) write_replaced_word_to_codes_file() return input_file ### MAIN PART ### min_freq=2 open(input_file) to read open(codes_file) and (output_file) to write pairs = get_most_freq_pair(input_file,min_freq) arrange_pairs_for_decreasing_of_frequency() for each (freq,pair) in pairs: update_pairs(pair,input_file,codes_file) output_file=input_file close_all_files() Compared to other word segmentation methods which require training on labeled data, our VNBPE is a simple unsupervised method, alike to its original BPE algorithm. Table TABREF7 shows the outputs of one decent word segmentation method and our VNBPE."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Vietnamese Tokenization",
+    "Vietnamese Tokenization",
+    "Vietnamese Tokenization",
+    "Vietnamese Tokenization"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Vietnamese Tokenization",
+      0
+    ],
+    [
+      "Vietnamese Tokenization",
+      1
+    ],
+    [
+      "Vietnamese Tokenization",
+      2
+    ],
+    [
+      "Vietnamese Tokenization",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Vietnamese Tokenization",
+  "section": "Vietnamese Tokenization",
+  "title_path": "Vietnamese Tokenization",
+  "block_type": "long_unit"
+}

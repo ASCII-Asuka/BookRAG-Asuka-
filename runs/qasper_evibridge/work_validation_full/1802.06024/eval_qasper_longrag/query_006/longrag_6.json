@@ -1,0 +1,142 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Experiments\n[source_id=42] We now evaluate LiLi in terms of its predictive performance and strategy formulation abilities.\n[source_id=43] Data: We use two standard datasets (see Table 4): (1) Freebase FB15k, and (2) WordNet INLINEFORM0 . Using each dataset, we build a fairly large graph and use it as the original KB ( INLINEFORM1 ) for evaluation. We also augment INLINEFORM2 with inverse triples ( INLINEFORM3 , INLINEFORM4 , INLINEFORM5 ) for each ( INLINEFORM6 , INLINEFORM7 , INLINEFORM8 ) following existing KBC methods.\n[source_id=44] Parameter Settings. Unless specified, the empirically set parameters (see Table 1) of LiLi are: INLINEFORM0 , INLINEFORM1 , INLINEFORM2 , INLINEFORM3 , INLINEFORM4 , INLINEFORM5 , INLINEFORM6 , INLINEFORM7 , INLINEFORM8 , INLINEFORM9 , INLINEFORM10 . For training RL-model with INLINEFORM11 -greedy strategy, we use INLINEFORM12 , INLINEFORM13 , pre-training steps=50000. We used Keras deep learning library to implement and train the prediction model. We set batch-size as 128, max. training epoch as 150, dropout as 0.2, hidden units and embedding size as 300 and learning rate as 5e-3 which is reduced gradually on plateau with factor 0.5 and patience 5. Adam optimizer and early stopping were used in training. We also shuffle INLINEFORM14 in each epoch and adjust class weights inversely proportional to class frequencies in INLINEFORM15 .\n[source_id=45] Labeled Dataset Generation and Simulated User Creation. We create a simulated user for each KB to evaluate LiLi. We create the labeled datasets, the simulated user’s knowledge base ( INLINEFORM0 ), and the base KB ( INLINEFORM1 ) from INLINEFORM2 . INLINEFORM3 used as the initial KB graph ( INLINEFORM4 ) of LiLi.\n[source_id=46] We followed BIBREF16 for labeled dataset generation. For Freebase, we found 86 relations with INLINEFORM0 triples and randomly selected 50 from various domains. We randomly shuffle the list of 50 relations, select 25% of them as unknown relations and consider the rest (75%) as known relations. For each known relation INLINEFORM1 , we randomly shuffle the list of distinct triples for INLINEFORM2 , choose 1000 triples and split them into 60% training, 10% validation and 20% test. Rest 10% along with the leftover (not included in the list of 1000) triples are added to INLINEFORM3 . For each unknown relation INLINEFORM4 , we remove all triples of INLINEFORM5 from INLINEFORM6 and add them to INLINEFORM7 . In this process, we also randomly choose 20% triples as test instances for unknown INLINEFORM8 which are excluded from INLINEFORM9 . Note that, now INLINEFORM10 has at least 10% of chosen triples for each INLINEFORM11 (known and unknown) and so, user is always able to provide clues for both cases. For each labeled dataset, we randomly choose 10% of the entities present in dataset triples, remove triples involving those entities from INLINEFORM12 and add to INLINEFORM13 . At this point, INLINEFORM14 gets reduced to INLINEFORM15 and is used as INLINEFORM16 for LiLi. The dataset stats in Table 4 shows that the base KB (60% triples of INLINEFORM17 ) is highly sparse (compared to original KB) which makes the inference task much harder. WordNet dataset being small, we select all 18 relations for evaluation and create labeled dataset, INLINEFORM18 and INLINEFORM19 following Freebase. Although the user may provide clues 100% of the time, it often cannot respond to MLQs and CLQs (due to lack of required triples/facts). Thus, we further enrich INLINEFORM20 with external KB triples.\n[source_id=47] Given a relation INLINEFORM0 and an observed triple ( INLINEFORM1 , INLINEFORM2 , INLINEFORM3 ) in training or testing, the pair ( INLINEFORM4 , INLINEFORM5 ) is regarded as a +ve instance for INLINEFORM6 . Following BIBREF18 , for each +ve instance ( INLINEFORM7 , INLINEFORM8 ), we generate two negative ones, one by randomly corrupting the source INLINEFORM9 , and the other by corrupting the target INLINEFORM10 . Note that, the test triples are not in INLINEFORM11 or INLINEFORM12 and none of the -ve instances overlap with the +ve ones.\n[source_id=48] Baselines. As none of the existing KBC methods can solve the OKBC problem, we choose various versions of LiLi as baselines.\n[source_id=49] Single: Version of LiLi where we train a single prediction model INLINEFORM0 for all test relations.\n[source_id=50] Sep: We do not transfer (past learned) weights for initializing INLINEFORM0 , i.e., we disable LL.\n[source_id=51] F-th): Here, we use a fixed prediction threshold 0.5 instead of relation-specific threshold INLINEFORM0 .\n[source_id=52] BG: The missing or connecting links (when the user does not respond) are filled with “@-RelatedTo-@\" blindly, no guessing mechanism.\n[source_id=53] w/o PTS: LiLi does not ask for additional clues via past task selection for skillset improvement.\n[source_id=54] Evaluation Metrics. To evaluate the strategy formulation ability, we introduce a measure called Coverage( INLINEFORM0 ), defined as the fraction of total query data instances, for which LiLi has successfully formulated strategies that lead to winning. If LiLi wins on all episodes for a given dataset, INLINEFORM1 is 1.0. To evaluate the predictive performance, we use Avg. MCC and avg. +ve F1 score.",
+  "score": 2.0314654235428393,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54
+  ],
+  "child_qasper_evidence_texts": [
+    "We now evaluate LiLi in terms of its predictive performance and strategy formulation abilities.",
+    "Data: We use two standard datasets (see Table 4): (1) Freebase FB15k, and (2) WordNet INLINEFORM0 . Using each dataset, we build a fairly large graph and use it as the original KB ( INLINEFORM1 ) for evaluation. We also augment INLINEFORM2 with inverse triples ( INLINEFORM3 , INLINEFORM4 , INLINEFORM5 ) for each ( INLINEFORM6 , INLINEFORM7 , INLINEFORM8 ) following existing KBC methods.",
+    "Parameter Settings. Unless specified, the empirically set parameters (see Table 1) of LiLi are: INLINEFORM0 , INLINEFORM1 , INLINEFORM2 , INLINEFORM3 , INLINEFORM4 , INLINEFORM5 , INLINEFORM6 , INLINEFORM7 , INLINEFORM8 , INLINEFORM9 , INLINEFORM10 . For training RL-model with INLINEFORM11 -greedy strategy, we use INLINEFORM12 , INLINEFORM13 , pre-training steps=50000. We used Keras deep learning library to implement and train the prediction model. We set batch-size as 128, max. training epoch as 150, dropout as 0.2, hidden units and embedding size as 300 and learning rate as 5e-3 which is reduced gradually on plateau with factor 0.5 and patience 5. Adam optimizer and early stopping were used in training. We also shuffle INLINEFORM14 in each epoch and adjust class weights inversely proportional to class frequencies in INLINEFORM15 .",
+    "Labeled Dataset Generation and Simulated User Creation. We create a simulated user for each KB to evaluate LiLi. We create the labeled datasets, the simulated user’s knowledge base ( INLINEFORM0 ), and the base KB ( INLINEFORM1 ) from INLINEFORM2 . INLINEFORM3 used as the initial KB graph ( INLINEFORM4 ) of LiLi.",
+    "We followed BIBREF16 for labeled dataset generation. For Freebase, we found 86 relations with INLINEFORM0 triples and randomly selected 50 from various domains. We randomly shuffle the list of 50 relations, select 25% of them as unknown relations and consider the rest (75%) as known relations. For each known relation INLINEFORM1 , we randomly shuffle the list of distinct triples for INLINEFORM2 , choose 1000 triples and split them into 60% training, 10% validation and 20% test. Rest 10% along with the leftover (not included in the list of 1000) triples are added to INLINEFORM3 . For each unknown relation INLINEFORM4 , we remove all triples of INLINEFORM5 from INLINEFORM6 and add them to INLINEFORM7 . In this process, we also randomly choose 20% triples as test instances for unknown INLINEFORM8 which are excluded from INLINEFORM9 . Note that, now INLINEFORM10 has at least 10% of chosen triples for each INLINEFORM11 (known and unknown) and so, user is always able to provide clues for both cases. For each labeled dataset, we randomly choose 10% of the entities present in dataset triples, remove triples involving those entities from INLINEFORM12 and add to INLINEFORM13 . At this point, INLINEFORM14 gets reduced to INLINEFORM15 and is used as INLINEFORM16 for LiLi. The dataset stats in Table 4 shows that the base KB (60% triples of INLINEFORM17 ) is highly sparse (compared to original KB) which makes the inference task much harder. WordNet dataset being small, we select all 18 relations for evaluation and create labeled dataset, INLINEFORM18 and INLINEFORM19 following Freebase. Although the user may provide clues 100% of the time, it often cannot respond to MLQs and CLQs (due to lack of required triples/facts). Thus, we further enrich INLINEFORM20 with external KB triples.",
+    "Given a relation INLINEFORM0 and an observed triple ( INLINEFORM1 , INLINEFORM2 , INLINEFORM3 ) in training or testing, the pair ( INLINEFORM4 , INLINEFORM5 ) is regarded as a +ve instance for INLINEFORM6 . Following BIBREF18 , for each +ve instance ( INLINEFORM7 , INLINEFORM8 ), we generate two negative ones, one by randomly corrupting the source INLINEFORM9 , and the other by corrupting the target INLINEFORM10 . Note that, the test triples are not in INLINEFORM11 or INLINEFORM12 and none of the -ve instances overlap with the +ve ones.",
+    "Baselines. As none of the existing KBC methods can solve the OKBC problem, we choose various versions of LiLi as baselines.",
+    "Single: Version of LiLi where we train a single prediction model INLINEFORM0 for all test relations.",
+    "Sep: We do not transfer (past learned) weights for initializing INLINEFORM0 , i.e., we disable LL.",
+    "F-th): Here, we use a fixed prediction threshold 0.5 instead of relation-specific threshold INLINEFORM0 .",
+    "BG: The missing or connecting links (when the user does not respond) are filled with “@-RelatedTo-@\" blindly, no guessing mechanism.",
+    "w/o PTS: LiLi does not ask for additional clues via past task selection for skillset improvement.",
+    "Evaluation Metrics. To evaluate the strategy formulation ability, we introduce a measure called Coverage( INLINEFORM0 ), defined as the fraction of total query data instances, for which LiLi has successfully formulated strategies that lead to winning. If LiLi wins on all episodes for a given dataset, INLINEFORM1 is 1.0. To evaluate the predictive performance, we use Avg. MCC and avg. +ve F1 score."
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Experiments",
+      0
+    ],
+    [
+      "Experiments",
+      1
+    ],
+    [
+      "Experiments",
+      2
+    ],
+    [
+      "Experiments",
+      3
+    ],
+    [
+      "Experiments",
+      4
+    ],
+    [
+      "Experiments",
+      5
+    ],
+    [
+      "Experiments",
+      6
+    ],
+    [
+      "Experiments",
+      7
+    ],
+    [
+      "Experiments",
+      8
+    ],
+    [
+      "Experiments",
+      9
+    ],
+    [
+      "Experiments",
+      10
+    ],
+    [
+      "Experiments",
+      11
+    ],
+    [
+      "Experiments",
+      12
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Experiments",
+  "section": "Experiments",
+  "title_path": "Experiments",
+  "block_type": "long_unit"
+}

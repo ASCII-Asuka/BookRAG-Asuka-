@@ -1,0 +1,70 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Model\n[source_id=22] We build two types of models. First, we develop feature-based models which utilize features of the successful models in social media analysis and causal relation discourse parsing. Then, we build a recursive neural network model which uses distributed representation of discourse arguments as this approach can even capture latent properties of causal relations which may exist between distant discourse arguments. We specifically selected bidirectional LSTM since the model with the discourse distributional structure built in this form outperformed the traditional models in similar NLP downstream tasks BIBREF3 .\n[source_id=23] As the first step of our pipeline, we use Tweebo parser BIBREF20 to extract syntactic features from messages. Then, we demarcate sentences using punctuation (`,') tag and periods. Among those sentences, we find discourse connectives defined in PDTB annotation along with a Tweet POS tag for conjunction words which can also be a discourse marker. In order to decide whether these connectives are really discourse connectives (e.g., I went home, but he stayed) as opposed to simple connections of two words (I like apple and banana) we see if verb phrases exist before and after the connective by using dependency parsing results. Although discourse connective disambiguation is a complicated task which can be much improved by syntactic features BIBREF21 , we try to minimize effects of syntactic parsing and simplify it since it is highly error-prone in social media. Finally, according to visual inspection, emojis (`E' tag) are crucial for discourse relation in social media so we take them as separate discourse arguments (e.g.,in “My test result... :(” the sad feeling is caused by the test result, but it cannot be captured by plain word tokens).\n[source_id=24] We trained a linear SVM, an rbf SVM, and a random forest with N-gram, charater N-gram, and tweet POS tags, sentiment tags, average word lengths and word counts from each message as they have a pivotal role in the models for many NLP downstream tasks in social media BIBREF19 , BIBREF18 . In addition to these features, we also extracted First-Last, First3 features and Word Pairs from every adjacent pair of discourse arguments since these features were most helpful for causal relation prediction BIBREF9 . First-Last, First3 features are first and last word and first three words of two discourse arguments of the relation, and Word Pairs are the cross product of words of those discourse arguments. These two features enable our model to capture interaction between two discourse arguments. BIBREF9 reported that these two features along with verbs, modality, context, and polarity (which can be captured by N-grams, sentiment tags and POS tags in our previous features) obtained the best performance for predicting Contingency class to which causality belongs.\n[source_id=25] We load the GLOVE word embedding BIBREF22 trained in Twitter for each token of extracted discourse arguments from messages. For the distributional representation of discourse arguments, we run a Word-level LSTM on the words' embeddings within each discourse argument and concatenate last hidden state vectors of forward LSTM ( $\\overrightarrow{h}$ ) and backward LSTM ( $\\overleftarrow{h}$ ) which is suggested by BIBREF3 ( $DA = [\\overrightarrow{h};\\overleftarrow{h}]$ ). Then, we feed the sequence of the vector representation of discourse arguments to the Discourse-argument-level LSTM (DA-level LSTM) to make a final prediction with log softmax function. With this structure, the model can learn the representation of interaction of tokens inside each discourse argument, then capture discourse relations across all of the discourse arguments in each message (Figure 2 ). In order to prevent the overfitting, we added a dropout layer between the Word-level LSTM and the DA-level LSTM layer.\n[source_id=26] We also explore subsets of the full RNN architecture, specifically with one of the two LSTM layers removed. In the first model variant, we directly input all word embeddings of a whole message to a BiLSTM layer and make prediction (Word LSTM) without the help of the distributional vector representations of discourse arguments. In the second model variant, we take the average of all word embeddings of each discourse argument ( $DA_k=\\frac{1}{N_k} \\sum _{i=1}^{N_k}W_{i}$ ), and use them as inputs to a BiLSTM layer (DA AVG LSTM) as the average vector of embeddings were quite effective for representing the whole sequence BIBREF3 , BIBREF5 . As with the full architectures, for CP both of these variants ends with a many-to-one classification per message, while the CEI model ends with a sequence of classifications.",
+  "score": 0.5252021606794558,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    22,
+    23,
+    24,
+    25,
+    26
+  ],
+  "child_qasper_evidence_texts": [
+    "We build two types of models. First, we develop feature-based models which utilize features of the successful models in social media analysis and causal relation discourse parsing. Then, we build a recursive neural network model which uses distributed representation of discourse arguments as this approach can even capture latent properties of causal relations which may exist between distant discourse arguments. We specifically selected bidirectional LSTM since the model with the discourse distributional structure built in this form outperformed the traditional models in similar NLP downstream tasks BIBREF3 .",
+    "As the first step of our pipeline, we use Tweebo parser BIBREF20 to extract syntactic features from messages. Then, we demarcate sentences using punctuation (`,') tag and periods. Among those sentences, we find discourse connectives defined in PDTB annotation along with a Tweet POS tag for conjunction words which can also be a discourse marker. In order to decide whether these connectives are really discourse connectives (e.g., I went home, but he stayed) as opposed to simple connections of two words (I like apple and banana) we see if verb phrases exist before and after the connective by using dependency parsing results. Although discourse connective disambiguation is a complicated task which can be much improved by syntactic features BIBREF21 , we try to minimize effects of syntactic parsing and simplify it since it is highly error-prone in social media. Finally, according to visual inspection, emojis (`E' tag) are crucial for discourse relation in social media so we take them as separate discourse arguments (e.g.,in “My test result... :(” the sad feeling is caused by the test result, but it cannot be captured by plain word tokens).",
+    "We trained a linear SVM, an rbf SVM, and a random forest with N-gram, charater N-gram, and tweet POS tags, sentiment tags, average word lengths and word counts from each message as they have a pivotal role in the models for many NLP downstream tasks in social media BIBREF19 , BIBREF18 . In addition to these features, we also extracted First-Last, First3 features and Word Pairs from every adjacent pair of discourse arguments since these features were most helpful for causal relation prediction BIBREF9 . First-Last, First3 features are first and last word and first three words of two discourse arguments of the relation, and Word Pairs are the cross product of words of those discourse arguments. These two features enable our model to capture interaction between two discourse arguments. BIBREF9 reported that these two features along with verbs, modality, context, and polarity (which can be captured by N-grams, sentiment tags and POS tags in our previous features) obtained the best performance for predicting Contingency class to which causality belongs.",
+    "We load the GLOVE word embedding BIBREF22 trained in Twitter for each token of extracted discourse arguments from messages. For the distributional representation of discourse arguments, we run a Word-level LSTM on the words' embeddings within each discourse argument and concatenate last hidden state vectors of forward LSTM ( $\\overrightarrow{h}$ ) and backward LSTM ( $\\overleftarrow{h}$ ) which is suggested by BIBREF3 ( $DA = [\\overrightarrow{h};\\overleftarrow{h}]$ ). Then, we feed the sequence of the vector representation of discourse arguments to the Discourse-argument-level LSTM (DA-level LSTM) to make a final prediction with log softmax function. With this structure, the model can learn the representation of interaction of tokens inside each discourse argument, then capture discourse relations across all of the discourse arguments in each message (Figure 2 ). In order to prevent the overfitting, we added a dropout layer between the Word-level LSTM and the DA-level LSTM layer.",
+    "We also explore subsets of the full RNN architecture, specifically with one of the two LSTM layers removed. In the first model variant, we directly input all word embeddings of a whole message to a BiLSTM layer and make prediction (Word LSTM) without the help of the distributional vector representations of discourse arguments. In the second model variant, we take the average of all word embeddings of each discourse argument ( $DA_k=\\frac{1}{N_k} \\sum _{i=1}^{N_k}W_{i}$ ), and use them as inputs to a BiLSTM layer (DA AVG LSTM) as the average vector of embeddings were quite effective for representing the whole sequence BIBREF3 , BIBREF5 . As with the full architectures, for CP both of these variants ends with a many-to-one classification per message, while the CEI model ends with a sequence of classifications."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Model",
+    "Model",
+    "Model",
+    "Model",
+    "Model"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Model",
+      0
+    ],
+    [
+      "Model",
+      1
+    ],
+    [
+      "Model",
+      2
+    ],
+    [
+      "Model",
+      3
+    ],
+    [
+      "Model",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Model",
+  "section": "Model",
+  "title_path": "Model",
+  "block_type": "long_unit"
+}

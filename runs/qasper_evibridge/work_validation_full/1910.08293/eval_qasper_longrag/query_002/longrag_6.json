@@ -1,0 +1,61 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Methodology ::: Character Space Module (CSM)\n[source_id=26] CSM learns how to rank characters. We can measure the interdependencies between the HLA variables BIBREF29 and rank the similarity between the TV show characters. We use implicit feedback instead of neighborhood models (e.g. cosine similarity) because it can compute latent factors to transform both characters and HLAs into the same latent space, making them directly comparable.\n[source_id=27] We define a matrix $P$ that contains binary values, with $P_{u,i} = 1$ if character $u$ has HLA $i$ in our dataset, and $P_{u,i} = 0$ otherwise. We define a constant $\\alpha $ that measures our confidence in observing various character-HLA pairs as positive. $\\alpha $ controls how much the model penalizes the error if the ground truth is $P_{u,i} = 1$. If $P_{u,i} = 1$ and the model guesses incorrectly, we penalize by $\\alpha $ times the loss. But if $P_{u,i} = 0$ and the model guesses a value greater than 0, we do not penalize as $\\alpha $ has no impact. This is because $P_{u,i} = 0$ can either represent a true negative or be due to a lack of data, and hence is less reliable for penalization. See Equation DISPLAY_FORM8. We find that using $\\alpha =20$ provides decent results.\n[source_id=28] We further define two dense vectors $X_u$ and $Y_i$. We call $X_u$ the “latent factors for character $u$\", and $Y_i$ the “latent factors for HLA $i$\". The dot product of these two vectors produces a value ($X_u^TY_i$) that approximates $P_{u,i}$ (see Figure FIGREF9). This is analogous to factoring the matrix $P$ into two separate matrices, where one contains the latent factors for characters, and the other contains the latent factors for HLAs. We find that $X_u$ and $Y_i$ being 36-dimensional produces decent results. To bring $X_u^TY_i$ as close as possible to $P_{u,i}$, we minimize the following loss function using the Conjugate Gradient Method BIBREF30:\n[source_id=29] The first term penalizes differences between the model's prediction ($X_u^TY_i$) and the actual value ($P_{u,i}$). The second term is an L2 regularizer to reduce overfitting. We find $\\lambda = 100$ provides decent results for 500 iterations (see Section SECREF26).",
+  "score": 4.971473365718144,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    26,
+    27,
+    28,
+    29
+  ],
+  "child_qasper_evidence_texts": [
+    "CSM learns how to rank characters. We can measure the interdependencies between the HLA variables BIBREF29 and rank the similarity between the TV show characters. We use implicit feedback instead of neighborhood models (e.g. cosine similarity) because it can compute latent factors to transform both characters and HLAs into the same latent space, making them directly comparable.",
+    "We define a matrix $P$ that contains binary values, with $P_{u,i} = 1$ if character $u$ has HLA $i$ in our dataset, and $P_{u,i} = 0$ otherwise. We define a constant $\\alpha $ that measures our confidence in observing various character-HLA pairs as positive. $\\alpha $ controls how much the model penalizes the error if the ground truth is $P_{u,i} = 1$. If $P_{u,i} = 1$ and the model guesses incorrectly, we penalize by $\\alpha $ times the loss. But if $P_{u,i} = 0$ and the model guesses a value greater than 0, we do not penalize as $\\alpha $ has no impact. This is because $P_{u,i} = 0$ can either represent a true negative or be due to a lack of data, and hence is less reliable for penalization. See Equation DISPLAY_FORM8. We find that using $\\alpha =20$ provides decent results.",
+    "We further define two dense vectors $X_u$ and $Y_i$. We call $X_u$ the “latent factors for character $u$\", and $Y_i$ the “latent factors for HLA $i$\". The dot product of these two vectors produces a value ($X_u^TY_i$) that approximates $P_{u,i}$ (see Figure FIGREF9). This is analogous to factoring the matrix $P$ into two separate matrices, where one contains the latent factors for characters, and the other contains the latent factors for HLAs. We find that $X_u$ and $Y_i$ being 36-dimensional produces decent results. To bring $X_u^TY_i$ as close as possible to $P_{u,i}$, we minimize the following loss function using the Conjugate Gradient Method BIBREF30:",
+    "The first term penalizes differences between the model's prediction ($X_u^TY_i$) and the actual value ($P_{u,i}$). The second term is an L2 regularizer to reduce overfitting. We find $\\lambda = 100$ provides decent results for 500 iterations (see Section SECREF26)."
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Methodology ::: Character Space Module (CSM)",
+    "Methodology ::: Character Space Module (CSM)",
+    "Methodology ::: Character Space Module (CSM)",
+    "Methodology ::: Character Space Module (CSM)"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Methodology ::: Character Space Module (CSM)",
+      0
+    ],
+    [
+      "Methodology ::: Character Space Module (CSM)",
+      1
+    ],
+    [
+      "Methodology ::: Character Space Module (CSM)",
+      2
+    ],
+    [
+      "Methodology ::: Character Space Module (CSM)",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Methodology ::: Character Space Module (CSM)",
+  "section": "Methodology ::: Character Space Module (CSM)",
+  "title_path": "Methodology ::: Character Space Module (CSM)",
+  "block_type": "long_unit"
+}

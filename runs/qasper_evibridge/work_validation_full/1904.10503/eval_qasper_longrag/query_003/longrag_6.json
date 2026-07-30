@@ -1,0 +1,106 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Entity Linking using Wikidata\n[source_id=28] Entity linking (EL) BIBREF24 , also known as named entity disambiguation or normalization, is the task to determine the identity of entities mentioned in a piece of text with reference to a knowledge base. There are a number of knowledge bases that provide a background repository for entity classification of this type. For this study, we use Wikidata, which can be seen diagrammatically in Figure FIGREF12 . Systems such as DeepType BIBREF25 integrate symbolic information into the reasoning process of a neural network with a type system and show state-of-the-art performances for EL. They do not, however, quote results on Wiki(gold) so a direct comparison is difficult.\n[source_id=29] While these knowledge bases provide semantically rich and fine-granular classes and relationship types, the task of entity classification often requires associating coarse-grained classes with discovered surface forms of entities. Most existing studies consider NER and entity linking as two separate tasks, whereas we try to combine the two. It has been shown that one can significantly increase the semantic information carried by a NER system when we successfully linking entities from a deep learning method to the related entities from a knowledge base BIBREF26 , BIBREF27 .\n[source_id=30] Redirection: For the Wikidata linking element, we recognize that the lookup will be constrained by the most common lookup name for each entity. Consider the utterance (referring to the NBA basketball player) from Figure FIGREF12 “Michael Jeffrey Jordan in San Jose” as an example. The lookup for this entity in Wikidata is “Michael Jordan” and consequently will not be picked up if we were to use an exact string match. A simple method to circumvent such a problem is the usage of a redirection list. Such a list is provided on an entity by entity basis in the “Also known as” section in Wikidata. Using this redirection list, when we do not find an exact string match improves the recall of our model by 5-10%. Moreover, with the example of Michael Jordan (person), using our current framework, we will always refer to the retired basketball player (Q41421). We will never, for instance, pick up Michael Jordan (Q27069141) the American football cornerback. Or in fact any other Michael Jordan, famous or otherwise. One possible method to overcome this is to add a disambiguation layer, which seeks to use context from earlier parts of the text. This is, however, work for future improvement and we only consider the most common version of that entity.\n[source_id=31] Clustering: The Wikidata taxonomy provides thousands of possible instance of, and subclass of types for our entities. Consequently, in order to perform a meaningful validation of our model, we must find a way to cluster these onto the 112 types provided by Wiki(gold). Our clustering is performed as follows:\n[source_id=32] If the entity type is either person, location, organization we use the NECKAr BIBREF28 tool to narrow down our list of searchable entities.\n[source_id=33] We then look at either the occupation for person, or instance of for location/organization categories to map to the available subtypes.\n[source_id=34] If the entity type is not person, location, or organization we search all of Wikidata.\n[source_id=35] The clustering we perform in part 1 or 2 is from a cosine similarity of the entity description to the list of possible subtypes for that entity. For this we use Word2Vec word embeddings trained on Wikipedia. We set the minimum threshold of the average cosine similarity to be 0.1.\n[source_id=36] As an example, consider the test sentence: “The device will be available on sale on 20th April 2011 on amazon uk Apple's iPad” from Figure FIGREF18 . First, we tag iPad as product using the context encoder described in Section 2.1. We then search Wikidata and return the most common variant for that entity in this case Q2796 (the most referenced variant is the one with the lowest Q-id). We then calculate a cosine similarity of the description, in this case “line of tablet computers”, with the possible subtypes of product. The possible subtypes, in this case, are engine, airplane, car, ship, spacecraft, train, camera, mobile phone, computer, software, game, instrument, ship, weapon. We return the highest result above 0.1, which in this case is computer (0.54).",
+  "score": 6.86706910329437,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36
+  ],
+  "child_qasper_evidence_texts": [
+    "Entity linking (EL) BIBREF24 , also known as named entity disambiguation or normalization, is the task to determine the identity of entities mentioned in a piece of text with reference to a knowledge base. There are a number of knowledge bases that provide a background repository for entity classification of this type. For this study, we use Wikidata, which can be seen diagrammatically in Figure FIGREF12 . Systems such as DeepType BIBREF25 integrate symbolic information into the reasoning process of a neural network with a type system and show state-of-the-art performances for EL. They do not, however, quote results on Wiki(gold) so a direct comparison is difficult.",
+    "While these knowledge bases provide semantically rich and fine-granular classes and relationship types, the task of entity classification often requires associating coarse-grained classes with discovered surface forms of entities. Most existing studies consider NER and entity linking as two separate tasks, whereas we try to combine the two. It has been shown that one can significantly increase the semantic information carried by a NER system when we successfully linking entities from a deep learning method to the related entities from a knowledge base BIBREF26 , BIBREF27 .",
+    "Redirection: For the Wikidata linking element, we recognize that the lookup will be constrained by the most common lookup name for each entity. Consider the utterance (referring to the NBA basketball player) from Figure FIGREF12 “Michael Jeffrey Jordan in San Jose” as an example. The lookup for this entity in Wikidata is “Michael Jordan” and consequently will not be picked up if we were to use an exact string match. A simple method to circumvent such a problem is the usage of a redirection list. Such a list is provided on an entity by entity basis in the “Also known as” section in Wikidata. Using this redirection list, when we do not find an exact string match improves the recall of our model by 5-10%. Moreover, with the example of Michael Jordan (person), using our current framework, we will always refer to the retired basketball player (Q41421). We will never, for instance, pick up Michael Jordan (Q27069141) the American football cornerback. Or in fact any other Michael Jordan, famous or otherwise. One possible method to overcome this is to add a disambiguation layer, which seeks to use context from earlier parts of the text. This is, however, work for future improvement and we only consider the most common version of that entity.",
+    "Clustering: The Wikidata taxonomy provides thousands of possible instance of, and subclass of types for our entities. Consequently, in order to perform a meaningful validation of our model, we must find a way to cluster these onto the 112 types provided by Wiki(gold). Our clustering is performed as follows:",
+    "If the entity type is either person, location, organization we use the NECKAr BIBREF28 tool to narrow down our list of searchable entities.",
+    "We then look at either the occupation for person, or instance of for location/organization categories to map to the available subtypes.",
+    "If the entity type is not person, location, or organization we search all of Wikidata.",
+    "The clustering we perform in part 1 or 2 is from a cosine similarity of the entity description to the list of possible subtypes for that entity. For this we use Word2Vec word embeddings trained on Wikipedia. We set the minimum threshold of the average cosine similarity to be 0.1.",
+    "As an example, consider the test sentence: “The device will be available on sale on 20th April 2011 on amazon uk Apple's iPad” from Figure FIGREF18 . First, we tag iPad as product using the context encoder described in Section 2.1. We then search Wikidata and return the most common variant for that entity in this case Q2796 (the most referenced variant is the one with the lowest Q-id). We then calculate a cosine similarity of the description, in this case “line of tablet computers”, with the possible subtypes of product. The possible subtypes, in this case, are engine, airplane, car, ship, spacecraft, train, camera, mobile phone, computer, software, game, instrument, ship, weapon. We return the highest result above 0.1, which in this case is computer (0.54)."
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Entity Linking using Wikidata",
+    "Entity Linking using Wikidata",
+    "Entity Linking using Wikidata",
+    "Entity Linking using Wikidata",
+    "Entity Linking using Wikidata",
+    "Entity Linking using Wikidata",
+    "Entity Linking using Wikidata",
+    "Entity Linking using Wikidata",
+    "Entity Linking using Wikidata"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Entity Linking using Wikidata",
+      0
+    ],
+    [
+      "Entity Linking using Wikidata",
+      1
+    ],
+    [
+      "Entity Linking using Wikidata",
+      2
+    ],
+    [
+      "Entity Linking using Wikidata",
+      3
+    ],
+    [
+      "Entity Linking using Wikidata",
+      4
+    ],
+    [
+      "Entity Linking using Wikidata",
+      5
+    ],
+    [
+      "Entity Linking using Wikidata",
+      6
+    ],
+    [
+      "Entity Linking using Wikidata",
+      7
+    ],
+    [
+      "Entity Linking using Wikidata",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Entity Linking using Wikidata",
+  "section": "Entity Linking using Wikidata",
+  "title_path": "Entity Linking using Wikidata",
+  "block_type": "long_unit"
+}

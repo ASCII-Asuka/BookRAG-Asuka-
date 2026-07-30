@@ -1,0 +1,142 @@
+{
+  "id": "longrag_14",
+  "content": "[Section] Monolingual Evaluation of Representation Learning Models ::: Models in Comparison\n[source_id=89] Static Word Embeddings in Different Languages. First, we evaluate a standard method for inducing non-contextualized (i.e., static) word embeddings across a plethora of different languages: fastText (ft) vectors BIBREF31 are currently the most popular and robust choice given 1) the availability of pretrained vectors in a large number of languages BIBREF108 trained on large Common Crawl (CC) plus Wikipedia (Wiki) data, and 2) their superior performance across a range of NLP tasks BIBREF109. In fact, fastText is an extension of the standard word-level CBOW and skip-gram word2vec models BIBREF32 that takes into account subword-level information, i.e. the contituent character n-grams of each word BIBREF110. For this reason, fastText is also more suited for modeling rare words and morphologically rich languages.\n[source_id=90] We rely on 300-dimensional ft word vectors trained on CC+Wiki and available online for 157 languages. The word vectors for all languages are obtained by CBOW with position-weights, with character n-grams of length 5, a window of size 5, 10 negative examples, and 10 training epochs. We also probe another (older) collection of ft vectors, pretrained on full Wikipedia dumps of each language.. The vectors are 300-dimensional, trained with the skip-gram objective for 5 epochs, with 5 negative examples, a window size set to 5, and relying on all character n-grams from length 3 to 6. Following prior work, we trim the vocabularies for all languages to the 200K most frequent words and compute representations for multi-word expressions by averaging the vectors of their constituent words.\n[source_id=91] Unsupervised Post-Processing. Further, we consider a variety of unsupervised post-processing steps that can be applied post-training on top of any pretrained input word embedding space without any external lexical semantic resource. So far, the usefulness of such methods has been verified only on the English language through benchmarks for lexical semantics and sentence-level tasks BIBREF113. In this paper, we assess if unsupervised post-processing is beneficial also in other languages. To this end, we apply the following post-hoc transformations on the initial word embeddings:\n[source_id=92] 1) Mean centering (mc) is applied after unit length normalization to ensure that all vectors have a zero mean, and is commonly applied in data mining and analysis BIBREF114, BIBREF115.\n[source_id=93] 2) All-but-the-top (abtt) BIBREF113, BIBREF116 eliminates the common mean vector and a few top dominating directions (according to PCA) from the input distributional word vectors, since they do not contribute towards distinguishing the actual semantic meaning of different words. The method contains a single (tunable) hyper-parameter $dd_{A}$ which denotes the number of the dominating directions to remove from the initial representations. Previous work has verified the usefulness of abtt in several English lexical semantic tasks such as semantic similarity, word analogies, and concept categorization, as well as in sentence-level text classification tasks BIBREF113.\n[source_id=94] 3) uncovec BIBREF117 adjusts the similarity order of an arbitrary input word embedding space, and can emphasize either syntactic or semantic information in the transformed vectors. In short, it transforms the input space $\\mathbf {X}$ into an adjusted space $\\mathbf {X}\\mathbf {W}_{\\alpha }$ through a linear map $\\mathbf {W}_{\\alpha }$ controlled by a single hyper-parameter $\\alpha $. The $n^{\\text{th}}$-order similarity transformation of the input word vector space $\\mathbf {X}$ (for which $n=1$) can be obtained as $\\mathbf {M}_{n}(\\mathbf {X}) = \\mathbf {M}_1(\\mathbf {X}\\mathbf {W}_{(n-1)/2})$, with $\\mathbf {W}_{\\alpha }=\\mathbf {Q}\\mathbf {\\Gamma }^{\\alpha }$, where $\\mathbf {Q}$ and $\\mathbf {\\Gamma }$ are the matrices obtained via eigendecomposition of $\\mathbf {X}^T\\mathbf {X}=\\mathbf {Q}\\mathbf {\\Gamma }\\mathbf {Q}^T$. $\\mathbf {\\Gamma }$ is a diagonal matrix containing eigenvalues of $\\mathbf {X}^T\\mathbf {X}$; $\\mathbf {Q}$ is an orthogonal matrix with eigenvectors of $\\mathbf {X}^T\\mathbf {X}$ as columns. While the motivation for the uncovec methods does originate from adjusting discrete similarity orders, note that $\\alpha $ is in fact a continuous real-valued hyper-parameter which can be carefully tuned. For more technical details we refer the reader to the original work of BIBREF117.\n[source_id=95] As mentioned, all post-processing methods can be seen as unsupervised retrofitting methods that, given an arbitrary input vector space $\\mathbf {X}$, produce a perturbed/transformed output vector space $\\mathbf {X}^{\\prime }$, but unlike common retrofitting methods BIBREF62, BIBREF16, the perturbation is completely unsupervised (i.e., self-contained) and does not inject any external (semantic similarity oriented) knowledge into the vector space. Note that different perturbations can also be stacked: e.g., we can apply uncovec and then use abtt on top the output uncovec vectors. When using uncovec and abtt we always length-normalize and mean-center the data first (i.e., we apply the simple mc normalization). Finally, we tune the two hyper-parameters $d_A$ (for abtt) and $\\alpha $ (uncovec) on the English Multi-SimLex and use the same values on the datasets of all other languages; we report results with $dd_A = 3$ or $dd_A = 10$, and $\\alpha =-0.3$.\n[source_id=96] Contextualized Word Embeddings. We also evaluate the capacity of unsupervised pretraining architectures based on language modeling objectives to reason over lexical semantic similarity. To the best of our knowledge, our article is the first study performing such analyses. State-of-the-art models such as bert BIBREF29, xlm BIBREF30, or roberta BIBREF118 are typically very deep neural networks based on the Transformer architecture BIBREF119. They receive subword-level tokens as inputs (such as WordPieces BIBREF120) to tackle data sparsity. In output, they return contextualized embeddings, dynamic representations for words in context.\n[source_id=97] To represent words or multi-word expressions through a pretrained model, we follow prior work BIBREF121 and compute an input item's representation by 1) feeding it to a pretrained model in isolation; then 2) averaging the $H$ last hidden representations for each of the item’s constituent subwords; and then finally 3) averaging the resulting subword representations to produce the final $d$-dimensional representation, where $d$ is the embedding and hidden-layer dimensionality (e.g., $d=768$ with bert). We opt for this approach due to its proven viability and simplicity BIBREF121, as it does not require any additional corpora to condition the induction of contextualized embeddings. Other ways to extract the representations from pretrained models BIBREF122, BIBREF123, BIBREF124 are beyond the scope of this work, and we will experiment with them in the future.\n[source_id=98] In other words, we treat each pretrained encoder enc as a black-box function to encode a single word or a multi-word expression $x$ in each language into a $d$-dimensional contextualized representation $\\mathbf {x}_{\\textsc {enc}} \\in \\mathbb {R}^d = \\textsc {enc}(x)$ (e.g., $d=768$ with bert). As multilingual pretrained encoders, we experiment with the multilingual bert model (m-bert) BIBREF29 and xlm BIBREF30. m-bert is pretrained on monolingual Wikipedia corpora of 102 languages (comprising all Multi-SimLex languages) with a 12-layer Transformer network, and yields 768-dimensional representations. Since the concept pairs in Multi-SimLex are lowercased, we use the uncased version of m-bert. m-bert comprises all Multi-SimLex languages, and its evident ability to perform cross-lingual transfer BIBREF12, BIBREF125, BIBREF126 also makes it a convenient baseline model for cross-lingual experiments later in §SECREF8. The second multilingual model we consider, xlm-100, is pretrained on Wikipedia dumps of 100 languages, and encodes each concept into a $1,280$-dimensional representation. In contrast to m-bert, xlm-100 drops the next-sentence prediction objective and adds a cross-lingual masked language modeling objective. For both encoders, the representations of each concept are computed as averages over the last $H=4$ hidden layers in all experiments, as suggested by Wu:2019arxiv.\n[source_id=99] Besides m-bert and xlm, covering multiple languages, we also analyze the performance of “language-specific” bert and xlm models for the languages where they are available: Finnish, Spanish, English, Mandarin Chinese, and French. The main goal of this comparison is to study the differences in performance between multilingual “one-size-fits-all” encoders and language-specific encoders. For all experiments, we rely on the pretrained models released in the Transformers repository BIBREF127.\n[source_id=100] Unsupervised post-processing steps devised for static word embeddings (i.e., mean-centering, abtt, uncovec) can also be applied on top of contextualized embeddings if we predefine a vocabulary of word types $V$ that will be represented in a word vector space $\\mathbf {X}$. We construct such $V$ for each language as the intersection of word types covered by the corresponding CC+Wiki fastText vectors and the (single-word or multi-word) expressions appearing in the corresponding Multi-SimLex dataset.\n[source_id=101] Finally, note that it is not feasible to evaluate a full range of available pretrained encoders within the scope of this work. Our main intention is to provide the first set of baseline results on Multi-SimLex by benchmarking a sample of most popular encoders, at the same time also investigating other important questions such as performance of static versus contextualized word embeddings, or multilingual versus language-specific pretraining. Another purpose of the experiments is to outline the wide potential and applicability of the Multi-SimLex datasets for multilingual and cross-lingual representation learning evaluation.",
+  "score": 3.2316669304205825,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_14",
+  "child_source_node_ids": [
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101
+  ],
+  "child_qasper_evidence_texts": [
+    "Static Word Embeddings in Different Languages. First, we evaluate a standard method for inducing non-contextualized (i.e., static) word embeddings across a plethora of different languages: fastText (ft) vectors BIBREF31 are currently the most popular and robust choice given 1) the availability of pretrained vectors in a large number of languages BIBREF108 trained on large Common Crawl (CC) plus Wikipedia (Wiki) data, and 2) their superior performance across a range of NLP tasks BIBREF109. In fact, fastText is an extension of the standard word-level CBOW and skip-gram word2vec models BIBREF32 that takes into account subword-level information, i.e. the contituent character n-grams of each word BIBREF110. For this reason, fastText is also more suited for modeling rare words and morphologically rich languages.",
+    "We rely on 300-dimensional ft word vectors trained on CC+Wiki and available online for 157 languages. The word vectors for all languages are obtained by CBOW with position-weights, with character n-grams of length 5, a window of size 5, 10 negative examples, and 10 training epochs. We also probe another (older) collection of ft vectors, pretrained on full Wikipedia dumps of each language.. The vectors are 300-dimensional, trained with the skip-gram objective for 5 epochs, with 5 negative examples, a window size set to 5, and relying on all character n-grams from length 3 to 6. Following prior work, we trim the vocabularies for all languages to the 200K most frequent words and compute representations for multi-word expressions by averaging the vectors of their constituent words.",
+    "Unsupervised Post-Processing. Further, we consider a variety of unsupervised post-processing steps that can be applied post-training on top of any pretrained input word embedding space without any external lexical semantic resource. So far, the usefulness of such methods has been verified only on the English language through benchmarks for lexical semantics and sentence-level tasks BIBREF113. In this paper, we assess if unsupervised post-processing is beneficial also in other languages. To this end, we apply the following post-hoc transformations on the initial word embeddings:",
+    "1) Mean centering (mc) is applied after unit length normalization to ensure that all vectors have a zero mean, and is commonly applied in data mining and analysis BIBREF114, BIBREF115.",
+    "2) All-but-the-top (abtt) BIBREF113, BIBREF116 eliminates the common mean vector and a few top dominating directions (according to PCA) from the input distributional word vectors, since they do not contribute towards distinguishing the actual semantic meaning of different words. The method contains a single (tunable) hyper-parameter $dd_{A}$ which denotes the number of the dominating directions to remove from the initial representations. Previous work has verified the usefulness of abtt in several English lexical semantic tasks such as semantic similarity, word analogies, and concept categorization, as well as in sentence-level text classification tasks BIBREF113.",
+    "3) uncovec BIBREF117 adjusts the similarity order of an arbitrary input word embedding space, and can emphasize either syntactic or semantic information in the transformed vectors. In short, it transforms the input space $\\mathbf {X}$ into an adjusted space $\\mathbf {X}\\mathbf {W}_{\\alpha }$ through a linear map $\\mathbf {W}_{\\alpha }$ controlled by a single hyper-parameter $\\alpha $. The $n^{\\text{th}}$-order similarity transformation of the input word vector space $\\mathbf {X}$ (for which $n=1$) can be obtained as $\\mathbf {M}_{n}(\\mathbf {X}) = \\mathbf {M}_1(\\mathbf {X}\\mathbf {W}_{(n-1)/2})$, with $\\mathbf {W}_{\\alpha }=\\mathbf {Q}\\mathbf {\\Gamma }^{\\alpha }$, where $\\mathbf {Q}$ and $\\mathbf {\\Gamma }$ are the matrices obtained via eigendecomposition of $\\mathbf {X}^T\\mathbf {X}=\\mathbf {Q}\\mathbf {\\Gamma }\\mathbf {Q}^T$. $\\mathbf {\\Gamma }$ is a diagonal matrix containing eigenvalues of $\\mathbf {X}^T\\mathbf {X}$; $\\mathbf {Q}$ is an orthogonal matrix with eigenvectors of $\\mathbf {X}^T\\mathbf {X}$ as columns. While the motivation for the uncovec methods does originate from adjusting discrete similarity orders, note that $\\alpha $ is in fact a continuous real-valued hyper-parameter which can be carefully tuned. For more technical details we refer the reader to the original work of BIBREF117.",
+    "As mentioned, all post-processing methods can be seen as unsupervised retrofitting methods that, given an arbitrary input vector space $\\mathbf {X}$, produce a perturbed/transformed output vector space $\\mathbf {X}^{\\prime }$, but unlike common retrofitting methods BIBREF62, BIBREF16, the perturbation is completely unsupervised (i.e., self-contained) and does not inject any external (semantic similarity oriented) knowledge into the vector space. Note that different perturbations can also be stacked: e.g., we can apply uncovec and then use abtt on top the output uncovec vectors. When using uncovec and abtt we always length-normalize and mean-center the data first (i.e., we apply the simple mc normalization). Finally, we tune the two hyper-parameters $d_A$ (for abtt) and $\\alpha $ (uncovec) on the English Multi-SimLex and use the same values on the datasets of all other languages; we report results with $dd_A = 3$ or $dd_A = 10$, and $\\alpha =-0.3$.",
+    "Contextualized Word Embeddings. We also evaluate the capacity of unsupervised pretraining architectures based on language modeling objectives to reason over lexical semantic similarity. To the best of our knowledge, our article is the first study performing such analyses. State-of-the-art models such as bert BIBREF29, xlm BIBREF30, or roberta BIBREF118 are typically very deep neural networks based on the Transformer architecture BIBREF119. They receive subword-level tokens as inputs (such as WordPieces BIBREF120) to tackle data sparsity. In output, they return contextualized embeddings, dynamic representations for words in context.",
+    "To represent words or multi-word expressions through a pretrained model, we follow prior work BIBREF121 and compute an input item's representation by 1) feeding it to a pretrained model in isolation; then 2) averaging the $H$ last hidden representations for each of the item’s constituent subwords; and then finally 3) averaging the resulting subword representations to produce the final $d$-dimensional representation, where $d$ is the embedding and hidden-layer dimensionality (e.g., $d=768$ with bert). We opt for this approach due to its proven viability and simplicity BIBREF121, as it does not require any additional corpora to condition the induction of contextualized embeddings. Other ways to extract the representations from pretrained models BIBREF122, BIBREF123, BIBREF124 are beyond the scope of this work, and we will experiment with them in the future.",
+    "In other words, we treat each pretrained encoder enc as a black-box function to encode a single word or a multi-word expression $x$ in each language into a $d$-dimensional contextualized representation $\\mathbf {x}_{\\textsc {enc}} \\in \\mathbb {R}^d = \\textsc {enc}(x)$ (e.g., $d=768$ with bert). As multilingual pretrained encoders, we experiment with the multilingual bert model (m-bert) BIBREF29 and xlm BIBREF30. m-bert is pretrained on monolingual Wikipedia corpora of 102 languages (comprising all Multi-SimLex languages) with a 12-layer Transformer network, and yields 768-dimensional representations. Since the concept pairs in Multi-SimLex are lowercased, we use the uncased version of m-bert. m-bert comprises all Multi-SimLex languages, and its evident ability to perform cross-lingual transfer BIBREF12, BIBREF125, BIBREF126 also makes it a convenient baseline model for cross-lingual experiments later in §SECREF8. The second multilingual model we consider, xlm-100, is pretrained on Wikipedia dumps of 100 languages, and encodes each concept into a $1,280$-dimensional representation. In contrast to m-bert, xlm-100 drops the next-sentence prediction objective and adds a cross-lingual masked language modeling objective. For both encoders, the representations of each concept are computed as averages over the last $H=4$ hidden layers in all experiments, as suggested by Wu:2019arxiv.",
+    "Besides m-bert and xlm, covering multiple languages, we also analyze the performance of “language-specific” bert and xlm models for the languages where they are available: Finnish, Spanish, English, Mandarin Chinese, and French. The main goal of this comparison is to study the differences in performance between multilingual “one-size-fits-all” encoders and language-specific encoders. For all experiments, we rely on the pretrained models released in the Transformers repository BIBREF127.",
+    "Unsupervised post-processing steps devised for static word embeddings (i.e., mean-centering, abtt, uncovec) can also be applied on top of contextualized embeddings if we predefine a vocabulary of word types $V$ that will be represented in a word vector space $\\mathbf {X}$. We construct such $V$ for each language as the intersection of word types covered by the corresponding CC+Wiki fastText vectors and the (single-word or multi-word) expressions appearing in the corresponding Multi-SimLex dataset.",
+    "Finally, note that it is not feasible to evaluate a full range of available pretrained encoders within the scope of this work. Our main intention is to provide the first set of baseline results on Multi-SimLex by benchmarking a sample of most popular encoders, at the same time also investigating other important questions such as performance of static versus contextualized word embeddings, or multilingual versus language-specific pretraining. Another purpose of the experiments is to outline the wide potential and applicability of the Multi-SimLex datasets for multilingual and cross-lingual representation learning evaluation."
+  ],
+  "child_pages": [
+    14,
+    14,
+    14,
+    14,
+    14,
+    14,
+    14,
+    14,
+    14,
+    14,
+    14,
+    14,
+    14
+  ],
+  "child_sections": [
+    "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+    "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+    "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+    "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+    "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+    "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+    "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+    "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+    "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+    "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+    "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+    "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+    "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+      0
+    ],
+    [
+      "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+      1
+    ],
+    [
+      "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+      2
+    ],
+    [
+      "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+      3
+    ],
+    [
+      "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+      4
+    ],
+    [
+      "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+      5
+    ],
+    [
+      "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+      6
+    ],
+    [
+      "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+      7
+    ],
+    [
+      "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+      8
+    ],
+    [
+      "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+      9
+    ],
+    [
+      "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+      10
+    ],
+    [
+      "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+      11
+    ],
+    [
+      "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+      12
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_14",
+  "section_id": "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+  "section": "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+  "title_path": "Monolingual Evaluation of Representation Learning Models ::: Models in Comparison",
+  "block_type": "long_unit"
+}

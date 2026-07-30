@@ -1,0 +1,61 @@
+{
+  "id": "longrag_10",
+  "content": "[Section] Understanding Model Sensitivity\n[source_id=61] To study model sensitivity, for each sentence, we perturb one randomly-chosen word and replace it with all possible perturbations under a given attack type. The resulting set of perturbed sentences is then fed to the word recognizer (whose sensitivity is to be estimated). As described in equation 12 , we count the number of unique predictions from the output sentences. Two corrections are considered unique if they are mapped differently by the downstream classifier.\n[source_id=62] The neutral backoff variant has the lowest sensitivity (Table 5 ). This is expected, as it returns a fixed neutral word whenever the ScRNN predicts an UNK, therefore reducing the number of unique outputs it predicts. Open vocabulary (i.e. char-only, word+char, word-piece) downstream classifiers consider every unique combination of characters differently, whereas word-only classifiers internally treat all out of vocabulary (OOV) words alike. Hence, for char-only, word+char, and word-piece models, the pass-through version is more sensitive than the background variant, as it passes words as is (and each combination is considered uniquely). However, for word-only models, pass-through is less sensitive as all the OOV character combinations are rendered identical.\n[source_id=63] Ideally, a preferred defense is one with low sensitivity and word error rate. In practice, however, we see that a low error rate often comes at the cost of sensitivity. We see this trade-off in Figure 2 , where we plot WER and sensitivity on the two axes, and depict the robustness when using different backoff variants. Generally, sensitivity is the more dominant factor out of the two, as the error rates of the considered variants are reasonably low.\n[source_id=64] We verify if the sentiment (of the reviews) is preserved with char-level attacks. In a human study with 50 attacked (and subsequently misclassified), and 50 unchanged reviews, it was noted that 48 and 49, respectively, preserved the sentiment.",
+  "score": 2.5538173091829064,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_10",
+  "child_source_node_ids": [
+    61,
+    62,
+    63,
+    64
+  ],
+  "child_qasper_evidence_texts": [
+    "To study model sensitivity, for each sentence, we perturb one randomly-chosen word and replace it with all possible perturbations under a given attack type. The resulting set of perturbed sentences is then fed to the word recognizer (whose sensitivity is to be estimated). As described in equation 12 , we count the number of unique predictions from the output sentences. Two corrections are considered unique if they are mapped differently by the downstream classifier.",
+    "The neutral backoff variant has the lowest sensitivity (Table 5 ). This is expected, as it returns a fixed neutral word whenever the ScRNN predicts an UNK, therefore reducing the number of unique outputs it predicts. Open vocabulary (i.e. char-only, word+char, word-piece) downstream classifiers consider every unique combination of characters differently, whereas word-only classifiers internally treat all out of vocabulary (OOV) words alike. Hence, for char-only, word+char, and word-piece models, the pass-through version is more sensitive than the background variant, as it passes words as is (and each combination is considered uniquely). However, for word-only models, pass-through is less sensitive as all the OOV character combinations are rendered identical.",
+    "Ideally, a preferred defense is one with low sensitivity and word error rate. In practice, however, we see that a low error rate often comes at the cost of sensitivity. We see this trade-off in Figure 2 , where we plot WER and sensitivity on the two axes, and depict the robustness when using different backoff variants. Generally, sensitivity is the more dominant factor out of the two, as the error rates of the considered variants are reasonably low.",
+    "We verify if the sentiment (of the reviews) is preserved with char-level attacks. In a human study with 50 attacked (and subsequently misclassified), and 50 unchanged reviews, it was noted that 48 and 49, respectively, preserved the sentiment."
+  ],
+  "child_pages": [
+    10,
+    10,
+    10,
+    10
+  ],
+  "child_sections": [
+    "Understanding Model Sensitivity",
+    "Understanding Model Sensitivity",
+    "Understanding Model Sensitivity",
+    "Understanding Model Sensitivity"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Understanding Model Sensitivity",
+      0
+    ],
+    [
+      "Understanding Model Sensitivity",
+      1
+    ],
+    [
+      "Understanding Model Sensitivity",
+      2
+    ],
+    [
+      "Understanding Model Sensitivity",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_10",
+  "section_id": "Understanding Model Sensitivity",
+  "section": "Understanding Model Sensitivity",
+  "title_path": "Understanding Model Sensitivity",
+  "block_type": "long_unit"
+}

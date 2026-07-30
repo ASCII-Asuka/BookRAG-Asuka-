@@ -1,0 +1,97 @@
+{
+  "id": "longrag_3",
+  "content": "[Section] Model\n[source_id=20] Neural models have shown their effectiveness on sequence labeling tasks BIBREF13 , BIBREF14 , BIBREF15 . In this work, we adopt the bidirectional Long Short Term Memory (BiLSTM) BIBREF16 networks on top of the Conditional Random Fields BIBREF17 (CRF) architecture to make labeling decisions, which is one of the classical models for sequence labeling. Our model architecture is illustrated in Figure FIGREF8 with a running example. Given a context/sentence INLINEFORM0 where INLINEFORM1 is the length of the context, we generate the corresponding tag sequence INLINEFORM2 based on our designed tagging schemes and the original annotations for pun detection and location provided by the corpora. Our model is then trained on pairs of INLINEFORM3 .\n[source_id=21] Input. The contexts in the pun corpus hold the property that each pun contains exactly one content word, which can be either a noun, a verb, an adjective, or an adverb. To capture this characteristic, we consider lexical features at the character level. Similar to the work of BIBREF15 , the character embeddings are trained by the character-level LSTM networks on the unannotated input sequences. Nonlinear transformations are then applied to the character embeddings by highway networks BIBREF18 , which map the character-level features into different semantic spaces.\n[source_id=22] We also observe that a pun tends to appear at the end of a sentence. Specifically, based on the statistics, we found that sentences with a pun that locate at the second half of the text account for around 88% and 92% in homographic and heterographic datasets, respectively. We thus introduce a binary feature that indicates if a word is located at the first or the second half of an input sentence to capture such positional information. A binary indicator can be mapped to a vector representation using a randomly initialized embedding table BIBREF19 , BIBREF20 . In this work, we directly adopt the value of the binary indicator as part of the input.\n[source_id=23] The concatenation of the transformed character embeddings, the pre-trained word embeddings BIBREF21 , and the position indicators are taken as input of our model.\n[source_id=24] Tagging. The input is then fed into a BiLSTM network, which will be able to capture contextual information. For a training instance INLINEFORM0 , we suppose the output by the word-level BiLSTM is INLINEFORM1 . The CRF layer is adopted to capture label dependencies and make final tagging decisions at each position, which has been included in many state-of-the-art sequence labeling models BIBREF14 , BIBREF15 . The conditional probability is defined as:\n[source_id=25] where INLINEFORM0 is a set of all possible label sequences consisting of tags from INLINEFORM1 (or INLINEFORM2 ), INLINEFORM3 and INLINEFORM4 are weight and bias parameters corresponding to the label pair INLINEFORM5 . During training, we minimize the negative log-likelihood summed over all training instances:\n[source_id=26] where INLINEFORM0 refers to the INLINEFORM1 -th instance in the training set. During testing, we aim to find the optimal label sequence for a new input INLINEFORM2 :\n[source_id=27] This search process can be done efficiently using the Viterbi algorithm.",
+  "score": 0.455902118459676,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_3",
+  "child_source_node_ids": [
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "child_qasper_evidence_texts": [
+    "Neural models have shown their effectiveness on sequence labeling tasks BIBREF13 , BIBREF14 , BIBREF15 . In this work, we adopt the bidirectional Long Short Term Memory (BiLSTM) BIBREF16 networks on top of the Conditional Random Fields BIBREF17 (CRF) architecture to make labeling decisions, which is one of the classical models for sequence labeling. Our model architecture is illustrated in Figure FIGREF8 with a running example. Given a context/sentence INLINEFORM0 where INLINEFORM1 is the length of the context, we generate the corresponding tag sequence INLINEFORM2 based on our designed tagging schemes and the original annotations for pun detection and location provided by the corpora. Our model is then trained on pairs of INLINEFORM3 .",
+    "Input. The contexts in the pun corpus hold the property that each pun contains exactly one content word, which can be either a noun, a verb, an adjective, or an adverb. To capture this characteristic, we consider lexical features at the character level. Similar to the work of BIBREF15 , the character embeddings are trained by the character-level LSTM networks on the unannotated input sequences. Nonlinear transformations are then applied to the character embeddings by highway networks BIBREF18 , which map the character-level features into different semantic spaces.",
+    "We also observe that a pun tends to appear at the end of a sentence. Specifically, based on the statistics, we found that sentences with a pun that locate at the second half of the text account for around 88% and 92% in homographic and heterographic datasets, respectively. We thus introduce a binary feature that indicates if a word is located at the first or the second half of an input sentence to capture such positional information. A binary indicator can be mapped to a vector representation using a randomly initialized embedding table BIBREF19 , BIBREF20 . In this work, we directly adopt the value of the binary indicator as part of the input.",
+    "The concatenation of the transformed character embeddings, the pre-trained word embeddings BIBREF21 , and the position indicators are taken as input of our model.",
+    "Tagging. The input is then fed into a BiLSTM network, which will be able to capture contextual information. For a training instance INLINEFORM0 , we suppose the output by the word-level BiLSTM is INLINEFORM1 . The CRF layer is adopted to capture label dependencies and make final tagging decisions at each position, which has been included in many state-of-the-art sequence labeling models BIBREF14 , BIBREF15 . The conditional probability is defined as:",
+    "where INLINEFORM0 is a set of all possible label sequences consisting of tags from INLINEFORM1 (or INLINEFORM2 ), INLINEFORM3 and INLINEFORM4 are weight and bias parameters corresponding to the label pair INLINEFORM5 . During training, we minimize the negative log-likelihood summed over all training instances:",
+    "where INLINEFORM0 refers to the INLINEFORM1 -th instance in the training set. During testing, we aim to find the optimal label sequence for a new input INLINEFORM2 :",
+    "This search process can be done efficiently using the Viterbi algorithm."
+  ],
+  "child_pages": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "child_sections": [
+    "Model",
+    "Model",
+    "Model",
+    "Model",
+    "Model",
+    "Model",
+    "Model",
+    "Model"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Model",
+      0
+    ],
+    [
+      "Model",
+      1
+    ],
+    [
+      "Model",
+      2
+    ],
+    [
+      "Model",
+      3
+    ],
+    [
+      "Model",
+      4
+    ],
+    [
+      "Model",
+      5
+    ],
+    [
+      "Model",
+      6
+    ],
+    [
+      "Model",
+      7
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_3",
+  "section_id": "Model",
+  "section": "Model",
+  "title_path": "Model",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,124 @@
+{
+  "id": "longrag_13",
+  "content": "[Section] Global features and stock embedding\n[source_id=164] Given the price and news histories for each stock $sc$ we could directly learn one model per stock. However, this approach suffers from two main drawbacks. First, the market activity of one specific stock is expected to impact other stocks, which is a widely accepted pattern named “spillover effect”. Second, since our price data is sampled on a daily basis, we would train the stock model relying on a small number of samples. One possible solution to model the commonality among stocks would be feature enrichment. For example, when modeling a given stock $X$ we would enrich its news and price features by concatenating features from stock $Y$ and $Z$ . Although the feature enrichment is able to model the effect of other stocks, it still would consider only one sample per day.\n[source_id=165] In this work, we propose a method that learns an global model.\n[source_id=166] The global model is implemented using the following methods:\n[source_id=167] Multi-Stock batch samples: Since our models are trained using Stochastic Gradient Descent, we propose at each mini-batch iteration to sample from a batch set containing any stock of our stocks universe. As a consequence, the mapping between volatility and multimodal data is now able to learn common explanatory factors among stocks. Moreover, adopting this approach increases the total number of training samples, which is now the sum of the number of samples per stock.\n[source_id=168] Stock Embedding: Utilizing the Multi-Stock batch samples above, we tackle the problem of modeling commonality among stocks. However, it is reasonable to assume that stocks have part of its dynamic driven by idiosyncratic factors. Nevertheless, we could aggregate stocks per sector or rely on any measure of similarity among stocks. In order to incorporate information specific to each stock, we propose to equip our model with a “stock embedding” mode that is learnt jointly with price and news modes. That is to say, we leave the task of distinguishing the specific dynamic of each stock to be learnt by the neural network. Specifically, this stock embedding is modeled using a discrete encoding as input, i.e. $\\mathcal {I}^{sc}_t$ is a vector with size equal to the number of stocks of the stocks universe and has element 1 for the i-th coordinate and 0 elsewhere, thus, indicating the stock of each sample.\n[source_id=169] Formally, we can express the one model per stock approach as the mapping\n[source_id=170] $$\\begin{split}\n\\sigma ^{sc}_{t+1} = f^{sc} ( DN^{sc}_{t-T}, DN^{sc}_{t-T+1}, \\cdots , DN^{sc}_t ; \\\\\nDP^{sc}_{t-T}, DP^{sc}_{t-T+1}, \\cdots , DP^{sc}_t )\n\\end{split}$$   (Eq. 75)\n[source_id=171] where $DN^{sc}_{t^{\\prime }}$ is a fixed-vector representing all news released on a given day for the stock $sc$ and $DP^{sc}_{t^{\\prime }}$ is defined in eq:pricemodevec.\n[source_id=172] The global model attempts to learn a single mapping $f$ that at each mini-batch iteration randomly aggregates samples across all the universe of stocks, rather than one mapping $f^{sc}$ per stock. The global model is expressed as\n[source_id=173] $$\\begin{split}\n\\sigma ^{sc}_{t+1} = f ( DN^{sc}_{t-T}, DN^{sc}_{t-T+1}, \\cdots , DN^{sc}_t ; \\\\\nDP^{sc}_{t-T}, DP^{sc}_{t-T+1}, \\cdots , DP^{sc}_t ; \\\\\n\\mathcal {I}^{sc}_t)\n\\end{split}$$   (Eq. 77)\n[source_id=174] In the next section, we describe our hierarchical neural model and how the news, price and stock embedding are fused into a joint representation.",
+  "score": 3.4543873130026657,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_13",
+  "child_source_node_ids": [
+    164,
+    165,
+    166,
+    167,
+    168,
+    169,
+    170,
+    171,
+    172,
+    173,
+    174
+  ],
+  "child_qasper_evidence_texts": [
+    "Given the price and news histories for each stock $sc$ we could directly learn one model per stock. However, this approach suffers from two main drawbacks. First, the market activity of one specific stock is expected to impact other stocks, which is a widely accepted pattern named “spillover effect”. Second, since our price data is sampled on a daily basis, we would train the stock model relying on a small number of samples. One possible solution to model the commonality among stocks would be feature enrichment. For example, when modeling a given stock $X$ we would enrich its news and price features by concatenating features from stock $Y$ and $Z$ . Although the feature enrichment is able to model the effect of other stocks, it still would consider only one sample per day.",
+    "In this work, we propose a method that learns an global model.",
+    "The global model is implemented using the following methods:",
+    "Multi-Stock batch samples: Since our models are trained using Stochastic Gradient Descent, we propose at each mini-batch iteration to sample from a batch set containing any stock of our stocks universe. As a consequence, the mapping between volatility and multimodal data is now able to learn common explanatory factors among stocks. Moreover, adopting this approach increases the total number of training samples, which is now the sum of the number of samples per stock.",
+    "Stock Embedding: Utilizing the Multi-Stock batch samples above, we tackle the problem of modeling commonality among stocks. However, it is reasonable to assume that stocks have part of its dynamic driven by idiosyncratic factors. Nevertheless, we could aggregate stocks per sector or rely on any measure of similarity among stocks. In order to incorporate information specific to each stock, we propose to equip our model with a “stock embedding” mode that is learnt jointly with price and news modes. That is to say, we leave the task of distinguishing the specific dynamic of each stock to be learnt by the neural network. Specifically, this stock embedding is modeled using a discrete encoding as input, i.e. $\\mathcal {I}^{sc}_t$ is a vector with size equal to the number of stocks of the stocks universe and has element 1 for the i-th coordinate and 0 elsewhere, thus, indicating the stock of each sample.",
+    "Formally, we can express the one model per stock approach as the mapping",
+    "$$\\begin{split}\n\\sigma ^{sc}_{t+1} = f^{sc} ( DN^{sc}_{t-T}, DN^{sc}_{t-T+1}, \\cdots , DN^{sc}_t ; \\\\\nDP^{sc}_{t-T}, DP^{sc}_{t-T+1}, \\cdots , DP^{sc}_t )\n\\end{split}$$   (Eq. 75)",
+    "where $DN^{sc}_{t^{\\prime }}$ is a fixed-vector representing all news released on a given day for the stock $sc$ and $DP^{sc}_{t^{\\prime }}$ is defined in eq:pricemodevec.",
+    "The global model attempts to learn a single mapping $f$ that at each mini-batch iteration randomly aggregates samples across all the universe of stocks, rather than one mapping $f^{sc}$ per stock. The global model is expressed as",
+    "$$\\begin{split}\n\\sigma ^{sc}_{t+1} = f ( DN^{sc}_{t-T}, DN^{sc}_{t-T+1}, \\cdots , DN^{sc}_t ; \\\\\nDP^{sc}_{t-T}, DP^{sc}_{t-T+1}, \\cdots , DP^{sc}_t ; \\\\\n\\mathcal {I}^{sc}_t)\n\\end{split}$$   (Eq. 77)",
+    "In the next section, we describe our hierarchical neural model and how the news, price and stock embedding are fused into a joint representation."
+  ],
+  "child_pages": [
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13
+  ],
+  "child_sections": [
+    "Global features and stock embedding",
+    "Global features and stock embedding",
+    "Global features and stock embedding",
+    "Global features and stock embedding",
+    "Global features and stock embedding",
+    "Global features and stock embedding",
+    "Global features and stock embedding",
+    "Global features and stock embedding",
+    "Global features and stock embedding",
+    "Global features and stock embedding",
+    "Global features and stock embedding"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Global features and stock embedding",
+      0
+    ],
+    [
+      "Global features and stock embedding",
+      1
+    ],
+    [
+      "Global features and stock embedding",
+      2
+    ],
+    [
+      "Global features and stock embedding",
+      3
+    ],
+    [
+      "Global features and stock embedding",
+      4
+    ],
+    [
+      "Global features and stock embedding",
+      5
+    ],
+    [
+      "Global features and stock embedding",
+      6
+    ],
+    [
+      "Global features and stock embedding",
+      7
+    ],
+    [
+      "Global features and stock embedding",
+      8
+    ],
+    [
+      "Global features and stock embedding",
+      9
+    ],
+    [
+      "Global features and stock embedding",
+      10
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_13",
+  "section_id": "Global features and stock embedding",
+  "section": "Global features and stock embedding",
+  "title_path": "Global features and stock embedding",
+  "block_type": "long_unit"
+}

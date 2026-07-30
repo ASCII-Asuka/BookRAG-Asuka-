@@ -1,0 +1,75 @@
+{
+  "question": "How are chunks defined?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [],
+      "free_form_answer": "Chunks is group of tweets from single account that  is consecutive in time - idea is that this group can show secret intention of malicious accounts.",
+      "yes_no": null,
+      "evidence": [
+        "Given a news Twitter account, we read its tweets from the account's timeline. Then we sort the tweets by the posting date in ascending way and we split them into $N$ chunks. Each chunk consists of a sorted sequence of tweets labeled by the label of its corresponding account. We extract a set of features from each chunk and we feed them into a recurrent neural network to model the sequential flow of the chunks' tweets. We use an attention layer with dropout to attend over the most important tweets in each chunk. Finally, the representation is fed into a softmax layer to produce a probability distribution over the account types and thus predict the factuality of the accounts. Since we have many chunks for each account, the label for an account is obtained by taking the majority class of the account's chunks.",
+        "The main obstacle for detecting suspicious Twitter accounts is due to the behavior of mixing some real news with the misleading ones. Consequently, we investigate ways to detect suspicious accounts by considering their tweets in groups (chunks). Our hypothesis is that suspicious accounts have a unique pattern in posting tweet sequences. Since their intention is to mislead, the way they transition from one set of tweets to the next has a hidden signature, biased by their intentions. Therefore, reading these tweets in chunks has the potential to improve the detection of the fake news accounts."
+      ],
+      "evidence_block_ids": [
+        11,
+        5
+      ],
+      "evidence_paragraph_ids": [
+        11,
+        5
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [],
+      "free_form_answer": "sequence of $s$ tweets",
+      "yes_no": null,
+      "evidence": [
+        "Input Representation. Let $t$ be a Twitter account that contains $m$ tweets. These tweets are sorted by date and split into a sequence of chunks $ck = \\langle ck_1, \\ldots , ck_n \\rangle $, where each $ck_i$ contains $s$ tweets. Each tweet in $ck_i$ is represented by a vector $v \\in {\\rm I\\!R}^d$ , where $v$ is the concatenation of a set of features' vectors, that is $v = \\langle f_1, \\ldots , f_n \\rangle $. Each feature vector $f_i$ is built by counting the presence of tweet's words in a set of lexical lists. The final representation of the tweet is built by averaging the single word vectors."
+      ],
+      "evidence_block_ids": [
+        12
+      ],
+      "evidence_paragraph_ids": [
+        12
+      ]
+    }
+  ],
+  "doc_uuid": "1910.06592",
+  "doc_path": "qasper://1910.06592",
+  "qasper_question_id": "97d0f9a1540a48e0b4d30d7084a8c524dd09a4c3",
+  "title": "FacTweet: Profiling Fake News Twitter Accounts",
+  "evidence_block_ids": [
+    11,
+    5,
+    12
+  ],
+  "evidence_paragraph_ids": [
+    11,
+    5,
+    12
+  ],
+  "output": "{\"answer_short\": \"212\", \"answer_rationale\": \"\", \"supporting_block_ids\": [23, 24, 25, 26, 27]}",
+  "retrieved_node_ids": [
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "retrieved_block_ids": [
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "answer_short": "212",
+  "supporting_block_ids": [
+    23,
+    24,
+    25,
+    26,
+    27
+  ]
+}

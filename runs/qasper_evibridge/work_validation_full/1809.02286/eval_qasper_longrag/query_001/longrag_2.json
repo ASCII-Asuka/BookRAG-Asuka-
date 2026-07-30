@@ -1,0 +1,79 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Related Work\n[source_id=11] Recursive neural networks (RvNN) are a kind of neural architecture which model sentences by exploiting syntactic structure. While earlier RvNN models proposed utilizing diverse composition functions, including feed-forward neural networks BIBREF12 , matrix-vector multiplication BIBREF5 , and tensor computation BIBREF6 , tree-LSTMs BIBREF13 remain the standard for several sentence-level tasks.\n[source_id=12] Even though classic RvNNs have demonstrated superior performance on a variety of tasks, their inflexibility, i.e. their inability to handle dynamic compositionality for different syntactic configurations, is a considerable weakness. For instance, it would be desirable if our model could distinguish e.g. adjective-noun composition from that of verb-noun or preposition-noun composition, as models failing to make such a distinction ignore real-world syntactic considerations such as `-arity' of function words (i.e. types), and the adjunct/argument distinction.\n[source_id=13] To enable dynamic compositionality in recursive neural networks, many previous works BIBREF14 , BIBREF15 , BIBREF16 , BIBREF9 , BIBREF17 , BIBREF18 , BIBREF19 have proposed various methods.\n[source_id=14] One main direction of research leverages tag information, which is produced as a by-product of parsing. In detail, BIBREF16 ( BIBREF16 ) suggested TG-RNN, a model employing different composition functions according to POS tags, and TE-RNN/TE-RNTN, models which leverage tag embeddings as additional inputs for the existing tree-structured models. Despite the novelty of utilizing tag information, the explosion of the number of parameters (in case of the TG-RNN) and the limited performance of the original models (in case of the TE-RNN/TE-RNTN) have prevented these models from being widely adopted. Meanwhile, BIBREF9 ( BIBREF9 ) and BIBREF18 ( BIBREF18 ) proposed models based on a tree-LSTM which also uses the tag vectors to control the gate functions of the tree-LSTM. In spite of their impressive results, there is a limitation that the trained tag embeddings are too simple to reflect the rich information which tags provide in different syntactic structures. To alleviate this problem, we introduce structure-aware tag representations in the next section.\n[source_id=15] Another way of building dynamic compositionality into RvNNs is to take advantage of a meta-network (or hyper-network). Inspired by recent works on dynamic parameter prediction, DC-TreeLSTMs BIBREF17 dynamically create the parameters for compositional functions in a tree-LSTM. Specifically, the model has two separate tree-LSTM networks whose architectures are similar, but the smaller of the two is utilized to calculate the weights of the bigger one. A possible problem for this model is that it may be easy to be trained such that the role of each tree-LSTM is ambiguous, as they share the same input, i.e. word information. Therefore, we design two disentangled tree-LSTMs in our model so that one focuses on extracting useful features from only syntactic information while the other composes semantic units with the aid of the features. Furthermore, our model reduces the complexity of computation by utilizing typical tree-LSTM frameworks instead of computing the weights for each example.\n[source_id=16] Finally, some recent works BIBREF10 , BIBREF11 have proposed latent tree-structured models that learn how to formulate tree structures from only sequences of tokens, without the aid of syntactic trees or linguistic information. The latent tree models have the advantage of being able to find the optimized task-specific order of composition rather than a sequential or syntactic one. In experiments, we compare our model with not only syntactic tree-based models but also latent tree models, demonstrating that modeling with explicit linguistic knowledge can be an attractive option.",
+  "score": 3.879445557962506,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "child_qasper_evidence_texts": [
+    "Recursive neural networks (RvNN) are a kind of neural architecture which model sentences by exploiting syntactic structure. While earlier RvNN models proposed utilizing diverse composition functions, including feed-forward neural networks BIBREF12 , matrix-vector multiplication BIBREF5 , and tensor computation BIBREF6 , tree-LSTMs BIBREF13 remain the standard for several sentence-level tasks.",
+    "Even though classic RvNNs have demonstrated superior performance on a variety of tasks, their inflexibility, i.e. their inability to handle dynamic compositionality for different syntactic configurations, is a considerable weakness. For instance, it would be desirable if our model could distinguish e.g. adjective-noun composition from that of verb-noun or preposition-noun composition, as models failing to make such a distinction ignore real-world syntactic considerations such as `-arity' of function words (i.e. types), and the adjunct/argument distinction.",
+    "To enable dynamic compositionality in recursive neural networks, many previous works BIBREF14 , BIBREF15 , BIBREF16 , BIBREF9 , BIBREF17 , BIBREF18 , BIBREF19 have proposed various methods.",
+    "One main direction of research leverages tag information, which is produced as a by-product of parsing. In detail, BIBREF16 ( BIBREF16 ) suggested TG-RNN, a model employing different composition functions according to POS tags, and TE-RNN/TE-RNTN, models which leverage tag embeddings as additional inputs for the existing tree-structured models. Despite the novelty of utilizing tag information, the explosion of the number of parameters (in case of the TG-RNN) and the limited performance of the original models (in case of the TE-RNN/TE-RNTN) have prevented these models from being widely adopted. Meanwhile, BIBREF9 ( BIBREF9 ) and BIBREF18 ( BIBREF18 ) proposed models based on a tree-LSTM which also uses the tag vectors to control the gate functions of the tree-LSTM. In spite of their impressive results, there is a limitation that the trained tag embeddings are too simple to reflect the rich information which tags provide in different syntactic structures. To alleviate this problem, we introduce structure-aware tag representations in the next section.",
+    "Another way of building dynamic compositionality into RvNNs is to take advantage of a meta-network (or hyper-network). Inspired by recent works on dynamic parameter prediction, DC-TreeLSTMs BIBREF17 dynamically create the parameters for compositional functions in a tree-LSTM. Specifically, the model has two separate tree-LSTM networks whose architectures are similar, but the smaller of the two is utilized to calculate the weights of the bigger one. A possible problem for this model is that it may be easy to be trained such that the role of each tree-LSTM is ambiguous, as they share the same input, i.e. word information. Therefore, we design two disentangled tree-LSTMs in our model so that one focuses on extracting useful features from only syntactic information while the other composes semantic units with the aid of the features. Furthermore, our model reduces the complexity of computation by utilizing typical tree-LSTM frameworks instead of computing the weights for each example.",
+    "Finally, some recent works BIBREF10 , BIBREF11 have proposed latent tree-structured models that learn how to formulate tree structures from only sequences of tokens, without the aid of syntactic trees or linguistic information. The latent tree models have the advantage of being able to find the optimized task-specific order of composition rather than a sequential or syntactic one. In experiments, we compare our model with not only syntactic tree-based models but also latent tree models, demonstrating that modeling with explicit linguistic knowledge can be an attractive option."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Related Work",
+    "Related Work",
+    "Related Work",
+    "Related Work",
+    "Related Work",
+    "Related Work"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Related Work",
+      0
+    ],
+    [
+      "Related Work",
+      1
+    ],
+    [
+      "Related Work",
+      2
+    ],
+    [
+      "Related Work",
+      3
+    ],
+    [
+      "Related Work",
+      4
+    ],
+    [
+      "Related Work",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Related Work",
+  "section": "Related Work",
+  "title_path": "Related Work",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,61 @@
+{
+  "id": "longrag_13",
+  "content": "[Section] Error Analysis\n[source_id=64] Although our model outperforms other style transfer baselines according to automatic and human evaluation results, there are still some failure cases because irony generation is still a very challenging task. We would like to share the issues we meet during our experiments and our solutions to some of them in this section.\n[source_id=65] No Change: As mentioned above, many style transfer models, such as DualRL, tend to make few changes to the input sentence and output the same sentence. Actually, this is a common issue for unsupervised style transfer systems and we also meet it during our experiments. The main reason for the issue is that rewards for content preservation are too prominent and rewards for style accuracy cannot work well. In contrast, in order to guarantee the readability and fluency of the output sentence, we also cannot emphasize too much on rewards for style accuracy because it may cause some other issues such as word repetition mentioned below. A method to solve the problem is tuning hyperparameters and this is also the method we implement in this work. As for content preservation, maybe MLE methods such as back-translation are not enough because they tend to force models to generate specific words. In the future, we should further design some more suitable methods to control content preservation for models without disentangling style and content representations, such as DualRL and ours.\n[source_id=66] Word Repetition: During our experiments, we observe that some of the outputs prefer to repeat the same word as shown in Table TABREF38 . This is because reinforcement learning rewards encourage the model to generate words which can get high scores from classifiers and even back-translation cannot stop it. Our solution is that we can lower the probability of decoding a word in decoders if the word has been generated in the previous time steps during testing. We also try to implement this method during training time but obtain worse performances because it may limit the effects of training. Some previous studies utilize language models to control the fluency of the output sentence and we also try this method. Nonetheless, pre-training a language model with tweets and using it to generate rewards is difficult because tweets are more casual and have more noise. Rewards from that kind of language model are usually not accurate and may confuse the model. In the future, we should come up with better methods to model language fluency with the consideration of irony accuracy, sentiment and content preservation, especially for tweets.\n[source_id=67] Improper Words: As ironic style is hard for our model to learn, it may generate some improper words which make the sentence strange. As the example shown in the Table TABREF38 , the sentiment word in the input sentence is “wonderful\" and the model should change it into a negative word such as “sad\" to make the output sentence ironic. However, the model changes “friday\" and “fifa\" which are not related to ironic styles. We have not found a very effective method to address this issue and maybe we should further explore stronger models to learn ironic styles better.",
+  "score": 3.0305973191565334,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_13",
+  "child_source_node_ids": [
+    64,
+    65,
+    66,
+    67
+  ],
+  "child_qasper_evidence_texts": [
+    "Although our model outperforms other style transfer baselines according to automatic and human evaluation results, there are still some failure cases because irony generation is still a very challenging task. We would like to share the issues we meet during our experiments and our solutions to some of them in this section.",
+    "No Change: As mentioned above, many style transfer models, such as DualRL, tend to make few changes to the input sentence and output the same sentence. Actually, this is a common issue for unsupervised style transfer systems and we also meet it during our experiments. The main reason for the issue is that rewards for content preservation are too prominent and rewards for style accuracy cannot work well. In contrast, in order to guarantee the readability and fluency of the output sentence, we also cannot emphasize too much on rewards for style accuracy because it may cause some other issues such as word repetition mentioned below. A method to solve the problem is tuning hyperparameters and this is also the method we implement in this work. As for content preservation, maybe MLE methods such as back-translation are not enough because they tend to force models to generate specific words. In the future, we should further design some more suitable methods to control content preservation for models without disentangling style and content representations, such as DualRL and ours.",
+    "Word Repetition: During our experiments, we observe that some of the outputs prefer to repeat the same word as shown in Table TABREF38 . This is because reinforcement learning rewards encourage the model to generate words which can get high scores from classifiers and even back-translation cannot stop it. Our solution is that we can lower the probability of decoding a word in decoders if the word has been generated in the previous time steps during testing. We also try to implement this method during training time but obtain worse performances because it may limit the effects of training. Some previous studies utilize language models to control the fluency of the output sentence and we also try this method. Nonetheless, pre-training a language model with tweets and using it to generate rewards is difficult because tweets are more casual and have more noise. Rewards from that kind of language model are usually not accurate and may confuse the model. In the future, we should come up with better methods to model language fluency with the consideration of irony accuracy, sentiment and content preservation, especially for tweets.",
+    "Improper Words: As ironic style is hard for our model to learn, it may generate some improper words which make the sentence strange. As the example shown in the Table TABREF38 , the sentiment word in the input sentence is “wonderful\" and the model should change it into a negative word such as “sad\" to make the output sentence ironic. However, the model changes “friday\" and “fifa\" which are not related to ironic styles. We have not found a very effective method to address this issue and maybe we should further explore stronger models to learn ironic styles better."
+  ],
+  "child_pages": [
+    13,
+    13,
+    13,
+    13
+  ],
+  "child_sections": [
+    "Error Analysis",
+    "Error Analysis",
+    "Error Analysis",
+    "Error Analysis"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Error Analysis",
+      0
+    ],
+    [
+      "Error Analysis",
+      1
+    ],
+    [
+      "Error Analysis",
+      2
+    ],
+    [
+      "Error Analysis",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_13",
+  "section_id": "Error Analysis",
+  "section": "Error Analysis",
+  "title_path": "Error Analysis",
+  "block_type": "long_unit"
+}

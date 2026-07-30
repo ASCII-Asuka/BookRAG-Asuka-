@@ -1,0 +1,128 @@
+{
+  "question": "How they extract \"structured answer-relevant relation\"?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [],
+      "free_form_answer": "Using the OpenIE toolbox and applying heuristic rules to select the most relevant relation.",
+      "yes_no": null,
+      "evidence": [
+        "To address this issue, we extract the structured answer-relevant relations from sentences and propose a method to jointly model such structured relation and the unstructured sentence for question generation. The structured answer-relevant relation is likely to be to the point context and thus can help keep the generated question to the point. For example, Figure FIGREF1 shows our framework can extract the right answer-relevant relation (“The daily mean temperature in January”, “is”, “32.6$^\\circ $F (0.3$^\\circ $C)”) among multiple facts. With the help of such structured information, our model is less likely to be confused by sentences with a complex structure. Specifically, we firstly extract multiple relations with an off-the-shelf Open Information Extraction (OpenIE) toolbox BIBREF7, then we select the relation that is most relevant to the answer with carefully designed heuristic rules."
+      ],
+      "evidence_block_ids": [
+        8
+      ],
+      "evidence_paragraph_ids": [
+        8
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "off-the-shelf toolbox of OpenIE"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "We utilize an off-the-shelf toolbox of OpenIE to the derive structured answer-relevant relations from sentences as to the point contexts. Relations extracted by OpenIE can be represented either in a triple format or in an n-ary format with several secondary arguments, and we employ the latter to keep the extractions as informative as possible and avoid extracting too many similar relations in different granularities from one sentence. We join all arguments in the extracted n-ary relation into a sequence as our to the point context. Figure FIGREF5 shows n-ary relations extracted from OpenIE. As we can see, OpenIE extracts multiple relations for complex sentences. Here we select the most informative relation according to three criteria in the order of descending importance: (1) having the maximal number of overlapped tokens between the answer and the relation; (2) being assigned the highest confidence score by OpenIE; (3) containing maximum non-stop words. As shown in Figure FIGREF5, our criteria can select answer-relevant relations (waved in Figure FIGREF5), which is especially useful for sentences with extraneous information. In rare cases, OpenIE cannot extract any relation, we treat the sentence itself as the to the point context."
+      ],
+      "evidence_block_ids": [
+        17
+      ],
+      "evidence_paragraph_ids": [
+        17
+      ]
+    }
+  ],
+  "doc_uuid": "1910.06036",
+  "doc_path": "qasper://1910.06036",
+  "qasper_question_id": "1d197cbcac7b3f4015416f0152a6692e881ada6c",
+  "title": "Improving Question Generation With to the Point Context",
+  "evidence_block_ids": [
+    8,
+    17
+  ],
+  "evidence_paragraph_ids": [
+    8,
+    17
+  ],
+  "output": "{\n  \"answer_short\": \"They extract the structured answer-relevant relations from sentences using an off-the-shelf Open Information Extraction (OpenIE) toolbox, then select the most relevant relation based on criteria such as maximal overlap with the answer, highest confidence score, and maximum non-stop words.\",\n  \"answer_rationale\": \"The document explains that structured answer-relevant relations are extracted using an off-the-shelf OpenIE toolbox, which can derive relations in n-ary format. The most relevant relation is selected based on three criteria: (1) maximal overlap with the answer, (2) highest confidence score from OpenIE, and (3) maximum non-stop words. This process is detailed in Text 8 and Text 17, which describe the extraction and selection process.\",\n  \"supporting_block_ids\": [8, 17]\n}",
+  "retrieved_node_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70
+  ],
+  "answer_short": "They extract the structured answer-relevant relations from sentences using an off-the-shelf Open Information Extraction (OpenIE) toolbox, then select the most relevant relation based on criteria such as maximal overlap with the answer, highest confidence score, and maximum non-stop words.",
+  "answer_rationale": "The document explains that structured answer-relevant relations are extracted using an off-the-shelf OpenIE toolbox, which can derive relations in n-ary format. The most relevant relation is selected based on three criteria: (1) maximal overlap with the answer, (2) highest confidence score from OpenIE, and (3) maximum non-stop words. This process is detailed in Text 8 and Text 17, which describe the extraction and selection process.",
+  "supporting_block_ids": [
+    8,
+    17
+  ]
+}

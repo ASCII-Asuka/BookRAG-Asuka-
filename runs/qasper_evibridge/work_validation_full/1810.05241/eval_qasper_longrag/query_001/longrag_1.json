@@ -1,0 +1,79 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Keyphrase generation is the task of automatically predicting keyphrases given a source text. Desired keyphrases are often multi-word units that summarize the high-level meaning and highlight certain important topics or information of the source text. Consequently, models that can successfully perform this task should be capable of not only distilling high-level information from a document, but also locating specific, important snippets therein.\n[source_id=5] To make the problem even more challenging, a keyphrase may or may not be a substring of the source text (i.e., it may be present or absent). Moreover, a given source text is usually associated with a set of multiple keyphrases. Thus, keyphrase generation is an instance of the set generation problem, where both the size of the set and the size (i.e., the number of tokens in a phrase) of each element can vary depending on the source.\n[source_id=6] Similar to summarization, keyphrase generation is often formulated as a sequence-to-sequence (Seq2Seq) generation task in most prior studies BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 . Conditioned on a source text, Seq2Seq models generate phrases individually or as a longer sequence jointed by delimiting tokens. Since standard Seq2Seq models generate only one sequence at a time, thus to generate multiple phrases, a common approach is to over-generate using beam search with a large beam width. Models are then evaluated by taking a fixed number of top predicted phrases (typically 5 or 10) and comparing them against the ground truth keyphrases.\n[source_id=7] Though this approach has achieved good empirical results, we argue that it suffers from two major limitations. Firstly, models that use beam search to generate multiple keyphrases generally lack the ability to determine the dynamic number of keyphrases needed for different source texts. Meanwhile, the parallelism in beam search also fails to model the inter-relation among the generated phrases, which can often result in diminished diversity in the output. Although certain existing models take output diversity into consideration during training BIBREF1 , BIBREF2 , the effort is significantly undermined during decoding due to the reliance on over-generation and phrase ranking with beam search.\n[source_id=8] Secondly, the current evaluation setup is rather problematic, since existing studies attempt to match a fixed number of outputs against a variable number of ground truth keyphrases. Empirically, the number of keyphrases can vary drastically for different source texts, depending on a plethora of factors including the length or genre of the text, the granularity of keyphrase annotation, etc. For the several commonly used keyphrase generation datasets, for example, the average number of keyphrases per data point can range from 5.3 to 15.7, with variances sometimes as large as 64.6 (Table TABREF1 ). Therefore, using an arbitrary, fixed number INLINEFORM0 to evaluate entire datasets is not appropriate. In fact, under this evaluation setup, the F1 score for the oracle model on the KP20k dataset is 0.858 for INLINEFORM1 and 0.626 for INLINEFORM2 , which apparently poses serious normalization issues as evaluation metrics.\n[source_id=9] To overcome these problems, we propose novel decoding strategies and evaluation metrics for the keyphrase generation task. The main contributions of this work are as follows:",
+  "score": 3.1370721093777085,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "child_qasper_evidence_texts": [
+    "Keyphrase generation is the task of automatically predicting keyphrases given a source text. Desired keyphrases are often multi-word units that summarize the high-level meaning and highlight certain important topics or information of the source text. Consequently, models that can successfully perform this task should be capable of not only distilling high-level information from a document, but also locating specific, important snippets therein.",
+    "To make the problem even more challenging, a keyphrase may or may not be a substring of the source text (i.e., it may be present or absent). Moreover, a given source text is usually associated with a set of multiple keyphrases. Thus, keyphrase generation is an instance of the set generation problem, where both the size of the set and the size (i.e., the number of tokens in a phrase) of each element can vary depending on the source.",
+    "Similar to summarization, keyphrase generation is often formulated as a sequence-to-sequence (Seq2Seq) generation task in most prior studies BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 . Conditioned on a source text, Seq2Seq models generate phrases individually or as a longer sequence jointed by delimiting tokens. Since standard Seq2Seq models generate only one sequence at a time, thus to generate multiple phrases, a common approach is to over-generate using beam search with a large beam width. Models are then evaluated by taking a fixed number of top predicted phrases (typically 5 or 10) and comparing them against the ground truth keyphrases.",
+    "Though this approach has achieved good empirical results, we argue that it suffers from two major limitations. Firstly, models that use beam search to generate multiple keyphrases generally lack the ability to determine the dynamic number of keyphrases needed for different source texts. Meanwhile, the parallelism in beam search also fails to model the inter-relation among the generated phrases, which can often result in diminished diversity in the output. Although certain existing models take output diversity into consideration during training BIBREF1 , BIBREF2 , the effort is significantly undermined during decoding due to the reliance on over-generation and phrase ranking with beam search.",
+    "Secondly, the current evaluation setup is rather problematic, since existing studies attempt to match a fixed number of outputs against a variable number of ground truth keyphrases. Empirically, the number of keyphrases can vary drastically for different source texts, depending on a plethora of factors including the length or genre of the text, the granularity of keyphrase annotation, etc. For the several commonly used keyphrase generation datasets, for example, the average number of keyphrases per data point can range from 5.3 to 15.7, with variances sometimes as large as 64.6 (Table TABREF1 ). Therefore, using an arbitrary, fixed number INLINEFORM0 to evaluate entire datasets is not appropriate. In fact, under this evaluation setup, the F1 score for the oracle model on the KP20k dataset is 0.858 for INLINEFORM1 and 0.626 for INLINEFORM2 , which apparently poses serious normalization issues as evaluation metrics.",
+    "To overcome these problems, we propose novel decoding strategies and evaluation metrics for the keyphrase generation task. The main contributions of this work are as follows:"
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

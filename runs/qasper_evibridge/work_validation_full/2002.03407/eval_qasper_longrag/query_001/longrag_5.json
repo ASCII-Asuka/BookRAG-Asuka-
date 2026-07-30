@@ -1,0 +1,133 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Proposed Template-Based Synthesis Model\n[source_id=17] Our motivation for using templates for data synthesis is that seq2seq synthesis models (as discussed in related work) tend to generate irrelevant and repeated words BIBREF17, while templates can produce more coherent and concise output. Also, extracting templates can be done either manually or automatically typically by training a few parameters or even doing no training, then external information in the form of keywords or snippets can be populated into the templates with the help of more sophisticated models. Accordingly, using templates can be very tempting for domains with limited resources such as ours.\n[source_id=18] Model Structure. The model consists of 4 modules:\n[source_id=19] 1. Template extraction: To convert human summaries into templates, we remove keywords in the summary to leave only non-keywords. We use Rapid Automatic Keyword Extraction (RAKE) BIBREF18 to identify keywords.\n[source_id=20] 2. Template clustering: Upon converting human summaries into templates, we cluster them into $N$ clusters with the goal of using any template from the same cluster interchangeably. A template is first converted into embeddings using a pretrained BERT model BIBREF19, where template embedding is constructed by average pooling word embeddings. Templates are then clustered using k-medoid.\n[source_id=21] 3. Summary rewriting: An encoder-attention-decoder with pointer network is trained to perform the rewriting task. The model is trained to inject keywords into a template and perform rewriting into a coherent paragraph. The produced rewrites are considered as candidate summaries.\n[source_id=22] 4. Summary selection: After producing candidate summaries, we need to pick the best ones. We argue that the best candidates are those that are coherent and also convey the same meaning as the original human summary. We thus use a hybrid metric to score candidates, where the metric is a weighted sum of two scores and is calculated using Equations 1, 2, and 3. Eq.1 measures coherency using a language model (LM), Eq.2 measures how close a candidate is to a human summary using ROUGE scores, while Eq.3 picks the highest scored $N$ candidates as the final synthetic set.\n[source_id=23] CS and HS are a candidate and human summary. $P(w)$ is the probability of word $w$ using a language model. $\\alpha , \\beta $ are weighting parameters. In this work we use $\\alpha =\\beta =1$ for all experiments. $R_{i}(CS,HS)$ is ROUGE-i score between CS and HS for i=1, 2, and $l$.\n[source_id=24] Model Training. Before using the synthesis model, some of the constructing modules (rewriting module, scoring LM) need training. To train the rewriting model, we use another dataset consisting of a set of samples, where each sample can be a text snippet (sentence, paragraph, etc.). For each sample, keywords are extracted using RAKE, then removed. The keywords plus the sample with no keywords are then passed to the rewriting model. The training objective of this model is to reconstruct the original sample, which can be seen as trying to inject extracted keywords back into a template. Model Usage. To use the synthesis model to generate new samples, the set of human summaries are fed to the model, passing through the sub-modules in the following order:\n[source_id=25] 1. Human summaries first pass through the template extraction module, converting each summary $s_i$ into template $t_i$ and the corresponding keywords $kw_i$.\n[source_id=26] 2. Templates are then passed to the clustering module, producing a set of clusters. Each cluster $C$ contains a number of similar templates.\n[source_id=27] 3. For each template $t_i$ and corresponding keywords $kw_i$ from step 1, find the cluster $C_i$ that contains the template $t_i$, then pass the set of templates within that clusters $\\lbrace t_j\\rbrace \\forall {j},$ if $t_j \\in C_i$ alongside the keywords $kw_i$ to the summary rewriting module. This will produce a set of candidate summaries.\n[source_id=28] 4. The summary selection module scores and selects the highest $N$ candidates as the synthetic summaries.",
+  "score": 2.283090493014008,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+  ],
+  "child_qasper_evidence_texts": [
+    "Our motivation for using templates for data synthesis is that seq2seq synthesis models (as discussed in related work) tend to generate irrelevant and repeated words BIBREF17, while templates can produce more coherent and concise output. Also, extracting templates can be done either manually or automatically typically by training a few parameters or even doing no training, then external information in the form of keywords or snippets can be populated into the templates with the help of more sophisticated models. Accordingly, using templates can be very tempting for domains with limited resources such as ours.",
+    "Model Structure. The model consists of 4 modules:",
+    "1. Template extraction: To convert human summaries into templates, we remove keywords in the summary to leave only non-keywords. We use Rapid Automatic Keyword Extraction (RAKE) BIBREF18 to identify keywords.",
+    "2. Template clustering: Upon converting human summaries into templates, we cluster them into $N$ clusters with the goal of using any template from the same cluster interchangeably. A template is first converted into embeddings using a pretrained BERT model BIBREF19, where template embedding is constructed by average pooling word embeddings. Templates are then clustered using k-medoid.",
+    "3. Summary rewriting: An encoder-attention-decoder with pointer network is trained to perform the rewriting task. The model is trained to inject keywords into a template and perform rewriting into a coherent paragraph. The produced rewrites are considered as candidate summaries.",
+    "4. Summary selection: After producing candidate summaries, we need to pick the best ones. We argue that the best candidates are those that are coherent and also convey the same meaning as the original human summary. We thus use a hybrid metric to score candidates, where the metric is a weighted sum of two scores and is calculated using Equations 1, 2, and 3. Eq.1 measures coherency using a language model (LM), Eq.2 measures how close a candidate is to a human summary using ROUGE scores, while Eq.3 picks the highest scored $N$ candidates as the final synthetic set.",
+    "CS and HS are a candidate and human summary. $P(w)$ is the probability of word $w$ using a language model. $\\alpha , \\beta $ are weighting parameters. In this work we use $\\alpha =\\beta =1$ for all experiments. $R_{i}(CS,HS)$ is ROUGE-i score between CS and HS for i=1, 2, and $l$.",
+    "Model Training. Before using the synthesis model, some of the constructing modules (rewriting module, scoring LM) need training. To train the rewriting model, we use another dataset consisting of a set of samples, where each sample can be a text snippet (sentence, paragraph, etc.). For each sample, keywords are extracted using RAKE, then removed. The keywords plus the sample with no keywords are then passed to the rewriting model. The training objective of this model is to reconstruct the original sample, which can be seen as trying to inject extracted keywords back into a template. Model Usage. To use the synthesis model to generate new samples, the set of human summaries are fed to the model, passing through the sub-modules in the following order:",
+    "1. Human summaries first pass through the template extraction module, converting each summary $s_i$ into template $t_i$ and the corresponding keywords $kw_i$.",
+    "2. Templates are then passed to the clustering module, producing a set of clusters. Each cluster $C$ contains a number of similar templates.",
+    "3. For each template $t_i$ and corresponding keywords $kw_i$ from step 1, find the cluster $C_i$ that contains the template $t_i$, then pass the set of templates within that clusters $\\lbrace t_j\\rbrace \\forall {j},$ if $t_j \\in C_i$ alongside the keywords $kw_i$ to the summary rewriting module. This will produce a set of candidate summaries.",
+    "4. The summary selection module scores and selects the highest $N$ candidates as the synthetic summaries."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Proposed Template-Based Synthesis Model",
+    "Proposed Template-Based Synthesis Model",
+    "Proposed Template-Based Synthesis Model",
+    "Proposed Template-Based Synthesis Model",
+    "Proposed Template-Based Synthesis Model",
+    "Proposed Template-Based Synthesis Model",
+    "Proposed Template-Based Synthesis Model",
+    "Proposed Template-Based Synthesis Model",
+    "Proposed Template-Based Synthesis Model",
+    "Proposed Template-Based Synthesis Model",
+    "Proposed Template-Based Synthesis Model",
+    "Proposed Template-Based Synthesis Model"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Proposed Template-Based Synthesis Model",
+      0
+    ],
+    [
+      "Proposed Template-Based Synthesis Model",
+      1
+    ],
+    [
+      "Proposed Template-Based Synthesis Model",
+      2
+    ],
+    [
+      "Proposed Template-Based Synthesis Model",
+      3
+    ],
+    [
+      "Proposed Template-Based Synthesis Model",
+      4
+    ],
+    [
+      "Proposed Template-Based Synthesis Model",
+      5
+    ],
+    [
+      "Proposed Template-Based Synthesis Model",
+      6
+    ],
+    [
+      "Proposed Template-Based Synthesis Model",
+      7
+    ],
+    [
+      "Proposed Template-Based Synthesis Model",
+      8
+    ],
+    [
+      "Proposed Template-Based Synthesis Model",
+      9
+    ],
+    [
+      "Proposed Template-Based Synthesis Model",
+      10
+    ],
+    [
+      "Proposed Template-Based Synthesis Model",
+      11
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Proposed Template-Based Synthesis Model",
+  "section": "Proposed Template-Based Synthesis Model",
+  "title_path": "Proposed Template-Based Synthesis Model",
+  "block_type": "long_unit"
+}

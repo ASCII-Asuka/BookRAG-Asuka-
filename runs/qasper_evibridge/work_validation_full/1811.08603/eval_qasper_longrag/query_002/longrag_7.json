@@ -1,0 +1,97 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Global Features\n[source_id=33] The key idea of collective EL is to utilize the topical coherence throughout the entire document. The consistency assumption behind it is that: all mentions in a document shall be on the same topic. However, this leads to exhaustive computations if the number of mentions is large. Based on the observation that the consistency attenuates along with the distance between two mentions, we argue that the adjacent mentions might be sufficient for supporting the assumption efficiently.\n[source_id=34] Formally, we define neighbor mentions as INLINEFORM0 adjacent mentions before and after current mention INLINEFORM1 : INLINEFORM2 , where INLINEFORM3 is the pre-defined window size. Thus, the topical coherence at document level shall be achieved in a chain-like way. As shown in Figure FIGREF10 ( INLINEFORM4 ), mentions Hussain and Essex, a cricket player and the cricket club, provide adequate disambiguation clues to induce the underlying topic “cricket\" for the current mention England, which impacts positively on identifying the mention surrey as another cricket club via the common neighbor mention Essex.\n[source_id=35] A degraded case happens if INLINEFORM0 is large enough to cover the entire document, and the mentions used for global features become the same as the previous work, such as BIBREF21 . In experiments, we heuristically found a suitable INLINEFORM1 which is much smaller than the total number of mentions. The benefits of efficiency are in two ways: (i) to decrease time complexity, and (ii) to trim the entity graph into a fixed size of subgraph that facilitates computation acceleration through GPUs and batch techniques, which will be discussed in Section SECREF24 .\n[source_id=36] Given neighbor mentions INLINEFORM0 , we extract two types of vectorial global features and structured global features for each candidate INLINEFORM1 :\n[source_id=37] Neighbor Mention Compatibility Suppose neighbor mentions are topical coherent, a candidate entity shall also be compatible with neighbor mentions if it has a high compatibility score with the current mention, otherwise not. That is, we extract the vectorial global features by computing the similarities between INLINEFORM0 and all neighbor mentions: INLINEFORM1 , where INLINEFORM2 is the mention embedding by averaging the global vectors of words in its surface form: INLINEFORM3 , where INLINEFORM4 are tokenized words of mention INLINEFORM5 .\n[source_id=38] Subgraph Structure The above features reflect the consistent semantics in texts (i.e., mentions). We now extract structured global features using the relations in KB, which facilitates the inference among candidates to find the most topical coherent subset. For each document, we obtain the entity graph INLINEFORM0 by taking candidate entities of all mentions INLINEFORM1 as nodes, and using entity embeddings to compute their similarities as edges INLINEFORM2 . Then, we extract the subgraph structured features INLINEFORM3 for each entity INLINEFORM4 for efficiency.\n[source_id=39] Formally, we define the subgraph as: INLINEFORM0 , where INLINEFORM1 . For example (Figure FIGREF1 ), for entity England cricket team, the subgraph contains the relation from it to all candidates of neighbor mentions: England cricket team, Nasser Hussain (rugby union), Nasser Hussain, Essex, Essex County Cricket Club and Essex, New York. To support batch-wise acceleration, we represent INLINEFORM2 in the form of adjacency table based vectors: INLINEFORM3 , where INLINEFORM4 is the number of candidates per mention.\n[source_id=40] Finally, for each candidate INLINEFORM0 , we concatenate local features and neighbor mention compatibility scores as the feature vector INLINEFORM1 , and construct the subgraph structure representation INLINEFORM2 as the inputs of NCEL.",
+  "score": 1.614045849410042,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40
+  ],
+  "child_qasper_evidence_texts": [
+    "The key idea of collective EL is to utilize the topical coherence throughout the entire document. The consistency assumption behind it is that: all mentions in a document shall be on the same topic. However, this leads to exhaustive computations if the number of mentions is large. Based on the observation that the consistency attenuates along with the distance between two mentions, we argue that the adjacent mentions might be sufficient for supporting the assumption efficiently.",
+    "Formally, we define neighbor mentions as INLINEFORM0 adjacent mentions before and after current mention INLINEFORM1 : INLINEFORM2 , where INLINEFORM3 is the pre-defined window size. Thus, the topical coherence at document level shall be achieved in a chain-like way. As shown in Figure FIGREF10 ( INLINEFORM4 ), mentions Hussain and Essex, a cricket player and the cricket club, provide adequate disambiguation clues to induce the underlying topic “cricket\" for the current mention England, which impacts positively on identifying the mention surrey as another cricket club via the common neighbor mention Essex.",
+    "A degraded case happens if INLINEFORM0 is large enough to cover the entire document, and the mentions used for global features become the same as the previous work, such as BIBREF21 . In experiments, we heuristically found a suitable INLINEFORM1 which is much smaller than the total number of mentions. The benefits of efficiency are in two ways: (i) to decrease time complexity, and (ii) to trim the entity graph into a fixed size of subgraph that facilitates computation acceleration through GPUs and batch techniques, which will be discussed in Section SECREF24 .",
+    "Given neighbor mentions INLINEFORM0 , we extract two types of vectorial global features and structured global features for each candidate INLINEFORM1 :",
+    "Neighbor Mention Compatibility Suppose neighbor mentions are topical coherent, a candidate entity shall also be compatible with neighbor mentions if it has a high compatibility score with the current mention, otherwise not. That is, we extract the vectorial global features by computing the similarities between INLINEFORM0 and all neighbor mentions: INLINEFORM1 , where INLINEFORM2 is the mention embedding by averaging the global vectors of words in its surface form: INLINEFORM3 , where INLINEFORM4 are tokenized words of mention INLINEFORM5 .",
+    "Subgraph Structure The above features reflect the consistent semantics in texts (i.e., mentions). We now extract structured global features using the relations in KB, which facilitates the inference among candidates to find the most topical coherent subset. For each document, we obtain the entity graph INLINEFORM0 by taking candidate entities of all mentions INLINEFORM1 as nodes, and using entity embeddings to compute their similarities as edges INLINEFORM2 . Then, we extract the subgraph structured features INLINEFORM3 for each entity INLINEFORM4 for efficiency.",
+    "Formally, we define the subgraph as: INLINEFORM0 , where INLINEFORM1 . For example (Figure FIGREF1 ), for entity England cricket team, the subgraph contains the relation from it to all candidates of neighbor mentions: England cricket team, Nasser Hussain (rugby union), Nasser Hussain, Essex, Essex County Cricket Club and Essex, New York. To support batch-wise acceleration, we represent INLINEFORM2 in the form of adjacency table based vectors: INLINEFORM3 , where INLINEFORM4 is the number of candidates per mention.",
+    "Finally, for each candidate INLINEFORM0 , we concatenate local features and neighbor mention compatibility scores as the feature vector INLINEFORM1 , and construct the subgraph structure representation INLINEFORM2 as the inputs of NCEL."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Global Features",
+    "Global Features",
+    "Global Features",
+    "Global Features",
+    "Global Features",
+    "Global Features",
+    "Global Features",
+    "Global Features"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Global Features",
+      0
+    ],
+    [
+      "Global Features",
+      1
+    ],
+    [
+      "Global Features",
+      2
+    ],
+    [
+      "Global Features",
+      3
+    ],
+    [
+      "Global Features",
+      4
+    ],
+    [
+      "Global Features",
+      5
+    ],
+    [
+      "Global Features",
+      6
+    ],
+    [
+      "Global Features",
+      7
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Global Features",
+  "section": "Global Features",
+  "title_path": "Global Features",
+  "block_type": "long_unit"
+}

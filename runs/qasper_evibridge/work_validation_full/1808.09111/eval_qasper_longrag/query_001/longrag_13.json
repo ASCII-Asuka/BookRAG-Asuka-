@@ -1,0 +1,70 @@
+{
+  "id": "longrag_13",
+  "content": "[Section] Unsupervised Dependency Parsing without gold POS tags\n[source_id=60] For the task of unsupervised dependency parse induction, we employ the Dependency Model with Valence (DMV) BIBREF2 as the syntax model in our approach. DMV is a generative model that defines a probability distribution over dependency parse trees and syntactic categories, generating tokens and dependencies in a head-outward fashion. While, traditionally, DMV is trained using gold POS tags as observed syntactic categories, in our approach, we treat each tag as a latent variable, as described in sec:general-neural.\n[source_id=61] Most existing approaches to this task are not fully unsupervised since they rely on gold POS tags following the original experimental setup for DMV. This is partially because automatically parsing from words is difficult even when using unsupervised syntactic categories BIBREF29 . However, inducing dependencies from words alone represents a more realistic experimental condition since gold POS tags are often unavailable in practice. Previous work that has trained from words alone often requires additional linguistic constraints (like sentence internal boundaries) BIBREF29 , BIBREF30 , BIBREF31 , BIBREF32 , acoustic cues BIBREF33 , additional training data BIBREF4 , or annotated data from related languages BIBREF34 . Our approach is naturally designed to train on word embeddings directly, thus we attempt to induce dependencies without using gold POS tags or other extra linguistic information.\n[source_id=62] Like previous work we use sections 02-21 of WSJ corpus as training data and evaluate on section 23, we remove punctuations and train the models on sentences of length INLINEFORM0 , “head-percolation” rules BIBREF39 are applied to obtain gold dependencies for evaluation. We train basic DMV, extended DMV (E-DMV) BIBREF35 and Gaussian DMV (which treats POS tag as unknown latent variables and generates observed word embeddings directly conditioned on them following Gaussian distribution) as baselines. Basic DMV and E-DMV are trained with Viterbi EM BIBREF40 on unsupervised POS tags induced from our Markov-structured model described in sec:pos. Multinomial parameters of the syntax model in both Gaussian DMV and our model are initialized with the pre-trained DMV baseline. Other parameters are initialized in the same way as in the POS tagging experiment. The directed dependency accuracy (DDA) is used for evaluation and we report accuracy on sentences of length INLINEFORM1 and all lengths. We train the parser until training data likelihood converges, and report the mean and standard deviation over 20 random restarts.\n[source_id=63] Our model directly observes word embeddings and does not require gold POS tags during training. Thus, results from related work trained on gold tags are not directly comparable. However, to measure how these systems might perform without gold tags, we run three recent state-of-the-art systems in our experimental setting: UR-A E-DMV BIBREF36 , Neural E-DMV BIBREF11 , and CRF Autoencoder (CRFAE) BIBREF37 . We use unsupervised POS tags (induced from our Markov-structured model) in place of gold tags. We also train basic DMV on gold tags and include several state-of-the-art results on gold tags as reference points.\n[source_id=64] As shown in Table TABREF39 , our approach is able to improve over the Gaussian DMV by 4.8 points on length INLINEFORM0 and 4.8 points on all lengths, which suggests the additional latent embedding layer and neural projector are helpful. The proposed approach yields, to the best of our knowledge, state-of-the-art performance without gold POS annotation and without sentence-internal boundary information. DMV, UR-A E-DMV, Neural E-DMV, and CRFAE suffer a large decrease in performance when trained on unsupervised tags – an effect also seen in previous work BIBREF29 , BIBREF34 . Since our approach induces latent POS tags jointly with dependency trees, it may be able to learn POS clusters that are more amenable to grammar induction than the unsupervised tags. We observe that CRFAE underperforms its gold-tag counterpart substantially. This may largely be a result of the model's reliance on prior linguistic rules that become unavailable when gold POS tag types are unknown. Many extensions to DMV can be considered orthogonal to our approach – they essentially focus on improving the syntax model. It is possible that incorporating these more sophisticated syntax models into our approach may lead to further improvements.",
+  "score": 3.1242243383511177,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_13",
+  "child_source_node_ids": [
+    60,
+    61,
+    62,
+    63,
+    64
+  ],
+  "child_qasper_evidence_texts": [
+    "For the task of unsupervised dependency parse induction, we employ the Dependency Model with Valence (DMV) BIBREF2 as the syntax model in our approach. DMV is a generative model that defines a probability distribution over dependency parse trees and syntactic categories, generating tokens and dependencies in a head-outward fashion. While, traditionally, DMV is trained using gold POS tags as observed syntactic categories, in our approach, we treat each tag as a latent variable, as described in sec:general-neural.",
+    "Most existing approaches to this task are not fully unsupervised since they rely on gold POS tags following the original experimental setup for DMV. This is partially because automatically parsing from words is difficult even when using unsupervised syntactic categories BIBREF29 . However, inducing dependencies from words alone represents a more realistic experimental condition since gold POS tags are often unavailable in practice. Previous work that has trained from words alone often requires additional linguistic constraints (like sentence internal boundaries) BIBREF29 , BIBREF30 , BIBREF31 , BIBREF32 , acoustic cues BIBREF33 , additional training data BIBREF4 , or annotated data from related languages BIBREF34 . Our approach is naturally designed to train on word embeddings directly, thus we attempt to induce dependencies without using gold POS tags or other extra linguistic information.",
+    "Like previous work we use sections 02-21 of WSJ corpus as training data and evaluate on section 23, we remove punctuations and train the models on sentences of length INLINEFORM0 , “head-percolation” rules BIBREF39 are applied to obtain gold dependencies for evaluation. We train basic DMV, extended DMV (E-DMV) BIBREF35 and Gaussian DMV (which treats POS tag as unknown latent variables and generates observed word embeddings directly conditioned on them following Gaussian distribution) as baselines. Basic DMV and E-DMV are trained with Viterbi EM BIBREF40 on unsupervised POS tags induced from our Markov-structured model described in sec:pos. Multinomial parameters of the syntax model in both Gaussian DMV and our model are initialized with the pre-trained DMV baseline. Other parameters are initialized in the same way as in the POS tagging experiment. The directed dependency accuracy (DDA) is used for evaluation and we report accuracy on sentences of length INLINEFORM1 and all lengths. We train the parser until training data likelihood converges, and report the mean and standard deviation over 20 random restarts.",
+    "Our model directly observes word embeddings and does not require gold POS tags during training. Thus, results from related work trained on gold tags are not directly comparable. However, to measure how these systems might perform without gold tags, we run three recent state-of-the-art systems in our experimental setting: UR-A E-DMV BIBREF36 , Neural E-DMV BIBREF11 , and CRF Autoencoder (CRFAE) BIBREF37 . We use unsupervised POS tags (induced from our Markov-structured model) in place of gold tags. We also train basic DMV on gold tags and include several state-of-the-art results on gold tags as reference points.",
+    "As shown in Table TABREF39 , our approach is able to improve over the Gaussian DMV by 4.8 points on length INLINEFORM0 and 4.8 points on all lengths, which suggests the additional latent embedding layer and neural projector are helpful. The proposed approach yields, to the best of our knowledge, state-of-the-art performance without gold POS annotation and without sentence-internal boundary information. DMV, UR-A E-DMV, Neural E-DMV, and CRFAE suffer a large decrease in performance when trained on unsupervised tags – an effect also seen in previous work BIBREF29 , BIBREF34 . Since our approach induces latent POS tags jointly with dependency trees, it may be able to learn POS clusters that are more amenable to grammar induction than the unsupervised tags. We observe that CRFAE underperforms its gold-tag counterpart substantially. This may largely be a result of the model's reliance on prior linguistic rules that become unavailable when gold POS tag types are unknown. Many extensions to DMV can be considered orthogonal to our approach – they essentially focus on improving the syntax model. It is possible that incorporating these more sophisticated syntax models into our approach may lead to further improvements."
+  ],
+  "child_pages": [
+    13,
+    13,
+    13,
+    13,
+    13
+  ],
+  "child_sections": [
+    "Unsupervised Dependency Parsing without gold POS tags",
+    "Unsupervised Dependency Parsing without gold POS tags",
+    "Unsupervised Dependency Parsing without gold POS tags",
+    "Unsupervised Dependency Parsing without gold POS tags",
+    "Unsupervised Dependency Parsing without gold POS tags"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Unsupervised Dependency Parsing without gold POS tags",
+      0
+    ],
+    [
+      "Unsupervised Dependency Parsing without gold POS tags",
+      1
+    ],
+    [
+      "Unsupervised Dependency Parsing without gold POS tags",
+      2
+    ],
+    [
+      "Unsupervised Dependency Parsing without gold POS tags",
+      3
+    ],
+    [
+      "Unsupervised Dependency Parsing without gold POS tags",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_13",
+  "section_id": "Unsupervised Dependency Parsing without gold POS tags",
+  "section": "Unsupervised Dependency Parsing without gold POS tags",
+  "title_path": "Unsupervised Dependency Parsing without gold POS tags",
+  "block_type": "long_unit"
+}

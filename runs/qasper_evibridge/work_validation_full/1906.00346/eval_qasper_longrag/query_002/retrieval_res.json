@@ -1,0 +1,636 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_2",
+      "content": "[Section] Related Work\n[source_id=8] Medication Recommendation Medication Recommendation can be categorized into instance-based and longitudinal recommendation methods BIBREF1 . Instance-based methods focus on current health conditions. Among them, Leap BIBREF9 formulates a multi-instance multi-label learning framework and proposes a variant of sequence-to-sequence model based on content-attention mechanism to predict combination of medicines given patient's diagnoses. Longitudinal-based methods leverage the temporal dependencies among clinical events, see BIBREF10 , BIBREF11 , BIBREF12 . Among them, RETAIN BIBREF10 uses a two-level neural attention model to detect influential past visits and significant clinical variables within those visits for improved medication recommendation.\n[source_id=9] Pre-training Techniques The goal of pre-training techniques is to provide model training with good initializations. Pre-training has been shown extremely effective in various areas such as image classification BIBREF13 , BIBREF14 and machine translation BIBREF15 . The unsupervised pre-training can be considered as a regularizer that supports better generalization from the training dataset BIBREF16 . Recently, language model pre-training techniques such as BIBREF5 , BIBREF6 , BIBREF7 have shown to largely improve the performance on multiple NLP tasks. As the most widely used one, BERT BIBREF7 builds on the Transformer BIBREF8 architecture and improves the pre-training using a masked language model for bidirectional representation. In this paper, we adapt the framework of BERT and pre-train our model on each visit of the EHR data to leverage the single-visit data that were not fit for model training in other medication recommendation models.\n[source_id=10] Graph Neural Networks (GNN) GNNs are neural networks that learn node or graph representations from graph-structured data. Various graph neural networks have been proposed to encode the graph-structure information, including graph convolutional neural networks (GCN) BIBREF17 , message passing networks (MPNN) BIBREF18 , graph attention networks (GAT) BIBREF19 . GNNs have already been demonstrated useful on EHR modeling BIBREF20 , BIBREF1 . GRAM BIBREF20 represented a medical concept as a combination of its ancestors in the medical ontology using an attention mechanism. It's different from G-BERT from two aspects as described in Section \"Input Representation\" . Another work worth mentioning is GAMENet BIBREF1 , which also used graph neural network to assist the medication recommendation task. However, GAMENet has a different motivation which results in using graph neural networks on drug-drug-interaction graphs instead of medical ontology.",
+      "score": 5.952737058335295,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        8,
+        9,
+        10
+      ],
+      "child_qasper_evidence_texts": [
+        "Medication Recommendation Medication Recommendation can be categorized into instance-based and longitudinal recommendation methods BIBREF1 . Instance-based methods focus on current health conditions. Among them, Leap BIBREF9 formulates a multi-instance multi-label learning framework and proposes a variant of sequence-to-sequence model based on content-attention mechanism to predict combination of medicines given patient's diagnoses. Longitudinal-based methods leverage the temporal dependencies among clinical events, see BIBREF10 , BIBREF11 , BIBREF12 . Among them, RETAIN BIBREF10 uses a two-level neural attention model to detect influential past visits and significant clinical variables within those visits for improved medication recommendation.",
+        "Pre-training Techniques The goal of pre-training techniques is to provide model training with good initializations. Pre-training has been shown extremely effective in various areas such as image classification BIBREF13 , BIBREF14 and machine translation BIBREF15 . The unsupervised pre-training can be considered as a regularizer that supports better generalization from the training dataset BIBREF16 . Recently, language model pre-training techniques such as BIBREF5 , BIBREF6 , BIBREF7 have shown to largely improve the performance on multiple NLP tasks. As the most widely used one, BERT BIBREF7 builds on the Transformer BIBREF8 architecture and improves the pre-training using a masked language model for bidirectional representation. In this paper, we adapt the framework of BERT and pre-train our model on each visit of the EHR data to leverage the single-visit data that were not fit for model training in other medication recommendation models.",
+        "Graph Neural Networks (GNN) GNNs are neural networks that learn node or graph representations from graph-structured data. Various graph neural networks have been proposed to encode the graph-structure information, including graph convolutional neural networks (GCN) BIBREF17 , message passing networks (MPNN) BIBREF18 , graph attention networks (GAT) BIBREF19 . GNNs have already been demonstrated useful on EHR modeling BIBREF20 , BIBREF1 . GRAM BIBREF20 represented a medical concept as a combination of its ancestors in the medical ontology using an attention mechanism. It's different from G-BERT from two aspects as described in Section \"Input Representation\" . Another work worth mentioning is GAMENet BIBREF1 , which also used graph neural network to assist the medication recommendation task. However, GAMENet has a different motivation which results in using graph neural networks on drug-drug-interaction graphs instead of medical ontology."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Related Work",
+        "Related Work",
+        "Related Work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work",
+          0
+        ],
+        [
+          "Related Work",
+          1
+        ],
+        [
+          "Related Work",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Related Work",
+      "section": "Related Work",
+      "title_path": "Related Work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Results\n[source_id=71] Experimental Results Table. 3 compares the performance on the medication recommendation task. For variants of G-BERT, $\\texttt {G-BERT}_{G^-,P^-}$ performs worse compared with $\\texttt {G-BERT}_{G^-}$ and $\\texttt {G-BERT}_{P^-}$ which demonstrate the effectiveness of using ontology information to get enhanced medical embedding as input and employ an unsupervised pre-training procedure on larger abundant data. Incorporating both hierarchical ontology information and pre-training procedure, the end-to-end model G-BERT has more capacity and achieve comparable results with others.\n[source_id=72] As for baseline models, LR and Leap are worse than our most basic model ( $\\texttt {G-BERT}_{G^-,P^-}$ ) in terms of most metrics. Comparing $\\texttt {G-BERT}_{P^-}$ and GRAM, which both used medical ontology information without pre-training, the scores of our $\\texttt {G-BERT}_{P^-}$ is slightly higher in all metrics. This can demonstrate the validness of using Transformer encoders and the specific prediction layer for medication recommendation. Our final model G-BERT is also better than the attention based model, RETAIN, and the recently published state-of-the-art model, GAMENet. Specifically, even adding the extra information of DDI knowledge and procedure codes, GAMENet still performs worse than G-BERT.\n[source_id=73] In addition, we visualized the pre-training medical code embeddings of $\\texttt {G-BERT}_{G^-}$ and G-BERT to show the effectiveness of ontology embedding using online embedding projector shown in (https://raw.githubusercontent.com/jshang123/G-Bert/master/saved/tsne.png/).",
+      "score": 3.20792371597987,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        71,
+        72,
+        73
+      ],
+      "child_qasper_evidence_texts": [
+        "Experimental Results Table. 3 compares the performance on the medication recommendation task. For variants of G-BERT, $\\texttt {G-BERT}_{G^-,P^-}$ performs worse compared with $\\texttt {G-BERT}_{G^-}$ and $\\texttt {G-BERT}_{P^-}$ which demonstrate the effectiveness of using ontology information to get enhanced medical embedding as input and employ an unsupervised pre-training procedure on larger abundant data. Incorporating both hierarchical ontology information and pre-training procedure, the end-to-end model G-BERT has more capacity and achieve comparable results with others.",
+        "As for baseline models, LR and Leap are worse than our most basic model ( $\\texttt {G-BERT}_{G^-,P^-}$ ) in terms of most metrics. Comparing $\\texttt {G-BERT}_{P^-}$ and GRAM, which both used medical ontology information without pre-training, the scores of our $\\texttt {G-BERT}_{P^-}$ is slightly higher in all metrics. This can demonstrate the validness of using Transformer encoders and the specific prediction layer for medication recommendation. Our final model G-BERT is also better than the attention based model, RETAIN, and the recently published state-of-the-art model, GAMENet. Specifically, even adding the extra information of DDI knowledge and procedure codes, GAMENet still performs worse than G-BERT.",
+        "In addition, we visualized the pre-training medical code embeddings of $\\texttt {G-BERT}_{G^-}$ and G-BERT to show the effectiveness of ontology embedding using online embedding projector shown in (https://raw.githubusercontent.com/jshang123/G-Bert/master/saved/tsne.png/)."
+      ],
+      "child_pages": [
+        9,
+        9,
+        9
+      ],
+      "child_sections": [
+        "Results",
+        "Results",
+        "Results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results",
+          0
+        ],
+        [
+          "Results",
+          1
+        ],
+        [
+          "Results",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Results",
+      "section": "Results",
+      "title_path": "Results",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Conclusion\n[source_id=75] In this paper we proposed a pre-training model named G-BERT for medical code representation and medication recommendation. To our best knowledge, G-BERT is the first that utilizes language model pre-training techniques in healthcare domain. It adapted BERT to the EHR data and integrated medical ontology information using graph neural networks. By additional pre-training on the EHR from patients who only have one hospital visit which are generally discarded before model training, G-BERT outperforms all baselines in prediction accuracy on medication recommendation task. One direction for the future work is to add more auxiliary and structural tasks to improve the ability of code representaion. Another direction may be to adapt our model to be suitable for even larger datasets with more heterogeneous modalities.",
+      "score": 3.1267748997535367,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        75
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper we proposed a pre-training model named G-BERT for medical code representation and medication recommendation. To our best knowledge, G-BERT is the first that utilizes language model pre-training techniques in healthcare domain. It adapted BERT to the EHR data and integrated medical ontology information using graph neural networks. By additional pre-training on the EHR from patients who only have one hospital visit which are generally discarded before model training, G-BERT outperforms all baselines in prediction accuracy on medication recommendation task. One direction for the future work is to add more auxiliary and structural tasks to improve the ability of code representaion. Another direction may be to adapt our model to be suitable for even larger datasets with more heterogeneous modalities."
+      ],
+      "child_pages": [
+        10
+      ],
+      "child_sections": [
+        "Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Method\n[source_id=16] The overall framework of G-BERT is described in Figure 2 . G-BERT first derives the initial embedding of medical codes from medical ontology using graph neural networks. Then, in order to fully utilize the rich EHR data, G-BERT constructs an adaptive BERT model on the discarded single-visit data for visit representation. Finally we add a prediction layer and fine-tune the model in the medication recommendation task. In the following we will describe G-BERT in detail. But firstly, we give a brief background of BERT especially for the two pre-training objectives which will be later adapted to EHR data in Section \"Pre-training\" .\n[source_id=17] Background of BERT Based on a multi-layer Transformer encoder BIBREF8 (The transformer architecture has been ubiquitously used in many sequence modeling tasks recently, so we will not introduce the details here), BERT is pre-trained using two unsupervised tasks:\n[source_id=18] A typical input to BERT is as follows ( BIBREF7 ):\n[source_id=19] Input = [CLS] the man went to [MASK] store [SEP] he bought a gallon [MASK] milk [SEP]\n[source_id=20] Label = IsNext\n[source_id=21] where [CLS] is the first token of each sentence pair to represent the special classification embedding, i.e. the final state of this token is used as the aggregated sequence representation for classification tasks; [SEP] is used to separate two sentences; [MASK] is used to mask out the predicted words in the masked language model. Using this form, these inputs facilitate the two tasks described above, and they will also be used in our method description in the following section.",
+      "score": 2.9694859465038945,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "child_qasper_evidence_texts": [
+        "The overall framework of G-BERT is described in Figure 2 . G-BERT first derives the initial embedding of medical codes from medical ontology using graph neural networks. Then, in order to fully utilize the rich EHR data, G-BERT constructs an adaptive BERT model on the discarded single-visit data for visit representation. Finally we add a prediction layer and fine-tune the model in the medication recommendation task. In the following we will describe G-BERT in detail. But firstly, we give a brief background of BERT especially for the two pre-training objectives which will be later adapted to EHR data in Section \"Pre-training\" .",
+        "Background of BERT Based on a multi-layer Transformer encoder BIBREF8 (The transformer architecture has been ubiquitously used in many sequence modeling tasks recently, so we will not introduce the details here), BERT is pre-trained using two unsupervised tasks:",
+        "A typical input to BERT is as follows ( BIBREF7 ):",
+        "Input = [CLS] the man went to [MASK] store [SEP] he bought a gallon [MASK] milk [SEP]",
+        "Label = IsNext",
+        "where [CLS] is the first token of each sentence pair to represent the special classification embedding, i.e. the final state of this token is used as the aggregated sequence representation for classification tasks; [SEP] is used to separate two sentences; [MASK] is used to mask out the predicted words in the masked language model. Using this form, these inputs facilitate the two tasks described above, and they will also be used in our method description in the following section."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Method",
+        "Method",
+        "Method",
+        "Method",
+        "Method",
+        "Method"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Method",
+          0
+        ],
+        [
+          "Method",
+          1
+        ],
+        [
+          "Method",
+          2
+        ],
+        [
+          "Method",
+          3
+        ],
+        [
+          "Method",
+          4
+        ],
+        [
+          "Method",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Method",
+      "section": "Method",
+      "title_path": "Method",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Medication recommendation is an important healthcare application. It is commonly formulated as a temporal prediction task. Hence, most existing works only utilize longitudinal electronic health records (EHRs) from a small number of patients with multiple visits ignoring a large number of patients with a single visit (selection bias). Moreover, important hierarchical knowledge such as diagnosis hierarchy is not leveraged in the representation learning process. To address these challenges, we propose G-BERT, a new model to combine the power of Graph Neural Networks (GNNs) and BERT (Bidirectional Encoder Representations from Transformers) for medical code representation and medication recommendation. We use GNNs to represent the internal hierarchical structures of medical codes. Then we integrate the GNN representation into a transformer-based visit encoder and pre-train it on EHR data from patients only with a single visit. The pre-trained visit encoder and representation are then fine-tuned for downstream predictive tasks on longitudinal EHRs from patients with multiple visits. G-BERT is the first to bring the language model pre-training schema into the healthcare domain and it achieved state-of-the-art performance on the medication recommendation task.",
+      "score": 2.9592989058142405,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Medication recommendation is an important healthcare application. It is commonly formulated as a temporal prediction task. Hence, most existing works only utilize longitudinal electronic health records (EHRs) from a small number of patients with multiple visits ignoring a large number of patients with a single visit (selection bias). Moreover, important hierarchical knowledge such as diagnosis hierarchy is not leveraged in the representation learning process. To address these challenges, we propose G-BERT, a new model to combine the power of Graph Neural Networks (GNNs) and BERT (Bidirectional Encoder Representations from Transformers) for medical code representation and medication recommendation. We use GNNs to represent the internal hierarchical structures of medical codes. Then we integrate the GNN representation into a transformer-based visit encoder and pre-train it on EHR data from patients only with a single visit. The pre-trained visit encoder and representation are then fine-tuned for downstream predictive tasks on longitudinal EHRs from patients with multiple visits. G-BERT is the first to bring the language model pre-training schema into the healthcare domain and it achieved state-of-the-art performance on the medication recommendation task."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Input Representation\n[source_id=23] The G-BERT model takes medical codes' ontology embeddings as input, and obtains intermediate representations from a Transformer encoder as the visit embeddings. It is then pre-trained on EHR from patients who only have one hospital visit. The derived encoder and visit embedding will be fed into a classifier and fine-tuned to make predictions.\n[source_id=24] Ontology Embedding We constructed ontology embedding from diagnosis ontology $\\mathcal {O}_d$ and medication ontology $\\mathcal {O}_m$ . Since the medical codes in raw EHR data can be considered as leaf nodes in these ontology trees, we can enhance the medical code embedding using graph neural networks (GNNs) to integrate the ancestors' information of these codes. Here we perform a two-stage procedure with a specially designed GNN for ontology embedding.\n[source_id=25] To start, we assign an initial embedding vector to every medical code $c_\\ast \\in \\mathcal {O}_\\ast $ with a learnable embedding matrix $\\mathbf {W}_e \\in \\mathbb {R}^{|\\mathcal {O}_\\ast | \\times d}$ where $d$ is the embedding dimension.\n[source_id=26] Stage 1. For each non-leaf node $c_\\ast \\in \\overline{\\mathcal {C}_\\ast }$ , we obtain its enhanced medical embedding $\\mathbf {h}_{c_\\ast } \\in \\mathbb {R}^{d}$ as follows:\n[source_id=27] $$\\mathbf {h}_{c_\\ast } = g(c_\\ast , ch(c_\\ast ), \\mathbf {W}_e)$$   (Eq. 11)\n[source_id=28] where $g(\\cdot ,\\cdot ,\\cdot )$ is an aggregation function which accepts the target medical code $c_\\ast $ , its direct child codes $ch(c_\\ast )$ and initial embedding matrix. Intuitively, the aggregation function can pass and fuse information in target node from its direct children which result in the more related embedding of ancestor' code to child codes' embedding.\n[source_id=29] Stage 2. After obtaining enhanced embeddings, we pass the enhance embedding matrix $\\mathbf {H}_e \\in \\mathbb {R}^{|\\mathcal {O}_\\ast | \\times d}$ back to get ontology embedding for leaf codes $c_\\ast \\in \\mathcal {C}_\\ast $ as follows:\n[source_id=30] $$\\mathbf {o}_{c_\\ast } = g(c_\\ast , pa(c_\\ast ), \\mathbf {H}_e)$$   (Eq. 12)\n[source_id=31] where $g(\\cdot ,\\cdot ,\\cdot )$ accepts ancestor codes of target medical code $c_\\ast $ . Here, we use $pa(c_\\ast )$ instead of $ch(c_\\ast )$ , since utilizing the ancestors' embedding can indirectly associate all medical codes instead of taking each leaf code as independent input.\n[source_id=32] The option for the aggregation function $g(\\cdot ,\\cdot ,\\cdot )$ is flexible, including sum, mean. Here we choose the one from graph attention networks (GAT) BIBREF19 , which has shown efficient embedding learning ability on graph-structured tasks, e.g., node classification and link prediction. In particular, we implement the aggregation function $g(\\cdot ,\\cdot ,\\cdot )$ as follows:\n[source_id=33] $$g (c_\\ast , p(c_\\ast ), \\mathbf {H}_e) = \\operatornamewithlimits{\\scalebox {1}[1.5]{\\parallel }}_{k=1}^K \\sigma \\left( \\sum _{j \\in \\lbrace c_\\ast \\rbrace  \\cup pa(c_\\ast )} \\alpha _{i,j}^k \\mathbf {W}^k \\mathbf {h}_j \\right)$$   (Eq. 13)\n[source_id=34] where $\\operatornamewithlimits{\\scalebox {1}[1.5]{\\parallel }}$ represents concatenation which enables the multi-head attention mechanism, $\\sigma $ is a nonlinear activation function, $\\mathbf {W}^k \\in \\mathbb {R}^{m \\times d}$ is the weight matrix for input transformation, and $\\alpha _{i,j}^k$ are the corresponding $k$ -th normalized attention coefficients computed as follows:\n[source_id=35] $$\\alpha _{i,j}^k = \\frac{e^{\\left(\\text{LeakyReLU}(\\mathbf {a}^\\intercal [\\mathbf {W}^k \\mathbf {h}_i || \\mathbf {W}^k \\mathbf {h}_j])\\right)}}{\\sum _{k \\in \\mathcal {N}_i} e^{\\left(\\text{LeakyReLU}(\\mathbf {a}^\\intercal [\\mathbf {W}^k \\mathbf {h}_i || \\mathbf {W}^k \\mathbf {h}_k])\\right)}}$$   (Eq. 14)\n[source_id=36] where $\\mathbf {a} \\in \\mathbb {R}^{2m}$ is a learnable weight vector and LeakyReLU is a nonlinear function. (we assume $m = d/K$ ).\n[source_id=37] As shown in Figure 2 , we construct ICD-9 tree for diagnosis and ATC tree for medication using the same structure. Here the direction of arrow shows the information flow where ancestor nodes can get information from their direct children (in stage 1) and similarly leaf nodes can get information from their connected ancestors (in stage 2).\n[source_id=38] It is worth mentioning that our graph embedding method on medical ontology is different from GRAM BIBREF20 from the following two aspects:\n[source_id=39] Initialization: we initialize all the node embeddings from a learnable embedding matrix, while GRAM learns them using Glove from the co-occurrence information.\n[source_id=40] Updating: we develop a two-step updating function for both leaf nodes and ancestor nodes; while in GRAM, only the leaf nodes are updated (as a combination of their ancestor nodes and themselves).\n[source_id=41] Visit Embedding Similar to BERT, we use a multi-layer Transformer architecture BIBREF8 as our visit encoder. The model takes the ontology embedding as input and derive visit embedding $\\mathbf {v}_\\ast ^t \\in \\mathbb {R}^d$ for a patient at $t$ -th visit:\n[source_id=42] $$\\mathbf {v}_\\ast ^t = \\mathrm {Transformer}(\\lbrace \\textit {[CLS]}\\rbrace  \\cup \\lbrace \\mathbf {o}_{c_\\ast }^t| c_\\ast \\in \\mathcal {C}_\\ast ^t\\rbrace )[0]$$   (Eq. 17)\n[source_id=43] where [CLS] is a special token as in BERT. It is put in the first position of each visit of type $\\ast $ and its final state can be used as the representation of the visit. Intuitively, it is more reasonable to use Transformers as encoders (multi-head attention based architecture) than RNN or mean/sum to aggregate multiple medical embedding for visit embedding since the set of medical codes within one visit is not ordered.\n[source_id=44] It is worth noting that our Transformer encoder is different from the original one in the position embedding part. Position embedding, as an important component in Transformers and BERT, is used to encode the position and order information of each token in a sequence. However, one big difference between language sentences and EHR sequences is that the medical codes within the same visit do not generally have an order, so we remove the position embedding in our model.",
+      "score": 2.8445870784641034,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44
+      ],
+      "child_qasper_evidence_texts": [
+        "The G-BERT model takes medical codes' ontology embeddings as input, and obtains intermediate representations from a Transformer encoder as the visit embeddings. It is then pre-trained on EHR from patients who only have one hospital visit. The derived encoder and visit embedding will be fed into a classifier and fine-tuned to make predictions.",
+        "Ontology Embedding We constructed ontology embedding from diagnosis ontology $\\mathcal {O}_d$ and medication ontology $\\mathcal {O}_m$ . Since the medical codes in raw EHR data can be considered as leaf nodes in these ontology trees, we can enhance the medical code embedding using graph neural networks (GNNs) to integrate the ancestors' information of these codes. Here we perform a two-stage procedure with a specially designed GNN for ontology embedding.",
+        "To start, we assign an initial embedding vector to every medical code $c_\\ast \\in \\mathcal {O}_\\ast $ with a learnable embedding matrix $\\mathbf {W}_e \\in \\mathbb {R}^{|\\mathcal {O}_\\ast | \\times d}$ where $d$ is the embedding dimension.",
+        "Stage 1. For each non-leaf node $c_\\ast \\in \\overline{\\mathcal {C}_\\ast }$ , we obtain its enhanced medical embedding $\\mathbf {h}_{c_\\ast } \\in \\mathbb {R}^{d}$ as follows:",
+        "$$\\mathbf {h}_{c_\\ast } = g(c_\\ast , ch(c_\\ast ), \\mathbf {W}_e)$$   (Eq. 11)",
+        "where $g(\\cdot ,\\cdot ,\\cdot )$ is an aggregation function which accepts the target medical code $c_\\ast $ , its direct child codes $ch(c_\\ast )$ and initial embedding matrix. Intuitively, the aggregation function can pass and fuse information in target node from its direct children which result in the more related embedding of ancestor' code to child codes' embedding.",
+        "Stage 2. After obtaining enhanced embeddings, we pass the enhance embedding matrix $\\mathbf {H}_e \\in \\mathbb {R}^{|\\mathcal {O}_\\ast | \\times d}$ back to get ontology embedding for leaf codes $c_\\ast \\in \\mathcal {C}_\\ast $ as follows:",
+        "$$\\mathbf {o}_{c_\\ast } = g(c_\\ast , pa(c_\\ast ), \\mathbf {H}_e)$$   (Eq. 12)",
+        "where $g(\\cdot ,\\cdot ,\\cdot )$ accepts ancestor codes of target medical code $c_\\ast $ . Here, we use $pa(c_\\ast )$ instead of $ch(c_\\ast )$ , since utilizing the ancestors' embedding can indirectly associate all medical codes instead of taking each leaf code as independent input.",
+        "The option for the aggregation function $g(\\cdot ,\\cdot ,\\cdot )$ is flexible, including sum, mean. Here we choose the one from graph attention networks (GAT) BIBREF19 , which has shown efficient embedding learning ability on graph-structured tasks, e.g., node classification and link prediction. In particular, we implement the aggregation function $g(\\cdot ,\\cdot ,\\cdot )$ as follows:",
+        "$$g (c_\\ast , p(c_\\ast ), \\mathbf {H}_e) = \\operatornamewithlimits{\\scalebox {1}[1.5]{\\parallel }}_{k=1}^K \\sigma \\left( \\sum _{j \\in \\lbrace c_\\ast \\rbrace  \\cup pa(c_\\ast )} \\alpha _{i,j}^k \\mathbf {W}^k \\mathbf {h}_j \\right)$$   (Eq. 13)",
+        "where $\\operatornamewithlimits{\\scalebox {1}[1.5]{\\parallel }}$ represents concatenation which enables the multi-head attention mechanism, $\\sigma $ is a nonlinear activation function, $\\mathbf {W}^k \\in \\mathbb {R}^{m \\times d}$ is the weight matrix for input transformation, and $\\alpha _{i,j}^k$ are the corresponding $k$ -th normalized attention coefficients computed as follows:",
+        "$$\\alpha _{i,j}^k = \\frac{e^{\\left(\\text{LeakyReLU}(\\mathbf {a}^\\intercal [\\mathbf {W}^k \\mathbf {h}_i || \\mathbf {W}^k \\mathbf {h}_j])\\right)}}{\\sum _{k \\in \\mathcal {N}_i} e^{\\left(\\text{LeakyReLU}(\\mathbf {a}^\\intercal [\\mathbf {W}^k \\mathbf {h}_i || \\mathbf {W}^k \\mathbf {h}_k])\\right)}}$$   (Eq. 14)",
+        "where $\\mathbf {a} \\in \\mathbb {R}^{2m}$ is a learnable weight vector and LeakyReLU is a nonlinear function. (we assume $m = d/K$ ).",
+        "As shown in Figure 2 , we construct ICD-9 tree for diagnosis and ATC tree for medication using the same structure. Here the direction of arrow shows the information flow where ancestor nodes can get information from their direct children (in stage 1) and similarly leaf nodes can get information from their connected ancestors (in stage 2).",
+        "It is worth mentioning that our graph embedding method on medical ontology is different from GRAM BIBREF20 from the following two aspects:",
+        "Initialization: we initialize all the node embeddings from a learnable embedding matrix, while GRAM learns them using Glove from the co-occurrence information.",
+        "Updating: we develop a two-step updating function for both leaf nodes and ancestor nodes; while in GRAM, only the leaf nodes are updated (as a combination of their ancestor nodes and themselves).",
+        "Visit Embedding Similar to BERT, we use a multi-layer Transformer architecture BIBREF8 as our visit encoder. The model takes the ontology embedding as input and derive visit embedding $\\mathbf {v}_\\ast ^t \\in \\mathbb {R}^d$ for a patient at $t$ -th visit:",
+        "$$\\mathbf {v}_\\ast ^t = \\mathrm {Transformer}(\\lbrace \\textit {[CLS]}\\rbrace  \\cup \\lbrace \\mathbf {o}_{c_\\ast }^t| c_\\ast \\in \\mathcal {C}_\\ast ^t\\rbrace )[0]$$   (Eq. 17)",
+        "where [CLS] is a special token as in BERT. It is put in the first position of each visit of type $\\ast $ and its final state can be used as the representation of the visit. Intuitively, it is more reasonable to use Transformers as encoders (multi-head attention based architecture) than RNN or mean/sum to aggregate multiple medical embedding for visit embedding since the set of medical codes within one visit is not ordered.",
+        "It is worth noting that our Transformer encoder is different from the original one in the position embedding part. Position embedding, as an important component in Transformers and BERT, is used to encode the position and order information of each token in a sequence. However, one big difference between language sentences and EHR sequences is that the medical codes within the same visit do not generally have an order, so we remove the position embedding in our model."
+      ],
+      "child_pages": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation",
+        "Input Representation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Input Representation",
+          0
+        ],
+        [
+          "Input Representation",
+          1
+        ],
+        [
+          "Input Representation",
+          2
+        ],
+        [
+          "Input Representation",
+          3
+        ],
+        [
+          "Input Representation",
+          4
+        ],
+        [
+          "Input Representation",
+          5
+        ],
+        [
+          "Input Representation",
+          6
+        ],
+        [
+          "Input Representation",
+          7
+        ],
+        [
+          "Input Representation",
+          8
+        ],
+        [
+          "Input Representation",
+          9
+        ],
+        [
+          "Input Representation",
+          10
+        ],
+        [
+          "Input Representation",
+          11
+        ],
+        [
+          "Input Representation",
+          12
+        ],
+        [
+          "Input Representation",
+          13
+        ],
+        [
+          "Input Representation",
+          14
+        ],
+        [
+          "Input Representation",
+          15
+        ],
+        [
+          "Input Representation",
+          16
+        ],
+        [
+          "Input Representation",
+          17
+        ],
+        [
+          "Input Representation",
+          18
+        ],
+        [
+          "Input Representation",
+          19
+        ],
+        [
+          "Input Representation",
+          20
+        ],
+        [
+          "Input Representation",
+          21
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Input Representation",
+      "section": "Input Representation",
+      "title_path": "Input Representation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Pre-training\n[source_id=46] We adapted the original BERT model to be more suitable for our data and task. In particular, we pre-train the model on each EHR visit (within both single-visit EHR sequences and multi-visit EHR sequences). We modified the input and pre-training objectives of the BERT model: (1) For the input, we built the Transformer encoder on the GNN outputs, i.e. ontology embeddings, for visit embedding. For the original EHR sequence, it means essentially we combine the GNN model with a Transformer to become a new integrated encoder. In addition, we removed the position embedding as we explained before. (2) As for the pre-training procedures, we modified the original pre-training tasks i.e., Masked LM (language model) task and Next Sentence prediction task to self-prediction task and dual-prediction task. The idea to conduct these tasks is to make the visit embedding absorb enough information about what it is made of and what it is able to predict.\n[source_id=47] Thus, for the self-prediction task, we want the visit embedding $v^1_\\ast $ to recover what it is made of, i.e., the input medical codes $\\mathcal {C}_\\ast ^t$ for each visit as follows:\n[source_id=48] $$\\begin{aligned}\n&\\mathcal {L}_{se}(\\mathbf {v}^1_\\ast , \\mathcal {C}_\\ast ^1) = -\\log p(\\mathcal {C}_\\ast ^1 | \\mathbf {v}^1_\\ast ) \\\\\n& = - \\sum _{c \\in \\mathcal {C}_\\ast ^1}\\log p(c_\\ast ^1 | \\mathbf {v}^1_\\ast ) + \\sum _{c \\in \\mathcal {C}_\\ast \\setminus \\mathcal {C}_\\ast ^1}\\log p(c_\\ast ^1 | \\mathbf {v}^1_\\ast )\n\\end{aligned}$$   (Eq. 19)\n[source_id=49] we minimize the binary cross entropy loss $\\mathcal {L}_s$ , and in practise, $\\text{Sigmoid}(f(\\mathbf {v}_\\ast ))$ should be transformed by applying a fully connected neural network $f(\\cdot )$ with one hidden layer. With an analogy to the Masked LM task in BERT, we also used specific symbol [MASK] to randomly replace the original medical code $c_\\ast \\in \\mathcal {C}_\\ast ^1$ . So there are $15\\%$ codes in $\\mathcal {C}_\\ast $ which will be replaced randomly and the model should have the ability to predict the masked code based on others.\n[source_id=50] Likewise, for the dual-prediction task, since the visit embedding $\\mathbf {v}_\\ast $ carries the information of medical codes of type $\\ast $ , we can further expect it has the ability to do more task-specific prediction as follows:\n[source_id=51] $$\\begin{aligned}\n\\mathcal {L}_{du} = -\\log p(\\mathcal {C}_d^1 | \\mathbf {v}_m^1) - \\log p(\\mathcal {C}_m^1 | \\mathbf {v}_d^1)\n\\end{aligned}$$   (Eq. 20)\n[source_id=52] where we use the same transformation function $\\text{Sigmoid}(f_1(\\mathbf {v}_m^1))$ , $\\text{Sigmoid}(f_2(\\mathbf {v}_d^1))$ with different weight matrix to transform the visit embedding and optimize the binary cross entropy loss $\\mathcal {L}_{du}$ expanded same as $\\mathcal {L}_{se}$ in Eq. 19 . This is a direct adaptation of the next sentence prediction task. In BERT, the next sentence prediction task facilitates the prediction of sentence relations, which is a common task in NLP. However, in healthcare, most predictive tasks do not have a sequence pair to classify. Instead, we are often interested in predicting unknown disease or medication codes of the sequence. For example, in medication recommendation, we want to predict multiple medications given only the diagnosis codes. Inversely, we can also predict unknown diagnosis given the medication codes.\n[source_id=53] Thus, our final pre-training optimization objective can simply be the combination of the aforementioned losses, as shown in Eq. 21 . It is used to train on EHR data from all patients who only have one hospital visits..\n[source_id=54] $$\\begin{aligned}\n\\mathcal {L}_{pr} = \\frac{1}{N} \\sum _{n=1}^N ((\n&\\mathcal {L}_{se}(\\mathbf {v}_d^{1, (n)}, \\mathcal {C}_d^{1, (n)}) + \\mathcal {L}_{se}(\\mathbf {v}_m^{1, (n)}, \\mathcal {C}_m^{1, (n)})\\\\\n& + \\mathcal {L}_{du}^{(n)})\n)\n\\end{aligned}$$   (Eq. 21)",
+      "score": 2.320931233045906,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54
+      ],
+      "child_qasper_evidence_texts": [
+        "We adapted the original BERT model to be more suitable for our data and task. In particular, we pre-train the model on each EHR visit (within both single-visit EHR sequences and multi-visit EHR sequences). We modified the input and pre-training objectives of the BERT model: (1) For the input, we built the Transformer encoder on the GNN outputs, i.e. ontology embeddings, for visit embedding. For the original EHR sequence, it means essentially we combine the GNN model with a Transformer to become a new integrated encoder. In addition, we removed the position embedding as we explained before. (2) As for the pre-training procedures, we modified the original pre-training tasks i.e., Masked LM (language model) task and Next Sentence prediction task to self-prediction task and dual-prediction task. The idea to conduct these tasks is to make the visit embedding absorb enough information about what it is made of and what it is able to predict.",
+        "Thus, for the self-prediction task, we want the visit embedding $v^1_\\ast $ to recover what it is made of, i.e., the input medical codes $\\mathcal {C}_\\ast ^t$ for each visit as follows:",
+        "$$\\begin{aligned}\n&\\mathcal {L}_{se}(\\mathbf {v}^1_\\ast , \\mathcal {C}_\\ast ^1) = -\\log p(\\mathcal {C}_\\ast ^1 | \\mathbf {v}^1_\\ast ) \\\\\n& = - \\sum _{c \\in \\mathcal {C}_\\ast ^1}\\log p(c_\\ast ^1 | \\mathbf {v}^1_\\ast ) + \\sum _{c \\in \\mathcal {C}_\\ast \\setminus \\mathcal {C}_\\ast ^1}\\log p(c_\\ast ^1 | \\mathbf {v}^1_\\ast )\n\\end{aligned}$$   (Eq. 19)",
+        "we minimize the binary cross entropy loss $\\mathcal {L}_s$ , and in practise, $\\text{Sigmoid}(f(\\mathbf {v}_\\ast ))$ should be transformed by applying a fully connected neural network $f(\\cdot )$ with one hidden layer. With an analogy to the Masked LM task in BERT, we also used specific symbol [MASK] to randomly replace the original medical code $c_\\ast \\in \\mathcal {C}_\\ast ^1$ . So there are $15\\%$ codes in $\\mathcal {C}_\\ast $ which will be replaced randomly and the model should have the ability to predict the masked code based on others.",
+        "Likewise, for the dual-prediction task, since the visit embedding $\\mathbf {v}_\\ast $ carries the information of medical codes of type $\\ast $ , we can further expect it has the ability to do more task-specific prediction as follows:",
+        "$$\\begin{aligned}\n\\mathcal {L}_{du} = -\\log p(\\mathcal {C}_d^1 | \\mathbf {v}_m^1) - \\log p(\\mathcal {C}_m^1 | \\mathbf {v}_d^1)\n\\end{aligned}$$   (Eq. 20)",
+        "where we use the same transformation function $\\text{Sigmoid}(f_1(\\mathbf {v}_m^1))$ , $\\text{Sigmoid}(f_2(\\mathbf {v}_d^1))$ with different weight matrix to transform the visit embedding and optimize the binary cross entropy loss $\\mathcal {L}_{du}$ expanded same as $\\mathcal {L}_{se}$ in Eq. 19 . This is a direct adaptation of the next sentence prediction task. In BERT, the next sentence prediction task facilitates the prediction of sentence relations, which is a common task in NLP. However, in healthcare, most predictive tasks do not have a sequence pair to classify. Instead, we are often interested in predicting unknown disease or medication codes of the sequence. For example, in medication recommendation, we want to predict multiple medications given only the diagnosis codes. Inversely, we can also predict unknown diagnosis given the medication codes.",
+        "Thus, our final pre-training optimization objective can simply be the combination of the aforementioned losses, as shown in Eq. 21 . It is used to train on EHR data from all patients who only have one hospital visits..",
+        "$$\\begin{aligned}\n\\mathcal {L}_{pr} = \\frac{1}{N} \\sum _{n=1}^N ((\n&\\mathcal {L}_{se}(\\mathbf {v}_d^{1, (n)}, \\mathcal {C}_d^{1, (n)}) + \\mathcal {L}_{se}(\\mathbf {v}_m^{1, (n)}, \\mathcal {C}_m^{1, (n)})\\\\\n& + \\mathcal {L}_{du}^{(n)})\n)\n\\end{aligned}$$   (Eq. 21)"
+      ],
+      "child_pages": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "child_sections": [
+        "Pre-training",
+        "Pre-training",
+        "Pre-training",
+        "Pre-training",
+        "Pre-training",
+        "Pre-training",
+        "Pre-training",
+        "Pre-training",
+        "Pre-training"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Pre-training",
+          0
+        ],
+        [
+          "Pre-training",
+          1
+        ],
+        [
+          "Pre-training",
+          2
+        ],
+        [
+          "Pre-training",
+          3
+        ],
+        [
+          "Pre-training",
+          4
+        ],
+        [
+          "Pre-training",
+          5
+        ],
+        [
+          "Pre-training",
+          6
+        ],
+        [
+          "Pre-training",
+          7
+        ],
+        [
+          "Pre-training",
+          8
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Pre-training",
+      "section": "Pre-training",
+      "title_path": "Pre-training",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] The availability of massive electronic health records (EHR) data and the advances of deep learning technologies have provided unprecedented resource and opportunity for predictive healthcare, including the computational medication recommendation task. A number of deep learning models were proposed to assist doctors in making medication recommendation BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 , BIBREF4 . They often learn representations for medical entities (e.g., patients, diagnosis, medications) from patient EHR data, and then use the learned representations to predict medications that are suited to the patient's health condition.\n[source_id=5] To provide effective medication recommendation, it is important to learn accurate representation of medical codes. Despite that various considerations were handled in previous works for improving medical code representations BIBREF4 , BIBREF2 , BIBREF3 , there are two limitations with the existing work:\n[source_id=6] To mitigate the aforementioned limitations, we propose G-BERT that combines the pre-training techniques and graph neural networks for better medical code representation and medication recommendation. G-BERT is enabled and demonstrated by the following technical contributions:",
+      "score": 2.2860674426276546,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6
+      ],
+      "child_qasper_evidence_texts": [
+        "The availability of massive electronic health records (EHR) data and the advances of deep learning technologies have provided unprecedented resource and opportunity for predictive healthcare, including the computational medication recommendation task. A number of deep learning models were proposed to assist doctors in making medication recommendation BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 , BIBREF4 . They often learn representations for medical entities (e.g., patients, diagnosis, medications) from patient EHR data, and then use the learned representations to predict medications that are suited to the patient's health condition.",
+        "To provide effective medication recommendation, it is important to learn accurate representation of medical codes. Despite that various considerations were handled in previous works for improving medical code representations BIBREF4 , BIBREF2 , BIBREF3 , there are two limitations with the existing work:",
+        "To mitigate the aforementioned limitations, we propose G-BERT that combines the pre-training techniques and graph neural networks for better medical code representation and medication recommendation. G-BERT is enabled and demonstrated by the following technical contributions:"
+      ],
+      "child_pages": [
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    }
+  ]
+}

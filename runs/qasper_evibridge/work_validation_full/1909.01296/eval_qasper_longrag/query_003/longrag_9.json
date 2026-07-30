@@ -1,0 +1,106 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Dialogue Flow\n[source_id=28] The ranking model lends itself to the one-shot task of finding the most relevant responses in a given context. However, a restaurant-browsing system needs to support a dialogue flow where the user finds a restaurant, and then asks questions about it. The dialogue state for each search scenario is represented as the set of restaurants that are considered relevant. This starts off as all the restaurants in the given city, and is assumed to monotonically decrease in size as the conversation progresses until the user converges to a single restaurant. A restaurant is only considered valid in the context of a new user input if it has relevant responses corresponding to it. This flow is summarised here:\n[source_id=29] S1. Initialise $R$ as the set of all restaurants in the city. Given the user's input, rank all the responses in the response pool pertaining to restaurants in $R$.\n[source_id=30] S2. Retrieve the top $N$ responses $r_1, r_2, \\ldots , r_N$ with corresponding (sorted) cosine similarity scores: $s_1 \\ge s_2 \\ge \\ldots \\ge s_N$.\n[source_id=31] S3. Compute probability scores $p_i \\propto \\exp (a \\cdot s_i)$ with $\\sum _{i=1}^N p_i$, where $a>0$ is a tunable constant.\n[source_id=32] S4. Compute a score $q_e$ for each restaurant/entity $e \\in R$, $q_e = \\sum _{i: r_i \\in e} p_i$.\n[source_id=33] S5. Update $R$ to the smallest set of restaurants with highest $q$ whose $q$-values sum up to more than a predefined threshold $t$.\n[source_id=34] S6. Display the most relevant responses associated with the updated $R$, and return to S2.\n[source_id=35] If there are multiple relevant restaurants, one response is shown from each. When only one restaurant is relevant, the top $N$ responses are all shown, and relevant photos are also displayed. The system does not require dedicated understanding, decision-making, and generation modules, and this dialogue flow does not rely on explicit task-tailored semantics. The set of relevant restaurants is kept internally while the system narrows it down across multiple dialogue turns. A simple set of predefined rules is used to provide a templatic spoken system response: e.g., an example rule is “One review of $e$ said $r$”, where $e$ refers to the restaurant, and $r$ to a relevant response associated with $e$. Note that while the demo is currently focused on the restaurant search task, the described “narrowing down” dialogue flow is generic and applicable to a variety of applications dealing with similar entity search.\n[source_id=36] The system can use a set of intent classifiers to allow resetting the dialogue state, or to activate the separate restaurant booking dialogue flow. These classifiers are briefly discussed in §SECREF4.",
+  "score": 1.5206138622899492,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36
+  ],
+  "child_qasper_evidence_texts": [
+    "The ranking model lends itself to the one-shot task of finding the most relevant responses in a given context. However, a restaurant-browsing system needs to support a dialogue flow where the user finds a restaurant, and then asks questions about it. The dialogue state for each search scenario is represented as the set of restaurants that are considered relevant. This starts off as all the restaurants in the given city, and is assumed to monotonically decrease in size as the conversation progresses until the user converges to a single restaurant. A restaurant is only considered valid in the context of a new user input if it has relevant responses corresponding to it. This flow is summarised here:",
+    "S1. Initialise $R$ as the set of all restaurants in the city. Given the user's input, rank all the responses in the response pool pertaining to restaurants in $R$.",
+    "S2. Retrieve the top $N$ responses $r_1, r_2, \\ldots , r_N$ with corresponding (sorted) cosine similarity scores: $s_1 \\ge s_2 \\ge \\ldots \\ge s_N$.",
+    "S3. Compute probability scores $p_i \\propto \\exp (a \\cdot s_i)$ with $\\sum _{i=1}^N p_i$, where $a>0$ is a tunable constant.",
+    "S4. Compute a score $q_e$ for each restaurant/entity $e \\in R$, $q_e = \\sum _{i: r_i \\in e} p_i$.",
+    "S5. Update $R$ to the smallest set of restaurants with highest $q$ whose $q$-values sum up to more than a predefined threshold $t$.",
+    "S6. Display the most relevant responses associated with the updated $R$, and return to S2.",
+    "If there are multiple relevant restaurants, one response is shown from each. When only one restaurant is relevant, the top $N$ responses are all shown, and relevant photos are also displayed. The system does not require dedicated understanding, decision-making, and generation modules, and this dialogue flow does not rely on explicit task-tailored semantics. The set of relevant restaurants is kept internally while the system narrows it down across multiple dialogue turns. A simple set of predefined rules is used to provide a templatic spoken system response: e.g., an example rule is “One review of $e$ said $r$”, where $e$ refers to the restaurant, and $r$ to a relevant response associated with $e$. Note that while the demo is currently focused on the restaurant search task, the described “narrowing down” dialogue flow is generic and applicable to a variety of applications dealing with similar entity search.",
+    "The system can use a set of intent classifiers to allow resetting the dialogue state, or to activate the separate restaurant booking dialogue flow. These classifiers are briefly discussed in §SECREF4."
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Dialogue Flow",
+    "Dialogue Flow",
+    "Dialogue Flow",
+    "Dialogue Flow",
+    "Dialogue Flow",
+    "Dialogue Flow",
+    "Dialogue Flow",
+    "Dialogue Flow",
+    "Dialogue Flow"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Dialogue Flow",
+      0
+    ],
+    [
+      "Dialogue Flow",
+      1
+    ],
+    [
+      "Dialogue Flow",
+      2
+    ],
+    [
+      "Dialogue Flow",
+      3
+    ],
+    [
+      "Dialogue Flow",
+      4
+    ],
+    [
+      "Dialogue Flow",
+      5
+    ],
+    [
+      "Dialogue Flow",
+      6
+    ],
+    [
+      "Dialogue Flow",
+      7
+    ],
+    [
+      "Dialogue Flow",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Dialogue Flow",
+  "section": "Dialogue Flow",
+  "title_path": "Dialogue Flow",
+  "block_type": "long_unit"
+}

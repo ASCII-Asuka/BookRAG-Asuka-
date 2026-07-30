@@ -1,0 +1,79 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Model\n[source_id=20] The key innovation of our work is to decompose the intervention prediction problem into a two-stage model that first explicitly tries to discover the proper context to which a potential intervention could be replying to, and then, predict the intervention status. This model implicitly assesses the importance (or urgency) of the existing thread's context to decide whether an intervention is necessary. For example in Figure SECREF1 , prior to the instructor's intervention, the ultimate post (Post #6) by Student 2 already acknowledged the OP's gratitude for his answer. In this regard, the instructor may have decided to use this point to summarize the entire thread to consolidate all the pertinent positions. Here, we might assume that the instructor's reply takes the entire thread (Posts #1–6) as the context for her reply.\n[source_id=21] This subproblem of inferring the context scope is where our innovation centers on. To be clear, in order to make the prediction that a instruction intervention is now necessary on a thread, the instructor's reply is not yet available — the model predicts whether a reply is necessary — so in the example, only Posts #1–6 are available in the problem setting. To infer the context, we have to decide which subsequence of posts are the most plausible motivation for an intervention.\n[source_id=22] Recent work in deep neural modeling has used an attention mechanism as a focusing query to highlight specific items within the input history that significantly influence the current decision point. Our work employs this mechanism – but with a twist: due to the fact that the actual instructor intervention is not (yet) available at the decision timing, we cannot use any actual intervention to decide the context. To employ attention, we must then employ a surrogate text as the query to train our prediction model. Our model variants model assess the suitability of such surrogate texts for the attention mechanism basis.\n[source_id=23] Congruent with the representation of the input forums, in all our proposed models, we encode the discussion thread hierarchically. We first build representations for each post by passing pre-trained word vector representations from GloVe BIBREF9 for each word through an LSTM BIBREF10 , INLINEFORM0 . We use the last layer output of the LSTM as a representation of the post. We refer this as the post vector INLINEFORM1 .\n[source_id=24] Then each post INLINEFORM0 is passed through another LSTM, INLINEFORM1 , whose last layer output forms the encoding of the entire thread. Hidden unit outputs of INLINEFORM2 represent the contexts INLINEFORM3 ; that is, snapshots of the threads after each post, as shown in Figure FIGREF1 .\n[source_id=25] The INLINEFORM0 and INLINEFORM1 together constitute the hierarchical LSTM (hLSTM) model. This general hLSTM model serves as the basis for our model exploration in the rest of this section.",
+  "score": 5.2543801187452,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+  ],
+  "child_qasper_evidence_texts": [
+    "The key innovation of our work is to decompose the intervention prediction problem into a two-stage model that first explicitly tries to discover the proper context to which a potential intervention could be replying to, and then, predict the intervention status. This model implicitly assesses the importance (or urgency) of the existing thread's context to decide whether an intervention is necessary. For example in Figure SECREF1 , prior to the instructor's intervention, the ultimate post (Post #6) by Student 2 already acknowledged the OP's gratitude for his answer. In this regard, the instructor may have decided to use this point to summarize the entire thread to consolidate all the pertinent positions. Here, we might assume that the instructor's reply takes the entire thread (Posts #1–6) as the context for her reply.",
+    "This subproblem of inferring the context scope is where our innovation centers on. To be clear, in order to make the prediction that a instruction intervention is now necessary on a thread, the instructor's reply is not yet available — the model predicts whether a reply is necessary — so in the example, only Posts #1–6 are available in the problem setting. To infer the context, we have to decide which subsequence of posts are the most plausible motivation for an intervention.",
+    "Recent work in deep neural modeling has used an attention mechanism as a focusing query to highlight specific items within the input history that significantly influence the current decision point. Our work employs this mechanism – but with a twist: due to the fact that the actual instructor intervention is not (yet) available at the decision timing, we cannot use any actual intervention to decide the context. To employ attention, we must then employ a surrogate text as the query to train our prediction model. Our model variants model assess the suitability of such surrogate texts for the attention mechanism basis.",
+    "Congruent with the representation of the input forums, in all our proposed models, we encode the discussion thread hierarchically. We first build representations for each post by passing pre-trained word vector representations from GloVe BIBREF9 for each word through an LSTM BIBREF10 , INLINEFORM0 . We use the last layer output of the LSTM as a representation of the post. We refer this as the post vector INLINEFORM1 .",
+    "Then each post INLINEFORM0 is passed through another LSTM, INLINEFORM1 , whose last layer output forms the encoding of the entire thread. Hidden unit outputs of INLINEFORM2 represent the contexts INLINEFORM3 ; that is, snapshots of the threads after each post, as shown in Figure FIGREF1 .",
+    "The INLINEFORM0 and INLINEFORM1 together constitute the hierarchical LSTM (hLSTM) model. This general hLSTM model serves as the basis for our model exploration in the rest of this section."
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Model",
+    "Model",
+    "Model",
+    "Model",
+    "Model",
+    "Model"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Model",
+      0
+    ],
+    [
+      "Model",
+      1
+    ],
+    [
+      "Model",
+      2
+    ],
+    [
+      "Model",
+      3
+    ],
+    [
+      "Model",
+      4
+    ],
+    [
+      "Model",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Model",
+  "section": "Model",
+  "title_path": "Model",
+  "block_type": "long_unit"
+}

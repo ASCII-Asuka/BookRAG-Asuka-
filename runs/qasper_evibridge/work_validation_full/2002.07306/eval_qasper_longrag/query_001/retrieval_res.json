@@ -1,0 +1,438 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Pre-trained models BIBREF0, BIBREF1 have received much of attention recently thanks to their impressive results in many down stream NLP tasks. Additionally, multilingual pre-trained models enable many NLP applications for other languages via zero-short cross-lingual transfer. Zero-shot cross-lingual transfer has shown promising results for rapidly building applications for low resource languages. BIBREF2 show the potential of multilingual-BERT BIBREF0 in zero-shot transfer for a large number of languages from different language families on five NLP tasks, namely, natural language inference, document classification, named entity recognition, part-of-speech tagging, and dependency parsing.\n[source_id=5] Although multilingual models are an important ingredient for enhancing language technology in many languages, recent research on improving pre-trained models puts much emphasis on English BIBREF3, BIBREF4, BIBREF5. The current state of affairs makes it difficult to translate advancements in pre-training from English to non-English languages. To our best knowledge, there are only three available multilingual pre-trained models to date: (1) the multilingual-BERT (mBERT) that supports 104 languages, (2) cross-lingual language model BIBREF6 that supports 100 languages, and (3) Language Agnostic SEntence Representations BIBREF7 that supports 93 languages. Among the three models, LASER is based on neural machine translation approach and strictly requires parallel data to train.\n[source_id=6] Do multilingual models always need to be trained from scratch? Can we transfer linguistic knowledge learned by English pre-trained models to other languages? In this work, we develop a technique to rapidly transfer an existing pre-trained model from English to other languages in an energy efficient way BIBREF8. As the first step, we focus on building a bilingual language model (LM) of English and a target language. Starting from a pre-trained English LM, we learn the target language specific parameters (i.e., word embeddings), while keeping the encoder layers of the pre-trained English LM fixed. We then fine-tune both English and target model to obtain the bilingual LM. We apply our approach to autoencoding language models with masked language model objective and show the advantage of the proposed approach in zero-shot transfer. Our main contributions in this work are:\n[source_id=7] We propose a fast adaptation method for obtaining a bilingual BERT$_{\\textsc {base}}$ of English and a target language within a day using one Tesla V100 16GB GPU.\n[source_id=8] We evaluate our bilingual LMs for six languages on two zero-shot cross-lingual transfer tasks, namely natural language inference BIBREF9 and universal dependency parsing. We show that our models offer competitive performance or even better that mBERT.\n[source_id=9] We illustrate that our bilingual LMs can serve as an excellent feature extractor in supervised dependency parsing task.",
+      "score": 9.086048381317793,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "child_qasper_evidence_texts": [
+        "Pre-trained models BIBREF0, BIBREF1 have received much of attention recently thanks to their impressive results in many down stream NLP tasks. Additionally, multilingual pre-trained models enable many NLP applications for other languages via zero-short cross-lingual transfer. Zero-shot cross-lingual transfer has shown promising results for rapidly building applications for low resource languages. BIBREF2 show the potential of multilingual-BERT BIBREF0 in zero-shot transfer for a large number of languages from different language families on five NLP tasks, namely, natural language inference, document classification, named entity recognition, part-of-speech tagging, and dependency parsing.",
+        "Although multilingual models are an important ingredient for enhancing language technology in many languages, recent research on improving pre-trained models puts much emphasis on English BIBREF3, BIBREF4, BIBREF5. The current state of affairs makes it difficult to translate advancements in pre-training from English to non-English languages. To our best knowledge, there are only three available multilingual pre-trained models to date: (1) the multilingual-BERT (mBERT) that supports 104 languages, (2) cross-lingual language model BIBREF6 that supports 100 languages, and (3) Language Agnostic SEntence Representations BIBREF7 that supports 93 languages. Among the three models, LASER is based on neural machine translation approach and strictly requires parallel data to train.",
+        "Do multilingual models always need to be trained from scratch? Can we transfer linguistic knowledge learned by English pre-trained models to other languages? In this work, we develop a technique to rapidly transfer an existing pre-trained model from English to other languages in an energy efficient way BIBREF8. As the first step, we focus on building a bilingual language model (LM) of English and a target language. Starting from a pre-trained English LM, we learn the target language specific parameters (i.e., word embeddings), while keeping the encoder layers of the pre-trained English LM fixed. We then fine-tune both English and target model to obtain the bilingual LM. We apply our approach to autoencoding language models with masked language model objective and show the advantage of the proposed approach in zero-shot transfer. Our main contributions in this work are:",
+        "We propose a fast adaptation method for obtaining a bilingual BERT$_{\\textsc {base}}$ of English and a target language within a day using one Tesla V100 16GB GPU.",
+        "We evaluate our bilingual LMs for six languages on two zero-shot cross-lingual transfer tasks, namely natural language inference BIBREF9 and universal dependency parsing. We show that our models offer competitive performance or even better that mBERT.",
+        "We illustrate that our bilingual LMs can serve as an excellent feature extractor in supervised dependency parsing task."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_18",
+      "content": "[Section] Analysis ::: How does linguistic knowledge transfer happen through each training stages?\n[source_id=62] We evaluate the performance of RAMEN+RoBERTa$_{\\textsc {base}}$ (initialized from monolingual data) at each training steps: initialization of word embeddings (0K update), fine-tuning target embeddings (25K), and fine-tuning the model on both English and target language (at each 25K updates). The results are presented in Figure FIGREF40.\n[source_id=63] Without fine-tuning, the average accuracy of XLNI is 39.7% for a three-ways classification task, and the average LAS score is 3.6 for dependency parsing. We see the biggest leap in the performance after 50K updates. While semantic similarity task profits significantly at 25K updates of the target embeddings, syntactic task benefits with further fine-tuning the encoder. This is expected since the target languages might exhibit different syntactic structures than English and fine-tuning encoder helps to capture language specific structures. We observe a substantial gain of 19-30 LAS for all languages except French after 50K updates.\n[source_id=64] Language similarities have more impact on transferring syntax than semantics. Without tuning the English encoder, French enjoys 50.3 LAS for being closely related to English, whereas Arabic and Hindi, SOV languages, modestly reach 4.2 and 6.4 points using the SVO encoder. Although Chinese has SVO order, it is often seen as head-final while English is strong head-initial. Perhaps, this explains the poor performance for Chinese.",
+      "score": 7.016341958226705,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_18",
+      "child_source_node_ids": [
+        62,
+        63,
+        64
+      ],
+      "child_qasper_evidence_texts": [
+        "We evaluate the performance of RAMEN+RoBERTa$_{\\textsc {base}}$ (initialized from monolingual data) at each training steps: initialization of word embeddings (0K update), fine-tuning target embeddings (25K), and fine-tuning the model on both English and target language (at each 25K updates). The results are presented in Figure FIGREF40.",
+        "Without fine-tuning, the average accuracy of XLNI is 39.7% for a three-ways classification task, and the average LAS score is 3.6 for dependency parsing. We see the biggest leap in the performance after 50K updates. While semantic similarity task profits significantly at 25K updates of the target embeddings, syntactic task benefits with further fine-tuning the encoder. This is expected since the target languages might exhibit different syntactic structures than English and fine-tuning encoder helps to capture language specific structures. We observe a substantial gain of 19-30 LAS for all languages except French after 50K updates.",
+        "Language similarities have more impact on transferring syntax than semantics. Without tuning the English encoder, French enjoys 50.3 LAS for being closely related to English, whereas Arabic and Hindi, SOV languages, modestly reach 4.2 and 6.4 points using the SVO encoder. Although Chinese has SVO order, it is often seen as head-final while English is strong head-initial. Perhaps, this explains the poor performance for Chinese."
+      ],
+      "child_pages": [
+        18,
+        18,
+        18
+      ],
+      "child_sections": [
+        "Analysis ::: How does linguistic knowledge transfer happen through each training stages?",
+        "Analysis ::: How does linguistic knowledge transfer happen through each training stages?",
+        "Analysis ::: How does linguistic knowledge transfer happen through each training stages?"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Analysis ::: How does linguistic knowledge transfer happen through each training stages?",
+          0
+        ],
+        [
+          "Analysis ::: How does linguistic knowledge transfer happen through each training stages?",
+          1
+        ],
+        [
+          "Analysis ::: How does linguistic knowledge transfer happen through each training stages?",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_18",
+      "section_id": "Analysis ::: How does linguistic knowledge transfer happen through each training stages?",
+      "section": "Analysis ::: How does linguistic knowledge transfer happen through each training stages?",
+      "title_path": "Analysis ::: How does linguistic knowledge transfer happen through each training stages?",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_14",
+      "content": "[Section] Results ::: Cross-lingual Natural Language Inference\n[source_id=49] Table TABREF32 shows the XNLI test accuracy. For reference, we also include the scores from the previous work, notably the state-of-the-art system XLM BIBREF6. Before discussing the results, we spell out that the fairest comparison in this experiment is the comparison between mBERT and RAMEN$_{\\textsc {base}}$+BERT trained with monolingual only.\n[source_id=50] We first discuss the transfer results from BERT. Initialized from fastText vectors, RAMEN$_{\\textsc {base}}$ slightly outperforms mBERT by 1.9 points on average and widen the gap of 3.3 points on Arabic. RAMEN$_{\\textsc {base}}$ gains extra 0.8 points on average when initialized from parallel data. With triple number of parameters, RAMEN$_{\\textsc {large}}$ offers an additional boost in term of accuracy and initialization with parallel data consistently improves the performance. It has been shown that BERT$_{\\textsc {large}}$ significantly outperforms BERT$_{\\textsc {base}}$ on 11 English NLP tasks BIBREF0, the strength of BERT$_{\\textsc {large}}$ also shows up when adapted to foreign languages.\n[source_id=51] Transferring from RoBERTa leads to better zero-shot accuracies. With the same initializing condition, RAMEN$_{\\textsc {base}}$+RoBERTa outperforms RAMEN$_{\\textsc {base}}$+BERT on average by 2.9 and 2.3 points when initializing from monolingual and parallel data respectively. This result show that with similar number of parameters, our approach benefits from a better English pre-trained model. When transferring from RoBERTa$_{\\textsc {large}}$, we obtain state-of-the-art results for five languages.\n[source_id=52] Currently, RAMEN only uses parallel data to initialize foreign embeddings. RAMEN can also exploit parallel data through translation objective proposed in XLM. We believe that by utilizing parallel data during the fine-tuning of RAMEN would bring additional benefits for zero-shot tasks. We leave this exploration to future work. In summary, starting from BERT$_{\\textsc {base}}$, our approach obtains competitive bilingual LMs with mBERT for zero-shot XNLI. Our approach shows the accuracy gains when adapting from a better pre-trained model.",
+      "score": 6.561216582978476,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_14",
+      "child_source_node_ids": [
+        49,
+        50,
+        51,
+        52
+      ],
+      "child_qasper_evidence_texts": [
+        "Table TABREF32 shows the XNLI test accuracy. For reference, we also include the scores from the previous work, notably the state-of-the-art system XLM BIBREF6. Before discussing the results, we spell out that the fairest comparison in this experiment is the comparison between mBERT and RAMEN$_{\\textsc {base}}$+BERT trained with monolingual only.",
+        "We first discuss the transfer results from BERT. Initialized from fastText vectors, RAMEN$_{\\textsc {base}}$ slightly outperforms mBERT by 1.9 points on average and widen the gap of 3.3 points on Arabic. RAMEN$_{\\textsc {base}}$ gains extra 0.8 points on average when initialized from parallel data. With triple number of parameters, RAMEN$_{\\textsc {large}}$ offers an additional boost in term of accuracy and initialization with parallel data consistently improves the performance. It has been shown that BERT$_{\\textsc {large}}$ significantly outperforms BERT$_{\\textsc {base}}$ on 11 English NLP tasks BIBREF0, the strength of BERT$_{\\textsc {large}}$ also shows up when adapted to foreign languages.",
+        "Transferring from RoBERTa leads to better zero-shot accuracies. With the same initializing condition, RAMEN$_{\\textsc {base}}$+RoBERTa outperforms RAMEN$_{\\textsc {base}}$+BERT on average by 2.9 and 2.3 points when initializing from monolingual and parallel data respectively. This result show that with similar number of parameters, our approach benefits from a better English pre-trained model. When transferring from RoBERTa$_{\\textsc {large}}$, we obtain state-of-the-art results for five languages.",
+        "Currently, RAMEN only uses parallel data to initialize foreign embeddings. RAMEN can also exploit parallel data through translation objective proposed in XLM. We believe that by utilizing parallel data during the fine-tuning of RAMEN would bring additional benefits for zero-shot tasks. We leave this exploration to future work. In summary, starting from BERT$_{\\textsc {base}}$, our approach obtains competitive bilingual LMs with mBERT for zero-shot XNLI. Our approach shows the accuracy gains when adapting from a better pre-trained model."
+      ],
+      "child_pages": [
+        14,
+        14,
+        14,
+        14
+      ],
+      "child_sections": [
+        "Results ::: Cross-lingual Natural Language Inference",
+        "Results ::: Cross-lingual Natural Language Inference",
+        "Results ::: Cross-lingual Natural Language Inference",
+        "Results ::: Cross-lingual Natural Language Inference"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results ::: Cross-lingual Natural Language Inference",
+          0
+        ],
+        [
+          "Results ::: Cross-lingual Natural Language Inference",
+          1
+        ],
+        [
+          "Results ::: Cross-lingual Natural Language Inference",
+          2
+        ],
+        [
+          "Results ::: Cross-lingual Natural Language Inference",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_14",
+      "section_id": "Results ::: Cross-lingual Natural Language Inference",
+      "section": "Results ::: Cross-lingual Natural Language Inference",
+      "title_path": "Results ::: Cross-lingual Natural Language Inference",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_17",
+      "content": "[Section] Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?\n[source_id=59] All the RAMEN models are built from English and tuned on English for zero-shot cross-lingual tasks. It is reasonable to expect RAMENs do well in those tasks as we have shown in our experiments. But are they also a good feature extractor for supervised tasks? We offer a partial answer to this question by evaluating our model for supervised dependency parsing on UD datasets.\n[source_id=60] We used train/dev/test splits provided in UD to train and evaluate our RAMEN-based parser. Table TABREF38 summarizes the results (LAS) of our supervised parser. For a fair comparison, we choose mBERT as the baseline and all the RAMEN models are initialized from aligned fastText vectors. With the same architecture of 12 Transformer layers, RAMEN$_{\\textsc {base}}$+BERT performs competitive to mBERT and outshines mBERT by +1.2 points for Vietnamese. The best LAS results are obtained by RAMEN$_{\\textsc {large}}$+RoBERTa with 24 Transformer layers. Overall, our results indicate the potential of using contextual representations from RAMEN for supervised tasks.",
+      "score": 5.351000290439184,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_17",
+      "child_source_node_ids": [
+        59,
+        60
+      ],
+      "child_qasper_evidence_texts": [
+        "All the RAMEN models are built from English and tuned on English for zero-shot cross-lingual tasks. It is reasonable to expect RAMENs do well in those tasks as we have shown in our experiments. But are they also a good feature extractor for supervised tasks? We offer a partial answer to this question by evaluating our model for supervised dependency parsing on UD datasets.",
+        "We used train/dev/test splits provided in UD to train and evaluate our RAMEN-based parser. Table TABREF38 summarizes the results (LAS) of our supervised parser. For a fair comparison, we choose mBERT as the baseline and all the RAMEN models are initialized from aligned fastText vectors. With the same architecture of 12 Transformer layers, RAMEN$_{\\textsc {base}}$+BERT performs competitive to mBERT and outshines mBERT by +1.2 points for Vietnamese. The best LAS results are obtained by RAMEN$_{\\textsc {large}}$+RoBERTa with 24 Transformer layers. Overall, our results indicate the potential of using contextual representations from RAMEN for supervised tasks."
+      ],
+      "child_pages": [
+        17,
+        17
+      ],
+      "child_sections": [
+        "Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?",
+        "Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?",
+          0
+        ],
+        [
+          "Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_17",
+      "section_id": "Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?",
+      "section": "Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?",
+      "title_path": "Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Zero-shot Experiments ::: Data\n[source_id=31] We evaluate our approach for six target languages: French (fr), Russian (ru), Arabic (ar), Chinese (zh), Hindi (hi), and Vietnamese (vi). These languages belong to four different language families. French, Russian, and Hindi are Indo-European languages, similar to English. Arabic, Chinese, and Vietnamese belong to Afro-Asiatic, Sino-Tibetan, and Austro-Asiatic family respectively. The choice of the six languages also reflects different training conditions depending on the amount of monolingual data. French and Russian, and Arabic can be regarded as high resource languages whereas Hindi has far less data and can be considered as low resource.\n[source_id=32] For experiments that use parallel data to initialize foreign specific parameters, we use the same datasets in the work of BIBREF6. Specifically, we use United Nations Parallel Corpus BIBREF18 for en-ru, en-ar, en-zh, and en-fr. We collect en-hi parallel data from IIT Bombay corpus BIBREF19 and en-vi data from OpenSubtitles 2018. For experiments that use only monolingual data to initialize foreign parameters, instead of training word-vectors from the scratch, we use the pre-trained word vectors from fastText BIBREF14 to estimate word translation probabilities (Eq. DISPLAY_FORM13). We align these vectors into a common space using orthogonal Procrustes BIBREF20, BIBREF15, BIBREF16. We only use identical words between the two languages as the supervised signal. We use WikiExtractor to extract extract raw sentences from Wikipedias as monolingual data for fine-tuning target embeddings and bilingual LMs (§SECREF15). We do not lowercase or remove accents in our data preprocessing pipeline.\n[source_id=33] We tokenize English using the provided tokenizer from pre-trained models. For target languages, we use fastBPE to learn 30,000 BPE codes and 50,000 codes when transferring from BERT and RoBERTa respectively. We truncate the BPE vocabulary of foreign languages to match the size of the English vocabulary in the source models. Precisely, the size of foreign vocabulary is set to 32,000 when transferring from BERT and 50,000 when transferring from RoBERTa.\n[source_id=34] We use XNLI dataset BIBREF9 for classification task and Universal Dependencies v2.4 BIBREF21 for parsing task. Since a language might have more than one treebank in Universal Dependencies, we use the following treebanks: en_ewt (English), fr_gsd (French), ru_syntagrus (Russian) ar_padt (Arabic), vi_vtb (Vietnamese), hi_hdtb (Hindi), and zh_gsd (Chinese).",
+      "score": 4.909880743262837,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        31,
+        32,
+        33,
+        34
+      ],
+      "child_qasper_evidence_texts": [
+        "We evaluate our approach for six target languages: French (fr), Russian (ru), Arabic (ar), Chinese (zh), Hindi (hi), and Vietnamese (vi). These languages belong to four different language families. French, Russian, and Hindi are Indo-European languages, similar to English. Arabic, Chinese, and Vietnamese belong to Afro-Asiatic, Sino-Tibetan, and Austro-Asiatic family respectively. The choice of the six languages also reflects different training conditions depending on the amount of monolingual data. French and Russian, and Arabic can be regarded as high resource languages whereas Hindi has far less data and can be considered as low resource.",
+        "For experiments that use parallel data to initialize foreign specific parameters, we use the same datasets in the work of BIBREF6. Specifically, we use United Nations Parallel Corpus BIBREF18 for en-ru, en-ar, en-zh, and en-fr. We collect en-hi parallel data from IIT Bombay corpus BIBREF19 and en-vi data from OpenSubtitles 2018. For experiments that use only monolingual data to initialize foreign parameters, instead of training word-vectors from the scratch, we use the pre-trained word vectors from fastText BIBREF14 to estimate word translation probabilities (Eq. DISPLAY_FORM13). We align these vectors into a common space using orthogonal Procrustes BIBREF20, BIBREF15, BIBREF16. We only use identical words between the two languages as the supervised signal. We use WikiExtractor to extract extract raw sentences from Wikipedias as monolingual data for fine-tuning target embeddings and bilingual LMs (§SECREF15). We do not lowercase or remove accents in our data preprocessing pipeline.",
+        "We tokenize English using the provided tokenizer from pre-trained models. For target languages, we use fastBPE to learn 30,000 BPE codes and 50,000 codes when transferring from BERT and RoBERTa respectively. We truncate the BPE vocabulary of foreign languages to match the size of the English vocabulary in the source models. Precisely, the size of foreign vocabulary is set to 32,000 when transferring from BERT and 50,000 when transferring from RoBERTa.",
+        "We use XNLI dataset BIBREF9 for classification task and Universal Dependencies v2.4 BIBREF21 for parsing task. Since a language might have more than one treebank in Universal Dependencies, we use the following treebanks: en_ewt (English), fr_gsd (French), ru_syntagrus (Russian) ar_padt (Arabic), vi_vtb (Vietnamese), hi_hdtb (Hindi), and zh_gsd (Chinese)."
+      ],
+      "child_pages": [
+        9,
+        9,
+        9,
+        9
+      ],
+      "child_sections": [
+        "Zero-shot Experiments ::: Data",
+        "Zero-shot Experiments ::: Data",
+        "Zero-shot Experiments ::: Data",
+        "Zero-shot Experiments ::: Data"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Zero-shot Experiments ::: Data",
+          0
+        ],
+        [
+          "Zero-shot Experiments ::: Data",
+          1
+        ],
+        [
+          "Zero-shot Experiments ::: Data",
+          2
+        ],
+        [
+          "Zero-shot Experiments ::: Data",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Zero-shot Experiments ::: Data",
+      "section": "Zero-shot Experiments ::: Data",
+      "title_path": "Zero-shot Experiments ::: Data",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Bilingual Pre-trained LMs ::: Initializing Target Embeddings\n[source_id=15] Our approach to learn the initial foreign word embeddings $_f \\in ^{|V_f| \\times d}$ is based on the idea of mapping the trained English word embeddings $_e \\in ^{|V_e| \\times d}$ to $_f$ such that if a foreign word and an English word are similar in meaning then their embeddings are similar. Borrowing the idea of universal lexical sharing from BIBREF11, we represent each foreign word embedding $_f[i] \\in ^d$ as a linear combination of English word embeddings $_e[j] \\in ^d$\n[source_id=16] where $_i\\in ^{|V_e|}$ is a sparse vector and $\\sum _j^{|V_e|} \\alpha _{ij} = 1$.\n[source_id=17] In this step of initializing foreign embeddings, having a good estimation of $$ could speed of the convergence when tuning the foreign model and enable zero-shot transfer (§SECREF5). In the following, we discuss how to estimate $_i\\;\\forall i\\in \\lbrace 1,2, \\dots , |V_f|\\rbrace $ under two scenarios: (i) we have parallel data of English-foreign, and (ii) we only rely on English and foreign monolingual data.",
+      "score": 4.4502064376763935,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        15,
+        16,
+        17
+      ],
+      "child_qasper_evidence_texts": [
+        "Our approach to learn the initial foreign word embeddings $_f \\in ^{|V_f| \\times d}$ is based on the idea of mapping the trained English word embeddings $_e \\in ^{|V_e| \\times d}$ to $_f$ such that if a foreign word and an English word are similar in meaning then their embeddings are similar. Borrowing the idea of universal lexical sharing from BIBREF11, we represent each foreign word embedding $_f[i] \\in ^d$ as a linear combination of English word embeddings $_e[j] \\in ^d$",
+        "where $_i\\in ^{|V_e|}$ is a sparse vector and $\\sum _j^{|V_e|} \\alpha _{ij} = 1$.",
+        "In this step of initializing foreign embeddings, having a good estimation of $$ could speed of the convergence when tuning the foreign model and enable zero-shot transfer (§SECREF5). In the following, we discuss how to estimate $_i\\;\\forall i\\in \\lbrace 1,2, \\dots , |V_f|\\rbrace $ under two scenarios: (i) we have parallel data of English-foreign, and (ii) we only rely on English and foreign monolingual data."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Bilingual Pre-trained LMs ::: Initializing Target Embeddings",
+        "Bilingual Pre-trained LMs ::: Initializing Target Embeddings",
+        "Bilingual Pre-trained LMs ::: Initializing Target Embeddings"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Bilingual Pre-trained LMs ::: Initializing Target Embeddings",
+          0
+        ],
+        [
+          "Bilingual Pre-trained LMs ::: Initializing Target Embeddings",
+          1
+        ],
+        [
+          "Bilingual Pre-trained LMs ::: Initializing Target Embeddings",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Bilingual Pre-trained LMs ::: Initializing Target Embeddings",
+      "section": "Bilingual Pre-trained LMs ::: Initializing Target Embeddings",
+      "title_path": "Bilingual Pre-trained LMs ::: Initializing Target Embeddings",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Bilingual Pre-trained LMs ::: Fine-tuning Bilingual LM\n[source_id=27] We create a bilingual LM by plugging foreign language specific parameters to the pre-trained English LM (Figure FIGREF7). The new model has two separate embedding layers and output layers, one for English and one for foreign language. The encoder layer in between is shared. We then fine-tune this model using English and foreign monolingual data. Here, we keep tuning the model on English to ensure that it does not forget what it has learned in English and that we can use the resulting model for zero-shot transfer (§SECREF3). In this step, the encoder parameters are also updated so that in can learn syntactic aspects (i.e., word order, morphological agreement) of the target languages.",
+      "score": 4.3804159888486165,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        27
+      ],
+      "child_qasper_evidence_texts": [
+        "We create a bilingual LM by plugging foreign language specific parameters to the pre-trained English LM (Figure FIGREF7). The new model has two separate embedding layers and output layers, one for English and one for foreign language. The encoder layer in between is shared. We then fine-tune this model using English and foreign monolingual data. Here, we keep tuning the model on English to ensure that it does not forget what it has learned in English and that we can use the resulting model for zero-shot transfer (§SECREF3). In this step, the encoder parameters are also updated so that in can learn syntactic aspects (i.e., word order, morphological agreement) of the target languages."
+      ],
+      "child_pages": [
+        7
+      ],
+      "child_sections": [
+        "Bilingual Pre-trained LMs ::: Fine-tuning Bilingual LM"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Bilingual Pre-trained LMs ::: Fine-tuning Bilingual LM",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Bilingual Pre-trained LMs ::: Fine-tuning Bilingual LM",
+      "section": "Bilingual Pre-trained LMs ::: Fine-tuning Bilingual LM",
+      "title_path": "Bilingual Pre-trained LMs ::: Fine-tuning Bilingual LM",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Bilingual Pre-trained LMs\n[source_id=11] We first provide some background of pre-trained language models. Let $_e$ be English word-embeddings and $\\Psi ()$ be the Transformer BIBREF10 encoder with parameters $$. Let $_{w_i}$ denote the embedding of word $w_i$ (i.e., $_{w_i} = _e[w_1]$). We omit positional embeddings and bias for clarity. A pre-trained LM typically performs the following computations: (i) transform a sequence of input tokens to contextualized representations $[_{w_1},\\dots ,_{w_n}] = \\Psi (_{w_1}, \\dots , _{w_n}; )$, and (ii) predict an output word $y_i$ at $i^{\\text{th}}$ position $p(y_i | _{w_i}) \\propto \\exp (_{w_i}^\\top _{y_i})$.\n[source_id=12] Autoencoding LM BIBREF0 corrupts some input tokens $w_i$ by replacing them with a special token [MASK]. It then predicts the original tokens $y_i = w_i$ from the corrupted tokens. Autoregressive LM BIBREF3 predicts the next token ($y_i = w_{i+1}$) given all the previous tokens. The recently proposed XLNet model BIBREF5 is an autoregressive LM that factorizes output with all possible permutations, which shows empirical performance improvement over GPT-2 due to the ability to capture bidirectional context. Here we assume that the encoder performs necessary masking with respect to each training objective.\n[source_id=13] Given an English pre-trained LM, we wish to learn a bilingual LM for English and a given target language $f$ under a limited computational resource budget. To quickly build a bilingual LM, we directly adapt the English pre-traind model to the target model. Our approach consists of three steps. First, we initialize target language word-embeddings $_f$ in the English embedding space such that embeddings of a target word and its English equivalents are close together (§SECREF8). Next, we create a target LM from the target embeddings and the English encoder $\\Psi ()$. We then fine-tune target embeddings while keeping $\\Psi ()$ fixed (§SECREF14). Finally, we construct a bilingual LM of $_e$, $_f$, and $\\Psi ()$ and fine-tune all the parameters (§SECREF15). Figure FIGREF7 illustrates the last two steps in our approach.",
+      "score": 4.158505967755696,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        11,
+        12,
+        13
+      ],
+      "child_qasper_evidence_texts": [
+        "We first provide some background of pre-trained language models. Let $_e$ be English word-embeddings and $\\Psi ()$ be the Transformer BIBREF10 encoder with parameters $$. Let $_{w_i}$ denote the embedding of word $w_i$ (i.e., $_{w_i} = _e[w_1]$). We omit positional embeddings and bias for clarity. A pre-trained LM typically performs the following computations: (i) transform a sequence of input tokens to contextualized representations $[_{w_1},\\dots ,_{w_n}] = \\Psi (_{w_1}, \\dots , _{w_n}; )$, and (ii) predict an output word $y_i$ at $i^{\\text{th}}$ position $p(y_i | _{w_i}) \\propto \\exp (_{w_i}^\\top _{y_i})$.",
+        "Autoencoding LM BIBREF0 corrupts some input tokens $w_i$ by replacing them with a special token [MASK]. It then predicts the original tokens $y_i = w_i$ from the corrupted tokens. Autoregressive LM BIBREF3 predicts the next token ($y_i = w_{i+1}$) given all the previous tokens. The recently proposed XLNet model BIBREF5 is an autoregressive LM that factorizes output with all possible permutations, which shows empirical performance improvement over GPT-2 due to the ability to capture bidirectional context. Here we assume that the encoder performs necessary masking with respect to each training objective.",
+        "Given an English pre-trained LM, we wish to learn a bilingual LM for English and a given target language $f$ under a limited computational resource budget. To quickly build a bilingual LM, we directly adapt the English pre-traind model to the target model. Our approach consists of three steps. First, we initialize target language word-embeddings $_f$ in the English embedding space such that embeddings of a target word and its English equivalents are close together (§SECREF8). Next, we create a target LM from the target embeddings and the English encoder $\\Psi ()$. We then fine-tune target embeddings while keeping $\\Psi ()$ fixed (§SECREF14). Finally, we construct a bilingual LM of $_e$, $_f$, and $\\Psi ()$ and fine-tune all the parameters (§SECREF15). Figure FIGREF7 illustrates the last two steps in our approach."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Bilingual Pre-trained LMs",
+        "Bilingual Pre-trained LMs",
+        "Bilingual Pre-trained LMs"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Bilingual Pre-trained LMs",
+          0
+        ],
+        [
+          "Bilingual Pre-trained LMs",
+          1
+        ],
+        [
+          "Bilingual Pre-trained LMs",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Bilingual Pre-trained LMs",
+      "section": "Bilingual Pre-trained LMs",
+      "title_path": "Bilingual Pre-trained LMs",
+      "block_type": "long_unit"
+    }
+  ]
+}

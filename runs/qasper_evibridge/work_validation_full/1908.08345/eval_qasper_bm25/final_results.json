@@ -1,0 +1,219 @@
+[
+  {
+    "question": "What is novel about their document-level encoder?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Bert model have a maximum length of 512; we overcome this limitation by adding more position embeddings",
+          "we insert external [cls] tokens at the start of each sentence, and each [cls] symbol collects features for the sentence preceding it",
+          "document representations are learned hierarchically"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "In order to represent individual sentences, we insert external [cls] tokens at the start of each sentence, and each [cls] symbol collects features for the sentence preceding it. We also use interval segment embeddings to distinguish multiple sentences within a document. For $sent_i$ we assign segment embedding $E_A$ or $E_B$ depending on whether $i$ is odd or even. For example, for document $[sent_1, sent_2, sent_3, sent_4, sent_5]$, we would assign embeddings $[E_A, E_B, E_A,E_B, E_A]$. This way, document representations are learned hierarchically where lower Transformer layers represent adjacent sentences, while higher layers, in combination with self-attention, represent multi-sentence discourse.",
+          "Position embeddings in the original Bert model have a maximum length of 512; we overcome this limitation by adding more position embeddings that are initialized randomly and fine-tuned with other parameters in the encoder."
+        ],
+        "evidence_block_ids": [
+          20,
+          21
+        ],
+        "evidence_paragraph_ids": [
+          20,
+          21
+        ]
+      }
+    ],
+    "doc_uuid": "1908.08345",
+    "doc_path": "qasper://1908.08345",
+    "qasper_question_id": "97d1ac71eed13d4f51f29aac0e1a554007907df8",
+    "title": "Text Summarization with Pretrained Encoders",
+    "evidence_block_ids": [
+      20,
+      21
+    ],
+    "evidence_paragraph_ids": [
+      20,
+      21
+    ],
+    "output": "{\n  \"answer_short\": \"based on Bert which is able to encode a document and obtain representations for its sentences\",\n  \"answer_rationale\": \"Text 2 and Text 4 both state that the novel document-level encoder is based on BERT and is designed to encode a document while obtaining sentence-level representations. This is the core novelty highlighted in the introduction and abstract sections.\"\n}",
+    "retrieved_node_ids": [
+      43,
+      6,
+      68,
+      2,
+      62,
+      44,
+      5,
+      24,
+      14,
+      17
+    ],
+    "answer_short": "based on Bert which is able to encode a document and obtain representations for its sentences",
+    "answer_rationale": "Text 2 and Text 4 both state that the novel document-level encoder is based on BERT and is designed to encode a document while obtaining sentence-level representations. This is the core novelty highlighted in the introduction and abstract sections.",
+    "supporting_block_ids": [
+      43,
+      6,
+      68,
+      2,
+      62,
+      44,
+      5,
+      24,
+      14,
+      17
+    ]
+  },
+  {
+    "question": "What rouge score do they achieve?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "Best results on unigram:\nCNN/Daily Mail: Rogue F1 43.85\nNYT: Rogue Recall 49.02\nXSum: Rogue F1 38.81",
+        "yes_no": null,
+        "evidence": [
+          "We evaluated summarization quality automatically using ROUGE BIBREF32. We report unigram and bigram overlap (ROUGE-1 and ROUGE-2) as a means of assessing informativeness and the longest common subsequence (ROUGE-L) as a means of assessing fluency. Table TABREF23 summarizes our results on the CNN/DailyMail dataset. The first block in the table includes the results of an extractive Oracle system as an upper bound. We also present the Lead-3 baseline (which simply selects the first three sentences in a document). The second block in the table includes various extractive models trained on the CNN/DailyMail dataset (see Section SECREF5 for an overview). For comparison to our own model, we also implemented a non-pretrained Transformer baseline (TransformerExt) which uses the same architecture as BertSumExt, but with fewer parameters. It is randomly initialized and only trained on the summarization task. TransformerExt has 6 layers, the hidden size is 512, and the feed-forward filter size is 2,048. The model was trained with same settings as in BIBREF3. The third block in Table TABREF23 highlights the performance of several abstractive models on the CNN/DailyMail dataset (see Section SECREF6 for an overview). We also include an abstractive Transformer baseline (TransformerAbs) which has the same decoder as our abstractive BertSum models; the encoder is a 6-layer Transformer with 768 hidden size and 2,048 feed-forward filter size. The fourth block reports results with fine-tuned Bert models: BertSumExt and its two variants (one without interval embeddings, and one with the large version of Bert), BertSumAbs, and BertSumExtAbs. Bert-based models outperform the Lead-3 baseline which is not a strawman; on the CNN/DailyMail corpus it is indeed superior to several extractive BIBREF7, BIBREF8, BIBREF19 and abstractive models BIBREF6. Bert models collectively outperform all previously proposed extractive and abstractive systems, only falling behind the Oracle upper bound. Among Bert variants, BertSumExt performs best which is not entirely surprising; CNN/DailyMail summaries are somewhat extractive and even abstractive models are prone to copying sentences from the source document when trained on this dataset BIBREF6. Perhaps unsurprisingly we observe that larger versions of Bert lead to performance improvements and that interval embeddings bring only slight gains. Table TABREF24 presents results on the NYT dataset. Following the evaluation protocol in BIBREF27, we use limited-length ROUGE Recall, where predicted summaries are truncated to the length of the gold summaries. Again, we report the performance of the Oracle upper bound and Lead-3 baseline. The second block in the table contains previously proposed extractive models as well as our own Transformer baseline. Compress BIBREF27 is an ILP-based model which combines compression and anaphoricity constraints. The third block includes abstractive models from the literature, and our Transformer baseline. Bert-based models are shown in the fourth block. Again, we observe that they outperform previously proposed approaches. On this dataset, abstractive Bert models generally perform better compared to BertSumExt, almost approaching Oracle performance.",
+          "Table TABREF26 summarizes our results on the XSum dataset. Recall that summaries in this dataset are highly abstractive (see Table TABREF12) consisting of a single sentence conveying the gist of the document. Extractive models here perform poorly as corroborated by the low performance of the Lead baseline (which simply selects the leading sentence from the document), and the Oracle (which selects a single-best sentence in each document) in Table TABREF26. As a result, we do not report results for extractive models on this dataset. The second block in Table TABREF26 presents the results of various abstractive models taken from BIBREF22 and also includes our own abstractive Transformer baseline. In the third block we show the results of our Bert summarizers which again are superior to all previously reported models (by a wide margin)."
+        ],
+        "evidence_block_ids": [
+          55,
+          56
+        ],
+        "evidence_paragraph_ids": [
+          55,
+          56
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "Highest scores for ROUGE-1, ROUGE-2 and ROUGE-L on CNN/DailyMail test set are 43.85, 20.34 and 39.90 respectively; on the XSum test set 38.81, 16.50 and 31.27 and on the NYT test set 49.02, 31.02 and 45.55",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      }
+    ],
+    "doc_uuid": "1908.08345",
+    "doc_path": "qasper://1908.08345",
+    "qasper_question_id": "c17b609b0b090d7e8f99de1445be04f8f66367d4",
+    "title": "Text Summarization with Pretrained Encoders",
+    "evidence_block_ids": [
+      55,
+      56
+    ],
+    "evidence_paragraph_ids": [
+      55,
+      56
+    ],
+    "output": "{\n  \"answer_short\": \"Not answerable\",\n  \"answer_rationale\": \"The retrieved documents discuss ROUGE scores in general terms and mention ROUGE-1, ROUGE-2, and ROUGE-L metrics, but they do not provide a specific rouge score achieved by 'they' (the proposed models or any particular model) without explicit numerical data. While the documents state that Bert models outperform previous systems and approach Oracle performance, no exact rouge score is given for 'they'.\"\n}",
+    "retrieved_node_ids": [
+      48,
+      43,
+      7,
+      55,
+      49,
+      56,
+      19,
+      37,
+      65,
+      60
+    ],
+    "answer_short": "Not answerable",
+    "answer_rationale": "The retrieved documents discuss ROUGE scores in general terms and mention ROUGE-1, ROUGE-2, and ROUGE-L metrics, but they do not provide a specific rouge score achieved by 'they' (the proposed models or any particular model) without explicit numerical data. While the documents state that Bert models outperform previous systems and approach Oracle performance, no exact rouge score is given for 'they'.",
+    "supporting_block_ids": [
+      48,
+      43,
+      7,
+      55,
+      49,
+      56,
+      19,
+      37,
+      65,
+      60
+    ]
+  },
+  {
+    "question": "What are the datasets used for evaluation?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "CNN/DailyMail news highlights",
+          "New York Times Annotated Corpus",
+          "XSum"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "We evaluated our model on three benchmark datasets, namely the CNN/DailyMail news highlights dataset BIBREF24, the New York Times Annotated Corpus (NYT; BIBREF25), and XSum BIBREF22. These datasets represent different summary styles ranging from highlights to very brief one sentence summaries. The summaries also vary with respect to the type of rewriting operations they exemplify (e.g., some showcase more cut and paste operations while others are genuinely abstractive). Table TABREF12 presents statistics on these datasets (test set); example (gold-standard) summaries are provided in the supplementary material."
+        ],
+        "evidence_block_ids": [
+          37
+        ],
+        "evidence_paragraph_ids": [
+          37
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "the CNN/DailyMail news highlights dataset BIBREF24",
+          "the New York Times Annotated Corpus (NYT; BIBREF25)",
+          "XSum BIBREF22"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "We evaluated our model on three benchmark datasets, namely the CNN/DailyMail news highlights dataset BIBREF24, the New York Times Annotated Corpus (NYT; BIBREF25), and XSum BIBREF22. These datasets represent different summary styles ranging from highlights to very brief one sentence summaries. The summaries also vary with respect to the type of rewriting operations they exemplify (e.g., some showcase more cut and paste operations while others are genuinely abstractive). Table TABREF12 presents statistics on these datasets (test set); example (gold-standard) summaries are provided in the supplementary material."
+        ],
+        "evidence_block_ids": [
+          37
+        ],
+        "evidence_paragraph_ids": [
+          37
+        ]
+      }
+    ],
+    "doc_uuid": "1908.08345",
+    "doc_path": "qasper://1908.08345",
+    "qasper_question_id": "53014cfb506f6fffb22577bf580ae6f4d5317ce5",
+    "title": "Text Summarization with Pretrained Encoders",
+    "evidence_block_ids": [
+      37
+    ],
+    "evidence_paragraph_ids": [
+      37
+    ],
+    "output": "{\n  \"answer_short\": \"CNN/DailyMail, NYT, XSum\",\n  \"answer_rationale\": \"Text 6 explicitly states that the model was evaluated on three benchmark datasets: CNN/DailyMail, NYT, and XSum. These are also referenced in Text 1 (XSum), Text 7 (CNN/DailyMail and NYT), and Text 5 (three datasets), confirming their use for evaluation.\"\n}",
+    "retrieved_node_ids": [
+      43,
+      65,
+      66,
+      35,
+      68,
+      37,
+      44,
+      7,
+      12,
+      48
+    ],
+    "answer_short": "CNN/DailyMail, NYT, XSum",
+    "answer_rationale": "Text 6 explicitly states that the model was evaluated on three benchmark datasets: CNN/DailyMail, NYT, and XSum. These are also referenced in Text 1 (XSum), Text 7 (CNN/DailyMail and NYT), and Text 5 (three datasets), confirming their use for evaluation.",
+    "supporting_block_ids": [
+      43,
+      65,
+      66,
+      35,
+      68,
+      37,
+      44,
+      7,
+      12,
+      48
+    ]
+  }
+]

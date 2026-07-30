@@ -1,0 +1,79 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Losses ::: Self-adusting Dice Loss\n[source_id=31] Consider a simple case where the dataset consists of only one example $x_i$, which is classified as positive as long as $p_{i1}$ is larger than 0.5. The computation of $F1$ score is actually as follows:\n[source_id=32] Comparing Eq.DISPLAY_FORM14 with Eq.DISPLAY_FORM22, we can see that Eq.DISPLAY_FORM14 is actually a soft form of $F1$, using a continuous $p$ rather than the binary $\\mathbb {I}( p_{i1}>0.5)$. This gap isn't a big issue for balanced datasets, but is extremely detrimental if a big proportion of training examples are easy-negative ones: easy-negative examples can easily dominate training since their probabilities can be pushed to 0 fairly easily. Meanwhile, the model can hardly distinguish between hard-negative examples and positive ones, which has a huge negative effect on the final F1 performance.\n[source_id=33] To address this issue, we propose to multiply the soft probability $p$ with a decaying factor $(1-p)$, changing Eq.DISPLAY_FORM22 to the following form:\n[source_id=34] One can think $(1-p_{i1})$ as a weight associated with each example, which changes as training proceeds. The intuition of changing $p_{i1}$ to $(1-p_{i1}) p_{i1}$ is to push down the weight of easy examples. For easy examples whose probability are approaching 0 or 1, $(1-p_{i1}) p_{i1}$ makes the model attach significantly less focus to them. Figure FIGREF23 gives gives an explanation from the perspective in derivative: the derivative of $\\frac{(1-p)p}{1+(1-p)p}$ with respect to $p$ approaches 0 immediately after $p$ approaches 0, which means the model attends less to examples once they are correctly classified.\n[source_id=35] A close look at Eq.DISPLAY_FORM14 reveals that it actually mimics the idea of focal loss (FL for short) BIBREF16 for object detection in vision. Focal loss was proposed for one-stage object detector to handle foreground-background tradeoff encountered during training. It down-weights the loss assigned to well-classified examples by adding a $(1-p)^{\\beta }$ factor, leading the final loss to be $(1-p)^{\\beta }\\log p$.\n[source_id=36] In Table TABREF18, we show the losses used in our experiments, which is described in the next section.",
+  "score": 1.9018461008300196,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    31,
+    32,
+    33,
+    34,
+    35,
+    36
+  ],
+  "child_qasper_evidence_texts": [
+    "Consider a simple case where the dataset consists of only one example $x_i$, which is classified as positive as long as $p_{i1}$ is larger than 0.5. The computation of $F1$ score is actually as follows:",
+    "Comparing Eq.DISPLAY_FORM14 with Eq.DISPLAY_FORM22, we can see that Eq.DISPLAY_FORM14 is actually a soft form of $F1$, using a continuous $p$ rather than the binary $\\mathbb {I}( p_{i1}>0.5)$. This gap isn't a big issue for balanced datasets, but is extremely detrimental if a big proportion of training examples are easy-negative ones: easy-negative examples can easily dominate training since their probabilities can be pushed to 0 fairly easily. Meanwhile, the model can hardly distinguish between hard-negative examples and positive ones, which has a huge negative effect on the final F1 performance.",
+    "To address this issue, we propose to multiply the soft probability $p$ with a decaying factor $(1-p)$, changing Eq.DISPLAY_FORM22 to the following form:",
+    "One can think $(1-p_{i1})$ as a weight associated with each example, which changes as training proceeds. The intuition of changing $p_{i1}$ to $(1-p_{i1}) p_{i1}$ is to push down the weight of easy examples. For easy examples whose probability are approaching 0 or 1, $(1-p_{i1}) p_{i1}$ makes the model attach significantly less focus to them. Figure FIGREF23 gives gives an explanation from the perspective in derivative: the derivative of $\\frac{(1-p)p}{1+(1-p)p}$ with respect to $p$ approaches 0 immediately after $p$ approaches 0, which means the model attends less to examples once they are correctly classified.",
+    "A close look at Eq.DISPLAY_FORM14 reveals that it actually mimics the idea of focal loss (FL for short) BIBREF16 for object detection in vision. Focal loss was proposed for one-stage object detector to handle foreground-background tradeoff encountered during training. It down-weights the loss assigned to well-classified examples by adding a $(1-p)^{\\beta }$ factor, leading the final loss to be $(1-p)^{\\beta }\\log p$.",
+    "In Table TABREF18, we show the losses used in our experiments, which is described in the next section."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Losses ::: Self-adusting Dice Loss",
+    "Losses ::: Self-adusting Dice Loss",
+    "Losses ::: Self-adusting Dice Loss",
+    "Losses ::: Self-adusting Dice Loss",
+    "Losses ::: Self-adusting Dice Loss",
+    "Losses ::: Self-adusting Dice Loss"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Losses ::: Self-adusting Dice Loss",
+      0
+    ],
+    [
+      "Losses ::: Self-adusting Dice Loss",
+      1
+    ],
+    [
+      "Losses ::: Self-adusting Dice Loss",
+      2
+    ],
+    [
+      "Losses ::: Self-adusting Dice Loss",
+      3
+    ],
+    [
+      "Losses ::: Self-adusting Dice Loss",
+      4
+    ],
+    [
+      "Losses ::: Self-adusting Dice Loss",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Losses ::: Self-adusting Dice Loss",
+  "section": "Losses ::: Self-adusting Dice Loss",
+  "title_path": "Losses ::: Self-adusting Dice Loss",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,223 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Input Representation\n[source_id=23] The G-BERT model takes medical codes' ontology embeddings as input, and obtains intermediate representations from a Transformer encoder as the visit embeddings. It is then pre-trained on EHR from patients who only have one hospital visit. The derived encoder and visit embedding will be fed into a classifier and fine-tuned to make predictions.\n[source_id=24] Ontology Embedding We constructed ontology embedding from diagnosis ontology $\\mathcal {O}_d$ and medication ontology $\\mathcal {O}_m$ . Since the medical codes in raw EHR data can be considered as leaf nodes in these ontology trees, we can enhance the medical code embedding using graph neural networks (GNNs) to integrate the ancestors' information of these codes. Here we perform a two-stage procedure with a specially designed GNN for ontology embedding.\n[source_id=25] To start, we assign an initial embedding vector to every medical code $c_\\ast \\in \\mathcal {O}_\\ast $ with a learnable embedding matrix $\\mathbf {W}_e \\in \\mathbb {R}^{|\\mathcal {O}_\\ast | \\times d}$ where $d$ is the embedding dimension.\n[source_id=26] Stage 1. For each non-leaf node $c_\\ast \\in \\overline{\\mathcal {C}_\\ast }$ , we obtain its enhanced medical embedding $\\mathbf {h}_{c_\\ast } \\in \\mathbb {R}^{d}$ as follows:\n[source_id=27] $$\\mathbf {h}_{c_\\ast } = g(c_\\ast , ch(c_\\ast ), \\mathbf {W}_e)$$   (Eq. 11)\n[source_id=28] where $g(\\cdot ,\\cdot ,\\cdot )$ is an aggregation function which accepts the target medical code $c_\\ast $ , its direct child codes $ch(c_\\ast )$ and initial embedding matrix. Intuitively, the aggregation function can pass and fuse information in target node from its direct children which result in the more related embedding of ancestor' code to child codes' embedding.\n[source_id=29] Stage 2. After obtaining enhanced embeddings, we pass the enhance embedding matrix $\\mathbf {H}_e \\in \\mathbb {R}^{|\\mathcal {O}_\\ast | \\times d}$ back to get ontology embedding for leaf codes $c_\\ast \\in \\mathcal {C}_\\ast $ as follows:\n[source_id=30] $$\\mathbf {o}_{c_\\ast } = g(c_\\ast , pa(c_\\ast ), \\mathbf {H}_e)$$   (Eq. 12)\n[source_id=31] where $g(\\cdot ,\\cdot ,\\cdot )$ accepts ancestor codes of target medical code $c_\\ast $ . Here, we use $pa(c_\\ast )$ instead of $ch(c_\\ast )$ , since utilizing the ancestors' embedding can indirectly associate all medical codes instead of taking each leaf code as independent input.\n[source_id=32] The option for the aggregation function $g(\\cdot ,\\cdot ,\\cdot )$ is flexible, including sum, mean. Here we choose the one from graph attention networks (GAT) BIBREF19 , which has shown efficient embedding learning ability on graph-structured tasks, e.g., node classification and link prediction. In particular, we implement the aggregation function $g(\\cdot ,\\cdot ,\\cdot )$ as follows:\n[source_id=33] $$g (c_\\ast , p(c_\\ast ), \\mathbf {H}_e) = \\operatornamewithlimits{\\scalebox {1}[1.5]{\\parallel }}_{k=1}^K \\sigma \\left( \\sum _{j \\in \\lbrace c_\\ast \\rbrace  \\cup pa(c_\\ast )} \\alpha _{i,j}^k \\mathbf {W}^k \\mathbf {h}_j \\right)$$   (Eq. 13)\n[source_id=34] where $\\operatornamewithlimits{\\scalebox {1}[1.5]{\\parallel }}$ represents concatenation which enables the multi-head attention mechanism, $\\sigma $ is a nonlinear activation function, $\\mathbf {W}^k \\in \\mathbb {R}^{m \\times d}$ is the weight matrix for input transformation, and $\\alpha _{i,j}^k$ are the corresponding $k$ -th normalized attention coefficients computed as follows:\n[source_id=35] $$\\alpha _{i,j}^k = \\frac{e^{\\left(\\text{LeakyReLU}(\\mathbf {a}^\\intercal [\\mathbf {W}^k \\mathbf {h}_i || \\mathbf {W}^k \\mathbf {h}_j])\\right)}}{\\sum _{k \\in \\mathcal {N}_i} e^{\\left(\\text{LeakyReLU}(\\mathbf {a}^\\intercal [\\mathbf {W}^k \\mathbf {h}_i || \\mathbf {W}^k \\mathbf {h}_k])\\right)}}$$   (Eq. 14)\n[source_id=36] where $\\mathbf {a} \\in \\mathbb {R}^{2m}$ is a learnable weight vector and LeakyReLU is a nonlinear function. (we assume $m = d/K$ ).\n[source_id=37] As shown in Figure 2 , we construct ICD-9 tree for diagnosis and ATC tree for medication using the same structure. Here the direction of arrow shows the information flow where ancestor nodes can get information from their direct children (in stage 1) and similarly leaf nodes can get information from their connected ancestors (in stage 2).\n[source_id=38] It is worth mentioning that our graph embedding method on medical ontology is different from GRAM BIBREF20 from the following two aspects:\n[source_id=39] Initialization: we initialize all the node embeddings from a learnable embedding matrix, while GRAM learns them using Glove from the co-occurrence information.\n[source_id=40] Updating: we develop a two-step updating function for both leaf nodes and ancestor nodes; while in GRAM, only the leaf nodes are updated (as a combination of their ancestor nodes and themselves).\n[source_id=41] Visit Embedding Similar to BERT, we use a multi-layer Transformer architecture BIBREF8 as our visit encoder. The model takes the ontology embedding as input and derive visit embedding $\\mathbf {v}_\\ast ^t \\in \\mathbb {R}^d$ for a patient at $t$ -th visit:\n[source_id=42] $$\\mathbf {v}_\\ast ^t = \\mathrm {Transformer}(\\lbrace \\textit {[CLS]}\\rbrace  \\cup \\lbrace \\mathbf {o}_{c_\\ast }^t| c_\\ast \\in \\mathcal {C}_\\ast ^t\\rbrace )[0]$$   (Eq. 17)\n[source_id=43] where [CLS] is a special token as in BERT. It is put in the first position of each visit of type $\\ast $ and its final state can be used as the representation of the visit. Intuitively, it is more reasonable to use Transformers as encoders (multi-head attention based architecture) than RNN or mean/sum to aggregate multiple medical embedding for visit embedding since the set of medical codes within one visit is not ordered.\n[source_id=44] It is worth noting that our Transformer encoder is different from the original one in the position embedding part. Position embedding, as an important component in Transformers and BERT, is used to encode the position and order information of each token in a sequence. However, one big difference between language sentences and EHR sequences is that the medical codes within the same visit do not generally have an order, so we remove the position embedding in our model.",
+  "score": 1.740047951653487,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44
+  ],
+  "child_qasper_evidence_texts": [
+    "The G-BERT model takes medical codes' ontology embeddings as input, and obtains intermediate representations from a Transformer encoder as the visit embeddings. It is then pre-trained on EHR from patients who only have one hospital visit. The derived encoder and visit embedding will be fed into a classifier and fine-tuned to make predictions.",
+    "Ontology Embedding We constructed ontology embedding from diagnosis ontology $\\mathcal {O}_d$ and medication ontology $\\mathcal {O}_m$ . Since the medical codes in raw EHR data can be considered as leaf nodes in these ontology trees, we can enhance the medical code embedding using graph neural networks (GNNs) to integrate the ancestors' information of these codes. Here we perform a two-stage procedure with a specially designed GNN for ontology embedding.",
+    "To start, we assign an initial embedding vector to every medical code $c_\\ast \\in \\mathcal {O}_\\ast $ with a learnable embedding matrix $\\mathbf {W}_e \\in \\mathbb {R}^{|\\mathcal {O}_\\ast | \\times d}$ where $d$ is the embedding dimension.",
+    "Stage 1. For each non-leaf node $c_\\ast \\in \\overline{\\mathcal {C}_\\ast }$ , we obtain its enhanced medical embedding $\\mathbf {h}_{c_\\ast } \\in \\mathbb {R}^{d}$ as follows:",
+    "$$\\mathbf {h}_{c_\\ast } = g(c_\\ast , ch(c_\\ast ), \\mathbf {W}_e)$$   (Eq. 11)",
+    "where $g(\\cdot ,\\cdot ,\\cdot )$ is an aggregation function which accepts the target medical code $c_\\ast $ , its direct child codes $ch(c_\\ast )$ and initial embedding matrix. Intuitively, the aggregation function can pass and fuse information in target node from its direct children which result in the more related embedding of ancestor' code to child codes' embedding.",
+    "Stage 2. After obtaining enhanced embeddings, we pass the enhance embedding matrix $\\mathbf {H}_e \\in \\mathbb {R}^{|\\mathcal {O}_\\ast | \\times d}$ back to get ontology embedding for leaf codes $c_\\ast \\in \\mathcal {C}_\\ast $ as follows:",
+    "$$\\mathbf {o}_{c_\\ast } = g(c_\\ast , pa(c_\\ast ), \\mathbf {H}_e)$$   (Eq. 12)",
+    "where $g(\\cdot ,\\cdot ,\\cdot )$ accepts ancestor codes of target medical code $c_\\ast $ . Here, we use $pa(c_\\ast )$ instead of $ch(c_\\ast )$ , since utilizing the ancestors' embedding can indirectly associate all medical codes instead of taking each leaf code as independent input.",
+    "The option for the aggregation function $g(\\cdot ,\\cdot ,\\cdot )$ is flexible, including sum, mean. Here we choose the one from graph attention networks (GAT) BIBREF19 , which has shown efficient embedding learning ability on graph-structured tasks, e.g., node classification and link prediction. In particular, we implement the aggregation function $g(\\cdot ,\\cdot ,\\cdot )$ as follows:",
+    "$$g (c_\\ast , p(c_\\ast ), \\mathbf {H}_e) = \\operatornamewithlimits{\\scalebox {1}[1.5]{\\parallel }}_{k=1}^K \\sigma \\left( \\sum _{j \\in \\lbrace c_\\ast \\rbrace  \\cup pa(c_\\ast )} \\alpha _{i,j}^k \\mathbf {W}^k \\mathbf {h}_j \\right)$$   (Eq. 13)",
+    "where $\\operatornamewithlimits{\\scalebox {1}[1.5]{\\parallel }}$ represents concatenation which enables the multi-head attention mechanism, $\\sigma $ is a nonlinear activation function, $\\mathbf {W}^k \\in \\mathbb {R}^{m \\times d}$ is the weight matrix for input transformation, and $\\alpha _{i,j}^k$ are the corresponding $k$ -th normalized attention coefficients computed as follows:",
+    "$$\\alpha _{i,j}^k = \\frac{e^{\\left(\\text{LeakyReLU}(\\mathbf {a}^\\intercal [\\mathbf {W}^k \\mathbf {h}_i || \\mathbf {W}^k \\mathbf {h}_j])\\right)}}{\\sum _{k \\in \\mathcal {N}_i} e^{\\left(\\text{LeakyReLU}(\\mathbf {a}^\\intercal [\\mathbf {W}^k \\mathbf {h}_i || \\mathbf {W}^k \\mathbf {h}_k])\\right)}}$$   (Eq. 14)",
+    "where $\\mathbf {a} \\in \\mathbb {R}^{2m}$ is a learnable weight vector and LeakyReLU is a nonlinear function. (we assume $m = d/K$ ).",
+    "As shown in Figure 2 , we construct ICD-9 tree for diagnosis and ATC tree for medication using the same structure. Here the direction of arrow shows the information flow where ancestor nodes can get information from their direct children (in stage 1) and similarly leaf nodes can get information from their connected ancestors (in stage 2).",
+    "It is worth mentioning that our graph embedding method on medical ontology is different from GRAM BIBREF20 from the following two aspects:",
+    "Initialization: we initialize all the node embeddings from a learnable embedding matrix, while GRAM learns them using Glove from the co-occurrence information.",
+    "Updating: we develop a two-step updating function for both leaf nodes and ancestor nodes; while in GRAM, only the leaf nodes are updated (as a combination of their ancestor nodes and themselves).",
+    "Visit Embedding Similar to BERT, we use a multi-layer Transformer architecture BIBREF8 as our visit encoder. The model takes the ontology embedding as input and derive visit embedding $\\mathbf {v}_\\ast ^t \\in \\mathbb {R}^d$ for a patient at $t$ -th visit:",
+    "$$\\mathbf {v}_\\ast ^t = \\mathrm {Transformer}(\\lbrace \\textit {[CLS]}\\rbrace  \\cup \\lbrace \\mathbf {o}_{c_\\ast }^t| c_\\ast \\in \\mathcal {C}_\\ast ^t\\rbrace )[0]$$   (Eq. 17)",
+    "where [CLS] is a special token as in BERT. It is put in the first position of each visit of type $\\ast $ and its final state can be used as the representation of the visit. Intuitively, it is more reasonable to use Transformers as encoders (multi-head attention based architecture) than RNN or mean/sum to aggregate multiple medical embedding for visit embedding since the set of medical codes within one visit is not ordered.",
+    "It is worth noting that our Transformer encoder is different from the original one in the position embedding part. Position embedding, as an important component in Transformers and BERT, is used to encode the position and order information of each token in a sequence. However, one big difference between language sentences and EHR sequences is that the medical codes within the same visit do not generally have an order, so we remove the position embedding in our model."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation",
+    "Input Representation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Input Representation",
+      0
+    ],
+    [
+      "Input Representation",
+      1
+    ],
+    [
+      "Input Representation",
+      2
+    ],
+    [
+      "Input Representation",
+      3
+    ],
+    [
+      "Input Representation",
+      4
+    ],
+    [
+      "Input Representation",
+      5
+    ],
+    [
+      "Input Representation",
+      6
+    ],
+    [
+      "Input Representation",
+      7
+    ],
+    [
+      "Input Representation",
+      8
+    ],
+    [
+      "Input Representation",
+      9
+    ],
+    [
+      "Input Representation",
+      10
+    ],
+    [
+      "Input Representation",
+      11
+    ],
+    [
+      "Input Representation",
+      12
+    ],
+    [
+      "Input Representation",
+      13
+    ],
+    [
+      "Input Representation",
+      14
+    ],
+    [
+      "Input Representation",
+      15
+    ],
+    [
+      "Input Representation",
+      16
+    ],
+    [
+      "Input Representation",
+      17
+    ],
+    [
+      "Input Representation",
+      18
+    ],
+    [
+      "Input Representation",
+      19
+    ],
+    [
+      "Input Representation",
+      20
+    ],
+    [
+      "Input Representation",
+      21
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Input Representation",
+  "section": "Input Representation",
+  "title_path": "Input Representation",
+  "block_type": "long_unit"
+}

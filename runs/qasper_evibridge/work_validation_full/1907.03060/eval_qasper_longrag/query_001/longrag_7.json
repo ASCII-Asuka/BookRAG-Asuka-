@@ -1,0 +1,115 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Results\n[source_id=41] We evaluated MT models using case-sensitive and tokenized BLEU BIBREF23 on test sets, using Moses's multi-bleu.perl. Statistical significance ( INLINEFORM0 ) on the difference of BLEU scores was tested by Moses's bootstrap-hypothesis-difference-significance.pl.\n[source_id=42] Tables TABREF27 and TABREF31 show BLEU scores of all the models, except the NMT systems augmented with back-translations. Whereas some models achieved reasonable BLEU scores for Ja INLINEFORM0 En and Ru INLINEFORM1 En translation, all the results for Ja INLINEFORM2 Ru, which is our main concern, were abysmal.\n[source_id=43] Among the NMT models, Transformer models (b INLINEFORM0 ) were proven to be better than RNMT models (a INLINEFORM1 ). RNMT models could not even outperform the uni-directional PBSMT models (c1). M2M models (a3) and (b3) outperformed their corresponding uni- and bi-directional models in most cases. It is worth noting that in this extremely low-resource scenario, BLEU scores of the M2M RNMT model for the largest language pair, i.e., Ru INLINEFORM2 En, were lower than those of the uni- and bi-directional RNMT models as in TACL1081. In contrast, with the M2M Transformer model, Ru INLINEFORM3 En also benefited from multilingualism.\n[source_id=44] Standard PBSMT models (c1) achieved higher BLEU scores than uni-directional NMT models (a1) and (b1), as reported by koehn-knowles:2017:NMT, whereas they underperform the M2M Transformer NMT model (b3). As shown in Table TABREF31 , pivot-based PBSMT systems always achieved higher BLEU scores than (c1). The best model with three phrase tables, labeled “Synthesize / Triangulate / Gold,” brought visible BLEU gains with substantial reduction of OOV tokens (3047 INLINEFORM0 1180 for Ja INLINEFORM1 Ru, 4463 INLINEFORM2 1812 for Ru INLINEFORM3 Ja). However, further extension with phrase tables induced from monolingual data did not push the limit, despite their high coverage; only 336 and 677 OOV tokens were left for the two translation directions, respectively. This is due to the poor quality of the bilingual word embeddings used to extract the phrase table, as envisaged in Section SECREF3 .\n[source_id=45] None of pivot-based approaches with uni-directional NMT models could even remotely rival the M2M Transformer NMT model (b3).\n[source_id=46] Table TABREF46 shows the results of our multistage fine-tuning, where the IDs of each row refer to those described in Section SECREF41 . First of all, the final models of our multistage fine-tuning, i.e., V and VII, achieved significantly higher BLEU scores than (b3) in Table TABREF27 , a weak baseline without using any monolingual data, and #10 in Table TABREF33 , a strong baseline established with monolingual data.\n[source_id=47] The performance of the initial model (I) depends on the language pair. For Ja INLINEFORM0 Ru pair, it cannot achieve minimum level of quality since the model has never seen parallel data for this pair. The performance on Ja INLINEFORM1 En pair was much lower than the two baseline models, reflecting the crucial mismatch between training and testing domains. In contrast, Ru INLINEFORM2 En pair benefited the most and achieved surprisingly high BLEU scores. The reason might be due to the proximity of out-of-domain training data and in-domain test data.\n[source_id=48] The first fine-tuning stage significantly pushed up the translation quality for Ja INLINEFORM0 En and Ru INLINEFORM1 En pairs, in both cases with fine-tuning (II) and mixed fine-tuning (III). At this stage, both models performed only poorly for Ja INLINEFORM2 Ru pair as they have not yet seen Ja INLINEFORM3 Ru parallel data. Either model had a consistent advantage to the other.\n[source_id=49] When these models were further fine-tuned only on the in-domain Ja INLINEFORM0 Ru parallel data (IV and VI), we obtained translations of better quality than the two baselines for Ja INLINEFORM1 Ru pair. However, as a result of complete ignorance of Ja INLINEFORM2 En and Ru INLINEFORM3 En pairs, the models only produced translations of poor quality for these language pairs. In contrast, mixed fine-tuning for the second fine-tuning stage (V and VII) resulted in consistently better models than conventional fine-tuning (IV and VI), irrespective of the choice at the first stage, thanks to the gradual shift of parameters realized by in-domain Ja INLINEFORM4 En and Ru INLINEFORM5 En parallel data. Unfortunately, the translation quality for Ja INLINEFORM6 En and Ru INLINEFORM7 En pairs sometimes degraded from II and III. Nevertheless, the BLEU scores still retain the large margin against two baselines.\n[source_id=50] The last three rows in Table TABREF46 present BLEU scores obtained by the methods with fewer fine-tuning steps. The most naive model I', trained on the balanced mixture of whole five types of corpora from scratch, and the model II', obtained through a single-step conventional fine-tuning of I on all the in-domain data, achieved only BLEU scores consistently worse than VII. In contrast, when we merged our two fine-tuning steps into a single mixed fine-tuning on I, we obtained a model III' which is better for the Ja INLINEFORM0 Ru pair than VII. Nevertheless, they are still comparable to those of VII and the BLEU scores for the other two language pairs are much lower than VII. As such, we conclude that our multistage fine-tuning leads to a more robust in-domain multilingual model.",
+  "score": 2.7889915464088535,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50
+  ],
+  "child_qasper_evidence_texts": [
+    "We evaluated MT models using case-sensitive and tokenized BLEU BIBREF23 on test sets, using Moses's multi-bleu.perl. Statistical significance ( INLINEFORM0 ) on the difference of BLEU scores was tested by Moses's bootstrap-hypothesis-difference-significance.pl.",
+    "Tables TABREF27 and TABREF31 show BLEU scores of all the models, except the NMT systems augmented with back-translations. Whereas some models achieved reasonable BLEU scores for Ja INLINEFORM0 En and Ru INLINEFORM1 En translation, all the results for Ja INLINEFORM2 Ru, which is our main concern, were abysmal.",
+    "Among the NMT models, Transformer models (b INLINEFORM0 ) were proven to be better than RNMT models (a INLINEFORM1 ). RNMT models could not even outperform the uni-directional PBSMT models (c1). M2M models (a3) and (b3) outperformed their corresponding uni- and bi-directional models in most cases. It is worth noting that in this extremely low-resource scenario, BLEU scores of the M2M RNMT model for the largest language pair, i.e., Ru INLINEFORM2 En, were lower than those of the uni- and bi-directional RNMT models as in TACL1081. In contrast, with the M2M Transformer model, Ru INLINEFORM3 En also benefited from multilingualism.",
+    "Standard PBSMT models (c1) achieved higher BLEU scores than uni-directional NMT models (a1) and (b1), as reported by koehn-knowles:2017:NMT, whereas they underperform the M2M Transformer NMT model (b3). As shown in Table TABREF31 , pivot-based PBSMT systems always achieved higher BLEU scores than (c1). The best model with three phrase tables, labeled “Synthesize / Triangulate / Gold,” brought visible BLEU gains with substantial reduction of OOV tokens (3047 INLINEFORM0 1180 for Ja INLINEFORM1 Ru, 4463 INLINEFORM2 1812 for Ru INLINEFORM3 Ja). However, further extension with phrase tables induced from monolingual data did not push the limit, despite their high coverage; only 336 and 677 OOV tokens were left for the two translation directions, respectively. This is due to the poor quality of the bilingual word embeddings used to extract the phrase table, as envisaged in Section SECREF3 .",
+    "None of pivot-based approaches with uni-directional NMT models could even remotely rival the M2M Transformer NMT model (b3).",
+    "Table TABREF46 shows the results of our multistage fine-tuning, where the IDs of each row refer to those described in Section SECREF41 . First of all, the final models of our multistage fine-tuning, i.e., V and VII, achieved significantly higher BLEU scores than (b3) in Table TABREF27 , a weak baseline without using any monolingual data, and #10 in Table TABREF33 , a strong baseline established with monolingual data.",
+    "The performance of the initial model (I) depends on the language pair. For Ja INLINEFORM0 Ru pair, it cannot achieve minimum level of quality since the model has never seen parallel data for this pair. The performance on Ja INLINEFORM1 En pair was much lower than the two baseline models, reflecting the crucial mismatch between training and testing domains. In contrast, Ru INLINEFORM2 En pair benefited the most and achieved surprisingly high BLEU scores. The reason might be due to the proximity of out-of-domain training data and in-domain test data.",
+    "The first fine-tuning stage significantly pushed up the translation quality for Ja INLINEFORM0 En and Ru INLINEFORM1 En pairs, in both cases with fine-tuning (II) and mixed fine-tuning (III). At this stage, both models performed only poorly for Ja INLINEFORM2 Ru pair as they have not yet seen Ja INLINEFORM3 Ru parallel data. Either model had a consistent advantage to the other.",
+    "When these models were further fine-tuned only on the in-domain Ja INLINEFORM0 Ru parallel data (IV and VI), we obtained translations of better quality than the two baselines for Ja INLINEFORM1 Ru pair. However, as a result of complete ignorance of Ja INLINEFORM2 En and Ru INLINEFORM3 En pairs, the models only produced translations of poor quality for these language pairs. In contrast, mixed fine-tuning for the second fine-tuning stage (V and VII) resulted in consistently better models than conventional fine-tuning (IV and VI), irrespective of the choice at the first stage, thanks to the gradual shift of parameters realized by in-domain Ja INLINEFORM4 En and Ru INLINEFORM5 En parallel data. Unfortunately, the translation quality for Ja INLINEFORM6 En and Ru INLINEFORM7 En pairs sometimes degraded from II and III. Nevertheless, the BLEU scores still retain the large margin against two baselines.",
+    "The last three rows in Table TABREF46 present BLEU scores obtained by the methods with fewer fine-tuning steps. The most naive model I', trained on the balanced mixture of whole five types of corpora from scratch, and the model II', obtained through a single-step conventional fine-tuning of I on all the in-domain data, achieved only BLEU scores consistently worse than VII. In contrast, when we merged our two fine-tuning steps into a single mixed fine-tuning on I, we obtained a model III' which is better for the Ja INLINEFORM0 Ru pair than VII. Nevertheless, they are still comparable to those of VII and the BLEU scores for the other two language pairs are much lower than VII. As such, we conclude that our multistage fine-tuning leads to a more robust in-domain multilingual model."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Results",
+    "Results",
+    "Results",
+    "Results",
+    "Results",
+    "Results",
+    "Results",
+    "Results",
+    "Results",
+    "Results"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Results",
+      0
+    ],
+    [
+      "Results",
+      1
+    ],
+    [
+      "Results",
+      2
+    ],
+    [
+      "Results",
+      3
+    ],
+    [
+      "Results",
+      4
+    ],
+    [
+      "Results",
+      5
+    ],
+    [
+      "Results",
+      6
+    ],
+    [
+      "Results",
+      7
+    ],
+    [
+      "Results",
+      8
+    ],
+    [
+      "Results",
+      9
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Results",
+  "section": "Results",
+  "title_path": "Results",
+  "block_type": "long_unit"
+}

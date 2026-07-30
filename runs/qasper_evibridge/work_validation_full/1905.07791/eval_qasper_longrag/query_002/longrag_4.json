@@ -1,0 +1,97 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Quantifying Task Difficulty\n[source_id=19] The test set includes annotations from both crowd workers and domain experts. We treat the latter as ground truth and then define the difficulty of sentences in terms of the observed agreement between expert and lay annotators. Formally, for annotation task $t$ and instance $i$ :\n[source_id=20] $$\\text{Difficulty}_{ti} = \\frac{\\sum _{j=1}^n{f(\\text{label}_{ij}, y_i})}{n}$$   (Eq. 3)\n[source_id=21] where $f$ is a scoring function that measures the quality of the label from worker $j$ for sentence $i$ , as compared to a ground truth annotation, $y_i$ . The difficulty score of sentence $i$ is taken as an average over the scores for all $n$ layworkers. We use Spearmans' correlation coefficient as a scoring function. Specifically, for each sentence we create two vectors comprising counts of how many times each token was annotated by crowd and expert workers, respectively, and calculate the correlation between these. Sentences with no labels are treated as maximally easy; those with only either crowd worker or expert label(s) are assumed maximally difficult.\n[source_id=22] The training set contains only crowdsourced annotations. To label the training data, we use a 10-fold validation like setting. We iteratively retrain the LSTM-CRF-Pattern sequence tagger of Patel et al. patel2018syntactic on 9 folds of the training data and use that trained model to predict labels for the 10th. In this way we obtain predictions on the full training set. We then use predicted spans as proxy `ground truth' annotations to calculate the difficulty score of sentences as described above; we normalize these to the [ $0, 1$ ] interval. We validate this approximation by comparing the proxy scores against reference scores over the test set, the Pearson's correlation coefficients are 0.57 for Population, 0.71 for Intervention and 0.68 for Outcome.\n[source_id=23] There exist many sentences that contain neither manual nor predicted annotations. We treat these as maximally easy sentences (with difficulty scores of 0). Such sentences comprise 51%, 42% and 36% for Population, Interventions and Outcomes data respectively, indicating that it is easier to identify sentences that have no Population spans, but harder to identify sentences that have no Interventions or Outcomes spans. This is intuitive as descriptions of the latter two tend to be more technical and dense with medical jargon.\n[source_id=24] We show the distribution of the automatically labeled scores for sentences that do contain spans in Figure 1 . The mean of the Population (p) sentence scores is significantly lower than that for other types of sentences (i and o), again indicating that they are easier on average to annotate. This aligns with a previous finding that annotating Interventions and Outcomes is more difficult than annotating Participants BIBREF5 .\n[source_id=25] Many sentences contain spans tagged by the LSTM-CRF-Pattern model, but missed by all crowd workers, resulting in a maximally difficult score (1). Inspection of such sentences revealed that some are truly difficult examples, but others are tagging model errors. In either case, such sentences have confused workers and/or the model, and so we retain them all as `difficult' sentences.\n[source_id=26] Content describing the p, i and o, respectively, is quite different. As such, one sentence usually contains (at most) only one of these three content types. We thus treat difficulty prediction for the respective label types as separate tasks.",
+  "score": 3.5349308475648695,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26
+  ],
+  "child_qasper_evidence_texts": [
+    "The test set includes annotations from both crowd workers and domain experts. We treat the latter as ground truth and then define the difficulty of sentences in terms of the observed agreement between expert and lay annotators. Formally, for annotation task $t$ and instance $i$ :",
+    "$$\\text{Difficulty}_{ti} = \\frac{\\sum _{j=1}^n{f(\\text{label}_{ij}, y_i})}{n}$$   (Eq. 3)",
+    "where $f$ is a scoring function that measures the quality of the label from worker $j$ for sentence $i$ , as compared to a ground truth annotation, $y_i$ . The difficulty score of sentence $i$ is taken as an average over the scores for all $n$ layworkers. We use Spearmans' correlation coefficient as a scoring function. Specifically, for each sentence we create two vectors comprising counts of how many times each token was annotated by crowd and expert workers, respectively, and calculate the correlation between these. Sentences with no labels are treated as maximally easy; those with only either crowd worker or expert label(s) are assumed maximally difficult.",
+    "The training set contains only crowdsourced annotations. To label the training data, we use a 10-fold validation like setting. We iteratively retrain the LSTM-CRF-Pattern sequence tagger of Patel et al. patel2018syntactic on 9 folds of the training data and use that trained model to predict labels for the 10th. In this way we obtain predictions on the full training set. We then use predicted spans as proxy `ground truth' annotations to calculate the difficulty score of sentences as described above; we normalize these to the [ $0, 1$ ] interval. We validate this approximation by comparing the proxy scores against reference scores over the test set, the Pearson's correlation coefficients are 0.57 for Population, 0.71 for Intervention and 0.68 for Outcome.",
+    "There exist many sentences that contain neither manual nor predicted annotations. We treat these as maximally easy sentences (with difficulty scores of 0). Such sentences comprise 51%, 42% and 36% for Population, Interventions and Outcomes data respectively, indicating that it is easier to identify sentences that have no Population spans, but harder to identify sentences that have no Interventions or Outcomes spans. This is intuitive as descriptions of the latter two tend to be more technical and dense with medical jargon.",
+    "We show the distribution of the automatically labeled scores for sentences that do contain spans in Figure 1 . The mean of the Population (p) sentence scores is significantly lower than that for other types of sentences (i and o), again indicating that they are easier on average to annotate. This aligns with a previous finding that annotating Interventions and Outcomes is more difficult than annotating Participants BIBREF5 .",
+    "Many sentences contain spans tagged by the LSTM-CRF-Pattern model, but missed by all crowd workers, resulting in a maximally difficult score (1). Inspection of such sentences revealed that some are truly difficult examples, but others are tagging model errors. In either case, such sentences have confused workers and/or the model, and so we retain them all as `difficult' sentences.",
+    "Content describing the p, i and o, respectively, is quite different. As such, one sentence usually contains (at most) only one of these three content types. We thus treat difficulty prediction for the respective label types as separate tasks."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Quantifying Task Difficulty",
+    "Quantifying Task Difficulty",
+    "Quantifying Task Difficulty",
+    "Quantifying Task Difficulty",
+    "Quantifying Task Difficulty",
+    "Quantifying Task Difficulty",
+    "Quantifying Task Difficulty",
+    "Quantifying Task Difficulty"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Quantifying Task Difficulty",
+      0
+    ],
+    [
+      "Quantifying Task Difficulty",
+      1
+    ],
+    [
+      "Quantifying Task Difficulty",
+      2
+    ],
+    [
+      "Quantifying Task Difficulty",
+      3
+    ],
+    [
+      "Quantifying Task Difficulty",
+      4
+    ],
+    [
+      "Quantifying Task Difficulty",
+      5
+    ],
+    [
+      "Quantifying Task Difficulty",
+      6
+    ],
+    [
+      "Quantifying Task Difficulty",
+      7
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Quantifying Task Difficulty",
+  "section": "Quantifying Task Difficulty",
+  "title_path": "Quantifying Task Difficulty",
+  "block_type": "long_unit"
+}

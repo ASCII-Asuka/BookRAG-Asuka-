@@ -1,0 +1,70 @@
+{
+  "id": "longrag_3",
+  "content": "[Section] The Pitfalls of Cross-Entropy Loss\n[source_id=14] Previous work optimizes summarization models by maximizing INLINEFORM0 , the likelihood of the ground-truth labels y = INLINEFORM1 for sentences INLINEFORM2 , given document D and model parameters INLINEFORM3 . This objective can be achieved by minimizing the cross-entropy loss at each decoding step: DISPLAYFORM0\n[source_id=15] Cross-entropy training leads to two kinds of discrepancies in the model. The first discrepancy comes from the disconnect between the task definition and the training objective. While MLE in Equation ( EQREF7 ) aims to maximize the likelihood of the ground-truth labels, the model is (a) expected to rank sentences to generate a summary and (b) evaluated using INLINEFORM0 at test time. The second discrepancy comes from the reliance on ground-truth labels. Document collections for training summarization systems do not naturally contain labels indicating which sentences should be extracted. Instead, they are typically accompanied by abstractive summaries from which sentence-level labels are extrapolated. jp-acl16 follow woodsend-acl10 in adopting a rule-based method which assigns labels to each sentence in the document individually based on their semantic correspondence with the gold summary (see the fourth column in Table TABREF6 ). An alternative method BIBREF26 , BIBREF27 , BIBREF10 identifies the set of sentences which collectively gives the highest ROUGE with respect to the gold summary. Sentences in this set are labeled with 1 and 0 otherwise (see the column 5 in Table TABREF6 ).\n[source_id=16] Labeling sentences individually often generates too many positive labels causing the model to overfit the data. For example, the document in Table TABREF6 has 12 positively labeled sentences out of 31 in total (only first 10 are shown). Collective labels present a better alternative since they only pertain to the few sentences deemed most suitable to form the summary. However, a model trained with cross-entropy loss on collective labels will underfit the data as it will only maximize probabilities INLINEFORM0 for sentences in this set (e.g., sentences INLINEFORM1 in Table TABREF6 ) and ignore all other sentences. We found that there are many candidate summaries with high ROUGE scores which could be considered during training.\n[source_id=17] Table TABREF6 (last column) shows candidate summaries ranked according to the mean of ROUGE-1, ROUGE-2, and ROUGE-L F INLINEFORM0 scores. Interestingly, multiple top ranked summaries have reasonably high ROUGE scores. For example, the average ROUGE for the summaries ranked second (0,13), third (11,13), and fourth (0,1,13) is 57.5%, 57.2%, and 57.1%, and all top 16 summaries have ROUGE scores more or equal to 50%. A few sentences are indicative of important content and appear frequently in the summaries: sentence 13 occurs in all summaries except one, while sentence 0 appears in several summaries too. Also note that summaries (11,13) and (1,13) yield better ROUGE scores compared to longer summaries, and may be as informative, yet more concise, alternatives.\n[source_id=18] These discrepancies render the model less efficient at ranking sentences for the summarization task. Instead of maximizing the likelihood of the ground-truth labels, we could train the model to predict the individual ROUGE score for each sentence in the document and then select the top INLINEFORM0 sentences with highest scores. But sentences with individual ROUGE scores do not necessarily lead to a high scoring summary, e.g., they may convey overlapping content and form verbose and redundant summaries. For example, sentence 3, despite having a high individual ROUGE score (35.6%), does not occur in any of the top 5 summaries. We next explain how we address these issues using reinforcement learning.",
+  "score": 3.9650387104938942,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_3",
+  "child_source_node_ids": [
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "child_qasper_evidence_texts": [
+    "Previous work optimizes summarization models by maximizing INLINEFORM0 , the likelihood of the ground-truth labels y = INLINEFORM1 for sentences INLINEFORM2 , given document D and model parameters INLINEFORM3 . This objective can be achieved by minimizing the cross-entropy loss at each decoding step: DISPLAYFORM0",
+    "Cross-entropy training leads to two kinds of discrepancies in the model. The first discrepancy comes from the disconnect between the task definition and the training objective. While MLE in Equation ( EQREF7 ) aims to maximize the likelihood of the ground-truth labels, the model is (a) expected to rank sentences to generate a summary and (b) evaluated using INLINEFORM0 at test time. The second discrepancy comes from the reliance on ground-truth labels. Document collections for training summarization systems do not naturally contain labels indicating which sentences should be extracted. Instead, they are typically accompanied by abstractive summaries from which sentence-level labels are extrapolated. jp-acl16 follow woodsend-acl10 in adopting a rule-based method which assigns labels to each sentence in the document individually based on their semantic correspondence with the gold summary (see the fourth column in Table TABREF6 ). An alternative method BIBREF26 , BIBREF27 , BIBREF10 identifies the set of sentences which collectively gives the highest ROUGE with respect to the gold summary. Sentences in this set are labeled with 1 and 0 otherwise (see the column 5 in Table TABREF6 ).",
+    "Labeling sentences individually often generates too many positive labels causing the model to overfit the data. For example, the document in Table TABREF6 has 12 positively labeled sentences out of 31 in total (only first 10 are shown). Collective labels present a better alternative since they only pertain to the few sentences deemed most suitable to form the summary. However, a model trained with cross-entropy loss on collective labels will underfit the data as it will only maximize probabilities INLINEFORM0 for sentences in this set (e.g., sentences INLINEFORM1 in Table TABREF6 ) and ignore all other sentences. We found that there are many candidate summaries with high ROUGE scores which could be considered during training.",
+    "Table TABREF6 (last column) shows candidate summaries ranked according to the mean of ROUGE-1, ROUGE-2, and ROUGE-L F INLINEFORM0 scores. Interestingly, multiple top ranked summaries have reasonably high ROUGE scores. For example, the average ROUGE for the summaries ranked second (0,13), third (11,13), and fourth (0,1,13) is 57.5%, 57.2%, and 57.1%, and all top 16 summaries have ROUGE scores more or equal to 50%. A few sentences are indicative of important content and appear frequently in the summaries: sentence 13 occurs in all summaries except one, while sentence 0 appears in several summaries too. Also note that summaries (11,13) and (1,13) yield better ROUGE scores compared to longer summaries, and may be as informative, yet more concise, alternatives.",
+    "These discrepancies render the model less efficient at ranking sentences for the summarization task. Instead of maximizing the likelihood of the ground-truth labels, we could train the model to predict the individual ROUGE score for each sentence in the document and then select the top INLINEFORM0 sentences with highest scores. But sentences with individual ROUGE scores do not necessarily lead to a high scoring summary, e.g., they may convey overlapping content and form verbose and redundant summaries. For example, sentence 3, despite having a high individual ROUGE score (35.6%), does not occur in any of the top 5 summaries. We next explain how we address these issues using reinforcement learning."
+  ],
+  "child_pages": [
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "child_sections": [
+    "The Pitfalls of Cross-Entropy Loss",
+    "The Pitfalls of Cross-Entropy Loss",
+    "The Pitfalls of Cross-Entropy Loss",
+    "The Pitfalls of Cross-Entropy Loss",
+    "The Pitfalls of Cross-Entropy Loss"
+  ],
+  "child_hotpot_facts": [
+    [
+      "The Pitfalls of Cross-Entropy Loss",
+      0
+    ],
+    [
+      "The Pitfalls of Cross-Entropy Loss",
+      1
+    ],
+    [
+      "The Pitfalls of Cross-Entropy Loss",
+      2
+    ],
+    [
+      "The Pitfalls of Cross-Entropy Loss",
+      3
+    ],
+    [
+      "The Pitfalls of Cross-Entropy Loss",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_3",
+  "section_id": "The Pitfalls of Cross-Entropy Loss",
+  "section": "The Pitfalls of Cross-Entropy Loss",
+  "title_path": "The Pitfalls of Cross-Entropy Loss",
+  "block_type": "long_unit"
+}

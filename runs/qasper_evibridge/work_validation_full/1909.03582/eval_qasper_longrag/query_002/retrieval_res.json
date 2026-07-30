@@ -1,0 +1,492 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_14",
+      "content": "[Section] Results\n[source_id=60] We first compare all four models, Pointer-Gen, Pointer-Gen-RL+ROUGE, Pointer-Gen-RL-SEN, and Pointer-Gen-ARL-SEN, to existing models with ROUGE in Table TABREF25 to establish that our model produces relevant headlines and we leave the sensationalism for human evaluation. Note that we only compare our models to commonly used strong summarization baselines, to validate that our implementation achieves comparable performance to existing work. In our implementation, Pointer-Gen achieves a 34.51 RG-1 score, 22.21 RG-2 score, and 31.68 RG-L score, which is similar to the results of gu2016incorporating. Pointer-Gen+ARL-SEN, although optimized for the sensationalism reward, achieves similar performance to our Pointer-Gen baseline, which means that Pointer-Gen+ARL-SEN still keeps its summarization ability. An example of headlines generated from different models in Table TABREF29 shows that Pointer-Gen and Pointer-Gen+RL-ROUGE learns to summarize the main point of the article: “The Nikon D600 camera is reported to have black spots when taking photos”. Pointer-Gen+RL-SEN makes the headline more sensational by blaming Nikon for attributing the damage to the smog. Pointer-Gen+ARL-SEN generates the most sensational headline by exaggerating the result “Getting a serious trouble!” to maximize user's attention.\n[source_id=61] We then compare different models using the sensationalism score in Table TABREF30. The Pointer-Gen baseline model achieves a 42.6% sensationalism score, which is the minimum that a typical summarization model achieves. By filtering out low-sensational headlines, Pointer-Gen+Same-FT and Pointer-Gen+Pos-FT achieves higher sensationalism scores, which implies the effectiveness of our sensationalism scorer. Our Pointer-Gen+ARL-SEN model achieves the best performance of 60.8%. This is an absolute improvement of 18.2% over the Pointer-Gen baseline. The Chi-square test on the results confirms that Pointer-Gen+ARL-SEN is statistically significantly more sensational than all the other baseline models, with the largest p-value less than 0.01. Also, we find that the test set headlines achieves 57.8% sensationalism score, much larger than Pointer-Gen baseline, which also supports our intuition that generated headlines will be less sensational than the original one. On the other hand, we found that Pointer-Gen+Pos is much worse than other baselines. The reason is that training on sensational samples alone discards around 80% of the whole training set that is also helpful for maintaining relevance and a good language model. It shows the necessity of using RL.\n[source_id=62] UTF8gbsn\n[source_id=63] In addition, both Pointer-Gen+RL-SEN and Pointer-Gen+ARL-SEN, which use the sensationalism score as the reward, obtain statistically better results than Pointer-Gen+RL-ROUGE and Pointer-Gen, with a p-value less than 0.05 by a Chi-square test. This result shows the effectiveness of RL to generate more sensational headlines. The reason is that even though our noisy classifier could also learn to classify domains, the generator during RL training is not allowed to increase the reward by shifting domains but encouraged to generate more sensational headlines, due to the consistency constraint on the domains of the headline and the article. Furthermore, Poiner-Gen+ARL-SEN gets better performance than Pointer-Gen+RL-SEN, which confirms the superiority of the ARL loss function. We also visualize in Figure FIGREF31 a comparison between Pointer-Gen+ARL-SEN and Pointer-Gen+RL-SEN according to how sensational the test set headlines are. The blue bars denote the smaller scores between the two models. For example, if the blue bar is 0.6, it means that the worse model between Pointer-Gen+RL-SEN and Pointer-Gen+ARL-SEN achieves 0.6. And the color of orange/black further indicates the better model and its score. We find that Pointer-Gen+ARL-SEN outperforms Pointer-Gen+RL-SEN for most cases. The improvement is higher when the test set headlines are not sensational (the sensationalism score is less than 0.5), which may be attributed to the higher ratio of RL training on non-sensational headlines.\n[source_id=64] Apart from the sensationalism evaluation, we measure the fluency of the headlines generated from different models. Fluency scores in Table TABREF30 show that Pointer-Gen+RL-SEN and Pointer-Gen+ARL-SEN achieve comparable fluency performance to Pointer-Gen and Pointer-Gen+RL-ROUGE. Test set headlines achieve the best performance among all models, but the difference is not statistically significant. Also, we observe that fine-tuning on sensational headlines will hurt the performance, both in sensationalism and fluency.\n[source_id=65] After manually checking the outputs, we observe that our model is able to generate sensational headlines using diverse sensationalization strategies. These strategies include, but are not limited to, creating a curiosity gap, asking questions, highlighting numbers, being emotional and emphasizing the user. Examples can be found in Table TABREF32.",
+      "score": 5.789886432887863,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_14",
+      "child_source_node_ids": [
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "child_qasper_evidence_texts": [
+        "We first compare all four models, Pointer-Gen, Pointer-Gen-RL+ROUGE, Pointer-Gen-RL-SEN, and Pointer-Gen-ARL-SEN, to existing models with ROUGE in Table TABREF25 to establish that our model produces relevant headlines and we leave the sensationalism for human evaluation. Note that we only compare our models to commonly used strong summarization baselines, to validate that our implementation achieves comparable performance to existing work. In our implementation, Pointer-Gen achieves a 34.51 RG-1 score, 22.21 RG-2 score, and 31.68 RG-L score, which is similar to the results of gu2016incorporating. Pointer-Gen+ARL-SEN, although optimized for the sensationalism reward, achieves similar performance to our Pointer-Gen baseline, which means that Pointer-Gen+ARL-SEN still keeps its summarization ability. An example of headlines generated from different models in Table TABREF29 shows that Pointer-Gen and Pointer-Gen+RL-ROUGE learns to summarize the main point of the article: “The Nikon D600 camera is reported to have black spots when taking photos”. Pointer-Gen+RL-SEN makes the headline more sensational by blaming Nikon for attributing the damage to the smog. Pointer-Gen+ARL-SEN generates the most sensational headline by exaggerating the result “Getting a serious trouble!” to maximize user's attention.",
+        "We then compare different models using the sensationalism score in Table TABREF30. The Pointer-Gen baseline model achieves a 42.6% sensationalism score, which is the minimum that a typical summarization model achieves. By filtering out low-sensational headlines, Pointer-Gen+Same-FT and Pointer-Gen+Pos-FT achieves higher sensationalism scores, which implies the effectiveness of our sensationalism scorer. Our Pointer-Gen+ARL-SEN model achieves the best performance of 60.8%. This is an absolute improvement of 18.2% over the Pointer-Gen baseline. The Chi-square test on the results confirms that Pointer-Gen+ARL-SEN is statistically significantly more sensational than all the other baseline models, with the largest p-value less than 0.01. Also, we find that the test set headlines achieves 57.8% sensationalism score, much larger than Pointer-Gen baseline, which also supports our intuition that generated headlines will be less sensational than the original one. On the other hand, we found that Pointer-Gen+Pos is much worse than other baselines. The reason is that training on sensational samples alone discards around 80% of the whole training set that is also helpful for maintaining relevance and a good language model. It shows the necessity of using RL.",
+        "UTF8gbsn",
+        "In addition, both Pointer-Gen+RL-SEN and Pointer-Gen+ARL-SEN, which use the sensationalism score as the reward, obtain statistically better results than Pointer-Gen+RL-ROUGE and Pointer-Gen, with a p-value less than 0.05 by a Chi-square test. This result shows the effectiveness of RL to generate more sensational headlines. The reason is that even though our noisy classifier could also learn to classify domains, the generator during RL training is not allowed to increase the reward by shifting domains but encouraged to generate more sensational headlines, due to the consistency constraint on the domains of the headline and the article. Furthermore, Poiner-Gen+ARL-SEN gets better performance than Pointer-Gen+RL-SEN, which confirms the superiority of the ARL loss function. We also visualize in Figure FIGREF31 a comparison between Pointer-Gen+ARL-SEN and Pointer-Gen+RL-SEN according to how sensational the test set headlines are. The blue bars denote the smaller scores between the two models. For example, if the blue bar is 0.6, it means that the worse model between Pointer-Gen+RL-SEN and Pointer-Gen+ARL-SEN achieves 0.6. And the color of orange/black further indicates the better model and its score. We find that Pointer-Gen+ARL-SEN outperforms Pointer-Gen+RL-SEN for most cases. The improvement is higher when the test set headlines are not sensational (the sensationalism score is less than 0.5), which may be attributed to the higher ratio of RL training on non-sensational headlines.",
+        "Apart from the sensationalism evaluation, we measure the fluency of the headlines generated from different models. Fluency scores in Table TABREF30 show that Pointer-Gen+RL-SEN and Pointer-Gen+ARL-SEN achieve comparable fluency performance to Pointer-Gen and Pointer-Gen+RL-ROUGE. Test set headlines achieve the best performance among all models, but the difference is not statistically significant. Also, we observe that fine-tuning on sensational headlines will hurt the performance, both in sensationalism and fluency.",
+        "After manually checking the outputs, we observe that our model is able to generate sensational headlines using diverse sensationalization strategies. These strategies include, but are not limited to, creating a curiosity gap, asking questions, highlighting numbers, being emotional and emphasizing the user. Examples can be found in Table TABREF32."
+      ],
+      "child_pages": [
+        14,
+        14,
+        14,
+        14,
+        14,
+        14
+      ],
+      "child_sections": [
+        "Results",
+        "Results",
+        "Results",
+        "Results",
+        "Results",
+        "Results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results",
+          0
+        ],
+        [
+          "Results",
+          1
+        ],
+        [
+          "Results",
+          2
+        ],
+        [
+          "Results",
+          3
+        ],
+        [
+          "Results",
+          4
+        ],
+        [
+          "Results",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_14",
+      "section_id": "Results",
+      "section": "Results",
+      "title_path": "Results",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Sensational Headline Generation ::: Training Methods ::: MLE and RL\n[source_id=25] A headline generation model can be trained with MLE, RL or a combination of MLE and RL. MLE training is to minimize the negative log likelihood of the training headlines. We feed $y^*$ into the decoder word by word and maximize the likelihood of $y^*$. The loss function for MLE becomes\n[source_id=26] For RL training, we choose the REINFORCE algorithm BIBREF6. In the training phase, after encoding an article, a headline $y^s = \\lbrace y_1^s, y_2^s, y_3^s, \\cdots , y_T^s\\rbrace $ is obtained by sampling from $P(w)$ from our generator, and then a reward of sensationalism or ROUGE(RG) is calculated.\n[source_id=27] We use the baseline reward $\\hat{R_t}$ to reduce the variance of the reward, similar to ranzato2015sequence. To elaborate, a linear model is deployed to estimate the baseline reward $\\hat{R_t}$ based on $t$-th state $o_t$ for each timestep $t$. The parameters of the linear model are trained by minimizing the mean square loss between $R$ and $\\hat{R_t}$:\n[source_id=28] where $W_r$ and $b_r$ are trainable parameters. To maximize the expected reward, our loss function for RL becomes\n[source_id=29] A naive way to mix these two objective functions using a hyper-parameter $\\lambda $ has been successfully incorporated in the summarization task BIBREF7. It includes the MLE training as a language model to mitigate the readability and quality issues in RL. The mixed loss function is shown as follows:\n[source_id=30] where $*$ is the reward type. Usually $\\lambda $ is large, and paulus2017deep used 0.9984.",
+      "score": 3.191013441553556,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "child_qasper_evidence_texts": [
+        "A headline generation model can be trained with MLE, RL or a combination of MLE and RL. MLE training is to minimize the negative log likelihood of the training headlines. We feed $y^*$ into the decoder word by word and maximize the likelihood of $y^*$. The loss function for MLE becomes",
+        "For RL training, we choose the REINFORCE algorithm BIBREF6. In the training phase, after encoding an article, a headline $y^s = \\lbrace y_1^s, y_2^s, y_3^s, \\cdots , y_T^s\\rbrace $ is obtained by sampling from $P(w)$ from our generator, and then a reward of sensationalism or ROUGE(RG) is calculated.",
+        "We use the baseline reward $\\hat{R_t}$ to reduce the variance of the reward, similar to ranzato2015sequence. To elaborate, a linear model is deployed to estimate the baseline reward $\\hat{R_t}$ based on $t$-th state $o_t$ for each timestep $t$. The parameters of the linear model are trained by minimizing the mean square loss between $R$ and $\\hat{R_t}$:",
+        "where $W_r$ and $b_r$ are trainable parameters. To maximize the expected reward, our loss function for RL becomes",
+        "A naive way to mix these two objective functions using a hyper-parameter $\\lambda $ has been successfully incorporated in the summarization task BIBREF7. It includes the MLE training as a language model to mitigate the readability and quality issues in RL. The mixed loss function is shown as follows:",
+        "where $*$ is the reward type. Usually $\\lambda $ is large, and paulus2017deep used 0.9984."
+      ],
+      "child_pages": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "child_sections": [
+        "Sensational Headline Generation ::: Training Methods ::: MLE and RL",
+        "Sensational Headline Generation ::: Training Methods ::: MLE and RL",
+        "Sensational Headline Generation ::: Training Methods ::: MLE and RL",
+        "Sensational Headline Generation ::: Training Methods ::: MLE and RL",
+        "Sensational Headline Generation ::: Training Methods ::: MLE and RL",
+        "Sensational Headline Generation ::: Training Methods ::: MLE and RL"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Sensational Headline Generation ::: Training Methods ::: MLE and RL",
+          0
+        ],
+        [
+          "Sensational Headline Generation ::: Training Methods ::: MLE and RL",
+          1
+        ],
+        [
+          "Sensational Headline Generation ::: Training Methods ::: MLE and RL",
+          2
+        ],
+        [
+          "Sensational Headline Generation ::: Training Methods ::: MLE and RL",
+          3
+        ],
+        [
+          "Sensational Headline Generation ::: Training Methods ::: MLE and RL",
+          4
+        ],
+        [
+          "Sensational Headline Generation ::: Training Methods ::: MLE and RL",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Sensational Headline Generation ::: Training Methods ::: MLE and RL",
+      "section": "Sensational Headline Generation ::: Training Methods ::: MLE and RL",
+      "title_path": "Sensational Headline Generation ::: Training Methods ::: MLE and RL",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Sensational Headline Generation ::: Dataset\n[source_id=37] We use LCSTS BIBREF5 as our dataset to train the summarization model. The dataset is collected from the Chinese microblogging website Sina Weibo. It contains over 2 million Chinese short texts with corresponding headlines given by the author of each text. The dataset is split into 2,400,591 samples for training, 10,666 samples for validation and 725 samples for testing. We tokenize each sentence with Jieba and a vocabulary size of 50000 is saved.",
+      "score": 3.128058863596699,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        37
+      ],
+      "child_qasper_evidence_texts": [
+        "We use LCSTS BIBREF5 as our dataset to train the summarization model. The dataset is collected from the Chinese microblogging website Sina Weibo. It contains over 2 million Chinese short texts with corresponding headlines given by the author of each text. The dataset is split into 2,400,591 samples for training, 10,666 samples for validation and 725 samples for testing. We tokenize each sentence with Jieba and a vocabulary size of 50000 is saved."
+      ],
+      "child_pages": [
+        10
+      ],
+      "child_sections": [
+        "Sensational Headline Generation ::: Dataset"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Sensational Headline Generation ::: Dataset",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Sensational Headline Generation ::: Dataset",
+      "section": "Sensational Headline Generation ::: Dataset",
+      "title_path": "Sensational Headline Generation ::: Dataset",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Sensational Headline Generation ::: Training Methods ::: Auto-tuned Reinforcement Learning\n[source_id=32] Applying the naive mixed training method using sensationalism score as the reward is not obvious/trivial in our task. The main reason is that our sensationalism reward is notably more noisy and more fragile than the ROUGE-L reward or abstractive reward used in the summarization task BIBREF7, BIBREF8. A higher ROUGE-L F1 reward in summarization indicates higher overlapping ratio between generation and true summary statistically, but our sensationalism reward is a learned score which is fragile to be fooled with unnatural samples.\n[source_id=33] To effectively train the model with RL under noisy sensationalism reward, our idea is to balance RL with MLE. However, we argue that the weighted ratio between MLE and RL should be sample-dependent, instead of being fixed for all training samples as in paulus2017deep, kryscinski2018improving. The reason is that, RL and MLE have inconsistent optimization objectives. When the training headline is non-sensational, MLE training will encourage our model to imitate the training headline (thus generating non-sensational headlines), which counteracts the effects of RL training to generate sensational headlines.\n[source_id=34] The sensationalism score is, therefore, used to give dynamic weight to MLE and RL. Our ARL loss function becomes:\n[source_id=35] If $\\alpha _{\\text{sen}}(y^*)$ is high, meaning the training headline is sensational, our loss function encourages our model to imitate the sample more using the MLE training. If $\\alpha _{\\text{sen}}(y^*)$ is low, our loss function replies on RL training to improve the sensationalism. Note that the weight $\\alpha _{\\text{sen}}(y^*)$ is different from our sensationalism reward $\\alpha _{\\text{sen}}(y^s)$ and we call the loss function Auto-tuned Reinforcement Learning, because the ratio between MLE and RL are well “tuned” towards different samples.",
+      "score": 3.088350858573166,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        32,
+        33,
+        34,
+        35
+      ],
+      "child_qasper_evidence_texts": [
+        "Applying the naive mixed training method using sensationalism score as the reward is not obvious/trivial in our task. The main reason is that our sensationalism reward is notably more noisy and more fragile than the ROUGE-L reward or abstractive reward used in the summarization task BIBREF7, BIBREF8. A higher ROUGE-L F1 reward in summarization indicates higher overlapping ratio between generation and true summary statistically, but our sensationalism reward is a learned score which is fragile to be fooled with unnatural samples.",
+        "To effectively train the model with RL under noisy sensationalism reward, our idea is to balance RL with MLE. However, we argue that the weighted ratio between MLE and RL should be sample-dependent, instead of being fixed for all training samples as in paulus2017deep, kryscinski2018improving. The reason is that, RL and MLE have inconsistent optimization objectives. When the training headline is non-sensational, MLE training will encourage our model to imitate the training headline (thus generating non-sensational headlines), which counteracts the effects of RL training to generate sensational headlines.",
+        "The sensationalism score is, therefore, used to give dynamic weight to MLE and RL. Our ARL loss function becomes:",
+        "If $\\alpha _{\\text{sen}}(y^*)$ is high, meaning the training headline is sensational, our loss function encourages our model to imitate the sample more using the MLE training. If $\\alpha _{\\text{sen}}(y^*)$ is low, our loss function replies on RL training to improve the sensationalism. Note that the weight $\\alpha _{\\text{sen}}(y^*)$ is different from our sensationalism reward $\\alpha _{\\text{sen}}(y^s)$ and we call the loss function Auto-tuned Reinforcement Learning, because the ratio between MLE and RL are well “tuned” towards different samples."
+      ],
+      "child_pages": [
+        9,
+        9,
+        9,
+        9
+      ],
+      "child_sections": [
+        "Sensational Headline Generation ::: Training Methods ::: Auto-tuned Reinforcement Learning",
+        "Sensational Headline Generation ::: Training Methods ::: Auto-tuned Reinforcement Learning",
+        "Sensational Headline Generation ::: Training Methods ::: Auto-tuned Reinforcement Learning",
+        "Sensational Headline Generation ::: Training Methods ::: Auto-tuned Reinforcement Learning"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Sensational Headline Generation ::: Training Methods ::: Auto-tuned Reinforcement Learning",
+          0
+        ],
+        [
+          "Sensational Headline Generation ::: Training Methods ::: Auto-tuned Reinforcement Learning",
+          1
+        ],
+        [
+          "Sensational Headline Generation ::: Training Methods ::: Auto-tuned Reinforcement Learning",
+          2
+        ],
+        [
+          "Sensational Headline Generation ::: Training Methods ::: Auto-tuned Reinforcement Learning",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Sensational Headline Generation ::: Training Methods ::: Auto-tuned Reinforcement Learning",
+      "section": "Sensational Headline Generation ::: Training Methods ::: Auto-tuned Reinforcement Learning",
+      "title_path": "Sensational Headline Generation ::: Training Methods ::: Auto-tuned Reinforcement Learning",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Headline generation is the process of creating a headline-style sentence given an input article. The research community has been regarding the task of headline generation as a summarization task BIBREF1, ignoring the fundamental differences between headlines and summaries. While summaries aim to contain most of the important information from the articles, headlines do not necessarily need to. Instead, a good headline needs to capture people's attention and serve as an irresistible invitation for users to read through the article. For example, the headline “$2 Billion Worth of Free Media for Trump”, which gives only an intriguing hint, is considered better than the summarization style headline “Measuring Trump’s Media Dominance” , as the former gets almost three times the readers as the latter. Generating headlines with many clicks is especially important in this digital age, because many of the revenues of journalism come from online advertisements and getting more user clicks means being more competitive in the market. However, most existing websites naively generate sensational headlines using only keywords or templates. Instead, this paper aims to learn a model that generates sensational headlines based on an input article without labeled data.\n[source_id=5] To generate sensational headlines, there are two main challenges. Firstly, there is a lack of sensationalism scorer to measure how sensational a headline is. Some researchers have tried to manually label headlines as clickbait or non-clickbait BIBREF2, BIBREF3. However, these human-annotated datasets are usually small and expensive to collect. To capture a large variety of sensationalization patterns, we need a cheap and easy way to collect a large number of sensational headlines. Thus, we propose a distant supervision strategy to collect a sensationalism dataset. We regard headlines receiving lots of comments as sensational samples and the headlines generated by a summarization model as non-sensational samples. Experimental results show that by distinguishing these two types of headlines, we can partially teach the model a sense of being sensational.\n[source_id=6] Secondly, after training a sensationalism scorer on our sensationalism dataset, a natural way to generate sensational headlines is to maximize the sensationalism score using reinforcement learning (RL). However, the following shows an example of a RL model maximizing the sensationalism score by generating a very unnatural sentence, while its sensationalism scorer gave a very high score of 0.99996: UTF8gbsn 十个可穿戴产品的设计原则这消息消息可惜说明 Ten design principles for wearable devices, this message message pity introduction. This happens because the sensationalism scorer can make mistakes and RL can generate unnatural phrases which fools our sensationalism scorer. Thus, how to effectively leverage RL with noisy rewards remains an open problem. To deal with the noisy reward, we introduce Auto-tuned Reinforcement Learning (ARL). Our model automatically tunes the ratio between MLE and RL based on how sensational the training headline is. In this way, we effectively take advantage of RL with a noisy reward to generate headlines that are both sensational and fluent.\n[source_id=7] The major contributions of this paper are as follows: 1) To the best of our knowledge, we propose the first-ever model that tackles the sensational headline generation task with reinforcement learning techniques. 2) Without human-annotated data, we propose a distant supervision strategy to train a sensationalism scorer as a reward function.3) We propose a novel loss function, Auto-tuned Reinforcement Learning, to give dynamic weights to balance between MLE and RL. Our code will be released .",
+      "score": 2.8933683783055675,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "child_qasper_evidence_texts": [
+        "Headline generation is the process of creating a headline-style sentence given an input article. The research community has been regarding the task of headline generation as a summarization task BIBREF1, ignoring the fundamental differences between headlines and summaries. While summaries aim to contain most of the important information from the articles, headlines do not necessarily need to. Instead, a good headline needs to capture people's attention and serve as an irresistible invitation for users to read through the article. For example, the headline “$2 Billion Worth of Free Media for Trump”, which gives only an intriguing hint, is considered better than the summarization style headline “Measuring Trump’s Media Dominance” , as the former gets almost three times the readers as the latter. Generating headlines with many clicks is especially important in this digital age, because many of the revenues of journalism come from online advertisements and getting more user clicks means being more competitive in the market. However, most existing websites naively generate sensational headlines using only keywords or templates. Instead, this paper aims to learn a model that generates sensational headlines based on an input article without labeled data.",
+        "To generate sensational headlines, there are two main challenges. Firstly, there is a lack of sensationalism scorer to measure how sensational a headline is. Some researchers have tried to manually label headlines as clickbait or non-clickbait BIBREF2, BIBREF3. However, these human-annotated datasets are usually small and expensive to collect. To capture a large variety of sensationalization patterns, we need a cheap and easy way to collect a large number of sensational headlines. Thus, we propose a distant supervision strategy to collect a sensationalism dataset. We regard headlines receiving lots of comments as sensational samples and the headlines generated by a summarization model as non-sensational samples. Experimental results show that by distinguishing these two types of headlines, we can partially teach the model a sense of being sensational.",
+        "Secondly, after training a sensationalism scorer on our sensationalism dataset, a natural way to generate sensational headlines is to maximize the sensationalism score using reinforcement learning (RL). However, the following shows an example of a RL model maximizing the sensationalism score by generating a very unnatural sentence, while its sensationalism scorer gave a very high score of 0.99996: UTF8gbsn 十个可穿戴产品的设计原则这消息消息可惜说明 Ten design principles for wearable devices, this message message pity introduction. This happens because the sensationalism scorer can make mistakes and RL can generate unnatural phrases which fools our sensationalism scorer. Thus, how to effectively leverage RL with noisy rewards remains an open problem. To deal with the noisy reward, we introduce Auto-tuned Reinforcement Learning (ARL). Our model automatically tunes the ratio between MLE and RL based on how sensational the training headline is. In this way, we effectively take advantage of RL with a noisy reward to generate headlines that are both sensational and fluent.",
+        "The major contributions of this paper are as follows: 1) To the best of our knowledge, we propose the first-ever model that tackles the sensational headline generation task with reinforcement learning techniques. 2) Without human-annotated data, we propose a distant supervision strategy to train a sensationalism scorer as a reward function.3) We propose a novel loss function, Auto-tuned Reinforcement Learning, to give dynamic weights to balance between MLE and RL. Our code will be released ."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Sensational Headline Generation ::: Training Details\n[source_id=51] MLE training: An Adam optimizer is used with the learning rate of 0.0001 to optimize $L_{\\text{MLE}}$. The batch size is set as 128 and a one-layer, bi-directional Long Short-Term Memory (bi-LSTM) model with 512 hidden sizes and a 350 embedding size is utilized. Gradients with the l2 norm larger than 2.0 are clipped. We stop training when the ROUGE-L f-score stops increasing.\n[source_id=52] Hybrid training: An Adam optimizer with a learning rate of 0.0001 is used to optimize $L_{\\text{RL-*}}$ (Equation DISPLAY_FORM17) and $L_\\text{{ARL-SEN}}$ (Equation DISPLAY_FORM19). When training Pointer-Gen+RL-ROUGE, the best $\\lambda $ is chosen based on the ROUGE-L score on the validation set. In our experiment, $\\lambda $ is set as 0.95. An Adam optimizer with a learning rate of 0.001 is used to optimize $L_b$. When training Pointer-Gen+ARL-SEN, we don't use the full LCSTS dataset, but only headlines with a sensationalism score larger than 0.1 as we observe that Pointer-Gen+ARL-SEN will generate a few unnatural phrases when using full dataset. We believe the reason is the high ratio of RL during training. Figure FIGREF23 shows that the probability density near 0 is very high, meaning that in each batch, many of the samples will have a very low sensationalism score. On expectation, each sample will receive 0.239 MLE training and 0.761 RL training. This leads to RL dominanting the loss. Thus, we propose to filter samples with a minimum sensationalism score with 0.1 and it works very well. For Pointer-Gen+RL-SEN, we also set the minimum sensationalism score as 0.1, and $\\lambda $ is set as 0.5 to remove unnatural phrases, making a fair comparison to Pointer-Gen+ARL-SEN.\n[source_id=53] We stop training Pointer-Gen+Same-FT, Pointer-Gen+Pos-FT, Pointer-Gen+RL-SEN and Pointer-Gen+ARL-SEN, when $\\alpha _\\text{sen}$ stops increasing on the validation set. Beam-search with a beam size of 5 is adopted for decoding in all models.",
+      "score": 2.7592751829787217,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        51,
+        52,
+        53
+      ],
+      "child_qasper_evidence_texts": [
+        "MLE training: An Adam optimizer is used with the learning rate of 0.0001 to optimize $L_{\\text{MLE}}$. The batch size is set as 128 and a one-layer, bi-directional Long Short-Term Memory (bi-LSTM) model with 512 hidden sizes and a 350 embedding size is utilized. Gradients with the l2 norm larger than 2.0 are clipped. We stop training when the ROUGE-L f-score stops increasing.",
+        "Hybrid training: An Adam optimizer with a learning rate of 0.0001 is used to optimize $L_{\\text{RL-*}}$ (Equation DISPLAY_FORM17) and $L_\\text{{ARL-SEN}}$ (Equation DISPLAY_FORM19). When training Pointer-Gen+RL-ROUGE, the best $\\lambda $ is chosen based on the ROUGE-L score on the validation set. In our experiment, $\\lambda $ is set as 0.95. An Adam optimizer with a learning rate of 0.001 is used to optimize $L_b$. When training Pointer-Gen+ARL-SEN, we don't use the full LCSTS dataset, but only headlines with a sensationalism score larger than 0.1 as we observe that Pointer-Gen+ARL-SEN will generate a few unnatural phrases when using full dataset. We believe the reason is the high ratio of RL during training. Figure FIGREF23 shows that the probability density near 0 is very high, meaning that in each batch, many of the samples will have a very low sensationalism score. On expectation, each sample will receive 0.239 MLE training and 0.761 RL training. This leads to RL dominanting the loss. Thus, we propose to filter samples with a minimum sensationalism score with 0.1 and it works very well. For Pointer-Gen+RL-SEN, we also set the minimum sensationalism score as 0.1, and $\\lambda $ is set as 0.5 to remove unnatural phrases, making a fair comparison to Pointer-Gen+ARL-SEN.",
+        "We stop training Pointer-Gen+Same-FT, Pointer-Gen+Pos-FT, Pointer-Gen+RL-SEN and Pointer-Gen+ARL-SEN, when $\\alpha _\\text{sen}$ stops increasing on the validation set. Beam-search with a beam size of 5 is adopted for decoding in all models."
+      ],
+      "child_pages": [
+        12,
+        12,
+        12
+      ],
+      "child_sections": [
+        "Sensational Headline Generation ::: Training Details",
+        "Sensational Headline Generation ::: Training Details",
+        "Sensational Headline Generation ::: Training Details"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Sensational Headline Generation ::: Training Details",
+          0
+        ],
+        [
+          "Sensational Headline Generation ::: Training Details",
+          1
+        ],
+        [
+          "Sensational Headline Generation ::: Training Details",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Sensational Headline Generation ::: Training Details",
+      "section": "Sensational Headline Generation ::: Training Details",
+      "title_path": "Sensational Headline Generation ::: Training Details",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Sensational Headline Generation ::: Pointer-Gen Headline Generator\n[source_id=18] We choose Pointer Generator (Pointer-Gen) BIBREF0, a widely used summarization model, as our headline generator for its ability to copy words from the input article. It takes a news article as input and generates a headline. Firstly, the tokens of each article, $\\lbrace x_1,x_2,x_3,\\cdots ,x_M\\rbrace $, are fed into the encoder one-by-one and the encoder generates a sequence of hidden states $h_i$. For each decoding step $t$, the decoder receives the embedding for each token of a headline $y_t$ as input and updates its hidden states $s_t$. An attention mechanism following luong2015effective is used:\n[source_id=19] where $v$, $W_h$, $W_s$, and $b_{attn}$ are the trainable parameters and $h_t^*$ is the context vector. $s_t$ and $h_t^*$ are then combined to give a probability distribution over the vocabulary through two linear layers:\n[source_id=20] where $V$, $b$, $V^{^{\\prime }}$, and $b^{^{\\prime }}$ are trainable parameters. We use a pointer generator network to enable our model to copy rare/unknown words from the input article, giving the following final word probability:\n[source_id=21] where $x^t$ is the embedding of the input word of the decoder, $w_{h^*}^T$, $w_s^T$, $w_x^T$, and $b_{ptr}$ are trainable parameters, and $\\sigma $ is the sigmoid function.",
+      "score": 2.4522093628770256,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        18,
+        19,
+        20,
+        21
+      ],
+      "child_qasper_evidence_texts": [
+        "We choose Pointer Generator (Pointer-Gen) BIBREF0, a widely used summarization model, as our headline generator for its ability to copy words from the input article. It takes a news article as input and generates a headline. Firstly, the tokens of each article, $\\lbrace x_1,x_2,x_3,\\cdots ,x_M\\rbrace $, are fed into the encoder one-by-one and the encoder generates a sequence of hidden states $h_i$. For each decoding step $t$, the decoder receives the embedding for each token of a headline $y_t$ as input and updates its hidden states $s_t$. An attention mechanism following luong2015effective is used:",
+        "where $v$, $W_h$, $W_s$, and $b_{attn}$ are the trainable parameters and $h_t^*$ is the context vector. $s_t$ and $h_t^*$ are then combined to give a probability distribution over the vocabulary through two linear layers:",
+        "where $V$, $b$, $V^{^{\\prime }}$, and $b^{^{\\prime }}$ are trainable parameters. We use a pointer generator network to enable our model to copy rare/unknown words from the input article, giving the following final word probability:",
+        "where $x^t$ is the embedding of the input word of the decoder, $w_{h^*}^T$, $w_s^T$, $w_x^T$, and $b_{ptr}$ are trainable parameters, and $\\sigma $ is the sigmoid function."
+      ],
+      "child_pages": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "child_sections": [
+        "Sensational Headline Generation ::: Pointer-Gen Headline Generator",
+        "Sensational Headline Generation ::: Pointer-Gen Headline Generator",
+        "Sensational Headline Generation ::: Pointer-Gen Headline Generator",
+        "Sensational Headline Generation ::: Pointer-Gen Headline Generator"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Sensational Headline Generation ::: Pointer-Gen Headline Generator",
+          0
+        ],
+        [
+          "Sensational Headline Generation ::: Pointer-Gen Headline Generator",
+          1
+        ],
+        [
+          "Sensational Headline Generation ::: Pointer-Gen Headline Generator",
+          2
+        ],
+        [
+          "Sensational Headline Generation ::: Pointer-Gen Headline Generator",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Sensational Headline Generation ::: Pointer-Gen Headline Generator",
+      "section": "Sensational Headline Generation ::: Pointer-Gen Headline Generator",
+      "title_path": "Sensational Headline Generation ::: Pointer-Gen Headline Generator",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Sensational headlines are headlines that capture people's attention and generate reader interest. Conventional abstractive headline generation methods, unlike human writers, do not optimize for maximal reader attention. In this paper, we propose a model that generates sensational headlines without labeled data. We first train a sensationalism scorer by classifying online headlines with many comments (\"clickbait\") against a baseline of headlines generated from a summarization model. The score from the sensationalism scorer is used as the reward for a reinforcement learner. However, maximizing the noisy sensationalism reward will generate unnatural phrases instead of sensational headlines. To effectively leverage this noisy reward, we propose a novel loss function, Auto-tuned Reinforcement Learning (ARL), to dynamically balance reinforcement learning (RL) with maximum likelihood estimation (MLE). Human evaluation shows that 60.8% of samples generated by our model are sensational, which is significantly better than the Pointer-Gen baseline and other RL models.",
+      "score": 1.7478169407501396,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Sensational headlines are headlines that capture people's attention and generate reader interest. Conventional abstractive headline generation methods, unlike human writers, do not optimize for maximal reader attention. In this paper, we propose a model that generates sensational headlines without labeled data. We first train a sensationalism scorer by classifying online headlines with many comments (\"clickbait\") against a baseline of headlines generated from a summarization model. The score from the sensationalism scorer is used as the reward for a reinforcement learner. However, maximizing the noisy sensationalism reward will generate unnatural phrases instead of sensational headlines. To effectively leverage this noisy reward, we propose a novel loss function, Auto-tuned Reinforcement Learning (ARL), to dynamically balance reinforcement learning (RL) with maximum likelihood estimation (MLE). Human evaluation shows that 60.8% of samples generated by our model are sensational, which is significantly better than the Pointer-Gen baseline and other RL models."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 61,
+      "content": "We then compare different models using the sensationalism score in Table TABREF30. The Pointer-Gen baseline model achieves a 42.6% sensationalism score, which is the minimum that a typical summarization model achieves. By filtering out low-sensational headlines, Pointer-Gen+Same-FT and Pointer-Gen+Pos-FT achieves higher sensationalism scores, which implies the effectiveness of our sensationalism scorer. Our Pointer-Gen+ARL-SEN model achieves the best performance of 60.8%. This is an absolute improvement of 18.2% over the Pointer-Gen baseline. The Chi-square test on the results confirms that Pointer-Gen+ARL-SEN is statistically significantly more sensational than all the other baseline models, with the largest p-value less than 0.01. Also, we find that the test set headlines achieves 57.8% sensationalism score, much larger than Pointer-Gen baseline, which also supports our intuition that generated headlines will be less sensational than the original one. On the other hand, we found that Pointer-Gen+Pos is much worse than other baselines. The reason is that training on sensational samples alone discards around 80% of the whole training set that is also helpful for maintaining relevance and a good language model. It shows the necessity of using RL.",
+      "qasper_evidence_text": "We then compare different models using the sensationalism score in Table TABREF30. The Pointer-Gen baseline model achieves a 42.6% sensationalism score, which is the minimum that a typical summarization model achieves. By filtering out low-sensational headlines, Pointer-Gen+Same-FT and Pointer-Gen+Pos-FT achieves higher sensationalism scores, which implies the effectiveness of our sensationalism scorer. Our Pointer-Gen+ARL-SEN model achieves the best performance of 60.8%. This is an absolute improvement of 18.2% over the Pointer-Gen baseline. The Chi-square test on the results confirms that Pointer-Gen+ARL-SEN is statistically significantly more sensational than all the other baseline models, with the largest p-value less than 0.01. Also, we find that the test set headlines achieves 57.8% sensationalism score, much larger than Pointer-Gen baseline, which also supports our intuition that generated headlines will be less sensational than the original one. On the other hand, we found that Pointer-Gen+Pos is much worse than other baselines. The reason is that training on sensational samples alone discards around 80% of the whole training set that is also helpful for maintaining relevance and a good language model. It shows the necessity of using RL.",
+      "source_node_id": 61,
+      "node_id": 61,
+      "paragraph_id": 61,
+      "evidence_id": 61,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_14",
+      "rank": 1,
+      "score": 5.789886432887863,
+      "block_type": "paragraph",
+      "page": 14,
+      "section_id": "Results",
+      "section": "Results",
+      "title": "Results",
+      "hotpot_title": "Results",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 1
+    }
+  ],
+  "supporting_block_ids": [
+    61
+  ]
+}

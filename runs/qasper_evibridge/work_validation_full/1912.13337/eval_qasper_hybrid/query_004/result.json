@@ -1,0 +1,104 @@
+{
+  "question": "How do they control for annotation artificats?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        " we use several of the MCQA baseline models first introduced in BIBREF0"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "When creating synthetic datasets, it is important to ensure that systematic biases, or annotation artifacts BIBREF41, are not introduced into the resulting probes and that the target datasets are sufficiently challenging (or good, in the sense of BIBREF42). To test for this, we use several of the MCQA baseline models first introduced in BIBREF0, which take inspiration from the LSTM-based models used in BIBREF43 for NLI and various partial-input baselines based on these models."
+      ],
+      "evidence_block_ids": [
+        50
+      ],
+      "evidence_paragraph_ids": [
+        50
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "Choice-Only model, which is a variant of the well-known hypothesis-only baseline",
+        "Choice-to-choice model, tries to single out a given answer choice relative to other choices",
+        "Question-to-choice model, in contrast, uses the contextual representations for each question and individual choice and an attention model Att model to get a score"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "When creating synthetic datasets, it is important to ensure that systematic biases, or annotation artifacts BIBREF41, are not introduced into the resulting probes and that the target datasets are sufficiently challenging (or good, in the sense of BIBREF42). To test for this, we use several of the MCQA baseline models first introduced in BIBREF0, which take inspiration from the LSTM-based models used in BIBREF43 for NLI and various partial-input baselines based on these models.",
+        "Following the notation from BIBREF0, for any given sequence $s$ of tokens in $\\lbrace q^{(j)}, a_{1}^{(j)},...,a_{N}^{(j)}\\rbrace $ in $D$, an encoding of $s$ is given as $h_{s}^{(j)} = \\textbf {BiLSTM}(\\textsc {embed}(s)) \\in \\mathbb {R}^{|s| \\times 2h}$ (where $h$ is the dimension of the hidden state in each directional network, and embed$(\\cdot )$ is an embedding function that assigns token-level embeddings to each token in $s$). A contextual representation for each $s$ is then built by applying an element-wise max operation over $h_{s}$ as follows:",
+        "With these contextual representations, different baseline models can be constructed. For example, a Choice-Only model, which is a variant of the well-known hypothesis-only baseline used in NLI BIBREF46, scores each choice $c_{i}$ in the following way:",
+        "for $\\textbf {W}^{T} \\in \\mathbb {R}^{2h}$ independently of the question and assigns a probability to each answer $p_{i}^{(j)} \\propto e^{\\alpha _{i}^{(j)}}$.",
+        "A slight variant of this model, the Choice-to-choice model, tries to single out a given answer choice relative to other choices by scoring all choice pairs $\\alpha _{i,i^{\\prime }}^{(j)} = \\textsc {Att}(r^{(j)}_{c_{i}},r^{(j)}_{c_{i^{\\prime }}}) \\in \\mathbb {R}$ using a learned attention mechanism Att and finding the choice with the minimal similarity to other options (for full details, see their original paper). In using these partial-input baselines, which we train directly on each target probe, we can check whether systematic biases related to answer choices were introduced into the data creation process.",
+        "A Question-to-choice model, in contrast, uses the contextual representations for each question and individual choice and an attention model Att model to get a score $\\alpha ^{(j)}_{q,i} = \\textsc {Att}(r^{(j)}_{q},r^{(j)}_{c_{i}}) \\in \\mathbb {R}$ as above. Here we also experiment with using ESIM BIBREF47 to generate the contextual representations $r$, as well as a simpler VecSimilarity model that measures the average vector similarity between question and answer tokens: $\\alpha ^{(j)}_{q,i} = \\textsc {Sim}(\\textsc {embed}(q^{(j)}),\\textsc {embed}(c^{(j)}_{i}))$. In contrast to the models above, these sets of baselines are used to check for artifacts between questions and answers that are not captured in the partial-input baselines (see discussion in BIBREF49) and ensure that the overall MCQA tasks are sufficiently difficult for our transformer models."
+      ],
+      "evidence_block_ids": [
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "evidence_paragraph_ids": [
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ]
+    }
+  ],
+  "doc_uuid": "1912.13337",
+  "doc_path": "qasper://1912.13337",
+  "qasper_question_id": "85590bb26fed01a802241bc537d85ba5ef1c6dc2",
+  "title": "What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge",
+  "evidence_block_ids": [
+    50,
+    51,
+    52,
+    53,
+    54,
+    55
+  ],
+  "evidence_paragraph_ids": [
+    50,
+    51,
+    52,
+    53,
+    54,
+    55
+  ],
+  "output": "{\n  \"answer_short\": \"They control for annotation artifacts by generating data automatically, which obviates the need for manual annotation and allows for systematic control over semantic aspects.\",\n  \"answer_rationale\": \"Text 3 states that the authors focus on generating data in an entirely automatic fashion, which obviates the need for expensive annotation and gives them the flexibility to construct larger datasets that control a rich set of semantic aspects. This automatic generation inherently avoids introducing systematic biases or annotation artifacts that might arise from manual annotation processes.\"\n}",
+  "retrieved_node_ids": [
+    50,
+    6,
+    16,
+    90,
+    60,
+    89,
+    5,
+    8,
+    64,
+    73
+  ],
+  "answer_short": "They control for annotation artifacts by generating data automatically, which obviates the need for manual annotation and allows for systematic control over semantic aspects.",
+  "answer_rationale": "Text 3 states that the authors focus on generating data in an entirely automatic fashion, which obviates the need for expensive annotation and gives them the flexibility to construct larger datasets that control a rich set of semantic aspects. This automatic generation inherently avoids introducing systematic biases or annotation artifacts that might arise from manual annotation processes.",
+  "supporting_block_ids": [
+    50,
+    6,
+    16,
+    90,
+    60,
+    89,
+    5,
+    8,
+    64,
+    73
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Models ::: Bi-affinal Attention Scorer\n[source_id=40] Regarding word boundaries as gaps between any adjacent words converts the character labeling task to the gap labeling task. Different from character labeling task, gap labeling task requires information of two adjacent characters. The relationship between adjacent characters can be represented as the type of gap. The characteristic of word boundaries makes bi-affine attention an appropriate scorer for CWS task.\n[source_id=41] Bi-affinal attention scorer is the component that we use to label the gap. Bi-affinal attention is developed from bilinear attention which has been used in dependency parsing BIBREF26 and SRL BIBREF27. The distribution of labels in a labeling task is often uneven which makes the output layer often include a fixed bias term for the prior probability of different labels BIBREF27. Bi-affine attention uses bias terms to alleviate the burden of the fixed bias term and get the prior probability which makes it different from bilinear attention. The distribution of the gap is uneven that is similar as other labeling task which fits bi-affine.\n[source_id=42] Bi-affinal attention scorer labels the target depending on information of independent unit and the joint information of two units. In bi-affinal attention, the score $s_{ij}$ of characters $c_i$ and $c_j$ $(i < j)$ is calculated by:\n[source_id=43] where $v_i^f$ is the forward information of $c_i$ and $v_i^b$ is the backward information of $c_j$. In Equation (DISPLAY_FORM21), $W$, $U$ and $b$ are all parameters that can be updated in training. $W$ is a matrix with shape $(d_i \\times N\\times d_j)$ and $U$ is a $(N\\times (d_i + d_j))$ matrix where $d_i$ is the dimension of vector $v_i^f$ and $N$ is the number of labels.\n[source_id=44] In our model, the biaffine scorer uses the forward information of character in front of the gap and the backward information of the character behind the gap to distinguish the position of characters. Figure FIGREF22 is an example of labeling gap. The method of using biaffine scorer ensures that the boundaries of words can be determined by adjacent characters with different directional information. The score vector of the gap is formed by the probability of being a boundary of word. Further, the model generates all boundaries using activation function in a greedy decoding way.",
+  "score": 1.313123165750973,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    40,
+    41,
+    42,
+    43,
+    44
+  ],
+  "child_qasper_evidence_texts": [
+    "Regarding word boundaries as gaps between any adjacent words converts the character labeling task to the gap labeling task. Different from character labeling task, gap labeling task requires information of two adjacent characters. The relationship between adjacent characters can be represented as the type of gap. The characteristic of word boundaries makes bi-affine attention an appropriate scorer for CWS task.",
+    "Bi-affinal attention scorer is the component that we use to label the gap. Bi-affinal attention is developed from bilinear attention which has been used in dependency parsing BIBREF26 and SRL BIBREF27. The distribution of labels in a labeling task is often uneven which makes the output layer often include a fixed bias term for the prior probability of different labels BIBREF27. Bi-affine attention uses bias terms to alleviate the burden of the fixed bias term and get the prior probability which makes it different from bilinear attention. The distribution of the gap is uneven that is similar as other labeling task which fits bi-affine.",
+    "Bi-affinal attention scorer labels the target depending on information of independent unit and the joint information of two units. In bi-affinal attention, the score $s_{ij}$ of characters $c_i$ and $c_j$ $(i < j)$ is calculated by:",
+    "where $v_i^f$ is the forward information of $c_i$ and $v_i^b$ is the backward information of $c_j$. In Equation (DISPLAY_FORM21), $W$, $U$ and $b$ are all parameters that can be updated in training. $W$ is a matrix with shape $(d_i \\times N\\times d_j)$ and $U$ is a $(N\\times (d_i + d_j))$ matrix where $d_i$ is the dimension of vector $v_i^f$ and $N$ is the number of labels.",
+    "In our model, the biaffine scorer uses the forward information of character in front of the gap and the backward information of the character behind the gap to distinguish the position of characters. Figure FIGREF22 is an example of labeling gap. The method of using biaffine scorer ensures that the boundaries of words can be determined by adjacent characters with different directional information. The score vector of the gap is formed by the probability of being a boundary of word. Further, the model generates all boundaries using activation function in a greedy decoding way."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Models ::: Bi-affinal Attention Scorer",
+    "Models ::: Bi-affinal Attention Scorer",
+    "Models ::: Bi-affinal Attention Scorer",
+    "Models ::: Bi-affinal Attention Scorer",
+    "Models ::: Bi-affinal Attention Scorer"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Models ::: Bi-affinal Attention Scorer",
+      0
+    ],
+    [
+      "Models ::: Bi-affinal Attention Scorer",
+      1
+    ],
+    [
+      "Models ::: Bi-affinal Attention Scorer",
+      2
+    ],
+    [
+      "Models ::: Bi-affinal Attention Scorer",
+      3
+    ],
+    [
+      "Models ::: Bi-affinal Attention Scorer",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Models ::: Bi-affinal Attention Scorer",
+  "section": "Models ::: Bi-affinal Attention Scorer",
+  "title_path": "Models ::: Bi-affinal Attention Scorer",
+  "block_type": "long_unit"
+}

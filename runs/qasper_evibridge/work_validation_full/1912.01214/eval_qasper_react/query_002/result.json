@@ -1,0 +1,85 @@
+{
+  "question": "what are the pivot-based baselines?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "pivoting",
+        "pivoting$_{\\rm m}$"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "Table TABREF19 and TABREF26 report zero-shot results on Europarl and Multi-UN evaluation sets, respectively. We compare our approaches with related approaches of pivoting, multilingual NMT (MNMT) BIBREF19, and cross-lingual transfer without pretraining BIBREF16. The results show that our approaches consistently outperform other approaches across languages and datasets, especially surpass pivoting, which is a strong baseline in the zero-shot scenario that multilingual NMT systems often fail to beat BIBREF19, BIBREF20, BIBREF23. Pivoting translates source to pivot then to target in two steps, causing inefficient translation process. Our approaches use one encoder-decoder model to translate between any zero-shot directions, which is more efficient than pivoting. Regarding the comparison between transfer approaches, our cross-lingual pretraining based transfer outperforms transfer method that does not use pretraining by a large margin.",
+        "Although it is challenging for one model to translate all zero-shot directions between multiple distant language pairs of MultiUN, MLM+BRLM-SA still achieves better performances on Es $\\rightarrow $ Ar and Es $\\rightarrow $ Ru than strong pivoting$_{\\rm m}$, which uses MNMT to translate source to pivot then to target in two separate steps with each step receiving supervised signal of parallel corpora. Our approaches surpass pivoting$_{\\rm m}$ in all zero-shot directions by adding back translation BIBREF33 to generate pseudo parallel sentences for all zero-shot directions based on our pretrained models such as MLM+BRLM-SA, and further training our universal encoder-decoder model with these pseudo data. BIBREF22 gu2019improved introduces back translation into MNMT, while we adopt it in our transfer approaches. Finally, our best MLM+BRLM-SA with back translation outperforms pivoting$_{\\rm m}$ by 2.4 BLEU points averagely, and outperforms MNMT BIBREF22 by 4.6 BLEU points averagely. Again, in supervised translation directions, MLM+BRLM-SA with back translation also achieves better performance than the original supervised Transformer."
+      ],
+      "evidence_block_ids": [
+        48,
+        55
+      ],
+      "evidence_paragraph_ids": [
+        48,
+        55
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "firstly translates a source language into the pivot language which is later translated to the target language"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "We use traditional transfer learning, pivot-based method and multilingual NMT as our baselines. For the fair comparison, the Transformer-big model with 1024 embedding/hidden units, 4096 feed-forward filter size, 6 layers and 8 heads per layer is adopted for all translation models in our experiments. We set the batch size to 2400 per batch and limit sentence length to 100 BPE tokens. We set the $\\text{attn}\\_\\text{drop}=0$ (a dropout rate on each attention head), which is favorable to the zero-shot translation and has no effect on supervised translation directions BIBREF22. For the model initialization, we use Facebook's cross-lingual pretrained models released by XLM to initialize the encoder part, and the rest parameters are initialized with xavier uniform. We employ the Adam optimizer with $\\text{lr}=0.0001$, $t_{\\text{warm}\\_\\text{up}}=4000$ and $\\text{dropout}=0.1$. At decoding time, we generate greedily with length penalty $\\alpha =1.0$.",
+        "Pivot-based Method is a common strategy to obtain a source$\\rightarrow $target model by introducing a pivot language. This approach is further divided into pivoting and pivot-synthetic. While the former firstly translates a source language into the pivot language which is later translated to the target language BIBREF4, BIBREF5, BIBREF12, the latter trains a source$\\rightarrow $target model with pseudo data generated from source-pivot or pivot-target parallel data BIBREF13, BIBREF14. Although the pivot-based methods can achieve not bad performance, it always falls into a computation-expensive and parameter-vast dilemma of quadratic growth in the number of source languages, and suffers from the error propagation problem BIBREF15."
+      ],
+      "evidence_block_ids": [
+        45,
+        13
+      ],
+      "evidence_paragraph_ids": [
+        45,
+        13
+      ]
+    }
+  ],
+  "doc_uuid": "1912.01214",
+  "doc_path": "qasper://1912.01214",
+  "qasper_question_id": "f5e6f43454332e0521a778db0b769481e23e7682",
+  "title": "Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation",
+  "evidence_block_ids": [
+    48,
+    55,
+    45,
+    13
+  ],
+  "evidence_paragraph_ids": [
+    48,
+    55,
+    45,
+    13
+  ],
+  "output": "{\"answer_short\": \"Pivot-based alignment using word embeddings, Pivot-based alignment using syntactic trees, Pivot-based alignment using discourse structure\", \"answer_rationale\": \"\", \"supporting_block_ids\": [29, 30, 31, 32, 33]}",
+  "retrieved_node_ids": [
+    29,
+    30,
+    31,
+    32,
+    33
+  ],
+  "retrieved_block_ids": [
+    29,
+    30,
+    31,
+    32,
+    33
+  ],
+  "answer_short": "Pivot-based alignment using word embeddings, Pivot-based alignment using syntactic trees, Pivot-based alignment using discourse structure",
+  "supporting_block_ids": [
+    29,
+    30,
+    31,
+    32,
+    33
+  ]
+}

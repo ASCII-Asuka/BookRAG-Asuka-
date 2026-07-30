@@ -1,0 +1,115 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Experimentation and Results\n[source_id=25] We train our proposed model GM$\\_$KL (Gaussian Mixture using KL Divergence) on the Text8 dataset BIBREF14 which is a pre-processed data of $17M$ words from wikipedia. Of which, 71290 unique and frequent words are chosen using the subsampling trick in BIBREF15. We compare GM$\\_$KL with the previous approaches w2g BIBREF9 ( single Gaussian model) and w2gm BIBREF10 (mixture of Gaussian model with expected likelihood kernel). For all the models used for experimentation, the embedding size ($D$) was set to 50, number of mixtures to 2, context window length to 10, batch size to 128. The word embeddings were initialized using a uniform distribution in the range of $[-\\sqrt{\\frac{3}{D}}$, $\\sqrt{\\frac{3}{D}}]$ such that the expectation of variance is 1 and mean 0 BIBREF16. One could also consider initializing the word embeddings using other contextual representations such as BERT BIBREF17 and ELMo BIBREF18 in the proposed approach. In order to purely analyze the performance of $\\emph {GM\\_KL}$ over the other models, we have chosen initialization using uniform distribution for experiments. For computational benefits, diagonal covariance is used similar to BIBREF10. Each mixture probability is constrained in the range $[0,1]$, summing to 1 by optimizing over unconstrained scores in the range $(-\\infty ,\\infty )$ and converting scores to probability using softmax function. The mixture scores are initialized to 0 to ensure fairness among all the components. The threshold for negative sampling was set to $10^{-5}$, as recommended in BIBREF3. Mini-batch gradient descent with Adagrad optimizer BIBREF19 was used with initial learning rate set to $0.05$.\n[source_id=26] Table TABREF9 shows the qualitative results of GM$\\_$KL. Given a query word and component id, the set of nearest neighbours along with their respective component ids are listed. For eg., the word `plane' in its 0th component captures the `geometry' sense and so are its neighbours, and its 1st component captures `vehicle' sense and so are its corresponding neighbours. Other words such as `rock' captures both the `metal' and `music' senses, `star' captures `celebrity' and `astronomical' senses, and `phone' captures `telephony' and `internet' senses.\n[source_id=27] We quantitatively compare the performance of the GM$\\_$KL, w2g, and w2gm approaches on the SCWS dataset BIBREF6. The dataset consists of 2003 word pairs of polysemous and homonymous words with labels obtained by an average of 10 human scores. The Spearman correlation between the human scores and the model scores are computed. To obtain the model score, the following metrics are used:\n[source_id=28] MaxCos: Maximum cosine similarity among all component pairs of words $w$ and $v$:\n[source_id=29] AvgCos: Average component-wise cosine similarity between the words $w$ and $v$.\n[source_id=30] KL$\\_$approx: Formulated as shown in (DISPLAY_FORM8) between the words $w$ and $v$.\n[source_id=31] KL$\\_$comp: Maximum component-wise negative KL between words $w$ and $v$:\n[source_id=32] Table TABREF17 compares the performance of the approaches on the SCWS dataset. It is evident from Table TABREF17 that GM$\\_$KL achieves better correlation than existing approaches for various metrics on SCWS dataset.\n[source_id=33] Table TABREF18 shows the Spearman correlation values of GM$\\_$KL model evaluated on the benchmark word similarity datasets: SL BIBREF20, WS, WS-R, WS-S BIBREF21, MEN BIBREF22, MC BIBREF23, RG BIBREF24, YP BIBREF25, MTurk-287 and MTurk-771 BIBREF26, BIBREF27, and RW BIBREF28. The metric used for comparison is 'AvgCos'. It can be seen that for most of the datasets, GM$\\_$KL achieves significantly better correlation score than w2g and w2gm approaches. Other datasets such as MC and RW consist of only a single sense, and hence w2g model performs better and GM$\\_$KL achieves next better performance. The YP dataset have multiple senses but does not contain entailed data and hence could not make use of entailment benefits of GM$\\_$KL.\n[source_id=34] Table TABREF19 shows the evaluation results of GM$\\_$KL model on the entailment datasets such as entailment pairs dataset BIBREF29 created from WordNet with both positive and negative labels, a crowdsourced dataset BIBREF30 of 79 semantic relations labelled as entailed or not and annotated distributionally similar nouns dataset BIBREF31. The 'MaxCos' similarity metric is used for evaluation and the best precision and best F1-score is shown, by picking the optimal threshold. Overall, GM$\\_$KL performs better than both w2g and w2gm approaches.",
+  "score": 7.953550978609923,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34
+  ],
+  "child_qasper_evidence_texts": [
+    "We train our proposed model GM$\\_$KL (Gaussian Mixture using KL Divergence) on the Text8 dataset BIBREF14 which is a pre-processed data of $17M$ words from wikipedia. Of which, 71290 unique and frequent words are chosen using the subsampling trick in BIBREF15. We compare GM$\\_$KL with the previous approaches w2g BIBREF9 ( single Gaussian model) and w2gm BIBREF10 (mixture of Gaussian model with expected likelihood kernel). For all the models used for experimentation, the embedding size ($D$) was set to 50, number of mixtures to 2, context window length to 10, batch size to 128. The word embeddings were initialized using a uniform distribution in the range of $[-\\sqrt{\\frac{3}{D}}$, $\\sqrt{\\frac{3}{D}}]$ such that the expectation of variance is 1 and mean 0 BIBREF16. One could also consider initializing the word embeddings using other contextual representations such as BERT BIBREF17 and ELMo BIBREF18 in the proposed approach. In order to purely analyze the performance of $\\emph {GM\\_KL}$ over the other models, we have chosen initialization using uniform distribution for experiments. For computational benefits, diagonal covariance is used similar to BIBREF10. Each mixture probability is constrained in the range $[0,1]$, summing to 1 by optimizing over unconstrained scores in the range $(-\\infty ,\\infty )$ and converting scores to probability using softmax function. The mixture scores are initialized to 0 to ensure fairness among all the components. The threshold for negative sampling was set to $10^{-5}$, as recommended in BIBREF3. Mini-batch gradient descent with Adagrad optimizer BIBREF19 was used with initial learning rate set to $0.05$.",
+    "Table TABREF9 shows the qualitative results of GM$\\_$KL. Given a query word and component id, the set of nearest neighbours along with their respective component ids are listed. For eg., the word `plane' in its 0th component captures the `geometry' sense and so are its neighbours, and its 1st component captures `vehicle' sense and so are its corresponding neighbours. Other words such as `rock' captures both the `metal' and `music' senses, `star' captures `celebrity' and `astronomical' senses, and `phone' captures `telephony' and `internet' senses.",
+    "We quantitatively compare the performance of the GM$\\_$KL, w2g, and w2gm approaches on the SCWS dataset BIBREF6. The dataset consists of 2003 word pairs of polysemous and homonymous words with labels obtained by an average of 10 human scores. The Spearman correlation between the human scores and the model scores are computed. To obtain the model score, the following metrics are used:",
+    "MaxCos: Maximum cosine similarity among all component pairs of words $w$ and $v$:",
+    "AvgCos: Average component-wise cosine similarity between the words $w$ and $v$.",
+    "KL$\\_$approx: Formulated as shown in (DISPLAY_FORM8) between the words $w$ and $v$.",
+    "KL$\\_$comp: Maximum component-wise negative KL between words $w$ and $v$:",
+    "Table TABREF17 compares the performance of the approaches on the SCWS dataset. It is evident from Table TABREF17 that GM$\\_$KL achieves better correlation than existing approaches for various metrics on SCWS dataset.",
+    "Table TABREF18 shows the Spearman correlation values of GM$\\_$KL model evaluated on the benchmark word similarity datasets: SL BIBREF20, WS, WS-R, WS-S BIBREF21, MEN BIBREF22, MC BIBREF23, RG BIBREF24, YP BIBREF25, MTurk-287 and MTurk-771 BIBREF26, BIBREF27, and RW BIBREF28. The metric used for comparison is 'AvgCos'. It can be seen that for most of the datasets, GM$\\_$KL achieves significantly better correlation score than w2g and w2gm approaches. Other datasets such as MC and RW consist of only a single sense, and hence w2g model performs better and GM$\\_$KL achieves next better performance. The YP dataset have multiple senses but does not contain entailed data and hence could not make use of entailment benefits of GM$\\_$KL.",
+    "Table TABREF19 shows the evaluation results of GM$\\_$KL model on the entailment datasets such as entailment pairs dataset BIBREF29 created from WordNet with both positive and negative labels, a crowdsourced dataset BIBREF30 of 79 semantic relations labelled as entailed or not and annotated distributionally similar nouns dataset BIBREF31. The 'MaxCos' similarity metric is used for evaluation and the best precision and best F1-score is shown, by picking the optimal threshold. Overall, GM$\\_$KL performs better than both w2g and w2gm approaches."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Experimentation and Results",
+    "Experimentation and Results",
+    "Experimentation and Results",
+    "Experimentation and Results",
+    "Experimentation and Results",
+    "Experimentation and Results",
+    "Experimentation and Results",
+    "Experimentation and Results",
+    "Experimentation and Results",
+    "Experimentation and Results"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Experimentation and Results",
+      0
+    ],
+    [
+      "Experimentation and Results",
+      1
+    ],
+    [
+      "Experimentation and Results",
+      2
+    ],
+    [
+      "Experimentation and Results",
+      3
+    ],
+    [
+      "Experimentation and Results",
+      4
+    ],
+    [
+      "Experimentation and Results",
+      5
+    ],
+    [
+      "Experimentation and Results",
+      6
+    ],
+    [
+      "Experimentation and Results",
+      7
+    ],
+    [
+      "Experimentation and Results",
+      8
+    ],
+    [
+      "Experimentation and Results",
+      9
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Experimentation and Results",
+  "section": "Experimentation and Results",
+  "title_path": "Experimentation and Results",
+  "block_type": "long_unit"
+}

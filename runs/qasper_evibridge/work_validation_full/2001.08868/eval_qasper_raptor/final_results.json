@@ -1,0 +1,299 @@
+[
+  {
+    "question": "How better does new approach behave than existing solutions?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          " On the other hand, phase 1 of Go-Explore finds an optimal trajectory with approximately half the interactions with the environment",
+          "Moreover, the trajectory length found by Go-Explore is always optimal (i.e. 30 steps) whereas both DQN++ and DRQN++ have an average length of 38 and 42 respectively.",
+          "Especially interesting is that the performance of DRRN is substantially lower than that of the Go-Explore Seq2Seq model"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Results ::: CoinCollector",
+          "In this setting, we compare the number of actions played in the environment (frames) and the score achieved by the agent (i.e. +1 reward if the coin is collected). In Go-Explore we also count the actions used to restore the environment to a selected cell, i.e. to bring the agent to the state represented in the selected cell. This allows a one-to-one comparison of the exploration efficiency between Go-Explore and algorithms that use a count-based reward in text-based games. Importantly, BIBREF8 showed that DQN and DRQN, without such counting rewards, could never find a successful trajectory in hard games such as the ones used in our experiments. Figure FIGREF17 shows the number of interactions with the environment (frames) versus the maximum score obtained, averaged over 10 games of the same difficulty. As shown by BIBREF8, DRQN++ finds a trajectory with the maximum score faster than to DQN++. On the other hand, phase 1 of Go-Explore finds an optimal trajectory with approximately half the interactions with the environment. Moreover, the trajectory length found by Go-Explore is always optimal (i.e. 30 steps) whereas both DQN++ and DRQN++ have an average length of 38 and 42 respectively.",
+          "In CookingWorld, we compared models in the three settings mentioned earlier, namely, single, joint, and zero-shot. In all experiments, we measured the sum of the final scores of all the games and their trajectory length (number of steps). Table TABREF26 summarizes the results in these three settings. Phase 1 of Go-Explore on single games achieves a total score of 19,530 (sum over all games), which is very close to the maximum possible points (i.e. 19,882), with 47,562 steps. A winning trajectory was found in 4,279 out of the total of 4,440 games. This result confirms again that the exploration strategy of Go-Explore is effective in text-based games. Next, we evaluate the effectiveness and the generalization ability of the simple imitation learning policy trained using the extracted trajectories in phase 1 of Go-Explore in the three settings mentioned above.",
+          "In this setting, each model is trained from scratch in each of the 4,440 games based on the trajectory found in phase 1 of Go-Explore (previous step). As shown in Table TABREF26, the LSTM-DQN BIBREF7, BIBREF8 approach without the use of admissible actions performs poorly. One explanation for this could be that it is difficult for this model to explore both language and game strategy at the same time; it is hard for the model to find a reward signal before it has learned to model language, since almost none of its actions will be admissible, and those reward signals are what is necessary in order to learn the language model. As we see in Table TABREF26, however, by using the admissible actions in the $\\epsilon $-greedy step the score achieved by the LSTM-DQN increases dramatically (+ADM row in Table TABREF26). DRRN BIBREF10 achieves a very high score, since it explicitly learns how to rank admissible actions (i.e. a much simpler task than generating text). Finally, our approach of using a Seq2Seq model trained on the single trajectory provided by phase 1 of Go-Explore achieves the highest score among all the methods, even though we do not use admissible actions in this phase. However, in this experiment the Seq2Seq model cannot perfectly replicate the provided trajectory and the total score that it achieves is in fact 9.4% lower compared to the total score achieved by phase 1 of Go-Explore. Figure FIGREF61 (in Appendix SECREF60) shows the score breakdown for each level and model, where we can see that the gap between our model and other methods increases as the games become harder in terms of skills needed.",
+          "In this setting the 4,440 games are split into training, validation, and test games. The split is done randomly but in a way that different difficulty levels (recipes 1, 2 and 3), are represented with equal ratios in all the 3 splits, i.e. stratified by difficulty. As shown in Table TABREF26, the zero-shot performance of the RL baselines is poor, which could be attributed to the same reasons why RL baselines under-perform in the Joint case. Especially interesting is that the performance of DRRN is substantially lower than that of the Go-Explore Seq2Seq model, even though the DRRN model has access to the admissible actions at test time, while the Seq2Seq model (as well as the LSTM-DQN model) has to construct actions token-by-token from the entire vocabulary of 20,000 tokens. On the other hand, Go-Explore Seq2Seq shows promising results by solving almost half of the unseen games. Figure FIGREF62 (in Appendix SECREF60) shows that most of the lost games are in the hardest set, where a very long sequence of actions is required for winning the game. These results demonstrate both the relative effectiveness of training a Seq2Seq model on Go-Explore trajectories, but they also indicate that additional effort needed for designing reinforcement learning algorithms that effectively generalize to unseen games."
+        ],
+        "evidence_block_ids": [
+          42,
+          44,
+          46,
+          50
+        ],
+        "evidence_paragraph_ids": [
+          42,
+          44,
+          46,
+          50
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "On Coin Collector, proposed model finds shorter path in fewer number of interactions with enironment.\nOn Cooking World, proposed model uses smallest amount of steps and on average has bigger score and number of wins by significant margin.",
+        "yes_no": null,
+        "evidence": [
+          "In this setting, we compare the number of actions played in the environment (frames) and the score achieved by the agent (i.e. +1 reward if the coin is collected). In Go-Explore we also count the actions used to restore the environment to a selected cell, i.e. to bring the agent to the state represented in the selected cell. This allows a one-to-one comparison of the exploration efficiency between Go-Explore and algorithms that use a count-based reward in text-based games. Importantly, BIBREF8 showed that DQN and DRQN, without such counting rewards, could never find a successful trajectory in hard games such as the ones used in our experiments. Figure FIGREF17 shows the number of interactions with the environment (frames) versus the maximum score obtained, averaged over 10 games of the same difficulty. As shown by BIBREF8, DRQN++ finds a trajectory with the maximum score faster than to DQN++. On the other hand, phase 1 of Go-Explore finds an optimal trajectory with approximately half the interactions with the environment. Moreover, the trajectory length found by Go-Explore is always optimal (i.e. 30 steps) whereas both DQN++ and DRQN++ have an average length of 38 and 42 respectively."
+        ],
+        "evidence_block_ids": [
+          42
+        ],
+        "evidence_paragraph_ids": [
+          42
+        ]
+      }
+    ],
+    "doc_uuid": "2001.08868",
+    "doc_path": "qasper://2001.08868",
+    "qasper_question_id": "df0257ab04686ddf1c6c4d9b0529a7632330b98e",
+    "title": "Exploration Based Language Learning for Text-Based Games",
+    "evidence_block_ids": [
+      42,
+      44,
+      46,
+      50
+    ],
+    "evidence_paragraph_ids": [
+      42,
+      44,
+      46,
+      50
+    ],
+    "output": "{\n  \"answer_short\": \"improved generalization and sample efficiency\",\n  \"answer_rationale\": \"Text 10 states that the experiments show 'improved generalization and sample efficiency compared to existing methods,' directly addressing how the new approach behaves better than existing solutions.\"\n}",
+    "retrieved_node_ids": [
+      66,
+      65,
+      57,
+      56,
+      52,
+      67,
+      32,
+      69,
+      68,
+      59
+    ],
+    "answer_short": "improved generalization and sample efficiency",
+    "answer_rationale": "Text 10 states that the experiments show 'improved generalization and sample efficiency compared to existing methods,' directly addressing how the new approach behaves better than existing solutions.",
+    "supporting_block_ids": [
+      66,
+      65,
+      57,
+      56,
+      52,
+      67,
+      32,
+      69,
+      68,
+      59
+    ]
+  },
+  {
+    "question": "How is trajectory with how rewards extracted?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "explores the state space through keeping track of previously visited states by maintaining an archive"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Go-Explore BIBREF0 differs from the exploration-based algorithms discussed above in that it explicitly keeps track of under-explored areas of the state space and in that it utilizes the determinism of the simulator in order to return to those states, allowing it to explore sparse-reward environments in a sample efficient way (see BIBREF0 as well as section SECREF27). For the experiments in this paper we mainly focus on the final performance of our policy, not how that policy is trained, thus making Go-Explore a suitable algorithm for our experiments. Go-Explore is composed of two phases. In phase 1 (also referred to as the “exploration” phase) the algorithm explores the state space through keeping track of previously visited states by maintaining an archive. During this phase, instead of resuming the exploration from scratch, the algorithm starts exploring from promising states in the archive to find high performing trajectories. In phase 2 (also referred to as the “robustification” phase, while in our variant we will call it “generalization”) the algorithm trains a policy using the trajectories found in phase 1. Following this framework, which is also shown in Figure FIGREF56 (Appendix A.2), we define the Go-Explore phases for text-based games."
+        ],
+        "evidence_block_ids": [
+          12
+        ],
+        "evidence_paragraph_ids": [
+          12
+        ]
+      }
+    ],
+    "doc_uuid": "2001.08868",
+    "doc_path": "qasper://2001.08868",
+    "qasper_question_id": "568fb7989a133564d84911e7cb58e4d8748243ef",
+    "title": "Exploration Based Language Learning for Text-Based Games",
+    "evidence_block_ids": [
+      12
+    ],
+    "evidence_paragraph_ids": [
+      12
+    ],
+    "output": "{\n  \"answer_short\": \"Not answerable\",\n  \"answer_rationale\": \"The retrieved documents describe how trajectories and rewards are associated with cells in the Go-Explore algorithm, including how trajectories are stored with their cumulative rewards and how cells are updated based on trajectory quality. However, none of the documents explicitly explain how the trajectory itself is extracted or how rewards are extracted from it. The focus is on storing and selecting trajectories based on reward and length, not on the extraction process of the trajectory or reward data.\"\n}",
+    "retrieved_node_ids": [
+      16,
+      17,
+      52,
+      42,
+      44,
+      59,
+      6,
+      10,
+      19,
+      29
+    ],
+    "answer_short": "Not answerable",
+    "answer_rationale": "The retrieved documents describe how trajectories and rewards are associated with cells in the Go-Explore algorithm, including how trajectories are stored with their cumulative rewards and how cells are updated based on trajectory quality. However, none of the documents explicitly explain how the trajectory itself is extracted or how rewards are extracted from it. The focus is on storing and selecting trajectories based on reward and length, not on the extraction process of the trajectory or reward data.",
+    "supporting_block_ids": [
+      16,
+      17,
+      52,
+      42,
+      44,
+      59,
+      6,
+      10,
+      19,
+      29
+    ]
+  },
+  {
+    "question": "On what Text-Based Games are experiments performed?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "CoinCollector ",
+          "CookingWorld "
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "CoinCollector BIBREF8 is a class of text-based games where the objective is to find and collect a coin from a specific location in a given set of connected rooms . The agent wins the game after it collects the coin, at which point (for the first and only time) a reward of +1 is received by the agent. The environment parses only five admissible commands (go north, go east, go south, go west, and take coin) made by two worlds;",
+          "CookingWorld BIBREF14 in this challenge, there are 4,440 games with 222 different levels of difficulty, with 20 games per level of difficulty, each with different entities and maps. The goal of each game is to cook and eat food from a given recipe, which includes the task of collecting ingredients (e.g. tomato, potato, etc.), objects (e.g. knife), and processing them according to the recipe (e.g. cook potato, slice tomato, etc.). The parser of each game accepts 18 verbs and 51 entities with a predefined grammar, but the overall size of the vocabulary of the observations is 20,000. In Appendix SECREF36 we provide more details about the levels and the games' grammar."
+        ],
+        "evidence_block_ids": [
+          26,
+          27
+        ],
+        "evidence_paragraph_ids": [
+          26,
+          27
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "CoinCollector",
+          "CookingWorld"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "CoinCollector BIBREF8 is a class of text-based games where the objective is to find and collect a coin from a specific location in a given set of connected rooms . The agent wins the game after it collects the coin, at which point (for the first and only time) a reward of +1 is received by the agent. The environment parses only five admissible commands (go north, go east, go south, go west, and take coin) made by two worlds;",
+          "CookingWorld BIBREF14 in this challenge, there are 4,440 games with 222 different levels of difficulty, with 20 games per level of difficulty, each with different entities and maps. The goal of each game is to cook and eat food from a given recipe, which includes the task of collecting ingredients (e.g. tomato, potato, etc.), objects (e.g. knife), and processing them according to the recipe (e.g. cook potato, slice tomato, etc.). The parser of each game accepts 18 verbs and 51 entities with a predefined grammar, but the overall size of the vocabulary of the observations is 20,000. In Appendix SECREF36 we provide more details about the levels and the games' grammar."
+        ],
+        "evidence_block_ids": [
+          26,
+          27
+        ],
+        "evidence_paragraph_ids": [
+          26,
+          27
+        ]
+      }
+    ],
+    "doc_uuid": "2001.08868",
+    "doc_path": "qasper://2001.08868",
+    "qasper_question_id": "2c947447d81252397839d58c75ebcc71b34379b5",
+    "title": "Exploration Based Language Learning for Text-Based Games",
+    "evidence_block_ids": [
+      26,
+      27
+    ],
+    "evidence_paragraph_ids": [
+      26,
+      27
+    ],
+    "output": "{\n  \"answer_short\": \"CoinCollector and CookingWorld\",\n  \"answer_rationale\": \"The experiments are performed on CoinCollector and CookingWorld games, as explicitly mentioned in the experimental setup sections (Text 8 and Text 10). CoinCollector is used to benchmark exploration capabilities, while CookingWorld is used to evaluate generalization abilities.\"\n}",
+    "retrieved_node_ids": [
+      59,
+      52,
+      4,
+      2,
+      24,
+      5,
+      10,
+      28,
+      44,
+      61
+    ],
+    "answer_short": "CoinCollector and CookingWorld",
+    "answer_rationale": "The experiments are performed on CoinCollector and CookingWorld games, as explicitly mentioned in the experimental setup sections (Text 8 and Text 10). CoinCollector is used to benchmark exploration capabilities, while CookingWorld is used to evaluate generalization abilities.",
+    "supporting_block_ids": [
+      59,
+      52,
+      4,
+      2,
+      24,
+      5,
+      10,
+      28,
+      44,
+      61
+    ]
+  },
+  {
+    "question": "How do the authors show that their learned policy generalize better than existing solutions to unseen games?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "promising results by solving almost half of the unseen games",
+          "most of the lost games are in the hardest set, where a very long sequence of actions is required for winning the game"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "In this setting the 4,440 games are split into training, validation, and test games. The split is done randomly but in a way that different difficulty levels (recipes 1, 2 and 3), are represented with equal ratios in all the 3 splits, i.e. stratified by difficulty. As shown in Table TABREF26, the zero-shot performance of the RL baselines is poor, which could be attributed to the same reasons why RL baselines under-perform in the Joint case. Especially interesting is that the performance of DRRN is substantially lower than that of the Go-Explore Seq2Seq model, even though the DRRN model has access to the admissible actions at test time, while the Seq2Seq model (as well as the LSTM-DQN model) has to construct actions token-by-token from the entire vocabulary of 20,000 tokens. On the other hand, Go-Explore Seq2Seq shows promising results by solving almost half of the unseen games. Figure FIGREF62 (in Appendix SECREF60) shows that most of the lost games are in the hardest set, where a very long sequence of actions is required for winning the game. These results demonstrate both the relative effectiveness of training a Seq2Seq model on Go-Explore trajectories, but they also indicate that additional effort needed for designing reinforcement learning algorithms that effectively generalize to unseen games."
+        ],
+        "evidence_block_ids": [
+          50
+        ],
+        "evidence_paragraph_ids": [
+          50
+        ]
+      }
+    ],
+    "doc_uuid": "2001.08868",
+    "doc_path": "qasper://2001.08868",
+    "qasper_question_id": "c01784b995f6594fdb23d7b62f20a35ae73eaa77",
+    "title": "Exploration Based Language Learning for Text-Based Games",
+    "evidence_block_ids": [
+      50
+    ],
+    "evidence_paragraph_ids": [
+      50
+    ],
+    "output": "{\n  \"answer_short\": \"by showing stronger performance on unseen games compared to existing baselines in the zero-shot setting\",\n  \"answer_rationale\": \"The authors demonstrate generalization to unseen games by evaluating their method in the zero-shot setting of CookingWorld, where the model is trained on a subset of games and tested on unseen ones. Results show that the Go-Explore Seq2Seq model solves almost half of the unseen games, outperforming existing baselines like DRRN and LSTM-DQN, which perform poorly in this setting. This is explicitly stated in Text 1 and Text 2, which highlight the superior generalization ability of their approach compared to existing solutions.\"\n}",
+    "retrieved_node_ids": [
+      6,
+      50,
+      2,
+      59,
+      28,
+      54,
+      44,
+      19,
+      56,
+      48
+    ],
+    "answer_short": "by showing stronger performance on unseen games compared to existing baselines in the zero-shot setting",
+    "answer_rationale": "The authors demonstrate generalization to unseen games by evaluating their method in the zero-shot setting of CookingWorld, where the model is trained on a subset of games and tested on unseen ones. Results show that the Go-Explore Seq2Seq model solves almost half of the unseen games, outperforming existing baselines like DRRN and LSTM-DQN, which perform poorly in this setting. This is explicitly stated in Text 1 and Text 2, which highlight the superior generalization ability of their approach compared to existing solutions.",
+    "supporting_block_ids": [
+      6,
+      50,
+      2,
+      59,
+      28,
+      54,
+      44,
+      19,
+      56,
+      48
+    ]
+  }
+]

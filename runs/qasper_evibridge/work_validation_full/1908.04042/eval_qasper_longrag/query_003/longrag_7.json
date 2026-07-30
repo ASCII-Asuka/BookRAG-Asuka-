@@ -1,0 +1,88 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Evaluation Metrics\n[source_id=32] In this work, we measure (i) recommendation accuracy, (ii) semantic similarity, and (iii) recommendation diversity to evaluate the quality of our approaches from different perspectives.\n[source_id=33] Recommendation accuracy. We use Normalized Discounted Cumulative Gain (nDCG) BIBREF15 to measure the accuracy of the tag recommendation approaches. The nDCG measure is a standard ranking-dependent metric that not only measures how many tags can be correctly predicted but also takes into account their position in the recommendation list with length of INLINEFORM0 . It is based on the Discounted Cummulative Gain, which is given by: DISPLAYFORM0\n[source_id=34] where INLINEFORM0 is a function that returns 1 if the recommended tag at position INLINEFORM1 in the recommended list is relevant. We then calculate DCG@ INLINEFORM2 for every evaluated e-book by dividing DCG@ INLINEFORM3 with the ideal DCG value iDCG@ INLINEFORM4 , which is the highest possible DCG value that can be achieved if all the relevant tags would be recommended in the correct order. It is given by the following formula BIBREF15 : DISPLAYFORM0\n[source_id=35] Semantic similarity. One precondition of standard recommendation accuracy measures is that to generate a “hit”, the recommended tag needs to be an exact syntactical match to the one from the test set. When tags are recommended from one data source and compared to tags from another source, this can be problematic. For example, if we recommend the tag “victim” but expect the tag “prey”, we would mark this as a mismatch, therefore being a bad recommendation. But if we know that the corresponding e-book is a crime novel, the recommended tag would be (semantically) descriptive to reflect the book's content. Hence, in this paper, we propose to additionally measure the semantic similarity between recommended tags and tags from the test set (i.e., the Amazon review keywords).\n[source_id=36] Over the last four years, there have been several notable publications in the area of applying deep learning to uncover semantic relationships between textual content (e.g., by learning word embeddings with Word2Vec BIBREF16 , BIBREF17 ). Based on this, we propose an alternative measure of recommendation quality by learning the semantic relationships from both vocabularies and then using it to compare how semantically similar the recommended tags are to the expected review keywords. For this, we first extract the textual content in the form of the description text, title, editor tags and Amazon search terms of e-books from our dataset. We then train a Doc2Vec BIBREF7 model on the content. Then, we use the model to infer the latent representation for both the complete list of recommended tags as well as the list of expected tags from the test set. Finally, we use the cosine similarity measure to calculate how semantically similar these two lists are.\n[source_id=37] Recommendation diversity. As defined in BIBREF18 , we calculate recommendation diversity as the average dissimilarity of all pairs of tags in the list of recommended tags. Thus, given a distance function INLINEFORM0 that corresponds to the dissimilarity between two tags INLINEFORM1 and INLINEFORM2 in the list of recommended tags, INLINEFORM3 is given as the average dissimilarity of all pairs of tags: DISPLAYFORM0\n[source_id=38] where INLINEFORM0 is the number of evaluated e-books and the dissimilarity function is defined as INLINEFORM1 . In our experiments, we use the previously trained Doc2Vec model to extract the latent representation of a specific tag. The similarity of two tags INLINEFORM2 is then calculated with the Cosine similarity measure using the latent vector representations of respective tags INLINEFORM3 and INLINEFORM4 .",
+  "score": 4.266343162975225,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38
+  ],
+  "child_qasper_evidence_texts": [
+    "In this work, we measure (i) recommendation accuracy, (ii) semantic similarity, and (iii) recommendation diversity to evaluate the quality of our approaches from different perspectives.",
+    "Recommendation accuracy. We use Normalized Discounted Cumulative Gain (nDCG) BIBREF15 to measure the accuracy of the tag recommendation approaches. The nDCG measure is a standard ranking-dependent metric that not only measures how many tags can be correctly predicted but also takes into account their position in the recommendation list with length of INLINEFORM0 . It is based on the Discounted Cummulative Gain, which is given by: DISPLAYFORM0",
+    "where INLINEFORM0 is a function that returns 1 if the recommended tag at position INLINEFORM1 in the recommended list is relevant. We then calculate DCG@ INLINEFORM2 for every evaluated e-book by dividing DCG@ INLINEFORM3 with the ideal DCG value iDCG@ INLINEFORM4 , which is the highest possible DCG value that can be achieved if all the relevant tags would be recommended in the correct order. It is given by the following formula BIBREF15 : DISPLAYFORM0",
+    "Semantic similarity. One precondition of standard recommendation accuracy measures is that to generate a “hit”, the recommended tag needs to be an exact syntactical match to the one from the test set. When tags are recommended from one data source and compared to tags from another source, this can be problematic. For example, if we recommend the tag “victim” but expect the tag “prey”, we would mark this as a mismatch, therefore being a bad recommendation. But if we know that the corresponding e-book is a crime novel, the recommended tag would be (semantically) descriptive to reflect the book's content. Hence, in this paper, we propose to additionally measure the semantic similarity between recommended tags and tags from the test set (i.e., the Amazon review keywords).",
+    "Over the last four years, there have been several notable publications in the area of applying deep learning to uncover semantic relationships between textual content (e.g., by learning word embeddings with Word2Vec BIBREF16 , BIBREF17 ). Based on this, we propose an alternative measure of recommendation quality by learning the semantic relationships from both vocabularies and then using it to compare how semantically similar the recommended tags are to the expected review keywords. For this, we first extract the textual content in the form of the description text, title, editor tags and Amazon search terms of e-books from our dataset. We then train a Doc2Vec BIBREF7 model on the content. Then, we use the model to infer the latent representation for both the complete list of recommended tags as well as the list of expected tags from the test set. Finally, we use the cosine similarity measure to calculate how semantically similar these two lists are.",
+    "Recommendation diversity. As defined in BIBREF18 , we calculate recommendation diversity as the average dissimilarity of all pairs of tags in the list of recommended tags. Thus, given a distance function INLINEFORM0 that corresponds to the dissimilarity between two tags INLINEFORM1 and INLINEFORM2 in the list of recommended tags, INLINEFORM3 is given as the average dissimilarity of all pairs of tags: DISPLAYFORM0",
+    "where INLINEFORM0 is the number of evaluated e-books and the dissimilarity function is defined as INLINEFORM1 . In our experiments, we use the previously trained Doc2Vec model to extract the latent representation of a specific tag. The similarity of two tags INLINEFORM2 is then calculated with the Cosine similarity measure using the latent vector representations of respective tags INLINEFORM3 and INLINEFORM4 ."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Evaluation Metrics",
+    "Evaluation Metrics",
+    "Evaluation Metrics",
+    "Evaluation Metrics",
+    "Evaluation Metrics",
+    "Evaluation Metrics",
+    "Evaluation Metrics"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Evaluation Metrics",
+      0
+    ],
+    [
+      "Evaluation Metrics",
+      1
+    ],
+    [
+      "Evaluation Metrics",
+      2
+    ],
+    [
+      "Evaluation Metrics",
+      3
+    ],
+    [
+      "Evaluation Metrics",
+      4
+    ],
+    [
+      "Evaluation Metrics",
+      5
+    ],
+    [
+      "Evaluation Metrics",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Evaluation Metrics",
+  "section": "Evaluation Metrics",
+  "title_path": "Evaluation Metrics",
+  "block_type": "long_unit"
+}

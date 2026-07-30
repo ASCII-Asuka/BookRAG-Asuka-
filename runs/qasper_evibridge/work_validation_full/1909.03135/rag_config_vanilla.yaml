@@ -1,0 +1,117 @@
+graph:
+  embedding_config:
+    api_base: http://localhost:11434
+    api_key: '***REDACTED***'
+    backend: local
+    device: cuda:2
+    max_length: 8192
+    model_name: Qwen/Qwen3-Embedding-0.6B
+    type: text
+  extractor_type: llm
+  g: 0.6
+  image_description_force: false
+  local_model_name: en_core_web_sm
+  max_gleaning: 0
+  refine_type: advanced
+  reranker_config:
+    api_base: http://localhost:8011/v1
+    api_key: '***REDACTED***'
+    backend: local
+    device: cuda:2
+    max_length: 8192
+    max_retries: 3
+    model_name: Qwen/Qwen3-Reranker-0.6B
+    request_timeout: 60.0
+    retry_backoff: 0.5
+index_type: bm25
+llm:
+  api_base: https://api.siliconflow.cn/v1
+  api_key: '***REDACTED***'
+  backend: openai
+  frequency_penalty: 0.0
+  max_output_tokens: null
+  max_tokens: 5000
+  max_workers: 1
+  model_name: Qwen/Qwen3-VL-8B-Instruct
+  presence_penalty: 0.0
+  temperature: 0.1
+mineru:
+  backend: pipeline
+  lang: en
+  method: auto
+  server_url: http://127.0.0.1:30000
+pdf_path: qasper:\1909.03135
+rag:
+  strategy_config:
+    answer_style: short
+    bm25_corpus: paragraph
+    bm25_vdb_dir_name: bm25_vdb
+    corpus_unit: chunk
+    full_document_max_context_tokens: 30000
+    hybrid_bm25_topk: 50
+    hybrid_dense_topk: 50
+    ircot_final_topk: 10
+    ircot_max_steps: 3
+    ircot_step_topk: 3
+    longrag_max_context_tokens: 30000
+    longrag_unit_tokens: 4096
+    react_dataset_name: qasper
+    react_max_steps: 7
+    react_page_observation_units: 5
+    react_prompt_file: ''
+    react_search_topk: 1
+    rerank_batch_size: 50
+    rerank_topk: 50
+    reranker_config:
+      api_base: http://localhost:8011/v1
+      api_key: '***REDACTED***'
+      backend: local
+      device: cuda:2
+      max_length: 8192
+      max_retries: 3
+      model_name: Qwen/Qwen3-Reranker-0.6B
+      request_timeout: 60.0
+      retry_backoff: 0.5
+    retrieval_method: react
+    rrf_k: 60
+    strategy: vanilla
+    topk: 10
+    vdb_config:
+      collection_name: BM25VDB
+      embedding_config:
+        api_base: TODO
+        api_key: '***REDACTED***'
+        backend: openai
+        device: cpu
+        max_length: 4096
+        model_name: TODO
+        type: text
+      force_rebuild: true
+      mm_embedding: false
+      vdb_dir_name: bm25_vdb
+rag_force_reprocess: false
+save_path: runs\qasper_evibridge\work_validation_full\1909.03135
+tree:
+  node_keywords: true
+  node_summary: false
+  use_vlm: false
+vdb:
+  collection_name: BM25VDB
+  embedding_config:
+    api_base: http://localhost:11434
+    api_key: '***REDACTED***'
+    backend: local
+    device: cuda:2
+    max_length: 8192
+    model_name: Qwen/Qwen3-Embedding-0.6B
+    type: text
+  force_rebuild: true
+  mm_embedding: false
+  vdb_dir_name: bm25_vdb
+vlm:
+  api_base: TODO
+  api_key: '***REDACTED***'
+  backend: ollama
+  max_tokens: 6000
+  model_name: TODO
+  temperature: 0.1

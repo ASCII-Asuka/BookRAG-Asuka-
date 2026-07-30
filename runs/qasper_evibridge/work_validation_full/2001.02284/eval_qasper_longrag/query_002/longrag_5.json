@@ -1,0 +1,223 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Model ::: Dialogue Modules\n[source_id=20] Figure FIGREF82 (see the Appendix) displays the entire dialogue flow. In a nutshell, the system receives a user input, analyzes it and extracts information, if provided. If some of the required information is missing, the system asks the student to provide it. When all the information is collected, it will be automatically validated and subsequently forwarded to a human tutor, who then can directly proceed with the assistance. In the following we will describe the central components of the system.\n[source_id=21] OMB+ Design: Figure FIGREF52 (see Section SECREF11 of the Appendix) illustrates the internal structure and design of the OMB+ platform. It has topics and sub-topics, as well as four examination modes. Each topic (Figure FIGREF52, tag 1) corresponds to a chapter level and always has sub-topics (Figure FIGREF52, tag 2), which correspond to a section level. Examination modes training and exercise are ambiguous, because they correspond to either a chapter (Figure FIGREF52, tag 3) or a section (Figure FIGREF52, tag 5) level, and it is important to differentiate between them, since they contain different types of content. The mode final examination (Figure FIGREF52, tag 4) always corresponds to a chapter level, whereas quiz (Figure FIGREF52, tag 5) can belong only to a section level. According to the design of the OMB+ platform, there are several ways of how a possible dialogue flow can proceed.\n[source_id=22] Preprocessing: In a natural language dialogue, a user may respond in many different ways, thus, the extraction of any data from user-generated text is a challenging task due to a number of misspellings or confusable spellings (e.g., Exercise 1.a, Exercise 1 (a)). Therefore, to enable a reliable extraction of entities, we preprocessed and normalized (e.g., misspellings, synonyms) every user input before it was sent to the Natural Language Understanding (NLU) module. The preprocessing includes following steps:\n[source_id=23] lowercasing and stemming of all words in the input;\n[source_id=24] removal of German stop words and punctuation;\n[source_id=25] all mentions of $x$ in mathematical formulas were removed to avoid confusion with roman number 10 (“$X$”);\n[source_id=26] in a combination of the type: word “Chapter/Exercise” + digit written as a word (i.e “first”, “second”), word was replaced with a digit (“in first Chapter” $\\rightarrow $ “in Chapter 1”), roman numbers were replaced with digits as well (“Chapter IV” $\\rightarrow $ “Chapter 4”).\n[source_id=27] detected ambiguities were normalized (e.g., “Trainingsaufgabe” $\\rightarrow $ “Training”);\n[source_id=28] recognized misspellings resp. typos were corrected (e.g., “Difeernzialrechnung” $\\rightarrow $ “Differentialrechnung')'\n[source_id=29] permalinks were parsed and analyzed. From each permalink it is possible to extract topic, examination mode and question number;\n[source_id=30] Natural Language Understanding (NLU): We implemented an NLU unit utilizing handcrafted rules, Regular Expressions (RegEx) and Elasticsearch (ES) API. The NLU module contains following functionalities:\n[source_id=31] Intent classification: As we mentioned above, student questions can be grouped into three main categories: Organizational questions, contextual questions and mathematical questions. To classify the input message by its category or so-called intent, we utilized key-word information predefined by handcrafted rules. We assumed that particular words are explicit and associated with a corresponding intent. If no intent could be classified, then it is assumed that the NLU unit was not capable of understanding and the intent is interpreted as unknown. In this case, the system requests the user to provide an intent manually (by picking one from the mentioned three options). The questions from organizational and theoretical categories are directly delivered to a human tutor, while mathematical questions are processed by the automated system for further analysis.\n[source_id=32] Entity Extraction: Next, the system attempts to retrieve the entities from a user message on the topic (and sub-topic), examination mode and level, and question number. This part is implemented using Elasticsearch (ES) and RegEx. To enable the use of ES, we indexed the OMB+ site to an internal database. Besides indexing the topics and titles, we also provided information on possible synonyms or writing styles. We additionally filed OMB+ permalinks, which direct to the site pages. To query the resulting database, we utilized the internal Elasticsearch multi match function and set the minimum should match parameter to $20\\%$. This parameter defines the number of terms that must match for a document to be considered relevant. Besides that, we adopted fuzziness with the maximum edit distance set to 2 characters. The fuzzy query uses similarity based on Levenshtein edit distance BIBREF3. Finally, the system generates a ranked list of possible matching entries found in the database within the predefined relevance threshold (we set it to $\\theta $=$1.5$). We pick the most probable entry as the correct one and extract the corresponding entity from the user input.\n[source_id=33] To summarize, the NLU module receives the user input as a preprocessed text and checks it across all predefined RegEx statements and for a match in the Elasticsearch database. Every time the entity is extracted, it is entered in the Information Dictionary (ID). The ID has the following six slots to be filled in: topic, sub-topic, examination level, examination mode, question number, and exact problem formulation.\n[source_id=34] Dialogue Manager consists of the Dialogue State Tracker (DST), that maintains a representation of the current dialog state, and of the Policy Learner (PL) that defines the next system action. In our model, the system's next action is defined by the state of the previously obtained information stored in the Information Dictionary. For instance, if the system recognizes that the student works on the final examination, it also understands (defined by the logic in the predefined rules) that there is no need to ask for sub-topic because the final examination always corresponds to a chapter level (due to the design of OMB+ platform). If the system identifies that the user has difficulties in solving a quiz, it has to ask for the corresponding topic and sub-topic if not yet provided by a user (because the quiz always refers to a section level). To determine all of the potential dialogue flows, we implemented Mutually Exclusive Rules (MER), which indicate that two events $e_{1}$ and $e_{2}$ are mutually exclusive or disjoint if they cannot both occur at the same time (thus, the intersection of these events is empty: $P(A \\cap B) = 0$). Additionally, we defined transition and mapping rules. The formal explanation of rules can be found in Section SECREF12 of the Appendix. Following the rules, we generated 56 state transitions, which define next system actions. Being on a new dialogue state, the system compares the extracted (i.e., updated) information in the ID with the valid dialogue states (see Section SECREF12 of the Appendix for the explanation of the validness) and picks the mapped action as the next system's action.\n[source_id=35] The abovementioned rules are intended to support the current design of the OMB+ learning platform. However, additional MERs could be added to generate new transitions. Exemplifying this, we conducted experiments with the former design of the platform, where all the topics, except for the first one, had only sub-topics, whereas the first topic had both sub-topics and sub-sub-topics. We could effortlessly generate the missing transitions with our approach. The number of possible transitions, in this case, increased from 56 to 117.\n[source_id=36] Meta Policy: Since the system is intended to operate in a real-world scenario, we had to implement additional policies that control the dialogue flow and validate the system's accuracy. Below we describe these policies:\n[source_id=37] Completeness of the Information Dictionary: In this step, the system validates the completeness of the ID, which is defined by the number of obligatory slots filled in the information dictionary. There are 6 distinct cases when the ID is considered to be complete (see Section SECREF13 of the Appendix). For instance, if a user works on a final examination, the system does not has to request a sub-topic or examination level. Thus, the ID has to be filled only with data for a topic, examination mode, and question number, whereas, if the user works on a quiz, the system has to gather information about the topic, sub-topic, examination mode, and the question number. Once the ID is complete, it is provided to the verification step. Otherwise, the system proceeds according to the next action. The system extracts the information in each dialogue step, and thus if the user provides updated information on any subject later in the dialogue, the corresponding slot will be updated in the ID.\n[source_id=38] Verification Step: Once the system has obtained all the necessary information (i.e., ID is complete), it proceeds to the final verification. In that step, the collected data is shown to the student in the session. The student is asked to verify the correctness of the collected data and if some entries are wrong, to correct them. The ID is, where necessary, updated with the user-provided data. This procedure repeats until the user confirms the correctness of the assembled data.\n[source_id=39] Fallback Policy: In some cases, the system fails to derive information from a student query, even if the student provides it. It is due to the Elasticsearch functionality and previously unseen RegEx patterns. In these cases, the system re-asks a user and attempts to retrieve information from a follow-up query. The maximum number of re-ask attempts is set to three times ($r=3$). If the system is unable to extract information after three times, the user input is considered as the ground truth and saved to the appropriate slot in ID. An exception to this rule applies where the user has to specify the intent manually. In this case, after three unclassified attempts, a session is directly handed over to a human tutor.\n[source_id=40] Human Request: In each dialogue state, a user can switch to a human tutor. For this, a user can enter the human key-word. Hence, every user message is additionally analyzed for the presence of this key-word.\n[source_id=41] Response Generation: In this module, the semantic representation of the system's next action is transformed into natural language. Hence, each possible action is mapped to precisely one utterance, which is stored in the templates. Some of the predefined responses are fixed (i.e., “Welches Kapitel bearbeitest du gerade?”), others have placeholders for system values. In the latter case, the utterance can be formulated dependent on the actual ID. The dialogue showcases can be found in Section SECREF14 of the Appendix.",
+  "score": 4.435940647411394,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41
+  ],
+  "child_qasper_evidence_texts": [
+    "Figure FIGREF82 (see the Appendix) displays the entire dialogue flow. In a nutshell, the system receives a user input, analyzes it and extracts information, if provided. If some of the required information is missing, the system asks the student to provide it. When all the information is collected, it will be automatically validated and subsequently forwarded to a human tutor, who then can directly proceed with the assistance. In the following we will describe the central components of the system.",
+    "OMB+ Design: Figure FIGREF52 (see Section SECREF11 of the Appendix) illustrates the internal structure and design of the OMB+ platform. It has topics and sub-topics, as well as four examination modes. Each topic (Figure FIGREF52, tag 1) corresponds to a chapter level and always has sub-topics (Figure FIGREF52, tag 2), which correspond to a section level. Examination modes training and exercise are ambiguous, because they correspond to either a chapter (Figure FIGREF52, tag 3) or a section (Figure FIGREF52, tag 5) level, and it is important to differentiate between them, since they contain different types of content. The mode final examination (Figure FIGREF52, tag 4) always corresponds to a chapter level, whereas quiz (Figure FIGREF52, tag 5) can belong only to a section level. According to the design of the OMB+ platform, there are several ways of how a possible dialogue flow can proceed.",
+    "Preprocessing: In a natural language dialogue, a user may respond in many different ways, thus, the extraction of any data from user-generated text is a challenging task due to a number of misspellings or confusable spellings (e.g., Exercise 1.a, Exercise 1 (a)). Therefore, to enable a reliable extraction of entities, we preprocessed and normalized (e.g., misspellings, synonyms) every user input before it was sent to the Natural Language Understanding (NLU) module. The preprocessing includes following steps:",
+    "lowercasing and stemming of all words in the input;",
+    "removal of German stop words and punctuation;",
+    "all mentions of $x$ in mathematical formulas were removed to avoid confusion with roman number 10 (“$X$”);",
+    "in a combination of the type: word “Chapter/Exercise” + digit written as a word (i.e “first”, “second”), word was replaced with a digit (“in first Chapter” $\\rightarrow $ “in Chapter 1”), roman numbers were replaced with digits as well (“Chapter IV” $\\rightarrow $ “Chapter 4”).",
+    "detected ambiguities were normalized (e.g., “Trainingsaufgabe” $\\rightarrow $ “Training”);",
+    "recognized misspellings resp. typos were corrected (e.g., “Difeernzialrechnung” $\\rightarrow $ “Differentialrechnung')'",
+    "permalinks were parsed and analyzed. From each permalink it is possible to extract topic, examination mode and question number;",
+    "Natural Language Understanding (NLU): We implemented an NLU unit utilizing handcrafted rules, Regular Expressions (RegEx) and Elasticsearch (ES) API. The NLU module contains following functionalities:",
+    "Intent classification: As we mentioned above, student questions can be grouped into three main categories: Organizational questions, contextual questions and mathematical questions. To classify the input message by its category or so-called intent, we utilized key-word information predefined by handcrafted rules. We assumed that particular words are explicit and associated with a corresponding intent. If no intent could be classified, then it is assumed that the NLU unit was not capable of understanding and the intent is interpreted as unknown. In this case, the system requests the user to provide an intent manually (by picking one from the mentioned three options). The questions from organizational and theoretical categories are directly delivered to a human tutor, while mathematical questions are processed by the automated system for further analysis.",
+    "Entity Extraction: Next, the system attempts to retrieve the entities from a user message on the topic (and sub-topic), examination mode and level, and question number. This part is implemented using Elasticsearch (ES) and RegEx. To enable the use of ES, we indexed the OMB+ site to an internal database. Besides indexing the topics and titles, we also provided information on possible synonyms or writing styles. We additionally filed OMB+ permalinks, which direct to the site pages. To query the resulting database, we utilized the internal Elasticsearch multi match function and set the minimum should match parameter to $20\\%$. This parameter defines the number of terms that must match for a document to be considered relevant. Besides that, we adopted fuzziness with the maximum edit distance set to 2 characters. The fuzzy query uses similarity based on Levenshtein edit distance BIBREF3. Finally, the system generates a ranked list of possible matching entries found in the database within the predefined relevance threshold (we set it to $\\theta $=$1.5$). We pick the most probable entry as the correct one and extract the corresponding entity from the user input.",
+    "To summarize, the NLU module receives the user input as a preprocessed text and checks it across all predefined RegEx statements and for a match in the Elasticsearch database. Every time the entity is extracted, it is entered in the Information Dictionary (ID). The ID has the following six slots to be filled in: topic, sub-topic, examination level, examination mode, question number, and exact problem formulation.",
+    "Dialogue Manager consists of the Dialogue State Tracker (DST), that maintains a representation of the current dialog state, and of the Policy Learner (PL) that defines the next system action. In our model, the system's next action is defined by the state of the previously obtained information stored in the Information Dictionary. For instance, if the system recognizes that the student works on the final examination, it also understands (defined by the logic in the predefined rules) that there is no need to ask for sub-topic because the final examination always corresponds to a chapter level (due to the design of OMB+ platform). If the system identifies that the user has difficulties in solving a quiz, it has to ask for the corresponding topic and sub-topic if not yet provided by a user (because the quiz always refers to a section level). To determine all of the potential dialogue flows, we implemented Mutually Exclusive Rules (MER), which indicate that two events $e_{1}$ and $e_{2}$ are mutually exclusive or disjoint if they cannot both occur at the same time (thus, the intersection of these events is empty: $P(A \\cap B) = 0$). Additionally, we defined transition and mapping rules. The formal explanation of rules can be found in Section SECREF12 of the Appendix. Following the rules, we generated 56 state transitions, which define next system actions. Being on a new dialogue state, the system compares the extracted (i.e., updated) information in the ID with the valid dialogue states (see Section SECREF12 of the Appendix for the explanation of the validness) and picks the mapped action as the next system's action.",
+    "The abovementioned rules are intended to support the current design of the OMB+ learning platform. However, additional MERs could be added to generate new transitions. Exemplifying this, we conducted experiments with the former design of the platform, where all the topics, except for the first one, had only sub-topics, whereas the first topic had both sub-topics and sub-sub-topics. We could effortlessly generate the missing transitions with our approach. The number of possible transitions, in this case, increased from 56 to 117.",
+    "Meta Policy: Since the system is intended to operate in a real-world scenario, we had to implement additional policies that control the dialogue flow and validate the system's accuracy. Below we describe these policies:",
+    "Completeness of the Information Dictionary: In this step, the system validates the completeness of the ID, which is defined by the number of obligatory slots filled in the information dictionary. There are 6 distinct cases when the ID is considered to be complete (see Section SECREF13 of the Appendix). For instance, if a user works on a final examination, the system does not has to request a sub-topic or examination level. Thus, the ID has to be filled only with data for a topic, examination mode, and question number, whereas, if the user works on a quiz, the system has to gather information about the topic, sub-topic, examination mode, and the question number. Once the ID is complete, it is provided to the verification step. Otherwise, the system proceeds according to the next action. The system extracts the information in each dialogue step, and thus if the user provides updated information on any subject later in the dialogue, the corresponding slot will be updated in the ID.",
+    "Verification Step: Once the system has obtained all the necessary information (i.e., ID is complete), it proceeds to the final verification. In that step, the collected data is shown to the student in the session. The student is asked to verify the correctness of the collected data and if some entries are wrong, to correct them. The ID is, where necessary, updated with the user-provided data. This procedure repeats until the user confirms the correctness of the assembled data.",
+    "Fallback Policy: In some cases, the system fails to derive information from a student query, even if the student provides it. It is due to the Elasticsearch functionality and previously unseen RegEx patterns. In these cases, the system re-asks a user and attempts to retrieve information from a follow-up query. The maximum number of re-ask attempts is set to three times ($r=3$). If the system is unable to extract information after three times, the user input is considered as the ground truth and saved to the appropriate slot in ID. An exception to this rule applies where the user has to specify the intent manually. In this case, after three unclassified attempts, a session is directly handed over to a human tutor.",
+    "Human Request: In each dialogue state, a user can switch to a human tutor. For this, a user can enter the human key-word. Hence, every user message is additionally analyzed for the presence of this key-word.",
+    "Response Generation: In this module, the semantic representation of the system's next action is transformed into natural language. Hence, each possible action is mapped to precisely one utterance, which is stored in the templates. Some of the predefined responses are fixed (i.e., “Welches Kapitel bearbeitest du gerade?”), others have placeholders for system values. In the latter case, the utterance can be formulated dependent on the actual ID. The dialogue showcases can be found in Section SECREF14 of the Appendix."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules",
+    "Model ::: Dialogue Modules"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Model ::: Dialogue Modules",
+      0
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      1
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      2
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      3
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      4
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      5
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      6
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      7
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      8
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      9
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      10
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      11
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      12
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      13
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      14
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      15
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      16
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      17
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      18
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      19
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      20
+    ],
+    [
+      "Model ::: Dialogue Modules",
+      21
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Model ::: Dialogue Modules",
+  "section": "Model ::: Dialogue Modules",
+  "title_path": "Model ::: Dialogue Modules",
+  "block_type": "long_unit"
+}

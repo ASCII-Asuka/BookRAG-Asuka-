@@ -1,0 +1,633 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] BioASQ is a biomedical document classification, document retrieval, and question answering competition, currently in its seventh year. We provide an overview of our submissions to semantic question answering task (7b, Phase B) of BioASQ 7 (except for 'ideal answer' test, in which we did not participate this year). In this task systems are provided with biomedical questions and are required to submit ideal and exact answers to those questions. We have used BioBERT BIBREF0 based system , see also Bidirectional Encoder Representations from Transformers(BERT) BIBREF1, and we fine tuned it for the biomedical question answering task. Our system scored near the top for factoid questions for all the batches of the challenge. More specifially, in the third test batch set, our system achieved highest ‘MRR’ score for Factoid Question Answering task. Also, for List-type question answering task our system achieved highest recall score in the fourth test batch set. Along with our detailed approach, we present the results for our submissions and also highlight identified downsides for our current approach and ways to improve them in our future experiments. In last test batch results we placed 4th for List-type questions and 3rd for Factoid-type questions.)\n[source_id=5] The QA task is organized in two phases. Phase A deals with retrieval of the relevant document, snippets, concepts, and RDF triples, and phase B deals with exact and ideal answer generations (which is a paragraph size summary of snippets). Exact answer generation is required for factoid, list, and yes/no type question.\n[source_id=6] BioASQ organizers provide the training and testing data. The training data consists of questions, gold standard documents, snippets, concepts, and ideal answers (which we did not use in this paper, but we used last year BIBREF2). The test data is split between phases A and B. The Phase A dataset consists of the questions, unique ids, question types. The Phase B dataset consists of the questions, golden standard documents, snippets, unique ids and question types. Exact answers for factoid type questions are evaluated using strict accuracy (the top answer), lenient accuracy (the top 5 answers), and MRR (Mean Reciprocal Rank) which takes into account the ranks of returned answers. Answers for the list type question are evaluated using precision, recall, and F-measure.",
+      "score": 5.740558100716769,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6
+      ],
+      "child_qasper_evidence_texts": [
+        "BioASQ is a biomedical document classification, document retrieval, and question answering competition, currently in its seventh year. We provide an overview of our submissions to semantic question answering task (7b, Phase B) of BioASQ 7 (except for 'ideal answer' test, in which we did not participate this year). In this task systems are provided with biomedical questions and are required to submit ideal and exact answers to those questions. We have used BioBERT BIBREF0 based system , see also Bidirectional Encoder Representations from Transformers(BERT) BIBREF1, and we fine tuned it for the biomedical question answering task. Our system scored near the top for factoid questions for all the batches of the challenge. More specifially, in the third test batch set, our system achieved highest ‘MRR’ score for Factoid Question Answering task. Also, for List-type question answering task our system achieved highest recall score in the fourth test batch set. Along with our detailed approach, we present the results for our submissions and also highlight identified downsides for our current approach and ways to improve them in our future experiments. In last test batch results we placed 4th for List-type questions and 3rd for Factoid-type questions.)",
+        "The QA task is organized in two phases. Phase A deals with retrieval of the relevant document, snippets, concepts, and RDF triples, and phase B deals with exact and ideal answer generations (which is a paragraph size summary of snippets). Exact answer generation is required for factoid, list, and yes/no type question.",
+        "BioASQ organizers provide the training and testing data. The training data consists of questions, gold standard documents, snippets, concepts, and ideal answers (which we did not use in this paper, but we used last year BIBREF2). The test data is split between phases A and B. The Phase A dataset consists of the questions, unique ids, question types. The Phase B dataset consists of the questions, golden standard documents, snippets, unique ids and question types. Exact answers for factoid type questions are evaluated using strict accuracy (the top answer), lenient accuracy (the top 5 answers), and MRR (Mean Reciprocal Rank) which takes into account the ranks of returned answers. Answers for the list type question are evaluated using precision, recall, and F-measure."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Experiments: Factoid Question Answering Task ::: Setup\n[source_id=21] BioASQ provides the training data. This data is based on previous BioASQ competitions. Train data we have considered is aggregate of all train data sets till the 5th version of BioASQ competition. We cleaned the data, that is, question-answering data without answers are removed and left with a total count of ‘530’ question answers. The data is split into train and test data in the ratio of 94 to 6; that is, count of '495' for training and '35' for testing.\n[source_id=22] The original data format is converted to the BERT/BioBERT format, where BioBERT expects ‘start_index’ of the actual answer. The ‘start_index corresponds to the index of the answer text present in the paragraph/ Context. For finding ‘start_index’ we used built-in python function find(). The function returns the lowest index of the actual answer present in the context(paragraph). If the answer is not found ‘-1’ is returned as the index. The efficient way of finding start_index is, if the paragraph (Context) has multiple instances of answer text, then ‘start_index’ of the answer should be that instance of answer text whose context actually matches with what’s been asked in the question.\n[source_id=23] Example (Question, Answer and Paragraph from BIBREF8):\n[source_id=24] Question: Which drug should be used as an antidote in benzodiazepine overdose?\n[source_id=25] Answer: 'Flumazenil'\n[source_id=26] Paragraph(context):\n[source_id=27] \"Flumazenil use in benzodiazepine overdose in the UK: a retrospective survey of NPIS data. OBJECTIVE: Benzodiazepine (BZD) overdose (OD) continues to cause significant morbidity and mortality in the UK. Flumazenil is an effective antidote but there is a risk of seizures, particularly in those who have co-ingested tricyclic antidepressants. A study was undertaken to examine the frequency of use, safety and efficacy of flumazenil in the management of BZD OD in the UK. METHODS: A 2-year retrospective cohort study was performed of all enquiries to the UK National Poisons Information Service involving BZD OD. RESULTS: Flumazenil was administered to 80 patients in 4504 BZD-related enquiries, 68 of whom did not have ventilatory failure or had recognised contraindications to flumazenil. Factors associated with flumazenil use were increased age, severe poisoning and ventilatory failure. Co-ingestion of tricyclic antidepressants and chronic obstructive pulmonary disease did not influence flumazenil administration. Seizure frequency in patients not treated with flumazenil was 0.3%\".\n[source_id=28] Actual answer is 'Flumazenil', but there are multiple instances of word 'Flu-mazenil'. Efficient way to identify the start-index for 'Flumazenil'(answer) is to find that particular instance of the word 'Flumazenil' which matches the context for the question. In the above example 'Flumazenil' highlighted in bold is the actual instance that matches question's context. Unfortunately, we could not identify readily available tools that can achieve this goal. In our future work, we look forward to handling these scenarios effectively.\n[source_id=29] Note: The creators of 'SQuAD' BIBREF7 have handled the task of identifying answer's start_index effectively. But 'SQuAD' data set is much more general and does not include biomedical question answering data.",
+      "score": 5.2658841674569885,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "child_qasper_evidence_texts": [
+        "BioASQ provides the training data. This data is based on previous BioASQ competitions. Train data we have considered is aggregate of all train data sets till the 5th version of BioASQ competition. We cleaned the data, that is, question-answering data without answers are removed and left with a total count of ‘530’ question answers. The data is split into train and test data in the ratio of 94 to 6; that is, count of '495' for training and '35' for testing.",
+        "The original data format is converted to the BERT/BioBERT format, where BioBERT expects ‘start_index’ of the actual answer. The ‘start_index corresponds to the index of the answer text present in the paragraph/ Context. For finding ‘start_index’ we used built-in python function find(). The function returns the lowest index of the actual answer present in the context(paragraph). If the answer is not found ‘-1’ is returned as the index. The efficient way of finding start_index is, if the paragraph (Context) has multiple instances of answer text, then ‘start_index’ of the answer should be that instance of answer text whose context actually matches with what’s been asked in the question.",
+        "Example (Question, Answer and Paragraph from BIBREF8):",
+        "Question: Which drug should be used as an antidote in benzodiazepine overdose?",
+        "Answer: 'Flumazenil'",
+        "Paragraph(context):",
+        "\"Flumazenil use in benzodiazepine overdose in the UK: a retrospective survey of NPIS data. OBJECTIVE: Benzodiazepine (BZD) overdose (OD) continues to cause significant morbidity and mortality in the UK. Flumazenil is an effective antidote but there is a risk of seizures, particularly in those who have co-ingested tricyclic antidepressants. A study was undertaken to examine the frequency of use, safety and efficacy of flumazenil in the management of BZD OD in the UK. METHODS: A 2-year retrospective cohort study was performed of all enquiries to the UK National Poisons Information Service involving BZD OD. RESULTS: Flumazenil was administered to 80 patients in 4504 BZD-related enquiries, 68 of whom did not have ventilatory failure or had recognised contraindications to flumazenil. Factors associated with flumazenil use were increased age, severe poisoning and ventilatory failure. Co-ingestion of tricyclic antidepressants and chronic obstructive pulmonary disease did not influence flumazenil administration. Seizure frequency in patients not treated with flumazenil was 0.3%\".",
+        "Actual answer is 'Flumazenil', but there are multiple instances of word 'Flu-mazenil'. Efficient way to identify the start-index for 'Flumazenil'(answer) is to find that particular instance of the word 'Flumazenil' which matches the context for the question. In the above example 'Flumazenil' highlighted in bold is the actual instance that matches question's context. Unfortunately, we could not identify readily available tools that can achieve this goal. In our future work, we look forward to handling these scenarios effectively.",
+        "Note: The creators of 'SQuAD' BIBREF7 have handled the task of identifying answer's start_index effectively. But 'SQuAD' data set is much more general and does not include biomedical question answering data."
+      ],
+      "child_pages": [
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Experiments: Factoid Question Answering Task ::: Setup",
+        "Experiments: Factoid Question Answering Task ::: Setup",
+        "Experiments: Factoid Question Answering Task ::: Setup",
+        "Experiments: Factoid Question Answering Task ::: Setup",
+        "Experiments: Factoid Question Answering Task ::: Setup",
+        "Experiments: Factoid Question Answering Task ::: Setup",
+        "Experiments: Factoid Question Answering Task ::: Setup",
+        "Experiments: Factoid Question Answering Task ::: Setup",
+        "Experiments: Factoid Question Answering Task ::: Setup"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments: Factoid Question Answering Task ::: Setup",
+          0
+        ],
+        [
+          "Experiments: Factoid Question Answering Task ::: Setup",
+          1
+        ],
+        [
+          "Experiments: Factoid Question Answering Task ::: Setup",
+          2
+        ],
+        [
+          "Experiments: Factoid Question Answering Task ::: Setup",
+          3
+        ],
+        [
+          "Experiments: Factoid Question Answering Task ::: Setup",
+          4
+        ],
+        [
+          "Experiments: Factoid Question Answering Task ::: Setup",
+          5
+        ],
+        [
+          "Experiments: Factoid Question Answering Task ::: Setup",
+          6
+        ],
+        [
+          "Experiments: Factoid Question Answering Task ::: Setup",
+          7
+        ],
+        [
+          "Experiments: Factoid Question Answering Task ::: Setup",
+          8
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Experiments: Factoid Question Answering Task ::: Setup",
+      "section": "Experiments: Factoid Question Answering Task ::: Setup",
+      "title_path": "Experiments: Factoid Question Answering Task ::: Setup",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_17",
+      "content": "[Section] Summary of our results\n[source_id=105] The tables below summarize all our results. They show that the performance of our systems was mixed. The simple architectures and algorithm we used worked very well only in Batch 3. However, we feel we can built a better system based on this experience. In particular we observed both the value of contextual embeddings and of feature engineering (LAT), however we failed to combine them properly.",
+      "score": 3.842257319937497,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_17",
+      "child_source_node_ids": [
+        105
+      ],
+      "child_qasper_evidence_texts": [
+        "The tables below summarize all our results. They show that the performance of our systems was mixed. The simple architectures and algorithm we used worked very well only in Batch 3. However, we feel we can built a better system based on this experience. In particular we observed both the value of contextual embeddings and of feature engineering (LAT), however we failed to combine them properly."
+      ],
+      "child_pages": [
+        17
+      ],
+      "child_sections": [
+        "Summary of our results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Summary of our results",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_17",
+      "section_id": "Summary of our results",
+      "section": "Summary of our results",
+      "title_path": "Summary of our results",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type.\n[source_id=61] There are different question types: ‘Which’, ‘What’, ‘When’, ‘How’ etc. Each type of question is being handled differently and there are commonalities among the rules written for different question types. Question words are identified through parts of speech tags: 'WDT', 'WRB' ,'WP'. We assumed that LAT is a ‘Noun’ and follows the question word. Often it was also a subject (nsubj). This process is illustrated in Fig.FIGREF15.\n[source_id=62] LAT computation was governed by a few simple rules, e.g. when a question has multiple words that are 'Subjects’ (and ‘Noun’), a word that is in proximity to the question word is considered as ‘LAT’. These rules are different for each \"Wh\" word.\n[source_id=63] Namely, when the word immediately following the question word is a Noun, window size is set to ‘3’. The window size ‘3’ means we iterate through the next ‘3’ words to check if any of the word is both Noun and Subject, If so, such word is considered the ‘LAT’; else the word that is present very next to the question word is considered as the ‘LAT’.\n[source_id=64] For questions with words ‘Which’ , ‘What’, ‘When’; a Noun immediately following the question word is very often the LAT, e.g. 'enzyme' in Which enzyme is targeted by Evolocumab?. When the word immediately following the question word is not a Noun, e.g. in What is the function of the protein Magt1? the window size is set to ‘5’, and we iterate through the next ‘5’ words (if present) and search for the word that is both Noun and Subject. If present, the word is considered as the ‘LAT’; else, the Noun in close proximity to the question word and following it is returned as the ‘LAT’.\n[source_id=65] For questions with question words: ‘When’, ‘Who’, ‘Why’, the ’LAT’ is a question word itself. For the word ‘How', e.g. in How many selenoproteins are encoded in the human genome?, we look at the adjective and if we find one, we take it to be the LAT, otherwise the word 'How' is considered as the ‘LAT’.\n[source_id=66] Perhaps because of using only very simple rules, the accuracy for ‘LAT’ derivation is 75%; that is, in the remaining 25% of the cases the LAT word is identified incorrectly. Worth noting is that the overall performance the system that used LATs was slightly inferior to the system without LATs, but the types of errors changed. The training used BioBERT with the LAT feature as part of the input string. The errors it introduces usually involve finding the wrong element of the correct type e.g. wrong enzyme when two similar enzymes are described in the text, or 'neuron' when asked about a type of cell with a certain function, when the answer calls for a different cell category, adipocytes, and both are mentioned in the text. We feel with more data and additional tuning or perhaps using an ensemble model, we might be able to keep the correct answers, and improve the results on the confusing examples like the one mentioned above. Therefore if we improve our ‘LAT’ derivation logic, or have larger datasets, then perhaps the neural network techniques they will yield better results.",
+      "score": 3.514305576874208,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        61,
+        62,
+        63,
+        64,
+        65,
+        66
+      ],
+      "child_qasper_evidence_texts": [
+        "There are different question types: ‘Which’, ‘What’, ‘When’, ‘How’ etc. Each type of question is being handled differently and there are commonalities among the rules written for different question types. Question words are identified through parts of speech tags: 'WDT', 'WRB' ,'WP'. We assumed that LAT is a ‘Noun’ and follows the question word. Often it was also a subject (nsubj). This process is illustrated in Fig.FIGREF15.",
+        "LAT computation was governed by a few simple rules, e.g. when a question has multiple words that are 'Subjects’ (and ‘Noun’), a word that is in proximity to the question word is considered as ‘LAT’. These rules are different for each \"Wh\" word.",
+        "Namely, when the word immediately following the question word is a Noun, window size is set to ‘3’. The window size ‘3’ means we iterate through the next ‘3’ words to check if any of the word is both Noun and Subject, If so, such word is considered the ‘LAT’; else the word that is present very next to the question word is considered as the ‘LAT’.",
+        "For questions with words ‘Which’ , ‘What’, ‘When’; a Noun immediately following the question word is very often the LAT, e.g. 'enzyme' in Which enzyme is targeted by Evolocumab?. When the word immediately following the question word is not a Noun, e.g. in What is the function of the protein Magt1? the window size is set to ‘5’, and we iterate through the next ‘5’ words (if present) and search for the word that is both Noun and Subject. If present, the word is considered as the ‘LAT’; else, the Noun in close proximity to the question word and following it is returned as the ‘LAT’.",
+        "For questions with question words: ‘When’, ‘Who’, ‘Why’, the ’LAT’ is a question word itself. For the word ‘How', e.g. in How many selenoproteins are encoded in the human genome?, we look at the adjective and if we find one, we take it to be the LAT, otherwise the word 'How' is considered as the ‘LAT’.",
+        "Perhaps because of using only very simple rules, the accuracy for ‘LAT’ derivation is 75%; that is, in the remaining 25% of the cases the LAT word is identified incorrectly. Worth noting is that the overall performance the system that used LATs was slightly inferior to the system without LATs, but the types of errors changed. The training used BioBERT with the LAT feature as part of the input string. The errors it introduces usually involve finding the wrong element of the correct type e.g. wrong enzyme when two similar enzymes are described in the text, or 'neuron' when asked about a type of cell with a certain function, when the answer calls for a different cell category, adipocytes, and both are mentioned in the text. We feel with more data and additional tuning or perhaps using an ensemble model, we might be able to keep the correct answers, and improve the results on the confusing examples like the one mentioned above. Therefore if we improve our ‘LAT’ derivation logic, or have larger datasets, then perhaps the neural network techniques they will yield better results."
+      ],
+      "child_pages": [
+        11,
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "child_sections": [
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type.",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type.",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type.",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type.",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type.",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type."
+      ],
+      "child_hotpot_facts": [
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type.",
+          0
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type.",
+          1
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type.",
+          2
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type.",
+          3
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type.",
+          4
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type.",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type.",
+      "section": "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type.",
+      "title_path": "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative) ::: Assumptions and rules for deriving lexical answer type.",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_22",
+      "content": "[Section] Discussion, Future Experiments, and Conclusions ::: Future experiments\n[source_id=119] In the current model, we have a shallow neural network with a softmax layer for predicting answer span. Shallow networks however are not good at generalizations. In our future experiments we would like to create dense question answering neural network with a softmax layer for predicting answer span. The main idea is to get contextual word embedding for the words present in the question and paragraph (Context) and feed the contextual word embeddings retrieved from the last layer of BioBERT to the dense question answering network. The mentioned dense layered question answering neural network need to be tuned for finding right hyper parameters. An example of such architecture is shown in Fig.FIGREF30.\n[source_id=120] In one more experiment, we would like to add a better version of ‘LAT’ contextual word embedding as a feature, along with the actual contextual word embeddings for question text, and Context and feed them as input to the dense question answering neural network. By this experiment, we would like to find if ‘LAT’ feature is improving overall answer prediction accuracy. Adding ‘LAT’ feature this way instead of feeding this word piece embedding directly to the BioBERT (as we did in our above experiments) would not downgrade the quality of contextual word embeddings generated form ‘BioBERT'. Quality contextual word embeddings would lead to efficient transfer learning and chances are that it would improve the model's answer prediction accuracy.\n[source_id=121] We also see potential for incorporating domain specific inference into the task e.g. using the MedNLI dataset BIBREF14. For all types of experiments it might be worth exploring clinical BERT embeddings BIBREF15, explicitly incorporating domain knowledge (e.g. BIBREF16) and possibly deeper discourse representations (e.g. BIBREF17).",
+      "score": 3.0140538097896927,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_22",
+      "child_source_node_ids": [
+        119,
+        120,
+        121
+      ],
+      "child_qasper_evidence_texts": [
+        "In the current model, we have a shallow neural network with a softmax layer for predicting answer span. Shallow networks however are not good at generalizations. In our future experiments we would like to create dense question answering neural network with a softmax layer for predicting answer span. The main idea is to get contextual word embedding for the words present in the question and paragraph (Context) and feed the contextual word embeddings retrieved from the last layer of BioBERT to the dense question answering network. The mentioned dense layered question answering neural network need to be tuned for finding right hyper parameters. An example of such architecture is shown in Fig.FIGREF30.",
+        "In one more experiment, we would like to add a better version of ‘LAT’ contextual word embedding as a feature, along with the actual contextual word embeddings for question text, and Context and feed them as input to the dense question answering neural network. By this experiment, we would like to find if ‘LAT’ feature is improving overall answer prediction accuracy. Adding ‘LAT’ feature this way instead of feeding this word piece embedding directly to the BioBERT (as we did in our above experiments) would not downgrade the quality of contextual word embeddings generated form ‘BioBERT'. Quality contextual word embeddings would lead to efficient transfer learning and chances are that it would improve the model's answer prediction accuracy.",
+        "We also see potential for incorporating domain specific inference into the task e.g. using the MedNLI dataset BIBREF14. For all types of experiments it might be worth exploring clinical BERT embeddings BIBREF15, explicitly incorporating domain knowledge (e.g. BIBREF16) and possibly deeper discourse representations (e.g. BIBREF17)."
+      ],
+      "child_pages": [
+        22,
+        22,
+        22
+      ],
+      "child_sections": [
+        "Discussion, Future Experiments, and Conclusions ::: Future experiments",
+        "Discussion, Future Experiments, and Conclusions ::: Future experiments",
+        "Discussion, Future Experiments, and Conclusions ::: Future experiments"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Discussion, Future Experiments, and Conclusions ::: Future experiments",
+          0
+        ],
+        [
+          "Discussion, Future Experiments, and Conclusions ::: Future experiments",
+          1
+        ],
+        [
+          "Discussion, Future Experiments, and Conclusions ::: Future experiments",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_22",
+      "section_id": "Discussion, Future Experiments, and Conclusions ::: Future experiments",
+      "section": "Discussion, Future Experiments, and Conclusions ::: Future experiments",
+      "title_path": "Discussion, Future Experiments, and Conclusions ::: Future experiments",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_28",
+      "content": "[Section] APPENDIX ::: Systems and their descriptions: ::: System description for UNCC_QA3:\n[source_id=137] System is finetuned on the SQuAD 2.0 [reference] and BioASQ dataset[].For data preprocessing Context / paragraph is generated from relevant snippets provided in the test data.\n[source_id=138] Fine tuning process is same as it is done for the system ‘UNCC_QA_1’ in test batch-5. Difference is during data preprocessing, Context/paragraph is generated form from the relevant documents for which URLS are included in the test data.",
+      "score": 2.9152779536878586,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_28",
+      "child_source_node_ids": [
+        137,
+        138
+      ],
+      "child_qasper_evidence_texts": [
+        "System is finetuned on the SQuAD 2.0 [reference] and BioASQ dataset[].For data preprocessing Context / paragraph is generated from relevant snippets provided in the test data.",
+        "Fine tuning process is same as it is done for the system ‘UNCC_QA_1’ in test batch-5. Difference is during data preprocessing, Context/paragraph is generated form from the relevant documents for which URLS are included in the test data."
+      ],
+      "child_pages": [
+        28,
+        28
+      ],
+      "child_sections": [
+        "APPENDIX ::: Systems and their descriptions: ::: System description for UNCC_QA3:",
+        "APPENDIX ::: Systems and their descriptions: ::: System description for UNCC_QA3:"
+      ],
+      "child_hotpot_facts": [
+        [
+          "APPENDIX ::: Systems and their descriptions: ::: System description for UNCC_QA3:",
+          0
+        ],
+        [
+          "APPENDIX ::: Systems and their descriptions: ::: System description for UNCC_QA3:",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_28",
+      "section_id": "APPENDIX ::: Systems and their descriptions: ::: System description for UNCC_QA3:",
+      "section": "APPENDIX ::: Systems and their descriptions: ::: System description for UNCC_QA3:",
+      "title_path": "APPENDIX ::: Systems and their descriptions: ::: System description for UNCC_QA3:",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_15",
+      "content": "[Section] Performance on Yes/No and List questions ::: Entailment improves Yes/No accuracy\n[source_id=76] We started by answering always YES (in batch 2 and 3) to get the baseline performance. For batch 4 we used entailment. Our algorithm was very simple: Given a question we iterate through the candidate sentences and try to find any candidate sentence is contradicting the question (with confidence over 50%), if so 'No' is returned as answer, else 'Yes' is returned. In batch 4 this strategy produced better than the BioAsq baseline performance, and compared to our other systems, the use of entailment increased the performance by about 13% (macro F1 score). We used 'AllenNlp' BIBREF13 entailment library to find entailment of the candidate sentences with question.",
+      "score": 2.908612242949756,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_15",
+      "child_source_node_ids": [
+        76
+      ],
+      "child_qasper_evidence_texts": [
+        "We started by answering always YES (in batch 2 and 3) to get the baseline performance. For batch 4 we used entailment. Our algorithm was very simple: Given a question we iterate through the candidate sentences and try to find any candidate sentence is contradicting the question (with confidence over 50%), if so 'No' is returned as answer, else 'Yes' is returned. In batch 4 this strategy produced better than the BioAsq baseline performance, and compared to our other systems, the use of entailment increased the performance by about 13% (macro F1 score). We used 'AllenNlp' BIBREF13 entailment library to find entailment of the candidate sentences with question."
+      ],
+      "child_pages": [
+        15
+      ],
+      "child_sections": [
+        "Performance on Yes/No and List questions ::: Entailment improves Yes/No accuracy"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Performance on Yes/No and List questions ::: Entailment improves Yes/No accuracy",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_15",
+      "section_id": "Performance on Yes/No and List questions ::: Entailment improves Yes/No accuracy",
+      "section": "Performance on Yes/No and List questions ::: Entailment improves Yes/No accuracy",
+      "title_path": "Performance on Yes/No and List questions ::: Entailment improves Yes/No accuracy",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)\n[source_id=48] During error analysis we found that for some cases, answer being returned by the model is far away from what it is being asked in the Question.\n[source_id=49] Example: (from BIBREF8)\n[source_id=50] Question: Hy's law measures failure of which organ?\n[source_id=51] Actual Answer: ‘Liver’.\n[source_id=52] The answer returned by one of our models was ‘alanine aminotransferase’, which is an enzyme. The model returns an enzyme, when the question asked for the organ name. To address this type of errors, we decided to try the concepts of ‘Lexical Answer Type’ (LAT) and Focus Word, which was used in IBM Watson, see BIBREF11 for overview; BIBREF10 for technical details, and BIBREF9 for details on question analysis. In an example given in the last source we read:\n[source_id=53] POETS & POETRY: He was a bank clerk in the Yukon before he published \"Songs of a Sourdough\" in 1907.\n[source_id=54] The focus is the part of the question that is a reference to the answer. In the example above, the focus is \"he\".\n[source_id=55] LATs are terms in the question that indicate what type of entity is being asked for.\n[source_id=56] The headword of the focus is generally a LAT, but questions often contain additional LATs, and in the Jeopardy! domain, categories are an additional source of LATs.\n[source_id=57] (...) In the example, LATs are \"he\", \"clerk\", and \"poet\".\n[source_id=58] For example in the question \"Which plant does oleuropein originate from?\" (BIBREF8). The LAT here is ‘plant’. For the BioAsq task we did not need to explicitly distinguish between the focus and the LAT concepts. In this example, the expectation is that answer returned by the model is a plant. Thus it is conceivable that the cosine distance between contextual embedding of word 'plant' in the question and contextual embedding for the answer present in the paragraph(context) is comparatively low. As a result model learns to adjust its weights during training phase and returns answers with low cosine distance with the LAT.\n[source_id=59] We used Stanford CoreNLP BIBREF12 library to write rules for extracting lexical answer type present in the question, both 'parts of speech'(POS) and dependency parsing functionality was used. We incorporated the Lexical Answer Type into one of our systems, UNCC_QA1 in Batch 4. This system underperformed our system FACTOIDS by about 3% in the MRR measure, but corrected errors such as in the example above.",
+      "score": 2.8379813966775043,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "child_qasper_evidence_texts": [
+        "During error analysis we found that for some cases, answer being returned by the model is far away from what it is being asked in the Question.",
+        "Example: (from BIBREF8)",
+        "Question: Hy's law measures failure of which organ?",
+        "Actual Answer: ‘Liver’.",
+        "The answer returned by one of our models was ‘alanine aminotransferase’, which is an enzyme. The model returns an enzyme, when the question asked for the organ name. To address this type of errors, we decided to try the concepts of ‘Lexical Answer Type’ (LAT) and Focus Word, which was used in IBM Watson, see BIBREF11 for overview; BIBREF10 for technical details, and BIBREF9 for details on question analysis. In an example given in the last source we read:",
+        "POETS & POETRY: He was a bank clerk in the Yukon before he published \"Songs of a Sourdough\" in 1907.",
+        "The focus is the part of the question that is a reference to the answer. In the example above, the focus is \"he\".",
+        "LATs are terms in the question that indicate what type of entity is being asked for.",
+        "The headword of the focus is generally a LAT, but questions often contain additional LATs, and in the Jeopardy! domain, categories are an additional source of LATs.",
+        "(...) In the example, LATs are \"he\", \"clerk\", and \"poet\".",
+        "For example in the question \"Which plant does oleuropein originate from?\" (BIBREF8). The LAT here is ‘plant’. For the BioAsq task we did not need to explicitly distinguish between the focus and the LAT concepts. In this example, the expectation is that answer returned by the model is a plant. Thus it is conceivable that the cosine distance between contextual embedding of word 'plant' in the question and contextual embedding for the answer present in the paragraph(context) is comparatively low. As a result model learns to adjust its weights during training phase and returns answers with low cosine distance with the LAT.",
+        "We used Stanford CoreNLP BIBREF12 library to write rules for extracting lexical answer type present in the question, both 'parts of speech'(POS) and dependency parsing functionality was used. We incorporated the Lexical Answer Type into one of our systems, UNCC_QA1 in Batch 4. This system underperformed our system FACTOIDS by about 3% in the MRR measure, but corrected errors such as in the example above."
+      ],
+      "child_pages": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ],
+      "child_sections": [
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+        "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+          0
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+          1
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+          2
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+          3
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+          4
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+          5
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+          6
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+          7
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+          8
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+          9
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+          10
+        ],
+        [
+          "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+          11
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+      "section": "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+      "title_path": "Our Systems and Their Performance on Factoid Questions ::: LAT Feature considered and its impact (slightly negative)",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 4,
+      "content": "BioASQ is a biomedical document classification, document retrieval, and question answering competition, currently in its seventh year. We provide an overview of our submissions to semantic question answering task (7b, Phase B) of BioASQ 7 (except for 'ideal answer' test, in which we did not participate this year). In this task systems are provided with biomedical questions and are required to submit ideal and exact answers to those questions. We have used BioBERT BIBREF0 based system , see also Bidirectional Encoder Representations from Transformers(BERT) BIBREF1, and we fine tuned it for the biomedical question answering task. Our system scored near the top for factoid questions for all the batches of the challenge. More specifially, in the third test batch set, our system achieved highest ‘MRR’ score for Factoid Question Answering task. Also, for List-type question answering task our system achieved highest recall score in the fourth test batch set. Along with our detailed approach, we present the results for our submissions and also highlight identified downsides for our current approach and ways to improve them in our future experiments. In last test batch results we placed 4th for List-type questions and 3rd for Factoid-type questions.)",
+      "qasper_evidence_text": "BioASQ is a biomedical document classification, document retrieval, and question answering competition, currently in its seventh year. We provide an overview of our submissions to semantic question answering task (7b, Phase B) of BioASQ 7 (except for 'ideal answer' test, in which we did not participate this year). In this task systems are provided with biomedical questions and are required to submit ideal and exact answers to those questions. We have used BioBERT BIBREF0 based system , see also Bidirectional Encoder Representations from Transformers(BERT) BIBREF1, and we fine tuned it for the biomedical question answering task. Our system scored near the top for factoid questions for all the batches of the challenge. More specifially, in the third test batch set, our system achieved highest ‘MRR’ score for Factoid Question Answering task. Also, for List-type question answering task our system achieved highest recall score in the fourth test batch set. Along with our detailed approach, we present the results for our submissions and also highlight identified downsides for our current approach and ways to improve them in our future experiments. In last test batch results we placed 4th for List-type questions and 3rd for Factoid-type questions.)",
+      "source_node_id": 4,
+      "node_id": 4,
+      "paragraph_id": 4,
+      "evidence_id": 4,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 1,
+      "score": 5.740558100716769,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 6,
+      "content": "BioASQ organizers provide the training and testing data. The training data consists of questions, gold standard documents, snippets, concepts, and ideal answers (which we did not use in this paper, but we used last year BIBREF2). The test data is split between phases A and B. The Phase A dataset consists of the questions, unique ids, question types. The Phase B dataset consists of the questions, golden standard documents, snippets, unique ids and question types. Exact answers for factoid type questions are evaluated using strict accuracy (the top answer), lenient accuracy (the top 5 answers), and MRR (Mean Reciprocal Rank) which takes into account the ranks of returned answers. Answers for the list type question are evaluated using precision, recall, and F-measure.",
+      "qasper_evidence_text": "BioASQ organizers provide the training and testing data. The training data consists of questions, gold standard documents, snippets, concepts, and ideal answers (which we did not use in this paper, but we used last year BIBREF2). The test data is split between phases A and B. The Phase A dataset consists of the questions, unique ids, question types. The Phase B dataset consists of the questions, golden standard documents, snippets, unique ids and question types. Exact answers for factoid type questions are evaluated using strict accuracy (the top answer), lenient accuracy (the top 5 answers), and MRR (Mean Reciprocal Rank) which takes into account the ranks of returned answers. Answers for the list type question are evaluated using precision, recall, and F-measure.",
+      "source_node_id": 6,
+      "node_id": 6,
+      "paragraph_id": 6,
+      "evidence_id": 6,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 1,
+      "score": 5.740558100716769,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 2,
+      "hotpot_sent_id": 2,
+      "supporting_rank": 2
+    },
+    {
+      "id": 21,
+      "content": "BioASQ provides the training data. This data is based on previous BioASQ competitions. Train data we have considered is aggregate of all train data sets till the 5th version of BioASQ competition. We cleaned the data, that is, question-answering data without answers are removed and left with a total count of ‘530’ question answers. The data is split into train and test data in the ratio of 94 to 6; that is, count of '495' for training and '35' for testing.",
+      "qasper_evidence_text": "BioASQ provides the training data. This data is based on previous BioASQ competitions. Train data we have considered is aggregate of all train data sets till the 5th version of BioASQ competition. We cleaned the data, that is, question-answering data without answers are removed and left with a total count of ‘530’ question answers. The data is split into train and test data in the ratio of 94 to 6; that is, count of '495' for training and '35' for testing.",
+      "source_node_id": 21,
+      "node_id": 21,
+      "paragraph_id": 21,
+      "evidence_id": 21,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_7",
+      "rank": 2,
+      "score": 5.2658841674569885,
+      "block_type": "paragraph",
+      "page": 7,
+      "section_id": "Experiments: Factoid Question Answering Task ::: Setup",
+      "section": "Experiments: Factoid Question Answering Task ::: Setup",
+      "title": "Experiments: Factoid Question Answering Task ::: Setup",
+      "hotpot_title": "Experiments: Factoid Question Answering Task ::: Setup",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 3
+    },
+    {
+      "id": 137,
+      "content": "System is finetuned on the SQuAD 2.0 [reference] and BioASQ dataset[].For data preprocessing Context / paragraph is generated from relevant snippets provided in the test data.",
+      "qasper_evidence_text": "System is finetuned on the SQuAD 2.0 [reference] and BioASQ dataset[].For data preprocessing Context / paragraph is generated from relevant snippets provided in the test data.",
+      "source_node_id": 137,
+      "node_id": 137,
+      "paragraph_id": 137,
+      "evidence_id": 137,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_28",
+      "rank": 6,
+      "score": 2.9152779536878586,
+      "block_type": "paragraph",
+      "page": 28,
+      "section_id": "APPENDIX ::: Systems and their descriptions: ::: System description for UNCC_QA3:",
+      "section": "APPENDIX ::: Systems and their descriptions: ::: System description for UNCC_QA3:",
+      "title": "APPENDIX ::: Systems and their descriptions: ::: System description for UNCC_QA3:",
+      "hotpot_title": "APPENDIX ::: Systems and their descriptions: ::: System description for UNCC_QA3:",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 4
+    }
+  ],
+  "supporting_block_ids": [
+    4,
+    6,
+    21,
+    137
+  ]
+}

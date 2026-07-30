@@ -1,0 +1,178 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Adaptation to the BERT model\n[source_id=16] In contrast to these works, the BERT model is bi-directional: it is trained to predict the identity of masked words based on both the prefix and suffix surrounding these words. I adapt the uni-directional setup by feeding into BERT the complete sentence, while masking out the single focus verb. I then ask BERT for its word predictions for the masked position, and compare the score assigned to the original correct verb to the score assigned to the incorrect one.\n[source_id=17] For example, for the sentence:\n[source_id=18] a 2002 systemic review of herbal products found that several herbs , including peppermint and caraway , have anti-dyspeptic effects for non-ulcer dyspepsia with “ encouraging safety profiles ” . (from BIBREF1 )\n[source_id=19] I feed into BERT:\n[source_id=20] [CLS] a 2002 systemic review of herbal products found that several herbs , including peppermint and caraway , [MASK] anti-dyspeptic effects for non-ulcer dyspepsia with “ encouraging safety profiles ” . and look for the score assigned to the words have and has at the masked position.\n[source_id=21] Similarly, for the pair\n[source_id=22] the game that the guard hates is bad .\n[source_id=23] the game that the guard hates are bad .\n[source_id=24] (from BIBREF3 ), I feed into BERT:\n[source_id=25] [CLS] the game that the guard hates [MASK] bad .\n[source_id=26] and compare the scores predicted for is and are.\n[source_id=27] This differs from BIBREF1 and BIBREF2 by considering the entire sentence (excluding the verb) and not just its prefix leading to the verb, and differs from BIBREF3 by conditioning the focus verb on bidirectional context.\n[source_id=28] I use the PyTorch implementation of BERT, with the pre-trained models supplied by Google. I experiment with the bert-large-uncased and bert-base-uncased models.\n[source_id=29] The bi-directional setup precludes using using the NPI stimuli of BIBREF3 , in which the minimal pair differs in two words position, which I discard from the evaluation. I also discard the agreement cases involving the verbs is or are in BIBREF1 and in BIBREF2 , because some of them are copular construction, in which strong agreement hints can be found also on the object following the verb. This is not an issue in the manually constructed BIBREF3 stimuli due to the patterns they chose.\n[source_id=30] Finally, I discard stimuli in which the focus verb or its plural/singular inflection does not appear as a single word in the BERT word-piece-based vocabulary (and hence cannot be predicted by the model). This include discarding BIBREF3 stimuli involving the words swims or admires, resulting in 23,368 discarded pairs (out of 152,300). I similarly discard 680 sentences from BIBREF1 where the focus verb or its inflection were one of 108 out-of-vocabulary tokens, and 28 sentence-pairs (8 tokens) from BIBREF2 .\n[source_id=31] The BERT results are not directly comparable to the numbers reported in previous work. Beyond the differences due to bidirectionality and the discarded stimuli, the BERT models are also trained on a different and larger corpus (covering both wikipedia and books).\n[source_id=32] Code is available at https://github.com/yoavg/bert-syntax.",
+  "score": 3.3612415007780356,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "child_qasper_evidence_texts": [
+    "In contrast to these works, the BERT model is bi-directional: it is trained to predict the identity of masked words based on both the prefix and suffix surrounding these words. I adapt the uni-directional setup by feeding into BERT the complete sentence, while masking out the single focus verb. I then ask BERT for its word predictions for the masked position, and compare the score assigned to the original correct verb to the score assigned to the incorrect one.",
+    "For example, for the sentence:",
+    "a 2002 systemic review of herbal products found that several herbs , including peppermint and caraway , have anti-dyspeptic effects for non-ulcer dyspepsia with “ encouraging safety profiles ” . (from BIBREF1 )",
+    "I feed into BERT:",
+    "[CLS] a 2002 systemic review of herbal products found that several herbs , including peppermint and caraway , [MASK] anti-dyspeptic effects for non-ulcer dyspepsia with “ encouraging safety profiles ” . and look for the score assigned to the words have and has at the masked position.",
+    "Similarly, for the pair",
+    "the game that the guard hates is bad .",
+    "the game that the guard hates are bad .",
+    "(from BIBREF3 ), I feed into BERT:",
+    "[CLS] the game that the guard hates [MASK] bad .",
+    "and compare the scores predicted for is and are.",
+    "This differs from BIBREF1 and BIBREF2 by considering the entire sentence (excluding the verb) and not just its prefix leading to the verb, and differs from BIBREF3 by conditioning the focus verb on bidirectional context.",
+    "I use the PyTorch implementation of BERT, with the pre-trained models supplied by Google. I experiment with the bert-large-uncased and bert-base-uncased models.",
+    "The bi-directional setup precludes using using the NPI stimuli of BIBREF3 , in which the minimal pair differs in two words position, which I discard from the evaluation. I also discard the agreement cases involving the verbs is or are in BIBREF1 and in BIBREF2 , because some of them are copular construction, in which strong agreement hints can be found also on the object following the verb. This is not an issue in the manually constructed BIBREF3 stimuli due to the patterns they chose.",
+    "Finally, I discard stimuli in which the focus verb or its plural/singular inflection does not appear as a single word in the BERT word-piece-based vocabulary (and hence cannot be predicted by the model). This include discarding BIBREF3 stimuli involving the words swims or admires, resulting in 23,368 discarded pairs (out of 152,300). I similarly discard 680 sentences from BIBREF1 where the focus verb or its inflection were one of 108 out-of-vocabulary tokens, and 28 sentence-pairs (8 tokens) from BIBREF2 .",
+    "The BERT results are not directly comparable to the numbers reported in previous work. Beyond the differences due to bidirectionality and the discarded stimuli, the BERT models are also trained on a different and larger corpus (covering both wikipedia and books).",
+    "Code is available at https://github.com/yoavg/bert-syntax."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model",
+    "Adaptation to the BERT model"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Adaptation to the BERT model",
+      0
+    ],
+    [
+      "Adaptation to the BERT model",
+      1
+    ],
+    [
+      "Adaptation to the BERT model",
+      2
+    ],
+    [
+      "Adaptation to the BERT model",
+      3
+    ],
+    [
+      "Adaptation to the BERT model",
+      4
+    ],
+    [
+      "Adaptation to the BERT model",
+      5
+    ],
+    [
+      "Adaptation to the BERT model",
+      6
+    ],
+    [
+      "Adaptation to the BERT model",
+      7
+    ],
+    [
+      "Adaptation to the BERT model",
+      8
+    ],
+    [
+      "Adaptation to the BERT model",
+      9
+    ],
+    [
+      "Adaptation to the BERT model",
+      10
+    ],
+    [
+      "Adaptation to the BERT model",
+      11
+    ],
+    [
+      "Adaptation to the BERT model",
+      12
+    ],
+    [
+      "Adaptation to the BERT model",
+      13
+    ],
+    [
+      "Adaptation to the BERT model",
+      14
+    ],
+    [
+      "Adaptation to the BERT model",
+      15
+    ],
+    [
+      "Adaptation to the BERT model",
+      16
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Adaptation to the BERT model",
+  "section": "Adaptation to the BERT model",
+  "title_path": "Adaptation to the BERT model",
+  "block_type": "long_unit"
+}

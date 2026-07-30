@@ -1,0 +1,196 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Labeling History of Present Illness Notes\n[source_id=20] We developed a classifier to label topics in the history of present illness (HPI) notes, including demographics, diagnosis history, and symptoms/signs, among others. A random sample of 515 history of present illness notes was taken, and each of the notes was manually annotated by one of eight annotators using the software Multi-document Annotation Environment (MAE) BIBREF20 . MAE provides an interactive GUI for annotators and exports the results of each annotation as an XML file with text spans and their associated labels for additional processing. 40% of the HPI notes were labeled by clinicians and 60% by non-clinicians. Table TABREF5 shows the instructions given to the annotators for each of the 10 labels. The entire HPI note was labeled with one of the labels, and instructions were given to label each clause in a sentence with the same label when possible.\n[source_id=21] Our LSTM model was adopted from prior work by Dernoncourt et al BIBREF21 . Whereas the Dernoncourt model jointly classified each sentence in a medical abstract, here we jointly classify each word in the HPI summary. Our model consists of four layers: a token embedding layer, a word contextual representation layer, a label scoring layer, and a label sequence optimization layer (Figure FIGREF9 ).\n[source_id=22] In the following descriptions, lowercase italics is used to denote scalars, lowercase bold is used to denote vectors, and uppercase italics is used to denote matrices.\n[source_id=23] Token Embedding Layer: In the token embedding layer, pretrained word embeddings are combined with learned character embeddings to create a hybrid token embedding for each word in the HPI note. The word embeddings, which are direct mappings from word INLINEFORM0 to vector INLINEFORM1 , were pretrained using word2vec BIBREF22 , BIBREF23 , BIBREF24 on all of the notes in MIMIC (v30) and only the discharge notes. Both the continuous bag of words (CBOW) and skip gram models were explored.\n[source_id=24] Let INLINEFORM0 be the sequence of characters comprising the word INLINEFORM1 . Each character is mapped to its embedding INLINEFORM2 , and all embeddings are input into a bidirectional LSTM, which ultimately outputs INLINEFORM3 , the character embedding of the word INLINEFORM4 .\n[source_id=25] The output of the token embedding layer is the vector e, which is the result of concatenation of the word embedding, t, and the character embedding, c.\n[source_id=26] Contextual Representation Layer: The contextual representation layer takes as input the sequence of word embeddings, INLINEFORM0 , and outputs an embedding of the contextual representation for each word in the HPI note. The word embeddings are fed into a bi-directional LSTM, which outputs INLINEFORM1 , a concatenation of the hidden states of the two LSTMs for each word.\n[source_id=27] Label Scoring Layer: At this point, each word INLINEFORM0 is associated with a hidden representation of the word, INLINEFORM1 . In the label scoring layer, we use a fully connected neural network with one hidden layer to output a score associated with each of the 10 categories for each word. Let INLINEFORM2 and INLINEFORM3 . We can compute a vector of scores s = INLINEFORM4 where the ith component of s is the score of class i for a given word.\n[source_id=28] Label Sequence Optimization Layer: The Label Sequence Optimization Layer computes the probability of a labeling sequence and finds the sequence with the highest probability. In order to condition the label for each word on the labels of its neighbors, we employ a linear chain conditional random field (CRF) to define a global score, INLINEFORM0 , for a sequence of words and their associated scores INLINEFORM1 and labels, INLINEFORM2 : DISPLAYFORM0\n[source_id=29] where T is a transition matrix INLINEFORM0 INLINEFORM1 and INLINEFORM2 are vectors of scores that describe the cost of beginning or ending with a label.\n[source_id=30] The probability of a sequence of labels is calculated by applying a softmax layer to obtain a probability of a sequence of labels: DISPLAYFORM0\n[source_id=31] Cross-entropy loss, INLINEFORM0 , is used as the objective function where INLINEFORM1 is the correct sequence of labels and the probability INLINEFORM2 is calculated according to the CRF.\n[source_id=32] We evaluated our model on the 515 annotated history of present illness notes, which were split in a 70% train set, 15% development set, and a 15% test set. The model is trained using the Adam algorithm for gradient-based optimization BIBREF25 with an initial learning rate = 0.001 and decay = 0.9. A dropout rate of 0.5 was applied for regularization, and each batch size = 20. The model ran for 20 epochs and was halted early if there was no improvement after 3 epochs.\n[source_id=33] We evaluated the impact of character embeddings, the choice of pretrained w2v embeddings, and the addition of learned word embeddings on model performance on the dev set. We report performance of the best performing model on the test set.\n[source_id=34] Table TABREF16 compares dev set performance of the model using various pretrained word embeddings, with and without character embeddings, and with pretrained versus learned word embeddings. The first row in each section is the performance of the model architecture described in the methods section for comparison. Models using word embeddings trained on the discharge summaries performed better than word embeddings trained on all MIMIC notes, likely because the discharge summary word embeddings better captured word use in discharge summaries alone. Interestingly, the continuous bag of words embeddings outperformed skip gram embeddings, which is surprising because the skip gram architecture typically works better for infrequent words BIBREF26 . As expected, inclusion of character embeddings increases performance by approximately 3%. The model with word embeddings learned in the model achieves the highest performance on the dev set (0.886), which may be because the pretrained worm embeddings were trained on a previous version of MIMIC. As a result, some words in the discharge summaries, such as mi-spelled words or rarer diseases and medications, did not have associated word embeddings. Performing a simple spell correction on out of vocab words may improve performance with pretrained word embeddings.\n[source_id=35] We evaluated the best performing model on the test set. The Learned Word Embeddings model achieved an accuracy of 0.88 and an F1-Score of 0.876 on the test set. Table TABREF17 shows the precision, recall, F1 score, and support for each of the ten labels, and Figure FIGREF18 shows the confusion matrix illustrating which labels were frequently misclassified. The demographics and patient movement labels achieved the highest F1 scores (0.96 and 0.93 respectively) while the vitals/labs and medication history labels had the lowest F1 scores (0.40 and 0.66 respectively). The demographics section consistently occurs at the beginning of the HPI note, and the patient movement section uses a limited vocab (transferred, admitted, etc.), which may explain their high F1 scores. On the other hand, the vitals/labs and medication history sections had the lowest support, which may explain why they were more challenging to label.\n[source_id=36] Words that belonged to the diagnosis history, patient movement, and procedure/results sections were frequently labeled as symptoms/signs (Figure FIGREF18 ). Diagnosis history sections may be labeled frequently as symptoms/signs because symptoms/diseases can either be described as part of the patient's diagnosis history or current symptoms depending on when the symptom/disease occurred. However, many of the misclassification errors may be due to inconsistency in manual labelling among annotators. For example, sentences describing both patient movement and patient symptoms (e.g. \"the patient was transferred to the hospital for his hypertension\") were labeled entirely as 'patient movement' by some annotators while other annotators labeled the different clauses of the sentence separately as 'patient movement' and 'symptoms/signs.' Further standardization among annotators is needed to avoid these misclassifications. Future work is needed to obtain additional manual annotations where each HPI note is annotated by multiple annotators. This will allow for calculation of Cohen's kappa, which measures inter-annotator agreement, and comparison of clinician and non-clinician annotator reliability.\n[source_id=37] Future work is also needed to better understand commonly mislabeled categories and explore alternative model architectures. Here we perform word level label prediction, which can result in phrases that contain multiple labels. For example, the phrase \"history of neck pain\" can be labeled with both 'diagnosis history' and 'symptoms/signs' labels. Post-processing is needed to create a final label prediction for each phrase. While phrase level prediction may resolve these challenges, it is difficult to segment the HPI note into phrases for prediction, as a single phrase may truly contain multiple labels. Segmentation of sentences by punctuation, conjunctions, and prepositions may yield the best phrase chunker for discharge summary text.\n[source_id=38] Finally, supplementing the word embeddings in our LSTM model with CUIs may further improve performance. While word embeddings do well in learning the contextual context of words, CUIs allow for more explicit incorporation of medical domain expertise. By concatenating the CUI for each word with its hybrid token embedding, we may be able to leverage both data driven and ontology driven approaches.",
+  "score": 3.161742485283309,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38
+  ],
+  "child_qasper_evidence_texts": [
+    "We developed a classifier to label topics in the history of present illness (HPI) notes, including demographics, diagnosis history, and symptoms/signs, among others. A random sample of 515 history of present illness notes was taken, and each of the notes was manually annotated by one of eight annotators using the software Multi-document Annotation Environment (MAE) BIBREF20 . MAE provides an interactive GUI for annotators and exports the results of each annotation as an XML file with text spans and their associated labels for additional processing. 40% of the HPI notes were labeled by clinicians and 60% by non-clinicians. Table TABREF5 shows the instructions given to the annotators for each of the 10 labels. The entire HPI note was labeled with one of the labels, and instructions were given to label each clause in a sentence with the same label when possible.",
+    "Our LSTM model was adopted from prior work by Dernoncourt et al BIBREF21 . Whereas the Dernoncourt model jointly classified each sentence in a medical abstract, here we jointly classify each word in the HPI summary. Our model consists of four layers: a token embedding layer, a word contextual representation layer, a label scoring layer, and a label sequence optimization layer (Figure FIGREF9 ).",
+    "In the following descriptions, lowercase italics is used to denote scalars, lowercase bold is used to denote vectors, and uppercase italics is used to denote matrices.",
+    "Token Embedding Layer: In the token embedding layer, pretrained word embeddings are combined with learned character embeddings to create a hybrid token embedding for each word in the HPI note. The word embeddings, which are direct mappings from word INLINEFORM0 to vector INLINEFORM1 , were pretrained using word2vec BIBREF22 , BIBREF23 , BIBREF24 on all of the notes in MIMIC (v30) and only the discharge notes. Both the continuous bag of words (CBOW) and skip gram models were explored.",
+    "Let INLINEFORM0 be the sequence of characters comprising the word INLINEFORM1 . Each character is mapped to its embedding INLINEFORM2 , and all embeddings are input into a bidirectional LSTM, which ultimately outputs INLINEFORM3 , the character embedding of the word INLINEFORM4 .",
+    "The output of the token embedding layer is the vector e, which is the result of concatenation of the word embedding, t, and the character embedding, c.",
+    "Contextual Representation Layer: The contextual representation layer takes as input the sequence of word embeddings, INLINEFORM0 , and outputs an embedding of the contextual representation for each word in the HPI note. The word embeddings are fed into a bi-directional LSTM, which outputs INLINEFORM1 , a concatenation of the hidden states of the two LSTMs for each word.",
+    "Label Scoring Layer: At this point, each word INLINEFORM0 is associated with a hidden representation of the word, INLINEFORM1 . In the label scoring layer, we use a fully connected neural network with one hidden layer to output a score associated with each of the 10 categories for each word. Let INLINEFORM2 and INLINEFORM3 . We can compute a vector of scores s = INLINEFORM4 where the ith component of s is the score of class i for a given word.",
+    "Label Sequence Optimization Layer: The Label Sequence Optimization Layer computes the probability of a labeling sequence and finds the sequence with the highest probability. In order to condition the label for each word on the labels of its neighbors, we employ a linear chain conditional random field (CRF) to define a global score, INLINEFORM0 , for a sequence of words and their associated scores INLINEFORM1 and labels, INLINEFORM2 : DISPLAYFORM0",
+    "where T is a transition matrix INLINEFORM0 INLINEFORM1 and INLINEFORM2 are vectors of scores that describe the cost of beginning or ending with a label.",
+    "The probability of a sequence of labels is calculated by applying a softmax layer to obtain a probability of a sequence of labels: DISPLAYFORM0",
+    "Cross-entropy loss, INLINEFORM0 , is used as the objective function where INLINEFORM1 is the correct sequence of labels and the probability INLINEFORM2 is calculated according to the CRF.",
+    "We evaluated our model on the 515 annotated history of present illness notes, which were split in a 70% train set, 15% development set, and a 15% test set. The model is trained using the Adam algorithm for gradient-based optimization BIBREF25 with an initial learning rate = 0.001 and decay = 0.9. A dropout rate of 0.5 was applied for regularization, and each batch size = 20. The model ran for 20 epochs and was halted early if there was no improvement after 3 epochs.",
+    "We evaluated the impact of character embeddings, the choice of pretrained w2v embeddings, and the addition of learned word embeddings on model performance on the dev set. We report performance of the best performing model on the test set.",
+    "Table TABREF16 compares dev set performance of the model using various pretrained word embeddings, with and without character embeddings, and with pretrained versus learned word embeddings. The first row in each section is the performance of the model architecture described in the methods section for comparison. Models using word embeddings trained on the discharge summaries performed better than word embeddings trained on all MIMIC notes, likely because the discharge summary word embeddings better captured word use in discharge summaries alone. Interestingly, the continuous bag of words embeddings outperformed skip gram embeddings, which is surprising because the skip gram architecture typically works better for infrequent words BIBREF26 . As expected, inclusion of character embeddings increases performance by approximately 3%. The model with word embeddings learned in the model achieves the highest performance on the dev set (0.886), which may be because the pretrained worm embeddings were trained on a previous version of MIMIC. As a result, some words in the discharge summaries, such as mi-spelled words or rarer diseases and medications, did not have associated word embeddings. Performing a simple spell correction on out of vocab words may improve performance with pretrained word embeddings.",
+    "We evaluated the best performing model on the test set. The Learned Word Embeddings model achieved an accuracy of 0.88 and an F1-Score of 0.876 on the test set. Table TABREF17 shows the precision, recall, F1 score, and support for each of the ten labels, and Figure FIGREF18 shows the confusion matrix illustrating which labels were frequently misclassified. The demographics and patient movement labels achieved the highest F1 scores (0.96 and 0.93 respectively) while the vitals/labs and medication history labels had the lowest F1 scores (0.40 and 0.66 respectively). The demographics section consistently occurs at the beginning of the HPI note, and the patient movement section uses a limited vocab (transferred, admitted, etc.), which may explain their high F1 scores. On the other hand, the vitals/labs and medication history sections had the lowest support, which may explain why they were more challenging to label.",
+    "Words that belonged to the diagnosis history, patient movement, and procedure/results sections were frequently labeled as symptoms/signs (Figure FIGREF18 ). Diagnosis history sections may be labeled frequently as symptoms/signs because symptoms/diseases can either be described as part of the patient's diagnosis history or current symptoms depending on when the symptom/disease occurred. However, many of the misclassification errors may be due to inconsistency in manual labelling among annotators. For example, sentences describing both patient movement and patient symptoms (e.g. \"the patient was transferred to the hospital for his hypertension\") were labeled entirely as 'patient movement' by some annotators while other annotators labeled the different clauses of the sentence separately as 'patient movement' and 'symptoms/signs.' Further standardization among annotators is needed to avoid these misclassifications. Future work is needed to obtain additional manual annotations where each HPI note is annotated by multiple annotators. This will allow for calculation of Cohen's kappa, which measures inter-annotator agreement, and comparison of clinician and non-clinician annotator reliability.",
+    "Future work is also needed to better understand commonly mislabeled categories and explore alternative model architectures. Here we perform word level label prediction, which can result in phrases that contain multiple labels. For example, the phrase \"history of neck pain\" can be labeled with both 'diagnosis history' and 'symptoms/signs' labels. Post-processing is needed to create a final label prediction for each phrase. While phrase level prediction may resolve these challenges, it is difficult to segment the HPI note into phrases for prediction, as a single phrase may truly contain multiple labels. Segmentation of sentences by punctuation, conjunctions, and prepositions may yield the best phrase chunker for discharge summary text.",
+    "Finally, supplementing the word embeddings in our LSTM model with CUIs may further improve performance. While word embeddings do well in learning the contextual context of words, CUIs allow for more explicit incorporation of medical domain expertise. By concatenating the CUI for each word with its hybrid token embedding, we may be able to leverage both data driven and ontology driven approaches."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes",
+    "Labeling History of Present Illness Notes"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Labeling History of Present Illness Notes",
+      0
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      1
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      2
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      3
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      4
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      5
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      6
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      7
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      8
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      9
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      10
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      11
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      12
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      13
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      14
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      15
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      16
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      17
+    ],
+    [
+      "Labeling History of Present Illness Notes",
+      18
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Labeling History of Present Illness Notes",
+  "section": "Labeling History of Present Illness Notes",
+  "title_path": "Labeling History of Present Illness Notes",
+  "block_type": "long_unit"
+}

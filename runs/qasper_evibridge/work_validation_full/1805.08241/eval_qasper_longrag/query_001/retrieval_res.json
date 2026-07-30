@@ -1,0 +1,411 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_5",
+      "content": "[Section] Experiments\n[source_id=18] We evaluated our attention transformations on three language pairs. We focused on small datasets, as they are the most affected by coverage mistakes. We use the IWSLT 2014 corpus for De-En, the KFTT corpus for Ja-En BIBREF19 , and the WMT 2016 dataset for Ro-En. The training sets have 153,326, 329,882, and 560,767 parallel sentences, respectively. Our reason to prefer smaller datasets is that this regime is what brings more adequacy issues and demands more structural biases, hence it is a good test bed for our methods. We tokenized the data using the Moses scripts and preprocessed it with subword units BIBREF20 with a joint vocabulary and 32k merge operations. Our implementation was done on a fork of the OpenNMT-py toolkit BIBREF21 with the default parameters . We used a validation set to tune hyperparameters introduced by our model. Even though our attention implementations are CPU-based using NumPy (unlike the rest of the computation which is done on the GPU), we did not observe any noticeable slowdown using multiple devices.\n[source_id=19] As baselines, we use softmax attention, as well as two recently proposed coverage models:\n[source_id=20] We also experimented combining the strategies above with the sparsemax transformation.\n[source_id=21] As evaluation metrics, we report tokenized BLEU, METEOR ( BIBREF22 , as well as two new metrics that we describe next to account for over and under-translation.",
+      "score": 5.945731008953322,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        18,
+        19,
+        20,
+        21
+      ],
+      "child_qasper_evidence_texts": [
+        "We evaluated our attention transformations on three language pairs. We focused on small datasets, as they are the most affected by coverage mistakes. We use the IWSLT 2014 corpus for De-En, the KFTT corpus for Ja-En BIBREF19 , and the WMT 2016 dataset for Ro-En. The training sets have 153,326, 329,882, and 560,767 parallel sentences, respectively. Our reason to prefer smaller datasets is that this regime is what brings more adequacy issues and demands more structural biases, hence it is a good test bed for our methods. We tokenized the data using the Moses scripts and preprocessed it with subword units BIBREF20 with a joint vocabulary and 32k merge operations. Our implementation was done on a fork of the OpenNMT-py toolkit BIBREF21 with the default parameters . We used a validation set to tune hyperparameters introduced by our model. Even though our attention implementations are CPU-based using NumPy (unlike the rest of the computation which is done on the GPU), we did not observe any noticeable slowdown using multiple devices.",
+        "As baselines, we use softmax attention, as well as two recently proposed coverage models:",
+        "We also experimented combining the strategies above with the sparsemax transformation.",
+        "As evaluation metrics, we report tokenized BLEU, METEOR ( BIBREF22 , as well as two new metrics that we describe next to account for over and under-translation."
+      ],
+      "child_pages": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "Experiments",
+        "Experiments",
+        "Experiments",
+        "Experiments"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments",
+          0
+        ],
+        [
+          "Experiments",
+          1
+        ],
+        [
+          "Experiments",
+          2
+        ],
+        [
+          "Experiments",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Experiments",
+      "section": "Experiments",
+      "title_path": "Experiments",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Neural machine translation (NMT) emerged in the last few years as a very successful paradigm BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 . While NMT is generally more fluent than previous statistical systems, adequacy is still a major concern BIBREF4 : common mistakes include dropping source words and repeating words in the generated translation.\n[source_id=5] Previous work has attempted to mitigate this problem in various ways. BIBREF5 incorporate coverage and length penalties during beam search—a simple yet limited solution, since it only affects the scores of translation hypotheses that are already in the beam. Other approaches involve architectural changes: providing coverage vectors to track the attention history BIBREF6 , BIBREF7 , using gating architectures and adaptive attention to control the amount of source context provided BIBREF8 , BIBREF9 , or adding a reconstruction loss BIBREF10 . BIBREF11 also use the notion of fertility implicitly in their proposed model. Their “fertility conditioned decoder” uses a coverage vector and an “extract gate” which are incorporated in the decoding recurrent unit, increasing the number of parameters.\n[source_id=6] In this paper, we propose a different solution that does not change the overall architecture, but only the attention transformation. Namely, we replace the traditional softmax by other recently proposed transformations that either promote attention sparsity BIBREF12 or upper bound the amount of attention a word can receive BIBREF13 . The bounds are determined by the fertility values of the source words. While these transformations have given encouraging results in various NLP problems, they have never been applied to NMT, to the best of our knowledge. Furthermore, we combine these two ideas and propose a novel attention transformation, constrained sparsemax, which produces both sparse and bounded attention weights, yielding a compact and interpretable set of alignments. While being in-between soft and hard alignments (Figure FIGREF20 ), the constrained sparsemax transformation is end-to-end differentiable, hence amenable for training with gradient backpropagation.\n[source_id=7] To sum up, our contributions are as follows:",
+      "score": 4.748386876717201,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "child_qasper_evidence_texts": [
+        "Neural machine translation (NMT) emerged in the last few years as a very successful paradigm BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 . While NMT is generally more fluent than previous statistical systems, adequacy is still a major concern BIBREF4 : common mistakes include dropping source words and repeating words in the generated translation.",
+        "Previous work has attempted to mitigate this problem in various ways. BIBREF5 incorporate coverage and length penalties during beam search—a simple yet limited solution, since it only affects the scores of translation hypotheses that are already in the beam. Other approaches involve architectural changes: providing coverage vectors to track the attention history BIBREF6 , BIBREF7 , using gating architectures and adaptive attention to control the amount of source context provided BIBREF8 , BIBREF9 , or adding a reconstruction loss BIBREF10 . BIBREF11 also use the notion of fertility implicitly in their proposed model. Their “fertility conditioned decoder” uses a coverage vector and an “extract gate” which are incorporated in the decoding recurrent unit, increasing the number of parameters.",
+        "In this paper, we propose a different solution that does not change the overall architecture, but only the attention transformation. Namely, we replace the traditional softmax by other recently proposed transformations that either promote attention sparsity BIBREF12 or upper bound the amount of attention a word can receive BIBREF13 . The bounds are determined by the fertility values of the source words. While these transformations have given encouraging results in various NLP problems, they have never been applied to NMT, to the best of our knowledge. Furthermore, we combine these two ideas and propose a novel attention transformation, constrained sparsemax, which produces both sparse and bounded attention weights, yielding a compact and interpretable set of alignments. While being in-between soft and hard alignments (Figure FIGREF20 ), the constrained sparsemax transformation is end-to-end differentiable, hence amenable for training with gradient backpropagation.",
+        "To sum up, our contributions are as follows:"
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Examples of Translations\n[source_id=49] We show some examples of translations obtained for the German-English language pair with different systems. Blue highlights the parts of the reference that are correct and red highlights the corresponding problematic parts of translations, including repetitions, dropped words or mistranslations.",
+      "score": 4.262332674345444,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        49
+      ],
+      "child_qasper_evidence_texts": [
+        "We show some examples of translations obtained for the German-English language pair with different systems. Blue highlights the parts of the reference that are correct and red highlights the corresponding problematic parts of translations, including repetitions, dropped words or mistranslations."
+      ],
+      "child_pages": [
+        12
+      ],
+      "child_sections": [
+        "Examples of Translations"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Examples of Translations",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Examples of Translations",
+      "section": "Examples of Translations",
+      "title_path": "Examples of Translations",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] In NMT, words are sometimes dropped from the source or generated repeatedly in the translation. We explore novel strategies to address the coverage problem that change only the attention transformation. Our approach allocates fertilities to source words, used to bound the attention each word can receive. We experiment with various sparse and constrained attention transformations and propose a new one, constrained sparsemax, shown to be differentiable and sparse. Empirical evaluation is provided in three languages pairs.",
+      "score": 4.232932640019637,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "In NMT, words are sometimes dropped from the source or generated repeatedly in the translation. We explore novel strategies to address the coverage problem that change only the attention transformation. Our approach allocates fertilities to source words, used to bound the attention each word can receive. We experiment with various sparse and constrained attention transformations and propose a new one, constrained sparsemax, shown to be differentiable and sparse. Empirical evaluation is provided in three languages pairs."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Fertility Bounds\n[source_id=16] We experiment with three ways of setting the fertility of the source words: constant, guided, and predicted. With constant, we set the fertilities of all source words to a fixed integer value INLINEFORM0 . With guided, we train a word aligner based on IBM Model 2 (we used fast_align in our experiments, BIBREF17 ) and, for each word in the vocabulary, we set the fertilities to the maximal observed value in the training data (or 1 if no alignment was observed). With the predicted strategy, we train a separate fertility predictor model using a bi-LSTM tagger. At training time, we provide as supervision the fertility estimated by fast_align. Since our model works with fertility upper bounds and the word aligner may miss some word pairs, we found it beneficial to add a constant to this number (1 in our experiments). At test time, we use the expected fertilities according to our model.",
+      "score": 2.982346404452296,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        16
+      ],
+      "child_qasper_evidence_texts": [
+        "We experiment with three ways of setting the fertility of the source words: constant, guided, and predicted. With constant, we set the fertilities of all source words to a fixed integer value INLINEFORM0 . With guided, we train a word aligner based on IBM Model 2 (we used fast_align in our experiments, BIBREF17 ) and, for each word in the vocabulary, we set the fertilities to the maximal observed value in the training data (or 1 if no alignment was observed). With the predicted strategy, we train a separate fertility predictor model using a bi-LSTM tagger. At training time, we provide as supervision the fertility estimated by fast_align. Since our model works with fertility upper bounds and the word aligner may miss some word pairs, we found it beneficial to add a constant to this number (1 in our experiments). At test time, we use the expected fertilities according to our model."
+      ],
+      "child_pages": [
+        4
+      ],
+      "child_sections": [
+        "Fertility Bounds"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Fertility Bounds",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Fertility Bounds",
+      "section": "Fertility Bounds",
+      "title_path": "Fertility Bounds",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Linear-Time Evaluation\n[source_id=44] Finally, we present an algorithm to solve the problem in Eq. EQREF14 in linear time.\n[source_id=45] BIBREF16 describe an algorithm, reproduced here as Algorithm SECREF38 , for solving a class of singly-constrained convex quadratic problems, which can be written in the form above (where each INLINEFORM0 ): DISPLAYFORM0\n[source_id=46] The solution of the problem in Eq. EQREF45 is of the form INLINEFORM0 , where INLINEFORM1 is a constant. The algorithm searches the value of this constant (which is similar to INLINEFORM2 in our problem), which lies in a particular interval of split-points (line SECREF38 ), iteratively shrinking this interval. The algorithm requires computing medians as a subroutine, which can be done in linear time BIBREF24 . The overall complexity in INLINEFORM3 BIBREF16 . The same algorithm has been used in NLP by BIBREF23 for a budgeted summarization problem.\n[source_id=47] To show that this algorithm applies to the problem of evaluating INLINEFORM0 , it suffices to show that our problem in Eq. EQREF14 can be rewritten in the form of Eq. EQREF45 . This is indeed the case, if we set: DISPLAYFORM0",
+      "score": 2.357290261845705,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        44,
+        45,
+        46,
+        47
+      ],
+      "child_qasper_evidence_texts": [
+        "Finally, we present an algorithm to solve the problem in Eq. EQREF14 in linear time.",
+        "BIBREF16 describe an algorithm, reproduced here as Algorithm SECREF38 , for solving a class of singly-constrained convex quadratic problems, which can be written in the form above (where each INLINEFORM0 ): DISPLAYFORM0",
+        "The solution of the problem in Eq. EQREF45 is of the form INLINEFORM0 , where INLINEFORM1 is a constant. The algorithm searches the value of this constant (which is similar to INLINEFORM2 in our problem), which lies in a particular interval of split-points (line SECREF38 ), iteratively shrinking this interval. The algorithm requires computing medians as a subroutine, which can be done in linear time BIBREF24 . The overall complexity in INLINEFORM3 BIBREF16 . The same algorithm has been used in NLP by BIBREF23 for a budgeted summarization problem.",
+        "To show that this algorithm applies to the problem of evaluating INLINEFORM0 , it suffices to show that our problem in Eq. EQREF14 can be rewritten in the form of Eq. EQREF45 . This is indeed the case, if we set: DISPLAYFORM0"
+      ],
+      "child_pages": [
+        11,
+        11,
+        11,
+        11
+      ],
+      "child_sections": [
+        "Linear-Time Evaluation",
+        "Linear-Time Evaluation",
+        "Linear-Time Evaluation",
+        "Linear-Time Evaluation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Linear-Time Evaluation",
+          0
+        ],
+        [
+          "Linear-Time Evaluation",
+          1
+        ],
+        [
+          "Linear-Time Evaluation",
+          2
+        ],
+        [
+          "Linear-Time Evaluation",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Linear-Time Evaluation",
+      "section": "Linear-Time Evaluation",
+      "title_path": "Linear-Time Evaluation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Sparse and Constrained Attention\n[source_id=13] In this work, we consider alternatives to Eq. EQREF5 . Since the softmax is strictly positive, it forces all words in the source to receive some probability mass in the resulting attention distribution, which can be wasteful. Moreover, it may happen that the decoder attends repeatedly to the same source words across time steps, causing repetitions in the generated translation, as BIBREF7 observed.\n[source_id=14] With this in mind, we replace Eq. EQREF5 by INLINEFORM0 , where INLINEFORM1 is a transformation that may depend both on the scores INLINEFORM2 and on upper bounds INLINEFORM3 that limit the amount of attention that each word can receive. We consider three alternatives to softmax, described next.",
+      "score": 2.144854963680485,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        13,
+        14
+      ],
+      "child_qasper_evidence_texts": [
+        "In this work, we consider alternatives to Eq. EQREF5 . Since the softmax is strictly positive, it forces all words in the source to receive some probability mass in the resulting attention distribution, which can be wasteful. Moreover, it may happen that the decoder attends repeatedly to the same source words across time steps, causing repetitions in the generated translation, as BIBREF7 observed.",
+        "With this in mind, we replace Eq. EQREF5 by INLINEFORM0 , where INLINEFORM1 is a transformation that may depend both on the scores INLINEFORM2 and on upper bounds INLINEFORM3 that limit the amount of attention that each word can receive. We consider three alternatives to softmax, described next."
+      ],
+      "child_pages": [
+        3,
+        3
+      ],
+      "child_sections": [
+        "Sparse and Constrained Attention",
+        "Sparse and Constrained Attention"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Sparse and Constrained Attention",
+          0
+        ],
+        [
+          "Sparse and Constrained Attention",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Sparse and Constrained Attention",
+      "section": "Sparse and Constrained Attention",
+      "title_path": "Sparse and Constrained Attention",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Preliminaries\n[source_id=9] Our underlying model architecture is a standard attentional encoder-decoder BIBREF1 . Let INLINEFORM0 and INLINEFORM1 denote the source and target sentences, respectively. We use a Bi-LSTM encoder to represent the source words as a matrix INLINEFORM2 . The conditional probability of the target sentence is given as DISPLAYFORM0\n[source_id=10] where INLINEFORM0 is computed by a softmax output layer that receives a decoder state INLINEFORM1 as input. This state is updated by an auto-regressive LSTM, INLINEFORM2 , where INLINEFORM3 is an input context vector. This vector is computed as INLINEFORM4 , where INLINEFORM5 is a probability distribution that represents the attention over the source words, commonly obtained as DISPLAYFORM0\n[source_id=11] where INLINEFORM0 is a vector of scores. We follow BIBREF14 and define INLINEFORM1 as a bilinear transformation of encoder and decoder states, where INLINEFORM2 is a model parameter.",
+      "score": 1.0950796196817663,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        9,
+        10,
+        11
+      ],
+      "child_qasper_evidence_texts": [
+        "Our underlying model architecture is a standard attentional encoder-decoder BIBREF1 . Let INLINEFORM0 and INLINEFORM1 denote the source and target sentences, respectively. We use a Bi-LSTM encoder to represent the source words as a matrix INLINEFORM2 . The conditional probability of the target sentence is given as DISPLAYFORM0",
+        "where INLINEFORM0 is computed by a softmax output layer that receives a decoder state INLINEFORM1 as input. This state is updated by an auto-regressive LSTM, INLINEFORM2 , where INLINEFORM3 is an input context vector. This vector is computed as INLINEFORM4 , where INLINEFORM5 is a probability distribution that represents the attention over the source words, commonly obtained as DISPLAYFORM0",
+        "where INLINEFORM0 is a vector of scores. We follow BIBREF14 and define INLINEFORM1 as a bilinear transformation of encoder and decoder states, where INLINEFORM2 is a model parameter."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Preliminaries",
+        "Preliminaries",
+        "Preliminaries"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Preliminaries",
+          0
+        ],
+        [
+          "Preliminaries",
+          1
+        ],
+        [
+          "Preliminaries",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Preliminaries",
+      "section": "Preliminaries",
+      "title_path": "Preliminaries",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 18,
+      "content": "We evaluated our attention transformations on three language pairs. We focused on small datasets, as they are the most affected by coverage mistakes. We use the IWSLT 2014 corpus for De-En, the KFTT corpus for Ja-En BIBREF19 , and the WMT 2016 dataset for Ro-En. The training sets have 153,326, 329,882, and 560,767 parallel sentences, respectively. Our reason to prefer smaller datasets is that this regime is what brings more adequacy issues and demands more structural biases, hence it is a good test bed for our methods. We tokenized the data using the Moses scripts and preprocessed it with subword units BIBREF20 with a joint vocabulary and 32k merge operations. Our implementation was done on a fork of the OpenNMT-py toolkit BIBREF21 with the default parameters . We used a validation set to tune hyperparameters introduced by our model. Even though our attention implementations are CPU-based using NumPy (unlike the rest of the computation which is done on the GPU), we did not observe any noticeable slowdown using multiple devices.",
+      "qasper_evidence_text": "We evaluated our attention transformations on three language pairs. We focused on small datasets, as they are the most affected by coverage mistakes. We use the IWSLT 2014 corpus for De-En, the KFTT corpus for Ja-En BIBREF19 , and the WMT 2016 dataset for Ro-En. The training sets have 153,326, 329,882, and 560,767 parallel sentences, respectively. Our reason to prefer smaller datasets is that this regime is what brings more adequacy issues and demands more structural biases, hence it is a good test bed for our methods. We tokenized the data using the Moses scripts and preprocessed it with subword units BIBREF20 with a joint vocabulary and 32k merge operations. Our implementation was done on a fork of the OpenNMT-py toolkit BIBREF21 with the default parameters . We used a validation set to tune hyperparameters introduced by our model. Even though our attention implementations are CPU-based using NumPy (unlike the rest of the computation which is done on the GPU), we did not observe any noticeable slowdown using multiple devices.",
+      "source_node_id": 18,
+      "node_id": 18,
+      "paragraph_id": 18,
+      "evidence_id": 18,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_5",
+      "rank": 1,
+      "score": 5.945731008953322,
+      "block_type": "paragraph",
+      "page": 5,
+      "section_id": "Experiments",
+      "section": "Experiments",
+      "title": "Experiments",
+      "hotpot_title": "Experiments",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    }
+  ],
+  "supporting_block_ids": [
+    18
+  ]
+}

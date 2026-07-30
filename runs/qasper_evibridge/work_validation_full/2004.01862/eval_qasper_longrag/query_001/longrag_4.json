@@ -1,0 +1,52 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Methods ::: Extracting Sentences Containing Radiological Findings\n[source_id=17] In this section, we develop a sentence-level classifier to determine whether a sentence contains radiological findings. To build such a classifier, we need to create positive and negative training sentences, without labor-intensive annotations. To obtain positive examples, we resort to the MedPix database, which contains radiology reports narrating radiological findings. MedPix is an open-access online database of medical images, teaching cases, and clinical topics. It contains more than 9000 topics, 59000 images from 12000 patient cases. We selected diagnostic reports for CT images and used sentences in the reports as positive samples. To obtain negative sentences, we randomly sample some sentences from the articles and quickly screen them to ensure that they are not about radiological findings. Since most sentences in the literature are not about radiological findings, a random sampling can almost ensure the select sentences are negative. A manual screening is conducted to further ensure this and the screening effort is not heavy.\n[source_id=18] Given these positive and negative training sentences, we use them to train a sentence classifier which predicts whether a sentence is about the radiological findings of COVID-19. We use the Bidirectional Encoder Representations from Transformers (BERT) BIBREF3 model for sentence classification. BERT is a neural language model that learns contextual representations of words and sentences. BERT pretrains deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers. To apply the pretrained BERT to a downstream task such as sentence classification, one can add an additional layer on top of the BERT architecture and train this newly-added layer using the labeled data in the target task. In our case, similar to BIBREF4, we pretrain the BERT model on a vast amount of biomedical literature to obtain semantic representations of words. A linear layer is added to the output of BERT for predicting whether this sentence is positive (containing radiological finding) or negative. The architecture and hyperparameters of the BERT model used in our method are the same as those in BIBREF4. Figure FIGREF7 shows the architecture of the classification model.\n[source_id=19] When applying this trained sentence classifier to unseen sentences, we found that it yields a lot of false positives: many sentences irrelevant to radiological findings of COVID-19 are predicted as being relevant. To solve this problem, we iteratively perform hard example mining in a bootstrapping way and use these hard examples to retrain the classifier for reducing false positives. At iteration $t$, given the classifier $C_t$, we apply it to make predictions on unseen sentences. Each sentence is associated with a prediction score where a larger score indicates that this sentence is more likely to be positive. We rank these sentences in descending order of their prediction scores. Then for the top-K sentences with the largest prediction scores, we read them and label each of them as either being positive or negative. Then we add the labeled pairs to the training set and re-train the classifier and get $C_{t+1}$. This procedure is repeated again to identify new false positives and update the classifier using the new false positives.",
+  "score": 0.7955820017237474,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    17,
+    18,
+    19
+  ],
+  "child_qasper_evidence_texts": [
+    "In this section, we develop a sentence-level classifier to determine whether a sentence contains radiological findings. To build such a classifier, we need to create positive and negative training sentences, without labor-intensive annotations. To obtain positive examples, we resort to the MedPix database, which contains radiology reports narrating radiological findings. MedPix is an open-access online database of medical images, teaching cases, and clinical topics. It contains more than 9000 topics, 59000 images from 12000 patient cases. We selected diagnostic reports for CT images and used sentences in the reports as positive samples. To obtain negative sentences, we randomly sample some sentences from the articles and quickly screen them to ensure that they are not about radiological findings. Since most sentences in the literature are not about radiological findings, a random sampling can almost ensure the select sentences are negative. A manual screening is conducted to further ensure this and the screening effort is not heavy.",
+    "Given these positive and negative training sentences, we use them to train a sentence classifier which predicts whether a sentence is about the radiological findings of COVID-19. We use the Bidirectional Encoder Representations from Transformers (BERT) BIBREF3 model for sentence classification. BERT is a neural language model that learns contextual representations of words and sentences. BERT pretrains deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers. To apply the pretrained BERT to a downstream task such as sentence classification, one can add an additional layer on top of the BERT architecture and train this newly-added layer using the labeled data in the target task. In our case, similar to BIBREF4, we pretrain the BERT model on a vast amount of biomedical literature to obtain semantic representations of words. A linear layer is added to the output of BERT for predicting whether this sentence is positive (containing radiological finding) or negative. The architecture and hyperparameters of the BERT model used in our method are the same as those in BIBREF4. Figure FIGREF7 shows the architecture of the classification model.",
+    "When applying this trained sentence classifier to unseen sentences, we found that it yields a lot of false positives: many sentences irrelevant to radiological findings of COVID-19 are predicted as being relevant. To solve this problem, we iteratively perform hard example mining in a bootstrapping way and use these hard examples to retrain the classifier for reducing false positives. At iteration $t$, given the classifier $C_t$, we apply it to make predictions on unseen sentences. Each sentence is associated with a prediction score where a larger score indicates that this sentence is more likely to be positive. We rank these sentences in descending order of their prediction scores. Then for the top-K sentences with the largest prediction scores, we read them and label each of them as either being positive or negative. Then we add the labeled pairs to the training set and re-train the classifier and get $C_{t+1}$. This procedure is repeated again to identify new false positives and update the classifier using the new false positives."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Methods ::: Extracting Sentences Containing Radiological Findings",
+    "Methods ::: Extracting Sentences Containing Radiological Findings",
+    "Methods ::: Extracting Sentences Containing Radiological Findings"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Methods ::: Extracting Sentences Containing Radiological Findings",
+      0
+    ],
+    [
+      "Methods ::: Extracting Sentences Containing Radiological Findings",
+      1
+    ],
+    [
+      "Methods ::: Extracting Sentences Containing Radiological Findings",
+      2
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Methods ::: Extracting Sentences Containing Radiological Findings",
+  "section": "Methods ::: Extracting Sentences Containing Radiological Findings",
+  "title_path": "Methods ::: Extracting Sentences Containing Radiological Findings",
+  "block_type": "long_unit"
+}

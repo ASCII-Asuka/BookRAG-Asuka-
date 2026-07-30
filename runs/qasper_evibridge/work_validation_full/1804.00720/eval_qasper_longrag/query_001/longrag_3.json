@@ -1,0 +1,88 @@
+{
+  "id": "longrag_3",
+  "content": "[Section] Methodology\n[source_id=12] Our system comprises of following three steps:\n[source_id=13] Cloze generation: Most of the documents typically follow a template, they begin with an introduction that provides an overview and a brief summary for what is to follow. We assume such a structure while constructing our cloze style questions. When there is no clear demarcation, we treat the first $K\\%$ (hyperparameter, in our case 20%) of the document as the introduction. While noisy, this heuristic generates a large number of clozes given any corpus, which we found to be beneficial for semi-supervised learning despite the noise.\n[source_id=14] We use a standard NLP pipeline based on Stanford CoreNLP (for SQuAD, TrivaQA and PubMed) and the BANNER Named Entity Recognizer (only for PubMed articles) to identify entities and phrases. Assume that a document comprises of introduction sentences $\\lbrace q_1, q_2, ... q_n\\rbrace $ , and the remaining passages $\\lbrace p_1, p_2, .. p_m\\rbrace $ . Additionally, let's say that each sentence $q_i$ in introduction is composed of words $\\lbrace w_1, w_2, ... w_{l_{q_i}}\\rbrace $ , where $l_{q_i}$ is the length of $q_i$ . We consider a $\\text{match} (q_i, p_j)$ , if there is an exact string match of a sequence of words $\\lbrace w_k, w_{k+1}, .. w_{l_{q_i}}\\rbrace $ between the sentence $q_i$ and passage $p_j$ . If this sequence is either a noun phrase, verb phrase, adjective phrase or a named entity in $\\lbrace p_1, p_2, .. p_m\\rbrace $0 , as recognized by CoreNLP or BANNER, we select it as an answer span $\\lbrace p_1, p_2, .. p_m\\rbrace $1 . Additionally, we use $\\lbrace p_1, p_2, .. p_m\\rbrace $2 as the passage $\\lbrace p_1, p_2, .. p_m\\rbrace $3 and form a cloze question $\\lbrace p_1, p_2, .. p_m\\rbrace $4 from the answer bearing sentence $\\lbrace p_1, p_2, .. p_m\\rbrace $5 by replacing $\\lbrace p_1, p_2, .. p_m\\rbrace $6 with a placeholder. As a result, we obtain passage-question-answer ( $\\lbrace p_1, p_2, .. p_m\\rbrace $7 ) triples (Table 1 shows an example). As a post-processing step, we prune out $\\lbrace p_1, p_2, .. p_m\\rbrace $8 triples where the word overlap between the question (Q) and passage (P) is less than 2 words (after excluding the stop words).\n[source_id=15] The process relies on the fact that answer candidates from the introduction are likely to be discussed in detail in the remainder of the article. In effect, the cloze question from the introduction and the matching paragraph in the body forms a question and context passage pair. We create two cloze datasets, one each from Wikipedia corpus (for SQuAD and TriviaQA) and PUBMed academic papers (for the BioASQ challenge), consisting of 2.2M and 1M clozes respectively. From analyzing the cloze data manually, we were able to answer 76% times for the Wikipedia set and 80% times for the PUBMed set using the information in the passage. In most cases the cloze paraphrased the information in the passage, which we hypothesized to be a useful signal for the downstream QA task.\n[source_id=16] We also investigate the utility of forming subsets of the large cloze corpus, where we select the top passage-question-answer triples, based on the different criteria, like i) jaccard similarity of answer bearing sentence in introduction and the passage ii) the tf-idf scores of answer candidates and iii) the length of answer candidates. However, we empirically find that we were better off using the entire set rather than these subsets.\n[source_id=17] Pre-training: We make use of the generated cloze dataset to pre-train an expressive neural network designed for the task of reading comprehension. We work with two publicly available neural network models – the GA Reader BIBREF2 (to enable comparison with prior work) and BiDAF + Self-Attention (SA) model from BIBREF1 (which is among the best performing models on SQuAD and TriviaQA). After pretraining, the performance of BiDAF+SA on a dev set of the (Wikipedia) cloze questions is 0.58 F1 score and 0.55 Exact Match (EM) score. This implies that the cloze corpus is neither too easy, nor too difficult to answer.\n[source_id=18] Fine Tuning: We fine tune the pre-trained model, from the previous step, over a small set of labelled question-answer pairs. As we shall later see, this step is crucial, and it only requires a handful of labelled questions to achieve a significant proportion of the performance typically attained by training on tens of thousands of questions.",
+  "score": 3.5168433200441407,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_3",
+  "child_source_node_ids": [
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "child_qasper_evidence_texts": [
+    "Our system comprises of following three steps:",
+    "Cloze generation: Most of the documents typically follow a template, they begin with an introduction that provides an overview and a brief summary for what is to follow. We assume such a structure while constructing our cloze style questions. When there is no clear demarcation, we treat the first $K\\%$ (hyperparameter, in our case 20%) of the document as the introduction. While noisy, this heuristic generates a large number of clozes given any corpus, which we found to be beneficial for semi-supervised learning despite the noise.",
+    "We use a standard NLP pipeline based on Stanford CoreNLP (for SQuAD, TrivaQA and PubMed) and the BANNER Named Entity Recognizer (only for PubMed articles) to identify entities and phrases. Assume that a document comprises of introduction sentences $\\lbrace q_1, q_2, ... q_n\\rbrace $ , and the remaining passages $\\lbrace p_1, p_2, .. p_m\\rbrace $ . Additionally, let's say that each sentence $q_i$ in introduction is composed of words $\\lbrace w_1, w_2, ... w_{l_{q_i}}\\rbrace $ , where $l_{q_i}$ is the length of $q_i$ . We consider a $\\text{match} (q_i, p_j)$ , if there is an exact string match of a sequence of words $\\lbrace w_k, w_{k+1}, .. w_{l_{q_i}}\\rbrace $ between the sentence $q_i$ and passage $p_j$ . If this sequence is either a noun phrase, verb phrase, adjective phrase or a named entity in $\\lbrace p_1, p_2, .. p_m\\rbrace $0 , as recognized by CoreNLP or BANNER, we select it as an answer span $\\lbrace p_1, p_2, .. p_m\\rbrace $1 . Additionally, we use $\\lbrace p_1, p_2, .. p_m\\rbrace $2 as the passage $\\lbrace p_1, p_2, .. p_m\\rbrace $3 and form a cloze question $\\lbrace p_1, p_2, .. p_m\\rbrace $4 from the answer bearing sentence $\\lbrace p_1, p_2, .. p_m\\rbrace $5 by replacing $\\lbrace p_1, p_2, .. p_m\\rbrace $6 with a placeholder. As a result, we obtain passage-question-answer ( $\\lbrace p_1, p_2, .. p_m\\rbrace $7 ) triples (Table 1 shows an example). As a post-processing step, we prune out $\\lbrace p_1, p_2, .. p_m\\rbrace $8 triples where the word overlap between the question (Q) and passage (P) is less than 2 words (after excluding the stop words).",
+    "The process relies on the fact that answer candidates from the introduction are likely to be discussed in detail in the remainder of the article. In effect, the cloze question from the introduction and the matching paragraph in the body forms a question and context passage pair. We create two cloze datasets, one each from Wikipedia corpus (for SQuAD and TriviaQA) and PUBMed academic papers (for the BioASQ challenge), consisting of 2.2M and 1M clozes respectively. From analyzing the cloze data manually, we were able to answer 76% times for the Wikipedia set and 80% times for the PUBMed set using the information in the passage. In most cases the cloze paraphrased the information in the passage, which we hypothesized to be a useful signal for the downstream QA task.",
+    "We also investigate the utility of forming subsets of the large cloze corpus, where we select the top passage-question-answer triples, based on the different criteria, like i) jaccard similarity of answer bearing sentence in introduction and the passage ii) the tf-idf scores of answer candidates and iii) the length of answer candidates. However, we empirically find that we were better off using the entire set rather than these subsets.",
+    "Pre-training: We make use of the generated cloze dataset to pre-train an expressive neural network designed for the task of reading comprehension. We work with two publicly available neural network models – the GA Reader BIBREF2 (to enable comparison with prior work) and BiDAF + Self-Attention (SA) model from BIBREF1 (which is among the best performing models on SQuAD and TriviaQA). After pretraining, the performance of BiDAF+SA on a dev set of the (Wikipedia) cloze questions is 0.58 F1 score and 0.55 Exact Match (EM) score. This implies that the cloze corpus is neither too easy, nor too difficult to answer.",
+    "Fine Tuning: We fine tune the pre-trained model, from the previous step, over a small set of labelled question-answer pairs. As we shall later see, this step is crucial, and it only requires a handful of labelled questions to achieve a significant proportion of the performance typically attained by training on tens of thousands of questions."
+  ],
+  "child_pages": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "child_sections": [
+    "Methodology",
+    "Methodology",
+    "Methodology",
+    "Methodology",
+    "Methodology",
+    "Methodology",
+    "Methodology"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Methodology",
+      0
+    ],
+    [
+      "Methodology",
+      1
+    ],
+    [
+      "Methodology",
+      2
+    ],
+    [
+      "Methodology",
+      3
+    ],
+    [
+      "Methodology",
+      4
+    ],
+    [
+      "Methodology",
+      5
+    ],
+    [
+      "Methodology",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_3",
+  "section_id": "Methodology",
+  "section": "Methodology",
+  "title_path": "Methodology",
+  "block_type": "long_unit"
+}

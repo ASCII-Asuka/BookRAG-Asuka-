@@ -1,0 +1,52 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Method\n[source_id=9] Our method follows the autoencoder architecture in BIBREF0 except that there is an additional pitch regression network to separate pitch information out of the latent space. The architecture of PitchNet is illustrated in Fig. FIGREF1. It consists of five parts, an encoder, a decoder, a Look Up Table (LUT) of speaker embedding vectors, a singer classification network, and a pitch regression network.\n[source_id=10] First, the input waveform is passed through the encoder to extract high-level semantic features. An average pooling of stride 800 is then applied to the features, forming a bottleneck to limit the information passing through the encoder. After that, a singer id is used to retrieve the target singer's embedding vector from LUT, and concatenated with the output of the encoder at each time step to be a sequence of condition vectors. The pitch of the input audio, extracted separately from the network, is fed into the decoder after a linear interpolation as a compensation signal together with the condition vector. Finally, the decoder is conditioned on the condition vector and pitch to generate audio samples. Since the decoder is an autoregressive model, the output will be fed back to the decoder at the next time step. The model is trained on a softmax-based loss to minimize the reconstruction error with teacher-forcing.\n[source_id=11] In order to project the output features of the encoder into a singer and pitch invariant latent space, a singer classification network and a pitch regression network are employed to force the encoder not to encode singer and pitch information. The singer classification loss and pitch regression loss are added adversarially to the reconstruction loss to train the entire model end to end.",
+  "score": 1.5680454911692498,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    9,
+    10,
+    11
+  ],
+  "child_qasper_evidence_texts": [
+    "Our method follows the autoencoder architecture in BIBREF0 except that there is an additional pitch regression network to separate pitch information out of the latent space. The architecture of PitchNet is illustrated in Fig. FIGREF1. It consists of five parts, an encoder, a decoder, a Look Up Table (LUT) of speaker embedding vectors, a singer classification network, and a pitch regression network.",
+    "First, the input waveform is passed through the encoder to extract high-level semantic features. An average pooling of stride 800 is then applied to the features, forming a bottleneck to limit the information passing through the encoder. After that, a singer id is used to retrieve the target singer's embedding vector from LUT, and concatenated with the output of the encoder at each time step to be a sequence of condition vectors. The pitch of the input audio, extracted separately from the network, is fed into the decoder after a linear interpolation as a compensation signal together with the condition vector. Finally, the decoder is conditioned on the condition vector and pitch to generate audio samples. Since the decoder is an autoregressive model, the output will be fed back to the decoder at the next time step. The model is trained on a softmax-based loss to minimize the reconstruction error with teacher-forcing.",
+    "In order to project the output features of the encoder into a singer and pitch invariant latent space, a singer classification network and a pitch regression network are employed to force the encoder not to encode singer and pitch information. The singer classification loss and pitch regression loss are added adversarially to the reconstruction loss to train the entire model end to end."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Method",
+    "Method",
+    "Method"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Method",
+      0
+    ],
+    [
+      "Method",
+      1
+    ],
+    [
+      "Method",
+      2
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Method",
+  "section": "Method",
+  "title_path": "Method",
+  "block_type": "long_unit"
+}

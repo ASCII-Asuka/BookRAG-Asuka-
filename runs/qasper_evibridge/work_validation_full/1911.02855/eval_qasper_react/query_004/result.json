@@ -1,0 +1,77 @@
+{
+  "question": "How are weights dynamically adjusted?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "One can think $(1-p_{i1})$ as a weight associated with each example, which changes as training proceeds. The intuition of changing $p_{i1}$ to $(1-p_{i1}) p_{i1}$ is to push down the weight of easy examples. For easy examples whose probability are approaching 0 or 1, $(1-p_{i1}) p_{i1}$ makes the model attach significantly less focus to them. Figure FIGREF23 gives gives an explanation from the perspective in derivative: the derivative of $\\frac{(1-p)p}{1+(1-p)p}$ with respect to $p$ approaches 0 immediately after $p$ approaches 0, which means the model attends less to examples once they are correctly classified."
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "Comparing Eq.DISPLAY_FORM14 with Eq.DISPLAY_FORM22, we can see that Eq.DISPLAY_FORM14 is actually a soft form of $F1$, using a continuous $p$ rather than the binary $\\mathbb {I}( p_{i1}>0.5)$. This gap isn't a big issue for balanced datasets, but is extremely detrimental if a big proportion of training examples are easy-negative ones: easy-negative examples can easily dominate training since their probabilities can be pushed to 0 fairly easily. Meanwhile, the model can hardly distinguish between hard-negative examples and positive ones, which has a huge negative effect on the final F1 performance.",
+        "To address this issue, we propose to multiply the soft probability $p$ with a decaying factor $(1-p)$, changing Eq.DISPLAY_FORM22 to the following form:",
+        "One can think $(1-p_{i1})$ as a weight associated with each example, which changes as training proceeds. The intuition of changing $p_{i1}$ to $(1-p_{i1}) p_{i1}$ is to push down the weight of easy examples. For easy examples whose probability are approaching 0 or 1, $(1-p_{i1}) p_{i1}$ makes the model attach significantly less focus to them. Figure FIGREF23 gives gives an explanation from the perspective in derivative: the derivative of $\\frac{(1-p)p}{1+(1-p)p}$ with respect to $p$ approaches 0 immediately after $p$ approaches 0, which means the model attends less to examples once they are correctly classified.",
+        "A close look at Eq.DISPLAY_FORM14 reveals that it actually mimics the idea of focal loss (FL for short) BIBREF16 for object detection in vision. Focal loss was proposed for one-stage object detector to handle foreground-background tradeoff encountered during training. It down-weights the loss assigned to well-classified examples by adding a $(1-p)^{\\beta }$ factor, leading the final loss to be $(1-p)^{\\beta }\\log p$."
+      ],
+      "evidence_block_ids": [
+        32,
+        33,
+        34,
+        35
+      ],
+      "evidence_paragraph_ids": [
+        32,
+        33,
+        34,
+        35
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "associates each training example with a weight in proportion to $(1-p)$, and this weight dynamically changes as training proceeds"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "Only using dice loss or Tversky index is not enough since they are unable to address the dominating influence of easy-negative examples. This is intrinsically because dice loss is actually a hard version of the F1 score. Taking the binary classification task as an example, at test time, an example will be classified as negative as long as its probability is smaller than 0.5, but training will push the value to 0 as much as possible. This gap isn't a big issue for balanced datasets, but is extremely detrimental if a big proportion of training examples are easy-negative ones: easy-negative examples can easily dominate training since their probabilities can be pushed to 0 fairly easily. Meanwhile, the model can hardly distinguish between hard-negative examples and positive ones. Inspired by the idea of focal loss BIBREF16 in computer vision, we propose a dynamic weight adjusting strategy, which associates each training example with a weight in proportion to $(1-p)$, and this weight dynamically changes as training proceeds. This strategy helps to deemphasize confident examples during training as their $p$ approaches the value of 1, makes the model attentive to hard-negative examples, and thus alleviates the dominating effect of easy-negative examples."
+      ],
+      "evidence_block_ids": [
+        7
+      ],
+      "evidence_paragraph_ids": [
+        7
+      ]
+    }
+  ],
+  "doc_uuid": "1911.02855",
+  "doc_path": "qasper://1911.02855",
+  "qasper_question_id": "20e38438471266ce021817c6364f6a46d01564f2",
+  "title": "Dice Loss for Data-imbalanced NLP Tasks",
+  "evidence_block_ids": [
+    32,
+    33,
+    34,
+    35,
+    7
+  ],
+  "evidence_paragraph_ids": [
+    32,
+    33,
+    34,
+    35,
+    7
+  ],
+  "output": "{\"answer_short\": \"Based on temporal relevance and user engagement signals from the most recent interactions\", \"answer_rationale\": \"\", \"supporting_block_ids\": [11]}",
+  "retrieved_node_ids": [
+    11
+  ],
+  "retrieved_block_ids": [
+    11
+  ],
+  "answer_short": "Based on temporal relevance and user engagement signals from the most recent interactions",
+  "supporting_block_ids": [
+    11
+  ]
+}

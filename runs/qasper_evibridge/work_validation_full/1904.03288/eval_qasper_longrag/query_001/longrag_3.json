@@ -1,0 +1,88 @@
+{
+  "id": "longrag_3",
+  "content": "[Section] Normalization and Activation\n[source_id=17] In our study, we evaluate performance of models with:\n[source_id=18] 3 types of normalization: batch norm BIBREF10 , weight norm BIBREF9 , and layer norm BIBREF17\n[source_id=19] 3 types of rectified linear units: ReLU, clipped ReLU (cReLU), and leaky ReLU (lReLU)\n[source_id=20] 2 types of gated units: gated linear units (GLU) BIBREF8 , and gated activation units (GAU) BIBREF18\n[source_id=21] All experiment results are shown in Table TABREF15 . We first experimented with a smaller Jasper5x3 model to pick the top 3 settings before training on larger Jasper models. We found that layer norm with GAU performed the best on the smaller model. Layer norm with ReLU and batch norm with ReLU came second and third in our tests. Using these 3, we conducted further experiments on a larger Jasper10x4. For larger models, we noticed that batch norm with ReLU outperformed other choices. Thus, leading us to decide on batch normalization and ReLU for our architecture.\n[source_id=22] During batching, all sequences are padded to match the longest sequence. These padded values caused issues when using layer norm. We applied a sequence mask to exclude padding values from the mean and variance calculation. Further, we computed mean and variance over both the time dimension and channels similar to the sequence-wise normalization proposed by Laurent et al. BIBREF19 . In addition to masking layer norm, we additionally applied masking prior to the convolution operation, and masking the mean and variance calculation in batch norm. These results are shown in Table TABREF16 . Interestingly, we found that while masking before convolution gives a lower WER, using masks for both convolutions and batch norm results in worse performance.\n[source_id=23] As a final note, we found that training with weight norm was very unstable leading to exploding activations.",
+  "score": 0.26931019333217343,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_3",
+  "child_source_node_ids": [
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "child_qasper_evidence_texts": [
+    "In our study, we evaluate performance of models with:",
+    "3 types of normalization: batch norm BIBREF10 , weight norm BIBREF9 , and layer norm BIBREF17",
+    "3 types of rectified linear units: ReLU, clipped ReLU (cReLU), and leaky ReLU (lReLU)",
+    "2 types of gated units: gated linear units (GLU) BIBREF8 , and gated activation units (GAU) BIBREF18",
+    "All experiment results are shown in Table TABREF15 . We first experimented with a smaller Jasper5x3 model to pick the top 3 settings before training on larger Jasper models. We found that layer norm with GAU performed the best on the smaller model. Layer norm with ReLU and batch norm with ReLU came second and third in our tests. Using these 3, we conducted further experiments on a larger Jasper10x4. For larger models, we noticed that batch norm with ReLU outperformed other choices. Thus, leading us to decide on batch normalization and ReLU for our architecture.",
+    "During batching, all sequences are padded to match the longest sequence. These padded values caused issues when using layer norm. We applied a sequence mask to exclude padding values from the mean and variance calculation. Further, we computed mean and variance over both the time dimension and channels similar to the sequence-wise normalization proposed by Laurent et al. BIBREF19 . In addition to masking layer norm, we additionally applied masking prior to the convolution operation, and masking the mean and variance calculation in batch norm. These results are shown in Table TABREF16 . Interestingly, we found that while masking before convolution gives a lower WER, using masks for both convolutions and batch norm results in worse performance.",
+    "As a final note, we found that training with weight norm was very unstable leading to exploding activations."
+  ],
+  "child_pages": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "child_sections": [
+    "Normalization and Activation",
+    "Normalization and Activation",
+    "Normalization and Activation",
+    "Normalization and Activation",
+    "Normalization and Activation",
+    "Normalization and Activation",
+    "Normalization and Activation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Normalization and Activation",
+      0
+    ],
+    [
+      "Normalization and Activation",
+      1
+    ],
+    [
+      "Normalization and Activation",
+      2
+    ],
+    [
+      "Normalization and Activation",
+      3
+    ],
+    [
+      "Normalization and Activation",
+      4
+    ],
+    [
+      "Normalization and Activation",
+      5
+    ],
+    [
+      "Normalization and Activation",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_3",
+  "section_id": "Normalization and Activation",
+  "section": "Normalization and Activation",
+  "title_path": "Normalization and Activation",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,88 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Methodology ::: Dictionary-based Approach\n[source_id=25] In Turkish, there do not exist well-established sentiment lexicons as in English. In this approach, we made use of the TDK (Türk Dil Kurumu - “Turkish Language Institution”) dictionary to obtain word polarities. Although it is not a sentiment lexicon, combining it with domain-specific polarity scores obtained from the corpus led us to have state-of-the-art results.\n[source_id=26] We first construct a matrix whose row entries are corpus words and column entries are the words in their dictionary definitions. We followed the boolean approach. For instance, for the word cat, the column words occurring in its dictionary definition are given a score of 1. Those column words not appearing in the definition of cat are assigned a score of 0 for that corresponding row entry.\n[source_id=27] When we performed clustering on this matrix, we observed that those words having similar meanings are, in general, assigned to the same clusters. However, this similarity fails in capturing the sentimental characteristics. For instance, the words happy and unhappy are assigned to the same cluster, since they have the same words, such as feeling, in their dictionary definitions. However, they are of opposite polarities and should be discerned from each other.\n[source_id=28] Therefore, we utilise a metric to move such words away from each other in the VSM, even though they have common words in their dictionary definitions. We multiply each value in a row with the corresponding row word's raw supervised score, thereby having more meaningful clusters. Using the training data only, the supervised polarity score per word is calculated as in (DISPLAY_FORM4).\n[source_id=29] Here, $ w_{t}$ denotes the sentiment score of word $t$, $N_{t}$ is the number of documents (reviews or tweets) in which $t$ occurs in the dataset of positive polarity, $N$ is the number of all the words in the corpus of positive polarity. $N^{\\prime }$ denotes the corpus of negative polarity. $N^{\\prime }_{t}$ and $N^{\\prime }$ denote similar values for the negative polarity corpus. We perform normalisation to prevent the imbalance problem and add a small number to both numerator and denominator for smoothing.\n[source_id=30] As an alternative to multiplying with the supervised polarity scores, we also separately multiplied all the row scores with only +1 if the row word is a positive word, and with -1 if it is a negative word. We have observed it boosts the performance more compared to using raw scores.\n[source_id=31] The effect of this multiplication is exemplified in Figure FIGREF7, showing the positions of word vectors in the VSM. Those “x\" words are sentimentally negative words, those “o\" words are sentimentally positive ones. On the top coordinate plane, the words of opposite polarities are found to be close to each other, since they have common words in their dictionary definitions. Only the information concerned with the dictionary definitions are used there, discarding the polarity scores. However, when we utilise the supervised score (+1 or -1), words of opposite polarities (e.g. “happy\" and “unhappy\") get far away from each other as they are translated across coordinate regions. Positive words now appear in quadrant 1, whereas negative words appear in quadrant 3. Thus, in the VSM, words that are sentimentally similar to each other could be clustered more accurately. Besides clustering, we also employed the SVD method to perform dimensionality reduction on the unsupervised dictionary algorithm and used the newly generated matrix by combining it with other subapproaches. The number of dimensions is chosen as 200 again according to the $U$ matrix. The details are given in Section 3.4. When using and evaluating this subapproach on the English corpora, we used the SentiWordNet lexicon BIBREF13. We have achieved better results for the dictionary-based algorithm when we employed the SVD reduction method compared to the use of clustering.",
+  "score": 4.727315432165839,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+  ],
+  "child_qasper_evidence_texts": [
+    "In Turkish, there do not exist well-established sentiment lexicons as in English. In this approach, we made use of the TDK (Türk Dil Kurumu - “Turkish Language Institution”) dictionary to obtain word polarities. Although it is not a sentiment lexicon, combining it with domain-specific polarity scores obtained from the corpus led us to have state-of-the-art results.",
+    "We first construct a matrix whose row entries are corpus words and column entries are the words in their dictionary definitions. We followed the boolean approach. For instance, for the word cat, the column words occurring in its dictionary definition are given a score of 1. Those column words not appearing in the definition of cat are assigned a score of 0 for that corresponding row entry.",
+    "When we performed clustering on this matrix, we observed that those words having similar meanings are, in general, assigned to the same clusters. However, this similarity fails in capturing the sentimental characteristics. For instance, the words happy and unhappy are assigned to the same cluster, since they have the same words, such as feeling, in their dictionary definitions. However, they are of opposite polarities and should be discerned from each other.",
+    "Therefore, we utilise a metric to move such words away from each other in the VSM, even though they have common words in their dictionary definitions. We multiply each value in a row with the corresponding row word's raw supervised score, thereby having more meaningful clusters. Using the training data only, the supervised polarity score per word is calculated as in (DISPLAY_FORM4).",
+    "Here, $ w_{t}$ denotes the sentiment score of word $t$, $N_{t}$ is the number of documents (reviews or tweets) in which $t$ occurs in the dataset of positive polarity, $N$ is the number of all the words in the corpus of positive polarity. $N^{\\prime }$ denotes the corpus of negative polarity. $N^{\\prime }_{t}$ and $N^{\\prime }$ denote similar values for the negative polarity corpus. We perform normalisation to prevent the imbalance problem and add a small number to both numerator and denominator for smoothing.",
+    "As an alternative to multiplying with the supervised polarity scores, we also separately multiplied all the row scores with only +1 if the row word is a positive word, and with -1 if it is a negative word. We have observed it boosts the performance more compared to using raw scores.",
+    "The effect of this multiplication is exemplified in Figure FIGREF7, showing the positions of word vectors in the VSM. Those “x\" words are sentimentally negative words, those “o\" words are sentimentally positive ones. On the top coordinate plane, the words of opposite polarities are found to be close to each other, since they have common words in their dictionary definitions. Only the information concerned with the dictionary definitions are used there, discarding the polarity scores. However, when we utilise the supervised score (+1 or -1), words of opposite polarities (e.g. “happy\" and “unhappy\") get far away from each other as they are translated across coordinate regions. Positive words now appear in quadrant 1, whereas negative words appear in quadrant 3. Thus, in the VSM, words that are sentimentally similar to each other could be clustered more accurately. Besides clustering, we also employed the SVD method to perform dimensionality reduction on the unsupervised dictionary algorithm and used the newly generated matrix by combining it with other subapproaches. The number of dimensions is chosen as 200 again according to the $U$ matrix. The details are given in Section 3.4. When using and evaluating this subapproach on the English corpora, we used the SentiWordNet lexicon BIBREF13. We have achieved better results for the dictionary-based algorithm when we employed the SVD reduction method compared to the use of clustering."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Methodology ::: Dictionary-based Approach",
+    "Methodology ::: Dictionary-based Approach",
+    "Methodology ::: Dictionary-based Approach",
+    "Methodology ::: Dictionary-based Approach",
+    "Methodology ::: Dictionary-based Approach",
+    "Methodology ::: Dictionary-based Approach",
+    "Methodology ::: Dictionary-based Approach"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Methodology ::: Dictionary-based Approach",
+      0
+    ],
+    [
+      "Methodology ::: Dictionary-based Approach",
+      1
+    ],
+    [
+      "Methodology ::: Dictionary-based Approach",
+      2
+    ],
+    [
+      "Methodology ::: Dictionary-based Approach",
+      3
+    ],
+    [
+      "Methodology ::: Dictionary-based Approach",
+      4
+    ],
+    [
+      "Methodology ::: Dictionary-based Approach",
+      5
+    ],
+    [
+      "Methodology ::: Dictionary-based Approach",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Methodology ::: Dictionary-based Approach",
+  "section": "Methodology ::: Dictionary-based Approach",
+  "title_path": "Methodology ::: Dictionary-based Approach",
+  "block_type": "long_unit"
+}

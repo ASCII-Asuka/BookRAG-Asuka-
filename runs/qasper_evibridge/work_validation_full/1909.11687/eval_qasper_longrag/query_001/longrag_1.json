@@ -1,0 +1,97 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Recently, contextual-aware language models such as ELMo BIBREF0, GPT BIBREF1, BERT BIBREF2 and XLNet BIBREF3 have shown to greatly outperform traditional word embedding models including Word2Vec BIBREF4 and GloVe BIBREF5 in a variety of NLP tasks. These pre-trained language models, when fine-tuned on downstream language understanding tasks such as sentiment classification BIBREF6, natural language inference BIBREF7 and reading comprehension BIBREF8, BIBREF9, have achieved state-of-the-art performance. However, the large number of parameters in these models, often above hundreds of millions, makes it impossible to host them on resource-constrained tasks such as doing real-time inference on mobile and edge devices.\n[source_id=5] Besides utilizing model quantization techniques BIBREF10, BIBREF11 which aim to reduce the floating-point accuracy of the parameters, significant recent research has focused on knowledge distillation BIBREF12, BIBREF13 techniques. Here, the goal is to train a small-footprint student model by borrowing knowledge, such as through a soft predicted label distribution, from a larger pre-trained teacher model.\n[source_id=6] However, a significant bottleneck that has been overlooked by previous efforts is the input vocabulary size and its corresponding word embedding matrix, often accounting for a significant proportion of all model parameters. For instance, the embedding table of the BERTBASE model, comprising over 30K WordPiece tokens BIBREF14, accounts for over $21\\%$ of the model size. While there has been existing work on reducing NLP model vocabulary sizes BIBREF15, distillation techniques cannot utilize these, since they require the student and teacher models to share the same vocabulary and output space. This profoundly limits their potential to further reduce model sizes.\n[source_id=7] We present two novel ideas to improve the effectiveness of knowledge distillation, in particular for BERT, with the focus on bringing down model sizes to as much as a few mega-bytes. Our model is among the first to propose to use a significantly smaller vocabulary for the student model learned during distillation. In addition, instead of distilling solely on the teacher model's final-layer outputs, our model leverages layer-wise teacher model parameters to directly optimize the parameters of the corresponding layers in the student model. Specifically, our contributions are:\n[source_id=8] [leftmargin=*]\n[source_id=9] Dual Training: Our teacher and student models have different vocabularies and incompatible tokenizations for the same sequence. To address this during distillation, we feed the teacher model a mix of teacher vocabulary-tokenized and student vocabulary-tokenized words within a single sequence. Coupled with the masked language modeling task, this encourages an implicit alignment of the teacher and student WordPiece embeddings, since the student vocabulary embedding may be used as context to predict a word tokenized by the teacher vocabulary and vice versa.\n[source_id=10] Shared Variable Projections: To minimize the loss of information from reducing the hidden state dimension, we introduce a separate loss to align the teacher and student models' trainable variables. This allows for more direct layer-wise transfer of knowledge to the student model.\n[source_id=11] Using the combination of dual training and shared variable projections, we train a 12-layer highly-compressed student BERT model, achieving a maximum compression ratio of $\\sim $61.94x (with 48 dimension size) compared to the teacher BERTBASE model. We conduct experiments for measuring both generalized language modeling perspective and for downstream tasks, demonstrating competitive performance with high compression ratios for both families of tasks.",
+  "score": 7.176949367053338,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "child_qasper_evidence_texts": [
+    "Recently, contextual-aware language models such as ELMo BIBREF0, GPT BIBREF1, BERT BIBREF2 and XLNet BIBREF3 have shown to greatly outperform traditional word embedding models including Word2Vec BIBREF4 and GloVe BIBREF5 in a variety of NLP tasks. These pre-trained language models, when fine-tuned on downstream language understanding tasks such as sentiment classification BIBREF6, natural language inference BIBREF7 and reading comprehension BIBREF8, BIBREF9, have achieved state-of-the-art performance. However, the large number of parameters in these models, often above hundreds of millions, makes it impossible to host them on resource-constrained tasks such as doing real-time inference on mobile and edge devices.",
+    "Besides utilizing model quantization techniques BIBREF10, BIBREF11 which aim to reduce the floating-point accuracy of the parameters, significant recent research has focused on knowledge distillation BIBREF12, BIBREF13 techniques. Here, the goal is to train a small-footprint student model by borrowing knowledge, such as through a soft predicted label distribution, from a larger pre-trained teacher model.",
+    "However, a significant bottleneck that has been overlooked by previous efforts is the input vocabulary size and its corresponding word embedding matrix, often accounting for a significant proportion of all model parameters. For instance, the embedding table of the BERTBASE model, comprising over 30K WordPiece tokens BIBREF14, accounts for over $21\\%$ of the model size. While there has been existing work on reducing NLP model vocabulary sizes BIBREF15, distillation techniques cannot utilize these, since they require the student and teacher models to share the same vocabulary and output space. This profoundly limits their potential to further reduce model sizes.",
+    "We present two novel ideas to improve the effectiveness of knowledge distillation, in particular for BERT, with the focus on bringing down model sizes to as much as a few mega-bytes. Our model is among the first to propose to use a significantly smaller vocabulary for the student model learned during distillation. In addition, instead of distilling solely on the teacher model's final-layer outputs, our model leverages layer-wise teacher model parameters to directly optimize the parameters of the corresponding layers in the student model. Specifically, our contributions are:",
+    "[leftmargin=*]",
+    "Dual Training: Our teacher and student models have different vocabularies and incompatible tokenizations for the same sequence. To address this during distillation, we feed the teacher model a mix of teacher vocabulary-tokenized and student vocabulary-tokenized words within a single sequence. Coupled with the masked language modeling task, this encourages an implicit alignment of the teacher and student WordPiece embeddings, since the student vocabulary embedding may be used as context to predict a word tokenized by the teacher vocabulary and vice versa.",
+    "Shared Variable Projections: To minimize the loss of information from reducing the hidden state dimension, we introduce a separate loss to align the teacher and student models' trainable variables. This allows for more direct layer-wise transfer of knowledge to the student model.",
+    "Using the combination of dual training and shared variable projections, we train a 12-layer highly-compressed student BERT model, achieving a maximum compression ratio of $\\sim $61.94x (with 48 dimension size) compared to the teacher BERTBASE model. We conduct experiments for measuring both generalized language modeling perspective and for downstream tasks, demonstrating competitive performance with high compression ratios for both families of tasks."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ],
+    [
+      "Introduction",
+      7
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

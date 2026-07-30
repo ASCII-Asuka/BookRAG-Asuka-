@@ -1,0 +1,498 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_2",
+      "content": "[Section] Dataset collection\n[source_id=11] The primary aim of this work is to create a new large-scale NLI benchmark on which current state-of-the-art models fail. This constitutes a new target for the field to work towards, and can elucidate model capabilities and limitations. As noted, however, static benchmarks do not last very long these days. If continuously deployed, the data collection procedure we introduce here can pose a dynamic challenge that allows for never-ending learning.",
+      "score": 7.998201902224752,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        11
+      ],
+      "child_qasper_evidence_texts": [
+        "The primary aim of this work is to create a new large-scale NLI benchmark on which current state-of-the-art models fail. This constitutes a new target for the field to work towards, and can elucidate model capabilities and limitations. As noted, however, static benchmarks do not last very long these days. If continuously deployed, the data collection procedure we introduce here can pose a dynamic challenge that allows for never-ending learning."
+      ],
+      "child_pages": [
+        2
+      ],
+      "child_sections": [
+        "Dataset collection"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Dataset collection",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Dataset collection",
+      "section": "Dataset collection",
+      "title_path": "Dataset collection",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_24",
+      "content": "[Section] Related work ::: Bias in datasets\n[source_id=69] Machine learning methods are well-known to pick up on spurious statistical patterns. For instance, in image captioning, a simple baseline of utilizing the captions of nearest neighbors in the training set was shown to yield impressive BLEU scores BIBREF35. In the first visual question answering dataset BIBREF36, biases like “2” being the correct answer to 39% of the questions starting with “how many” allowed learning algorithms to perform well while ignoring the visual modality altogether BIBREF37, BIBREF38. The field has a tendency to overfit on static targets, even if that does not happen deliberately BIBREF39.\n[source_id=70] In NLI, Gururangan2018annotation, Poliak2018hypothesis and Tsuchiya2018performance showed that hypothesis-only baselines often perform far better than chance. It has been shown that NLI systems can often be broken merely by performing simple lexical substitutions BIBREF15, and that they struggle with quantifiers BIBREF40 and certain superficial syntactic properties BIBREF17. In reading comprehension and question answering, Kaushik2018howmuch showed that question- and passage-only models can perform surprisingly well, while Jia2017adversarial added adversarially constructed sentences to passages, leading to a drastic drop in performance. Many text classification datasets do not require sophisticated linguistic reasoning, as shown by the surprisingly good performance of random encoders BIBREF41. Similar observations were made in machine translation BIBREF42 and dialogue BIBREF43. In short, the field is rife with dataset bias and papers trying address this important problem. This work can be viewed as a natural extension: if such biases exist, they will allow humans to fool the models, adding useful examples to the training data until the bias is dynamically mitigated.",
+      "score": 6.0325958119459635,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_24",
+      "child_source_node_ids": [
+        69,
+        70
+      ],
+      "child_qasper_evidence_texts": [
+        "Machine learning methods are well-known to pick up on spurious statistical patterns. For instance, in image captioning, a simple baseline of utilizing the captions of nearest neighbors in the training set was shown to yield impressive BLEU scores BIBREF35. In the first visual question answering dataset BIBREF36, biases like “2” being the correct answer to 39% of the questions starting with “how many” allowed learning algorithms to perform well while ignoring the visual modality altogether BIBREF37, BIBREF38. The field has a tendency to overfit on static targets, even if that does not happen deliberately BIBREF39.",
+        "In NLI, Gururangan2018annotation, Poliak2018hypothesis and Tsuchiya2018performance showed that hypothesis-only baselines often perform far better than chance. It has been shown that NLI systems can often be broken merely by performing simple lexical substitutions BIBREF15, and that they struggle with quantifiers BIBREF40 and certain superficial syntactic properties BIBREF17. In reading comprehension and question answering, Kaushik2018howmuch showed that question- and passage-only models can perform surprisingly well, while Jia2017adversarial added adversarially constructed sentences to passages, leading to a drastic drop in performance. Many text classification datasets do not require sophisticated linguistic reasoning, as shown by the surprisingly good performance of random encoders BIBREF41. Similar observations were made in machine translation BIBREF42 and dialogue BIBREF43. In short, the field is rife with dataset bias and papers trying address this important problem. This work can be viewed as a natural extension: if such biases exist, they will allow humans to fool the models, adding useful examples to the training data until the bias is dynamically mitigated."
+      ],
+      "child_pages": [
+        24,
+        24
+      ],
+      "child_sections": [
+        "Related work ::: Bias in datasets",
+        "Related work ::: Bias in datasets"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related work ::: Bias in datasets",
+          0
+        ],
+        [
+          "Related work ::: Bias in datasets",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_24",
+      "section_id": "Related work ::: Bias in datasets",
+      "section": "Related work ::: Bias in datasets",
+      "title_path": "Related work ::: Bias in datasets",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Dataset collection ::: HAMLET\n[source_id=13] To paraphrase the great bard BIBREF21, there is something rotten in the state of the art. We propose Human-And-Model-in-the-Loop Entailment Training (HAMLET), a training procedure to automatically mitigate problems with current dataset collection procedures (see Figure FIGREF1).\n[source_id=14] In our setup, our starting point is a base model, trained on NLI data. Rather than employing automated adversarial methods, here the model's “adversary” is a human annotator. Given a context (also often called a “premise” in NLI), and a desired target label, we ask the human writer to provide a hypothesis that fools the model into misclassifying the label. One can think of the writer as a “white hat” hacker, trying to identify vulnerabilities in the system. For each human-generated example that is misclassified, we also ask the writer to provide a reason why they believe it was misclassified.\n[source_id=15] For examples that the model misclassified, it is necessary to verify that they are actually correct —i.e., that the given context-hypothesis pairs genuinely have their specified target label. The best way to do this is to have them checked by another human. Hence, we provide the example to human verifiers. If two human verifiers agree with the writer, the example is considered a good example. If they disagree, we ask a third human verifier to break the tie. If there is still disagreement between the writer and the verifiers, the example is discarded. Occasionally, verifiers will overrule the original label of the writer.\n[source_id=16] Once data collection for the current round is finished, we construct a new training set from the collected data, with accompanying development and test sets. While the training set includes correctly classified examples, the development and tests sets are built solely from them. The test set was further restricted so as to: 1) include pairs from “exclusive” annotators that are never included in the training data; and 2) be balanced by label classes (and genres, where applicable). We subsequently train a new model on this and other existing data, and repeat the procedure three times.",
+      "score": 5.282964617679645,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        13,
+        14,
+        15,
+        16
+      ],
+      "child_qasper_evidence_texts": [
+        "To paraphrase the great bard BIBREF21, there is something rotten in the state of the art. We propose Human-And-Model-in-the-Loop Entailment Training (HAMLET), a training procedure to automatically mitigate problems with current dataset collection procedures (see Figure FIGREF1).",
+        "In our setup, our starting point is a base model, trained on NLI data. Rather than employing automated adversarial methods, here the model's “adversary” is a human annotator. Given a context (also often called a “premise” in NLI), and a desired target label, we ask the human writer to provide a hypothesis that fools the model into misclassifying the label. One can think of the writer as a “white hat” hacker, trying to identify vulnerabilities in the system. For each human-generated example that is misclassified, we also ask the writer to provide a reason why they believe it was misclassified.",
+        "For examples that the model misclassified, it is necessary to verify that they are actually correct —i.e., that the given context-hypothesis pairs genuinely have their specified target label. The best way to do this is to have them checked by another human. Hence, we provide the example to human verifiers. If two human verifiers agree with the writer, the example is considered a good example. If they disagree, we ask a third human verifier to break the tie. If there is still disagreement between the writer and the verifiers, the example is discarded. Occasionally, verifiers will overrule the original label of the writer.",
+        "Once data collection for the current round is finished, we construct a new training set from the collected data, with accompanying development and test sets. While the training set includes correctly classified examples, the development and tests sets are built solely from them. The test set was further restricted so as to: 1) include pairs from “exclusive” annotators that are never included in the training data; and 2) be balanced by label classes (and genres, where applicable). We subsequently train a new model on this and other existing data, and repeat the procedure three times."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Dataset collection ::: HAMLET",
+        "Dataset collection ::: HAMLET",
+        "Dataset collection ::: HAMLET",
+        "Dataset collection ::: HAMLET"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Dataset collection ::: HAMLET",
+          0
+        ],
+        [
+          "Dataset collection ::: HAMLET",
+          1
+        ],
+        [
+          "Dataset collection ::: HAMLET",
+          2
+        ],
+        [
+          "Dataset collection ::: HAMLET",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Dataset collection ::: HAMLET",
+      "section": "Dataset collection ::: HAMLET",
+      "title_path": "Dataset collection ::: HAMLET",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Progress in AI has been driven by, among other things, the development of challenging large-scale benchmarks like ImageNet BIBREF0 in computer vision, and SNLI BIBREF1, SQuAD BIBREF2, and others in natural language processing (NLP). Recently, for natural language understanding (NLU) in particular, the focus has shifted to combined benchmarks like SentEval BIBREF3 and GLUE BIBREF4, which track model performance on multiple tasks and provide a unified platform for analysis.\n[source_id=5] With the rapid pace of advancement in AI, however, NLU benchmarks struggle to keep up with model improvement. Whereas it took around 15 years to achieve “near-human performance” on MNIST BIBREF5, BIBREF6, BIBREF7 and approximately 7 years to surpass humans on ImageNet BIBREF8, BIBREF0, BIBREF9, the GLUE benchmark did not last as long as we would have hoped after the advent of BERT BIBREF10, and rapidly had to be extended into SuperGLUE BIBREF11. This raises an important question: Can we collect a large benchmark dataset that can last longer?\n[source_id=6] The speed with which benchmarks become obsolete raises another important question: are current NLU models genuinely as good as their high performance on benchmarks suggests? A growing body of evidence shows that state-of-the-art models learn to exploit spurious statistical patterns in datasets BIBREF12, BIBREF13, BIBREF14, BIBREF15, BIBREF16, BIBREF17, instead of learning meaning in the flexible and generalizable way that humans do. Given this, human annotators—be they seasoned NLP researchers or non-experts—might easily be able to construct examples that expose model brittleness.\n[source_id=7] We propose an iterative, adversarial human-and-model-in-the-loop solution for NLU dataset collection that addresses both benchmark longevity and robustness issues. In the first stage, human annotators devise examples that our current best models cannot determine the correct label for. These resulting hard examples—which should expose additional model weaknesses—can be added to the training set and used to train a stronger model. We then subject the strengthened model to human interference and collect more weaknesses over several rounds. After each round, we both train a new model, and set aside a new test set. The process can be iteratively repeated in a never-ending learning BIBREF18 setting, with the model getting stronger and the test set getting harder in each new round.This process yields a “moving post” dynamic target for NLU systems, rather than a static benchmark that will eventually saturate.\n[source_id=8] Our approach draws inspiration from recent efforts that gamify collaborative training of machine learning agents over multiple rounds BIBREF19 and pit “builders” against “breakers” to learn better models BIBREF20. Recently, Dinan2019build showed that a similar approach can be used to make dialogue safety classifiers more robust. Here, we focus on natural language inference (NLI), arguably the most canonical task in NLU. We collected three rounds of data, and call our new dataset Adversarial NLI (ANLI).\n[source_id=9] Our contributions are as follows: 1) We introduce a novel human-and-model-in-the-loop dataset, currently consisting of three rounds that progressively increase in difficulty and complexity, that includes annotator-provided explanations. 2) We show that training models on this new dataset leads to state-of-the-art performance on a variety of popular NLI benchmarks. 3) We provide a detailed analysis of the collected data that sheds light on the shortcomings of current models, categorizes the data by inference type to examine weaknesses, and demonstrates good performance on NLI stress tests. The ANLI dataset is available at github.com/facebookresearch/anli/. A demo of the annotation procedure can be viewed at adversarialnli.com.",
+      "score": 5.0438176402323505,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "child_qasper_evidence_texts": [
+        "Progress in AI has been driven by, among other things, the development of challenging large-scale benchmarks like ImageNet BIBREF0 in computer vision, and SNLI BIBREF1, SQuAD BIBREF2, and others in natural language processing (NLP). Recently, for natural language understanding (NLU) in particular, the focus has shifted to combined benchmarks like SentEval BIBREF3 and GLUE BIBREF4, which track model performance on multiple tasks and provide a unified platform for analysis.",
+        "With the rapid pace of advancement in AI, however, NLU benchmarks struggle to keep up with model improvement. Whereas it took around 15 years to achieve “near-human performance” on MNIST BIBREF5, BIBREF6, BIBREF7 and approximately 7 years to surpass humans on ImageNet BIBREF8, BIBREF0, BIBREF9, the GLUE benchmark did not last as long as we would have hoped after the advent of BERT BIBREF10, and rapidly had to be extended into SuperGLUE BIBREF11. This raises an important question: Can we collect a large benchmark dataset that can last longer?",
+        "The speed with which benchmarks become obsolete raises another important question: are current NLU models genuinely as good as their high performance on benchmarks suggests? A growing body of evidence shows that state-of-the-art models learn to exploit spurious statistical patterns in datasets BIBREF12, BIBREF13, BIBREF14, BIBREF15, BIBREF16, BIBREF17, instead of learning meaning in the flexible and generalizable way that humans do. Given this, human annotators—be they seasoned NLP researchers or non-experts—might easily be able to construct examples that expose model brittleness.",
+        "We propose an iterative, adversarial human-and-model-in-the-loop solution for NLU dataset collection that addresses both benchmark longevity and robustness issues. In the first stage, human annotators devise examples that our current best models cannot determine the correct label for. These resulting hard examples—which should expose additional model weaknesses—can be added to the training set and used to train a stronger model. We then subject the strengthened model to human interference and collect more weaknesses over several rounds. After each round, we both train a new model, and set aside a new test set. The process can be iteratively repeated in a never-ending learning BIBREF18 setting, with the model getting stronger and the test set getting harder in each new round.This process yields a “moving post” dynamic target for NLU systems, rather than a static benchmark that will eventually saturate.",
+        "Our approach draws inspiration from recent efforts that gamify collaborative training of machine learning agents over multiple rounds BIBREF19 and pit “builders” against “breakers” to learn better models BIBREF20. Recently, Dinan2019build showed that a similar approach can be used to make dialogue safety classifiers more robust. Here, we focus on natural language inference (NLI), arguably the most canonical task in NLU. We collected three rounds of data, and call our new dataset Adversarial NLI (ANLI).",
+        "Our contributions are as follows: 1) We introduce a novel human-and-model-in-the-loop dataset, currently consisting of three rounds that progressively increase in difficulty and complexity, that includes annotator-provided explanations. 2) We show that training models on this new dataset leads to state-of-the-art performance on a variety of popular NLI benchmarks. 3) We provide a detailed analysis of the collected data that sheds light on the shortcomings of current models, categorizes the data by inference type to examine weaknesses, and demonstrates good performance on NLI stress tests. The ANLI dataset is available at github.com/facebookresearch/anli/. A demo of the annotation procedure can be viewed at adversarialnli.com."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] We introduce a new large-scale NLI benchmark dataset, collected via an iterative, adversarial human-and-model-in-the-loop procedure. We show that training models on this new dataset leads to state-of-the-art performance on a variety of popular NLI benchmarks, while posing a more difficult challenge with its new test set. Our analysis sheds light on the shortcomings of current state-of-the-art models, and shows that non-expert annotators are successful at finding their weaknesses. The data collection method can be applied in a never-ending learning scenario, becoming a moving target for NLU, rather than a static benchmark that will quickly saturate.",
+      "score": 4.916829836318498,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "We introduce a new large-scale NLI benchmark dataset, collected via an iterative, adversarial human-and-model-in-the-loop procedure. We show that training models on this new dataset leads to state-of-the-art performance on a variety of popular NLI benchmarks, while posing a more difficult challenge with its new test set. Our analysis sheds light on the shortcomings of current state-of-the-art models, and shows that non-expert annotators are successful at finding their weaknesses. The data collection method can be applied in a never-ending learning scenario, becoming a moving target for NLU, rather than a static benchmark that will quickly saturate."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_25",
+      "content": "[Section] Related work ::: Dynamic datasets.\n[source_id=72] Concurrently with this work, Anonymous2020adversarialfilters proposed AFLite, an iterative approach for filtering adversarial data points to avoid spurious biases. Kaushik2019learningdifference offer a causal account of spurious patterns, and counterfactually augment NLI datasets by editing examples to break the model. The former is an example of a model-in-the-loop setting, where the model is iteratively probed and improved. The latter is human-in-the-loop training, where humans are used to find problems with one single model. In this work, we employ both strategies iteratively, in a form of human-and-model-in-the-loop training, to collect completely new examples, in a potentially never-ending loop BIBREF18. Relatedly, lan2017ppdb propose a method for continuously growing a dataset of paraphrases.\n[source_id=73] Human-and-model-in-the-loop training is not a new idea. Mechanical Turker Descent proposes a gamified environment for the collaborative training of grounded language learning agents over multiple rounds BIBREF19. The “Build it Break it Fix it” strategy in the security domain BIBREF44 has been adapted to NLP BIBREF20 as well as dialogue BIBREF45. The QApedia framework BIBREF46 continuously refines and updates its content repository using humans in the loop, while human feedback loops have been used to improve image captioning systems BIBREF47. wallace2018trick leverage trivia experts to create a model-driven adversarial question writing procedure and generate a small set of challenge questions that QA-models fail on.\n[source_id=74] There has been a flurry of work in constructing datasets with an adversarial component, such as Swag BIBREF48 and HellaSwag BIBREF49, CODAH BIBREF50, Adversarial SQuAD BIBREF51, Lambada BIBREF52 and others. Our dataset is not to be confused with abductive NLI BIBREF53, which calls itself $\\alpha $NLI, or ART.",
+      "score": 4.170105735449931,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_25",
+      "child_source_node_ids": [
+        72,
+        73,
+        74
+      ],
+      "child_qasper_evidence_texts": [
+        "Concurrently with this work, Anonymous2020adversarialfilters proposed AFLite, an iterative approach for filtering adversarial data points to avoid spurious biases. Kaushik2019learningdifference offer a causal account of spurious patterns, and counterfactually augment NLI datasets by editing examples to break the model. The former is an example of a model-in-the-loop setting, where the model is iteratively probed and improved. The latter is human-in-the-loop training, where humans are used to find problems with one single model. In this work, we employ both strategies iteratively, in a form of human-and-model-in-the-loop training, to collect completely new examples, in a potentially never-ending loop BIBREF18. Relatedly, lan2017ppdb propose a method for continuously growing a dataset of paraphrases.",
+        "Human-and-model-in-the-loop training is not a new idea. Mechanical Turker Descent proposes a gamified environment for the collaborative training of grounded language learning agents over multiple rounds BIBREF19. The “Build it Break it Fix it” strategy in the security domain BIBREF44 has been adapted to NLP BIBREF20 as well as dialogue BIBREF45. The QApedia framework BIBREF46 continuously refines and updates its content repository using humans in the loop, while human feedback loops have been used to improve image captioning systems BIBREF47. wallace2018trick leverage trivia experts to create a model-driven adversarial question writing procedure and generate a small set of challenge questions that QA-models fail on.",
+        "There has been a flurry of work in constructing datasets with an adversarial component, such as Swag BIBREF48 and HellaSwag BIBREF49, CODAH BIBREF50, Adversarial SQuAD BIBREF51, Lambada BIBREF52 and others. Our dataset is not to be confused with abductive NLI BIBREF53, which calls itself $\\alpha $NLI, or ART."
+      ],
+      "child_pages": [
+        25,
+        25,
+        25
+      ],
+      "child_sections": [
+        "Related work ::: Dynamic datasets.",
+        "Related work ::: Dynamic datasets.",
+        "Related work ::: Dynamic datasets."
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related work ::: Dynamic datasets.",
+          0
+        ],
+        [
+          "Related work ::: Dynamic datasets.",
+          1
+        ],
+        [
+          "Related work ::: Dynamic datasets.",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_25",
+      "section_id": "Related work ::: Dynamic datasets.",
+      "section": "Related work ::: Dynamic datasets.",
+      "title_path": "Related work ::: Dynamic datasets.",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Dataset collection ::: Comparing with other datasets\n[source_id=26] The ANLI dataset improves upon previous work in several ways. First, and most obviously, the dataset is collected to be more difficult than previous datasets, by design. Second, it remedies a problem with SNLI, namely that its contexts (or premises) are very short, because they were selected from the image captioning domain. We believe longer contexts should naturally lead to harder examples, and so we constructed ANLI contexts from longer, multi-sentence source material.\n[source_id=27] Following previous observations that models might exploit spurious biases in NLI hypotheses, BIBREF12, BIBREF13, we conduct a study of the performance of hypothesis-only models on our dataset. We show that such models perform poorly on our test sets.\n[source_id=28] With respect to data generation with naïve annotators, Geva2019taskorannotator noted that models might pick up on annotator bias, modelling the annotators themselves rather than capturing the intended reasoning phenomenon. To counter this, we selected a subset of annotators (i.e., the “exclusive” workers) whose data would only be included in the test set. This enables us to avoid overfitting to the writing style biases of particular annotators, and also to determine how much individual annotator bias is present for the main portion of the data. Examples from each round of dataset collection are provided in Table TABREF2.\n[source_id=29] Furthermore, our dataset poses new challenges to the community that were less relevant for previous work, such as: can we improve performance online without having to train a new model from scratch every round, how can we overcome catastrophic forgetting, how do we deal with mixed model biases, etc. Because the training set includes examples that the model got right but were not verified, it might be noisy, posing filtering as an additional interesting problem.",
+      "score": 3.6012745082053272,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        26,
+        27,
+        28,
+        29
+      ],
+      "child_qasper_evidence_texts": [
+        "The ANLI dataset improves upon previous work in several ways. First, and most obviously, the dataset is collected to be more difficult than previous datasets, by design. Second, it remedies a problem with SNLI, namely that its contexts (or premises) are very short, because they were selected from the image captioning domain. We believe longer contexts should naturally lead to harder examples, and so we constructed ANLI contexts from longer, multi-sentence source material.",
+        "Following previous observations that models might exploit spurious biases in NLI hypotheses, BIBREF12, BIBREF13, we conduct a study of the performance of hypothesis-only models on our dataset. We show that such models perform poorly on our test sets.",
+        "With respect to data generation with naïve annotators, Geva2019taskorannotator noted that models might pick up on annotator bias, modelling the annotators themselves rather than capturing the intended reasoning phenomenon. To counter this, we selected a subset of annotators (i.e., the “exclusive” workers) whose data would only be included in the test set. This enables us to avoid overfitting to the writing style biases of particular annotators, and also to determine how much individual annotator bias is present for the main portion of the data. Examples from each round of dataset collection are provided in Table TABREF2.",
+        "Furthermore, our dataset poses new challenges to the community that were less relevant for previous work, such as: can we improve performance online without having to train a new model from scratch every round, how can we overcome catastrophic forgetting, how do we deal with mixed model biases, etc. Because the training set includes examples that the model got right but were not verified, it might be noisy, posing filtering as an additional interesting problem."
+      ],
+      "child_pages": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "child_sections": [
+        "Dataset collection ::: Comparing with other datasets",
+        "Dataset collection ::: Comparing with other datasets",
+        "Dataset collection ::: Comparing with other datasets",
+        "Dataset collection ::: Comparing with other datasets"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Dataset collection ::: Comparing with other datasets",
+          0
+        ],
+        [
+          "Dataset collection ::: Comparing with other datasets",
+          1
+        ],
+        [
+          "Dataset collection ::: Comparing with other datasets",
+          2
+        ],
+        [
+          "Dataset collection ::: Comparing with other datasets",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Dataset collection ::: Comparing with other datasets",
+      "section": "Dataset collection ::: Comparing with other datasets",
+      "title_path": "Dataset collection ::: Comparing with other datasets",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_21",
+      "content": "[Section] Analysis\n[source_id=58] We perform two types of model error analysis. First we evaluate two popular existing test sets that were created to expose model weaknesses, and show that our dataset discourages models from learning spurious statistical facts, relative to other large popular datasets (e.g., SNLI and MNLI). Secondly, we explore, by round, the types of inferences our writers successfully employed to stump models, by performing hand-annotation on 500 examples from each round's development set.",
+      "score": 3.1060585480199365,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_21",
+      "child_source_node_ids": [
+        58
+      ],
+      "child_qasper_evidence_texts": [
+        "We perform two types of model error analysis. First we evaluate two popular existing test sets that were created to expose model weaknesses, and show that our dataset discourages models from learning spurious statistical facts, relative to other large popular datasets (e.g., SNLI and MNLI). Secondly, we explore, by round, the types of inferences our writers successfully employed to stump models, by performing hand-annotation on 500 examples from each round's development set."
+      ],
+      "child_pages": [
+        21
+      ],
+      "child_sections": [
+        "Analysis"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Analysis",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_21",
+      "section_id": "Analysis",
+      "section": "Analysis",
+      "title_path": "Analysis",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 13,
+      "content": "To paraphrase the great bard BIBREF21, there is something rotten in the state of the art. We propose Human-And-Model-in-the-Loop Entailment Training (HAMLET), a training procedure to automatically mitigate problems with current dataset collection procedures (see Figure FIGREF1).",
+      "qasper_evidence_text": "To paraphrase the great bard BIBREF21, there is something rotten in the state of the art. We propose Human-And-Model-in-the-Loop Entailment Training (HAMLET), a training procedure to automatically mitigate problems with current dataset collection procedures (see Figure FIGREF1).",
+      "source_node_id": 13,
+      "node_id": 13,
+      "paragraph_id": 13,
+      "evidence_id": 13,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_3",
+      "rank": 3,
+      "score": 5.282964617679645,
+      "block_type": "paragraph",
+      "page": 3,
+      "section_id": "Dataset collection ::: HAMLET",
+      "section": "Dataset collection ::: HAMLET",
+      "title": "Dataset collection ::: HAMLET",
+      "hotpot_title": "Dataset collection ::: HAMLET",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 14,
+      "content": "In our setup, our starting point is a base model, trained on NLI data. Rather than employing automated adversarial methods, here the model's “adversary” is a human annotator. Given a context (also often called a “premise” in NLI), and a desired target label, we ask the human writer to provide a hypothesis that fools the model into misclassifying the label. One can think of the writer as a “white hat” hacker, trying to identify vulnerabilities in the system. For each human-generated example that is misclassified, we also ask the writer to provide a reason why they believe it was misclassified.",
+      "qasper_evidence_text": "In our setup, our starting point is a base model, trained on NLI data. Rather than employing automated adversarial methods, here the model's “adversary” is a human annotator. Given a context (also often called a “premise” in NLI), and a desired target label, we ask the human writer to provide a hypothesis that fools the model into misclassifying the label. One can think of the writer as a “white hat” hacker, trying to identify vulnerabilities in the system. For each human-generated example that is misclassified, we also ask the writer to provide a reason why they believe it was misclassified.",
+      "source_node_id": 14,
+      "node_id": 14,
+      "paragraph_id": 14,
+      "evidence_id": 14,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_3",
+      "rank": 3,
+      "score": 5.282964617679645,
+      "block_type": "paragraph",
+      "page": 3,
+      "section_id": "Dataset collection ::: HAMLET",
+      "section": "Dataset collection ::: HAMLET",
+      "title": "Dataset collection ::: HAMLET",
+      "hotpot_title": "Dataset collection ::: HAMLET",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 2
+    },
+    {
+      "id": 7,
+      "content": "We propose an iterative, adversarial human-and-model-in-the-loop solution for NLU dataset collection that addresses both benchmark longevity and robustness issues. In the first stage, human annotators devise examples that our current best models cannot determine the correct label for. These resulting hard examples—which should expose additional model weaknesses—can be added to the training set and used to train a stronger model. We then subject the strengthened model to human interference and collect more weaknesses over several rounds. After each round, we both train a new model, and set aside a new test set. The process can be iteratively repeated in a never-ending learning BIBREF18 setting, with the model getting stronger and the test set getting harder in each new round.This process yields a “moving post” dynamic target for NLU systems, rather than a static benchmark that will eventually saturate.",
+      "qasper_evidence_text": "We propose an iterative, adversarial human-and-model-in-the-loop solution for NLU dataset collection that addresses both benchmark longevity and robustness issues. In the first stage, human annotators devise examples that our current best models cannot determine the correct label for. These resulting hard examples—which should expose additional model weaknesses—can be added to the training set and used to train a stronger model. We then subject the strengthened model to human interference and collect more weaknesses over several rounds. After each round, we both train a new model, and set aside a new test set. The process can be iteratively repeated in a never-ending learning BIBREF18 setting, with the model getting stronger and the test set getting harder in each new round.This process yields a “moving post” dynamic target for NLU systems, rather than a static benchmark that will eventually saturate.",
+      "source_node_id": 7,
+      "node_id": 7,
+      "paragraph_id": 7,
+      "evidence_id": 7,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 4,
+      "score": 5.0438176402323505,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 3,
+      "hotpot_sent_id": 3,
+      "supporting_rank": 3
+    },
+    {
+      "id": 5,
+      "content": "With the rapid pace of advancement in AI, however, NLU benchmarks struggle to keep up with model improvement. Whereas it took around 15 years to achieve “near-human performance” on MNIST BIBREF5, BIBREF6, BIBREF7 and approximately 7 years to surpass humans on ImageNet BIBREF8, BIBREF0, BIBREF9, the GLUE benchmark did not last as long as we would have hoped after the advent of BERT BIBREF10, and rapidly had to be extended into SuperGLUE BIBREF11. This raises an important question: Can we collect a large benchmark dataset that can last longer?",
+      "qasper_evidence_text": "With the rapid pace of advancement in AI, however, NLU benchmarks struggle to keep up with model improvement. Whereas it took around 15 years to achieve “near-human performance” on MNIST BIBREF5, BIBREF6, BIBREF7 and approximately 7 years to surpass humans on ImageNet BIBREF8, BIBREF0, BIBREF9, the GLUE benchmark did not last as long as we would have hoped after the advent of BERT BIBREF10, and rapidly had to be extended into SuperGLUE BIBREF11. This raises an important question: Can we collect a large benchmark dataset that can last longer?",
+      "source_node_id": 5,
+      "node_id": 5,
+      "paragraph_id": 5,
+      "evidence_id": 5,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 4,
+      "score": 5.0438176402323505,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 4
+    }
+  ],
+  "supporting_block_ids": [
+    13,
+    14,
+    7,
+    5
+  ]
+}

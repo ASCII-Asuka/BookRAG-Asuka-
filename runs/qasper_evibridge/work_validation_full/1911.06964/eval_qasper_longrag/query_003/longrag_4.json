@@ -1,0 +1,79 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Approach ::: Multi-objective optimization.\n[source_id=17] Our goal now is to learn encoder-decoder pairs which optimally balance the communication cost and reconstruction loss. The simplest approach to balancing efficiency and accuracy is to weight $\\mathrm {cost}(x, \\alpha )$ and $\\mathrm {loss}(x, \\alpha , \\beta )$ linearly using a weight $\\lambda $ as follows,\n[source_id=18] where the expectation is taken over the population distribution of source sentences $x$, which is omitted to simplify notation. However, we observe that naively weighting and searching over $\\lambda $ is suboptimal and highly unstable—even slight changes to the weighting results in degenerate schemes which keep all or none of its tokens. This instability motivates us to develop a new stable objective.\n[source_id=19] Our main technical contribution is to draw inspiration from the multi-objective optimization literature and view the tradeoff as a sequence of constrained optimization problems, where we minimize the expected cost subject to varying expected reconstruction error constraints $\\epsilon $,\n[source_id=20] This greatly improves the stability of the training procedure. We empirically observe that the model initially keeps most of the tokens to meet the constraints, and slowly learns to drop uninformative words from the keywords to minimize the cost. Furthermore, $\\epsilon $ in Eq (DISPLAY_FORM6) allows us to directly control the maximum reconstruction error of resulting schemes, whereas $\\lambda $ in Eq (DISPLAY_FORM5) is not directly related to any of our desiderata.\n[source_id=21] To optimize the constrained objective, we consider the Lagrangian of Eq (DISPLAY_FORM6),\n[source_id=22] Much like the objective in Eq (DISPLAY_FORM5) we can compute unbiased gradients by replacing the expectations with their averages over random minibatches. Although gradient descent guarantees convergence on Eq (DISPLAY_FORM7) only when the objective is convex, we find that not only is the optimization stable, the resulting solution achieves better performance than the weighting approach in Eq (DISPLAY_FORM5).",
+  "score": 0.0,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    17,
+    18,
+    19,
+    20,
+    21,
+    22
+  ],
+  "child_qasper_evidence_texts": [
+    "Our goal now is to learn encoder-decoder pairs which optimally balance the communication cost and reconstruction loss. The simplest approach to balancing efficiency and accuracy is to weight $\\mathrm {cost}(x, \\alpha )$ and $\\mathrm {loss}(x, \\alpha , \\beta )$ linearly using a weight $\\lambda $ as follows,",
+    "where the expectation is taken over the population distribution of source sentences $x$, which is omitted to simplify notation. However, we observe that naively weighting and searching over $\\lambda $ is suboptimal and highly unstable—even slight changes to the weighting results in degenerate schemes which keep all or none of its tokens. This instability motivates us to develop a new stable objective.",
+    "Our main technical contribution is to draw inspiration from the multi-objective optimization literature and view the tradeoff as a sequence of constrained optimization problems, where we minimize the expected cost subject to varying expected reconstruction error constraints $\\epsilon $,",
+    "This greatly improves the stability of the training procedure. We empirically observe that the model initially keeps most of the tokens to meet the constraints, and slowly learns to drop uninformative words from the keywords to minimize the cost. Furthermore, $\\epsilon $ in Eq (DISPLAY_FORM6) allows us to directly control the maximum reconstruction error of resulting schemes, whereas $\\lambda $ in Eq (DISPLAY_FORM5) is not directly related to any of our desiderata.",
+    "To optimize the constrained objective, we consider the Lagrangian of Eq (DISPLAY_FORM6),",
+    "Much like the objective in Eq (DISPLAY_FORM5) we can compute unbiased gradients by replacing the expectations with their averages over random minibatches. Although gradient descent guarantees convergence on Eq (DISPLAY_FORM7) only when the objective is convex, we find that not only is the optimization stable, the resulting solution achieves better performance than the weighting approach in Eq (DISPLAY_FORM5)."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Approach ::: Multi-objective optimization.",
+    "Approach ::: Multi-objective optimization.",
+    "Approach ::: Multi-objective optimization.",
+    "Approach ::: Multi-objective optimization.",
+    "Approach ::: Multi-objective optimization.",
+    "Approach ::: Multi-objective optimization."
+  ],
+  "child_hotpot_facts": [
+    [
+      "Approach ::: Multi-objective optimization.",
+      0
+    ],
+    [
+      "Approach ::: Multi-objective optimization.",
+      1
+    ],
+    [
+      "Approach ::: Multi-objective optimization.",
+      2
+    ],
+    [
+      "Approach ::: Multi-objective optimization.",
+      3
+    ],
+    [
+      "Approach ::: Multi-objective optimization.",
+      4
+    ],
+    [
+      "Approach ::: Multi-objective optimization.",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Approach ::: Multi-objective optimization.",
+  "section": "Approach ::: Multi-objective optimization.",
+  "title_path": "Approach ::: Multi-objective optimization.",
+  "block_type": "long_unit"
+}

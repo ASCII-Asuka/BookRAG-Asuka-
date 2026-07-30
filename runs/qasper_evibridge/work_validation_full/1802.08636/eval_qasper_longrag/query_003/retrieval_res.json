@@ -1,0 +1,429 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_3",
+      "content": "[Section] The Pitfalls of Cross-Entropy Loss\n[source_id=14] Previous work optimizes summarization models by maximizing INLINEFORM0 , the likelihood of the ground-truth labels y = INLINEFORM1 for sentences INLINEFORM2 , given document D and model parameters INLINEFORM3 . This objective can be achieved by minimizing the cross-entropy loss at each decoding step: DISPLAYFORM0\n[source_id=15] Cross-entropy training leads to two kinds of discrepancies in the model. The first discrepancy comes from the disconnect between the task definition and the training objective. While MLE in Equation ( EQREF7 ) aims to maximize the likelihood of the ground-truth labels, the model is (a) expected to rank sentences to generate a summary and (b) evaluated using INLINEFORM0 at test time. The second discrepancy comes from the reliance on ground-truth labels. Document collections for training summarization systems do not naturally contain labels indicating which sentences should be extracted. Instead, they are typically accompanied by abstractive summaries from which sentence-level labels are extrapolated. jp-acl16 follow woodsend-acl10 in adopting a rule-based method which assigns labels to each sentence in the document individually based on their semantic correspondence with the gold summary (see the fourth column in Table TABREF6 ). An alternative method BIBREF26 , BIBREF27 , BIBREF10 identifies the set of sentences which collectively gives the highest ROUGE with respect to the gold summary. Sentences in this set are labeled with 1 and 0 otherwise (see the column 5 in Table TABREF6 ).\n[source_id=16] Labeling sentences individually often generates too many positive labels causing the model to overfit the data. For example, the document in Table TABREF6 has 12 positively labeled sentences out of 31 in total (only first 10 are shown). Collective labels present a better alternative since they only pertain to the few sentences deemed most suitable to form the summary. However, a model trained with cross-entropy loss on collective labels will underfit the data as it will only maximize probabilities INLINEFORM0 for sentences in this set (e.g., sentences INLINEFORM1 in Table TABREF6 ) and ignore all other sentences. We found that there are many candidate summaries with high ROUGE scores which could be considered during training.\n[source_id=17] Table TABREF6 (last column) shows candidate summaries ranked according to the mean of ROUGE-1, ROUGE-2, and ROUGE-L F INLINEFORM0 scores. Interestingly, multiple top ranked summaries have reasonably high ROUGE scores. For example, the average ROUGE for the summaries ranked second (0,13), third (11,13), and fourth (0,1,13) is 57.5%, 57.2%, and 57.1%, and all top 16 summaries have ROUGE scores more or equal to 50%. A few sentences are indicative of important content and appear frequently in the summaries: sentence 13 occurs in all summaries except one, while sentence 0 appears in several summaries too. Also note that summaries (11,13) and (1,13) yield better ROUGE scores compared to longer summaries, and may be as informative, yet more concise, alternatives.\n[source_id=18] These discrepancies render the model less efficient at ranking sentences for the summarization task. Instead of maximizing the likelihood of the ground-truth labels, we could train the model to predict the individual ROUGE score for each sentence in the document and then select the top INLINEFORM0 sentences with highest scores. But sentences with individual ROUGE scores do not necessarily lead to a high scoring summary, e.g., they may convey overlapping content and form verbose and redundant summaries. For example, sentence 3, despite having a high individual ROUGE score (35.6%), does not occur in any of the top 5 summaries. We next explain how we address these issues using reinforcement learning.",
+      "score": 0.8883826436589952,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "child_qasper_evidence_texts": [
+        "Previous work optimizes summarization models by maximizing INLINEFORM0 , the likelihood of the ground-truth labels y = INLINEFORM1 for sentences INLINEFORM2 , given document D and model parameters INLINEFORM3 . This objective can be achieved by minimizing the cross-entropy loss at each decoding step: DISPLAYFORM0",
+        "Cross-entropy training leads to two kinds of discrepancies in the model. The first discrepancy comes from the disconnect between the task definition and the training objective. While MLE in Equation ( EQREF7 ) aims to maximize the likelihood of the ground-truth labels, the model is (a) expected to rank sentences to generate a summary and (b) evaluated using INLINEFORM0 at test time. The second discrepancy comes from the reliance on ground-truth labels. Document collections for training summarization systems do not naturally contain labels indicating which sentences should be extracted. Instead, they are typically accompanied by abstractive summaries from which sentence-level labels are extrapolated. jp-acl16 follow woodsend-acl10 in adopting a rule-based method which assigns labels to each sentence in the document individually based on their semantic correspondence with the gold summary (see the fourth column in Table TABREF6 ). An alternative method BIBREF26 , BIBREF27 , BIBREF10 identifies the set of sentences which collectively gives the highest ROUGE with respect to the gold summary. Sentences in this set are labeled with 1 and 0 otherwise (see the column 5 in Table TABREF6 ).",
+        "Labeling sentences individually often generates too many positive labels causing the model to overfit the data. For example, the document in Table TABREF6 has 12 positively labeled sentences out of 31 in total (only first 10 are shown). Collective labels present a better alternative since they only pertain to the few sentences deemed most suitable to form the summary. However, a model trained with cross-entropy loss on collective labels will underfit the data as it will only maximize probabilities INLINEFORM0 for sentences in this set (e.g., sentences INLINEFORM1 in Table TABREF6 ) and ignore all other sentences. We found that there are many candidate summaries with high ROUGE scores which could be considered during training.",
+        "Table TABREF6 (last column) shows candidate summaries ranked according to the mean of ROUGE-1, ROUGE-2, and ROUGE-L F INLINEFORM0 scores. Interestingly, multiple top ranked summaries have reasonably high ROUGE scores. For example, the average ROUGE for the summaries ranked second (0,13), third (11,13), and fourth (0,1,13) is 57.5%, 57.2%, and 57.1%, and all top 16 summaries have ROUGE scores more or equal to 50%. A few sentences are indicative of important content and appear frequently in the summaries: sentence 13 occurs in all summaries except one, while sentence 0 appears in several summaries too. Also note that summaries (11,13) and (1,13) yield better ROUGE scores compared to longer summaries, and may be as informative, yet more concise, alternatives.",
+        "These discrepancies render the model less efficient at ranking sentences for the summarization task. Instead of maximizing the likelihood of the ground-truth labels, we could train the model to predict the individual ROUGE score for each sentence in the document and then select the top INLINEFORM0 sentences with highest scores. But sentences with individual ROUGE scores do not necessarily lead to a high scoring summary, e.g., they may convey overlapping content and form verbose and redundant summaries. For example, sentence 3, despite having a high individual ROUGE score (35.6%), does not occur in any of the top 5 summaries. We next explain how we address these issues using reinforcement learning."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "The Pitfalls of Cross-Entropy Loss",
+        "The Pitfalls of Cross-Entropy Loss",
+        "The Pitfalls of Cross-Entropy Loss",
+        "The Pitfalls of Cross-Entropy Loss",
+        "The Pitfalls of Cross-Entropy Loss"
+      ],
+      "child_hotpot_facts": [
+        [
+          "The Pitfalls of Cross-Entropy Loss",
+          0
+        ],
+        [
+          "The Pitfalls of Cross-Entropy Loss",
+          1
+        ],
+        [
+          "The Pitfalls of Cross-Entropy Loss",
+          2
+        ],
+        [
+          "The Pitfalls of Cross-Entropy Loss",
+          3
+        ],
+        [
+          "The Pitfalls of Cross-Entropy Loss",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "The Pitfalls of Cross-Entropy Loss",
+      "section": "The Pitfalls of Cross-Entropy Loss",
+      "title_path": "The Pitfalls of Cross-Entropy Loss",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Related Work\n[source_id=34] Traditional summarization methods manually define features to rank sentences for their salience in order to identify the most important sentences in a document or set of documents BIBREF42 , BIBREF43 , BIBREF44 , BIBREF45 , BIBREF46 , BIBREF47 . A vast majority of these methods learn to score each sentence independently BIBREF48 , BIBREF49 , BIBREF50 , BIBREF51 , BIBREF52 , BIBREF53 , BIBREF54 and a summary is generated by selecting top-scored sentences in a way that is not incorporated into the learning process. Summary quality can be improved heuristically, BIBREF55 , via max-margin methods BIBREF56 , BIBREF57 , or integer-linear programming BIBREF58 , BIBREF59 , BIBREF60 , BIBREF61 , BIBREF62 .\n[source_id=35] Recent deep learning methods BIBREF63 , BIBREF64 , BIBREF9 , BIBREF10 learn continuous features without any linguistic preprocessing (e.g., named entities). Like traditional methods, these approaches also suffer from the mismatch between the learning objective and the evaluation criterion (e.g., ROUGE) used at the test time. In comparison, our neural model globally optimizes the ROUGE evaluation metric through a reinforcement learning objective: sentences are highly ranked if they occur in highly scoring summaries.\n[source_id=36] Reinforcement learning has been previously used in the context of traditional multi-document summarization as a means of selecting a sentence or a subset of sentences from a document cluster. Ryang:2012 cast the sentence selection task as a search problem. Their agent observes a state (e.g., a candidate summary), executes an action (a transition operation that produces a new state selecting a not-yet-selected sentence), and then receives a delayed reward based on INLINEFORM0 . Follow-on work BIBREF65 extends this approach by employing ROUGE as part of the reward function, while hens-gscl15 further experiment with INLINEFORM1 -learning. MollaAliod:2017:ALTA2017 has adapt this approach to query-focused summarization. Our model differs from these approaches both in application and formulation. We focus solely on extractive summarization, in our case states are documents (not summaries) and actions are relevance scores which lead to sentence ranking (not sentence-to-sentence transitions). Rather than employing reinforcement learning for sentence selection, our algorithm performs sentence ranking using ROUGE as the reward function.\n[source_id=37] The REINFORCE algorithm BIBREF15 has been shown to improve encoder-decoder text-rewriting systems by allowing to directly optimize a non-differentiable objective BIBREF29 , BIBREF31 , BIBREF7 or to inject task-specific constraints BIBREF32 , BIBREF66 . However, we are not aware of any attempts to use reinforcement learning for training a sentence ranker in the context of extractive summarization.",
+      "score": 0.8617650447298325,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        34,
+        35,
+        36,
+        37
+      ],
+      "child_qasper_evidence_texts": [
+        "Traditional summarization methods manually define features to rank sentences for their salience in order to identify the most important sentences in a document or set of documents BIBREF42 , BIBREF43 , BIBREF44 , BIBREF45 , BIBREF46 , BIBREF47 . A vast majority of these methods learn to score each sentence independently BIBREF48 , BIBREF49 , BIBREF50 , BIBREF51 , BIBREF52 , BIBREF53 , BIBREF54 and a summary is generated by selecting top-scored sentences in a way that is not incorporated into the learning process. Summary quality can be improved heuristically, BIBREF55 , via max-margin methods BIBREF56 , BIBREF57 , or integer-linear programming BIBREF58 , BIBREF59 , BIBREF60 , BIBREF61 , BIBREF62 .",
+        "Recent deep learning methods BIBREF63 , BIBREF64 , BIBREF9 , BIBREF10 learn continuous features without any linguistic preprocessing (e.g., named entities). Like traditional methods, these approaches also suffer from the mismatch between the learning objective and the evaluation criterion (e.g., ROUGE) used at the test time. In comparison, our neural model globally optimizes the ROUGE evaluation metric through a reinforcement learning objective: sentences are highly ranked if they occur in highly scoring summaries.",
+        "Reinforcement learning has been previously used in the context of traditional multi-document summarization as a means of selecting a sentence or a subset of sentences from a document cluster. Ryang:2012 cast the sentence selection task as a search problem. Their agent observes a state (e.g., a candidate summary), executes an action (a transition operation that produces a new state selecting a not-yet-selected sentence), and then receives a delayed reward based on INLINEFORM0 . Follow-on work BIBREF65 extends this approach by employing ROUGE as part of the reward function, while hens-gscl15 further experiment with INLINEFORM1 -learning. MollaAliod:2017:ALTA2017 has adapt this approach to query-focused summarization. Our model differs from these approaches both in application and formulation. We focus solely on extractive summarization, in our case states are documents (not summaries) and actions are relevance scores which lead to sentence ranking (not sentence-to-sentence transitions). Rather than employing reinforcement learning for sentence selection, our algorithm performs sentence ranking using ROUGE as the reward function.",
+        "The REINFORCE algorithm BIBREF15 has been shown to improve encoder-decoder text-rewriting systems by allowing to directly optimize a non-differentiable objective BIBREF29 , BIBREF31 , BIBREF7 or to inject task-specific constraints BIBREF32 , BIBREF66 . However, we are not aware of any attempts to use reinforcement learning for training a sentence ranker in the context of extractive summarization."
+      ],
+      "child_pages": [
+        9,
+        9,
+        9,
+        9
+      ],
+      "child_sections": [
+        "Related Work",
+        "Related Work",
+        "Related Work",
+        "Related Work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work",
+          0
+        ],
+        [
+          "Related Work",
+          1
+        ],
+        [
+          "Related Work",
+          2
+        ],
+        [
+          "Related Work",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Related Work",
+      "section": "Related Work",
+      "title_path": "Related Work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Automatic summarization has enjoyed wide popularity in natural language processing due to its potential for various information access applications. Examples include tools which aid users navigate and digest web content (e.g., news, social media, product reviews), question answering, and personalized recommendation engines. Single document summarization — the task of producing a shorter version of a document while preserving its information content — is perhaps the most basic of summarization tasks that have been identified over the years (see BIBREF0 , BIBREF0 for a comprehensive overview).\n[source_id=5] Modern approaches to single document summarization are data-driven, taking advantage of the success of neural network architectures and their ability to learn continuous features without recourse to preprocessing tools or linguistic annotations. Abstractive summarization involves various text rewriting operations (e.g., substitution, deletion, reordering) and has been recently framed as a sequence-to-sequence problem BIBREF1 . Central in most approaches BIBREF2 , BIBREF3 , BIBREF4 , BIBREF5 , BIBREF6 , BIBREF7 is an encoder-decoder architecture modeled by recurrent neural networks. The encoder reads the source sequence into a list of continuous-space representations from which the decoder generates the target sequence. An attention mechanism BIBREF8 is often used to locate the region of focus during decoding.\n[source_id=6] Extractive systems create a summary by identifying (and subsequently concatenating) the most important sentences in a document. A few recent approaches BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 conceptualize extractive summarization as a sequence labeling task in which each label specifies whether each document sentence should be included in the summary. Existing models rely on recurrent neural networks to derive a meaning representation of the document which is then used to label each sentence, taking the previously labeled sentences into account. These models are typically trained using cross-entropy loss in order to maximize the likelihood of the ground-truth labels and do not necessarily learn to rank sentences based on their importance due to the absence of a ranking-based objective. Another discrepancy comes from the mismatch between the learning objective and the evaluation criterion, namely ROUGE BIBREF13 , which takes the entire summary into account.\n[source_id=7] In this paper we argue that cross-entropy training is not optimal for extractive summarization. Models trained this way are prone to generating verbose summaries with unnecessarily long sentences and redundant information. We propose to overcome these difficulties by globally optimizing the ROUGE evaluation metric and learning to rank sentences for summary generation through a reinforcement learning objective. Similar to previous work BIBREF9 , BIBREF11 , BIBREF10 , our neural summarization model consists of a hierarchical document encoder and a hierarchical sentence extractor. During training, it combines the maximum-likelihood cross-entropy loss with rewards from policy gradient reinforcement learning to directly optimize the evaluation metric relevant for the summarization task. We show that this global optimization framework renders extractive models better at discriminating among sentences for the final summary; a sentence is ranked high for selection if it often occurs in high scoring summaries.\n[source_id=8] We report results on the CNN and DailyMail news highlights datasets BIBREF14 which have been recently used as testbeds for the evaluation of neural summarization systems. Experimental results show that when evaluated automatically (in terms of ROUGE), our model outperforms state-of-the-art extractive and abstractive systems. We also conduct two human evaluations in order to assess (a) which type of summary participants prefer (we compare extractive and abstractive systems) and (b) how much key information from the document is preserved in the summary (we ask participants to answer questions pertaining to the content in the document by reading system summaries). Both evaluations overwhelmingly show that human subjects find our summaries more informative and complete.\n[source_id=9] Our contributions in this work are three-fold: a novel application of reinforcement learning to sentence ranking for extractive summarization; corroborated by analysis and empirical results showing that cross-entropy training is not well-suited to the summarization task; and large scale user studies following two evaluation paradigms which demonstrate that state-of-the-art abstractive systems lag behind extractive ones when the latter are globally trained.",
+      "score": 0.8088617819511124,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "child_qasper_evidence_texts": [
+        "Automatic summarization has enjoyed wide popularity in natural language processing due to its potential for various information access applications. Examples include tools which aid users navigate and digest web content (e.g., news, social media, product reviews), question answering, and personalized recommendation engines. Single document summarization — the task of producing a shorter version of a document while preserving its information content — is perhaps the most basic of summarization tasks that have been identified over the years (see BIBREF0 , BIBREF0 for a comprehensive overview).",
+        "Modern approaches to single document summarization are data-driven, taking advantage of the success of neural network architectures and their ability to learn continuous features without recourse to preprocessing tools or linguistic annotations. Abstractive summarization involves various text rewriting operations (e.g., substitution, deletion, reordering) and has been recently framed as a sequence-to-sequence problem BIBREF1 . Central in most approaches BIBREF2 , BIBREF3 , BIBREF4 , BIBREF5 , BIBREF6 , BIBREF7 is an encoder-decoder architecture modeled by recurrent neural networks. The encoder reads the source sequence into a list of continuous-space representations from which the decoder generates the target sequence. An attention mechanism BIBREF8 is often used to locate the region of focus during decoding.",
+        "Extractive systems create a summary by identifying (and subsequently concatenating) the most important sentences in a document. A few recent approaches BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 conceptualize extractive summarization as a sequence labeling task in which each label specifies whether each document sentence should be included in the summary. Existing models rely on recurrent neural networks to derive a meaning representation of the document which is then used to label each sentence, taking the previously labeled sentences into account. These models are typically trained using cross-entropy loss in order to maximize the likelihood of the ground-truth labels and do not necessarily learn to rank sentences based on their importance due to the absence of a ranking-based objective. Another discrepancy comes from the mismatch between the learning objective and the evaluation criterion, namely ROUGE BIBREF13 , which takes the entire summary into account.",
+        "In this paper we argue that cross-entropy training is not optimal for extractive summarization. Models trained this way are prone to generating verbose summaries with unnecessarily long sentences and redundant information. We propose to overcome these difficulties by globally optimizing the ROUGE evaluation metric and learning to rank sentences for summary generation through a reinforcement learning objective. Similar to previous work BIBREF9 , BIBREF11 , BIBREF10 , our neural summarization model consists of a hierarchical document encoder and a hierarchical sentence extractor. During training, it combines the maximum-likelihood cross-entropy loss with rewards from policy gradient reinforcement learning to directly optimize the evaluation metric relevant for the summarization task. We show that this global optimization framework renders extractive models better at discriminating among sentences for the final summary; a sentence is ranked high for selection if it often occurs in high scoring summaries.",
+        "We report results on the CNN and DailyMail news highlights datasets BIBREF14 which have been recently used as testbeds for the evaluation of neural summarization systems. Experimental results show that when evaluated automatically (in terms of ROUGE), our model outperforms state-of-the-art extractive and abstractive systems. We also conduct two human evaluations in order to assess (a) which type of summary participants prefer (we compare extractive and abstractive systems) and (b) how much key information from the document is preserved in the summary (we ask participants to answer questions pertaining to the content in the document by reading system summaries). Both evaluations overwhelmingly show that human subjects find our summaries more informative and complete.",
+        "Our contributions in this work are three-fold: a novel application of reinforcement learning to sentence ranking for extractive summarization; corroborated by analysis and empirical results showing that cross-entropy training is not well-suited to the summarization task; and large scale user studies following two evaluation paradigms which demonstrate that state-of-the-art abstractive systems lag behind extractive ones when the latter are globally trained."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Policy Learning\n[source_id=22] We cast the neural summarization model introduced in Figure FIGREF2 in the Reinforcement Learning paradigm BIBREF28 . Accordingly, the model can be viewed as an “agent” which interacts with an “environment” consisting of documents. At first, the agent is initialized randomly, it reads document D and predicts a relevance score for each sentence INLINEFORM0 using “policy” INLINEFORM1 , where INLINEFORM2 are model parameters. Once the agent is done reading the document, a summary with labels INLINEFORM3 is sampled out of the ranked sentences. The agent is then given a “reward” INLINEFORM4 commensurate with how well the extract resembles the gold-standard summary. Specifically, as reward function we use mean F INLINEFORM5 of INLINEFORM6 , INLINEFORM7 , and INLINEFORM8 . Unigram and bigram overlap ( INLINEFORM9 and INLINEFORM10 ) are meant to assess informativeness, whereas the longest common subsequence ( INLINEFORM11 ) is meant to assess fluency. We update the agent using the REINFORCE algorithm BIBREF15 which aims to minimize the negative expected reward: DISPLAYFORM0\n[source_id=23] where, INLINEFORM0 stands for INLINEFORM1 . REINFORCE is based on the observation that the expected gradient of a non-differentiable reward function (ROUGE, in our case) can be computed as follows: DISPLAYFORM0\n[source_id=24] While MLE in Equation ( EQREF7 ) aims to maximize the likelihood of the training data, the objective in Equation ( EQREF9 ) learns to discriminate among sentences with respect to how often they occur in high scoring summaries.",
+      "score": 0.7993968124652524,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        22,
+        23,
+        24
+      ],
+      "child_qasper_evidence_texts": [
+        "We cast the neural summarization model introduced in Figure FIGREF2 in the Reinforcement Learning paradigm BIBREF28 . Accordingly, the model can be viewed as an “agent” which interacts with an “environment” consisting of documents. At first, the agent is initialized randomly, it reads document D and predicts a relevance score for each sentence INLINEFORM0 using “policy” INLINEFORM1 , where INLINEFORM2 are model parameters. Once the agent is done reading the document, a summary with labels INLINEFORM3 is sampled out of the ranked sentences. The agent is then given a “reward” INLINEFORM4 commensurate with how well the extract resembles the gold-standard summary. Specifically, as reward function we use mean F INLINEFORM5 of INLINEFORM6 , INLINEFORM7 , and INLINEFORM8 . Unigram and bigram overlap ( INLINEFORM9 and INLINEFORM10 ) are meant to assess informativeness, whereas the longest common subsequence ( INLINEFORM11 ) is meant to assess fluency. We update the agent using the REINFORCE algorithm BIBREF15 which aims to minimize the negative expected reward: DISPLAYFORM0",
+        "where, INLINEFORM0 stands for INLINEFORM1 . REINFORCE is based on the observation that the expected gradient of a non-differentiable reward function (ROUGE, in our case) can be computed as follows: DISPLAYFORM0",
+        "While MLE in Equation ( EQREF7 ) aims to maximize the likelihood of the training data, the objective in Equation ( EQREF9 ) learns to discriminate among sentences with respect to how often they occur in high scoring summaries."
+      ],
+      "child_pages": [
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "Policy Learning",
+        "Policy Learning",
+        "Policy Learning"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Policy Learning",
+          0
+        ],
+        [
+          "Policy Learning",
+          1
+        ],
+        [
+          "Policy Learning",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Policy Learning",
+      "section": "Policy Learning",
+      "title_path": "Policy Learning",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Results\n[source_id=32] We report results using automatic metrics in Table TABREF20 . The top part of the table compares Refresh against related extractive systems. The bottom part reports the performance of abstractive systems. We present three variants of Lead, one is computed by ourselves and the other two are reported in nallapati17 and see-acl17. Note that they vary slightly due to differences in the preprocessing of the data. We report results on the CNN and DailyMail datasets and their combination (CNN INLINEFORM0 DailyMail).",
+      "score": 0.7737387380566934,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        32
+      ],
+      "child_qasper_evidence_texts": [
+        "We report results using automatic metrics in Table TABREF20 . The top part of the table compares Refresh against related extractive systems. The bottom part reports the performance of abstractive systems. We present three variants of Lead, one is computed by ourselves and the other two are reported in nallapati17 and see-acl17. Note that they vary slightly due to differences in the preprocessing of the data. We report results on the CNN and DailyMail datasets and their combination (CNN INLINEFORM0 DailyMail)."
+      ],
+      "child_pages": [
+        8
+      ],
+      "child_sections": [
+        "Results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Results",
+      "section": "Results",
+      "title_path": "Results",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Summarization as Sentence Ranking\n[source_id=11] Given a document D consisting of a sequence of sentences INLINEFORM0 , an extractive summarizer aims to produce a summary INLINEFORM1 by selecting INLINEFORM2 sentences from D (where INLINEFORM3 ). For each sentence INLINEFORM4 , we predict a label INLINEFORM5 (where 1 means that INLINEFORM6 should be included in the summary) and assign a score INLINEFORM7 quantifying INLINEFORM8 's relevance to the summary. The model learns to assign INLINEFORM9 when sentence INLINEFORM10 is more relevant than INLINEFORM11 . Model parameters are denoted by INLINEFORM12 . We estimate INLINEFORM13 using a neural network model and assemble a summary INLINEFORM14 by selecting INLINEFORM15 sentences with top INLINEFORM16 scores.\n[source_id=12] Our architecture resembles those previously proposed in the literature BIBREF9 , BIBREF10 , BIBREF11 . The main components include a sentence encoder, a document encoder, and a sentence extractor (see the left block of Figure FIGREF2 ) which we describe in more detail below.",
+      "score": 0.6739993521948906,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        11,
+        12
+      ],
+      "child_qasper_evidence_texts": [
+        "Given a document D consisting of a sequence of sentences INLINEFORM0 , an extractive summarizer aims to produce a summary INLINEFORM1 by selecting INLINEFORM2 sentences from D (where INLINEFORM3 ). For each sentence INLINEFORM4 , we predict a label INLINEFORM5 (where 1 means that INLINEFORM6 should be included in the summary) and assign a score INLINEFORM7 quantifying INLINEFORM8 's relevance to the summary. The model learns to assign INLINEFORM9 when sentence INLINEFORM10 is more relevant than INLINEFORM11 . Model parameters are denoted by INLINEFORM12 . We estimate INLINEFORM13 using a neural network model and assemble a summary INLINEFORM14 by selecting INLINEFORM15 sentences with top INLINEFORM16 scores.",
+        "Our architecture resembles those previously proposed in the literature BIBREF9 , BIBREF10 , BIBREF11 . The main components include a sentence encoder, a document encoder, and a sentence extractor (see the left block of Figure FIGREF2 ) which we describe in more detail below."
+      ],
+      "child_pages": [
+        2,
+        2
+      ],
+      "child_sections": [
+        "Summarization as Sentence Ranking",
+        "Summarization as Sentence Ranking"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Summarization as Sentence Ranking",
+          0
+        ],
+        [
+          "Summarization as Sentence Ranking",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Summarization as Sentence Ranking",
+      "section": "Summarization as Sentence Ranking",
+      "title_path": "Summarization as Sentence Ranking",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Training with High Probability Samples\n[source_id=26] Computing the expectation term in Equation ( EQREF10 ) is prohibitive, since there is a large number of possible extracts. In practice, we approximate the expected gradient using a single sample INLINEFORM0 from INLINEFORM1 for each training example in a batch: DISPLAYFORM0\n[source_id=27] Presented in its original form, the REINFORCE algorithm starts learning with a random policy which can make model training challenging for complex tasks like ours where a single document can give rise to a very large number of candidate summaries. We therefore limit the search space of INLINEFORM0 in Equation ( EQREF12 ) to the set of largest probability samples INLINEFORM1 . We approximate INLINEFORM2 by the INLINEFORM3 extracts which receive highest ROUGE scores. More concretely, we assemble candidate summaries efficiently by first selecting INLINEFORM4 sentences from the document which on their own have high ROUGE scores. We then generate all possible combinations of INLINEFORM5 sentences subject to maximum length INLINEFORM6 and evaluate them against the gold summary. Summaries are ranked according to F INLINEFORM7 by taking the mean of INLINEFORM8 , INLINEFORM9 , and INLINEFORM10 . INLINEFORM11 contains these top INLINEFORM12 candidate summaries. During training, we sample INLINEFORM13 from INLINEFORM14 instead of INLINEFORM15 .\n[source_id=28] ranzato-arxiv15-bias proposed an alternative to REINFORCE called MIXER (Mixed Incremental Cross-Entropy Reinforce) which first pretrains the model with the cross-entropy loss using ground truth labels and then follows a curriculum learning strategy BIBREF30 to gradually teach the model to produce stable predictions on its own. In our experiments MIXER performed worse than the model of nallapati17 just trained on collective labels. We conjecture that this is due to the unbounded nature of our ranking problem. Recall that our model assigns relevance scores to sentences rather than words. The space of sentential representations is vast and fairly unconstrained compared to other prediction tasks operating with fixed vocabularies BIBREF31 , BIBREF7 , BIBREF32 . Moreover, our approximation of the gradient allows the model to converge much faster to an optimal policy. Advantageously, we do not require an online reward estimator, we pre-compute INLINEFORM0 , which leads to a significant speedup during training compared to MIXER BIBREF29 and related training schemes BIBREF33 .",
+      "score": 0.5002286624885945,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        26,
+        27,
+        28
+      ],
+      "child_qasper_evidence_texts": [
+        "Computing the expectation term in Equation ( EQREF10 ) is prohibitive, since there is a large number of possible extracts. In practice, we approximate the expected gradient using a single sample INLINEFORM0 from INLINEFORM1 for each training example in a batch: DISPLAYFORM0",
+        "Presented in its original form, the REINFORCE algorithm starts learning with a random policy which can make model training challenging for complex tasks like ours where a single document can give rise to a very large number of candidate summaries. We therefore limit the search space of INLINEFORM0 in Equation ( EQREF12 ) to the set of largest probability samples INLINEFORM1 . We approximate INLINEFORM2 by the INLINEFORM3 extracts which receive highest ROUGE scores. More concretely, we assemble candidate summaries efficiently by first selecting INLINEFORM4 sentences from the document which on their own have high ROUGE scores. We then generate all possible combinations of INLINEFORM5 sentences subject to maximum length INLINEFORM6 and evaluate them against the gold summary. Summaries are ranked according to F INLINEFORM7 by taking the mean of INLINEFORM8 , INLINEFORM9 , and INLINEFORM10 . INLINEFORM11 contains these top INLINEFORM12 candidate summaries. During training, we sample INLINEFORM13 from INLINEFORM14 instead of INLINEFORM15 .",
+        "ranzato-arxiv15-bias proposed an alternative to REINFORCE called MIXER (Mixed Incremental Cross-Entropy Reinforce) which first pretrains the model with the cross-entropy loss using ground truth labels and then follows a curriculum learning strategy BIBREF30 to gradually teach the model to produce stable predictions on its own. In our experiments MIXER performed worse than the model of nallapati17 just trained on collective labels. We conjecture that this is due to the unbounded nature of our ranking problem. Recall that our model assigns relevance scores to sentences rather than words. The space of sentential representations is vast and fairly unconstrained compared to other prediction tasks operating with fixed vocabularies BIBREF31 , BIBREF7 , BIBREF32 . Moreover, our approximation of the gradient allows the model to converge much faster to an optimal policy. Advantageously, we do not require an online reward estimator, we pre-compute INLINEFORM0 , which leads to a significant speedup during training compared to MIXER BIBREF29 and related training schemes BIBREF33 ."
+      ],
+      "child_pages": [
+        6,
+        6,
+        6
+      ],
+      "child_sections": [
+        "Training with High Probability Samples",
+        "Training with High Probability Samples",
+        "Training with High Probability Samples"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Training with High Probability Samples",
+          0
+        ],
+        [
+          "Training with High Probability Samples",
+          1
+        ],
+        [
+          "Training with High Probability Samples",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Training with High Probability Samples",
+      "section": "Training with High Probability Samples",
+      "title_path": "Training with High Probability Samples",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Conclusions\n[source_id=39] In this work we developed an extractive summarization model which is globally trained by optimizing the ROUGE evaluation metric. Our training algorithm explores the space of candidate summaries while learning to optimize a reward function which is relevant for the task at hand. Experimental results show that reinforcement learning offers a great means to steer our model towards generating informative, fluent, and concise summaries outperforming state-of-the-art extractive and abstractive systems on the CNN and DailyMail datasets. In the future we would like to focus on smaller discourse units BIBREF67 rather than individual sentences, modeling compression and extraction jointly.",
+      "score": 0.09358383405244806,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        39
+      ],
+      "child_qasper_evidence_texts": [
+        "In this work we developed an extractive summarization model which is globally trained by optimizing the ROUGE evaluation metric. Our training algorithm explores the space of candidate summaries while learning to optimize a reward function which is relevant for the task at hand. Experimental results show that reinforcement learning offers a great means to steer our model towards generating informative, fluent, and concise summaries outperforming state-of-the-art extractive and abstractive systems on the CNN and DailyMail datasets. In the future we would like to focus on smaller discourse units BIBREF67 rather than individual sentences, modeling compression and extraction jointly."
+      ],
+      "child_pages": [
+        10
+      ],
+      "child_sections": [
+        "Conclusions"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusions",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Conclusions",
+      "section": "Conclusions",
+      "title_path": "Conclusions",
+      "block_type": "long_unit"
+    }
+  ]
+}

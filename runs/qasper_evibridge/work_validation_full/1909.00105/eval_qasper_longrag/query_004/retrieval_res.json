@@ -1,0 +1,582 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_5",
+      "content": "[Section] Experiments and Results\n[source_id=35] For training and evaluation, we provide our model with the first 3-5 ingredients listed in each recipe. We decode recipe text via top-$k$ sampling BIBREF7, finding $k=3$ to produce satisfactory results. We use a hidden size $d_h=256$ for both the encoder and decoder. Embedding dimensions for vocabulary, ingredient, recipe, techniques, and caloric level are 300, 10, 50, 50, and 5 (respectively). For prior recipe attention, we set $k=20$, the 80th %-ile for the number of user interactions. We use the Adam optimizer BIBREF28 with a learning rate of $10^{-3}$, annealed with a decay rate of 0.9 BIBREF29. We also use teacher-forcing BIBREF30 in all training epochs.\n[source_id=36] In this work, we investigate how leveraging historical user preferences can improve generation quality over strong baselines in our setting. We compare our personalized models against two baselines. The first is a name-based Nearest-Neighbor model (NN). We initially adapted the Neural Checklist Model of BIBREF0 as a baseline; however, we ultimately use a simple Encoder-Decoder baseline with ingredient attention (Enc-Dec), which provides comparable performance and lower complexity. All personalized models outperform baseline in BPE perplexity (tab:metricsontest) with Prior Name performing the best. While our models exhibit comparable performance to baseline in BLEU-1/4 and ROUGE-L, we generate more diverse (Distinct-1/2: percentage of distinct unigrams and bigrams) and acceptable recipes. BLEU and ROUGE are not the most appropriate metrics for generation quality. A `correct' recipe can be written in many ways with the same main entities (ingredients). As BLEU-1/4 capture structural information via n-gram matching, they are not correlated with subjective recipe quality. This mirrors observations from BIBREF31, BIBREF8.\n[source_id=37] We observe that personalized models make more diverse recipes than baseline. They thus perform better in BLEU-1 with more key entities (ingredient mentions) present, but worse in BLEU-4, as these recipes are written in a personalized way and deviate from gold on the phrasal level. Similarly, the `Prior Name' model generates more unigram-diverse recipes than other personalized models and obtains a correspondingly lower BLEU-1 score.\n[source_id=38] Qualitative Analysis: We present sample outputs for a cocktail recipe in tab:samplerecipes, and additional recipes in the appendix. Generation quality progressively improves from generic baseline output to a blended cocktail produced by our best performing model. Models attending over prior recipes explicitly reference ingredients. The Prior Name model further suggests the addition of lemon and mint, which are reasonably associated with previously consumed recipes like coconut mousse and pork skewers.\n[source_id=39] Personalization: To measure personalization, we evaluate how closely the generated text corresponds to a particular user profile. We compute the likelihood of generated recipes using identical input specifications but conditioned on ten different user profiles—one `gold' user who consumed the original recipe, and nine randomly generated user profiles. Following BIBREF8, we expect the highest likelihood for the recipe conditioned on the gold user. We measure user matching accuracy (UMA)—the proportion where the gold user is ranked highest—and Mean Reciprocal Rank (MRR) BIBREF32 of the gold user. All personalized models beat baselines in both metrics, showing our models personalize generated recipes to the given user profiles. The Prior Name model achieves the best UMA and MRR by a large margin, revealing that prior recipe names are strong signals for personalization. Moreover, the addition of attention mechanisms to capture these signals improves language modeling performance over a strong non-personalized baseline.\n[source_id=40] Recipe Level Coherence: A plausible recipe should possess a coherent step order, and we evaluate this via a metric for recipe-level coherence. We use the neural scoring model from BIBREF33 to measure recipe-level coherence for each generated recipe. Each recipe step is encoded by BERT BIBREF34. Our scoring model is a GRU network that learns the overall recipe step ordering structure by minimizing the cosine similarity of recipe step hidden representations presented in the correct and reverse orders. Once pretrained, our scorer calculates the similarity of a generated recipe to the forward and backwards ordering of its corresponding gold label, giving a score equal to the difference between the former and latter. A higher score indicates better step ordering (with a maximum score of 2). tab:coherencemetrics shows that our personalized models achieve average recipe-level coherence scores of 1.78-1.82, surpassing the baseline at 1.77.\n[source_id=41] Recipe Step Entailment: Local coherence is also crucial to a user following a recipe: it is crucial that subsequent steps are logically consistent with prior ones. We model local coherence as an entailment task: predicting the likelihood that a recipe step follows the preceding. We sample several consecutive (positive) and non-consecutive (negative) pairs of steps from each recipe. We train a BERT BIBREF34 model to predict the entailment score of a pair of steps separated by a [SEP] token, using the final representation of the [CLS] token. The step entailment score is computed as the average of scores for each set of consecutive steps in each recipe, averaged over every generated recipe for a model, as shown in tab:coherencemetrics.\n[source_id=42] Human Evaluation: We presented 310 pairs of recipes for pairwise comparison BIBREF8 (details in appendix) between baseline and each personalized model, with results shown in tab:metricsontest. On average, human evaluators preferred personalized model outputs to baseline 63% of the time, confirming that personalized attention improves the semantic plausibility of generated recipes. We also performed a small-scale human coherence survey over 90 recipes, in which 60% of users found recipes generated by personalized models to be more coherent and preferable to those generated by baseline models.",
+      "score": 5.393369575453949,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42
+      ],
+      "child_qasper_evidence_texts": [
+        "For training and evaluation, we provide our model with the first 3-5 ingredients listed in each recipe. We decode recipe text via top-$k$ sampling BIBREF7, finding $k=3$ to produce satisfactory results. We use a hidden size $d_h=256$ for both the encoder and decoder. Embedding dimensions for vocabulary, ingredient, recipe, techniques, and caloric level are 300, 10, 50, 50, and 5 (respectively). For prior recipe attention, we set $k=20$, the 80th %-ile for the number of user interactions. We use the Adam optimizer BIBREF28 with a learning rate of $10^{-3}$, annealed with a decay rate of 0.9 BIBREF29. We also use teacher-forcing BIBREF30 in all training epochs.",
+        "In this work, we investigate how leveraging historical user preferences can improve generation quality over strong baselines in our setting. We compare our personalized models against two baselines. The first is a name-based Nearest-Neighbor model (NN). We initially adapted the Neural Checklist Model of BIBREF0 as a baseline; however, we ultimately use a simple Encoder-Decoder baseline with ingredient attention (Enc-Dec), which provides comparable performance and lower complexity. All personalized models outperform baseline in BPE perplexity (tab:metricsontest) with Prior Name performing the best. While our models exhibit comparable performance to baseline in BLEU-1/4 and ROUGE-L, we generate more diverse (Distinct-1/2: percentage of distinct unigrams and bigrams) and acceptable recipes. BLEU and ROUGE are not the most appropriate metrics for generation quality. A `correct' recipe can be written in many ways with the same main entities (ingredients). As BLEU-1/4 capture structural information via n-gram matching, they are not correlated with subjective recipe quality. This mirrors observations from BIBREF31, BIBREF8.",
+        "We observe that personalized models make more diverse recipes than baseline. They thus perform better in BLEU-1 with more key entities (ingredient mentions) present, but worse in BLEU-4, as these recipes are written in a personalized way and deviate from gold on the phrasal level. Similarly, the `Prior Name' model generates more unigram-diverse recipes than other personalized models and obtains a correspondingly lower BLEU-1 score.",
+        "Qualitative Analysis: We present sample outputs for a cocktail recipe in tab:samplerecipes, and additional recipes in the appendix. Generation quality progressively improves from generic baseline output to a blended cocktail produced by our best performing model. Models attending over prior recipes explicitly reference ingredients. The Prior Name model further suggests the addition of lemon and mint, which are reasonably associated with previously consumed recipes like coconut mousse and pork skewers.",
+        "Personalization: To measure personalization, we evaluate how closely the generated text corresponds to a particular user profile. We compute the likelihood of generated recipes using identical input specifications but conditioned on ten different user profiles—one `gold' user who consumed the original recipe, and nine randomly generated user profiles. Following BIBREF8, we expect the highest likelihood for the recipe conditioned on the gold user. We measure user matching accuracy (UMA)—the proportion where the gold user is ranked highest—and Mean Reciprocal Rank (MRR) BIBREF32 of the gold user. All personalized models beat baselines in both metrics, showing our models personalize generated recipes to the given user profiles. The Prior Name model achieves the best UMA and MRR by a large margin, revealing that prior recipe names are strong signals for personalization. Moreover, the addition of attention mechanisms to capture these signals improves language modeling performance over a strong non-personalized baseline.",
+        "Recipe Level Coherence: A plausible recipe should possess a coherent step order, and we evaluate this via a metric for recipe-level coherence. We use the neural scoring model from BIBREF33 to measure recipe-level coherence for each generated recipe. Each recipe step is encoded by BERT BIBREF34. Our scoring model is a GRU network that learns the overall recipe step ordering structure by minimizing the cosine similarity of recipe step hidden representations presented in the correct and reverse orders. Once pretrained, our scorer calculates the similarity of a generated recipe to the forward and backwards ordering of its corresponding gold label, giving a score equal to the difference between the former and latter. A higher score indicates better step ordering (with a maximum score of 2). tab:coherencemetrics shows that our personalized models achieve average recipe-level coherence scores of 1.78-1.82, surpassing the baseline at 1.77.",
+        "Recipe Step Entailment: Local coherence is also crucial to a user following a recipe: it is crucial that subsequent steps are logically consistent with prior ones. We model local coherence as an entailment task: predicting the likelihood that a recipe step follows the preceding. We sample several consecutive (positive) and non-consecutive (negative) pairs of steps from each recipe. We train a BERT BIBREF34 model to predict the entailment score of a pair of steps separated by a [SEP] token, using the final representation of the [CLS] token. The step entailment score is computed as the average of scores for each set of consecutive steps in each recipe, averaged over every generated recipe for a model, as shown in tab:coherencemetrics.",
+        "Human Evaluation: We presented 310 pairs of recipes for pairwise comparison BIBREF8 (details in appendix) between baseline and each personalized model, with results shown in tab:metricsontest. On average, human evaluators preferred personalized model outputs to baseline 63% of the time, confirming that personalized attention improves the semantic plausibility of generated recipes. We also performed a small-scale human coherence survey over 90 recipes, in which 60% of users found recipes generated by personalized models to be more coherent and preferable to those generated by baseline models."
+      ],
+      "child_pages": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "Experiments and Results",
+        "Experiments and Results",
+        "Experiments and Results",
+        "Experiments and Results",
+        "Experiments and Results",
+        "Experiments and Results",
+        "Experiments and Results",
+        "Experiments and Results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments and Results",
+          0
+        ],
+        [
+          "Experiments and Results",
+          1
+        ],
+        [
+          "Experiments and Results",
+          2
+        ],
+        [
+          "Experiments and Results",
+          3
+        ],
+        [
+          "Experiments and Results",
+          4
+        ],
+        [
+          "Experiments and Results",
+          5
+        ],
+        [
+          "Experiments and Results",
+          6
+        ],
+        [
+          "Experiments and Results",
+          7
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Experiments and Results",
+      "section": "Experiments and Results",
+      "title_path": "Experiments and Results",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Human Evaluation\n[source_id=51] We prepared a set of 15 pairwise comparisons per evaluation session, and collected 930 pairwise evaluations (310 per personalized model) over 62 sessions. For each pair, users were given a partial recipe specification (name and 3-5 key ingredients), as well as two generated recipes labeled `A' and `B'. One recipe is generated from our baseline encoder-decoder model and one recipe is generated by one of our three personalized models (Prior Tech, Prior Name, Prior Recipe). The order of recipe presentation (A/B) is randomly selected for each question. A screenshot of the user evaluation interface is given in fig:exeval. We ask the user to indicate which recipe they find more coherent, and which recipe best accomplishes the goal indicated by the recipe name. A screenshot of this survey interface is given in fig:exeval2.",
+      "score": 3.1794304272251184,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        51
+      ],
+      "child_qasper_evidence_texts": [
+        "We prepared a set of 15 pairwise comparisons per evaluation session, and collected 930 pairwise evaluations (310 per personalized model) over 62 sessions. For each pair, users were given a partial recipe specification (name and 3-5 key ingredients), as well as two generated recipes labeled `A' and `B'. One recipe is generated from our baseline encoder-decoder model and one recipe is generated by one of our three personalized models (Prior Tech, Prior Name, Prior Recipe). The order of recipe presentation (A/B) is randomly selected for each question. A screenshot of the user evaluation interface is given in fig:exeval. We ask the user to indicate which recipe they find more coherent, and which recipe best accomplishes the goal indicated by the recipe name. A screenshot of this survey interface is given in fig:exeval2."
+      ],
+      "child_pages": [
+        9
+      ],
+      "child_sections": [
+        "Human Evaluation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Human Evaluation",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Human Evaluation",
+      "section": "Human Evaluation",
+      "title_path": "Human Evaluation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] In the kitchen, we increasingly rely on instructions from cooking websites: recipes. A cook with a predilection for Asian cuisine may wish to prepare chicken curry, but may not know all necessary ingredients apart from a few basics. These users with limited knowledge cannot rely on existing recipe generation approaches that focus on creating coherent recipes given all ingredients and a recipe name BIBREF0. Such models do not address issues of personal preference (e.g. culinary tastes, garnish choices) and incomplete recipe details. We propose to approach both problems via personalized generation of plausible, user-specific recipes using user preferences extracted from previously consumed recipes.\n[source_id=5] Our work combines two important tasks from natural language processing and recommender systems: data-to-text generation BIBREF1 and personalized recommendation BIBREF2. Our model takes as user input the name of a specific dish, a few key ingredients, and a calorie level. We pass these loose input specifications to an encoder-decoder framework and attend on user profiles—learned latent representations of recipes previously consumed by a user—to generate a recipe personalized to the user's tastes. We fuse these `user-aware' representations with decoder output in an attention fusion layer to jointly determine text generation. Quantitative (perplexity, user-ranking) and qualitative analysis on user-aware model outputs confirm that personalization indeed assists in generating plausible recipes from incomplete ingredients.\n[source_id=6] While personalized text generation has seen success in conveying user writing styles in the product review BIBREF3, BIBREF4 and dialogue BIBREF5 spaces, we are the first to consider it for the problem of recipe generation, where output quality is heavily dependent on the content of the instructions—such as ingredients and cooking techniques.\n[source_id=7] To summarize, our main contributions are as follows:\n[source_id=8] We explore a new task of generating plausible and personalized recipes from incomplete input specifications by leveraging historical user preferences;\n[source_id=9] We release a new dataset of 180K+ recipes and 700K+ user reviews for this task;\n[source_id=10] We introduce new evaluation strategies for generation quality in instructional texts, centering on quantitative measures of coherence. We also show qualitatively and quantitatively that personalized models generate high-quality and specific recipes that align with historical user preferences.",
+      "score": 2.13208348143315,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "child_qasper_evidence_texts": [
+        "In the kitchen, we increasingly rely on instructions from cooking websites: recipes. A cook with a predilection for Asian cuisine may wish to prepare chicken curry, but may not know all necessary ingredients apart from a few basics. These users with limited knowledge cannot rely on existing recipe generation approaches that focus on creating coherent recipes given all ingredients and a recipe name BIBREF0. Such models do not address issues of personal preference (e.g. culinary tastes, garnish choices) and incomplete recipe details. We propose to approach both problems via personalized generation of plausible, user-specific recipes using user preferences extracted from previously consumed recipes.",
+        "Our work combines two important tasks from natural language processing and recommender systems: data-to-text generation BIBREF1 and personalized recommendation BIBREF2. Our model takes as user input the name of a specific dish, a few key ingredients, and a calorie level. We pass these loose input specifications to an encoder-decoder framework and attend on user profiles—learned latent representations of recipes previously consumed by a user—to generate a recipe personalized to the user's tastes. We fuse these `user-aware' representations with decoder output in an attention fusion layer to jointly determine text generation. Quantitative (perplexity, user-ranking) and qualitative analysis on user-aware model outputs confirm that personalization indeed assists in generating plausible recipes from incomplete ingredients.",
+        "While personalized text generation has seen success in conveying user writing styles in the product review BIBREF3, BIBREF4 and dialogue BIBREF5 spaces, we are the first to consider it for the problem of recipe generation, where output quality is heavily dependent on the content of the instructions—such as ingredients and cooking techniques.",
+        "To summarize, our main contributions are as follows:",
+        "We explore a new task of generating plausible and personalized recipes from incomplete input specifications by leveraging historical user preferences;",
+        "We release a new dataset of 180K+ recipes and 700K+ user reviews for this task;",
+        "We introduce new evaluation strategies for generation quality in instructional texts, centering on quantitative measures of coherence. We also show qualitatively and quantitatively that personalized models generate high-quality and specific recipes that align with historical user preferences."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ],
+        [
+          "Introduction",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Recipe Dataset: Food.com\n[source_id=30] We collect a novel dataset of 230K+ recipe texts and 1M+ user interactions (reviews) over 18 years (2000-2018) from Food.com. Here, we restrict to recipes with at least 3 steps, and at least 4 and no more than 20 ingredients. We discard users with fewer than 4 reviews, giving 180K+ recipes and 700K+ reviews, with splits as in tab:recipeixnstats.\n[source_id=31] Our model must learn to generate from a diverse recipe space: in our training data, the average recipe length is 117 tokens with a maximum of 256. There are 13K unique ingredients across all recipes. Rare words dominate the vocabulary: 95% of words appear $<$100 times, accounting for only 1.65% of all word usage. As such, we perform Byte-Pair Encoding (BPE) tokenization BIBREF25, BIBREF26, giving a training vocabulary of 15K tokens across 19M total mentions. User profiles are similarly diverse: 50% of users have consumed $\\le $6 recipes, while 10% of users have consumed $>$45 recipes.\n[source_id=32] We order reviews by timestamp, keeping the most recent review for each user as the test set, the second most recent for validation, and the remainder for training (sequential leave-one-out evaluation BIBREF27). We evaluate only on recipes not in the training set.\n[source_id=33] We manually construct a list of 58 cooking techniques from 384 cooking actions collected by BIBREF15; the most common techniques (bake, combine, pour, boil) account for 36.5% of technique mentions. We approximate technique adherence via string match between the recipe text and technique list.",
+      "score": 1.590596941281101,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        30,
+        31,
+        32,
+        33
+      ],
+      "child_qasper_evidence_texts": [
+        "We collect a novel dataset of 230K+ recipe texts and 1M+ user interactions (reviews) over 18 years (2000-2018) from Food.com. Here, we restrict to recipes with at least 3 steps, and at least 4 and no more than 20 ingredients. We discard users with fewer than 4 reviews, giving 180K+ recipes and 700K+ reviews, with splits as in tab:recipeixnstats.",
+        "Our model must learn to generate from a diverse recipe space: in our training data, the average recipe length is 117 tokens with a maximum of 256. There are 13K unique ingredients across all recipes. Rare words dominate the vocabulary: 95% of words appear $<$100 times, accounting for only 1.65% of all word usage. As such, we perform Byte-Pair Encoding (BPE) tokenization BIBREF25, BIBREF26, giving a training vocabulary of 15K tokens across 19M total mentions. User profiles are similarly diverse: 50% of users have consumed $\\le $6 recipes, while 10% of users have consumed $>$45 recipes.",
+        "We order reviews by timestamp, keeping the most recent review for each user as the test set, the second most recent for validation, and the remainder for training (sequential leave-one-out evaluation BIBREF27). We evaluate only on recipes not in the training set.",
+        "We manually construct a list of 58 cooking techniques from 384 cooking actions collected by BIBREF15; the most common techniques (bake, combine, pour, boil) account for 36.5% of technique mentions. We approximate technique adherence via string match between the recipe text and technique list."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Recipe Dataset: Food.com",
+        "Recipe Dataset: Food.com",
+        "Recipe Dataset: Food.com",
+        "Recipe Dataset: Food.com"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Recipe Dataset: Food.com",
+          0
+        ],
+        [
+          "Recipe Dataset: Food.com",
+          1
+        ],
+        [
+          "Recipe Dataset: Food.com",
+          2
+        ],
+        [
+          "Recipe Dataset: Food.com",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Recipe Dataset: Food.com",
+      "section": "Recipe Dataset: Food.com",
+      "title_path": "Recipe Dataset: Food.com",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Approach\n[source_id=16] Our model's input specification consists of: the recipe name as a sequence of tokens, a partial list of ingredients, and a caloric level (high, medium, low). It outputs the recipe instructions as a token sequence: $\\mathcal {W}_r=\\lbrace w_{r,0}, \\dots , w_{r,T}\\rbrace $ for a recipe $r$ of length $T$. To personalize output, we use historical recipe interactions of a user $u \\in \\mathcal {U}$.\n[source_id=17] Encoder: Our encoder has three embedding layers: vocabulary embedding $\\mathcal {V}$, ingredient embedding $\\mathcal {I}$, and caloric-level embedding $\\mathcal {C}$. Each token in the (length $L_n$) recipe name is embedded via $\\mathcal {V}$; the embedded token sequence is passed to a two-layered bidirectional GRU (BiGRU) BIBREF17, which outputs hidden states for names $\\lbrace \\mathbf {n}_{\\text{enc},j} \\in \\mathbb {R}^{2d_h}\\rbrace $, with hidden size $d_h$. Similarly each of the $L_i$ input ingredients is embedded via $\\mathcal {I}$, and the embedded ingredient sequence is passed to another two-layered BiGRU to output ingredient hidden states as $\\lbrace \\mathbf {i}_{\\text{enc},j} \\in \\mathbb {R}^{2d_h}\\rbrace $. The caloric level is embedded via $\\mathcal {C}$ and passed through a projection layer with weights $W_c$ to generate calorie hidden representation $\\mathbf {c}_{\\text{enc}} \\in \\mathbb {R}^{2d_h}$.\n[source_id=18] Ingredient Attention: We apply attention BIBREF18 over the encoded ingredients to use encoder outputs at each decoding time step. We define an attention-score function $\\alpha $ with key $K$ and query $Q$:\n[source_id=19] with trainable weights $W_{\\alpha }$, bias $\\mathbf {b}_{\\alpha }$, and normalization term $Z$. At decoding time $t$, we calculate the ingredient context $\\mathbf {a}_{t}^{i} \\in \\mathbb {R}^{d_h}$ as:\n[source_id=20] Decoder: The decoder is a two-layer GRU with hidden state $h_t$ conditioned on previous hidden state $h_{t-1}$ and input token $w_{r, t}$ from the original recipe text. We project the concatenated encoder outputs as the initial decoder hidden state:\n[source_id=21] To bias generation toward user preferences, we attend over a user's previously reviewed recipes to jointly determine the final output token distribution. We consider two different schemes to model preferences from user histories: (1) recipe interactions, and (2) techniques seen therein (defined in data). BIBREF19, BIBREF20, BIBREF21 explore similar schemes for personalized recommendation.\n[source_id=22] Prior Recipe Attention: We obtain the set of prior recipes for a user $u$: $R^+_u$, where each recipe can be represented by an embedding from a recipe embedding layer $\\mathcal {R}$ or an average of the name tokens embedded by $\\mathcal {V}$. We attend over the $k$-most recent prior recipes, $R^{k+}_u$, to account for temporal drift of user preferences BIBREF22. These embeddings are used in the `Prior Recipe' and `Prior Name' models, respectively.\n[source_id=23] Given a recipe representation $\\mathbf {r} \\in \\mathbb {R}^{d_r}$ (where $d_r$ is recipe- or vocabulary-embedding size depending on the recipe representation) the prior recipe attention context $\\mathbf {a}_{t}^{r_u}$ is calculated as\n[source_id=24] Prior Technique Attention: We calculate prior technique preference (used in the `Prior Tech` model) by normalizing co-occurrence between users and techniques seen in $R^+_u$, to obtain a preference vector $\\rho _{u}$. Each technique $x$ is embedded via a technique embedding layer $\\mathcal {X}$ to $\\mathbf {x}\\in \\mathbb {R}^{d_x}$. Prior technique attention is calculated as\n[source_id=25] where, inspired by copy mechanisms BIBREF23, BIBREF24, we add $\\rho _{u,x}$ for technique $x$ to emphasize the attention by the user's prior technique preference.\n[source_id=26] Attention Fusion Layer: We fuse all contexts calculated at time $t$, concatenating them with decoder GRU output and previous token embedding:\n[source_id=27] We then calculate the token probability:\n[source_id=28] and maximize the log-likelihood of the generated sequence conditioned on input specifications and user preferences. fig:ex shows a case where the Prior Name model attends strongly on previously consumed savory recipes to suggest the usage of an additional ingredient (`cilantro').",
+      "score": 1.3586082255119198,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "child_qasper_evidence_texts": [
+        "Our model's input specification consists of: the recipe name as a sequence of tokens, a partial list of ingredients, and a caloric level (high, medium, low). It outputs the recipe instructions as a token sequence: $\\mathcal {W}_r=\\lbrace w_{r,0}, \\dots , w_{r,T}\\rbrace $ for a recipe $r$ of length $T$. To personalize output, we use historical recipe interactions of a user $u \\in \\mathcal {U}$.",
+        "Encoder: Our encoder has three embedding layers: vocabulary embedding $\\mathcal {V}$, ingredient embedding $\\mathcal {I}$, and caloric-level embedding $\\mathcal {C}$. Each token in the (length $L_n$) recipe name is embedded via $\\mathcal {V}$; the embedded token sequence is passed to a two-layered bidirectional GRU (BiGRU) BIBREF17, which outputs hidden states for names $\\lbrace \\mathbf {n}_{\\text{enc},j} \\in \\mathbb {R}^{2d_h}\\rbrace $, with hidden size $d_h$. Similarly each of the $L_i$ input ingredients is embedded via $\\mathcal {I}$, and the embedded ingredient sequence is passed to another two-layered BiGRU to output ingredient hidden states as $\\lbrace \\mathbf {i}_{\\text{enc},j} \\in \\mathbb {R}^{2d_h}\\rbrace $. The caloric level is embedded via $\\mathcal {C}$ and passed through a projection layer with weights $W_c$ to generate calorie hidden representation $\\mathbf {c}_{\\text{enc}} \\in \\mathbb {R}^{2d_h}$.",
+        "Ingredient Attention: We apply attention BIBREF18 over the encoded ingredients to use encoder outputs at each decoding time step. We define an attention-score function $\\alpha $ with key $K$ and query $Q$:",
+        "with trainable weights $W_{\\alpha }$, bias $\\mathbf {b}_{\\alpha }$, and normalization term $Z$. At decoding time $t$, we calculate the ingredient context $\\mathbf {a}_{t}^{i} \\in \\mathbb {R}^{d_h}$ as:",
+        "Decoder: The decoder is a two-layer GRU with hidden state $h_t$ conditioned on previous hidden state $h_{t-1}$ and input token $w_{r, t}$ from the original recipe text. We project the concatenated encoder outputs as the initial decoder hidden state:",
+        "To bias generation toward user preferences, we attend over a user's previously reviewed recipes to jointly determine the final output token distribution. We consider two different schemes to model preferences from user histories: (1) recipe interactions, and (2) techniques seen therein (defined in data). BIBREF19, BIBREF20, BIBREF21 explore similar schemes for personalized recommendation.",
+        "Prior Recipe Attention: We obtain the set of prior recipes for a user $u$: $R^+_u$, where each recipe can be represented by an embedding from a recipe embedding layer $\\mathcal {R}$ or an average of the name tokens embedded by $\\mathcal {V}$. We attend over the $k$-most recent prior recipes, $R^{k+}_u$, to account for temporal drift of user preferences BIBREF22. These embeddings are used in the `Prior Recipe' and `Prior Name' models, respectively.",
+        "Given a recipe representation $\\mathbf {r} \\in \\mathbb {R}^{d_r}$ (where $d_r$ is recipe- or vocabulary-embedding size depending on the recipe representation) the prior recipe attention context $\\mathbf {a}_{t}^{r_u}$ is calculated as",
+        "Prior Technique Attention: We calculate prior technique preference (used in the `Prior Tech` model) by normalizing co-occurrence between users and techniques seen in $R^+_u$, to obtain a preference vector $\\rho _{u}$. Each technique $x$ is embedded via a technique embedding layer $\\mathcal {X}$ to $\\mathbf {x}\\in \\mathbb {R}^{d_x}$. Prior technique attention is calculated as",
+        "where, inspired by copy mechanisms BIBREF23, BIBREF24, we add $\\rho _{u,x}$ for technique $x$ to emphasize the attention by the user's prior technique preference.",
+        "Attention Fusion Layer: We fuse all contexts calculated at time $t$, concatenating them with decoder GRU output and previous token embedding:",
+        "We then calculate the token probability:",
+        "and maximize the log-likelihood of the generated sequence conditioned on input specifications and user preferences. fig:ex shows a case where the Prior Name model attends strongly on previously consumed savory recipes to suggest the usage of an additional ingredient (`cilantro')."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Approach",
+        "Approach",
+        "Approach",
+        "Approach",
+        "Approach",
+        "Approach",
+        "Approach",
+        "Approach",
+        "Approach",
+        "Approach",
+        "Approach",
+        "Approach",
+        "Approach"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Approach",
+          0
+        ],
+        [
+          "Approach",
+          1
+        ],
+        [
+          "Approach",
+          2
+        ],
+        [
+          "Approach",
+          3
+        ],
+        [
+          "Approach",
+          4
+        ],
+        [
+          "Approach",
+          5
+        ],
+        [
+          "Approach",
+          6
+        ],
+        [
+          "Approach",
+          7
+        ],
+        [
+          "Approach",
+          8
+        ],
+        [
+          "Approach",
+          9
+        ],
+        [
+          "Approach",
+          10
+        ],
+        [
+          "Approach",
+          11
+        ],
+        [
+          "Approach",
+          12
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Approach",
+      "section": "Approach",
+      "title_path": "Approach",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Existing approaches to recipe generation are unable to create recipes for users with culinary preferences but incomplete knowledge of ingredients in specific dishes. We propose a new task of personalized recipe generation to help these users: expanding a name and incomplete ingredient details into complete natural-text instructions aligned with the user's historical preferences. We attend on technique- and recipe-level representations of a user's previously consumed recipes, fusing these 'user-aware' representations in an attention fusion layer to control recipe text generation. Experiments on a new dataset of 180K recipes and 700K interactions show our model's ability to generate plausible and personalized recipes compared to non-personalized baselines.",
+      "score": 1.3140384922029857,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Existing approaches to recipe generation are unable to create recipes for users with culinary preferences but incomplete knowledge of ingredients in specific dishes. We propose a new task of personalized recipe generation to help these users: expanding a name and incomplete ingredient details into complete natural-text instructions aligned with the user's historical preferences. We attend on technique- and recipe-level representations of a user's previously consumed recipes, fusing these 'user-aware' representations in an attention fusion layer to control recipe text generation. Experiments on a new dataset of 180K recipes and 700K interactions show our model's ability to generate plausible and personalized recipes compared to non-personalized baselines."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Related Work\n[source_id=12] Large-scale transformer-based language models have shown surprising expressivity and fluency in creative and conditional long-text generation BIBREF6, BIBREF7. Recent works have proposed hierarchical methods that condition on narrative frameworks to generate internally consistent long texts BIBREF8, BIBREF9, BIBREF10. Here, we generate procedurally structured recipes instead of free-form narratives.\n[source_id=13] Recipe generation belongs to the field of data-to-text natural language generation BIBREF1, which sees other applications in automated journalism BIBREF11, question-answering BIBREF12, and abstractive summarization BIBREF13, among others. BIBREF14, BIBREF15 model recipes as a structured collection of ingredient entities acted upon by cooking actions. BIBREF0 imposes a `checklist' attention constraint emphasizing hitherto unused ingredients during generation. BIBREF16 attend over explicit ingredient references in the prior recipe step. Similar hierarchical approaches that infer a full ingredient list to constrain generation will not help personalize recipes, and would be infeasible in our setting due to the potentially unconstrained number of ingredients (from a space of 10K+) in a recipe. We instead learn historical preferences to guide full recipe generation.\n[source_id=14] A recent line of work has explored user- and item-dependent aspect-aware review generation BIBREF3, BIBREF4. This work is related to ours in that it combines contextual language generation with personalization. Here, we attend over historical user preferences from previously consumed recipes to generate recipe content, rather than writing styles.",
+      "score": 1.0405551707321425,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        12,
+        13,
+        14
+      ],
+      "child_qasper_evidence_texts": [
+        "Large-scale transformer-based language models have shown surprising expressivity and fluency in creative and conditional long-text generation BIBREF6, BIBREF7. Recent works have proposed hierarchical methods that condition on narrative frameworks to generate internally consistent long texts BIBREF8, BIBREF9, BIBREF10. Here, we generate procedurally structured recipes instead of free-form narratives.",
+        "Recipe generation belongs to the field of data-to-text natural language generation BIBREF1, which sees other applications in automated journalism BIBREF11, question-answering BIBREF12, and abstractive summarization BIBREF13, among others. BIBREF14, BIBREF15 model recipes as a structured collection of ingredient entities acted upon by cooking actions. BIBREF0 imposes a `checklist' attention constraint emphasizing hitherto unused ingredients during generation. BIBREF16 attend over explicit ingredient references in the prior recipe step. Similar hierarchical approaches that infer a full ingredient list to constrain generation will not help personalize recipes, and would be infeasible in our setting due to the potentially unconstrained number of ingredients (from a space of 10K+) in a recipe. We instead learn historical preferences to guide full recipe generation.",
+        "A recent line of work has explored user- and item-dependent aspect-aware review generation BIBREF3, BIBREF4. This work is related to ours in that it combines contextual language generation with personalization. Here, we attend over historical user preferences from previously consumed recipes to generate recipe content, rather than writing styles."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Related Work",
+        "Related Work",
+        "Related Work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work",
+          0
+        ],
+        [
+          "Related Work",
+          1
+        ],
+        [
+          "Related Work",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Related Work",
+      "section": "Related Work",
+      "title_path": "Related Work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Conclusion\n[source_id=44] In this paper, we propose a novel task: to generate personalized recipes from incomplete input specifications and user histories. On a large novel dataset of 180K recipes and 700K reviews, we show that our personalized generative models can generate plausible, personalized, and coherent recipes preferred by human evaluators for consumption. We also introduce a set of automatic coherence measures for instructional texts as well as personalization metrics to support our claims. Our future work includes generating structured representations of recipes to handle ingredient properties, as well as accounting for references to collections of ingredients (e.g. “dry mix\").\n[source_id=45] Acknowledgements. This work is partly supported by NSF #1750063. We thank all reviewers for their constructive suggestions, as well as Rei M., Sujoy P., Alicia L., Eric H., Tim S., Kathy C., Allen C., and Micah I. for their feedback.",
+      "score": 0.6861247278084109,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        44,
+        45
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper, we propose a novel task: to generate personalized recipes from incomplete input specifications and user histories. On a large novel dataset of 180K recipes and 700K reviews, we show that our personalized generative models can generate plausible, personalized, and coherent recipes preferred by human evaluators for consumption. We also introduce a set of automatic coherence measures for instructional texts as well as personalization metrics to support our claims. Our future work includes generating structured representations of recipes to handle ingredient properties, as well as accounting for references to collections of ingredients (e.g. “dry mix\").",
+        "Acknowledgements. This work is partly supported by NSF #1750063. We thank all reviewers for their constructive suggestions, as well as Rei M., Sujoy P., Alicia L., Eric H., Tim S., Kathy C., Allen C., and Micah I. for their feedback."
+      ],
+      "child_pages": [
+        6,
+        6
+      ],
+      "child_sections": [
+        "Conclusion",
+        "Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion",
+          0
+        ],
+        [
+          "Conclusion",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 36,
+      "content": "In this work, we investigate how leveraging historical user preferences can improve generation quality over strong baselines in our setting. We compare our personalized models against two baselines. The first is a name-based Nearest-Neighbor model (NN). We initially adapted the Neural Checklist Model of BIBREF0 as a baseline; however, we ultimately use a simple Encoder-Decoder baseline with ingredient attention (Enc-Dec), which provides comparable performance and lower complexity. All personalized models outperform baseline in BPE perplexity (tab:metricsontest) with Prior Name performing the best. While our models exhibit comparable performance to baseline in BLEU-1/4 and ROUGE-L, we generate more diverse (Distinct-1/2: percentage of distinct unigrams and bigrams) and acceptable recipes. BLEU and ROUGE are not the most appropriate metrics for generation quality. A `correct' recipe can be written in many ways with the same main entities (ingredients). As BLEU-1/4 capture structural information via n-gram matching, they are not correlated with subjective recipe quality. This mirrors observations from BIBREF31, BIBREF8.",
+      "qasper_evidence_text": "In this work, we investigate how leveraging historical user preferences can improve generation quality over strong baselines in our setting. We compare our personalized models against two baselines. The first is a name-based Nearest-Neighbor model (NN). We initially adapted the Neural Checklist Model of BIBREF0 as a baseline; however, we ultimately use a simple Encoder-Decoder baseline with ingredient attention (Enc-Dec), which provides comparable performance and lower complexity. All personalized models outperform baseline in BPE perplexity (tab:metricsontest) with Prior Name performing the best. While our models exhibit comparable performance to baseline in BLEU-1/4 and ROUGE-L, we generate more diverse (Distinct-1/2: percentage of distinct unigrams and bigrams) and acceptable recipes. BLEU and ROUGE are not the most appropriate metrics for generation quality. A `correct' recipe can be written in many ways with the same main entities (ingredients). As BLEU-1/4 capture structural information via n-gram matching, they are not correlated with subjective recipe quality. This mirrors observations from BIBREF31, BIBREF8.",
+      "source_node_id": 36,
+      "node_id": 36,
+      "paragraph_id": 36,
+      "evidence_id": 36,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_5",
+      "rank": 1,
+      "score": 5.393369575453949,
+      "block_type": "paragraph",
+      "page": 5,
+      "section_id": "Experiments and Results",
+      "section": "Experiments and Results",
+      "title": "Experiments and Results",
+      "hotpot_title": "Experiments and Results",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 1
+    }
+  ],
+  "supporting_block_ids": [
+    36
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "id": "longrag_10",
+  "content": "[Section] Re-weighting by Difficulty\n[source_id=48] We showed above that removing a small number of the most difficult sentences does not harm, and in fact modestly improves, medical IE model performance. However, using the available data we are unable to test if this will be useful in practice, as we would need additional data to determine how many difficult sentences should be dropped.\n[source_id=49] We instead explore an alternative, practical means of exploiting difficulty predictions: we re-weight sentences during training inversely to their predicted difficulty. Formally, we weight sentence $i$ with difficulty scores above $\\tau $ according to: $1-a\\cdot (d_i-\\tau )/(1-\\tau )$ , where $d_i$ is the difficulty score for sentence $i$ , and $a$ is a parameter codifying the minimum weight value. We set $\\tau $ to 0.8 so as to only re-weight sentences with difficulty in the top 20th percentile, and we set $a$ to 0.5. The re-weighting is equivalent to down-sampling the difficult sentences. LSTM-CRF-Pattern is our base model.\n[source_id=50] Table 4 reports the precision, recall and F1 achieved both with and without sentence re-weighting. Re-weighting improves all metrics modestly but consistently. All F1 differences are statistically significant under a sign test ( $p<0.01$ ). The model with best precision is different for Patient, Intervention and Outcome labels. However re-weighting by difficulty does consistently yield the best recall for all three extraction types, with the most notable improvement for i and o, where recall improved by 10 percentage points. This performance increase translated to improvements in F1 across all types, as compared to the base model and to re-weighting by agreement.",
+  "score": 4.386013398734255,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_10",
+  "child_source_node_ids": [
+    48,
+    49,
+    50
+  ],
+  "child_qasper_evidence_texts": [
+    "We showed above that removing a small number of the most difficult sentences does not harm, and in fact modestly improves, medical IE model performance. However, using the available data we are unable to test if this will be useful in practice, as we would need additional data to determine how many difficult sentences should be dropped.",
+    "We instead explore an alternative, practical means of exploiting difficulty predictions: we re-weight sentences during training inversely to their predicted difficulty. Formally, we weight sentence $i$ with difficulty scores above $\\tau $ according to: $1-a\\cdot (d_i-\\tau )/(1-\\tau )$ , where $d_i$ is the difficulty score for sentence $i$ , and $a$ is a parameter codifying the minimum weight value. We set $\\tau $ to 0.8 so as to only re-weight sentences with difficulty in the top 20th percentile, and we set $a$ to 0.5. The re-weighting is equivalent to down-sampling the difficult sentences. LSTM-CRF-Pattern is our base model.",
+    "Table 4 reports the precision, recall and F1 achieved both with and without sentence re-weighting. Re-weighting improves all metrics modestly but consistently. All F1 differences are statistically significant under a sign test ( $p<0.01$ ). The model with best precision is different for Patient, Intervention and Outcome labels. However re-weighting by difficulty does consistently yield the best recall for all three extraction types, with the most notable improvement for i and o, where recall improved by 10 percentage points. This performance increase translated to improvements in F1 across all types, as compared to the base model and to re-weighting by agreement."
+  ],
+  "child_pages": [
+    10,
+    10,
+    10
+  ],
+  "child_sections": [
+    "Re-weighting by Difficulty",
+    "Re-weighting by Difficulty",
+    "Re-weighting by Difficulty"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Re-weighting by Difficulty",
+      0
+    ],
+    [
+      "Re-weighting by Difficulty",
+      1
+    ],
+    [
+      "Re-weighting by Difficulty",
+      2
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_10",
+  "section_id": "Re-weighting by Difficulty",
+  "section": "Re-weighting by Difficulty",
+  "title_path": "Re-weighting by Difficulty",
+  "block_type": "long_unit"
+}

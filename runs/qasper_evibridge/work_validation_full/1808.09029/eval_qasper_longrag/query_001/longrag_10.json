@@ -1,0 +1,61 @@
+{
+  "id": "longrag_10",
+  "content": "[Section] Analysis\n[source_id=45] It is shown above that the PRU can learn representations at higher dimensionality with more generalization power, resulting in performance gains for language modeling. A closer analysis of the impact of the PRU in a language modeling system reveals several factors that help explain how the PRU achieves these gains.\n[source_id=46] As exemplified in Table TABREF34 , the PRU tends toward more confident decisions, placing more of the probability mass on the top next-word prediction than the LSTM. To quantify this effect, we calculate the entropy of the next-token distribution for both the PRU and the LSTM using 3687 contexts from the PTB validation set. Figure FIGREF32 shows a histogram of the entropies of the distribution, where bins of size 0.23 are used to effect categories. We see that the PRU more often produces lower entropy distributions corresponding to higher confidences for next-token choices. This is evidenced by the mass of the red PRU curve lying in the lower entropy ranges compared to the blue LSTM's curve. The PRU can produce confident decisions in part because more information is encoded in the higher dimensional context vectors.\n[source_id=47] The PRU has the ability to model individual words at different resolutions through the pyramidal transform; which provides multiple paths for the gradient to the embedding layer (similar to multi-task learning) and improves the flow of information. When considering the embeddings by part of speech, we find that the pyramid level 1 embeddings exhibit higher variance than the LSTM across all POS categories (Figure FIGREF33 ), and that pyramid level 2 embeddings show extremely low variance. We hypothesize that the LSTM must encode both coarse group similarities and individual word differences into the same vector space, reducing the space between individual words of the same category. The PRU can rely on the subsampled embeddings to account for coarse-grained group similarities, allowing for finer individual word distinctions in the embedding layer. This hypothesis is strengthened by the entropy results described above: a model which can make finer distinctions between individual words can more confidently assign probability mass. A model that cannot make these distinctions, such as the LSTM, must spread its probability mass across a larger class of similar words.\n[source_id=48] Saliency analysis using gradients help identify relevant words in a test sequence that contribute to the prediction BIBREF34 , BIBREF35 , BIBREF36 . These approaches compute the relevance as the squared norm of the gradients obtained through back-propagation. Table TABREF34 visualizes the heatmaps for different sequences. PRUs, in general, give more relevance to contextual words than LSTMs, such as southeast (sample 1), cost (sample 2), face (sample 4), and introduced (sample 5), which help in making more confident decisions. Furthermore, when gradients during back-propagation are visualized BIBREF37 (Table TABREF34 ), we find that PRUs have better gradient coverage than LSTMs, suggesting PRUs use more features than LSTMs that contributes to the decision. This also suggests that PRUs update more parameters at each iteration which results in faster training. Language model in BIBREF0 takes 500 and 750 epochs to converge with PRU and LSTM as a recurrent unit, respectively.",
+  "score": 0.8188168332561797,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_10",
+  "child_source_node_ids": [
+    45,
+    46,
+    47,
+    48
+  ],
+  "child_qasper_evidence_texts": [
+    "It is shown above that the PRU can learn representations at higher dimensionality with more generalization power, resulting in performance gains for language modeling. A closer analysis of the impact of the PRU in a language modeling system reveals several factors that help explain how the PRU achieves these gains.",
+    "As exemplified in Table TABREF34 , the PRU tends toward more confident decisions, placing more of the probability mass on the top next-word prediction than the LSTM. To quantify this effect, we calculate the entropy of the next-token distribution for both the PRU and the LSTM using 3687 contexts from the PTB validation set. Figure FIGREF32 shows a histogram of the entropies of the distribution, where bins of size 0.23 are used to effect categories. We see that the PRU more often produces lower entropy distributions corresponding to higher confidences for next-token choices. This is evidenced by the mass of the red PRU curve lying in the lower entropy ranges compared to the blue LSTM's curve. The PRU can produce confident decisions in part because more information is encoded in the higher dimensional context vectors.",
+    "The PRU has the ability to model individual words at different resolutions through the pyramidal transform; which provides multiple paths for the gradient to the embedding layer (similar to multi-task learning) and improves the flow of information. When considering the embeddings by part of speech, we find that the pyramid level 1 embeddings exhibit higher variance than the LSTM across all POS categories (Figure FIGREF33 ), and that pyramid level 2 embeddings show extremely low variance. We hypothesize that the LSTM must encode both coarse group similarities and individual word differences into the same vector space, reducing the space between individual words of the same category. The PRU can rely on the subsampled embeddings to account for coarse-grained group similarities, allowing for finer individual word distinctions in the embedding layer. This hypothesis is strengthened by the entropy results described above: a model which can make finer distinctions between individual words can more confidently assign probability mass. A model that cannot make these distinctions, such as the LSTM, must spread its probability mass across a larger class of similar words.",
+    "Saliency analysis using gradients help identify relevant words in a test sequence that contribute to the prediction BIBREF34 , BIBREF35 , BIBREF36 . These approaches compute the relevance as the squared norm of the gradients obtained through back-propagation. Table TABREF34 visualizes the heatmaps for different sequences. PRUs, in general, give more relevance to contextual words than LSTMs, such as southeast (sample 1), cost (sample 2), face (sample 4), and introduced (sample 5), which help in making more confident decisions. Furthermore, when gradients during back-propagation are visualized BIBREF37 (Table TABREF34 ), we find that PRUs have better gradient coverage than LSTMs, suggesting PRUs use more features than LSTMs that contributes to the decision. This also suggests that PRUs update more parameters at each iteration which results in faster training. Language model in BIBREF0 takes 500 and 750 epochs to converge with PRU and LSTM as a recurrent unit, respectively."
+  ],
+  "child_pages": [
+    10,
+    10,
+    10,
+    10
+  ],
+  "child_sections": [
+    "Analysis",
+    "Analysis",
+    "Analysis",
+    "Analysis"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Analysis",
+      0
+    ],
+    [
+      "Analysis",
+      1
+    ],
+    [
+      "Analysis",
+      2
+    ],
+    [
+      "Analysis",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_10",
+  "section_id": "Analysis",
+  "section": "Analysis",
+  "title_path": "Analysis",
+  "block_type": "long_unit"
+}

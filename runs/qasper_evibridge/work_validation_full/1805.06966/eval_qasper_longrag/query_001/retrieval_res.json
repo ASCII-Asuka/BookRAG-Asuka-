@@ -1,0 +1,402 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Spoken Dialogue Systems (SDS) allow human-computer interaction using natural speech. Task-oriented dialogue systems, the focus of this work, help users achieve goals such as finding restaurants or booking flights BIBREF0 .\n[source_id=5] Teaching a system how to respond appropriately in a task-oriented setting is non-trivial. In state-of-the-art systems this dialogue management task is often formulated as a reinforcement learning (RL) problem BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 . In this framework, the system learns by a trial and error process governed by a reward function. User Simulators can be used to train the policy of a dialogue manager (DM) without real user interactions. Furthermore, they allow an unlimited number of dialogues to be created with each dialogue being faster than a dialogue with a human.\n[source_id=6] In this paper the Neural User Simulator (NUS) is introduced which outputs natural language and whose behaviour is learned from a corpus. The main component, inspired by BIBREF4 , consists of a feature extractor and a neural network based sequence-to-sequence model BIBREF5 . The sequence-to-sequence model consists of a recurrent neural network (RNN) encoder that encodes the dialogue history and a decoder RNN which outputs natural language. Furthermore, the NUS generates its own goal and possibly changes it during a dialogue. This allows the model to be deployed for training more sophisticated DM policies. To achieve this, a method is proposed that transforms the goal-labels of the used dataset (DSTC2) into labels whose behaviour can be replicated during deployment.\n[source_id=7] The NUS is trained on dialogues between real users and an SDS in a restaurant recommendation domain. Compared to much of the related work on user simulation, we use the trained NUS to train the policy of a reinforcement learning based SDS. In order to evaluate the NUS, an Agenda-Based User-Simulator (ABUS) BIBREF6 is used to train another policy. The two policies are compared against each other by using cross-model evaluation BIBREF7 . This means to train on one model and to test on the other. Furthermore, both trained policies are tested on real users. On both evaluation tasks the NUS outperforms the ABUS, which is currently one of the most popular off-line training tools for reinforcement learning based Spoken Dialogue Systems BIBREF8 , BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 , BIBREF13 , BIBREF14 .\n[source_id=8] The remainder of this paper is organised as follows. Section 2 briefly describes task-oriented dialogue. Section 3 describes the motivation for the NUS and discusses related work. Section 4 explains the structure of the NUS, how it is trained and how it is deployed for training a DM's policy. Sections 5 and 6 present the experimental setup and results. Finally, Section 7 gives conclusions.",
+      "score": 6.007195118757428,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "child_qasper_evidence_texts": [
+        "Spoken Dialogue Systems (SDS) allow human-computer interaction using natural speech. Task-oriented dialogue systems, the focus of this work, help users achieve goals such as finding restaurants or booking flights BIBREF0 .",
+        "Teaching a system how to respond appropriately in a task-oriented setting is non-trivial. In state-of-the-art systems this dialogue management task is often formulated as a reinforcement learning (RL) problem BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 . In this framework, the system learns by a trial and error process governed by a reward function. User Simulators can be used to train the policy of a dialogue manager (DM) without real user interactions. Furthermore, they allow an unlimited number of dialogues to be created with each dialogue being faster than a dialogue with a human.",
+        "In this paper the Neural User Simulator (NUS) is introduced which outputs natural language and whose behaviour is learned from a corpus. The main component, inspired by BIBREF4 , consists of a feature extractor and a neural network based sequence-to-sequence model BIBREF5 . The sequence-to-sequence model consists of a recurrent neural network (RNN) encoder that encodes the dialogue history and a decoder RNN which outputs natural language. Furthermore, the NUS generates its own goal and possibly changes it during a dialogue. This allows the model to be deployed for training more sophisticated DM policies. To achieve this, a method is proposed that transforms the goal-labels of the used dataset (DSTC2) into labels whose behaviour can be replicated during deployment.",
+        "The NUS is trained on dialogues between real users and an SDS in a restaurant recommendation domain. Compared to much of the related work on user simulation, we use the trained NUS to train the policy of a reinforcement learning based SDS. In order to evaluate the NUS, an Agenda-Based User-Simulator (ABUS) BIBREF6 is used to train another policy. The two policies are compared against each other by using cross-model evaluation BIBREF7 . This means to train on one model and to test on the other. Furthermore, both trained policies are tested on real users. On both evaluation tasks the NUS outperforms the ABUS, which is currently one of the most popular off-line training tools for reinforcement learning based Spoken Dialogue Systems BIBREF8 , BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 , BIBREF13 , BIBREF14 .",
+        "The remainder of this paper is organised as follows. Section 2 briefly describes task-oriented dialogue. Section 3 describes the motivation for the NUS and discusses related work. Section 4 explains the structure of the NUS, how it is trained and how it is deployed for training a DM's policy. Sections 5 and 6 present the experimental setup and results. Finally, Section 7 gives conclusions."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] User Simulators are one of the major tools that enable offline training of task-oriented dialogue systems. For this task the Agenda-Based User Simulator (ABUS) is often used. The ABUS is based on hand-crafted rules and its output is in semantic form. Issues arise from both properties such as limited diversity and the inability to interface a text-level belief tracker. This paper introduces the Neural User Simulator (NUS) whose behaviour is learned from a corpus and which generates natural language, hence needing a less labelled dataset than simulators generating a semantic output. In comparison to much of the past work on this topic, which evaluates user simulators on corpus-based metrics, we use the NUS to train the policy of a reinforcement learning based Spoken Dialogue System. The NUS is compared to the ABUS by evaluating the policies that were trained using the simulators. Cross-model evaluation is performed i.e. training on one simulator and testing on the other. Furthermore, the trained policies are tested on real users. In both evaluation tasks the NUS outperformed the ABUS.",
+      "score": 4.265782195610871,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "User Simulators are one of the major tools that enable offline training of task-oriented dialogue systems. For this task the Agenda-Based User Simulator (ABUS) is often used. The ABUS is based on hand-crafted rules and its output is in semantic form. Issues arise from both properties such as limited diversity and the inability to interface a text-level belief tracker. This paper introduces the Neural User Simulator (NUS) whose behaviour is learned from a corpus and which generates natural language, hence needing a less labelled dataset than simulators generating a semantic output. In comparison to much of the past work on this topic, which evaluates user simulators on corpus-based metrics, we use the NUS to train the policy of a reinforcement learning based Spoken Dialogue System. The NUS is compared to the ABUS by evaluating the policies that were trained using the simulators. Cross-model evaluation is performed i.e. training on one simulator and testing on the other. Furthermore, the trained policies are tested on real users. In both evaluation tasks the NUS outperformed the ABUS."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Experimental Setup\n[source_id=45] The evaluation of user simulators is an ongoing area of research and a variety of techniques can be found in the literature. Most papers published on user simulation evaluate their US using direct methods. These methods evaluate the US through a statistical measure of similarity between the outputs of the US and a real user on a test set. Multiple models can outperform the ABUS on these metrics. However, this is unsurprising since these user simulators were trained on the same or similar metrics. The ABUS was explicitly proposed as a tool to train the policy of a dialogue manager and it is still the dominant form of US used for this task. Therefore, the only fair comparison between a new US model and the ABUS is to use the indirect method of evaluating the policies that were obtained by training with each US.",
+      "score": 3.777300210519753,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        45
+      ],
+      "child_qasper_evidence_texts": [
+        "The evaluation of user simulators is an ongoing area of research and a variety of techniques can be found in the literature. Most papers published on user simulation evaluate their US using direct methods. These methods evaluate the US through a statistical measure of similarity between the outputs of the US and a real user on a test set. Multiple models can outperform the ABUS on these metrics. However, this is unsurprising since these user simulators were trained on the same or similar metrics. The ABUS was explicitly proposed as a tool to train the policy of a dialogue manager and it is still the dominant form of US used for this task. Therefore, the only fair comparison between a new US model and the ABUS is to use the indirect method of evaluating the policies that were obtained by training with each US."
+      ],
+      "child_pages": [
+        9
+      ],
+      "child_sections": [
+        "Experimental Setup"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experimental Setup",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Experimental Setup",
+      "section": "Experimental Setup",
+      "title_path": "Experimental Setup",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Motivation and Related Work\n[source_id=13] Ideally the DM's policy would be trained by interacting with real users. Although there are models that support on-line learning BIBREF15 , for the majority of RL algorithms, which require a lot of interactions, this is impractical. Furthermore, a set of users needs to be recruited every time a policy is trained. This makes common practices such as hyper-parameter optimization prohibitively expensive. Thus, it is natural to try to learn from a dataset which needs to be recorded only once, but can be used over and over again.\n[source_id=14] A problem with learning directly from recorded dialogue corpora is that the state space that was visited during the collection of the data is limited; the size of the recorded corpus usually falls short of the requirements for training a statistical DM. However, even if the size of the corpus is large enough the optimal dialogue strategy is likely not to be contained within it.\n[source_id=15] A solution is to transform the static corpus into a dynamic tool: a user simulator. The user simulator (US) is trained on a dialogue corpus to learn what responses a real user would provide in a given dialogue context. The US is trained using supervised learning since the aim is for it to learn typical user behaviour. For the DM, however, we want optimal behaviour which is why supervised learning cannot be used. By interacting with the SDS, the trained US can be used to train the DM's policy. The DM's policy is optimised using the feedback given by either the user simulator or a separate evaluator. Any number of dialogues can be generated using the US and dialogue strategies that are not in the recorded corpus can be explored.\n[source_id=16] Most user-simulators work on the level of user semantics. These usually consist of a user dialogue act (e.g. inform, or request) and a corresponding slot-value pair. The first statistical user simulator BIBREF16 used a simple bi-gram model INLINEFORM0 to predict the next user act INLINEFORM1 given the last system act INLINEFORM2 . It has the advantage of being purely probabilistic and domain-independent. However, it does not take the full dialogue history into account and is not conditioned on a goal, leading to incoherent user behaviour throughout a dialogue. BIBREF17 , BIBREF18 attempted to overcome goal inconsistency by proposing a graph-based model. However, developing the graph structure requires extensive domain-specific knowledge. BIBREF19 combined features from Sheffler and Young's work with Eckert's Model, by conditioning a set of probabilities on an explicit representation of the user goal and memory. A Markov Model is also used by BIBREF20 . It uses a large feature vector to describe the user's current state, which helps to compensate for the Markov assumption. However, the model is not conditioned on any goal. Therefore, it is not used to train a dialogue policy since it is impossible to determine whether the user goal was fulfilled. A hidden Markov model was proposed by BIBREF21 , which was also not used to train a policy. BIBREF22 cast user simulation as an inverse reinforcement learning problem where the user is modelled as a decision-making agent. The model did not incorporate a user goal and was hence not used to train a policy. The most prominent user model for policy optimisation is the Agenda-Based User Simulator BIBREF6 , which represents the user state elegantly as a stack of necessary user actions, called the agenda. The mechanism that generates the user response and updates the agenda does not require any data, though it can be improved using data. The model is conditioned on a goal for which it has update rules in case the dialogue system expresses that it cannot fulfil the goal. BIBREF4 modelled user simulation as a sequence-to-sequence task. The model can keep track of the dialogue history and user behaviour is learned entirely from data. However, goal changes were not modelled, even though a large proportion of dialogues within their dataset (DSTC2) contains goal changes. Their model outperformed the ABUS on statistical metrics, which is not surprising given that it was trained by optimising a statistical metric and the ABUS was not.\n[source_id=17] The aforementioned work focuses on user simulation at the semantic level. Multiple issues arise from this approach. Firstly, annotating the user-response with the correct semantics is costly. More data could be collected, if the US were to output natural language. Secondly, research suggests that the two modules of an SDS performing Spoken Language Understanding (SLU) and belief tracking should be jointly trained as a single entity BIBREF23 , BIBREF24 , BIBREF25 , BIBREF26 , BIBREF27 . In fact in the second Dialogue State Tracking Challenge (DSTC2) BIBREF28 , the data of which this work uses, systems which used no external SLU module outperformed all systems that only used an external SLU Module. Training the policy of a DM in a simulated environment, when also using a joint system for SLU and belief tracking is not possible without a US that produces natural language. Thirdly, a US is sometimes augmented with an error model which generates a set of competing hypotheses with associated confidence scores trying to replicate the errors of the speech recogniser. When the error model matches the characteristics of the speech recogniser more accurately, the SDS performs better BIBREF29 . However, speech recognition errors are badly modelled based on user semantics since they arise (mostly) due to the phonetics of the spoken words and not their semantics BIBREF30 . Thus, an SDS that is trained with a natural language based error model is likely to outperform one trained with a semantic error model when tested on real users. Sequence-to-sequence learning for word-level user simulation is performed in BIBREF31 , though the model is not conditioned on any goal and hence not used for policy optimisation. A word-level user simulator was also used in BIBREF32 where it was built by augmenting the ABUS with a natural language generator.",
+      "score": 3.0311839535218494,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "child_qasper_evidence_texts": [
+        "Ideally the DM's policy would be trained by interacting with real users. Although there are models that support on-line learning BIBREF15 , for the majority of RL algorithms, which require a lot of interactions, this is impractical. Furthermore, a set of users needs to be recruited every time a policy is trained. This makes common practices such as hyper-parameter optimization prohibitively expensive. Thus, it is natural to try to learn from a dataset which needs to be recorded only once, but can be used over and over again.",
+        "A problem with learning directly from recorded dialogue corpora is that the state space that was visited during the collection of the data is limited; the size of the recorded corpus usually falls short of the requirements for training a statistical DM. However, even if the size of the corpus is large enough the optimal dialogue strategy is likely not to be contained within it.",
+        "A solution is to transform the static corpus into a dynamic tool: a user simulator. The user simulator (US) is trained on a dialogue corpus to learn what responses a real user would provide in a given dialogue context. The US is trained using supervised learning since the aim is for it to learn typical user behaviour. For the DM, however, we want optimal behaviour which is why supervised learning cannot be used. By interacting with the SDS, the trained US can be used to train the DM's policy. The DM's policy is optimised using the feedback given by either the user simulator or a separate evaluator. Any number of dialogues can be generated using the US and dialogue strategies that are not in the recorded corpus can be explored.",
+        "Most user-simulators work on the level of user semantics. These usually consist of a user dialogue act (e.g. inform, or request) and a corresponding slot-value pair. The first statistical user simulator BIBREF16 used a simple bi-gram model INLINEFORM0 to predict the next user act INLINEFORM1 given the last system act INLINEFORM2 . It has the advantage of being purely probabilistic and domain-independent. However, it does not take the full dialogue history into account and is not conditioned on a goal, leading to incoherent user behaviour throughout a dialogue. BIBREF17 , BIBREF18 attempted to overcome goal inconsistency by proposing a graph-based model. However, developing the graph structure requires extensive domain-specific knowledge. BIBREF19 combined features from Sheffler and Young's work with Eckert's Model, by conditioning a set of probabilities on an explicit representation of the user goal and memory. A Markov Model is also used by BIBREF20 . It uses a large feature vector to describe the user's current state, which helps to compensate for the Markov assumption. However, the model is not conditioned on any goal. Therefore, it is not used to train a dialogue policy since it is impossible to determine whether the user goal was fulfilled. A hidden Markov model was proposed by BIBREF21 , which was also not used to train a policy. BIBREF22 cast user simulation as an inverse reinforcement learning problem where the user is modelled as a decision-making agent. The model did not incorporate a user goal and was hence not used to train a policy. The most prominent user model for policy optimisation is the Agenda-Based User Simulator BIBREF6 , which represents the user state elegantly as a stack of necessary user actions, called the agenda. The mechanism that generates the user response and updates the agenda does not require any data, though it can be improved using data. The model is conditioned on a goal for which it has update rules in case the dialogue system expresses that it cannot fulfil the goal. BIBREF4 modelled user simulation as a sequence-to-sequence task. The model can keep track of the dialogue history and user behaviour is learned entirely from data. However, goal changes were not modelled, even though a large proportion of dialogues within their dataset (DSTC2) contains goal changes. Their model outperformed the ABUS on statistical metrics, which is not surprising given that it was trained by optimising a statistical metric and the ABUS was not.",
+        "The aforementioned work focuses on user simulation at the semantic level. Multiple issues arise from this approach. Firstly, annotating the user-response with the correct semantics is costly. More data could be collected, if the US were to output natural language. Secondly, research suggests that the two modules of an SDS performing Spoken Language Understanding (SLU) and belief tracking should be jointly trained as a single entity BIBREF23 , BIBREF24 , BIBREF25 , BIBREF26 , BIBREF27 . In fact in the second Dialogue State Tracking Challenge (DSTC2) BIBREF28 , the data of which this work uses, systems which used no external SLU module outperformed all systems that only used an external SLU Module. Training the policy of a DM in a simulated environment, when also using a joint system for SLU and belief tracking is not possible without a US that produces natural language. Thirdly, a US is sometimes augmented with an error model which generates a set of competing hypotheses with associated confidence scores trying to replicate the errors of the speech recogniser. When the error model matches the characteristics of the speech recogniser more accurately, the SDS performs better BIBREF29 . However, speech recognition errors are badly modelled based on user semantics since they arise (mostly) due to the phonetics of the spoken words and not their semantics BIBREF30 . Thus, an SDS that is trained with a natural language based error model is likely to outperform one trained with a semantic error model when tested on real users. Sequence-to-sequence learning for word-level user simulation is performed in BIBREF31 , though the model is not conditioned on any goal and hence not used for policy optimisation. A word-level user simulator was also used in BIBREF32 where it was built by augmenting the ABUS with a natural language generator."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Motivation and Related Work",
+        "Motivation and Related Work",
+        "Motivation and Related Work",
+        "Motivation and Related Work",
+        "Motivation and Related Work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Motivation and Related Work",
+          0
+        ],
+        [
+          "Motivation and Related Work",
+          1
+        ],
+        [
+          "Motivation and Related Work",
+          2
+        ],
+        [
+          "Motivation and Related Work",
+          3
+        ],
+        [
+          "Motivation and Related Work",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Motivation and Related Work",
+      "section": "Motivation and Related Work",
+      "title_path": "Motivation and Related Work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Goal Generator\n[source_id=21] The Goal Generator generates a random goal INLINEFORM0 at the start of the dialogue. It consists of a set of constraints, INLINEFORM1 , which specify the required venue e.g. (food=Spanish, area=north) and a number of requests, INLINEFORM2 , that specify the information that the NUS wants about the final venue e.g. the address or the phone number. The possibilities for INLINEFORM3 and INLINEFORM4 are defined by the ontology. In DSTC2 INLINEFORM5 can consist of a maximum of three constraints; food, area and pricerange. Whether each of the three is present is independently sampled with a probability of 0.66, 0.62 and 0.58 respectively. These probabilities were estimated from the DSTC2 data set. If no constraint is sampled then the goal is re-sampled. For each slot in INLINEFORM6 a value (e.g. north for area) is sampled uniformly from the ontology. Similarly, the presence of a request is independently sampled, followed by re-sampling if zero requests were chosen.\n[source_id=22] When training the sequence-to-sequence model, the Goal Generator is not used, but instead the goal labels from the DSTC2 dataset are used. In DSTC2 one goal-label is given to the entire dialogue. This goal is always the final goal. If the user's goal at the start of the dialogue is (food=eritrean, area=south), which is changed to (food=spanish, area=south), due to the non-existence of an Eritrean restaurant in the south, using only the final goal is insufficient to model the dialogue. The final goal can only be used for the requests as they are not altered during a dialogue. DSTC2 also provides turn-specific labels. These contain the constraints and requests expressed by the user up until and including the current turn. When training a policy with the NUS, such labels would not be available as they “predict the future\", i.e. when the turn-specific constraints change from (area=south) to (food=eritrean, area=south) it means that the user will inform the system about her desire to eat Eritrean food in the current turn.\n[source_id=23] In related work on user-simulation for which the DSTC2 dataset was used, the final goal was used for the entire dialogue BIBREF4 , BIBREF33 , BIBREF34 . As stated above, we do not believe this to be sufficient. The following describes how to update the turn-specific constraint labels such that their behaviour can be replicated when training a DM's policy, whilst allowing goal changes to be modelled. The update strategy is illustrated in Table TABREF4 with an example. The final turn keeps its constraints, from which we iterate backwards through the list of DSTC2's turn-specific constraints. The constraints of a turn will be set to the updated constraints of the succeeding turn, besides if the same slot is present with a different value. In that case the value will be kept. The behaviour of the updated turn-specific goal-labels can be replicated when the NUS is used to train a DM's policy. In the example, the food type changed due to the SDS expressing that there is no restaurant serving Eritrean food in the south. When deploying the NUS to train a policy, the goal is updated when the SDS outputs the canthelp dialogue act.",
+      "score": 2.073068039507886,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        21,
+        22,
+        23
+      ],
+      "child_qasper_evidence_texts": [
+        "The Goal Generator generates a random goal INLINEFORM0 at the start of the dialogue. It consists of a set of constraints, INLINEFORM1 , which specify the required venue e.g. (food=Spanish, area=north) and a number of requests, INLINEFORM2 , that specify the information that the NUS wants about the final venue e.g. the address or the phone number. The possibilities for INLINEFORM3 and INLINEFORM4 are defined by the ontology. In DSTC2 INLINEFORM5 can consist of a maximum of three constraints; food, area and pricerange. Whether each of the three is present is independently sampled with a probability of 0.66, 0.62 and 0.58 respectively. These probabilities were estimated from the DSTC2 data set. If no constraint is sampled then the goal is re-sampled. For each slot in INLINEFORM6 a value (e.g. north for area) is sampled uniformly from the ontology. Similarly, the presence of a request is independently sampled, followed by re-sampling if zero requests were chosen.",
+        "When training the sequence-to-sequence model, the Goal Generator is not used, but instead the goal labels from the DSTC2 dataset are used. In DSTC2 one goal-label is given to the entire dialogue. This goal is always the final goal. If the user's goal at the start of the dialogue is (food=eritrean, area=south), which is changed to (food=spanish, area=south), due to the non-existence of an Eritrean restaurant in the south, using only the final goal is insufficient to model the dialogue. The final goal can only be used for the requests as they are not altered during a dialogue. DSTC2 also provides turn-specific labels. These contain the constraints and requests expressed by the user up until and including the current turn. When training a policy with the NUS, such labels would not be available as they “predict the future\", i.e. when the turn-specific constraints change from (area=south) to (food=eritrean, area=south) it means that the user will inform the system about her desire to eat Eritrean food in the current turn.",
+        "In related work on user-simulation for which the DSTC2 dataset was used, the final goal was used for the entire dialogue BIBREF4 , BIBREF33 , BIBREF34 . As stated above, we do not believe this to be sufficient. The following describes how to update the turn-specific constraint labels such that their behaviour can be replicated when training a DM's policy, whilst allowing goal changes to be modelled. The update strategy is illustrated in Table TABREF4 with an example. The final turn keeps its constraints, from which we iterate backwards through the list of DSTC2's turn-specific constraints. The constraints of a turn will be set to the updated constraints of the succeeding turn, besides if the same slot is present with a different value. In that case the value will be kept. The behaviour of the updated turn-specific goal-labels can be replicated when the NUS is used to train a DM's policy. In the example, the food type changed due to the SDS expressing that there is no restaurant serving Eritrean food in the south. When deploying the NUS to train a policy, the goal is updated when the SDS outputs the canthelp dialogue act."
+      ],
+      "child_pages": [
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "Goal Generator",
+        "Goal Generator",
+        "Goal Generator"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Goal Generator",
+          0
+        ],
+        [
+          "Goal Generator",
+          1
+        ],
+        [
+          "Goal Generator",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Goal Generator",
+      "section": "Goal Generator",
+      "title_path": "Goal Generator",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Cross-Model Evaluation\n[source_id=51] Table TABREF18 shows the results of the cross-model evaluation after 4000 training dialogues. The policies trained with the NUS achieved an average success rate (SR) of 94.0% and of 96.6% when tested on the ABUS and the NUS, respectively. By comparison, the policies trained with the ABUS achieved average SRs of 99.5% and 45.5% respectively. Thus, training with the NUS leads to policies that can perform well on both USs, which is not the case for training with the ABUS. Furthermore, the best SRs when tested on the ABUS are similar at 99.9% (ABUS) and 99.8% (NUS). When tested on the NUS the best SRs were 71.5% (ABUS) and 98.0% (NUS). This shows that the behaviour of the Neural User Simulator is realistic and diverse enough to train policies that can also perform very well on the Agenda-Based User Simulator.\n[source_id=52] Of the five policies, for each US, the policy performing best on the NUS was not the best performing policy on the ABUS. This could indicate that the policy “overfits” to a particular user simulator. Overfitting usually manifests itself in worse results as the model is trained for longer. Five policies trained on each US for only 1000 dialogues were also evaluated, the results of which can be seen in Table TABREF19 . After training for 1000 dialogues, the average SR of the policies trained on the NUS when tested on the ABUS was 97.3% in comparison to 94.0% after 4000 dialogues. This behaviour was observed for all five seeds, which indicates that the policy indeed overfits to the NUS. For the policies trained with the ABUS this was not observed. This could indicate that the policy can learn to exploit some of the shortcomings of the trained NUS.",
+      "score": 2.020229980478956,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        51,
+        52
+      ],
+      "child_qasper_evidence_texts": [
+        "Table TABREF18 shows the results of the cross-model evaluation after 4000 training dialogues. The policies trained with the NUS achieved an average success rate (SR) of 94.0% and of 96.6% when tested on the ABUS and the NUS, respectively. By comparison, the policies trained with the ABUS achieved average SRs of 99.5% and 45.5% respectively. Thus, training with the NUS leads to policies that can perform well on both USs, which is not the case for training with the ABUS. Furthermore, the best SRs when tested on the ABUS are similar at 99.9% (ABUS) and 99.8% (NUS). When tested on the NUS the best SRs were 71.5% (ABUS) and 98.0% (NUS). This shows that the behaviour of the Neural User Simulator is realistic and diverse enough to train policies that can also perform very well on the Agenda-Based User Simulator.",
+        "Of the five policies, for each US, the policy performing best on the NUS was not the best performing policy on the ABUS. This could indicate that the policy “overfits” to a particular user simulator. Overfitting usually manifests itself in worse results as the model is trained for longer. Five policies trained on each US for only 1000 dialogues were also evaluated, the results of which can be seen in Table TABREF19 . After training for 1000 dialogues, the average SR of the policies trained on the NUS when tested on the ABUS was 97.3% in comparison to 94.0% after 4000 dialogues. This behaviour was observed for all five seeds, which indicates that the policy indeed overfits to the NUS. For the policies trained with the ABUS this was not observed. This could indicate that the policy can learn to exploit some of the shortcomings of the trained NUS."
+      ],
+      "child_pages": [
+        12,
+        12
+      ],
+      "child_sections": [
+        "Cross-Model Evaluation",
+        "Cross-Model Evaluation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Cross-Model Evaluation",
+          0
+        ],
+        [
+          "Cross-Model Evaluation",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Cross-Model Evaluation",
+      "section": "Cross-Model Evaluation",
+      "title_path": "Cross-Model Evaluation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_13",
+      "content": "[Section] Human Evaluation\n[source_id=54] The results of the human evaluation are shown in Table TABREF21 for 250 dialogues per policy. In Table TABREF21 policies are marked using an ID ( INLINEFORM0 ) that translates to results in Tables TABREF18 and TABREF19 . Both policies trained with the NUS outperformed those trained on the ABUS in terms of both reward and success rate. The best performing policy trained on the NUS achieves a 93.4% success rate and 13.8 average rewards whilst the best performing policy trained with the ABUS achieves only a 90.0% success rate and 13.3 average reward. This shows that the good performance of the NUS on the cross-model evaluation transfers to real users. Furthermore, the overfitting to a particular US is also observed in the real user evaluation. For not only the policies trained on the NUS, but also those trained on the ABUS, the best performing policy was the policy that performed best on the other US.",
+      "score": 1.7302990911894036,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_13",
+      "child_source_node_ids": [
+        54
+      ],
+      "child_qasper_evidence_texts": [
+        "The results of the human evaluation are shown in Table TABREF21 for 250 dialogues per policy. In Table TABREF21 policies are marked using an ID ( INLINEFORM0 ) that translates to results in Tables TABREF18 and TABREF19 . Both policies trained with the NUS outperformed those trained on the ABUS in terms of both reward and success rate. The best performing policy trained on the NUS achieves a 93.4% success rate and 13.8 average rewards whilst the best performing policy trained with the ABUS achieves only a 90.0% success rate and 13.3 average reward. This shows that the good performance of the NUS on the cross-model evaluation transfers to real users. Furthermore, the overfitting to a particular US is also observed in the real user evaluation. For not only the policies trained on the NUS, but also those trained on the ABUS, the best performing policy was the policy that performed best on the other US."
+      ],
+      "child_pages": [
+        13
+      ],
+      "child_sections": [
+        "Human Evaluation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Human Evaluation",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_13",
+      "section_id": "Human Evaluation",
+      "section": "Human Evaluation",
+      "title_path": "Human Evaluation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Testing with a simulated user\n[source_id=47] In Schatzmann et. al schatztmann2005effects cross-model evaluation is proposed to compare user simulators. First, the user simulators to be evaluated are used to train INLINEFORM0 policy each. Then these policies are tested using the different user simulators and the results averaged. BIBREF7 showed that a strategy learned with a good user model still performs well when tested on poor user models. If a policy performs well on all user simulators and not just on the one that it was trained on, it indicates that the US with which it was trained is diverse and realistic, and thus the policy is likely to perform better on real users. For each US five policies ( INLINEFORM1 ), each using a different random seed for initialisation, are trained. Results are reported for both the best and the average performance on 1000 test dialogues. The ABUS is programmed to always mention the new goal after a goal change. In order to not let this affect our results we implement the same for the NUS by re-sampling a sentence if the new goal is not mentioned.",
+      "score": 1.209582779737575,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        47
+      ],
+      "child_qasper_evidence_texts": [
+        "In Schatzmann et. al schatztmann2005effects cross-model evaluation is proposed to compare user simulators. First, the user simulators to be evaluated are used to train INLINEFORM0 policy each. Then these policies are tested using the different user simulators and the results averaged. BIBREF7 showed that a strategy learned with a good user model still performs well when tested on poor user models. If a policy performs well on all user simulators and not just on the one that it was trained on, it indicates that the US with which it was trained is diverse and realistic, and thus the policy is likely to perform better on real users. For each US five policies ( INLINEFORM1 ), each using a different random seed for initialisation, are trained. Results are reported for both the best and the average performance on 1000 test dialogues. The ABUS is programmed to always mention the new goal after a goal change. In order to not let this affect our results we implement the same for the NUS by re-sampling a sentence if the new goal is not mentioned."
+      ],
+      "child_pages": [
+        10
+      ],
+      "child_sections": [
+        "Testing with a simulated user"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Testing with a simulated user",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Testing with a simulated user",
+      "section": "Testing with a simulated user",
+      "title_path": "Testing with a simulated user",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 6,
+      "content": "In this paper the Neural User Simulator (NUS) is introduced which outputs natural language and whose behaviour is learned from a corpus. The main component, inspired by BIBREF4 , consists of a feature extractor and a neural network based sequence-to-sequence model BIBREF5 . The sequence-to-sequence model consists of a recurrent neural network (RNN) encoder that encodes the dialogue history and a decoder RNN which outputs natural language. Furthermore, the NUS generates its own goal and possibly changes it during a dialogue. This allows the model to be deployed for training more sophisticated DM policies. To achieve this, a method is proposed that transforms the goal-labels of the used dataset (DSTC2) into labels whose behaviour can be replicated during deployment.",
+      "qasper_evidence_text": "In this paper the Neural User Simulator (NUS) is introduced which outputs natural language and whose behaviour is learned from a corpus. The main component, inspired by BIBREF4 , consists of a feature extractor and a neural network based sequence-to-sequence model BIBREF5 . The sequence-to-sequence model consists of a recurrent neural network (RNN) encoder that encodes the dialogue history and a decoder RNN which outputs natural language. Furthermore, the NUS generates its own goal and possibly changes it during a dialogue. This allows the model to be deployed for training more sophisticated DM policies. To achieve this, a method is proposed that transforms the goal-labels of the used dataset (DSTC2) into labels whose behaviour can be replicated during deployment.",
+      "source_node_id": 6,
+      "node_id": 6,
+      "paragraph_id": 6,
+      "evidence_id": 6,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 1,
+      "score": 6.007195118757428,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 2,
+      "hotpot_sent_id": 2,
+      "supporting_rank": 1
+    }
+  ],
+  "supporting_block_ids": [
+    6
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Reinforcement Learning\n[source_id=31] Since the gold transferred result of input is unavailable, we cannot evaluate the quality of the generated sentence directly. Therefore, we implement reinforcement learning and elaborately design two rewards to describe the irony accuracy and sentiment preservation, respectively.\n[source_id=32] A pre-trained binary irony classifier based on CNN BIBREF20 is used to evaluate how ironic a sentence is. We denote the parameter of the classifier as INLINEFORM0 and it is fixed during the training process.\n[source_id=33] In order to facilitate the transformation, we design the irony reward as the difference between the irony score of the input sentence and that of the output sentence. Formally, when we input a non-ironic sentence INLINEFORM0 and transfer it to an ironic sentence INLINEFORM1 , our irony reward is defined as: DISPLAYFORM0\n[source_id=34] where INLINEFORM0 denotes ironic style and INLINEFORM1 is the probability of that a sentence INLINEFORM2 is ironic.\n[source_id=35] To preserve the sentiment polarity of the input sentence, we also need to use classifiers to evaluate the sentiment polarity of the sentences. However, the sentiment analysis of ironic sentences and non-ironic sentences are different. In the case of figurative languages such as irony, sarcasm or metaphor, the sentiment polarity of the literal meaning may differ significantly from that of the intended figurative meaning BIBREF0 . As we aim to train our model to transfer sentences from non-ironic to ironic, using only one classifier is not enough. As a result, we implement two pre-trained sentiment classifiers for non-ironic sentences and ironic sentences respectively. We denote the parameter of the sentiment classifier for ironic sentences as INLINEFORM0 and that of the sentiment classifier for non-ironic sentences as INLINEFORM1 .\n[source_id=36] A challenge, when we implement two classifiers to evaluate the sentiment polarity, is that the two classifiers trained with different datasets may have different distributions of scores. That means we cannot directly calculate the sentiment reward with scores applied by two classifiers. To alleviate this problem and standardize the prediction results of two classifiers, we set a threshold for each classifier and subtract the respective threshold from scores applied by the classifier to obtain the comparative sentiment polarity score. We get the optimal threshold by maximizing the ability of the classifier according to the distribution of our training data.\n[source_id=37] We denote the threshold of ironic sentiment classifier as INLINEFORM0 and the threshold of non-ironic sentiment classifier as INLINEFORM1 . The standardized sentiment score is defined as INLINEFORM2 and INLINEFORM3 where INLINEFORM4 denotes the positive sentiment polarity and INLINEFORM5 is the probability of that a sentence is positive in sentiment polarity.\n[source_id=38] As mentioned above, the input sentence and the generated sentence should express the same sentiment. For example, if we input a non-ironic sentence “I hate to be ignored\" which is negative in sentiment polarity, the generated ironic sentence should be also negative, such as “I love to be ignored\". To achieve sentiment preservation, we design the sentiment reward as that one minus the absolute value of the difference between the standardized sentiment score of the input sentence and that of the generated sentence. Formally, when we input a non-ironic sentence INLINEFORM0 and transfer it to an ironic sentence INLINEFORM1 , our sentiment reward is defined as: DISPLAYFORM0\n[source_id=39] To encourage our model to focus on both the irony accuracy and the sentiment preservation, we apply the harmonic mean of irony reward and sentiment reward: DISPLAYFORM0",
+  "score": 2.8964477690661425,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "child_qasper_evidence_texts": [
+    "Since the gold transferred result of input is unavailable, we cannot evaluate the quality of the generated sentence directly. Therefore, we implement reinforcement learning and elaborately design two rewards to describe the irony accuracy and sentiment preservation, respectively.",
+    "A pre-trained binary irony classifier based on CNN BIBREF20 is used to evaluate how ironic a sentence is. We denote the parameter of the classifier as INLINEFORM0 and it is fixed during the training process.",
+    "In order to facilitate the transformation, we design the irony reward as the difference between the irony score of the input sentence and that of the output sentence. Formally, when we input a non-ironic sentence INLINEFORM0 and transfer it to an ironic sentence INLINEFORM1 , our irony reward is defined as: DISPLAYFORM0",
+    "where INLINEFORM0 denotes ironic style and INLINEFORM1 is the probability of that a sentence INLINEFORM2 is ironic.",
+    "To preserve the sentiment polarity of the input sentence, we also need to use classifiers to evaluate the sentiment polarity of the sentences. However, the sentiment analysis of ironic sentences and non-ironic sentences are different. In the case of figurative languages such as irony, sarcasm or metaphor, the sentiment polarity of the literal meaning may differ significantly from that of the intended figurative meaning BIBREF0 . As we aim to train our model to transfer sentences from non-ironic to ironic, using only one classifier is not enough. As a result, we implement two pre-trained sentiment classifiers for non-ironic sentences and ironic sentences respectively. We denote the parameter of the sentiment classifier for ironic sentences as INLINEFORM0 and that of the sentiment classifier for non-ironic sentences as INLINEFORM1 .",
+    "A challenge, when we implement two classifiers to evaluate the sentiment polarity, is that the two classifiers trained with different datasets may have different distributions of scores. That means we cannot directly calculate the sentiment reward with scores applied by two classifiers. To alleviate this problem and standardize the prediction results of two classifiers, we set a threshold for each classifier and subtract the respective threshold from scores applied by the classifier to obtain the comparative sentiment polarity score. We get the optimal threshold by maximizing the ability of the classifier according to the distribution of our training data.",
+    "We denote the threshold of ironic sentiment classifier as INLINEFORM0 and the threshold of non-ironic sentiment classifier as INLINEFORM1 . The standardized sentiment score is defined as INLINEFORM2 and INLINEFORM3 where INLINEFORM4 denotes the positive sentiment polarity and INLINEFORM5 is the probability of that a sentence is positive in sentiment polarity.",
+    "As mentioned above, the input sentence and the generated sentence should express the same sentiment. For example, if we input a non-ironic sentence “I hate to be ignored\" which is negative in sentiment polarity, the generated ironic sentence should be also negative, such as “I love to be ignored\". To achieve sentiment preservation, we design the sentiment reward as that one minus the absolute value of the difference between the standardized sentiment score of the input sentence and that of the generated sentence. Formally, when we input a non-ironic sentence INLINEFORM0 and transfer it to an ironic sentence INLINEFORM1 , our sentiment reward is defined as: DISPLAYFORM0",
+    "To encourage our model to focus on both the irony accuracy and the sentiment preservation, we apply the harmonic mean of irony reward and sentiment reward: DISPLAYFORM0"
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Reinforcement Learning",
+    "Reinforcement Learning",
+    "Reinforcement Learning",
+    "Reinforcement Learning",
+    "Reinforcement Learning",
+    "Reinforcement Learning",
+    "Reinforcement Learning",
+    "Reinforcement Learning",
+    "Reinforcement Learning"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Reinforcement Learning",
+      0
+    ],
+    [
+      "Reinforcement Learning",
+      1
+    ],
+    [
+      "Reinforcement Learning",
+      2
+    ],
+    [
+      "Reinforcement Learning",
+      3
+    ],
+    [
+      "Reinforcement Learning",
+      4
+    ],
+    [
+      "Reinforcement Learning",
+      5
+    ],
+    [
+      "Reinforcement Learning",
+      6
+    ],
+    [
+      "Reinforcement Learning",
+      7
+    ],
+    [
+      "Reinforcement Learning",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Reinforcement Learning",
+  "section": "Reinforcement Learning",
+  "title_path": "Reinforcement Learning",
+  "block_type": "long_unit"
+}

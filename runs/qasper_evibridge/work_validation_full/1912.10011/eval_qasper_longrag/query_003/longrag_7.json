@@ -1,0 +1,88 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention\n[source_id=43] To fully leverage the hierarchical structure of our encoder, we propose two variants of hierarchical attention mechanism to compute the context fed to the decoder module.\n[source_id=44] $\\bullet $ Traditional Hierarchical Attention. As in BIBREF13, we hypothesize that a dynamic context should be computed in two steps: first attending to entities, then to records corresponding to these entities. To implement this hierarchical attention, at each decoding step $t$, the model learns a first set of attention scores $\\alpha _{i,t}$ over entities $e_i$ and a second set of attention scores $\\beta _{i,j,t}$ over records $r_{i,j}$ belonging to entity $e_i$. The $\\alpha _{i,t}$ scores are normalized to form a distribution over all entities $e_i$, and $\\beta _{i,j,t}$ scores are normalized to form a distribution over records $r_{i,j}$ of entity $e_i$. Each entity is then represented as a weighted sum of its record embeddings, and the entire data structure is represented as a weighted sum of the entity representations. The dynamic context is computed as:\n[source_id=45] ct = i=1I (i,t ( j i,j,t ri,j ))\n[source_id=46] where i,t exp(dtWei) and i,j,t exp(dtWhi,j)\n[source_id=47] where $\\mathbf {d_t}$ is the decoder hidden state at time step $t$, $\\mathbf {W}_{\\alpha } \\in \\mathbb {R}^{d\\times d}$ and $\\mathbf {W}_{\\beta } \\in \\mathbb {R}^{d\\times d}$ are learnt parameters, $ \\sum _i\\alpha _{i,t} = 1$, and for all $i \\in \\lbrace 1,...,I\\rbrace $ $\\sum _{j}\\beta _{i,j,t} = 1$.\n[source_id=48] $\\bullet $ Key-guided Hierarchical Attention. This variant follows the intuition that once an entity is chosen for mention (thanks to $\\alpha _{i,t}$), only the type of records is important to determine the content of the description. For example, when deciding to mention a player, all experts automatically report his score without consideration of its specific value. To test this intuition, we model the attention scores by computing the $\\beta _{i,j,t}$ scores from equation (SECREF16) solely on the embedding of the key rather than on the full record representation $\\mathbf {h}_{i,j}$:\n[source_id=49] Please note that the different embeddings and the model parameters presented in the model components are learnt using Equation 1.",
+  "score": 9.370989424983492,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49
+  ],
+  "child_qasper_evidence_texts": [
+    "To fully leverage the hierarchical structure of our encoder, we propose two variants of hierarchical attention mechanism to compute the context fed to the decoder module.",
+    "$\\bullet $ Traditional Hierarchical Attention. As in BIBREF13, we hypothesize that a dynamic context should be computed in two steps: first attending to entities, then to records corresponding to these entities. To implement this hierarchical attention, at each decoding step $t$, the model learns a first set of attention scores $\\alpha _{i,t}$ over entities $e_i$ and a second set of attention scores $\\beta _{i,j,t}$ over records $r_{i,j}$ belonging to entity $e_i$. The $\\alpha _{i,t}$ scores are normalized to form a distribution over all entities $e_i$, and $\\beta _{i,j,t}$ scores are normalized to form a distribution over records $r_{i,j}$ of entity $e_i$. Each entity is then represented as a weighted sum of its record embeddings, and the entire data structure is represented as a weighted sum of the entity representations. The dynamic context is computed as:",
+    "ct = i=1I (i,t ( j i,j,t ri,j ))",
+    "where i,t exp(dtWei) and i,j,t exp(dtWhi,j)",
+    "where $\\mathbf {d_t}$ is the decoder hidden state at time step $t$, $\\mathbf {W}_{\\alpha } \\in \\mathbb {R}^{d\\times d}$ and $\\mathbf {W}_{\\beta } \\in \\mathbb {R}^{d\\times d}$ are learnt parameters, $ \\sum _i\\alpha _{i,t} = 1$, and for all $i \\in \\lbrace 1,...,I\\rbrace $ $\\sum _{j}\\beta _{i,j,t} = 1$.",
+    "$\\bullet $ Key-guided Hierarchical Attention. This variant follows the intuition that once an entity is chosen for mention (thanks to $\\alpha _{i,t}$), only the type of records is important to determine the content of the description. For example, when deciding to mention a player, all experts automatically report his score without consideration of its specific value. To test this intuition, we model the attention scores by computing the $\\beta _{i,j,t}$ scores from equation (SECREF16) solely on the embedding of the key rather than on the full record representation $\\mathbf {h}_{i,j}$:",
+    "Please note that the different embeddings and the model parameters presented in the model components are learnt using Equation 1."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+    "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+    "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+    "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+    "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+    "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+    "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+      0
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+      1
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+      2
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+      3
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+      4
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+      5
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+  "section": "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+  "title_path": "Hierarchical Encoder Model for Data-to-Text ::: Hierarchical attention",
+  "block_type": "long_unit"
+}

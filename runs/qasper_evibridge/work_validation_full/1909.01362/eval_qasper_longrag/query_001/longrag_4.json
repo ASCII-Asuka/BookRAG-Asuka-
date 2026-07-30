@@ -1,0 +1,133 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Conversational Forecasting Model\n[source_id=36] We now describe our general model for forecasting future conversational events. Our model integrates two components: (a) a generative dialog model that learns to represent conversational dynamics in an unsupervised fashion; and (b) a supervised component that fine-tunes this representation to forecast future events. Figure FIGREF13 provides an overview of the proposed architecture, henceforth CRAFT (Conversational Recurrent Architecture for ForecasTing).\n[source_id=37] Terminology. For modeling purposes, we treat a conversation as a sequence of $N$ comments $C = \\lbrace c_1,\\dots ,c_N\\rbrace $. Each comment, in turn, is a sequence of tokens, where the number of tokens may vary from comment to comment. For the $n$-th comment ($1 \\le n \\le N)$, we let $M_n$ denote the number of tokens. Then, a comment $c_n$ can be represented as a sequence of $M_n$ tokens: $c_n = \\lbrace w_1,\\dots ,w_{M_n}\\rbrace $.\n[source_id=38] Generative component. For the generative component of our model, we use a hierarchical recurrent encoder-decoder (HRED) architecture BIBREF60, a modified version of the popular sequence-to-sequence (seq2seq) architecture BIBREF61 designed to account for dependencies between consecutive inputs. BIBREF23 showed that HRED can successfully model conversational context by encoding the temporal structure of previously seen comments, making it an ideal fit for our use case. Here, we provide a high-level summary of the HRED architecture, deferring deeper technical discussion to BIBREF60 and BIBREF23.\n[source_id=39] An HRED dialog model consists of three components: an utterance encoder, a context encoder, and a decoder. The utterance encoder is responsible for generating semantic vector representations of comments. It consists of a recurrent neural network (RNN) that reads a comment token-by-token, and on each token $w_m$ updates a hidden state $h^{\\text{enc}}$ based on the current token and the previous hidden state:\n[source_id=40] where $f^{\\text{RNN}}$ is a nonlinear gating function (our implementation uses GRU BIBREF62). The final hidden state $h^{\\text{enc}}_M$ can be viewed as a vector encoding of the entire comment.\n[source_id=41] Running the encoder on each comment $c_n$ results in a sequence of $N$ vector encodings. A second encoder, the context encoder, is then run over this sequence:\n[source_id=42] Each hidden state $h^{\\text{con}}_n$ can then be viewed as an encoding of the full conversational context up to and including the $n$-th comment. To generate a response to comment $n$, the context encoding $h^{\\text{con}}_n$ is used to initialize the hidden state $h^{\\text{dec}}_{0}$ of a decoder RNN. The decoder produces a response token by token using the following recurrence:\n[source_id=43] where $f^{\\text{out}}$ is some function that outputs a probability distribution over words; we implement this using a simple feedforward layer. In our implementation, we further augment the decoder with attention BIBREF63, BIBREF64 over context encoder states to help capture long-term inter-comment dependencies. This generative component can be pre-trained using unlabeled conversational data.\n[source_id=44] Prediction component. Given a pre-trained HRED dialog model, we aim to extend the model to predict from the conversational context whether the to-be-forecasted event will occur. Our predictor consists of a multilayer perceptron (MLP) with 3 fully-connected layers, leaky ReLU activations between layers, and sigmoid activation for output. For each comment $c_n$, the predictor takes as input the context encoding $h^{\\text{con}}_n$ and forwards it through the MLP layers, resulting in an output score that is interpreted as a probability $p_{\\text{event}}(c_{n+1})$ that the to-be-forecasted event will happen (e.g., that the conversation will derail).\n[source_id=45] Training the predictive component starts by initializing the weights of the encoders to the values learned in pre-training. The main training loop then works as follows: for each positive sample—i.e., a conversation containing an instance of the to-be-forecasted event (e.g., derailment) at comment $c_e$—we feed the context $c_1,\\dots ,c_{e-1}$ through the encoder and classifier, and compute cross-entropy loss between the classifier output and expected output of 1. Similarly, for each negative sample—i.e., a conversation where none of the comments exhibit the to-be-forecasted event and that ends with $c_N$—we feed the context $c_1,\\dots ,c_{N-1}$ through the model and compute loss against an expected output of 0.\n[source_id=46] Note that the parameters of the generative component are not held fixed during this process; instead, backpropagation is allowed to go all the way through the encoder layers. This process, known as fine-tuning, reshapes the representation learned during pre-training to be more directly useful to prediction BIBREF55.\n[source_id=47] We implement the model and training code using PyTorch, and we are publicly releasing our implementation and the trained models together with the data as part of ConvoKit.",
+  "score": 0.7400417261079606,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "child_qasper_evidence_texts": [
+    "We now describe our general model for forecasting future conversational events. Our model integrates two components: (a) a generative dialog model that learns to represent conversational dynamics in an unsupervised fashion; and (b) a supervised component that fine-tunes this representation to forecast future events. Figure FIGREF13 provides an overview of the proposed architecture, henceforth CRAFT (Conversational Recurrent Architecture for ForecasTing).",
+    "Terminology. For modeling purposes, we treat a conversation as a sequence of $N$ comments $C = \\lbrace c_1,\\dots ,c_N\\rbrace $. Each comment, in turn, is a sequence of tokens, where the number of tokens may vary from comment to comment. For the $n$-th comment ($1 \\le n \\le N)$, we let $M_n$ denote the number of tokens. Then, a comment $c_n$ can be represented as a sequence of $M_n$ tokens: $c_n = \\lbrace w_1,\\dots ,w_{M_n}\\rbrace $.",
+    "Generative component. For the generative component of our model, we use a hierarchical recurrent encoder-decoder (HRED) architecture BIBREF60, a modified version of the popular sequence-to-sequence (seq2seq) architecture BIBREF61 designed to account for dependencies between consecutive inputs. BIBREF23 showed that HRED can successfully model conversational context by encoding the temporal structure of previously seen comments, making it an ideal fit for our use case. Here, we provide a high-level summary of the HRED architecture, deferring deeper technical discussion to BIBREF60 and BIBREF23.",
+    "An HRED dialog model consists of three components: an utterance encoder, a context encoder, and a decoder. The utterance encoder is responsible for generating semantic vector representations of comments. It consists of a recurrent neural network (RNN) that reads a comment token-by-token, and on each token $w_m$ updates a hidden state $h^{\\text{enc}}$ based on the current token and the previous hidden state:",
+    "where $f^{\\text{RNN}}$ is a nonlinear gating function (our implementation uses GRU BIBREF62). The final hidden state $h^{\\text{enc}}_M$ can be viewed as a vector encoding of the entire comment.",
+    "Running the encoder on each comment $c_n$ results in a sequence of $N$ vector encodings. A second encoder, the context encoder, is then run over this sequence:",
+    "Each hidden state $h^{\\text{con}}_n$ can then be viewed as an encoding of the full conversational context up to and including the $n$-th comment. To generate a response to comment $n$, the context encoding $h^{\\text{con}}_n$ is used to initialize the hidden state $h^{\\text{dec}}_{0}$ of a decoder RNN. The decoder produces a response token by token using the following recurrence:",
+    "where $f^{\\text{out}}$ is some function that outputs a probability distribution over words; we implement this using a simple feedforward layer. In our implementation, we further augment the decoder with attention BIBREF63, BIBREF64 over context encoder states to help capture long-term inter-comment dependencies. This generative component can be pre-trained using unlabeled conversational data.",
+    "Prediction component. Given a pre-trained HRED dialog model, we aim to extend the model to predict from the conversational context whether the to-be-forecasted event will occur. Our predictor consists of a multilayer perceptron (MLP) with 3 fully-connected layers, leaky ReLU activations between layers, and sigmoid activation for output. For each comment $c_n$, the predictor takes as input the context encoding $h^{\\text{con}}_n$ and forwards it through the MLP layers, resulting in an output score that is interpreted as a probability $p_{\\text{event}}(c_{n+1})$ that the to-be-forecasted event will happen (e.g., that the conversation will derail).",
+    "Training the predictive component starts by initializing the weights of the encoders to the values learned in pre-training. The main training loop then works as follows: for each positive sample—i.e., a conversation containing an instance of the to-be-forecasted event (e.g., derailment) at comment $c_e$—we feed the context $c_1,\\dots ,c_{e-1}$ through the encoder and classifier, and compute cross-entropy loss between the classifier output and expected output of 1. Similarly, for each negative sample—i.e., a conversation where none of the comments exhibit the to-be-forecasted event and that ends with $c_N$—we feed the context $c_1,\\dots ,c_{N-1}$ through the model and compute loss against an expected output of 0.",
+    "Note that the parameters of the generative component are not held fixed during this process; instead, backpropagation is allowed to go all the way through the encoder layers. This process, known as fine-tuning, reshapes the representation learned during pre-training to be more directly useful to prediction BIBREF55.",
+    "We implement the model and training code using PyTorch, and we are publicly releasing our implementation and the trained models together with the data as part of ConvoKit."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Conversational Forecasting Model",
+    "Conversational Forecasting Model",
+    "Conversational Forecasting Model",
+    "Conversational Forecasting Model",
+    "Conversational Forecasting Model",
+    "Conversational Forecasting Model",
+    "Conversational Forecasting Model",
+    "Conversational Forecasting Model",
+    "Conversational Forecasting Model",
+    "Conversational Forecasting Model",
+    "Conversational Forecasting Model",
+    "Conversational Forecasting Model"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Conversational Forecasting Model",
+      0
+    ],
+    [
+      "Conversational Forecasting Model",
+      1
+    ],
+    [
+      "Conversational Forecasting Model",
+      2
+    ],
+    [
+      "Conversational Forecasting Model",
+      3
+    ],
+    [
+      "Conversational Forecasting Model",
+      4
+    ],
+    [
+      "Conversational Forecasting Model",
+      5
+    ],
+    [
+      "Conversational Forecasting Model",
+      6
+    ],
+    [
+      "Conversational Forecasting Model",
+      7
+    ],
+    [
+      "Conversational Forecasting Model",
+      8
+    ],
+    [
+      "Conversational Forecasting Model",
+      9
+    ],
+    [
+      "Conversational Forecasting Model",
+      10
+    ],
+    [
+      "Conversational Forecasting Model",
+      11
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Conversational Forecasting Model",
+  "section": "Conversational Forecasting Model",
+  "title_path": "Conversational Forecasting Model",
+  "block_type": "long_unit"
+}

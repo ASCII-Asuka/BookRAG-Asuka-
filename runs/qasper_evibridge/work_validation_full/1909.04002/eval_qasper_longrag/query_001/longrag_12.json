@@ -1,0 +1,88 @@
+{
+  "id": "longrag_12",
+  "content": "[Section] Approaches to authorship verification ::: Approach 4: Document embeddings\n[source_id=63] We hypothesize that if we obtain latent representations of tweets as documents, tweets from the same author will cluster together, and will be differentiable from tweets from others. To that end, we use the following setup:\n[source_id=64] We obtain representations of tweets as document embeddings. We experiment with two types of document embeddings: FastText BIBREF19 (embedding size = 100) and BERT-Base, uncased BIBREF20 (embedding size = 768).\n[source_id=65] We then use these embeddings as features to train a classification model. We experiment with two types of classifiers: Logistic Regression (LR) and Multi Linear Perceptron (MLP) of size $(5, 5, 5)$.\n[source_id=66] The characterization score of tweet $T$ is given by the classifier's confidence that $T$ belongs to the positive class.\n[source_id=67] Iterative sampling: As described in Section SECREF6, there exists an extreme class imbalance for this binary classification task, in that the number of negative examples is far more than the number of positive examples. Here, we explore an iterative sampling technique to address this problem. We train our classifier for multiple iterations, coupling the same $\\textrm {train}_{\\textrm {pos}}$ with a new randomly sampled $\\textrm {train}_{\\textrm {neg}}$ set in each iteration.\n[source_id=68] We conduct this experiment for all users with the best performing model for this approach, i.e. we use BERT embeddings as features, and MLP for classification. We train this classifier for 40 iterations, and compare the model's performance when we use the same set of negative examples vs. when we randomly sample new negative examples in each iteration.\n[source_id=69] Figure FIGREF28 shows the mean train and test accuracy for all users over 40 iterations. As expected, the training accuracy is higher if we do not sample, as the model gets trained on the same data repeatedly in each iteration. However, if we perform random sampling, the model is exposed to a larger number of negative examples, which results in a higher test accuracy (+ 1.08%), specifically for negative test examples (+ 2.62%).",
+  "score": 4.813067382839925,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_12",
+  "child_source_node_ids": [
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69
+  ],
+  "child_qasper_evidence_texts": [
+    "We hypothesize that if we obtain latent representations of tweets as documents, tweets from the same author will cluster together, and will be differentiable from tweets from others. To that end, we use the following setup:",
+    "We obtain representations of tweets as document embeddings. We experiment with two types of document embeddings: FastText BIBREF19 (embedding size = 100) and BERT-Base, uncased BIBREF20 (embedding size = 768).",
+    "We then use these embeddings as features to train a classification model. We experiment with two types of classifiers: Logistic Regression (LR) and Multi Linear Perceptron (MLP) of size $(5, 5, 5)$.",
+    "The characterization score of tweet $T$ is given by the classifier's confidence that $T$ belongs to the positive class.",
+    "Iterative sampling: As described in Section SECREF6, there exists an extreme class imbalance for this binary classification task, in that the number of negative examples is far more than the number of positive examples. Here, we explore an iterative sampling technique to address this problem. We train our classifier for multiple iterations, coupling the same $\\textrm {train}_{\\textrm {pos}}$ with a new randomly sampled $\\textrm {train}_{\\textrm {neg}}$ set in each iteration.",
+    "We conduct this experiment for all users with the best performing model for this approach, i.e. we use BERT embeddings as features, and MLP for classification. We train this classifier for 40 iterations, and compare the model's performance when we use the same set of negative examples vs. when we randomly sample new negative examples in each iteration.",
+    "Figure FIGREF28 shows the mean train and test accuracy for all users over 40 iterations. As expected, the training accuracy is higher if we do not sample, as the model gets trained on the same data repeatedly in each iteration. However, if we perform random sampling, the model is exposed to a larger number of negative examples, which results in a higher test accuracy (+ 1.08%), specifically for negative test examples (+ 2.62%)."
+  ],
+  "child_pages": [
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12
+  ],
+  "child_sections": [
+    "Approaches to authorship verification ::: Approach 4: Document embeddings",
+    "Approaches to authorship verification ::: Approach 4: Document embeddings",
+    "Approaches to authorship verification ::: Approach 4: Document embeddings",
+    "Approaches to authorship verification ::: Approach 4: Document embeddings",
+    "Approaches to authorship verification ::: Approach 4: Document embeddings",
+    "Approaches to authorship verification ::: Approach 4: Document embeddings",
+    "Approaches to authorship verification ::: Approach 4: Document embeddings"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Approaches to authorship verification ::: Approach 4: Document embeddings",
+      0
+    ],
+    [
+      "Approaches to authorship verification ::: Approach 4: Document embeddings",
+      1
+    ],
+    [
+      "Approaches to authorship verification ::: Approach 4: Document embeddings",
+      2
+    ],
+    [
+      "Approaches to authorship verification ::: Approach 4: Document embeddings",
+      3
+    ],
+    [
+      "Approaches to authorship verification ::: Approach 4: Document embeddings",
+      4
+    ],
+    [
+      "Approaches to authorship verification ::: Approach 4: Document embeddings",
+      5
+    ],
+    [
+      "Approaches to authorship verification ::: Approach 4: Document embeddings",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_12",
+  "section_id": "Approaches to authorship verification ::: Approach 4: Document embeddings",
+  "section": "Approaches to authorship verification ::: Approach 4: Document embeddings",
+  "title_path": "Approaches to authorship verification ::: Approach 4: Document embeddings",
+  "block_type": "long_unit"
+}

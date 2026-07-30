@@ -1,0 +1,97 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Background & Methods\n[source_id=13] The goal of an language model is to assign meaningful probabilities to a sequence of words. Given a set of tokens $\\mathbf {X}=(x_1,....,x_T)$, where $T$ is the length of a sequence, our task is to estimate the joint conditional probability $P(\\mathbf {X})$ which is\n[source_id=14] were $(x_{1}, \\ldots , x_{i-1})$ is the context. An Intrinsic evaluation of the performance of Language Models is perplexity (PPL) which is defined as the inverse probability of the set of the tokens and taking the $T^{th}$ root were $T$ is the number of tokens\n[source_id=15] In our two approaches we use transformer based architectures: BERT and Transformer-XL as mentioned before. Calculating the auto-regressive $P(\\mathbf {X})$ for the transformer-XL is quite straight-forward as the model is unidirectional but it doesn't factorize the same way for a bi-directional model like BERT.\n[source_id=16] BERT's bi-directional context poses a problem for us to calculate an auto-regressive joint probability. A simple fix could be that we mask all the tokens $\\mathbf {x}_{>i}$ and we calculate the conditional factors as we do for an unidirectional model. By doing so though, we loose upon the advantage of bi-directional context the BERT model enables. We propose an approximation of the joint probability as,\n[source_id=17] This type of approximations has been previously explored with Bi-directional RNN LM's BIBREF9 but not for deep transformer models. We therefore, define a pseudo-perplexity score from the above approximated joint probability.\n[source_id=18] The original BERT has two training objectives: 'Masked language modelling', in which you mask input tokens randomly and then predict the masked tokens using the left and right context. Additionally, there is the 'next sentence prediction' task that jointly trains text-pair representations. For training the Masked language model the original BERT used Byte Pair Encoding (BPE) BIBREF10 for subword tokenization BIBREF11.For example the rare word \"unaffable\" to be split up into more frequent subwords such as [\"un\", \"##aff\", \"##able\"]. To remain consistent with experiments performed with LSTM's we use the morfessor for the subword tokenization in the Finnish Language. In Addition, we also apply boundary markers as in (Table TABREF7) and train two separate models using this distinction. We train with left-marked markings as the original BERT was trained with such a scheme and the left+right-marked as it was the previous SOTA with the Finnish Language. For the transformer-XL experiments, we just train with the left+right marked scheme.\n[source_id=19] The Next Sentence Prediction (NSP) is a binary classification task which predicts whether two segments follow each other in the original text. This pre-training task was proposed to further improve the performance on downstreaming tasks, like Natural Language Inference(NLI) but in reality removing the NSP loss matches or slightly improves the downstream task performance BIBREF12. In this paper, we have omitted the NSP task from the BERT pre-training procedure and changed the input from a SEGMENT-PAIR input to a SINGLE SEGMENT input. As seen in (Fig FIGREF8)\n[source_id=20] Transformer-XL introduced the notion of recurrence in self-attention by caching the hidden state sequence to compute the hidden states of a new segment. It also introduces a novel relative positional embedding scheme and both of them combined address the issue of fixed context lengths. Transformer-XL as mentioned is a unidirectional deep transformer architecture, therefore the perplexity can be calculated as (Eq DISPLAY_FORM5). The only change is in the input format, were we use sub-word units rather than whole word units as Finnish is morphologically richer than English.",
+  "score": 1.838670163613076,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "child_qasper_evidence_texts": [
+    "The goal of an language model is to assign meaningful probabilities to a sequence of words. Given a set of tokens $\\mathbf {X}=(x_1,....,x_T)$, where $T$ is the length of a sequence, our task is to estimate the joint conditional probability $P(\\mathbf {X})$ which is",
+    "were $(x_{1}, \\ldots , x_{i-1})$ is the context. An Intrinsic evaluation of the performance of Language Models is perplexity (PPL) which is defined as the inverse probability of the set of the tokens and taking the $T^{th}$ root were $T$ is the number of tokens",
+    "In our two approaches we use transformer based architectures: BERT and Transformer-XL as mentioned before. Calculating the auto-regressive $P(\\mathbf {X})$ for the transformer-XL is quite straight-forward as the model is unidirectional but it doesn't factorize the same way for a bi-directional model like BERT.",
+    "BERT's bi-directional context poses a problem for us to calculate an auto-regressive joint probability. A simple fix could be that we mask all the tokens $\\mathbf {x}_{>i}$ and we calculate the conditional factors as we do for an unidirectional model. By doing so though, we loose upon the advantage of bi-directional context the BERT model enables. We propose an approximation of the joint probability as,",
+    "This type of approximations has been previously explored with Bi-directional RNN LM's BIBREF9 but not for deep transformer models. We therefore, define a pseudo-perplexity score from the above approximated joint probability.",
+    "The original BERT has two training objectives: 'Masked language modelling', in which you mask input tokens randomly and then predict the masked tokens using the left and right context. Additionally, there is the 'next sentence prediction' task that jointly trains text-pair representations. For training the Masked language model the original BERT used Byte Pair Encoding (BPE) BIBREF10 for subword tokenization BIBREF11.For example the rare word \"unaffable\" to be split up into more frequent subwords such as [\"un\", \"##aff\", \"##able\"]. To remain consistent with experiments performed with LSTM's we use the morfessor for the subword tokenization in the Finnish Language. In Addition, we also apply boundary markers as in (Table TABREF7) and train two separate models using this distinction. We train with left-marked markings as the original BERT was trained with such a scheme and the left+right-marked as it was the previous SOTA with the Finnish Language. For the transformer-XL experiments, we just train with the left+right marked scheme.",
+    "The Next Sentence Prediction (NSP) is a binary classification task which predicts whether two segments follow each other in the original text. This pre-training task was proposed to further improve the performance on downstreaming tasks, like Natural Language Inference(NLI) but in reality removing the NSP loss matches or slightly improves the downstream task performance BIBREF12. In this paper, we have omitted the NSP task from the BERT pre-training procedure and changed the input from a SEGMENT-PAIR input to a SINGLE SEGMENT input. As seen in (Fig FIGREF8)",
+    "Transformer-XL introduced the notion of recurrence in self-attention by caching the hidden state sequence to compute the hidden states of a new segment. It also introduces a novel relative positional embedding scheme and both of them combined address the issue of fixed context lengths. Transformer-XL as mentioned is a unidirectional deep transformer architecture, therefore the perplexity can be calculated as (Eq DISPLAY_FORM5). The only change is in the input format, were we use sub-word units rather than whole word units as Finnish is morphologically richer than English."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Background & Methods",
+    "Background & Methods",
+    "Background & Methods",
+    "Background & Methods",
+    "Background & Methods",
+    "Background & Methods",
+    "Background & Methods",
+    "Background & Methods"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Background & Methods",
+      0
+    ],
+    [
+      "Background & Methods",
+      1
+    ],
+    [
+      "Background & Methods",
+      2
+    ],
+    [
+      "Background & Methods",
+      3
+    ],
+    [
+      "Background & Methods",
+      4
+    ],
+    [
+      "Background & Methods",
+      5
+    ],
+    [
+      "Background & Methods",
+      6
+    ],
+    [
+      "Background & Methods",
+      7
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Background & Methods",
+  "section": "Background & Methods",
+  "title_path": "Background & Methods",
+  "block_type": "long_unit"
+}

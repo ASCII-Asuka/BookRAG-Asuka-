@@ -1,0 +1,560 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_10",
+      "content": "[Section] Implementation Details\n[source_id=54] Texts, questions and answers were tokenized using NLTK and lowercased. We used 100-dimensional GloVe vectors BIBREF16 to embed each token. For the neural models, the embeddings are used to initialize the token representations, and are refined during training. For the sliding similarity window approach, we set INLINEFORM0 .\n[source_id=55] The vocabulary of the neural models was extracted from training and development data. For optimizing the bilinear model and the attentive reader, we used vanilla stochastic gradient descent with gradient clipping, if the norm of gradients exceeds 10. The size of the hidden layers was tuned to 64, with a learning rate of INLINEFORM0 , for both models. We apply a dropout of INLINEFORM1 to the word embeddings. Batch size was set to 25 and all models were trained for 150 epochs. During training, we measured performance on the development set, and we selected the model from the best performing epoch for testing.",
+      "score": 4.139946795076458,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        54,
+        55
+      ],
+      "child_qasper_evidence_texts": [
+        "Texts, questions and answers were tokenized using NLTK and lowercased. We used 100-dimensional GloVe vectors BIBREF16 to embed each token. For the neural models, the embeddings are used to initialize the token representations, and are refined during training. For the sliding similarity window approach, we set INLINEFORM0 .",
+        "The vocabulary of the neural models was extracted from training and development data. For optimizing the bilinear model and the attentive reader, we used vanilla stochastic gradient descent with gradient clipping, if the norm of gradients exceeds 10. The size of the hidden layers was tuned to 64, with a learning rate of INLINEFORM0 , for both models. We apply a dropout of INLINEFORM1 to the word embeddings. Batch size was set to 25 and all models were trained for 150 epochs. During training, we measured performance on the development set, and we selected the model from the best performing epoch for testing."
+      ],
+      "child_pages": [
+        10,
+        10
+      ],
+      "child_sections": [
+        "Implementation Details",
+        "Implementation Details"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Implementation Details",
+          0
+        ],
+        [
+          "Implementation Details",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Implementation Details",
+      "section": "Implementation Details",
+      "title_path": "Implementation Details",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] We introduce a large dataset of narrative texts and questions about these texts, intended to be used in a machine comprehension task that requires reasoning using commonsense knowledge. Our dataset complements similar datasets in that we focus on stories about everyday activities, such as going to the movies or working in the garden, and that the questions require commonsense knowledge, or more specifically, script knowledge, to be answered. We show that our mode of data collection via crowdsourcing results in a substantial amount of such inference questions. The dataset forms the basis of a shared task on commonsense and script knowledge organized at SemEval 2018 and provides challenging test cases for the broader natural language understanding community.",
+      "score": 3.5220743714685567,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "We introduce a large dataset of narrative texts and questions about these texts, intended to be used in a machine comprehension task that requires reasoning using commonsense knowledge. Our dataset complements similar datasets in that we focus on stories about everyday activities, such as going to the movies or working in the garden, and that the questions require commonsense knowledge, or more specifically, script knowledge, to be answered. We show that our mode of data collection via crowdsourcing results in a substantial amount of such inference questions. The dataset forms the basis of a shared task on commonsense and script knowledge organized at SemEval 2018 and provides challenging test cases for the broader natural language understanding community."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Data Statistics\n[source_id=32] For all experiments, we admitted only experienced MTurk workers who are based in the US. One HIT consisted of writing one text for the text collection, formulating 15 questions for the question collection, or finding 15 pairs of answers for the answer collection. We paid $0.50 per HIT for the text and question collection, and $0.60 per HIT for the answer collection.\n[source_id=33] More than 2,100 texts were paired with 15 questions each, resulting in a total number of approx. 32,000 annotated questions. For 13% of the questions, the workers did not agree on one of the 4 categories with a 3 out of 5 majority, so we did not include these questions in our dataset.\n[source_id=34] The distribution of category labels on the remaining 87% is shown in Table TABREF10 . 14,074 (52%) questions could be answered. Out of the answerable questions, 10,160 could be answered from the text directly (text-based) and 3,914 questions required the use of commonsense knowledge (script-based). After removing 135 questions during the validation, the final dataset comprises 13,939 questions, 3,827 of which require commonsense knowledge (i.e. 27.4%). This ratio was manually verified based on a random sample of questions.\n[source_id=35] We split the dataset into training (9,731 questions on 1,470 texts), development (1,411 questions on 219 texts), and test set (2,797 questions on 430 texts). Each text appears only in one of the three sets. The complete set of texts for 5 scenarios was held out for the test set. The average text, question, and answer length is 196.0 words, 7.8 words, and 3.6 words, respectively. On average, there are 6.7 questions per text.\n[source_id=36] Figure FIGREF21 shows the distribution of question types in the dataset, which we identified using simple heuristics based on the first words of a question: Yes/no questions were identified as questions starting with an auxiliary or modal verb, all other question types were determined based on the question word.\n[source_id=37] We found that 29% of all questions are yes/no questions. Questions about details of a situation (such as what/ which and who) form the second most frequent question category. Temporal questions (when and how long/often) form approx. 11% of all questions. We leave a more detailed analysis of question types for future work.",
+      "score": 2.3061261874829846,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37
+      ],
+      "child_qasper_evidence_texts": [
+        "For all experiments, we admitted only experienced MTurk workers who are based in the US. One HIT consisted of writing one text for the text collection, formulating 15 questions for the question collection, or finding 15 pairs of answers for the answer collection. We paid $0.50 per HIT for the text and question collection, and $0.60 per HIT for the answer collection.",
+        "More than 2,100 texts were paired with 15 questions each, resulting in a total number of approx. 32,000 annotated questions. For 13% of the questions, the workers did not agree on one of the 4 categories with a 3 out of 5 majority, so we did not include these questions in our dataset.",
+        "The distribution of category labels on the remaining 87% is shown in Table TABREF10 . 14,074 (52%) questions could be answered. Out of the answerable questions, 10,160 could be answered from the text directly (text-based) and 3,914 questions required the use of commonsense knowledge (script-based). After removing 135 questions during the validation, the final dataset comprises 13,939 questions, 3,827 of which require commonsense knowledge (i.e. 27.4%). This ratio was manually verified based on a random sample of questions.",
+        "We split the dataset into training (9,731 questions on 1,470 texts), development (1,411 questions on 219 texts), and test set (2,797 questions on 430 texts). Each text appears only in one of the three sets. The complete set of texts for 5 scenarios was held out for the test set. The average text, question, and answer length is 196.0 words, 7.8 words, and 3.6 words, respectively. On average, there are 6.7 questions per text.",
+        "Figure FIGREF21 shows the distribution of question types in the dataset, which we identified using simple heuristics based on the first words of a question: Yes/no questions were identified as questions starting with an auxiliary or modal verb, all other question types were determined based on the question word.",
+        "We found that 29% of all questions are yes/no questions. Questions about details of a situation (such as what/ which and who) form the second most frequent question category. Temporal questions (when and how long/often) form approx. 11% of all questions. We leave a more detailed analysis of question types for future work."
+      ],
+      "child_pages": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "child_sections": [
+        "Data Statistics",
+        "Data Statistics",
+        "Data Statistics",
+        "Data Statistics",
+        "Data Statistics",
+        "Data Statistics"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Data Statistics",
+          0
+        ],
+        [
+          "Data Statistics",
+          1
+        ],
+        [
+          "Data Statistics",
+          2
+        ],
+        [
+          "Data Statistics",
+          3
+        ],
+        [
+          "Data Statistics",
+          4
+        ],
+        [
+          "Data Statistics",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Data Statistics",
+      "section": "Data Statistics",
+      "title_path": "Data Statistics",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Data Collection\n[source_id=17] As mentioned in the previous section, we decided to base the question collection on script scenarios rather than specific texts. As a starting point for our data collection, we use scenarios from three script data collections BIBREF3 , BIBREF11 , BIBREF12 . Together, these resources contain more than 200 scenarios. To make sure that scenarios have different complexity and content, we selected 80 of them and came up with 20 new scenarios. Together with the 10 scenarios from InScript, we end up with a total of 110 scenarios.\n[source_id=18] For the collection of texts, we followed modiinscript, where workers were asked to write a story about a given activity “as if explaining it to a child”. This results in elaborate and explicit texts that are centered around a single scenario. Consequently, the texts are syntactically simple, facilitating machine comprehension models to focus on semantic challenges and inference. We collected 20 texts for each scenario. Each participant was allowed to write only one story per scenario, but work on as many scenarios as they liked. For each of the 10 scenarios from InScript, we randomly selected 20 existing texts from that resource.\n[source_id=19] For collecting questions, workers were instructed to “imagine they told a story about a certain scenario to a child and want to test if the child understood everything correctly”. This instruction also ensured that questions are linguistically simple, elaborate and explicit. Workers were asked to formulate questions about details of such a situation, i.e. independent of a concrete narrative. This resulted in questions, the answer to which is not literally mentioned in the text. To cover a broad range of question types, we asked participants to write 3 temporal questions (asking about time points and event order), 3 content questions (asking about persons or details in the scenario) and 3 reasoning questions (asking how or why something happened). They were also asked to formulate 6 free questions, which resulted in a total of 15 questions. Asking each worker for a high number of questions enforced that more creative questions were formulated, which go beyond obvious questions for a scenario. Since participants were not shown a concrete story, we asked them to use the neutral pronoun “they” to address the protagonist of the story. We permitted participants to work on as many scenarios as desired and we collected questions from 10 participants per scenario.\n[source_id=20] Our mode of question collection results in questions that are not associated with specific texts. For each text, we collected answers for 15 questions that were randomly selected from the same scenario. Since questions and texts were collected independently, answering a random question is not always possible for a given text. Therefore, we carried out answer collection in two steps. In the first step, we asked participants to assign a category to each text–question pair.\n[source_id=21] We distinguish two categories of answerable questions: The category text-based was assigned to questions that can be answered from the text directly. If the answer could only be inferred by using commonsense knowledge, the category script-based was assigned. Making this distinction is interesting for evaluation purposes, since it enables us to estimate the number of commonsense inference questions. For questions that did not make sense at all given a text, unfitting was assigned. If a question made sense for a text, but it was impossible to find an answer, the label unknown was used.\n[source_id=22] In a second step, we told participants to formulate a plausible correct and a plausible incorrect answer candidate to answerable questions (text-based or script-based). To level out the effort between answerable and non-answerable questions, participants had to write a new question when selecting unknown or unfitting. In order to get reliable judgments about whether or not a question can be answered, we collected data from 5 participants for each question and decided on the final category via majority vote (at least 3 out of 5). Consequently, for each question with a majority vote on either text-based or script-based, there are 3 to 5 correct and incorrect answer candidates, one from each participant who agreed on the category. Questions without a clear majority vote or with ties were not included in the dataset.\n[source_id=23] We performed four post-processing steps on the collected data.\n[source_id=24] We manually filtered out texts that were instructional rather than narrative.\n[source_id=25] All texts, questions and answers were spellchecked by running aSpell and manually inspecting all corrections proposed by the spellchecker.\n[source_id=26] We found that some participants did not use “they” when referring to the protagonist. We identified “I”, “you”, “he”, “she”, “my”, “your”, “his”, “her” and “the person” as most common alternatives and replaced each appearance manually with “they” or “their”, if appropriate.\n[source_id=27] We manually filtered out invalid questions, e.g. questions that are suggestive (“Should you ask an adult before using a knife?”) or that ask for the personal opinion of the reader (“Do you think going to the museum was a good idea?”).",
+      "score": 2.243778557165602,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "child_qasper_evidence_texts": [
+        "As mentioned in the previous section, we decided to base the question collection on script scenarios rather than specific texts. As a starting point for our data collection, we use scenarios from three script data collections BIBREF3 , BIBREF11 , BIBREF12 . Together, these resources contain more than 200 scenarios. To make sure that scenarios have different complexity and content, we selected 80 of them and came up with 20 new scenarios. Together with the 10 scenarios from InScript, we end up with a total of 110 scenarios.",
+        "For the collection of texts, we followed modiinscript, where workers were asked to write a story about a given activity “as if explaining it to a child”. This results in elaborate and explicit texts that are centered around a single scenario. Consequently, the texts are syntactically simple, facilitating machine comprehension models to focus on semantic challenges and inference. We collected 20 texts for each scenario. Each participant was allowed to write only one story per scenario, but work on as many scenarios as they liked. For each of the 10 scenarios from InScript, we randomly selected 20 existing texts from that resource.",
+        "For collecting questions, workers were instructed to “imagine they told a story about a certain scenario to a child and want to test if the child understood everything correctly”. This instruction also ensured that questions are linguistically simple, elaborate and explicit. Workers were asked to formulate questions about details of such a situation, i.e. independent of a concrete narrative. This resulted in questions, the answer to which is not literally mentioned in the text. To cover a broad range of question types, we asked participants to write 3 temporal questions (asking about time points and event order), 3 content questions (asking about persons or details in the scenario) and 3 reasoning questions (asking how or why something happened). They were also asked to formulate 6 free questions, which resulted in a total of 15 questions. Asking each worker for a high number of questions enforced that more creative questions were formulated, which go beyond obvious questions for a scenario. Since participants were not shown a concrete story, we asked them to use the neutral pronoun “they” to address the protagonist of the story. We permitted participants to work on as many scenarios as desired and we collected questions from 10 participants per scenario.",
+        "Our mode of question collection results in questions that are not associated with specific texts. For each text, we collected answers for 15 questions that were randomly selected from the same scenario. Since questions and texts were collected independently, answering a random question is not always possible for a given text. Therefore, we carried out answer collection in two steps. In the first step, we asked participants to assign a category to each text–question pair.",
+        "We distinguish two categories of answerable questions: The category text-based was assigned to questions that can be answered from the text directly. If the answer could only be inferred by using commonsense knowledge, the category script-based was assigned. Making this distinction is interesting for evaluation purposes, since it enables us to estimate the number of commonsense inference questions. For questions that did not make sense at all given a text, unfitting was assigned. If a question made sense for a text, but it was impossible to find an answer, the label unknown was used.",
+        "In a second step, we told participants to formulate a plausible correct and a plausible incorrect answer candidate to answerable questions (text-based or script-based). To level out the effort between answerable and non-answerable questions, participants had to write a new question when selecting unknown or unfitting. In order to get reliable judgments about whether or not a question can be answered, we collected data from 5 participants for each question and decided on the final category via majority vote (at least 3 out of 5). Consequently, for each question with a majority vote on either text-based or script-based, there are 3 to 5 correct and incorrect answer candidates, one from each participant who agreed on the category. Questions without a clear majority vote or with ties were not included in the dataset.",
+        "We performed four post-processing steps on the collected data.",
+        "We manually filtered out texts that were instructional rather than narrative.",
+        "All texts, questions and answers were spellchecked by running aSpell and manually inspecting all corrections proposed by the spellchecker.",
+        "We found that some participants did not use “they” when referring to the protagonist. We identified “I”, “you”, “he”, “she”, “my”, “your”, “his”, “her” and “the person” as most common alternatives and replaced each appearance manually with “they” or “their”, if appropriate.",
+        "We manually filtered out invalid questions, e.g. questions that are suggestive (“Should you ask an adult before using a knife?”) or that ask for the personal opinion of the reader (“Do you think going to the museum was a good idea?”)."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Data Collection",
+        "Data Collection",
+        "Data Collection",
+        "Data Collection",
+        "Data Collection",
+        "Data Collection",
+        "Data Collection",
+        "Data Collection",
+        "Data Collection",
+        "Data Collection",
+        "Data Collection"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Data Collection",
+          0
+        ],
+        [
+          "Data Collection",
+          1
+        ],
+        [
+          "Data Collection",
+          2
+        ],
+        [
+          "Data Collection",
+          3
+        ],
+        [
+          "Data Collection",
+          4
+        ],
+        [
+          "Data Collection",
+          5
+        ],
+        [
+          "Data Collection",
+          6
+        ],
+        [
+          "Data Collection",
+          7
+        ],
+        [
+          "Data Collection",
+          8
+        ],
+        [
+          "Data Collection",
+          9
+        ],
+        [
+          "Data Collection",
+          10
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Data Collection",
+      "section": "Data Collection",
+      "title_path": "Data Collection",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Ambiguity and implicitness are inherent properties of natural language that cause challenges for computational models of language understanding. In everyday communication, people assume a shared common ground which forms a basis for efficiently resolving ambiguities and for inferring implicit information. Thus, recoverable information is often left unmentioned or underspecified. Such information may include encyclopedic and commonsense knowledge. This work focuses on commonsense knowledge about everyday activities, so-called scripts.\n[source_id=5] This paper introduces a dataset to evaluate natural language understanding approaches with a focus on interpretation processes requiring inference based on commonsense knowledge. In particular, we present MCScript, a dataset for assessing the contribution of script knowledge to machine comprehension. Scripts are sequences of events describing stereotypical human activities (also called scenarios), for example baking a cake or taking a bus BIBREF0 . To illustrate the importance of script knowledge, consider Example ( SECREF1 ):\n[source_id=6] Without using commonsense knowledge, it may be difficult to tell who ate the food: Rachel or the waitress. In contrast, if we utilize commonsense knowledge, in particular, script knowledge about the eating in a restaurant scenario, we can make the following inferences: Rachel is most likely a customer, since she received an order. It is usually the customer, and not the waitress, who eats the ordered food. So She most likely refers to Rachel.\n[source_id=7] Various approaches for script knowledge extraction and processing have been proposed in recent years. However, systems have been evaluated for specific aspects of script knowledge only, such as event ordering BIBREF1 , BIBREF2 , event paraphrasing BIBREF3 , BIBREF4 or event prediction (namely, the narrative cloze task BIBREF5 , BIBREF6 , BIBREF7 , BIBREF8 , BIBREF9 ). These evaluation methods lack a clear connection to real-world tasks. Our MCScript dataset provides an extrinsic evaluation framework, based on text comprehension involving commonsense knowledge. This framework makes it possible to assess system performance in a multiple-choice question answering setting, without imposing any specific structural or methodical requirements.\n[source_id=8] MCScript is a collection of (1) narrative texts, (2) questions of various types referring to these texts, and (3) pairs of answer candidates for each question. It comprises approx. 2,100 texts and a total of approx. 14,000 questions. Answering a substantial subset of questions requires knowledge beyond the facts mentioned in the text, i.e. it requires inference using commonsense knowledge about everyday activities. An example is given in Figure FIGREF2 . For both questions, the correct choice for an answer requires commonsense knowledge about the activity of planting a tree, which goes beyond what is mentioned in the text. Texts, questions, and answers were obtained through crowdsourcing. In order to ensure high quality, we manually validated and filtered the dataset. Due to our design of the data acquisition process, we ended up with a substantial subset of questions that require commonsense inference (27.4%).",
+      "score": 2.086495070119428,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "child_qasper_evidence_texts": [
+        "Ambiguity and implicitness are inherent properties of natural language that cause challenges for computational models of language understanding. In everyday communication, people assume a shared common ground which forms a basis for efficiently resolving ambiguities and for inferring implicit information. Thus, recoverable information is often left unmentioned or underspecified. Such information may include encyclopedic and commonsense knowledge. This work focuses on commonsense knowledge about everyday activities, so-called scripts.",
+        "This paper introduces a dataset to evaluate natural language understanding approaches with a focus on interpretation processes requiring inference based on commonsense knowledge. In particular, we present MCScript, a dataset for assessing the contribution of script knowledge to machine comprehension. Scripts are sequences of events describing stereotypical human activities (also called scenarios), for example baking a cake or taking a bus BIBREF0 . To illustrate the importance of script knowledge, consider Example ( SECREF1 ):",
+        "Without using commonsense knowledge, it may be difficult to tell who ate the food: Rachel or the waitress. In contrast, if we utilize commonsense knowledge, in particular, script knowledge about the eating in a restaurant scenario, we can make the following inferences: Rachel is most likely a customer, since she received an order. It is usually the customer, and not the waitress, who eats the ordered food. So She most likely refers to Rachel.",
+        "Various approaches for script knowledge extraction and processing have been proposed in recent years. However, systems have been evaluated for specific aspects of script knowledge only, such as event ordering BIBREF1 , BIBREF2 , event paraphrasing BIBREF3 , BIBREF4 or event prediction (namely, the narrative cloze task BIBREF5 , BIBREF6 , BIBREF7 , BIBREF8 , BIBREF9 ). These evaluation methods lack a clear connection to real-world tasks. Our MCScript dataset provides an extrinsic evaluation framework, based on text comprehension involving commonsense knowledge. This framework makes it possible to assess system performance in a multiple-choice question answering setting, without imposing any specific structural or methodical requirements.",
+        "MCScript is a collection of (1) narrative texts, (2) questions of various types referring to these texts, and (3) pairs of answer candidates for each question. It comprises approx. 2,100 texts and a total of approx. 14,000 questions. Answering a substantial subset of questions requires knowledge beyond the facts mentioned in the text, i.e. it requires inference using commonsense knowledge about everyday activities. An example is given in Figure FIGREF2 . For both questions, the correct choice for an answer requires commonsense knowledge about the activity of planting a tree, which goes beyond what is mentioned in the text. Texts, questions, and answers were obtained through crowdsourcing. In order to ensure high quality, we manually validated and filtered the dataset. Due to our design of the data acquisition process, we ended up with a substantial subset of questions that require commonsense inference (27.4%)."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Corpus\n[source_id=10] Machine comprehension datasets consist of three main components: texts, questions and answers. In this section, we describe our data collection for these 3 components. We first describe a series of pilot studies that we conducted in order to collect commonsense inference questions (Section SECREF4 ). In Section SECREF5 , we discuss the resulting data collection of questions, texts and answers via crowdsourcing on Amazon Mechanical Turk (henceforth MTurk). Section SECREF17 gives information about some necessary postprocessing steps and the dataset validation. Lastly, Section SECREF19 gives statistics about the final dataset.",
+      "score": 1.865911852332235,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        10
+      ],
+      "child_qasper_evidence_texts": [
+        "Machine comprehension datasets consist of three main components: texts, questions and answers. In this section, we describe our data collection for these 3 components. We first describe a series of pilot studies that we conducted in order to collect commonsense inference questions (Section SECREF4 ). In Section SECREF5 , we discuss the resulting data collection of questions, texts and answers via crowdsourcing on Amazon Mechanical Turk (henceforth MTurk). Section SECREF17 gives information about some necessary postprocessing steps and the dataset validation. Lastly, Section SECREF19 gives statistics about the final dataset."
+      ],
+      "child_pages": [
+        2
+      ],
+      "child_sections": [
+        "Corpus"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Corpus",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Corpus",
+      "section": "Corpus",
+      "title_path": "Corpus",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Answer Selection and Validation\n[source_id=29] We finalized the dataset by selecting one correct and one incorrect answer for each question–text pair. To increase the proportion of non-trivial inference cases, we chose the candidate with the lowest lexical overlap with the text from the set of correct answer candidates as correct answer. Using this principle also for incorrect answers leads to problems. We found that many incorrect candidates were not plausible answers to a given question. Instead of selecting a candidate based on overlap, we hence decided to rely on majority vote and selected the candidate from the set of incorrect answers that was most often mentioned.\n[source_id=30] For this step, we normalized each candidate by lowercasing, deleting punctuation and stop words (articles, and, to and or), and transforming all number words into digits, using text2num. We merged all answers that were string-identical, contained another answer, or had a Levenshtein distance BIBREF13 of 3 or less to another answer. The “most frequent answer” was then selected based on how many other answers it was merged with. Only if there was no majority, we selected the candidate with the highest overlap with the text as a fallback. Due to annotation mistakes, we found a small number of chosen correct and incorrect answers to be inappropriate, that is, some “correct” answers were actually incorrect and vice versa. Therefore, we manually validated the complete dataset in a final step. We asked annotators to read all texts, questions, and answers, and to mark for each question whether the correct and incorrect answers were appropriate. If an answer was inappropriate or contained any errors, they selected a different answer from the set of collected candidates. For approximately 11.5% of the questions, at least one answer was replaced. 135 questions (approx. 1%) were excluded from the dataset because no appropriate correct or incorrect answer could be found.",
+      "score": 1.8043720131372962,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        29,
+        30
+      ],
+      "child_qasper_evidence_texts": [
+        "We finalized the dataset by selecting one correct and one incorrect answer for each question–text pair. To increase the proportion of non-trivial inference cases, we chose the candidate with the lowest lexical overlap with the text from the set of correct answer candidates as correct answer. Using this principle also for incorrect answers leads to problems. We found that many incorrect candidates were not plausible answers to a given question. Instead of selecting a candidate based on overlap, we hence decided to rely on majority vote and selected the candidate from the set of incorrect answers that was most often mentioned.",
+        "For this step, we normalized each candidate by lowercasing, deleting punctuation and stop words (articles, and, to and or), and transforming all number words into digits, using text2num. We merged all answers that were string-identical, contained another answer, or had a Levenshtein distance BIBREF13 of 3 or less to another answer. The “most frequent answer” was then selected based on how many other answers it was merged with. Only if there was no majority, we selected the candidate with the highest overlap with the text as a fallback. Due to annotation mistakes, we found a small number of chosen correct and incorrect answers to be inappropriate, that is, some “correct” answers were actually incorrect and vice versa. Therefore, we manually validated the complete dataset in a final step. We asked annotators to read all texts, questions, and answers, and to mark for each question whether the correct and incorrect answers were appropriate. If an answer was inappropriate or contained any errors, they selected a different answer from the set of collected candidates. For approximately 11.5% of the questions, at least one answer was replaced. 135 questions (approx. 1%) were excluded from the dataset because no appropriate correct or incorrect answer could be found."
+      ],
+      "child_pages": [
+        5,
+        5
+      ],
+      "child_sections": [
+        "Answer Selection and Validation",
+        "Answer Selection and Validation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Answer Selection and Validation",
+          0
+        ],
+        [
+          "Answer Selection and Validation",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Answer Selection and Validation",
+      "section": "Answer Selection and Validation",
+      "title_path": "Answer Selection and Validation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Models\n[source_id=47] We first use a simple word matching baseline, by selecting the answer that has the highest literal overlap with the text. In case of a tie, we randomly select one of the answers.\n[source_id=48] The second baseline is a sliding window approach that looks at windows of INLINEFORM0 tokens on the text. Each text and each answer are represented as a sequence of word embeddings. The embeddings for each window of size INLINEFORM1 and each answer are then averaged to derive window and answer representations, respectively. The answer with the lowest cosine distance to one of the windows of the text is then selected as correct.\n[source_id=49] We employ a simple neural model as a third baseline. In this model, each text, question, and answer is represented by a vector. For a given sequence of words INLINEFORM0 , we compute this representation by averaging over the components of the word embeddings INLINEFORM1 that correspond to a word INLINEFORM2 , and then apply a linear transformation using a weight matrix. This procedure is applied to each answer INLINEFORM3 to derive an answer representation INLINEFORM4 . The representation of a text INLINEFORM5 and of a question INLINEFORM6 are computed in the same way. We use different weight matrices for INLINEFORM7 , INLINEFORM8 and INLINEFORM9 , respectively. A combined representation INLINEFORM10 for the text–question pair is then constructed using a bilinear transformation matrix INLINEFORM11 : DISPLAYFORM0\n[source_id=50] We compute a score for each answer by using the dot product and pass the scores for both answers through a softmax layer for prediction. The probability INLINEFORM0 for an answer INLINEFORM1 to be correct is thus defined as: DISPLAYFORM0\n[source_id=51] The attentive reader is a well-established machine comprehension model that reaches good performance e.g. on the CNN/Daily Mail corpus BIBREF14 , BIBREF15 . We use the model formulation by chen2016thorough and lai2017race, who employ bilinear weight functions to compute both attention and answer-text fit. Bi-directional GRUs are used to encode questions, texts and answers into hidden representations. For a question INLINEFORM0 and an answer INLINEFORM1 , the last state of the GRUs, INLINEFORM2 and INLINEFORM3 , are used as representations, while the text is encoded as a sequence of hidden states INLINEFORM4 . We then compute an attention score INLINEFORM5 for each hidden state INLINEFORM6 using the question representation INLINEFORM7 , a weight matrix INLINEFORM8 , and an attention bias INLINEFORM9 . Last, a text representation INLINEFORM10 is computed as a weighted average of the hidden representations: DISPLAYFORM0\n[source_id=52] The probability INLINEFORM0 of answer INLINEFORM1 being correct is then predicted using another bilinear weight matrix INLINEFORM2 , followed by an application of the softmax function over both answer options for the question: DISPLAYFORM0",
+      "score": 1.6018418618043306,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ],
+      "child_qasper_evidence_texts": [
+        "We first use a simple word matching baseline, by selecting the answer that has the highest literal overlap with the text. In case of a tie, we randomly select one of the answers.",
+        "The second baseline is a sliding window approach that looks at windows of INLINEFORM0 tokens on the text. Each text and each answer are represented as a sequence of word embeddings. The embeddings for each window of size INLINEFORM1 and each answer are then averaged to derive window and answer representations, respectively. The answer with the lowest cosine distance to one of the windows of the text is then selected as correct.",
+        "We employ a simple neural model as a third baseline. In this model, each text, question, and answer is represented by a vector. For a given sequence of words INLINEFORM0 , we compute this representation by averaging over the components of the word embeddings INLINEFORM1 that correspond to a word INLINEFORM2 , and then apply a linear transformation using a weight matrix. This procedure is applied to each answer INLINEFORM3 to derive an answer representation INLINEFORM4 . The representation of a text INLINEFORM5 and of a question INLINEFORM6 are computed in the same way. We use different weight matrices for INLINEFORM7 , INLINEFORM8 and INLINEFORM9 , respectively. A combined representation INLINEFORM10 for the text–question pair is then constructed using a bilinear transformation matrix INLINEFORM11 : DISPLAYFORM0",
+        "We compute a score for each answer by using the dot product and pass the scores for both answers through a softmax layer for prediction. The probability INLINEFORM0 for an answer INLINEFORM1 to be correct is thus defined as: DISPLAYFORM0",
+        "The attentive reader is a well-established machine comprehension model that reaches good performance e.g. on the CNN/Daily Mail corpus BIBREF14 , BIBREF15 . We use the model formulation by chen2016thorough and lai2017race, who employ bilinear weight functions to compute both attention and answer-text fit. Bi-directional GRUs are used to encode questions, texts and answers into hidden representations. For a question INLINEFORM0 and an answer INLINEFORM1 , the last state of the GRUs, INLINEFORM2 and INLINEFORM3 , are used as representations, while the text is encoded as a sequence of hidden states INLINEFORM4 . We then compute an attention score INLINEFORM5 for each hidden state INLINEFORM6 using the question representation INLINEFORM7 , a weight matrix INLINEFORM8 , and an attention bias INLINEFORM9 . Last, a text representation INLINEFORM10 is computed as a weighted average of the hidden representations: DISPLAYFORM0",
+        "The probability INLINEFORM0 of answer INLINEFORM1 being correct is then predicted using another bilinear weight matrix INLINEFORM2 , followed by an application of the softmax function over both answer options for the question: DISPLAYFORM0"
+      ],
+      "child_pages": [
+        9,
+        9,
+        9,
+        9,
+        9,
+        9
+      ],
+      "child_sections": [
+        "Models",
+        "Models",
+        "Models",
+        "Models",
+        "Models",
+        "Models"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Models",
+          0
+        ],
+        [
+          "Models",
+          1
+        ],
+        [
+          "Models",
+          2
+        ],
+        [
+          "Models",
+          3
+        ],
+        [
+          "Models",
+          4
+        ],
+        [
+          "Models",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Models",
+      "section": "Models",
+      "title_path": "Models",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 2,
+      "content": "We introduce a large dataset of narrative texts and questions about these texts, intended to be used in a machine comprehension task that requires reasoning using commonsense knowledge. Our dataset complements similar datasets in that we focus on stories about everyday activities, such as going to the movies or working in the garden, and that the questions require commonsense knowledge, or more specifically, script knowledge, to be answered. We show that our mode of data collection via crowdsourcing results in a substantial amount of such inference questions. The dataset forms the basis of a shared task on commonsense and script knowledge organized at SemEval 2018 and provides challenging test cases for the broader natural language understanding community.",
+      "qasper_evidence_text": "We introduce a large dataset of narrative texts and questions about these texts, intended to be used in a machine comprehension task that requires reasoning using commonsense knowledge. Our dataset complements similar datasets in that we focus on stories about everyday activities, such as going to the movies or working in the garden, and that the questions require commonsense knowledge, or more specifically, script knowledge, to be answered. We show that our mode of data collection via crowdsourcing results in a substantial amount of such inference questions. The dataset forms the basis of a shared task on commonsense and script knowledge organized at SemEval 2018 and provides challenging test cases for the broader natural language understanding community.",
+      "source_node_id": 2,
+      "node_id": 2,
+      "paragraph_id": 2,
+      "evidence_id": 2,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_0",
+      "rank": 2,
+      "score": 3.5220743714685567,
+      "block_type": "paragraph",
+      "page": 0,
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title": "Abstract",
+      "hotpot_title": "Abstract",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 32,
+      "content": "For all experiments, we admitted only experienced MTurk workers who are based in the US. One HIT consisted of writing one text for the text collection, formulating 15 questions for the question collection, or finding 15 pairs of answers for the answer collection. We paid $0.50 per HIT for the text and question collection, and $0.60 per HIT for the answer collection.",
+      "qasper_evidence_text": "For all experiments, we admitted only experienced MTurk workers who are based in the US. One HIT consisted of writing one text for the text collection, formulating 15 questions for the question collection, or finding 15 pairs of answers for the answer collection. We paid $0.50 per HIT for the text and question collection, and $0.60 per HIT for the answer collection.",
+      "source_node_id": 32,
+      "node_id": 32,
+      "paragraph_id": 32,
+      "evidence_id": 32,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_6",
+      "rank": 3,
+      "score": 2.3061261874829846,
+      "block_type": "paragraph",
+      "page": 6,
+      "section_id": "Data Statistics",
+      "section": "Data Statistics",
+      "title": "Data Statistics",
+      "hotpot_title": "Data Statistics",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 2
+    }
+  ],
+  "supporting_block_ids": [
+    2,
+    32
+  ]
+}

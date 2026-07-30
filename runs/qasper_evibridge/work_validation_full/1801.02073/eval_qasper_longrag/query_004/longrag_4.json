@@ -1,0 +1,61 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Answer Retrieval\n[source_id=19] This section describes another selection-based QA task, called answer retrieval, that finds the answer context from a larger dataset, the entire Wikipedia. SQuAD provides no mapping of the answer contexts to Wikipedia, whereas WikiQA and SelQA provide mappings; however, their data do not come from the same version of Wikipedia. We propose an automatic way of mapping the answer contexts from all corpora to the same version of Wikipeda so they can be coherently used for answer retrieval.\n[source_id=20] Each paragraph in Wikipedia is first indexed by Lucene using {1,2,3}-grams, where the paragraphs are separated by WikiExtractor and segmented by NLP4J (28.7M+ paragraphs are indexed). Each answer sentence from the corpora in Table TABREF3 is then queried to Lucene, and the top-5 ranked paragraphs are retrieved. The cosine similarity between each sentence in these paragraphs and the answer sentence is measured for INLINEFORM0 -grams, say INLINEFORM1 . A weight is assigned to each INLINEFORM2 -gram score, say INLINEFORM3 , and the weighted sum is measured: INLINEFORM4 . The fixed weights of INLINEFORM5 are used for our experiments, which can be improved.\n[source_id=21] If there exists a sentence whose INLINEFORM0 , the paragraph consisting of that sentence is considered the silver-standard answer passage. Table TABREF3 shows how robust these silver-standard passages are based on human judgement ( INLINEFORM1 ) and how many passages are collected ( INLINEFORM2 ) for INLINEFORM3 , where the human judgement is performed on 50 random samples for each case. For answer retrieval, a dataset is created by INLINEFORM4 , which gives INLINEFORM5 accuracy and INLINEFORM6 coverage, respectively. Finally, each question is queried to Lucene and the top- INLINEFORM7 paragraphs are retrieved from the entire Wikipedia. If the answer sentence exists within those retrieved paragraphs according to the silver-standard, it is considered correct.\n[source_id=22] Finding a paragraph that includes the answer context out of the entire Wikipedia is an extremely difficult task (128.7M). The last row of Table TABREF3 shows results from answer retrieval. Given INLINEFORM0 , SelQA and SQuAD show about 34% and 35% accuracy, which are reasonable. However, WikiQA shows a significantly lower accuracy of 12.47%; this is because the questions in WikiQA is about twice shorter than the questions in the other corpora such that not enough lexicons can be extracted from these questions for the Lucene search.",
+  "score": 4.09851103683339,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    19,
+    20,
+    21,
+    22
+  ],
+  "child_qasper_evidence_texts": [
+    "This section describes another selection-based QA task, called answer retrieval, that finds the answer context from a larger dataset, the entire Wikipedia. SQuAD provides no mapping of the answer contexts to Wikipedia, whereas WikiQA and SelQA provide mappings; however, their data do not come from the same version of Wikipedia. We propose an automatic way of mapping the answer contexts from all corpora to the same version of Wikipeda so they can be coherently used for answer retrieval.",
+    "Each paragraph in Wikipedia is first indexed by Lucene using {1,2,3}-grams, where the paragraphs are separated by WikiExtractor and segmented by NLP4J (28.7M+ paragraphs are indexed). Each answer sentence from the corpora in Table TABREF3 is then queried to Lucene, and the top-5 ranked paragraphs are retrieved. The cosine similarity between each sentence in these paragraphs and the answer sentence is measured for INLINEFORM0 -grams, say INLINEFORM1 . A weight is assigned to each INLINEFORM2 -gram score, say INLINEFORM3 , and the weighted sum is measured: INLINEFORM4 . The fixed weights of INLINEFORM5 are used for our experiments, which can be improved.",
+    "If there exists a sentence whose INLINEFORM0 , the paragraph consisting of that sentence is considered the silver-standard answer passage. Table TABREF3 shows how robust these silver-standard passages are based on human judgement ( INLINEFORM1 ) and how many passages are collected ( INLINEFORM2 ) for INLINEFORM3 , where the human judgement is performed on 50 random samples for each case. For answer retrieval, a dataset is created by INLINEFORM4 , which gives INLINEFORM5 accuracy and INLINEFORM6 coverage, respectively. Finally, each question is queried to Lucene and the top- INLINEFORM7 paragraphs are retrieved from the entire Wikipedia. If the answer sentence exists within those retrieved paragraphs according to the silver-standard, it is considered correct.",
+    "Finding a paragraph that includes the answer context out of the entire Wikipedia is an extremely difficult task (128.7M). The last row of Table TABREF3 shows results from answer retrieval. Given INLINEFORM0 , SelQA and SQuAD show about 34% and 35% accuracy, which are reasonable. However, WikiQA shows a significantly lower accuracy of 12.47%; this is because the questions in WikiQA is about twice shorter than the questions in the other corpora such that not enough lexicons can be extracted from these questions for the Lucene search."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Answer Retrieval",
+    "Answer Retrieval",
+    "Answer Retrieval",
+    "Answer Retrieval"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Answer Retrieval",
+      0
+    ],
+    [
+      "Answer Retrieval",
+      1
+    ],
+    [
+      "Answer Retrieval",
+      2
+    ],
+    [
+      "Answer Retrieval",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Answer Retrieval",
+  "section": "Answer Retrieval",
+  "title_path": "Answer Retrieval",
+  "block_type": "long_unit"
+}

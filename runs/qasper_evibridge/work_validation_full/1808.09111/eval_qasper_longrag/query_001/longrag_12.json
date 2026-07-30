@@ -1,0 +1,61 @@
+{
+  "id": "longrag_12",
+  "content": "[Section] Unsupervised POS tagging\n[source_id=55] For unsupervised POS tagging, we use a Markov-structured syntax model in our approach, which is a popular structure for unsupervised tagging tasks BIBREF9 , BIBREF10 .\n[source_id=56] Following existing literature, we train and test on the entire WSJ corpus (49208 sentences, 1M tokens). We use 45 tag clusters, the number of POS tags that appear in WSJ corpus. We train the discrete HMM and the Gaussian HMM BIBREF9 as baselines. For the Gaussian HMM, mean vectors of Gaussian emissions are initialized with the empirical mean of all word vectors with an additive noise. We assume diagonal covariance matrix for INLINEFORM0 and initialize it with the empirical variance of the word vectors. Following BIBREF9 , the covariance matrix is fixed during training. The multinomial probabilities are initialized as INLINEFORM1 , where INLINEFORM2 . For our approach, we initialize the syntax model and Gaussian parameters with the pre-trained Gaussian HMM. The weights of layers in the rectified network are initialized from a uniform distribution with mean zero and a standard deviation of INLINEFORM3 , where INLINEFORM4 is the input dimension. We evaluate the performance of POS tagging with both Many-to-One (M-1) accuracy BIBREF23 and V-Measure (VM) BIBREF24 . Given a model we found that the tagging performance is well-correlated with the training data likelihood, thus we use training data likelihood as a unsupervised criterion to select the trained model over 10 random restarts after training 50 epochs. We repeat this process 5 times and report the mean and standard deviation of performance.\n[source_id=57] We compare our approach with basic HMM, Gaussian HMM, and several state-of-the-art systems, including sophisticated HMM variants and clustering techniques with hand-engineered features. The results are presented in Table TABREF32 . Through the introduced latent embeddings and additional neural projection, our approach improves over the Gaussian HMM by 5.4 points in M-1 and 5.6 points in VM. Neural HMM (NHMM) BIBREF10 is a baseline that also learns word representation jointly. Both their basic model and extended Conv version does not outperform the Gaussian HMM. Their best model incorporates another LSTM to model long distance dependency and breaks the Markov assumption, yet our approach still achieves substantial improvement over it without considering more context information. Moreover, our method outperforms the best published result that benefits from hand-engineered features BIBREF27 by 2.0 points on VM.\n[source_id=58] We found that most tagging errors happen in noun subcategories. Therefore, we do the one-to-one mapping between gold POS tags and induced clusters and plot the normalized confusion matrix of noun subcategories in Figure FIGREF35 . The Gaussian HMM fails to identify “NN” and “NNS” correctly for most cases, and it often recognizes “NNPS” as “NNP”. In contrast, our approach corrects these errors well.",
+  "score": 2.6151994346104255,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_12",
+  "child_source_node_ids": [
+    55,
+    56,
+    57,
+    58
+  ],
+  "child_qasper_evidence_texts": [
+    "For unsupervised POS tagging, we use a Markov-structured syntax model in our approach, which is a popular structure for unsupervised tagging tasks BIBREF9 , BIBREF10 .",
+    "Following existing literature, we train and test on the entire WSJ corpus (49208 sentences, 1M tokens). We use 45 tag clusters, the number of POS tags that appear in WSJ corpus. We train the discrete HMM and the Gaussian HMM BIBREF9 as baselines. For the Gaussian HMM, mean vectors of Gaussian emissions are initialized with the empirical mean of all word vectors with an additive noise. We assume diagonal covariance matrix for INLINEFORM0 and initialize it with the empirical variance of the word vectors. Following BIBREF9 , the covariance matrix is fixed during training. The multinomial probabilities are initialized as INLINEFORM1 , where INLINEFORM2 . For our approach, we initialize the syntax model and Gaussian parameters with the pre-trained Gaussian HMM. The weights of layers in the rectified network are initialized from a uniform distribution with mean zero and a standard deviation of INLINEFORM3 , where INLINEFORM4 is the input dimension. We evaluate the performance of POS tagging with both Many-to-One (M-1) accuracy BIBREF23 and V-Measure (VM) BIBREF24 . Given a model we found that the tagging performance is well-correlated with the training data likelihood, thus we use training data likelihood as a unsupervised criterion to select the trained model over 10 random restarts after training 50 epochs. We repeat this process 5 times and report the mean and standard deviation of performance.",
+    "We compare our approach with basic HMM, Gaussian HMM, and several state-of-the-art systems, including sophisticated HMM variants and clustering techniques with hand-engineered features. The results are presented in Table TABREF32 . Through the introduced latent embeddings and additional neural projection, our approach improves over the Gaussian HMM by 5.4 points in M-1 and 5.6 points in VM. Neural HMM (NHMM) BIBREF10 is a baseline that also learns word representation jointly. Both their basic model and extended Conv version does not outperform the Gaussian HMM. Their best model incorporates another LSTM to model long distance dependency and breaks the Markov assumption, yet our approach still achieves substantial improvement over it without considering more context information. Moreover, our method outperforms the best published result that benefits from hand-engineered features BIBREF27 by 2.0 points on VM.",
+    "We found that most tagging errors happen in noun subcategories. Therefore, we do the one-to-one mapping between gold POS tags and induced clusters and plot the normalized confusion matrix of noun subcategories in Figure FIGREF35 . The Gaussian HMM fails to identify “NN” and “NNS” correctly for most cases, and it often recognizes “NNPS” as “NNP”. In contrast, our approach corrects these errors well."
+  ],
+  "child_pages": [
+    12,
+    12,
+    12,
+    12
+  ],
+  "child_sections": [
+    "Unsupervised POS tagging",
+    "Unsupervised POS tagging",
+    "Unsupervised POS tagging",
+    "Unsupervised POS tagging"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Unsupervised POS tagging",
+      0
+    ],
+    [
+      "Unsupervised POS tagging",
+      1
+    ],
+    [
+      "Unsupervised POS tagging",
+      2
+    ],
+    [
+      "Unsupervised POS tagging",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_12",
+  "section_id": "Unsupervised POS tagging",
+  "section": "Unsupervised POS tagging",
+  "title_path": "Unsupervised POS tagging",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,286 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Qualitative Analysis\n[source_id=44] We looked at the automatic corrections for 100 erroneous sentences of English and Estonian each as well as 80 sentences of Latvian. The overall aim was to find the ratio of sentences where (1) all errors have been corrected (2) only some are corrected (3) only some are corrected and part of the meaning is changed and (4) all meaning is lost.\n[source_id=45] The analysis was done separately for four error types: spelling and grammatical errors, word choice and word order. In case a sentence included more that one error type it was counted once for each error type. For English the first two types were annotated in the corpus, the rest were annotated by us, separating the original third error category into two new ones. The results can be seen in Table TABREF15 .\n[source_id=46] Not all English sentences included errors. 30 sentences remained unchanged, out of which 17 had no mistakes in them. For the changed sentences 87% were fully or partially corrected. In case of Estonian, where all sentences had mistakes, 61 out of the 100 sentences were fully or partially corrected without loss of information. 12 sentences became nonsense, all of which originally had some lexical mistakes. For English the results are similar: the most confusing type of errors that leads to complete loss of meaning is word choice. On the other hand, this was also the most common error type for both languages and errors of that type were fully corrected in 45% of cases for Estonian and 72% for English. Using words in the wrong order is a typical learner's error for Estonian that has rather free word order. It is also difficult to describe or set rules for this type of error. Our model manages this type rather well, correcting 79% of sentences acceptably, only losing some meaning in 2 sentences including this error type.\n[source_id=47] A similar experiment using 80 Latvian sentences yielded 17 fully corrected sentences, 15, 22 and 26 respectively for the other categories. As the Latvian model is weaker in general, this also leads to more chances of losing some of the meaning; we exclude it from the more detailed analysis and focus on English and Estonian.\n[source_id=48] Our model handles punctuation, word order mistakes and grammatical errors well. For example the subject-verb disagreement in English UID16 and verb-object disagreement in Estonian UID19 have been corrected.\n[source_id=49] “When price of gas goes up , the consumer do not want buy gas for fuels”\n[source_id=50] “When the price of gas goes up, the consumer doesn't want to buy gas for fuels”\n[source_id=51] “Sellepärast ütleb ta filmi lõpus, et tahab oma unistuse tagasi”\n[source_id=52] “Sellepärast ütleb ta filmi lõpus, et tahab oma unistust tagasi”\n[source_id=53] that's-why says he film at-end, that (he)-wants his-own dream INLINEFORM0\n[source_id=54] Sentences that include several error types are generally noticeably more difficult to correct. Depending on the error types that have been combined our model manages quite well and corrects all or several errors present. The sentence UID23 includes mistakes with word order and word choice: the argument \"vabaainetele\" (to elective courses) here should precede the verb and the verb \"registreeruma\" (register oneself) takes no such argument. Our model corrects both mistakes while also replacing the word \"seejärel\" (after that) with its synonym.\n[source_id=55] Seejärel pidi igaüks ennast registreeruma vabaainetele.\n[source_id=56] then had-to everyone oneself register-oneself to-free-courses\n[source_id=57] Siis pidi igaüks end vabaainetele registreerima.\n[source_id=58] then had-to everyone oneself to-free-courses register\n[source_id=59] The model fixes typos, but it mainly manages cases where two letters are needed but one is written and vice versa, for example \"detailled\" is corrected to \"detailed\" and ‘planing’ to \"planning\". More complicated mistakes are missed, especially if combined with other error types, and in some sentences a misspelled word is changed into an incorrect form that has a common ending, like \"misundrestood\" to \"misundrested\". The results get better if the input has been automatically spell-checked.\n[source_id=60] The system does more changes than are strictly necessary and often replaces correct words and phrases, for example \"frequently\" was changed to to \"often\" or in Estonian “öelda” (\"say\") to “avaldada” (\"publish\"). Sometimes this also confuses the meaning: \"siblings\" was changed to \"friends\".\n[source_id=61] To conclude this section, our model reliable corrects grammatical, spelling and word order errors on , with more mixed performance on lexical choice errors and some unnecessary paraphrasing of the input. The error types that the model manages well can be traced back to having a strong monolingual language model, a common trait of a good NMT model. As the model operates on the level of word parts and its vocabulary is limited, this leads to combining wrong word parts, sometimes across languages. This could be fixed by either using character-based NMT or doing automatic spelling correction prior to applying our current model.\n[source_id=62] We limit further comparisons to two styles, translating sentences of the OpenSubtitles test set into the style of Europarl and vice versa. Our assumption is that, generally, movie subtitles gravitate towards the more informal style, and parliament proceedings towards the more formal (see examples of translations into those styles in Table TABREF30 ). Preliminary tests showed that JRC-Acquis and EMEA texts resulted in practically the same style as Europarl. We also leave Latvian out of the evaluations, assuming that its performance is weaker, similarly to GEC results.\n[source_id=63] Human evaluation was performed on a subset of 100 sentences, 50 of them selected randomly from the OpenSubtitles test set and the other 50 from Europarl. Each sentence was translated into the opposite style. The resulting pairs were presented to participants, who were asked the following questions about each of them: (1) Do the sentences differ in any way? (2) How fluent is the translated sentence? (On a scale of 1 to 4, where 1 is unreadable, and 4 is perfectly fluent); (3) How similar are the sentences in meaning? (With options \"exactly the same\", \"the same with minor changes\", \"more or less the same\", \"completely different or nonsensical\"); (4) Does the translated sentence sound more formal than the original, more informal, or neither? (5) What differences are there between the sentences? (E.g. grammatical, lexical, missing words or phrases, word order, contractions, the use of formal \"you\").\n[source_id=64] Two such surveys were conducted, one in English and one in Estonian. 3 people participated in each of them, each of the three evaluators presented with the same set of examples.\n[source_id=65] In evaluation of fluency, all three human evaluators gave the translated sentences the same score in 41 out of 55 cases in English (not taking into account sentences which were simply copied from their originals), and in 51 out of 68 cases in Estonian. In evaluation of direction of style transfer, all three evaluators agreed in 16 cases and at least two agreed in 43 cases in English, and in Estonian in 19 cases all three agreed and in 59 at least two.\n[source_id=66] Of the 100 translated sentences, 45 were marked by all participants as being the same as their original sentences in the English set and 32 in Estonian. The remaining 55 and 68, respectively, were used to quantify style transfer quality.\n[source_id=67] Being a reasonably strong MT system, our model scores quite high on fluency (3.84 for English, 3.64 for Estonian) and meaning preservation (3.67 for English, 3.35 for Estonian). For meaning preservation, the judgments were converted into a scale of 1-4, where 1 stands for completely different meanings or nonsensical sentences, and 4 for the exact same meaning.\n[source_id=68] We evaluated the style transfer itself in the following way. For each pair of sentences, the average score given by three evaluators was calculated, in which the answer that the translated sentence is more formal counts as +1, more informal as -1, and neither as 0. We calculated the root mean square error between these scores and desired values (+1 if we aimed to make the sentence more formal, -1 if more informal). RMSE of 0 would stand for always transferring style in the right direction as judged by all evaluators, and 2 for always transferring style in the wrong direction.\n[source_id=69] On the English set, the RMSE is 0.78, and on Estonian 0.89. These numbers show that style transfer generally happens in the right direction, but is not very strong. Of the 55 sentences in English that were different from their source sentences, in 33 cases the sign of the average human score matched the desired one, in 7 it did not, and in 15 no change in style was observed by humans. In Estonian 36 sentences showed the right direction of style transfer, 10 wrong, and 22 no change.\n[source_id=70] In English sentences where the direction of style transfer was found to be correct (Figure FIGREF32 ), changes in use of contractions were reported in 19 cases (e.g. I have just been vs. I've just been), lexical changes in 15 cases (e.g. 'cause vs. because, or sure vs. certainly), grammatical in 13 (e.g. replacing no one's gonna with no one will, or method of production with production method), missing or added words or phrases in 8 cases.\n[source_id=71] In Estonian correctly transferred sentences (Figure FIGREF32 ), the most frequently reported were lexical substitutions (30 cases), followed by missing of added words or phrases (24 cases), changes in grammar (22 cases) and in word order (16 cases).\n[source_id=72] To conclude this section, unlike many style transfer models which produce text with strong style characteristics (e.g. with strong positive or negative sentiment), often at the cost of preserving meaning and fluency, our model gravitates towards keeping the meaning and fluency of the original sentence intact and mimicking some of the desired stylistic traits.",
+  "score": 4.283034477327869,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72
+  ],
+  "child_qasper_evidence_texts": [
+    "We looked at the automatic corrections for 100 erroneous sentences of English and Estonian each as well as 80 sentences of Latvian. The overall aim was to find the ratio of sentences where (1) all errors have been corrected (2) only some are corrected (3) only some are corrected and part of the meaning is changed and (4) all meaning is lost.",
+    "The analysis was done separately for four error types: spelling and grammatical errors, word choice and word order. In case a sentence included more that one error type it was counted once for each error type. For English the first two types were annotated in the corpus, the rest were annotated by us, separating the original third error category into two new ones. The results can be seen in Table TABREF15 .",
+    "Not all English sentences included errors. 30 sentences remained unchanged, out of which 17 had no mistakes in them. For the changed sentences 87% were fully or partially corrected. In case of Estonian, where all sentences had mistakes, 61 out of the 100 sentences were fully or partially corrected without loss of information. 12 sentences became nonsense, all of which originally had some lexical mistakes. For English the results are similar: the most confusing type of errors that leads to complete loss of meaning is word choice. On the other hand, this was also the most common error type for both languages and errors of that type were fully corrected in 45% of cases for Estonian and 72% for English. Using words in the wrong order is a typical learner's error for Estonian that has rather free word order. It is also difficult to describe or set rules for this type of error. Our model manages this type rather well, correcting 79% of sentences acceptably, only losing some meaning in 2 sentences including this error type.",
+    "A similar experiment using 80 Latvian sentences yielded 17 fully corrected sentences, 15, 22 and 26 respectively for the other categories. As the Latvian model is weaker in general, this also leads to more chances of losing some of the meaning; we exclude it from the more detailed analysis and focus on English and Estonian.",
+    "Our model handles punctuation, word order mistakes and grammatical errors well. For example the subject-verb disagreement in English UID16 and verb-object disagreement in Estonian UID19 have been corrected.",
+    "“When price of gas goes up , the consumer do not want buy gas for fuels”",
+    "“When the price of gas goes up, the consumer doesn't want to buy gas for fuels”",
+    "“Sellepärast ütleb ta filmi lõpus, et tahab oma unistuse tagasi”",
+    "“Sellepärast ütleb ta filmi lõpus, et tahab oma unistust tagasi”",
+    "that's-why says he film at-end, that (he)-wants his-own dream INLINEFORM0",
+    "Sentences that include several error types are generally noticeably more difficult to correct. Depending on the error types that have been combined our model manages quite well and corrects all or several errors present. The sentence UID23 includes mistakes with word order and word choice: the argument \"vabaainetele\" (to elective courses) here should precede the verb and the verb \"registreeruma\" (register oneself) takes no such argument. Our model corrects both mistakes while also replacing the word \"seejärel\" (after that) with its synonym.",
+    "Seejärel pidi igaüks ennast registreeruma vabaainetele.",
+    "then had-to everyone oneself register-oneself to-free-courses",
+    "Siis pidi igaüks end vabaainetele registreerima.",
+    "then had-to everyone oneself to-free-courses register",
+    "The model fixes typos, but it mainly manages cases where two letters are needed but one is written and vice versa, for example \"detailled\" is corrected to \"detailed\" and ‘planing’ to \"planning\". More complicated mistakes are missed, especially if combined with other error types, and in some sentences a misspelled word is changed into an incorrect form that has a common ending, like \"misundrestood\" to \"misundrested\". The results get better if the input has been automatically spell-checked.",
+    "The system does more changes than are strictly necessary and often replaces correct words and phrases, for example \"frequently\" was changed to to \"often\" or in Estonian “öelda” (\"say\") to “avaldada” (\"publish\"). Sometimes this also confuses the meaning: \"siblings\" was changed to \"friends\".",
+    "To conclude this section, our model reliable corrects grammatical, spelling and word order errors on , with more mixed performance on lexical choice errors and some unnecessary paraphrasing of the input. The error types that the model manages well can be traced back to having a strong monolingual language model, a common trait of a good NMT model. As the model operates on the level of word parts and its vocabulary is limited, this leads to combining wrong word parts, sometimes across languages. This could be fixed by either using character-based NMT or doing automatic spelling correction prior to applying our current model.",
+    "We limit further comparisons to two styles, translating sentences of the OpenSubtitles test set into the style of Europarl and vice versa. Our assumption is that, generally, movie subtitles gravitate towards the more informal style, and parliament proceedings towards the more formal (see examples of translations into those styles in Table TABREF30 ). Preliminary tests showed that JRC-Acquis and EMEA texts resulted in practically the same style as Europarl. We also leave Latvian out of the evaluations, assuming that its performance is weaker, similarly to GEC results.",
+    "Human evaluation was performed on a subset of 100 sentences, 50 of them selected randomly from the OpenSubtitles test set and the other 50 from Europarl. Each sentence was translated into the opposite style. The resulting pairs were presented to participants, who were asked the following questions about each of them: (1) Do the sentences differ in any way? (2) How fluent is the translated sentence? (On a scale of 1 to 4, where 1 is unreadable, and 4 is perfectly fluent); (3) How similar are the sentences in meaning? (With options \"exactly the same\", \"the same with minor changes\", \"more or less the same\", \"completely different or nonsensical\"); (4) Does the translated sentence sound more formal than the original, more informal, or neither? (5) What differences are there between the sentences? (E.g. grammatical, lexical, missing words or phrases, word order, contractions, the use of formal \"you\").",
+    "Two such surveys were conducted, one in English and one in Estonian. 3 people participated in each of them, each of the three evaluators presented with the same set of examples.",
+    "In evaluation of fluency, all three human evaluators gave the translated sentences the same score in 41 out of 55 cases in English (not taking into account sentences which were simply copied from their originals), and in 51 out of 68 cases in Estonian. In evaluation of direction of style transfer, all three evaluators agreed in 16 cases and at least two agreed in 43 cases in English, and in Estonian in 19 cases all three agreed and in 59 at least two.",
+    "Of the 100 translated sentences, 45 were marked by all participants as being the same as their original sentences in the English set and 32 in Estonian. The remaining 55 and 68, respectively, were used to quantify style transfer quality.",
+    "Being a reasonably strong MT system, our model scores quite high on fluency (3.84 for English, 3.64 for Estonian) and meaning preservation (3.67 for English, 3.35 for Estonian). For meaning preservation, the judgments were converted into a scale of 1-4, where 1 stands for completely different meanings or nonsensical sentences, and 4 for the exact same meaning.",
+    "We evaluated the style transfer itself in the following way. For each pair of sentences, the average score given by three evaluators was calculated, in which the answer that the translated sentence is more formal counts as +1, more informal as -1, and neither as 0. We calculated the root mean square error between these scores and desired values (+1 if we aimed to make the sentence more formal, -1 if more informal). RMSE of 0 would stand for always transferring style in the right direction as judged by all evaluators, and 2 for always transferring style in the wrong direction.",
+    "On the English set, the RMSE is 0.78, and on Estonian 0.89. These numbers show that style transfer generally happens in the right direction, but is not very strong. Of the 55 sentences in English that were different from their source sentences, in 33 cases the sign of the average human score matched the desired one, in 7 it did not, and in 15 no change in style was observed by humans. In Estonian 36 sentences showed the right direction of style transfer, 10 wrong, and 22 no change.",
+    "In English sentences where the direction of style transfer was found to be correct (Figure FIGREF32 ), changes in use of contractions were reported in 19 cases (e.g. I have just been vs. I've just been), lexical changes in 15 cases (e.g. 'cause vs. because, or sure vs. certainly), grammatical in 13 (e.g. replacing no one's gonna with no one will, or method of production with production method), missing or added words or phrases in 8 cases.",
+    "In Estonian correctly transferred sentences (Figure FIGREF32 ), the most frequently reported were lexical substitutions (30 cases), followed by missing of added words or phrases (24 cases), changes in grammar (22 cases) and in word order (16 cases).",
+    "To conclude this section, unlike many style transfer models which produce text with strong style characteristics (e.g. with strong positive or negative sentiment), often at the cost of preserving meaning and fluency, our model gravitates towards keeping the meaning and fluency of the original sentence intact and mimicking some of the desired stylistic traits."
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis",
+    "Qualitative Analysis"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Qualitative Analysis",
+      0
+    ],
+    [
+      "Qualitative Analysis",
+      1
+    ],
+    [
+      "Qualitative Analysis",
+      2
+    ],
+    [
+      "Qualitative Analysis",
+      3
+    ],
+    [
+      "Qualitative Analysis",
+      4
+    ],
+    [
+      "Qualitative Analysis",
+      5
+    ],
+    [
+      "Qualitative Analysis",
+      6
+    ],
+    [
+      "Qualitative Analysis",
+      7
+    ],
+    [
+      "Qualitative Analysis",
+      8
+    ],
+    [
+      "Qualitative Analysis",
+      9
+    ],
+    [
+      "Qualitative Analysis",
+      10
+    ],
+    [
+      "Qualitative Analysis",
+      11
+    ],
+    [
+      "Qualitative Analysis",
+      12
+    ],
+    [
+      "Qualitative Analysis",
+      13
+    ],
+    [
+      "Qualitative Analysis",
+      14
+    ],
+    [
+      "Qualitative Analysis",
+      15
+    ],
+    [
+      "Qualitative Analysis",
+      16
+    ],
+    [
+      "Qualitative Analysis",
+      17
+    ],
+    [
+      "Qualitative Analysis",
+      18
+    ],
+    [
+      "Qualitative Analysis",
+      19
+    ],
+    [
+      "Qualitative Analysis",
+      20
+    ],
+    [
+      "Qualitative Analysis",
+      21
+    ],
+    [
+      "Qualitative Analysis",
+      22
+    ],
+    [
+      "Qualitative Analysis",
+      23
+    ],
+    [
+      "Qualitative Analysis",
+      24
+    ],
+    [
+      "Qualitative Analysis",
+      25
+    ],
+    [
+      "Qualitative Analysis",
+      26
+    ],
+    [
+      "Qualitative Analysis",
+      27
+    ],
+    [
+      "Qualitative Analysis",
+      28
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Qualitative Analysis",
+  "section": "Qualitative Analysis",
+  "title_path": "Qualitative Analysis",
+  "block_type": "long_unit"
+}

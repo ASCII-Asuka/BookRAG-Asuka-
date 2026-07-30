@@ -1,0 +1,124 @@
+{
+  "strategy": "ircot",
+  "thoughts": [
+    "The evidence discusses model robustness and attack susceptibility, but does not directly compare RNNs and transformers for the specific task in question.",
+    "The evidence indicates that RNNs are used for word recognition in a defense mechanism, suggesting they may be preferred for handling sequential data and rare/unseen words in this specific task context.",
+    "RNNs are preferred for word recognition in this task because they handle sequential data and rare/unseen words effectively, especially with backoff strategies, which is critical for defending against adversarial attacks."
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "retrieval_query": "Why do they experiment with RNNs instead of transformers for this task?",
+      "thought": "The evidence discusses model robustness and attack susceptibility, but does not directly compare RNNs and transformers for the specific task in question.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 19,
+          "score": 6.38612339168872,
+          "content": "We now describe semi-character RNNs for word recognition, explain their limitations, and suggest techniques to improve them.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "We now describe semi-character RNNs for word recognition, explain their limitations, and suggest techniques to improve them.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 54,
+          "score": 6.335113612818093,
+          "content": "Intuitively, one might suppose that word-piece and character-level models would be more robust to such attacks given they can make use of the remaining context. However, we find that they are the more susceptible. To see why, note that the word `beautiful' can only be altered in a few ways for word-only models, either leading to an UNK or an existing vocabulary word, whereas, word-piece and character-only models treat each unique character combination differently. This provides more variations that an attacker can exploit. Following similar reasoning, add and key attacks pose a greater threat than swap and drop attacks. The robustness of different models can be ordered as word-only $>$ word+char $>$ char-only $\\sim $ word-piece, and the efficacy of different attacks as add $>$ key $>$ drop $>$ swap.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "Intuitively, one might suppose that word-piece and character-level models would be more robust to such attacks given they can make use of the remaining context. However, we find that they are the more susceptible. To see why, note that the word `beautiful' can only be altered in a few ways for word-only models, either leading to an UNK or an existing vocabulary word, whereas, word-piece and character-only models treat each unique character combination differently. This provides more variations that an attacker can exploit. Following similar reasoning, add and key attacks pose a greater threat than swap and drop attacks. The robustness of different models can be ordered as word-only $>$ word+char $>$ char-only $\\sim $ word-piece, and the efficacy of different attacks as add $>$ key $>$ drop $>$ swap.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 12,
+          "score": 5.209460229438563,
+          "content": "Several papers address adversarial attacks on NLP systems. Changes to text, whether word- or character-level, are all perceptible, raising some questions about what should rightly be considered an adversarial example BIBREF8 , BIBREF9 . BIBREF10 address the reading comprehension task, showing that by appending distractor sentences to the end of stories from the SQuAD dataset BIBREF11 , they could cause models to output incorrect answers. Inspired by this work, BIBREF12 demonstrate an attack that breaks entailment systems by replacing a single word with either a synonym or its hypernym. Recently, BIBREF13 investigated the problem of producing natural-seeming adversarial examples, noting that adversarial examples in NLP are often ungrammatical BIBREF14 .",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "Several papers address adversarial attacks on NLP systems. Changes to text, whether word- or character-level, are all perceptible, raising some questions about what should rightly be considered an adversarial example BIBREF8 , BIBREF9 . BIBREF10 address the reading comprehension task, showing that by appending distractor sentences to the end of stories from the SQuAD dataset BIBREF11 , they could cause models to output incorrect answers. Inspired by this work, BIBREF12 demonstrate an attack that breaks entailment systems by replacing a single word with either a synonym or its hypernym. Recently, BIBREF13 investigated the problem of producing natural-seeming adversarial examples, noting that adversarial examples in NLP are often ungrammatical BIBREF14 .",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "retrieval_query": "Why do they experiment with RNNs instead of transformers for this task?\nThought 1: The evidence discusses model robustness and attack susceptibility, but does not directly compare RNNs and transformers for the specific task in question.",
+      "thought": "The evidence indicates that RNNs are used for word recognition in a defense mechanism, suggesting they may be preferred for handling sequential data and rare/unseen words in this specific task context.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 9,
+          "score": 14.538062702692866,
+          "content": "Third (our primary contribution), we propose a task-agnostic defense, attaching a word recognition model that predicts each word in a sentence given a full sequence of (possibly misspelled) inputs. The word recognition model's outputs form the input to a downstream classification model. Our word recognition models build upon the RNN-based semi-character word recognition model due to BIBREF7 . While our word recognizers are trained on domain-specific text from the task at hand, they often predict UNK at test time, owing to the small domain-specific vocabulary. To handle unobserved and rare words, we propose several backoff strategies including falling back on a generic word recognizer trained on a larger corpus. Incorporating our defenses, BERT models subject to 1-character attacks are restored to $88.3$ , $81.1$ , $78.0$ accuracy for swap, drop, add attacks respectively, as compared to $69.2$ , $63.6$ , and $50.0$ for adversarial training",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "Third (our primary contribution), we propose a task-agnostic defense, attaching a word recognition model that predicts each word in a sentence given a full sequence of (possibly misspelled) inputs. The word recognition model's outputs form the input to a downstream classification model. Our word recognition models build upon the RNN-based semi-character word recognition model due to BIBREF7 . While our word recognizers are trained on domain-specific text from the task at hand, they often predict UNK at test time, owing to the small domain-specific vocabulary. To handle unobserved and rare words, we propose several backoff strategies including falling back on a generic word recognizer trained on a larger corpus. Incorporating our defenses, BERT models subject to 1-character attacks are restored to $88.3$ , $81.1$ , $78.0$ accuracy for swap, drop, add attacks respectively, as compared to $69.2$ , $63.6$ , and $50.0$ for adversarial training",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 59,
+          "score": 14.22716195286667,
+          "content": "Table 4 shows the accuracy of BERT on 200 examples from the dev set of the MRPC paraphrase detection task under various attack and defense settings. We re-trained the ScRNN model variants on the MRPC training set for these experiments. Again, we find that simple 1-2 character attacks can bring down the accuracy of BERT significantly ( $89\\%$ to $31\\%$ ). Word recognition models can provide an effective defense, with both our pass-through and neutral variants recovering most of the accuracy. While the neutral backoff model is effective on 2-char attacks, it hurts performance in the no attack setting, since it incorrectly modifies certain correctly spelled entity names. Since the two variants are already effective, we did not train a background model for this task.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "Table 4 shows the accuracy of BERT on 200 examples from the dev set of the MRPC paraphrase detection task under various attack and defense settings. We re-trained the ScRNN model variants on the MRPC training set for these experiments. Again, we find that simple 1-2 character attacks can bring down the accuracy of BERT significantly ( $89\\%$ to $31\\%$ ). Word recognition models can provide an effective defense, with both our pass-through and neutral variants recovering most of the accuracy. While the neutral backoff model is effective on 2-char attacks, it hurts performance in the no attack setting, since it incorrectly modifies certain correctly spelled entity names. Since the two variants are already effective, we did not train a background model for this task.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 19,
+          "score": 13.691389665514885,
+          "content": "We now describe semi-character RNNs for word recognition, explain their limitations, and suggest techniques to improve them.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "We now describe semi-character RNNs for word recognition, explain their limitations, and suggest techniques to improve them.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "retrieval_query": "Why do they experiment with RNNs instead of transformers for this task?\nThought 1: The evidence discusses model robustness and attack susceptibility, but does not directly compare RNNs and transformers for the specific task in question.\nThought 2: The evidence indicates that RNNs are used for word recognition in a defense mechanism, suggesting they may be preferred for handling sequential data and rare/unseen words in this specific task context.",
+      "thought": "RNNs are preferred for word recognition in this task because they handle sequential data and rare/unseen words effectively, especially with backoff strategies, which is critical for defending against adversarial attacks.",
+      "stop": true,
+      "retrieved": [
+        {
+          "id": 9,
+          "score": 32.961554252365346,
+          "content": "Third (our primary contribution), we propose a task-agnostic defense, attaching a word recognition model that predicts each word in a sentence given a full sequence of (possibly misspelled) inputs. The word recognition model's outputs form the input to a downstream classification model. Our word recognition models build upon the RNN-based semi-character word recognition model due to BIBREF7 . While our word recognizers are trained on domain-specific text from the task at hand, they often predict UNK at test time, owing to the small domain-specific vocabulary. To handle unobserved and rare words, we propose several backoff strategies including falling back on a generic word recognizer trained on a larger corpus. Incorporating our defenses, BERT models subject to 1-character attacks are restored to $88.3$ , $81.1$ , $78.0$ accuracy for swap, drop, add attacks respectively, as compared to $69.2$ , $63.6$ , and $50.0$ for adversarial training",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "Third (our primary contribution), we propose a task-agnostic defense, attaching a word recognition model that predicts each word in a sentence given a full sequence of (possibly misspelled) inputs. The word recognition model's outputs form the input to a downstream classification model. Our word recognition models build upon the RNN-based semi-character word recognition model due to BIBREF7 . While our word recognizers are trained on domain-specific text from the task at hand, they often predict UNK at test time, owing to the small domain-specific vocabulary. To handle unobserved and rare words, we propose several backoff strategies including falling back on a generic word recognizer trained on a larger corpus. Incorporating our defenses, BERT models subject to 1-character attacks are restored to $88.3$ , $81.1$ , $78.0$ accuracy for swap, drop, add attacks respectively, as compared to $69.2$ , $63.6$ , and $50.0$ for adversarial training",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 2,
+          "score": 25.962353285781738,
+          "content": "To combat adversarial spelling mistakes, we propose placing a word recognition model in front of the downstream classifier. Our word recognition models build upon the RNN semicharacter architecture, introducing several new backoff strategies for handling rare and unseen words. Trained to recognize words corrupted by random adds, drops, swaps, and keyboard mistakes, our method achieves 32% relative (and 3.3% absolute) error reduction over the vanilla semi-character model. Notably, our pipeline confers robustness on the downstream classifier, outperforming both adversarial training and off-the-shelf spell checkers. Against a BERT model fine-tuned for sentiment analysis, a single adversarially-chosen character attack lowers accuracy from 90.3% to 45.8%. Our defense restores accuracy to 75%\n1 . Surprisingly, better word recognition does not always entail greater robustness. Our analysis reveals that robustness also depends upon a quantity that we denote the sensitivity.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "To combat adversarial spelling mistakes, we propose placing a word recognition model in front of the downstream classifier. Our word recognition models build upon the RNN semicharacter architecture, introducing several new backoff strategies for handling rare and unseen words. Trained to recognize words corrupted by random adds, drops, swaps, and keyboard mistakes, our method achieves 32% relative (and 3.3% absolute) error reduction over the vanilla semi-character model. Notably, our pipeline confers robustness on the downstream classifier, outperforming both adversarial training and off-the-shelf spell checkers. Against a BERT model fine-tuned for sentiment analysis, a single adversarially-chosen character attack lowers accuracy from 90.3% to 45.8%. Our defense restores accuracy to 75%\n1 . Surprisingly, better word recognition does not always entail greater robustness. Our analysis reveals that robustness also depends upon a quantity that we denote the sensitivity.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 59,
+          "score": 25.798986154310033,
+          "content": "Table 4 shows the accuracy of BERT on 200 examples from the dev set of the MRPC paraphrase detection task under various attack and defense settings. We re-trained the ScRNN model variants on the MRPC training set for these experiments. Again, we find that simple 1-2 character attacks can bring down the accuracy of BERT significantly ( $89\\%$ to $31\\%$ ). Word recognition models can provide an effective defense, with both our pass-through and neutral variants recovering most of the accuracy. While the neutral backoff model is effective on 2-char attacks, it hurts performance in the no attack setting, since it incorrectly modifies certain correctly spelled entity names. Since the two variants are already effective, we did not train a background model for this task.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "Table 4 shows the accuracy of BERT on 200 examples from the dev set of the MRPC paraphrase detection task under various attack and defense settings. We re-trained the ScRNN model variants on the MRPC training set for these experiments. Again, we find that simple 1-2 character attacks can bring down the accuracy of BERT significantly ( $89\\%$ to $31\\%$ ). Word recognition models can provide an effective defense, with both our pass-through and neutral variants recovering most of the accuracy. While the neutral backoff model is effective on 2-char attacks, it hurts performance in the no attack setting, since it incorrectly modifies certain correctly spelled entity names. Since the two variants are already effective, we did not train a background model for this task.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    }
+  ],
+  "retrieved_block_ids": [
+    19,
+    54,
+    12,
+    9,
+    59,
+    2
+  ],
+  "supporting_block_ids": []
+}

@@ -1,0 +1,106 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Pre-training\n[source_id=46] We adapted the original BERT model to be more suitable for our data and task. In particular, we pre-train the model on each EHR visit (within both single-visit EHR sequences and multi-visit EHR sequences). We modified the input and pre-training objectives of the BERT model: (1) For the input, we built the Transformer encoder on the GNN outputs, i.e. ontology embeddings, for visit embedding. For the original EHR sequence, it means essentially we combine the GNN model with a Transformer to become a new integrated encoder. In addition, we removed the position embedding as we explained before. (2) As for the pre-training procedures, we modified the original pre-training tasks i.e., Masked LM (language model) task and Next Sentence prediction task to self-prediction task and dual-prediction task. The idea to conduct these tasks is to make the visit embedding absorb enough information about what it is made of and what it is able to predict.\n[source_id=47] Thus, for the self-prediction task, we want the visit embedding $v^1_\\ast $ to recover what it is made of, i.e., the input medical codes $\\mathcal {C}_\\ast ^t$ for each visit as follows:\n[source_id=48] $$\\begin{aligned}\n&\\mathcal {L}_{se}(\\mathbf {v}^1_\\ast , \\mathcal {C}_\\ast ^1) = -\\log p(\\mathcal {C}_\\ast ^1 | \\mathbf {v}^1_\\ast ) \\\\\n& = - \\sum _{c \\in \\mathcal {C}_\\ast ^1}\\log p(c_\\ast ^1 | \\mathbf {v}^1_\\ast ) + \\sum _{c \\in \\mathcal {C}_\\ast \\setminus \\mathcal {C}_\\ast ^1}\\log p(c_\\ast ^1 | \\mathbf {v}^1_\\ast )\n\\end{aligned}$$   (Eq. 19)\n[source_id=49] we minimize the binary cross entropy loss $\\mathcal {L}_s$ , and in practise, $\\text{Sigmoid}(f(\\mathbf {v}_\\ast ))$ should be transformed by applying a fully connected neural network $f(\\cdot )$ with one hidden layer. With an analogy to the Masked LM task in BERT, we also used specific symbol [MASK] to randomly replace the original medical code $c_\\ast \\in \\mathcal {C}_\\ast ^1$ . So there are $15\\%$ codes in $\\mathcal {C}_\\ast $ which will be replaced randomly and the model should have the ability to predict the masked code based on others.\n[source_id=50] Likewise, for the dual-prediction task, since the visit embedding $\\mathbf {v}_\\ast $ carries the information of medical codes of type $\\ast $ , we can further expect it has the ability to do more task-specific prediction as follows:\n[source_id=51] $$\\begin{aligned}\n\\mathcal {L}_{du} = -\\log p(\\mathcal {C}_d^1 | \\mathbf {v}_m^1) - \\log p(\\mathcal {C}_m^1 | \\mathbf {v}_d^1)\n\\end{aligned}$$   (Eq. 20)\n[source_id=52] where we use the same transformation function $\\text{Sigmoid}(f_1(\\mathbf {v}_m^1))$ , $\\text{Sigmoid}(f_2(\\mathbf {v}_d^1))$ with different weight matrix to transform the visit embedding and optimize the binary cross entropy loss $\\mathcal {L}_{du}$ expanded same as $\\mathcal {L}_{se}$ in Eq. 19 . This is a direct adaptation of the next sentence prediction task. In BERT, the next sentence prediction task facilitates the prediction of sentence relations, which is a common task in NLP. However, in healthcare, most predictive tasks do not have a sequence pair to classify. Instead, we are often interested in predicting unknown disease or medication codes of the sequence. For example, in medication recommendation, we want to predict multiple medications given only the diagnosis codes. Inversely, we can also predict unknown diagnosis given the medication codes.\n[source_id=53] Thus, our final pre-training optimization objective can simply be the combination of the aforementioned losses, as shown in Eq. 21 . It is used to train on EHR data from all patients who only have one hospital visits..\n[source_id=54] $$\\begin{aligned}\n\\mathcal {L}_{pr} = \\frac{1}{N} \\sum _{n=1}^N ((\n&\\mathcal {L}_{se}(\\mathbf {v}_d^{1, (n)}, \\mathcal {C}_d^{1, (n)}) + \\mathcal {L}_{se}(\\mathbf {v}_m^{1, (n)}, \\mathcal {C}_m^{1, (n)})\\\\\n& + \\mathcal {L}_{du}^{(n)})\n)\n\\end{aligned}$$   (Eq. 21)",
+  "score": 2.320931233045906,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54
+  ],
+  "child_qasper_evidence_texts": [
+    "We adapted the original BERT model to be more suitable for our data and task. In particular, we pre-train the model on each EHR visit (within both single-visit EHR sequences and multi-visit EHR sequences). We modified the input and pre-training objectives of the BERT model: (1) For the input, we built the Transformer encoder on the GNN outputs, i.e. ontology embeddings, for visit embedding. For the original EHR sequence, it means essentially we combine the GNN model with a Transformer to become a new integrated encoder. In addition, we removed the position embedding as we explained before. (2) As for the pre-training procedures, we modified the original pre-training tasks i.e., Masked LM (language model) task and Next Sentence prediction task to self-prediction task and dual-prediction task. The idea to conduct these tasks is to make the visit embedding absorb enough information about what it is made of and what it is able to predict.",
+    "Thus, for the self-prediction task, we want the visit embedding $v^1_\\ast $ to recover what it is made of, i.e., the input medical codes $\\mathcal {C}_\\ast ^t$ for each visit as follows:",
+    "$$\\begin{aligned}\n&\\mathcal {L}_{se}(\\mathbf {v}^1_\\ast , \\mathcal {C}_\\ast ^1) = -\\log p(\\mathcal {C}_\\ast ^1 | \\mathbf {v}^1_\\ast ) \\\\\n& = - \\sum _{c \\in \\mathcal {C}_\\ast ^1}\\log p(c_\\ast ^1 | \\mathbf {v}^1_\\ast ) + \\sum _{c \\in \\mathcal {C}_\\ast \\setminus \\mathcal {C}_\\ast ^1}\\log p(c_\\ast ^1 | \\mathbf {v}^1_\\ast )\n\\end{aligned}$$   (Eq. 19)",
+    "we minimize the binary cross entropy loss $\\mathcal {L}_s$ , and in practise, $\\text{Sigmoid}(f(\\mathbf {v}_\\ast ))$ should be transformed by applying a fully connected neural network $f(\\cdot )$ with one hidden layer. With an analogy to the Masked LM task in BERT, we also used specific symbol [MASK] to randomly replace the original medical code $c_\\ast \\in \\mathcal {C}_\\ast ^1$ . So there are $15\\%$ codes in $\\mathcal {C}_\\ast $ which will be replaced randomly and the model should have the ability to predict the masked code based on others.",
+    "Likewise, for the dual-prediction task, since the visit embedding $\\mathbf {v}_\\ast $ carries the information of medical codes of type $\\ast $ , we can further expect it has the ability to do more task-specific prediction as follows:",
+    "$$\\begin{aligned}\n\\mathcal {L}_{du} = -\\log p(\\mathcal {C}_d^1 | \\mathbf {v}_m^1) - \\log p(\\mathcal {C}_m^1 | \\mathbf {v}_d^1)\n\\end{aligned}$$   (Eq. 20)",
+    "where we use the same transformation function $\\text{Sigmoid}(f_1(\\mathbf {v}_m^1))$ , $\\text{Sigmoid}(f_2(\\mathbf {v}_d^1))$ with different weight matrix to transform the visit embedding and optimize the binary cross entropy loss $\\mathcal {L}_{du}$ expanded same as $\\mathcal {L}_{se}$ in Eq. 19 . This is a direct adaptation of the next sentence prediction task. In BERT, the next sentence prediction task facilitates the prediction of sentence relations, which is a common task in NLP. However, in healthcare, most predictive tasks do not have a sequence pair to classify. Instead, we are often interested in predicting unknown disease or medication codes of the sequence. For example, in medication recommendation, we want to predict multiple medications given only the diagnosis codes. Inversely, we can also predict unknown diagnosis given the medication codes.",
+    "Thus, our final pre-training optimization objective can simply be the combination of the aforementioned losses, as shown in Eq. 21 . It is used to train on EHR data from all patients who only have one hospital visits..",
+    "$$\\begin{aligned}\n\\mathcal {L}_{pr} = \\frac{1}{N} \\sum _{n=1}^N ((\n&\\mathcal {L}_{se}(\\mathbf {v}_d^{1, (n)}, \\mathcal {C}_d^{1, (n)}) + \\mathcal {L}_{se}(\\mathbf {v}_m^{1, (n)}, \\mathcal {C}_m^{1, (n)})\\\\\n& + \\mathcal {L}_{du}^{(n)})\n)\n\\end{aligned}$$   (Eq. 21)"
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Pre-training",
+    "Pre-training",
+    "Pre-training",
+    "Pre-training",
+    "Pre-training",
+    "Pre-training",
+    "Pre-training",
+    "Pre-training",
+    "Pre-training"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Pre-training",
+      0
+    ],
+    [
+      "Pre-training",
+      1
+    ],
+    [
+      "Pre-training",
+      2
+    ],
+    [
+      "Pre-training",
+      3
+    ],
+    [
+      "Pre-training",
+      4
+    ],
+    [
+      "Pre-training",
+      5
+    ],
+    [
+      "Pre-training",
+      6
+    ],
+    [
+      "Pre-training",
+      7
+    ],
+    [
+      "Pre-training",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Pre-training",
+  "section": "Pre-training",
+  "title_path": "Pre-training",
+  "block_type": "long_unit"
+}

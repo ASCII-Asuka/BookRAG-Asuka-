@@ -1,0 +1,106 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Forecasting Derailment\n[source_id=49] We evaluate the performance of CRAFT in the task of forecasting conversational derailment in both the Wikipedia and CMV scenarios. To this end, for each of these datasets we pre-train the generative component on the unlabeled portion of the data and fine-tune it on the labeled training split (data size detailed in Section SECREF3).\n[source_id=50] In order to evaluate our sequential system against conversational-level ground truth, we need to aggregate comment level predictions. If any comment in the conversation triggers a positive prediction—i.e., $p_{\\text{event}}(c_{n+1})$ is greater than a threshold learned on the development split—then the respective conversation is predicted to derail. If this forecast is triggered in a conversation that actually derails, but before the derailment actually happens, then the conversation is counted as a true positive; otherwise it is a false positive. If no positive predictions are triggered for a conversation, but it actually derails then it counts as a false negative; if it does not derail then it is a true negative.\n[source_id=51] Fixed-length window baselines. We first seek to compare CRAFT to existing, fixed-length window approaches to forecasting. To this end, we implement two such baselines: Awry, which is the state-of-the-art method proposed in BIBREF9 based on pragmatic features in the first comment-reply pair, and BoW, a simple bag-of-words baseline that makes a prediction using TF-IDF weighted bag-of-words features extracted from the first comment-reply pair.\n[source_id=52] Online forecasting baselines. Next, we consider simpler approaches for making forecasts as the conversations happen (i.e., in an online fashion). First, we propose Cumulative BoW, a model that recomputes bag-of-words features on all comments seen thus far every time a new comment arrives. While this approach does exhibit the desired behavior of producing updated predictions for each new comment, it fails to account for relationships between comments.\n[source_id=53] This simple cumulative approach cannot be directly extended to models whose features are strictly based on a fixed number of comments, like Awry. An alternative is to use a sliding window: for a feature set based on a window of $W$ comments, upon each new comment we can extract features from a window containing that comment and the $W-1$ comments preceding it. We apply this to the Awry method and call this model Sliding Awry. For both these baselines, we aggregate comment-level predictions in the same way as in our main model.\n[source_id=54] CRAFT ablations. Finally, we consider two modified versions of the CRAFT model in order to evaluate the impact of two of its key components: (1) the pre-training step, and (2) its ability to capture inter-comment dependencies through its hierarchical memory.\n[source_id=55] To evaluate the impact of pre-training, we train the prediction component of CRAFT on only the labeled training data, without first pre-training the encoder layers with the unlabeled data. We find that given the relatively small size of labeled data, this baseline fails to successfully learn, and ends up performing at the level of random guessing. This result underscores the need for the pre-training step that can make use of unlabeled data.\n[source_id=56] To evaluate the impact of the hierarchical memory, we implement a simplified version of CRAFT where the memory size of the context encoder is zero (CRAFT $-$ CE), thus effectively acting as if the pre-training component is a vanilla seq2seq model. In other words, this model cannot capture inter-comment dependencies, and instead at each step makes a prediction based only on the utterance encoding of the latest comment.\n[source_id=57] Results. Table TABREF17 compares CRAFT to the baselines on the test splits (random baseline is 50%) and illustrates several key findings. First, we find that unsurprisingly, accounting for full conversational context is indeed helpful, with even the simple online baselines outperforming the fixed-window baselines. On both datasets, CRAFT outperforms all baselines (including the other online models) in terms of accuracy and F1. Furthermore, although it loses on precision (to CRAFT $-$ CE) and recall (to Cumulative BoW) individually on the Wikipedia data, CRAFT has the superior balance between the two, having both a visibly higher precision-recall curve and larger area under the curve (AUPR) than the baselines (Figure FIGREF20). This latter property is particularly useful in a practical setting, as it allows moderators to tune model performance to some desired precision without having to sacrifice as much in the way of recall (or vice versa) compared to the baselines and pre-existing solutions.",
+  "score": 1.6917652235576341,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57
+  ],
+  "child_qasper_evidence_texts": [
+    "We evaluate the performance of CRAFT in the task of forecasting conversational derailment in both the Wikipedia and CMV scenarios. To this end, for each of these datasets we pre-train the generative component on the unlabeled portion of the data and fine-tune it on the labeled training split (data size detailed in Section SECREF3).",
+    "In order to evaluate our sequential system against conversational-level ground truth, we need to aggregate comment level predictions. If any comment in the conversation triggers a positive prediction—i.e., $p_{\\text{event}}(c_{n+1})$ is greater than a threshold learned on the development split—then the respective conversation is predicted to derail. If this forecast is triggered in a conversation that actually derails, but before the derailment actually happens, then the conversation is counted as a true positive; otherwise it is a false positive. If no positive predictions are triggered for a conversation, but it actually derails then it counts as a false negative; if it does not derail then it is a true negative.",
+    "Fixed-length window baselines. We first seek to compare CRAFT to existing, fixed-length window approaches to forecasting. To this end, we implement two such baselines: Awry, which is the state-of-the-art method proposed in BIBREF9 based on pragmatic features in the first comment-reply pair, and BoW, a simple bag-of-words baseline that makes a prediction using TF-IDF weighted bag-of-words features extracted from the first comment-reply pair.",
+    "Online forecasting baselines. Next, we consider simpler approaches for making forecasts as the conversations happen (i.e., in an online fashion). First, we propose Cumulative BoW, a model that recomputes bag-of-words features on all comments seen thus far every time a new comment arrives. While this approach does exhibit the desired behavior of producing updated predictions for each new comment, it fails to account for relationships between comments.",
+    "This simple cumulative approach cannot be directly extended to models whose features are strictly based on a fixed number of comments, like Awry. An alternative is to use a sliding window: for a feature set based on a window of $W$ comments, upon each new comment we can extract features from a window containing that comment and the $W-1$ comments preceding it. We apply this to the Awry method and call this model Sliding Awry. For both these baselines, we aggregate comment-level predictions in the same way as in our main model.",
+    "CRAFT ablations. Finally, we consider two modified versions of the CRAFT model in order to evaluate the impact of two of its key components: (1) the pre-training step, and (2) its ability to capture inter-comment dependencies through its hierarchical memory.",
+    "To evaluate the impact of pre-training, we train the prediction component of CRAFT on only the labeled training data, without first pre-training the encoder layers with the unlabeled data. We find that given the relatively small size of labeled data, this baseline fails to successfully learn, and ends up performing at the level of random guessing. This result underscores the need for the pre-training step that can make use of unlabeled data.",
+    "To evaluate the impact of the hierarchical memory, we implement a simplified version of CRAFT where the memory size of the context encoder is zero (CRAFT $-$ CE), thus effectively acting as if the pre-training component is a vanilla seq2seq model. In other words, this model cannot capture inter-comment dependencies, and instead at each step makes a prediction based only on the utterance encoding of the latest comment.",
+    "Results. Table TABREF17 compares CRAFT to the baselines on the test splits (random baseline is 50%) and illustrates several key findings. First, we find that unsurprisingly, accounting for full conversational context is indeed helpful, with even the simple online baselines outperforming the fixed-window baselines. On both datasets, CRAFT outperforms all baselines (including the other online models) in terms of accuracy and F1. Furthermore, although it loses on precision (to CRAFT $-$ CE) and recall (to Cumulative BoW) individually on the Wikipedia data, CRAFT has the superior balance between the two, having both a visibly higher precision-recall curve and larger area under the curve (AUPR) than the baselines (Figure FIGREF20). This latter property is particularly useful in a practical setting, as it allows moderators to tune model performance to some desired precision without having to sacrifice as much in the way of recall (or vice versa) compared to the baselines and pre-existing solutions."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Forecasting Derailment",
+    "Forecasting Derailment",
+    "Forecasting Derailment",
+    "Forecasting Derailment",
+    "Forecasting Derailment",
+    "Forecasting Derailment",
+    "Forecasting Derailment",
+    "Forecasting Derailment",
+    "Forecasting Derailment"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Forecasting Derailment",
+      0
+    ],
+    [
+      "Forecasting Derailment",
+      1
+    ],
+    [
+      "Forecasting Derailment",
+      2
+    ],
+    [
+      "Forecasting Derailment",
+      3
+    ],
+    [
+      "Forecasting Derailment",
+      4
+    ],
+    [
+      "Forecasting Derailment",
+      5
+    ],
+    [
+      "Forecasting Derailment",
+      6
+    ],
+    [
+      "Forecasting Derailment",
+      7
+    ],
+    [
+      "Forecasting Derailment",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Forecasting Derailment",
+  "section": "Forecasting Derailment",
+  "title_path": "Forecasting Derailment",
+  "block_type": "long_unit"
+}

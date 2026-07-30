@@ -1,0 +1,492 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_8",
+      "content": "[Section] Experiments and Results ::: Experimental Setup\n[source_id=58] Datasets. We perform our experiments with two predetermined event categories: cyber security (CyberAttack) and death of politicians (PoliticianDeath). These event categories are chosen as they are representative of important event types that are of interest to many governments and companies. The need to create our own dataset was motivated by the lack of public datasets for event detection on microposts. The few available datasets do not suit our requirements. For example, the publicly available Events-2012 Twitter dataset BIBREF20 contains generic event descriptions such as Politics, Sports, Culture etc. Our work targets more specific event categories BIBREF21. Following previous studies BIBREF1, we collect event-related microposts from Twitter using 11 and 8 seed events (see Section SECREF2) for CyberAttack and PoliticianDeath, respectively. Unlabeled microposts are collected by using the keyword `hack' for CyberAttack, while for PoliticianDeath, we use a set of keywords related to `politician' and `death' (such as `bureaucrat', `dead' etc.) For each dataset, we randomly select 500 tweets from the unlabeled subset and manually label them for evaluation. Table TABREF25 shows key statistics from our two datasets.\n[source_id=59] Comparison Methods. To demonstrate the generality of our approach on different event detection models, we consider Logistic Regression (LR) BIBREF1 and Multilayer Perceptron (MLP) BIBREF2 as the target models. As the goal of our experiments is to demonstrate the effectiveness of our approach as a new model training technique, we use these widely used models. Also, we note that in our case other neural network models with more complex network architectures for event detection, such as the bi-directional LSTM BIBREF17, turn out to be less effective than a simple feedforward network. For both LR and MLP, we evaluate our proposed human-AI loop approach for keyword discovery and expectation estimation by comparing against the weakly supervised learning method proposed by BIBREF1 (BIBREF1) and BIBREF17 (BIBREF17) where only one initial keyword is used with an expectation estimated by an individual expert.\n[source_id=60] Parameter Settings. We empirically set optimal parameters based on a held-out validation set that contains 20% of the test data. These include the hyperparamters of the target model, those of our proposed probabilistic model, and the parameters used for training the target model. We explore MLP with 1, 2 and 3 hidden layers and apply a grid search in 32, 64, 128, 256, 512 for the dimension of the embeddings and that of the hidden layers. For the coefficient of expectation regularization, we follow BIBREF6 (BIBREF6) and set it to $\\lambda =10 \\times $ #labeled examples. For model training, we use the Adam BIBREF22 optimization algorithm for both models.\n[source_id=61] Evaluation. Following BIBREF1 (BIBREF1) and BIBREF3 (BIBREF3), we use accuracy and area under the precision-recall curve (AUC) metrics to measure the performance of our proposed approach. We note that due to the imbalance in our datasets (20% positive microposts in CyberAttack and 27% in PoliticianDeath), accuracy is dominated by negative examples; AUC, in comparison, better characterizes the discriminative power of the model.\n[source_id=62] Crowdsourcing. We chose Level 3 workers on the Figure-Eight crowdsourcing platform for our experiments. The inter-annotator agreement in micropost classification is taken into account through the EM algorithm. For keyword discovery, we filter keywords based on the frequency of the keyword being selected by the crowd. In terms of cost-effectiveness, our approach is motivated from the fact that crowdsourced data annotation can be expensive, and is thus designed with minimal crowd involvement. For each iteration, we selected 50 tweets for keyword discovery and 50 tweets for micropost classification per keyword. For a dataset with 80k tweets (e.g., CyberAttack), our approach only requires to manually inspect 800 tweets (for 8 keywords), which is only 1% of the entire dataset.",
+      "score": 5.715847251829081,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        58,
+        59,
+        60,
+        61,
+        62
+      ],
+      "child_qasper_evidence_texts": [
+        "Datasets. We perform our experiments with two predetermined event categories: cyber security (CyberAttack) and death of politicians (PoliticianDeath). These event categories are chosen as they are representative of important event types that are of interest to many governments and companies. The need to create our own dataset was motivated by the lack of public datasets for event detection on microposts. The few available datasets do not suit our requirements. For example, the publicly available Events-2012 Twitter dataset BIBREF20 contains generic event descriptions such as Politics, Sports, Culture etc. Our work targets more specific event categories BIBREF21. Following previous studies BIBREF1, we collect event-related microposts from Twitter using 11 and 8 seed events (see Section SECREF2) for CyberAttack and PoliticianDeath, respectively. Unlabeled microposts are collected by using the keyword `hack' for CyberAttack, while for PoliticianDeath, we use a set of keywords related to `politician' and `death' (such as `bureaucrat', `dead' etc.) For each dataset, we randomly select 500 tweets from the unlabeled subset and manually label them for evaluation. Table TABREF25 shows key statistics from our two datasets.",
+        "Comparison Methods. To demonstrate the generality of our approach on different event detection models, we consider Logistic Regression (LR) BIBREF1 and Multilayer Perceptron (MLP) BIBREF2 as the target models. As the goal of our experiments is to demonstrate the effectiveness of our approach as a new model training technique, we use these widely used models. Also, we note that in our case other neural network models with more complex network architectures for event detection, such as the bi-directional LSTM BIBREF17, turn out to be less effective than a simple feedforward network. For both LR and MLP, we evaluate our proposed human-AI loop approach for keyword discovery and expectation estimation by comparing against the weakly supervised learning method proposed by BIBREF1 (BIBREF1) and BIBREF17 (BIBREF17) where only one initial keyword is used with an expectation estimated by an individual expert.",
+        "Parameter Settings. We empirically set optimal parameters based on a held-out validation set that contains 20% of the test data. These include the hyperparamters of the target model, those of our proposed probabilistic model, and the parameters used for training the target model. We explore MLP with 1, 2 and 3 hidden layers and apply a grid search in 32, 64, 128, 256, 512 for the dimension of the embeddings and that of the hidden layers. For the coefficient of expectation regularization, we follow BIBREF6 (BIBREF6) and set it to $\\lambda =10 \\times $ #labeled examples. For model training, we use the Adam BIBREF22 optimization algorithm for both models.",
+        "Evaluation. Following BIBREF1 (BIBREF1) and BIBREF3 (BIBREF3), we use accuracy and area under the precision-recall curve (AUC) metrics to measure the performance of our proposed approach. We note that due to the imbalance in our datasets (20% positive microposts in CyberAttack and 27% in PoliticianDeath), accuracy is dominated by negative examples; AUC, in comparison, better characterizes the discriminative power of the model.",
+        "Crowdsourcing. We chose Level 3 workers on the Figure-Eight crowdsourcing platform for our experiments. The inter-annotator agreement in micropost classification is taken into account through the EM algorithm. For keyword discovery, we filter keywords based on the frequency of the keyword being selected by the crowd. In terms of cost-effectiveness, our approach is motivated from the fact that crowdsourced data annotation can be expensive, and is thus designed with minimal crowd involvement. For each iteration, we selected 50 tweets for keyword discovery and 50 tweets for micropost classification per keyword. For a dataset with 80k tweets (e.g., CyberAttack), our approach only requires to manually inspect 800 tweets (for 8 keywords), which is only 1% of the entire dataset."
+      ],
+      "child_pages": [
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "child_sections": [
+        "Experiments and Results ::: Experimental Setup",
+        "Experiments and Results ::: Experimental Setup",
+        "Experiments and Results ::: Experimental Setup",
+        "Experiments and Results ::: Experimental Setup",
+        "Experiments and Results ::: Experimental Setup"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments and Results ::: Experimental Setup",
+          0
+        ],
+        [
+          "Experiments and Results ::: Experimental Setup",
+          1
+        ],
+        [
+          "Experiments and Results ::: Experimental Setup",
+          2
+        ],
+        [
+          "Experiments and Results ::: Experimental Setup",
+          3
+        ],
+        [
+          "Experiments and Results ::: Experimental Setup",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Experiments and Results ::: Experimental Setup",
+      "section": "Experiments and Results ::: Experimental Setup",
+      "title_path": "Experiments and Results ::: Experimental Setup",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Microblogging platforms such as Twitter are increasingly being used in event detection. Existing approaches mainly use machine learning models and rely on event-related keywords to collect the data for model training. These approaches make strong assumptions on the distribution of the relevant micro-posts containing the keyword -- referred to as the expectation of the distribution -- and use it as a posterior regularization parameter during model training. Such approaches are, however, limited as they fail to reliably estimate the informativeness of a keyword and its expectation for model training. This paper introduces a Human-AI loop approach to jointly discover informative keywords for model training while estimating their expectation. Our approach iteratively leverages the crowd to estimate both keyword specific expectation and the disagreement between the crowd and the model in order to discover new keywords that are most beneficial for model training. These keywords and their expectation not only improve the resulting performance but also make the model training process more transparent. We empirically demonstrate the merits of our approach, both in terms of accuracy and interpretability, on multiple real-world datasets and show that our approach improves the state of the art by 24.3%.",
+      "score": 4.806081051061165,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Microblogging platforms such as Twitter are increasingly being used in event detection. Existing approaches mainly use machine learning models and rely on event-related keywords to collect the data for model training. These approaches make strong assumptions on the distribution of the relevant micro-posts containing the keyword -- referred to as the expectation of the distribution -- and use it as a posterior regularization parameter during model training. Such approaches are, however, limited as they fail to reliably estimate the informativeness of a keyword and its expectation for model training. This paper introduces a Human-AI loop approach to jointly discover informative keywords for model training while estimating their expectation. Our approach iteratively leverages the crowd to estimate both keyword specific expectation and the disagreement between the crowd and the model in order to discover new keywords that are most beneficial for model training. These keywords and their expectation not only improve the resulting performance but also make the model training process more transparent. We empirically demonstrate the merits of our approach, both in terms of accuracy and interpretability, on multiple real-world datasets and show that our approach improves the state of the art by 24.3%."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Experiments and Results ::: Comparative Results on Keyword Discovery (Q2)\n[source_id=67] Figure FIGREF31 shows the evaluation of our approach when discovering new informative keywords for model training (see Section SECREF2: Keyword Discovery). We compare our human-AI collaborative way of discovering new keywords against a query expansion (QE) approach BIBREF23, BIBREF24 that leverages word embeddings to find similar words in the latent semantic space. Specifically, we use pre-trained word embeddings based on a large Google News dataset for query expansion. For instance, the top keywords resulting from QE for `politician' are, `deputy',`ministry',`secretary', and `minister'. For each of these keywords, we use the crowd to label a set of tweets and obtain a corresponding expectation.\n[source_id=68] We observe that our approach consistently outperforms QE by an average of $4.62\\%$ and $52.58\\%$ AUC on CyberAttack and PoliticianDeath, respectively. The large gap between the performance improvements for the two datasets is mainly due to the fact that microposts that are relevant for PoliticianDeath are semantically more complex than those for CyberAttack, as they encode noun-verb relationship (e.g., “the king of ... died ...”) rather than a simple verb (e.g., “... hacked.”) for the CyberAttack microposts. QE only finds synonyms of existing keywords related to either `politician' or `death', however cannot find a meaningful keyword that fully characterizes the death of a politician. For instance, QE finds the keywords `kill' and `murder', which are semantically close to `death' but are not specifically relevant to the death of a politician. Unlike QE, our approach identifies keywords that go beyond mere synonyms and that are more directly related to the end task, i.e., discriminating event-related microposts from non related ones. Examples are `demise' and `condolence'. As a remark, we note that in Figure FIGREF31(b), the increase in QE performance on PoliticianDeath is due to the keywords `deputy' and `minister', which happen to be highly indicative of the death of a politician in our dataset; these keywords are also identified by our approach.",
+      "score": 4.073759780368425,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        67,
+        68
+      ],
+      "child_qasper_evidence_texts": [
+        "Figure FIGREF31 shows the evaluation of our approach when discovering new informative keywords for model training (see Section SECREF2: Keyword Discovery). We compare our human-AI collaborative way of discovering new keywords against a query expansion (QE) approach BIBREF23, BIBREF24 that leverages word embeddings to find similar words in the latent semantic space. Specifically, we use pre-trained word embeddings based on a large Google News dataset for query expansion. For instance, the top keywords resulting from QE for `politician' are, `deputy',`ministry',`secretary', and `minister'. For each of these keywords, we use the crowd to label a set of tweets and obtain a corresponding expectation.",
+        "We observe that our approach consistently outperforms QE by an average of $4.62\\%$ and $52.58\\%$ AUC on CyberAttack and PoliticianDeath, respectively. The large gap between the performance improvements for the two datasets is mainly due to the fact that microposts that are relevant for PoliticianDeath are semantically more complex than those for CyberAttack, as they encode noun-verb relationship (e.g., “the king of ... died ...”) rather than a simple verb (e.g., “... hacked.”) for the CyberAttack microposts. QE only finds synonyms of existing keywords related to either `politician' or `death', however cannot find a meaningful keyword that fully characterizes the death of a politician. For instance, QE finds the keywords `kill' and `murder', which are semantically close to `death' but are not specifically relevant to the death of a politician. Unlike QE, our approach identifies keywords that go beyond mere synonyms and that are more directly related to the end task, i.e., discriminating event-related microposts from non related ones. Examples are `demise' and `condolence'. As a remark, we note that in Figure FIGREF31(b), the increase in QE performance on PoliticianDeath is due to the keywords `deputy' and `minister', which happen to be highly indicative of the death of a politician in our dataset; these keywords are also identified by our approach."
+      ],
+      "child_pages": [
+        10,
+        10
+      ],
+      "child_sections": [
+        "Experiments and Results ::: Comparative Results on Keyword Discovery (Q2)",
+        "Experiments and Results ::: Comparative Results on Keyword Discovery (Q2)"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments and Results ::: Comparative Results on Keyword Discovery (Q2)",
+          0
+        ],
+        [
+          "Experiments and Results ::: Comparative Results on Keyword Discovery (Q2)",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Experiments and Results ::: Comparative Results on Keyword Discovery (Q2)",
+      "section": "Experiments and Results ::: Comparative Results on Keyword Discovery (Q2)",
+      "title_path": "Experiments and Results ::: Comparative Results on Keyword Discovery (Q2)",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Experiments and Results\n[source_id=51] This section presents our experimental setup and results for evaluating our approach. We aim at answering the following questions:\n[source_id=52] [noitemsep,leftmargin=*]\n[source_id=53] Q1: How effectively does our proposed human-AI loop approach enhance the state-of-the-art machine learning models for event detection?\n[source_id=54] Q2: How well does our keyword discovery method work compare to existing keyword expansion methods?\n[source_id=55] Q3: How effective is our approach using crowdsourcing at obtaining new keywords compared with an approach labelling microposts for model training under the same cost?\n[source_id=56] Q4: How much benefit does our unified probabilistic model bring compared to methods that do not take crowd reliability into account?",
+      "score": 3.619966834085295,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        51,
+        52,
+        53,
+        54,
+        55,
+        56
+      ],
+      "child_qasper_evidence_texts": [
+        "This section presents our experimental setup and results for evaluating our approach. We aim at answering the following questions:",
+        "[noitemsep,leftmargin=*]",
+        "Q1: How effectively does our proposed human-AI loop approach enhance the state-of-the-art machine learning models for event detection?",
+        "Q2: How well does our keyword discovery method work compare to existing keyword expansion methods?",
+        "Q3: How effective is our approach using crowdsourcing at obtaining new keywords compared with an approach labelling microposts for model training under the same cost?",
+        "Q4: How much benefit does our unified probabilistic model bring compared to methods that do not take crowd reliability into account?"
+      ],
+      "child_pages": [
+        7,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Experiments and Results",
+        "Experiments and Results",
+        "Experiments and Results",
+        "Experiments and Results",
+        "Experiments and Results",
+        "Experiments and Results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments and Results",
+          0
+        ],
+        [
+          "Experiments and Results",
+          1
+        ],
+        [
+          "Experiments and Results",
+          2
+        ],
+        [
+          "Experiments and Results",
+          3
+        ],
+        [
+          "Experiments and Results",
+          4
+        ],
+        [
+          "Experiments and Results",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Experiments and Results",
+      "section": "Experiments and Results",
+      "title_path": "Experiments and Results",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Event detection on microblogging platforms such as Twitter aims to detect events preemptively. A main task in event detection is detecting events of predetermined types BIBREF0, such as concerts or controversial events based on microposts matching specific event descriptions. This task has extensive applications ranging from cyber security BIBREF1, BIBREF2 to political elections BIBREF3 or public health BIBREF4, BIBREF5. Due to the high ambiguity and inconsistency of the terms used in microposts, event detection is generally performed though statistical machine learning models, which require a labeled dataset for model training. Data labeling is, however, a long, laborious, and usually costly process. For the case of micropost classification, though positive labels can be collected (e.g., using specific hashtags, or event-related date-time information), there is no straightforward way to generate negative labels useful for model training. To tackle this lack of negative labels and the significant manual efforts in data labeling, BIBREF1 (BIBREF1, BIBREF3) introduced a weak supervision based learning approach, which uses only positively labeled data, accompanied by unlabeled examples by filtering microposts that contain a certain keyword indicative of the event type under consideration (e.g., `hack' for cyber security). Another key technique in this context is expectation regularization BIBREF6, BIBREF7, BIBREF1. Here, the estimated proportion of relevant microposts in an unlabeled dataset containing a keyword is given as a keyword-specific expectation. This expectation is used in the regularization term of the model's objective function to constrain the posterior distribution of the model predictions. By doing so, the model is trained with an expectation on its prediction for microposts that contain the keyword. Such a method, however, suffers from two key problems:\n[source_id=5] Due to the unpredictability of event occurrences and the constantly changing dynamics of users' posting frequency BIBREF8, estimating the expectation associated with a keyword is a challenging task, even for domain experts;\n[source_id=6] The performance of the event detection model is constrained by the informativeness of the keyword used for model training. As of now, we lack a principled method for discovering new keywords and improve the model performance.\n[source_id=7] To address the above issues, we advocate a human-AI loop approach for discovering informative keywords and estimating their expectations reliably. Our approach iteratively leverages 1) crowd workers for estimating keyword-specific expectations, and 2) the disagreement between the model and the crowd for discovering new informative keywords. More specifically, at each iteration after we obtain a keyword-specific expectation from the crowd, we train the model using expectation regularization and select those keyword-related microposts for which the model's prediction disagrees the most with the crowd's expectation; such microposts are then presented to the crowd to identify new keywords that best explain the disagreement. By doing so, our approach identifies new keywords which convey more relevant information with respect to existing ones, thus effectively boosting model performance. By exploiting the disagreement between the model and the crowd, our approach can make efficient use of the crowd, which is of critical importance in a human-in-the-loop context BIBREF9, BIBREF10. An additional advantage of our approach is that by obtaining new keywords that improve model performance over time, we are able to gain insight into how the model learns for specific event detection tasks. Such an advantage is particularly useful for event detection using complex models, e.g., deep neural networks, which are intrinsically hard to understand BIBREF11, BIBREF12. An additional challenge in involving crowd workers is that their contributions are not fully reliable BIBREF13. In the crowdsourcing literature, this problem is usually tackled with probabilistic latent variable models BIBREF14, BIBREF15, BIBREF16, which are used to perform truth inference by aggregating a redundant set of crowd contributions. Our human-AI loop approach improves the inference of keyword expectation by aggregating contributions not only from the crowd but also from the model. This, however, comes with its own challenge as the model's predictions are further dependent on the results of expectation inference, which is used for model training. To address this problem, we introduce a unified probabilistic model that seamlessly integrates expectation inference and model training, thereby allowing the former to benefit from the latter while resolving the inter-dependency between the two.\n[source_id=8] To the best of our knowledge, we are the first to propose a human-AI loop approach that iteratively improves machine learning models for event detection. In summary, our work makes the following key contributions:\n[source_id=9] A novel human-AI loop approach for micropost event detection that jointly discovers informative keywords and estimates their expectation;\n[source_id=10] A unified probabilistic model that infers keyword expectation and simultaneously performs model training;\n[source_id=11] An extensive empirical evaluation of our approach on multiple real-world datasets demonstrating that our approach significantly improves the state of the art by an average of 24.3% AUC.\n[source_id=12] The rest of this paper is organized as follows. First, we present our human-AI loop approach in Section SECREF2. Subsequently, we introduce our proposed probabilistic model in Section SECREF3. The experimental setup and results are presented in Section SECREF4. Finally, we briefly cover related work in Section SECREF5 before concluding our work in Section SECREF6.",
+      "score": 3.494088792373498,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "child_qasper_evidence_texts": [
+        "Event detection on microblogging platforms such as Twitter aims to detect events preemptively. A main task in event detection is detecting events of predetermined types BIBREF0, such as concerts or controversial events based on microposts matching specific event descriptions. This task has extensive applications ranging from cyber security BIBREF1, BIBREF2 to political elections BIBREF3 or public health BIBREF4, BIBREF5. Due to the high ambiguity and inconsistency of the terms used in microposts, event detection is generally performed though statistical machine learning models, which require a labeled dataset for model training. Data labeling is, however, a long, laborious, and usually costly process. For the case of micropost classification, though positive labels can be collected (e.g., using specific hashtags, or event-related date-time information), there is no straightforward way to generate negative labels useful for model training. To tackle this lack of negative labels and the significant manual efforts in data labeling, BIBREF1 (BIBREF1, BIBREF3) introduced a weak supervision based learning approach, which uses only positively labeled data, accompanied by unlabeled examples by filtering microposts that contain a certain keyword indicative of the event type under consideration (e.g., `hack' for cyber security). Another key technique in this context is expectation regularization BIBREF6, BIBREF7, BIBREF1. Here, the estimated proportion of relevant microposts in an unlabeled dataset containing a keyword is given as a keyword-specific expectation. This expectation is used in the regularization term of the model's objective function to constrain the posterior distribution of the model predictions. By doing so, the model is trained with an expectation on its prediction for microposts that contain the keyword. Such a method, however, suffers from two key problems:",
+        "Due to the unpredictability of event occurrences and the constantly changing dynamics of users' posting frequency BIBREF8, estimating the expectation associated with a keyword is a challenging task, even for domain experts;",
+        "The performance of the event detection model is constrained by the informativeness of the keyword used for model training. As of now, we lack a principled method for discovering new keywords and improve the model performance.",
+        "To address the above issues, we advocate a human-AI loop approach for discovering informative keywords and estimating their expectations reliably. Our approach iteratively leverages 1) crowd workers for estimating keyword-specific expectations, and 2) the disagreement between the model and the crowd for discovering new informative keywords. More specifically, at each iteration after we obtain a keyword-specific expectation from the crowd, we train the model using expectation regularization and select those keyword-related microposts for which the model's prediction disagrees the most with the crowd's expectation; such microposts are then presented to the crowd to identify new keywords that best explain the disagreement. By doing so, our approach identifies new keywords which convey more relevant information with respect to existing ones, thus effectively boosting model performance. By exploiting the disagreement between the model and the crowd, our approach can make efficient use of the crowd, which is of critical importance in a human-in-the-loop context BIBREF9, BIBREF10. An additional advantage of our approach is that by obtaining new keywords that improve model performance over time, we are able to gain insight into how the model learns for specific event detection tasks. Such an advantage is particularly useful for event detection using complex models, e.g., deep neural networks, which are intrinsically hard to understand BIBREF11, BIBREF12. An additional challenge in involving crowd workers is that their contributions are not fully reliable BIBREF13. In the crowdsourcing literature, this problem is usually tackled with probabilistic latent variable models BIBREF14, BIBREF15, BIBREF16, which are used to perform truth inference by aggregating a redundant set of crowd contributions. Our human-AI loop approach improves the inference of keyword expectation by aggregating contributions not only from the crowd but also from the model. This, however, comes with its own challenge as the model's predictions are further dependent on the results of expectation inference, which is used for model training. To address this problem, we introduce a unified probabilistic model that seamlessly integrates expectation inference and model training, thereby allowing the former to benefit from the latter while resolving the inter-dependency between the two.",
+        "To the best of our knowledge, we are the first to propose a human-AI loop approach that iteratively improves machine learning models for event detection. In summary, our work makes the following key contributions:",
+        "A novel human-AI loop approach for micropost event detection that jointly discovers informative keywords and estimates their expectation;",
+        "A unified probabilistic model that infers keyword expectation and simultaneously performs model training;",
+        "An extensive empirical evaluation of our approach on multiple real-world datasets demonstrating that our approach significantly improves the state of the art by an average of 24.3% AUC.",
+        "The rest of this paper is organized as follows. First, we present our human-AI loop approach in Section SECREF2. Subsequently, we introduce our proposed probabilistic model in Section SECREF3. The experimental setup and results are presented in Section SECREF4. Finally, we briefly cover related work in Section SECREF5 before concluding our work in Section SECREF6."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ],
+        [
+          "Introduction",
+          6
+        ],
+        [
+          "Introduction",
+          7
+        ],
+        [
+          "Introduction",
+          8
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Unified Probabilistic Model ::: Expectation as Model Posterior\n[source_id=34] First, we introduce an expectation regularization technique for the weakly supervised learning of the target model $p_{\\theta ^{(t)}}(y|x)$. In this setting, the objective function of the target model is composed of two parts, corresponding to the labeled microposts $\\mathcal {L}$ and the unlabeled ones $\\mathcal {U}$.\n[source_id=35] The former part aims at maximizing the likelihood of the labeled microposts:\n[source_id=36] where we assume that $\\theta $ is generated from a prior distribution (e.g., Laplacian or Gaussian) parameterized by $\\sigma $.\n[source_id=37] To leverage unlabeled data for model training, we make use of the expectations of existing keywords, i.e., {($w^{(1)}$, $e^{(1)}$), ..., ($w^{(t-1)}$, $e^{(t-1)}$), ($w^{(t)}$, $e^{(t)}$)} (Note that $e^{(t)}$ is inferred), as a regularization term to constrain model training. To do so, we first give the model's expectation for each keyword $w^{(k)}$ ($1\\le k\\le t$) as follows:\n[source_id=38] which denotes the empirical expectation of the model’s posterior predictions on the unlabeled microposts $\\mathcal {U}^{(k)}$ containing keyword $w^{(k)}$. Expectation regularization can then be formulated as the regularization of the distance between the Bernoulli distribution parameterized by the model's expectation and the expectation of the existing keyword:\n[source_id=39] where $D_{KL}[\\cdot \\Vert \\cdot ]$ denotes the KL-divergence between the Bernoulli distributions $Ber(e^{(k)})$ and $Ber(\\mathbb {E}_{x\\sim \\mathcal {U}^{(k)}}(y))$, and $\\lambda $ controls the strength of expectation regularization.",
+      "score": 3.375881788046307,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "child_qasper_evidence_texts": [
+        "First, we introduce an expectation regularization technique for the weakly supervised learning of the target model $p_{\\theta ^{(t)}}(y|x)$. In this setting, the objective function of the target model is composed of two parts, corresponding to the labeled microposts $\\mathcal {L}$ and the unlabeled ones $\\mathcal {U}$.",
+        "The former part aims at maximizing the likelihood of the labeled microposts:",
+        "where we assume that $\\theta $ is generated from a prior distribution (e.g., Laplacian or Gaussian) parameterized by $\\sigma $.",
+        "To leverage unlabeled data for model training, we make use of the expectations of existing keywords, i.e., {($w^{(1)}$, $e^{(1)}$), ..., ($w^{(t-1)}$, $e^{(t-1)}$), ($w^{(t)}$, $e^{(t)}$)} (Note that $e^{(t)}$ is inferred), as a regularization term to constrain model training. To do so, we first give the model's expectation for each keyword $w^{(k)}$ ($1\\le k\\le t$) as follows:",
+        "which denotes the empirical expectation of the model’s posterior predictions on the unlabeled microposts $\\mathcal {U}^{(k)}$ containing keyword $w^{(k)}$. Expectation regularization can then be formulated as the regularization of the distance between the Bernoulli distribution parameterized by the model's expectation and the expectation of the existing keyword:",
+        "where $D_{KL}[\\cdot \\Vert \\cdot ]$ denotes the KL-divergence between the Bernoulli distributions $Ber(e^{(k)})$ and $Ber(\\mathbb {E}_{x\\sim \\mathcal {U}^{(k)}}(y))$, and $\\lambda $ controls the strength of expectation regularization."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Unified Probabilistic Model ::: Expectation as Model Posterior",
+        "Unified Probabilistic Model ::: Expectation as Model Posterior",
+        "Unified Probabilistic Model ::: Expectation as Model Posterior",
+        "Unified Probabilistic Model ::: Expectation as Model Posterior",
+        "Unified Probabilistic Model ::: Expectation as Model Posterior",
+        "Unified Probabilistic Model ::: Expectation as Model Posterior"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Unified Probabilistic Model ::: Expectation as Model Posterior",
+          0
+        ],
+        [
+          "Unified Probabilistic Model ::: Expectation as Model Posterior",
+          1
+        ],
+        [
+          "Unified Probabilistic Model ::: Expectation as Model Posterior",
+          2
+        ],
+        [
+          "Unified Probabilistic Model ::: Expectation as Model Posterior",
+          3
+        ],
+        [
+          "Unified Probabilistic Model ::: Expectation as Model Posterior",
+          4
+        ],
+        [
+          "Unified Probabilistic Model ::: Expectation as Model Posterior",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Unified Probabilistic Model ::: Expectation as Model Posterior",
+      "section": "Unified Probabilistic Model ::: Expectation as Model Posterior",
+      "title_path": "Unified Probabilistic Model ::: Expectation as Model Posterior",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Experiments and Results ::: Cost-Effectiveness Results (Q3)\n[source_id=70] To demonstrate the cost-effectiveness of using crowdsourcing for obtaining new keywords and consequently, their expectations, we compare the performance of our approach with an approach using crowdsourcing to only label microposts for model training at the same cost. Specifically, we conducted an additional crowdsourcing experiment where the same cost used for keyword discovery in our approach is used to label additional microposts for model training. These newly labeled microposts are used with the microposts labeled in the micropost classification task of our approach (see Section SECREF2: Micropost Classification) and the expectation of the initial keyword to train the model for comparison. The model trained in this way increases AUC by 0.87% for CyberAttack, and by 1.06% for PoliticianDeath; in comparison, our proposed approach increases AUC by 33.42% for PoliticianDeath and by 15.23% for CyberAttack over the baseline presented by BIBREF1). These results show that using crowdsourcing for keyword discovery is significantly more cost-effective than simply using crowdsourcing to get additional labels when training the model.",
+      "score": 2.7171698093588526,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        70
+      ],
+      "child_qasper_evidence_texts": [
+        "To demonstrate the cost-effectiveness of using crowdsourcing for obtaining new keywords and consequently, their expectations, we compare the performance of our approach with an approach using crowdsourcing to only label microposts for model training at the same cost. Specifically, we conducted an additional crowdsourcing experiment where the same cost used for keyword discovery in our approach is used to label additional microposts for model training. These newly labeled microposts are used with the microposts labeled in the micropost classification task of our approach (see Section SECREF2: Micropost Classification) and the expectation of the initial keyword to train the model for comparison. The model trained in this way increases AUC by 0.87% for CyberAttack, and by 1.06% for PoliticianDeath; in comparison, our proposed approach increases AUC by 33.42% for PoliticianDeath and by 15.23% for CyberAttack over the baseline presented by BIBREF1). These results show that using crowdsourcing for keyword discovery is significantly more cost-effective than simply using crowdsourcing to get additional labels when training the model."
+      ],
+      "child_pages": [
+        11
+      ],
+      "child_sections": [
+        "Experiments and Results ::: Cost-Effectiveness Results (Q3)"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments and Results ::: Cost-Effectiveness Results (Q3)",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Experiments and Results ::: Cost-Effectiveness Results (Q3)",
+      "section": "Experiments and Results ::: Cost-Effectiveness Results (Q3)",
+      "title_path": "Experiments and Results ::: Cost-Effectiveness Results (Q3)",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_13",
+      "content": "[Section] Related Work\n[source_id=74] Event Detection. The techniques for event extraction from microblogging platforms can be classified according to their domain specificity and their detection method BIBREF0. Early works mainly focus on open domain event detection BIBREF25, BIBREF26, BIBREF27. Our work falls into the category of domain-specific event detection BIBREF21, which has drawn increasing attention due to its relevance for various applications such as cyber security BIBREF1, BIBREF2 and public health BIBREF4, BIBREF5. In terms of technique, our proposed detection method is related to the recently proposed weakly supervised learning methods BIBREF1, BIBREF17, BIBREF3. This comes in contrast with fully-supervised learning methods, which are often limited by the size of the training data (e.g., a few hundred examples) BIBREF28, BIBREF29.\n[source_id=75] Human-in-the-Loop Approaches. Our work extends weakly supervised learning methods by involving humans in the loop BIBREF13. Existing human-in-the-loop approaches mainly leverage crowds to label individual data instances BIBREF9, BIBREF10 or to debug the training data BIBREF30, BIBREF31 or components BIBREF32, BIBREF33, BIBREF34 of a machine learning system. Unlike these works, we leverage crowd workers to label sampled microposts in order to obtain keyword-specific expectations, which can then be generalized to help classify microposts containing the same keyword, thus amplifying the utility of the crowd. Our work is further connected to the topic of interpretability and transparency of machine learning models BIBREF11, BIBREF35, BIBREF12, for which humans are increasingly involved, for instance for post-hoc evaluations of the model's interpretability. In contrast, our approach directly solicits informative keywords from the crowd for model training, thereby providing human-understandable explanations for the improved model.",
+      "score": 2.355677268677943,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_13",
+      "child_source_node_ids": [
+        74,
+        75
+      ],
+      "child_qasper_evidence_texts": [
+        "Event Detection. The techniques for event extraction from microblogging platforms can be classified according to their domain specificity and their detection method BIBREF0. Early works mainly focus on open domain event detection BIBREF25, BIBREF26, BIBREF27. Our work falls into the category of domain-specific event detection BIBREF21, which has drawn increasing attention due to its relevance for various applications such as cyber security BIBREF1, BIBREF2 and public health BIBREF4, BIBREF5. In terms of technique, our proposed detection method is related to the recently proposed weakly supervised learning methods BIBREF1, BIBREF17, BIBREF3. This comes in contrast with fully-supervised learning methods, which are often limited by the size of the training data (e.g., a few hundred examples) BIBREF28, BIBREF29.",
+        "Human-in-the-Loop Approaches. Our work extends weakly supervised learning methods by involving humans in the loop BIBREF13. Existing human-in-the-loop approaches mainly leverage crowds to label individual data instances BIBREF9, BIBREF10 or to debug the training data BIBREF30, BIBREF31 or components BIBREF32, BIBREF33, BIBREF34 of a machine learning system. Unlike these works, we leverage crowd workers to label sampled microposts in order to obtain keyword-specific expectations, which can then be generalized to help classify microposts containing the same keyword, thus amplifying the utility of the crowd. Our work is further connected to the topic of interpretability and transparency of machine learning models BIBREF11, BIBREF35, BIBREF12, for which humans are increasingly involved, for instance for post-hoc evaluations of the model's interpretability. In contrast, our approach directly solicits informative keywords from the crowd for model training, thereby providing human-understandable explanations for the improved model."
+      ],
+      "child_pages": [
+        13,
+        13
+      ],
+      "child_sections": [
+        "Related Work",
+        "Related Work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work",
+          0
+        ],
+        [
+          "Related Work",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_13",
+      "section_id": "Related Work",
+      "section": "Related Work",
+      "title_path": "Related Work",
+      "block_type": "long_unit"
+    }
+  ]
+}

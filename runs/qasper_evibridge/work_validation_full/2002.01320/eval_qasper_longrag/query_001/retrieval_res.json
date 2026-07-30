@@ -1,0 +1,416 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_11",
+      "content": "[Section] Baseline Results ::: Machine Translation (MT)\n[source_id=31] MT models take transcripts (without punctuation) as inputs and outputs translations (with punctuation). For simplicity, we do not change the text preprocessing methods for MT to correct this mismatch. Moreover, this mismatch also exists in cascading ST systems, where MT model inputs are the outputs of an ASR model. Table TABREF20 shows the BLEU scores of MT models. We notice that the results are consistent with what we see from ASR models. For example thanks to abundant training data, French has a decent BLEU score of 29.8/25.4. German doesn't perform well, because of less richness of content (transcripts). The other languages are low resource in CoVoST and it is difficult to train decent models without additional data or pre-training techniques.",
+      "score": 3.852002855668717,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        31
+      ],
+      "child_qasper_evidence_texts": [
+        "MT models take transcripts (without punctuation) as inputs and outputs translations (with punctuation). For simplicity, we do not change the text preprocessing methods for MT to correct this mismatch. Moreover, this mismatch also exists in cascading ST systems, where MT model inputs are the outputs of an ASR model. Table TABREF20 shows the BLEU scores of MT models. We notice that the results are consistent with what we see from ASR models. For example thanks to abundant training data, French has a decent BLEU score of 29.8/25.4. German doesn't perform well, because of less richness of content (transcripts). The other languages are low resource in CoVoST and it is difficult to train decent models without additional data or pre-training techniques."
+      ],
+      "child_pages": [
+        11
+      ],
+      "child_sections": [
+        "Baseline Results ::: Machine Translation (MT)"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Baseline Results ::: Machine Translation (MT)",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Baseline Results ::: Machine Translation (MT)",
+      "section": "Baseline Results ::: Machine Translation (MT)",
+      "title_path": "Baseline Results ::: Machine Translation (MT)",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Spoken language translation has recently witnessed a resurgence in popularity, thanks to the development of end-to-end models and the creation of new corpora, such as Augmented LibriSpeech and MuST-C. Existing datasets involve language pairs with English as a source language, involve very specific domains or are low resource. We introduce CoVoST, a multilingual speech-to-text translation corpus from 11 languages into English, diversified with over 11,000 speakers and over 60 accents. We describe the dataset creation methodology and provide empirical evidence of the quality of the data. We also provide initial benchmarks, including, to our knowledge, the first end-to-end many-to-one multilingual models for spoken language translation. CoVoST is released under CC0 license and free to use. We also provide additional evaluation data derived from Tatoeba under CC licenses.",
+      "score": 3.573561757065108,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Spoken language translation has recently witnessed a resurgence in popularity, thanks to the development of end-to-end models and the creation of new corpora, such as Augmented LibriSpeech and MuST-C. Existing datasets involve language pairs with English as a source language, involve very specific domains or are low resource. We introduce CoVoST, a multilingual speech-to-text translation corpus from 11 languages into English, diversified with over 11,000 speakers and over 60 accents. We describe the dataset creation methodology and provide empirical evidence of the quality of the data. We also provide initial benchmarks, including, to our knowledge, the first end-to-end many-to-one multilingual models for spoken language translation. CoVoST is released under CC0 license and free to use. We also provide additional evaluation data derived from Tatoeba under CC licenses."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] End-to-end speech-to-text translation (ST) has attracted much attention recently BIBREF2, BIBREF3, BIBREF4, BIBREF5, BIBREF6 given its simplicity against cascading automatic speech recognition (ASR) and machine translation (MT) systems. The lack of labeled data, however, has become a major blocker for bridging the performance gaps between end-to-end models and cascading systems. Several corpora have been developed in recent years. post2013improved introduced a 38-hour Spanish-English ST corpus by augmenting the transcripts of the Fisher and Callhome corpora with English translations. di-gangi-etal-2019-must created the largest ST corpus to date from TED talks but the language pairs involved are out of English only. beilharz2019librivoxdeen created a 110-hour German-English ST corpus from LibriVox audiobooks. godard-etal-2018-low created a Moboshi-French ST corpus as part of a rare language documentation effort. woldeyohannis provided an Amharic-English ST corpus in the tourism domain. boito2019mass created a multilingual ST corpus involving 8 languages from a multilingual speech corpus based on Bible readings BIBREF7. Previous work either involves language pairs out of English, very specific domains, very low resource languages or a limited set of language pairs. This limits the scope of study, including the latest explorations on end-to-end multilingual ST BIBREF8, BIBREF9. Our work is mostly similar and concurrent to iranzosnchez2019europarlst who created a multilingual ST corpus from the European Parliament proceedings. The corpus we introduce has larger speech durations and more translation tokens. It is diversified with multiple speakers per transcript/translation. Finally, we provide additional out-of-domain test sets.\n[source_id=5] In this paper, we introduce CoVoST, a multilingual ST corpus based on Common Voice BIBREF10 for 11 languages into English, diversified with over 11,000 speakers and over 60 accents. It includes a total 708 hours of French (Fr), German (De), Dutch (Nl), Russian (Ru), Spanish (Es), Italian (It), Turkish (Tr), Persian (Fa), Swedish (Sv), Mongolian (Mn) and Chinese (Zh) speeches, with French and German ones having the largest durations among existing public corpora. We also collect an additional evaluation corpus from Tatoeba for French, German, Dutch, Russian and Spanish, resulting in a total of 9.3 hours of speech. Both corpora are created at the sentence level and do not require additional alignments or segmentation. Using the official Common Voice train-development-test split, we also provide baseline models, including, to our knowledge, the first end-to-end many-to-one multilingual ST models. CoVoST is released under CC0 license and free to use. The Tatoeba evaluation samples are also available under friendly CC licenses. All the data can be acquired at https://github.com/facebookresearch/covost.",
+      "score": 3.3119788932082854,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5
+      ],
+      "child_qasper_evidence_texts": [
+        "End-to-end speech-to-text translation (ST) has attracted much attention recently BIBREF2, BIBREF3, BIBREF4, BIBREF5, BIBREF6 given its simplicity against cascading automatic speech recognition (ASR) and machine translation (MT) systems. The lack of labeled data, however, has become a major blocker for bridging the performance gaps between end-to-end models and cascading systems. Several corpora have been developed in recent years. post2013improved introduced a 38-hour Spanish-English ST corpus by augmenting the transcripts of the Fisher and Callhome corpora with English translations. di-gangi-etal-2019-must created the largest ST corpus to date from TED talks but the language pairs involved are out of English only. beilharz2019librivoxdeen created a 110-hour German-English ST corpus from LibriVox audiobooks. godard-etal-2018-low created a Moboshi-French ST corpus as part of a rare language documentation effort. woldeyohannis provided an Amharic-English ST corpus in the tourism domain. boito2019mass created a multilingual ST corpus involving 8 languages from a multilingual speech corpus based on Bible readings BIBREF7. Previous work either involves language pairs out of English, very specific domains, very low resource languages or a limited set of language pairs. This limits the scope of study, including the latest explorations on end-to-end multilingual ST BIBREF8, BIBREF9. Our work is mostly similar and concurrent to iranzosnchez2019europarlst who created a multilingual ST corpus from the European Parliament proceedings. The corpus we introduce has larger speech durations and more translation tokens. It is diversified with multiple speakers per transcript/translation. Finally, we provide additional out-of-domain test sets.",
+        "In this paper, we introduce CoVoST, a multilingual ST corpus based on Common Voice BIBREF10 for 11 languages into English, diversified with over 11,000 speakers and over 60 accents. It includes a total 708 hours of French (Fr), German (De), Dutch (Nl), Russian (Ru), Spanish (Es), Italian (It), Turkish (Tr), Persian (Fa), Swedish (Sv), Mongolian (Mn) and Chinese (Zh) speeches, with French and German ones having the largest durations among existing public corpora. We also collect an additional evaluation corpus from Tatoeba for French, German, Dutch, Russian and Spanish, resulting in a total of 9.3 hours of speech. Both corpora are created at the sentence level and do not require additional alignments or segmentation. Using the official Common Voice train-development-test split, we also provide baseline models, including, to our knowledge, the first end-to-end many-to-one multilingual ST models. CoVoST is released under CC0 license and free to use. The Tatoeba evaluation samples are also available under friendly CC licenses. All the data can be acquired at https://github.com/facebookresearch/covost."
+      ],
+      "child_pages": [
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Data Analysis ::: Basic Statistics\n[source_id=17] Basic statistics for CoVoST and TT are listed in Table TABREF2 including (unique) sentence counts, speech durations, speaker demographics (partially available) as well as vocabulary and token statistics (based on Moses-tokenized sentences by sacreMoses) on both transcripts and translations. We see that CoVoST has over 327 hours of German speeches and over 171 hours of French speeches, which, to our knowledge, corresponds to the largest corpus among existing public ST corpora (the second largest is 110 hours BIBREF18 for German and 38 hours BIBREF19 for French). Moreover, CoVoST has a total of 18 hours of Dutch speeches, to our knowledge, contributing the first public Dutch ST resource. CoVoST also has around 27-hour Russian speeches, 37-hour Italian speeches and 67-hour Persian speeches, which is 1.8 times, 2.5 times and 13.3 times of the previous largest public one BIBREF7. Most of the sentences (transcripts) in CoVoST are covered by multiple speakers with potentially different accents, resulting in a rich diversity in the speeches. For example, there are over 1,000 speakers and over 10 accents in the French and German development / test sets. This enables good coverage of speech variations in both model training and evaluation.",
+      "score": 3.070671408926205,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        17
+      ],
+      "child_qasper_evidence_texts": [
+        "Basic statistics for CoVoST and TT are listed in Table TABREF2 including (unique) sentence counts, speech durations, speaker demographics (partially available) as well as vocabulary and token statistics (based on Moses-tokenized sentences by sacreMoses) on both transcripts and translations. We see that CoVoST has over 327 hours of German speeches and over 171 hours of French speeches, which, to our knowledge, corresponds to the largest corpus among existing public ST corpora (the second largest is 110 hours BIBREF18 for German and 38 hours BIBREF19 for French). Moreover, CoVoST has a total of 18 hours of Dutch speeches, to our knowledge, contributing the first public Dutch ST resource. CoVoST also has around 27-hour Russian speeches, 37-hour Italian speeches and 67-hour Persian speeches, which is 1.8 times, 2.5 times and 13.3 times of the previous largest public one BIBREF7. Most of the sentences (transcripts) in CoVoST are covered by multiple speakers with potentially different accents, resulting in a rich diversity in the speeches. For example, there are over 1,000 speakers and over 10 accents in the French and German development / test sets. This enables good coverage of speech variations in both model training and evaluation."
+      ],
+      "child_pages": [
+        4
+      ],
+      "child_sections": [
+        "Data Analysis ::: Basic Statistics"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Data Analysis ::: Basic Statistics",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Data Analysis ::: Basic Statistics",
+      "section": "Data Analysis ::: Basic Statistics",
+      "title_path": "Data Analysis ::: Basic Statistics",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_13",
+      "content": "[Section] Baseline Results ::: Multi-Speaker Evaluation\n[source_id=35] In CoVoST, large portion of transcripts are covered by multiple speakers with different genders, accents and age groups. Besides the standard corpus-level BLEU scores, we also want to evaluate model output variance on the same content (transcript) but different speakers. We hence propose to group samples (and their sentence BLEU scores) by transcript, and then calculate average per-group mean and average coefficient of variation defined as follows:\n[source_id=36] and\n[source_id=37] where $G$ is the set of sentence BLEU scores grouped by transcript and $G^{\\prime } = \\lbrace g | g\\in G, |g|>1, \\textrm {Mean}(g) > 0 \\rbrace $.\n[source_id=38] $\\textrm {BLEU}_{MS}$ provides a normalized quality score as oppose to corpus-level BLEU or unnormalized average of sentence BLEU. And $\\textrm {CoefVar}_{MS}$ is a standardized measure of model stability against different speakers (the lower the better). Table TABREF24 shows the $\\textrm {BLEU}_{MS}$ and $\\textrm {CoefVar}_{MS}$ of our ST models on CoVoST test set. We see that German and Persian have the worst $\\textrm {CoefVar}_{MS}$ (least stable) given their rich speaker diversity in the test set and relatively small train set (see also Figure FIGREF6 and Table TABREF2). Dutch also has poor $\\textrm {CoefVar}_{MS}$ because of the lack of training data. Multilingual models are consistantly more stable on low-resource languages. Ru+Fr, Tr+Fr, Fa+Fr and Zh+Fr even have better $\\textrm {CoefVar}_{MS}$ than all individual languages.",
+      "score": 2.9190035423485385,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_13",
+      "child_source_node_ids": [
+        35,
+        36,
+        37,
+        38
+      ],
+      "child_qasper_evidence_texts": [
+        "In CoVoST, large portion of transcripts are covered by multiple speakers with different genders, accents and age groups. Besides the standard corpus-level BLEU scores, we also want to evaluate model output variance on the same content (transcript) but different speakers. We hence propose to group samples (and their sentence BLEU scores) by transcript, and then calculate average per-group mean and average coefficient of variation defined as follows:",
+        "and",
+        "where $G$ is the set of sentence BLEU scores grouped by transcript and $G^{\\prime } = \\lbrace g | g\\in G, |g|>1, \\textrm {Mean}(g) > 0 \\rbrace $.",
+        "$\\textrm {BLEU}_{MS}$ provides a normalized quality score as oppose to corpus-level BLEU or unnormalized average of sentence BLEU. And $\\textrm {CoefVar}_{MS}$ is a standardized measure of model stability against different speakers (the lower the better). Table TABREF24 shows the $\\textrm {BLEU}_{MS}$ and $\\textrm {CoefVar}_{MS}$ of our ST models on CoVoST test set. We see that German and Persian have the worst $\\textrm {CoefVar}_{MS}$ (least stable) given their rich speaker diversity in the test set and relatively small train set (see also Figure FIGREF6 and Table TABREF2). Dutch also has poor $\\textrm {CoefVar}_{MS}$ because of the lack of training data. Multilingual models are consistantly more stable on low-resource languages. Ru+Fr, Tr+Fr, Fa+Fr and Zh+Fr even have better $\\textrm {CoefVar}_{MS}$ than all individual languages."
+      ],
+      "child_pages": [
+        13,
+        13,
+        13,
+        13
+      ],
+      "child_sections": [
+        "Baseline Results ::: Multi-Speaker Evaluation",
+        "Baseline Results ::: Multi-Speaker Evaluation",
+        "Baseline Results ::: Multi-Speaker Evaluation",
+        "Baseline Results ::: Multi-Speaker Evaluation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Baseline Results ::: Multi-Speaker Evaluation",
+          0
+        ],
+        [
+          "Baseline Results ::: Multi-Speaker Evaluation",
+          1
+        ],
+        [
+          "Baseline Results ::: Multi-Speaker Evaluation",
+          2
+        ],
+        [
+          "Baseline Results ::: Multi-Speaker Evaluation",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_13",
+      "section_id": "Baseline Results ::: Multi-Speaker Evaluation",
+      "section": "Baseline Results ::: Multi-Speaker Evaluation",
+      "title_path": "Baseline Results ::: Multi-Speaker Evaluation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Data Analysis ::: Speaker Diversity\n[source_id=19] As we can see from Table TABREF2, CoVoST is diversified with a rich set of speakers and accents. We further inspect the speaker demographics in terms of sample distributions with respect to speaker counts, accent counts and age groups, which is shown in Figure FIGREF6, FIGREF7 and FIGREF8. We observe that for 8 of the 11 languages, at least 60% of the sentences (transcripts) are covered by multiple speakers. Over 80% of the French sentences have at least 3 speakers. And for German sentences, even over 90% of them have at least 5 speakers. Similarly, we see that a large portion of sentences are spoken in multiple accents for French, German, Dutch and Spanish. Speakers of each language also spread widely across different age groups (below 20, 20s, 30s, 40s, 50s, 60s and 70s).",
+      "score": 2.593160647223988,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        19
+      ],
+      "child_qasper_evidence_texts": [
+        "As we can see from Table TABREF2, CoVoST is diversified with a rich set of speakers and accents. We further inspect the speaker demographics in terms of sample distributions with respect to speaker counts, accent counts and age groups, which is shown in Figure FIGREF6, FIGREF7 and FIGREF8. We observe that for 8 of the 11 languages, at least 60% of the sentences (transcripts) are covered by multiple speakers. Over 80% of the French sentences have at least 3 speakers. And for German sentences, even over 90% of them have at least 5 speakers. Similarly, we see that a large portion of sentences are spoken in multiple accents for French, German, Dutch and Spanish. Speakers of each language also spread widely across different age groups (below 20, 20s, 30s, 40s, 50s, 60s and 70s)."
+      ],
+      "child_pages": [
+        5
+      ],
+      "child_sections": [
+        "Data Analysis ::: Speaker Diversity"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Data Analysis ::: Speaker Diversity",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Data Analysis ::: Speaker Diversity",
+      "section": "Data Analysis ::: Speaker Diversity",
+      "title_path": "Data Analysis ::: Speaker Diversity",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Data Collection and Processing ::: Common Voice (CoVo)\n[source_id=7] Common Voice BIBREF10 is a crowdsourcing speech recognition corpus with an open CC0 license. Contributors record voice clips by reading from a bank of donated sentences. Each voice clip was validated by at least two other users. Most of the sentences are covered by multiple speakers, with potentially different genders, age groups or accents.\n[source_id=8] Raw CoVo data contains samples that passed validation as well as those that did not. To build CoVoST, we only use the former one and reuse the official train-development-test partition of the validated data. As of January 2020, the latest CoVo 2019-06-12 release includes 29 languages. CoVoST is currently built on that release and covers the following 11 languages: French, German, Dutch, Russian, Spanish, Italian, Turkish, Persian, Swedish, Mongolian and Chinese.\n[source_id=9] Validated transcripts were sent to professional translators. Note that the translators had access to the transcripts but not the corresponding voice clips since clips would not carry additional information. Since transcripts were duplicated due to multiple speakers, we deduplicated the transcripts before sending them to translators. As a result, different voice clips of the same content (transcript) will have identical translations in CoVoST for train, development and test splits.\n[source_id=10] In order to control the quality of the professional translations, we applied various sanity checks to the translations BIBREF11. 1) For German-English, French-English and Russian-English translations, we computed sentence-level BLEU BIBREF12 with the NLTK BIBREF13 implementation between the human translations and the automatic translations produced by a state-of-the-art system BIBREF14 (the French-English system was a Transformer big BIBREF15 separately trained on WMT14). We applied this method to these three language pairs only as we are confident about the quality of the corresponding systems. Translations with a score that was too low were manually inspected and sent back to the translators when needed. 2) We manually inspected examples where the source transcript was identical to the translation. 3) We measured the perplexity of the translations using a language model trained on a large amount of clean monolingual data BIBREF14. We manually inspected examples where the translation had a high perplexity and sent them back to translators accordingly. 4) We computed the ratio of English characters in the translations. We manually inspected examples with a low ratio and sent them back to translators accordingly. 5) Finally, we used VizSeq BIBREF16 to calculate similarity scores between transcripts and translations based on LASER cross-lingual sentence embeddings BIBREF17. Samples with low scores were manually inspected and sent back for translation when needed.\n[source_id=11] We also sanity check the overlaps of train, development and test sets in terms of transcripts and voice clips (via MD5 file hashing), and confirm they are totally disjoint.",
+      "score": 2.0447083873897136,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "child_qasper_evidence_texts": [
+        "Common Voice BIBREF10 is a crowdsourcing speech recognition corpus with an open CC0 license. Contributors record voice clips by reading from a bank of donated sentences. Each voice clip was validated by at least two other users. Most of the sentences are covered by multiple speakers, with potentially different genders, age groups or accents.",
+        "Raw CoVo data contains samples that passed validation as well as those that did not. To build CoVoST, we only use the former one and reuse the official train-development-test partition of the validated data. As of January 2020, the latest CoVo 2019-06-12 release includes 29 languages. CoVoST is currently built on that release and covers the following 11 languages: French, German, Dutch, Russian, Spanish, Italian, Turkish, Persian, Swedish, Mongolian and Chinese.",
+        "Validated transcripts were sent to professional translators. Note that the translators had access to the transcripts but not the corresponding voice clips since clips would not carry additional information. Since transcripts were duplicated due to multiple speakers, we deduplicated the transcripts before sending them to translators. As a result, different voice clips of the same content (transcript) will have identical translations in CoVoST for train, development and test splits.",
+        "In order to control the quality of the professional translations, we applied various sanity checks to the translations BIBREF11. 1) For German-English, French-English and Russian-English translations, we computed sentence-level BLEU BIBREF12 with the NLTK BIBREF13 implementation between the human translations and the automatic translations produced by a state-of-the-art system BIBREF14 (the French-English system was a Transformer big BIBREF15 separately trained on WMT14). We applied this method to these three language pairs only as we are confident about the quality of the corresponding systems. Translations with a score that was too low were manually inspected and sent back to the translators when needed. 2) We manually inspected examples where the source transcript was identical to the translation. 3) We measured the perplexity of the translations using a language model trained on a large amount of clean monolingual data BIBREF14. We manually inspected examples where the translation had a high perplexity and sent them back to translators accordingly. 4) We computed the ratio of English characters in the translations. We manually inspected examples with a low ratio and sent them back to translators accordingly. 5) Finally, we used VizSeq BIBREF16 to calculate similarity scores between transcripts and translations based on LASER cross-lingual sentence embeddings BIBREF17. Samples with low scores were manually inspected and sent back for translation when needed.",
+        "We also sanity check the overlaps of train, development and test sets in terms of transcripts and voice clips (via MD5 file hashing), and confirm they are totally disjoint."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Data Collection and Processing ::: Common Voice (CoVo)",
+        "Data Collection and Processing ::: Common Voice (CoVo)",
+        "Data Collection and Processing ::: Common Voice (CoVo)",
+        "Data Collection and Processing ::: Common Voice (CoVo)",
+        "Data Collection and Processing ::: Common Voice (CoVo)"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Data Collection and Processing ::: Common Voice (CoVo)",
+          0
+        ],
+        [
+          "Data Collection and Processing ::: Common Voice (CoVo)",
+          1
+        ],
+        [
+          "Data Collection and Processing ::: Common Voice (CoVo)",
+          2
+        ],
+        [
+          "Data Collection and Processing ::: Common Voice (CoVo)",
+          3
+        ],
+        [
+          "Data Collection and Processing ::: Common Voice (CoVo)",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Data Collection and Processing ::: Common Voice (CoVo)",
+      "section": "Data Collection and Processing ::: Common Voice (CoVo)",
+      "title_path": "Data Collection and Processing ::: Common Voice (CoVo)",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Data Collection and Processing ::: Tatoeba (TT)\n[source_id=13] Tatoeba (TT) is a community built language learning corpus having sentences aligned across multiple languages with the corresponding speech partially available. Its sentences are on average shorter than those in CoVoST (see also Table TABREF2) given the original purpose of language learning. Sentences in TT are licensed under CC BY 2.0 FR and part of the speeches are available under various CC licenses.\n[source_id=14] We construct an evaluation set from TT (for French, German, Dutch, Russian and Spanish) as a complement to CoVoST development and test sets. We collect (speech, transcript, English translation) triplets for the 5 languages and do not include those whose speech has a broken URL or is not CC licensed. We further filter these samples by sentence lengths (minimum 4 words including punctuations) to reduce the portion of short sentences. This makes the resulting evaluation set closer to real-world scenarios and more challenging.\n[source_id=15] We run the same quality checks for TT as for CoVoST but we do not find poor quality translations according to our criteria. Finally, we report the overlap between CoVo transcripts and TT sentences in Table TABREF5. We found a minimal overlap, which makes the TT evaluation set a suitable additional test set when training on CoVoST.",
+      "score": 1.702214648109171,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        13,
+        14,
+        15
+      ],
+      "child_qasper_evidence_texts": [
+        "Tatoeba (TT) is a community built language learning corpus having sentences aligned across multiple languages with the corresponding speech partially available. Its sentences are on average shorter than those in CoVoST (see also Table TABREF2) given the original purpose of language learning. Sentences in TT are licensed under CC BY 2.0 FR and part of the speeches are available under various CC licenses.",
+        "We construct an evaluation set from TT (for French, German, Dutch, Russian and Spanish) as a complement to CoVoST development and test sets. We collect (speech, transcript, English translation) triplets for the 5 languages and do not include those whose speech has a broken URL or is not CC licensed. We further filter these samples by sentence lengths (minimum 4 words including punctuations) to reduce the portion of short sentences. This makes the resulting evaluation set closer to real-world scenarios and more challenging.",
+        "We run the same quality checks for TT as for CoVoST but we do not find poor quality translations according to our criteria. Finally, we report the overlap between CoVo transcripts and TT sentences in Table TABREF5. We found a minimal overlap, which makes the TT evaluation set a suitable additional test set when training on CoVoST."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Data Collection and Processing ::: Tatoeba (TT)",
+        "Data Collection and Processing ::: Tatoeba (TT)",
+        "Data Collection and Processing ::: Tatoeba (TT)"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Data Collection and Processing ::: Tatoeba (TT)",
+          0
+        ],
+        [
+          "Data Collection and Processing ::: Tatoeba (TT)",
+          1
+        ],
+        [
+          "Data Collection and Processing ::: Tatoeba (TT)",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Data Collection and Processing ::: Tatoeba (TT)",
+      "section": "Data Collection and Processing ::: Tatoeba (TT)",
+      "title_path": "Data Collection and Processing ::: Tatoeba (TT)",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 5,
+      "content": "In this paper, we introduce CoVoST, a multilingual ST corpus based on Common Voice BIBREF10 for 11 languages into English, diversified with over 11,000 speakers and over 60 accents. It includes a total 708 hours of French (Fr), German (De), Dutch (Nl), Russian (Ru), Spanish (Es), Italian (It), Turkish (Tr), Persian (Fa), Swedish (Sv), Mongolian (Mn) and Chinese (Zh) speeches, with French and German ones having the largest durations among existing public corpora. We also collect an additional evaluation corpus from Tatoeba for French, German, Dutch, Russian and Spanish, resulting in a total of 9.3 hours of speech. Both corpora are created at the sentence level and do not require additional alignments or segmentation. Using the official Common Voice train-development-test split, we also provide baseline models, including, to our knowledge, the first end-to-end many-to-one multilingual ST models. CoVoST is released under CC0 license and free to use. The Tatoeba evaluation samples are also available under friendly CC licenses. All the data can be acquired at https://github.com/facebookresearch/covost.",
+      "qasper_evidence_text": "In this paper, we introduce CoVoST, a multilingual ST corpus based on Common Voice BIBREF10 for 11 languages into English, diversified with over 11,000 speakers and over 60 accents. It includes a total 708 hours of French (Fr), German (De), Dutch (Nl), Russian (Ru), Spanish (Es), Italian (It), Turkish (Tr), Persian (Fa), Swedish (Sv), Mongolian (Mn) and Chinese (Zh) speeches, with French and German ones having the largest durations among existing public corpora. We also collect an additional evaluation corpus from Tatoeba for French, German, Dutch, Russian and Spanish, resulting in a total of 9.3 hours of speech. Both corpora are created at the sentence level and do not require additional alignments or segmentation. Using the official Common Voice train-development-test split, we also provide baseline models, including, to our knowledge, the first end-to-end many-to-one multilingual ST models. CoVoST is released under CC0 license and free to use. The Tatoeba evaluation samples are also available under friendly CC licenses. All the data can be acquired at https://github.com/facebookresearch/covost.",
+      "source_node_id": 5,
+      "node_id": 5,
+      "paragraph_id": 5,
+      "evidence_id": 5,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 3,
+      "score": 3.3119788932082854,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 1
+    },
+    {
+      "id": 7,
+      "content": "Common Voice BIBREF10 is a crowdsourcing speech recognition corpus with an open CC0 license. Contributors record voice clips by reading from a bank of donated sentences. Each voice clip was validated by at least two other users. Most of the sentences are covered by multiple speakers, with potentially different genders, age groups or accents.",
+      "qasper_evidence_text": "Common Voice BIBREF10 is a crowdsourcing speech recognition corpus with an open CC0 license. Contributors record voice clips by reading from a bank of donated sentences. Each voice clip was validated by at least two other users. Most of the sentences are covered by multiple speakers, with potentially different genders, age groups or accents.",
+      "source_node_id": 7,
+      "node_id": 7,
+      "paragraph_id": 7,
+      "evidence_id": 7,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_2",
+      "rank": 7,
+      "score": 2.0447083873897136,
+      "block_type": "paragraph",
+      "page": 2,
+      "section_id": "Data Collection and Processing ::: Common Voice (CoVo)",
+      "section": "Data Collection and Processing ::: Common Voice (CoVo)",
+      "title": "Data Collection and Processing ::: Common Voice (CoVo)",
+      "hotpot_title": "Data Collection and Processing ::: Common Voice (CoVo)",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 2
+    }
+  ],
+  "supporting_block_ids": [
+    5,
+    7
+  ]
+}

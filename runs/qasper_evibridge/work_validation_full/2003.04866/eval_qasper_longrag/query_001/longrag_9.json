@@ -1,0 +1,142 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring\n[source_id=55] Across all languages, 145 human annotators were asked to score all 1,888 pairs (in their given language). We finally collect at least ten valid annotations for each word pair in each language. All annotators were required to abide by the following instructions:\n[source_id=56] 1. Each annotator must assign an integer score between 0 and 6 (inclusive) indicating how semantically similar the two words in a given pair are. A score of 6 indicates very high similarity (i.e., perfect synonymy), while zero indicates no similarity.\n[source_id=57] 2. Each annotator must score the entire set of 1,888 pairs in the dataset. The pairs must not be shared between different annotators.\n[source_id=58] 3. Annotators are able to break the workload over a period of approximately 2-3 weeks, and are able to use external sources (e.g. dictionaries, thesauri, WordNet) if required.\n[source_id=59] 4. Annotators are kept anonymous, and are not able to communicate with each other during the annotation process.\n[source_id=60] The selection criteria for the annotators required that all annotators must be native speakers of the target language. Preference to annotators with university education was given, but not required. Annotators were asked to complete a spreadsheet containing the translated pairs of words, as well as the part-of-speech, and a column to enter the score. The annotators did not have access to the original pairs in English.\n[source_id=61] To ensure the quality of the collected ratings, we have employed an adjudication protocol similar to the one proposed and validated by Pilehvar:2018emnlp. It consists of the following three rounds:\n[source_id=62] Round 1: All annotators are asked to follow the instructions outlined above, and to rate all 1,888 pairs with integer scores between 0 and 6.\n[source_id=63] Round 2: We compare the scores of all annotators and identify the pairs for each annotator that have shown the most disagreement. We ask the annotators to reconsider the assigned scores for those pairs only. The annotators may chose to either change or keep the scores. As in the case with Round 1, the annotators have no access to the scores of the other annotators, and the process is anonymous. This process gives a chance for annotators to correct errors or reconsider their judgments, and has been shown to be very effective in reaching consensus, as reported by BIBREF78. We used a very similar procedure as BIBREF78 to identify the pairs with the most disagreement; for each annotator, we marked the $i$th pair if the rated score $s_i$ falls within: $s_i \\ge \\mu _i + 1.5$ or $s_i \\le \\mu _i - 1.5$, where $\\mu _i$ is the mean of the other annotators' scores.\n[source_id=64] Round 3: We compute the average agreement for each annotator (with the other annotators), by measuring the average Spearman's correlation against all other annotators. We discard the scores of annotators that have shown the least average agreement with all other annotators, while we maintain at least ten annotators per language by the end of this round. The actual process is done in multiple iterations: (S1) we measure the average agreement for each annotator with every other annotator (this corresponds to the APIAA measure, see later); (S2) if we still have more than 10 valid annotators and the lowest average score is higher than in the previous iteration, we remove the lowest one, and rerun S1. Table TABREF14 shows the number of annotators at both the start (Round 1) and end (Round 3) of our process for each language.\n[source_id=65] We measure the agreement between annotators using two metrics, average pairwise inter-annotator agreement (APIAA), and average mean inter-annotator agreement (AMIAA). Both of these use Spearman's correlation ($\\rho $) between annotators scores, the only difference is how they are averaged. They are computed as follows:\n[source_id=66] where $\\rho (s_i,s_j)$ is the Spearman's correlation between annotators $i$ and $j$'s scores ($s_i$,$s_j$) for all pairs in the dataset, and $N$ is the number of annotators. APIAA has been used widely as the standard measure for inter-annotator agreement, including in the original SimLex paper BIBREF14. It simply averages the pairwise Spearman's correlation between all annotators. On the other hand, AMIAA compares the average Spearman's correlation of one held-out annotator with the average of all the other $N-1$ annotators, and then averages across all $N$ `held-out' annotators. It smooths individual annotator effects and arguably serves as a better upper bound than APIAA BIBREF15, BIBREF91, BIBREF78.\n[source_id=67] We present the respective APIAA and AMIAA scores in Table TABREF16 and Table TABREF17 for all part-of-speech subsets, as well as the agreement for the full datasets. As reported in prior work BIBREF15, BIBREF91, AMIAA scores are typically higher than APIAA scores. Crucially, the results indicate `strong agreement' (across all languages) using both measurements. The languages with the highest annotator agreement were French (fra) and Yue Chinese (yue), while Russian (rus) had the lowest overall IAA scores. These scores, however, are still considered to be `moderately strong agreement'.",
+  "score": 4.224380269938689,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67
+  ],
+  "child_qasper_evidence_texts": [
+    "Across all languages, 145 human annotators were asked to score all 1,888 pairs (in their given language). We finally collect at least ten valid annotations for each word pair in each language. All annotators were required to abide by the following instructions:",
+    "1. Each annotator must assign an integer score between 0 and 6 (inclusive) indicating how semantically similar the two words in a given pair are. A score of 6 indicates very high similarity (i.e., perfect synonymy), while zero indicates no similarity.",
+    "2. Each annotator must score the entire set of 1,888 pairs in the dataset. The pairs must not be shared between different annotators.",
+    "3. Annotators are able to break the workload over a period of approximately 2-3 weeks, and are able to use external sources (e.g. dictionaries, thesauri, WordNet) if required.",
+    "4. Annotators are kept anonymous, and are not able to communicate with each other during the annotation process.",
+    "The selection criteria for the annotators required that all annotators must be native speakers of the target language. Preference to annotators with university education was given, but not required. Annotators were asked to complete a spreadsheet containing the translated pairs of words, as well as the part-of-speech, and a column to enter the score. The annotators did not have access to the original pairs in English.",
+    "To ensure the quality of the collected ratings, we have employed an adjudication protocol similar to the one proposed and validated by Pilehvar:2018emnlp. It consists of the following three rounds:",
+    "Round 1: All annotators are asked to follow the instructions outlined above, and to rate all 1,888 pairs with integer scores between 0 and 6.",
+    "Round 2: We compare the scores of all annotators and identify the pairs for each annotator that have shown the most disagreement. We ask the annotators to reconsider the assigned scores for those pairs only. The annotators may chose to either change or keep the scores. As in the case with Round 1, the annotators have no access to the scores of the other annotators, and the process is anonymous. This process gives a chance for annotators to correct errors or reconsider their judgments, and has been shown to be very effective in reaching consensus, as reported by BIBREF78. We used a very similar procedure as BIBREF78 to identify the pairs with the most disagreement; for each annotator, we marked the $i$th pair if the rated score $s_i$ falls within: $s_i \\ge \\mu _i + 1.5$ or $s_i \\le \\mu _i - 1.5$, where $\\mu _i$ is the mean of the other annotators' scores.",
+    "Round 3: We compute the average agreement for each annotator (with the other annotators), by measuring the average Spearman's correlation against all other annotators. We discard the scores of annotators that have shown the least average agreement with all other annotators, while we maintain at least ten annotators per language by the end of this round. The actual process is done in multiple iterations: (S1) we measure the average agreement for each annotator with every other annotator (this corresponds to the APIAA measure, see later); (S2) if we still have more than 10 valid annotators and the lowest average score is higher than in the previous iteration, we remove the lowest one, and rerun S1. Table TABREF14 shows the number of annotators at both the start (Round 1) and end (Round 3) of our process for each language.",
+    "We measure the agreement between annotators using two metrics, average pairwise inter-annotator agreement (APIAA), and average mean inter-annotator agreement (AMIAA). Both of these use Spearman's correlation ($\\rho $) between annotators scores, the only difference is how they are averaged. They are computed as follows:",
+    "where $\\rho (s_i,s_j)$ is the Spearman's correlation between annotators $i$ and $j$'s scores ($s_i$,$s_j$) for all pairs in the dataset, and $N$ is the number of annotators. APIAA has been used widely as the standard measure for inter-annotator agreement, including in the original SimLex paper BIBREF14. It simply averages the pairwise Spearman's correlation between all annotators. On the other hand, AMIAA compares the average Spearman's correlation of one held-out annotator with the average of all the other $N-1$ annotators, and then averages across all $N$ `held-out' annotators. It smooths individual annotator effects and arguably serves as a better upper bound than APIAA BIBREF15, BIBREF91, BIBREF78.",
+    "We present the respective APIAA and AMIAA scores in Table TABREF16 and Table TABREF17 for all part-of-speech subsets, as well as the agreement for the full datasets. As reported in prior work BIBREF15, BIBREF91, AMIAA scores are typically higher than APIAA scores. Crucially, the results indicate `strong agreement' (across all languages) using both measurements. The languages with the highest annotator agreement were French (fra) and Yue Chinese (yue), while Russian (rus) had the lowest overall IAA scores. These scores, however, are still considered to be `moderately strong agreement'."
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+    "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+    "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+    "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+    "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+    "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+    "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+    "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+    "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+    "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+    "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+    "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+    "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+      0
+    ],
+    [
+      "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+      1
+    ],
+    [
+      "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+      2
+    ],
+    [
+      "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+      3
+    ],
+    [
+      "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+      4
+    ],
+    [
+      "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+      5
+    ],
+    [
+      "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+      6
+    ],
+    [
+      "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+      7
+    ],
+    [
+      "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+      8
+    ],
+    [
+      "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+      9
+    ],
+    [
+      "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+      10
+    ],
+    [
+      "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+      11
+    ],
+    [
+      "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+      12
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+  "section": "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+  "title_path": "Multi-SimLex: Translation and Annotation ::: Guidelines and Word Pair Scoring",
+  "block_type": "long_unit"
+}

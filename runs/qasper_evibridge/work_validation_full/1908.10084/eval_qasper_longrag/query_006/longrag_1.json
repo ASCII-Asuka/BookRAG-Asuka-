@@ -1,0 +1,88 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] In this publication, we present Sentence-BERT (SBERT), a modification of the BERT network using siamese and triplet networks that is able to derive semantically meaningful sentence embeddings. This enables BERT to be used for certain new tasks, which up-to-now were not applicable for BERT. These tasks include large-scale semantic similarity comparison, clustering, and information retrieval via semantic search.\n[source_id=5] BERT set new state-of-the-art performance on various sentence classification and sentence-pair regression tasks. BERT uses a cross-encoder: Two sentences are passed to the transformer network and the target value is predicted. However, this setup is unsuitable for various pair regression tasks due to too many possible combinations. Finding in a collection of $n=10\\,000$ sentences the pair with the highest similarity requires with BERT $n\\cdot (n-1)/2=49\\,995\\,000$ inference computations. On a modern V100 GPU, this requires about 65 hours. Similar, finding which of the over 40 million existent questions of Quora is the most similar for a new question could be modeled as a pair-wise comparison with BERT, however, answering a single query would require over 50 hours.\n[source_id=6] A common method to address clustering and semantic search is to map each sentence to a vector space such that semantically similar sentences are close. Researchers have started to input individual sentences into BERT and to derive fixed-size sentence embeddings. The most commonly used approach is to average the BERT output layer (known as BERT embeddings) or by using the output of the first token (the [CLS] token). As we will show, this common practice yields rather bad sentence embeddings, often worse than averaging GloVe embeddings BIBREF2.\n[source_id=7] To alleviate this issue, we developed SBERT. The siamese network architecture enables that fixed-sized vectors for input sentences can be derived. Using a similarity measure like cosine-similarity or Manhatten / Euclidean distance, semantically similar sentences can be found. These similarity measures can be performed extremely efficient on modern hardware, allowing SBERT to be used for semantic similarity search as well as for clustering. The complexity for finding the most similar sentence pair in a collection of 10,000 sentences is reduced from 65 hours with BERT to the computation of 10,000 sentence embeddings (5 seconds with SBERT) and computing cosine-similarity (0.01 seconds). By using optimized index structures, finding the most similar Quora question can be reduced from 50 hours to a few milliseconds BIBREF3.\n[source_id=8] We fine-tune SBERT on NLI data, which creates sentence embeddings that significantly outperform other state-of-the-art sentence embedding methods like InferSent BIBREF4 and Universal Sentence Encoder BIBREF5. On seven Semantic Textual Similarity (STS) tasks, SBERT achieves an improvement of 11.7 points compared to InferSent and 5.5 points compared to Universal Sentence Encoder. On SentEval BIBREF6, an evaluation toolkit for sentence embeddings, we achieve an improvement of 2.1 and 2.6 points, respectively.\n[source_id=9] SBERT can be adapted to a specific task. It sets new state-of-the-art performance on a challenging argument similarity dataset BIBREF7 and on a triplet dataset to distinguish sentences from different sections of a Wikipedia article BIBREF8.\n[source_id=10] The paper is structured in the following way: Section SECREF3 presents SBERT, section SECREF4 evaluates SBERT on common STS tasks and on the challenging Argument Facet Similarity (AFS) corpus BIBREF7. Section SECREF5 evaluates SBERT on SentEval. In section SECREF6, we perform an ablation study to test some design aspect of SBERT. In section SECREF7, we compare the computational efficiency of SBERT sentence embeddings in contrast to other state-of-the-art sentence embedding methods.",
+  "score": 2.498769717673221,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "child_qasper_evidence_texts": [
+    "In this publication, we present Sentence-BERT (SBERT), a modification of the BERT network using siamese and triplet networks that is able to derive semantically meaningful sentence embeddings. This enables BERT to be used for certain new tasks, which up-to-now were not applicable for BERT. These tasks include large-scale semantic similarity comparison, clustering, and information retrieval via semantic search.",
+    "BERT set new state-of-the-art performance on various sentence classification and sentence-pair regression tasks. BERT uses a cross-encoder: Two sentences are passed to the transformer network and the target value is predicted. However, this setup is unsuitable for various pair regression tasks due to too many possible combinations. Finding in a collection of $n=10\\,000$ sentences the pair with the highest similarity requires with BERT $n\\cdot (n-1)/2=49\\,995\\,000$ inference computations. On a modern V100 GPU, this requires about 65 hours. Similar, finding which of the over 40 million existent questions of Quora is the most similar for a new question could be modeled as a pair-wise comparison with BERT, however, answering a single query would require over 50 hours.",
+    "A common method to address clustering and semantic search is to map each sentence to a vector space such that semantically similar sentences are close. Researchers have started to input individual sentences into BERT and to derive fixed-size sentence embeddings. The most commonly used approach is to average the BERT output layer (known as BERT embeddings) or by using the output of the first token (the [CLS] token). As we will show, this common practice yields rather bad sentence embeddings, often worse than averaging GloVe embeddings BIBREF2.",
+    "To alleviate this issue, we developed SBERT. The siamese network architecture enables that fixed-sized vectors for input sentences can be derived. Using a similarity measure like cosine-similarity or Manhatten / Euclidean distance, semantically similar sentences can be found. These similarity measures can be performed extremely efficient on modern hardware, allowing SBERT to be used for semantic similarity search as well as for clustering. The complexity for finding the most similar sentence pair in a collection of 10,000 sentences is reduced from 65 hours with BERT to the computation of 10,000 sentence embeddings (5 seconds with SBERT) and computing cosine-similarity (0.01 seconds). By using optimized index structures, finding the most similar Quora question can be reduced from 50 hours to a few milliseconds BIBREF3.",
+    "We fine-tune SBERT on NLI data, which creates sentence embeddings that significantly outperform other state-of-the-art sentence embedding methods like InferSent BIBREF4 and Universal Sentence Encoder BIBREF5. On seven Semantic Textual Similarity (STS) tasks, SBERT achieves an improvement of 11.7 points compared to InferSent and 5.5 points compared to Universal Sentence Encoder. On SentEval BIBREF6, an evaluation toolkit for sentence embeddings, we achieve an improvement of 2.1 and 2.6 points, respectively.",
+    "SBERT can be adapted to a specific task. It sets new state-of-the-art performance on a challenging argument similarity dataset BIBREF7 and on a triplet dataset to distinguish sentences from different sections of a Wikipedia article BIBREF8.",
+    "The paper is structured in the following way: Section SECREF3 presents SBERT, section SECREF4 evaluates SBERT on common STS tasks and on the challenging Argument Facet Similarity (AFS) corpus BIBREF7. Section SECREF5 evaluates SBERT on SentEval. In section SECREF6, we perform an ablation study to test some design aspect of SBERT. In section SECREF7, we compare the computational efficiency of SBERT sentence embeddings in contrast to other state-of-the-art sentence embedding methods."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

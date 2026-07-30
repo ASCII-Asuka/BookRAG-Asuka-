@@ -1,0 +1,142 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] The lack of annotated training and evaluation data for many tasks and domains hinders the development of computational models for the majority of the world's languages BIBREF0, BIBREF1, BIBREF2. The necessity to guide and advance multilingual and cross-lingual NLP through annotation efforts that follow cross-lingually consistent guidelines has been recently recognized by collaborative initiatives such as the Universal Dependency (UD) project BIBREF3. The latest version of UD (as of March 2020) covers more than 70 languages. Crucially, this resource continues to steadily grow and evolve through the contributions of annotators from across the world, extending the UD's reach to a wide array of typologically diverse languages. Besides steering research in multilingual parsing BIBREF4, BIBREF5, BIBREF6 and cross-lingual parser transfer BIBREF7, BIBREF8, BIBREF9, the consistent annotations and guidelines have also enabled a range of insightful comparative studies focused on the languages' syntactic (dis)similarities BIBREF10, BIBREF11, BIBREF12.\n[source_id=5] Inspired by the UD work and its substantial impact on research in (multilingual) syntax, in this article we introduce Multi-SimLex, a suite of manually and consistently annotated semantic datasets for 12 different languages, focused on the fundamental lexical relation of semantic similarity BIBREF13, BIBREF14. For any pair of words, this relation measures whether their referents share the same (functional) features, as opposed to general cognitive association captured by co-occurrence patterns in texts (i.e., the distributional information). Datasets that quantify the strength of true semantic similarity between concept pairs such as SimLex-999 BIBREF14 or SimVerb-3500 BIBREF15 have been instrumental in improving models for distributional semantics and representation learning. Discerning between semantic similarity and relatedness/association is not only crucial for theoretical studies on lexical semantics (see §SECREF2), but has also been shown to benefit a range of language understanding tasks in NLP. Examples include dialog state tracking BIBREF16, BIBREF17, spoken language understanding BIBREF18, BIBREF19, text simplification BIBREF20, BIBREF21, BIBREF22, dictionary and thesaurus construction BIBREF23, BIBREF24.\n[source_id=6] Despite the proven usefulness of semantic similarity datasets, they are available only for a small and typologically narrow sample of resource-rich languages such as German, Italian, and Russian BIBREF25, whereas some language types and low-resource languages typically lack similar evaluation data. Even if some resources do exist, they are limited in their size (e.g., 500 pairs in Turkish BIBREF26, 500 in Farsi BIBREF27, or 300 in Finnish BIBREF28) and coverage (e.g., all datasets which originated from the original English SimLex-999 contain only high-frequent concepts, and are dominated by nouns). This is why, as our departure point, we introduce a larger and more comprehensive English word similarity dataset spanning 1,888 concept pairs (see §SECREF4).\n[source_id=7] Most importantly, semantic similarity datasets in different languages have been created using heterogeneous construction procedures with different guidelines for translation and annotation, as well as different rating scales. For instance, some datasets were obtained by directly translating the English SimLex-999 in its entirety BIBREF25, BIBREF16 or in part BIBREF28. Other datasets were created from scratch BIBREF26 and yet others sampled English concept pairs differently from SimLex-999 and then translated and reannotated them in target languages BIBREF27. This heterogeneity makes these datasets incomparable and precludes systematic cross-linguistic analyses. In this article, consolidating the lessons learned from previous dataset construction paradigms, we propose a carefully designed translation and annotation protocol for developing monolingual Multi-SimLex datasets with aligned concept pairs for typologically diverse languages. We apply this protocol to a set of 12 languages, including a mixture of major languages (e.g., Mandarin, Russian, and French) as well as several low-resource ones (e.g., Kiswahili, Welsh, and Yue Chinese). We demonstrate that our proposed dataset creation procedure yields data with high inter-annotator agreement rates (e.g., the average mean inter-annotator agreement for Welsh is 0.742).\n[source_id=8] The unified construction protocol and alignment between concept pairs enables a series of quantitative analyses. Preliminary studies on the influence that polysemy and cross-lingual variation in lexical categories (see §SECREF6) have on similarity judgments are provided in §SECREF5. Data created according to Multi-SimLex protocol also allow for probing into whether similarity judgments are universal across languages, or rather depend on linguistic affinity (in terms of linguistic features, phylogeny, and geographical location). We investigate this question in §SECREF25. Naturally, Multi-SimLex datasets can be used as an intrinsic evaluation benchmark to assess the quality of lexical representations based on monolingual, joint multilingual, and transfer learning paradigms. We conduct a systematic evaluation of several state-of-the-art representation models in §SECREF7, showing that there are large gaps between human and system performance in all languages. The proposed construction paradigm also supports the automatic creation of 66 cross-lingual Multi-SimLex datasets by interleaving the monolingual ones. We outline the construction of the cross-lingual datasets in §SECREF6, and then present a quantitative evaluation of a series of cutting-edge cross-lingual representation models on this benchmark in §SECREF8.\n[source_id=9] Contributions. We now summarize the main contributions of this work:\n[source_id=10] 1) Building on lessons learned from prior work, we create a more comprehensive lexical semantic similarity dataset for the English language spanning a total of 1,888 concept pairs balanced with respect to similarity, frequency, and concreteness, and covering four word classes: nouns, verbs, adjectives and, for the first time, adverbs. This dataset serves as the main source for the creation of equivalent datasets in several other languages.\n[source_id=11] 2) We present a carefully designed and rigorous language-agnostic translation and annotation protocol. These well-defined guidelines will facilitate the development of future Multi-SimLex datasets for other languages. The proposed protocol eliminates some crucial issues with prior efforts focused on the creation of multi-lingual semantic resources, namely: i) limited coverage; ii) heterogeneous annotation guidelines; and iii) concept pairs which are semantically incomparable across different languages.\n[source_id=12] 3) We offer to the community manually annotated evaluation sets of 1,888 concept pairs across 12 typologically diverse languages, and 66 large cross-lingual evaluation sets. To the best of our knowledge, Multi-SimLex is the most comprehensive evaluation resource to date focused on the relation of semantic similarity.\n[source_id=13] 4) We benchmark a wide array of recent state-of-the-art monolingual and cross-lingual word representation models across our sample of languages. The results can serve as strong baselines that lay the foundation for future improvements.\n[source_id=14] 5) We present a first large-scale evaluation study on the ability of encoders pretrained on language modeling (such as bert BIBREF29 and xlm BIBREF30) to reason over word-level semantic similarity in different languages. To our own surprise, the results show that monolingual pretrained encoders, even when presented with word types out of context, are sometimes competitive with static word embedding models such as fastText BIBREF31 or word2vec BIBREF32. The results also reveal a huge gap in performance between massively multilingual pretrained encoders and language-specific encoders in favor of the latter: our findings support other recent empirical evidence related to the “curse of multilinguality” BIBREF33, BIBREF34 in representation learning.\n[source_id=15] 6) We make all of these resources available on a website which facilitates easy creation, submission and sharing of Multi-Simlex-style datasets for a larger number of languages. We hope that this will yield an even larger repository of semantic resources that inspire future advances in NLP within and across languages.\n[source_id=16] In light of the success of Universal Dependencies BIBREF3, we hope that our initiative will instigate a collaborative public effort with established and clear-cut guidelines that will result in additional Multi-SimLex datasets in a large number of languages in the near future. Moreover, we hope that it will provide means to advance our understanding of distributional and lexical semantics across a large number of languages. All monolingual and cross-lingual Multi-SimLex datasets–along with detailed translation and annotation guidelines–are available online at: https://multisimlex.com/.",
+  "score": 3.002049654396405,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "child_qasper_evidence_texts": [
+    "The lack of annotated training and evaluation data for many tasks and domains hinders the development of computational models for the majority of the world's languages BIBREF0, BIBREF1, BIBREF2. The necessity to guide and advance multilingual and cross-lingual NLP through annotation efforts that follow cross-lingually consistent guidelines has been recently recognized by collaborative initiatives such as the Universal Dependency (UD) project BIBREF3. The latest version of UD (as of March 2020) covers more than 70 languages. Crucially, this resource continues to steadily grow and evolve through the contributions of annotators from across the world, extending the UD's reach to a wide array of typologically diverse languages. Besides steering research in multilingual parsing BIBREF4, BIBREF5, BIBREF6 and cross-lingual parser transfer BIBREF7, BIBREF8, BIBREF9, the consistent annotations and guidelines have also enabled a range of insightful comparative studies focused on the languages' syntactic (dis)similarities BIBREF10, BIBREF11, BIBREF12.",
+    "Inspired by the UD work and its substantial impact on research in (multilingual) syntax, in this article we introduce Multi-SimLex, a suite of manually and consistently annotated semantic datasets for 12 different languages, focused on the fundamental lexical relation of semantic similarity BIBREF13, BIBREF14. For any pair of words, this relation measures whether their referents share the same (functional) features, as opposed to general cognitive association captured by co-occurrence patterns in texts (i.e., the distributional information). Datasets that quantify the strength of true semantic similarity between concept pairs such as SimLex-999 BIBREF14 or SimVerb-3500 BIBREF15 have been instrumental in improving models for distributional semantics and representation learning. Discerning between semantic similarity and relatedness/association is not only crucial for theoretical studies on lexical semantics (see §SECREF2), but has also been shown to benefit a range of language understanding tasks in NLP. Examples include dialog state tracking BIBREF16, BIBREF17, spoken language understanding BIBREF18, BIBREF19, text simplification BIBREF20, BIBREF21, BIBREF22, dictionary and thesaurus construction BIBREF23, BIBREF24.",
+    "Despite the proven usefulness of semantic similarity datasets, they are available only for a small and typologically narrow sample of resource-rich languages such as German, Italian, and Russian BIBREF25, whereas some language types and low-resource languages typically lack similar evaluation data. Even if some resources do exist, they are limited in their size (e.g., 500 pairs in Turkish BIBREF26, 500 in Farsi BIBREF27, or 300 in Finnish BIBREF28) and coverage (e.g., all datasets which originated from the original English SimLex-999 contain only high-frequent concepts, and are dominated by nouns). This is why, as our departure point, we introduce a larger and more comprehensive English word similarity dataset spanning 1,888 concept pairs (see §SECREF4).",
+    "Most importantly, semantic similarity datasets in different languages have been created using heterogeneous construction procedures with different guidelines for translation and annotation, as well as different rating scales. For instance, some datasets were obtained by directly translating the English SimLex-999 in its entirety BIBREF25, BIBREF16 or in part BIBREF28. Other datasets were created from scratch BIBREF26 and yet others sampled English concept pairs differently from SimLex-999 and then translated and reannotated them in target languages BIBREF27. This heterogeneity makes these datasets incomparable and precludes systematic cross-linguistic analyses. In this article, consolidating the lessons learned from previous dataset construction paradigms, we propose a carefully designed translation and annotation protocol for developing monolingual Multi-SimLex datasets with aligned concept pairs for typologically diverse languages. We apply this protocol to a set of 12 languages, including a mixture of major languages (e.g., Mandarin, Russian, and French) as well as several low-resource ones (e.g., Kiswahili, Welsh, and Yue Chinese). We demonstrate that our proposed dataset creation procedure yields data with high inter-annotator agreement rates (e.g., the average mean inter-annotator agreement for Welsh is 0.742).",
+    "The unified construction protocol and alignment between concept pairs enables a series of quantitative analyses. Preliminary studies on the influence that polysemy and cross-lingual variation in lexical categories (see §SECREF6) have on similarity judgments are provided in §SECREF5. Data created according to Multi-SimLex protocol also allow for probing into whether similarity judgments are universal across languages, or rather depend on linguistic affinity (in terms of linguistic features, phylogeny, and geographical location). We investigate this question in §SECREF25. Naturally, Multi-SimLex datasets can be used as an intrinsic evaluation benchmark to assess the quality of lexical representations based on monolingual, joint multilingual, and transfer learning paradigms. We conduct a systematic evaluation of several state-of-the-art representation models in §SECREF7, showing that there are large gaps between human and system performance in all languages. The proposed construction paradigm also supports the automatic creation of 66 cross-lingual Multi-SimLex datasets by interleaving the monolingual ones. We outline the construction of the cross-lingual datasets in §SECREF6, and then present a quantitative evaluation of a series of cutting-edge cross-lingual representation models on this benchmark in §SECREF8.",
+    "Contributions. We now summarize the main contributions of this work:",
+    "1) Building on lessons learned from prior work, we create a more comprehensive lexical semantic similarity dataset for the English language spanning a total of 1,888 concept pairs balanced with respect to similarity, frequency, and concreteness, and covering four word classes: nouns, verbs, adjectives and, for the first time, adverbs. This dataset serves as the main source for the creation of equivalent datasets in several other languages.",
+    "2) We present a carefully designed and rigorous language-agnostic translation and annotation protocol. These well-defined guidelines will facilitate the development of future Multi-SimLex datasets for other languages. The proposed protocol eliminates some crucial issues with prior efforts focused on the creation of multi-lingual semantic resources, namely: i) limited coverage; ii) heterogeneous annotation guidelines; and iii) concept pairs which are semantically incomparable across different languages.",
+    "3) We offer to the community manually annotated evaluation sets of 1,888 concept pairs across 12 typologically diverse languages, and 66 large cross-lingual evaluation sets. To the best of our knowledge, Multi-SimLex is the most comprehensive evaluation resource to date focused on the relation of semantic similarity.",
+    "4) We benchmark a wide array of recent state-of-the-art monolingual and cross-lingual word representation models across our sample of languages. The results can serve as strong baselines that lay the foundation for future improvements.",
+    "5) We present a first large-scale evaluation study on the ability of encoders pretrained on language modeling (such as bert BIBREF29 and xlm BIBREF30) to reason over word-level semantic similarity in different languages. To our own surprise, the results show that monolingual pretrained encoders, even when presented with word types out of context, are sometimes competitive with static word embedding models such as fastText BIBREF31 or word2vec BIBREF32. The results also reveal a huge gap in performance between massively multilingual pretrained encoders and language-specific encoders in favor of the latter: our findings support other recent empirical evidence related to the “curse of multilinguality” BIBREF33, BIBREF34 in representation learning.",
+    "6) We make all of these resources available on a website which facilitates easy creation, submission and sharing of Multi-Simlex-style datasets for a larger number of languages. We hope that this will yield an even larger repository of semantic resources that inspire future advances in NLP within and across languages.",
+    "In light of the success of Universal Dependencies BIBREF3, we hope that our initiative will instigate a collaborative public effort with established and clear-cut guidelines that will result in additional Multi-SimLex datasets in a large number of languages in the near future. Moreover, we hope that it will provide means to advance our understanding of distributional and lexical semantics across a large number of languages. All monolingual and cross-lingual Multi-SimLex datasets–along with detailed translation and annotation guidelines–are available online at: https://multisimlex.com/."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ],
+    [
+      "Introduction",
+      7
+    ],
+    [
+      "Introduction",
+      8
+    ],
+    [
+      "Introduction",
+      9
+    ],
+    [
+      "Introduction",
+      10
+    ],
+    [
+      "Introduction",
+      11
+    ],
+    [
+      "Introduction",
+      12
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

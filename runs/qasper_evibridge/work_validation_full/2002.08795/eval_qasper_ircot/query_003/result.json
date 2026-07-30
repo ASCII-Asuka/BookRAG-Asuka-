@@ -1,0 +1,75 @@
+{
+  "question": "What are the two new strategies?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "a method that detects bottlenecks in text-games using the overall reward gained and the knowledge graph state",
+        "to leverage knowledge graphs to improve existing exploration algorithms for dealing with combinatorial action-space"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "More efficient exploration strategies are required to pass bottlenecks. Our contributions are two-fold. We first introduce a method that detects bottlenecks in text-games using the overall reward gained and the knowledge graph state. This method freezes the policy used to reach the bottleneck and restarts the training from there on out, additionally conducting a backtracking search to ensure that a sub-optimal policy has not been frozen. The second contribution explore how to leverage knowledge graphs to improve existing exploration algorithms for dealing with combinatorial action-spaces such as Go-Explore BIBREF9. We additionally present a comparative ablation study analyzing the performance of these methods on the popular text-game Zork1."
+      ],
+      "evidence_block_ids": [
+        9
+      ],
+      "evidence_paragraph_ids": [
+        9
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "KG-A2C-chained",
+        "KG-A2C-Explore"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "KG-A2C-Explore Go-Explore BIBREF9 is an algorithm that is designed to keep track of sub-optimal and under-explored states in order to allow the agent to explore upon more optimal states that may be a result of sparse rewards. The Go-Explore algorithm consists of two phases, the first to continuously explore until a set of promising states and corresponding trajectories are found on the basis of total score, and the second to robustify this found policy against potential stochasticity in the game. Promising states are defined as those states when explored from will likely result in higher reward trajectories. Since the text games we are dealing with are mostly deterministic, with the exception of Zork in later stages, we only focus on using Phase 1 of the Go-Explore algorithm to find an optimal policy. BIBREF10 look at applying Go-Explore to text-games on a set of simpler games generated using the game generation framework TextWorld BIBREF1. Instead of training a policy network in parallel to generate actions used for exploration, they use a small set of “admissible actions”—actions guaranteed to change the world state at any given step during Phase 1—to explore and find high reward trajectories. This space of actions is relatively small (of the order of $10^2$ per step) and so finding high reward trajectories in larger action-spaces such as in Zork would be infeasible",
+        "Go-Explore maintains an archive of cells—defined as a set of states that map to a single representation—to keep track of promising states. BIBREF9 simply encodes each cell by keeping track of the agent's position and BIBREF10 use the textual observations encoded by recurrent neural network as a cell representation. We improve on this implementation by training the KG-A2C network in parallel, using the snapshot of the knowledge graph in conjunction with the game state to further encode the current state and use this as a cell representation. At each step, Go-Explore chooses a cell to explore at random (weighted by score to prefer more advanced cells). The KG-A2C will run for a number of steps, starting with the knowledge graph state and the last seen state of the game from the cell. This will generate a trajectory for the agent while further training the KG-A2C at each iteration, creating a new representation for the knowledge graph as well as a new game state for the cell. After expanding a cell, Go-Explore will continue to sample cells by weight to continue expanding its known states. At the same time, KG-A2C will benefit from the heuristics of selecting preferred cells and be trained on promising states more often."
+      ],
+      "evidence_block_ids": [
+        14,
+        15
+      ],
+      "evidence_paragraph_ids": [
+        14,
+        15
+      ]
+    }
+  ],
+  "doc_uuid": "2002.08795",
+  "doc_path": "qasper://2002.08795",
+  "qasper_question_id": "88ab7811662157680144ed3fdd00939e36552672",
+  "title": "How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents",
+  "evidence_block_ids": [
+    9,
+    14,
+    15
+  ],
+  "evidence_paragraph_ids": [
+    9,
+    14,
+    15
+  ],
+  "output": "{\n  \"answer_short\": \"a bottleneck detection method using reward and knowledge graph state with policy freezing and backtracking, and leveraging knowledge graphs to improve exploration algorithms like Go-Explore\",\n  \"answer_rationale\": \"The two new strategies are explicitly described in the retrieved documents. Text 3 [source_id=9] outlines the first strategy as a bottleneck detection method using reward and knowledge graph state, with policy freezing and backtracking. The second strategy is described as leveraging knowledge graphs to improve exploration algorithms like Go-Explore. These are corroborated by Text 1 [source_id=2], which mentions introducing two new game state exploration strategies to address bottlenecks.\",\n  \"supporting_block_ids\": [2, 9]\n}",
+  "retrieved_node_ids": [
+    2,
+    17,
+    9
+  ],
+  "retrieved_block_ids": [
+    2,
+    17,
+    9
+  ],
+  "answer_short": "a bottleneck detection method using reward and knowledge graph state with policy freezing and backtracking, and leveraging knowledge graphs to improve exploration algorithms like Go-Explore",
+  "answer_rationale": "The two new strategies are explicitly described in the retrieved documents. Text 3 [source_id=9] outlines the first strategy as a bottleneck detection method using reward and knowledge graph state, with policy freezing and backtracking. The second strategy is described as leveraging knowledge graphs to improve exploration algorithms like Go-Explore. These are corroborated by Text 1 [source_id=2], which mentions introducing two new game state exploration strategies to address bottlenecks.",
+  "supporting_block_ids": [
+    2,
+    9
+  ]
+}

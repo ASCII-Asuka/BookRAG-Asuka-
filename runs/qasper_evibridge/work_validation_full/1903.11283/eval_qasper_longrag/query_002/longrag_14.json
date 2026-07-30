@@ -1,0 +1,52 @@
+{
+  "id": "longrag_14",
+  "content": "[Section] Model Training: Technical Details\n[source_id=90] After rudimentary cleaning (removing pairs where at least one sentence is longer that 100 tokens, at least one sentence is an empty string or does not contain any alphabetic characters, and pairs with length ratio over 9) and duplication to accommodate both translation directions in each language pair, the total size of the training corpus is 22.9M sentence pairs; training set sizes per language and corpus are given in Table TABREF36 . Validation set consists of 12K sentence pairs, 500 for each combination of translation direction and corpus. We also keep a test set of 24K sentence pairs, 1000 for each translation direction and corpus.\n[source_id=91] The data preprocessing pipeline consists of tokenization with Moses tokenizer BIBREF44 , true-casing, and segmentation with SentencePiece BIBREF45 with a joint vocabulary of size 32 000.\n[source_id=92] We trained a Transformer NMT model using the Sockeye framework BIBREF43 , mostly following the so-called Transformer base model: we used 6 layers, 512 positions, 8 attention heads and ReLU activations for both the encoder and decoder; Adam optimizer was used. Source and target token embeddings were both of size 512, and factors determining target language and style had embeddings of size 4. Batch size was set to 2048 words, initial learning rate to 0.0002, reducing by a factor of 0.7 every time the validation perplexity had not improved for 8 checkpoints, which happened every 4000 updates. The model converged during the 17th epoch, when validation perplexity has not improved for 32 consecutive checkpoints. The parameters of a single best checkpoint were used for all translations, with beam size set to 5.",
+  "score": 5.848304362937963,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_14",
+  "child_source_node_ids": [
+    90,
+    91,
+    92
+  ],
+  "child_qasper_evidence_texts": [
+    "After rudimentary cleaning (removing pairs where at least one sentence is longer that 100 tokens, at least one sentence is an empty string or does not contain any alphabetic characters, and pairs with length ratio over 9) and duplication to accommodate both translation directions in each language pair, the total size of the training corpus is 22.9M sentence pairs; training set sizes per language and corpus are given in Table TABREF36 . Validation set consists of 12K sentence pairs, 500 for each combination of translation direction and corpus. We also keep a test set of 24K sentence pairs, 1000 for each translation direction and corpus.",
+    "The data preprocessing pipeline consists of tokenization with Moses tokenizer BIBREF44 , true-casing, and segmentation with SentencePiece BIBREF45 with a joint vocabulary of size 32 000.",
+    "We trained a Transformer NMT model using the Sockeye framework BIBREF43 , mostly following the so-called Transformer base model: we used 6 layers, 512 positions, 8 attention heads and ReLU activations for both the encoder and decoder; Adam optimizer was used. Source and target token embeddings were both of size 512, and factors determining target language and style had embeddings of size 4. Batch size was set to 2048 words, initial learning rate to 0.0002, reducing by a factor of 0.7 every time the validation perplexity had not improved for 8 checkpoints, which happened every 4000 updates. The model converged during the 17th epoch, when validation perplexity has not improved for 32 consecutive checkpoints. The parameters of a single best checkpoint were used for all translations, with beam size set to 5."
+  ],
+  "child_pages": [
+    14,
+    14,
+    14
+  ],
+  "child_sections": [
+    "Model Training: Technical Details",
+    "Model Training: Technical Details",
+    "Model Training: Technical Details"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Model Training: Technical Details",
+      0
+    ],
+    [
+      "Model Training: Technical Details",
+      1
+    ],
+    [
+      "Model Training: Technical Details",
+      2
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_14",
+  "section_id": "Model Training: Technical Details",
+  "section": "Model Training: Technical Details",
+  "title_path": "Model Training: Technical Details",
+  "block_type": "long_unit"
+}

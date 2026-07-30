@@ -1,0 +1,87 @@
+[
+  {
+    "question": "Which text embedding methodologies are used?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Document to Vector (Doc2Vec)"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Figure 1 shows a summary of our pipeline. First, we pre-process each document to transform text into consecutive word tokens, where words are in their most normalised forms, and some words are removed if they have no distinctive meaning when used out of context BIBREF5 , BIBREF6 . We then train a paragraph vector model using the Document to Vector (Doc2Vec) framework BIBREF7 on the whole set (13 million) of preprocessed text records, although training on smaller sets (1 million) also produces good results. This training step is only done once. This Doc2Vec model is subsequently used to infer high-dimensional vector descriptions for the text of each of the 3229 documents in our target analysis set. We then compute a matrix containing pairwise similarities between any pair of document vectors, as inferred with Doc2Vec. This matrix can be thought of as a full, weighted graph with documents as nodes and edges weighted by their similarity. We sparsify this graph to the union of a minimum spanning tree and a k-Nearest Neighbors (MST-kNN) graph BIBREF8 , a geometric construction that removes less important similarities but preserves global connectivity for the graph and, hence, for the dataset. The derived MST-kNN graph is analysed with Markov Stability BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 , a multi-resolution dynamics-based graph partitioning method that identifies relevant subgraphs (i.e., clusters of documents) at different levels of granularity. MS uses a diffusive process on the graph to reveal the multiscale organisation at different resolutions without the need for choosing a priori the number of clusters, scale or organisation. To analyse a posteriori the different partitions across levels of resolution, we use both visualisations and quantitative scores. The visualisations include word clouds to summarise the main content, graph layouts, as well as Sankey diagrams and contingency tables that capture the correspondences across levels of resolution and relationships to the hand-coded classifications. The partitions are also evaluated quantitatively to score: (i) their intrinsic topic coherence (using pairwise mutual information BIBREF13 , BIBREF14 ), and (ii) their similarity to the operator hand-coded categories (using normalised mutual information BIBREF15 ). We now expand on the steps of the computational framework."
+        ],
+        "evidence_block_ids": [
+          11
+        ],
+        "evidence_paragraph_ids": [
+          11
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Doc2Vec",
+          "PV-DBOW model"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Here, we use the Gensim Python library BIBREF23 to train the PV-DBOW model. The Doc2Vec training was repeated several times with a variety of training hyper-parameters to optimise the output based on our own numerical experiments and the general guidelines provided by BIBREF24 . We trained Doc2Vec models using text corpora of different sizes and content with different sets of hyper-parameters, in order to characterise the usability and quality of models. Specifically, we checked the effect of corpus size on model quality by training Doc2Vec models on the full 13 million NRLS records and on subsets of 1 million and 2 million randomly sampled records. (We note that our target subset of 3229 records has been excluded from these samples.) Furthermore, we checked the importance of the specificity of the text corpus by obtaining a Doc2Vec model from a generic, non-specific set of 5 million articles from Wikipedia representing standard English usage across a variety of topics."
+        ],
+        "evidence_block_ids": [
+          20
+        ],
+        "evidence_paragraph_ids": [
+          20
+        ]
+      }
+    ],
+    "doc_uuid": "1811.05711",
+    "doc_path": "qasper://1811.05711",
+    "qasper_question_id": "0689904db9b00a814e3109fb1698086370a28fa2",
+    "title": "From Free Text to Clusters of Content in Health Records: An Unsupervised Graph Partitioning Approach",
+    "evidence_block_ids": [
+      11,
+      20
+    ],
+    "evidence_paragraph_ids": [
+      11,
+      20
+    ],
+    "output": "{\n  \"answer_short\": \"paragraph vectors (Doc2Vec)\",\n  \"answer_rationale\": \"The document explicitly states that the methodology combines 'deep neural network text-embedding methodologies based on paragraph vectors' (block_id=2) and further details that 'Doc2Vec' is the specific implementation used (block_id=11, block_id=19).\",\n  \"supporting_block_ids\": [2, 11, 19]\n}",
+    "retrieved_node_ids": [
+      2,
+      7,
+      15,
+      8,
+      18,
+      17,
+      85,
+      11,
+      19,
+      6
+    ],
+    "retrieved_block_ids": [
+      2,
+      7,
+      15,
+      8,
+      18,
+      17,
+      85,
+      11,
+      19,
+      6
+    ],
+    "answer_short": "paragraph vectors (Doc2Vec)",
+    "answer_rationale": "The document explicitly states that the methodology combines 'deep neural network text-embedding methodologies based on paragraph vectors' (block_id=2) and further details that 'Doc2Vec' is the specific implementation used (block_id=11, block_id=19).",
+    "supporting_block_ids": [
+      2,
+      18,
+      7,
+      17
+    ]
+  }
+]

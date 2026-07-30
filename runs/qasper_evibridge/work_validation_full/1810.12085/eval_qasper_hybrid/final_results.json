@@ -1,0 +1,211 @@
+[
+  {
+    "question": "what topics did they label?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "Demographics Age, DiagnosisHistory, MedicationHistory, ProcedureHistory, Symptoms/Signs, Vitals/Labs, Procedures/Results, Meds/Treatments, Movement, Other.",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "Demographics, Diagnosis History, Medication History, Procedure History, Symptoms, Labs, Procedures, Treatments, Hospital movements, and others",
+        "yes_no": null,
+        "evidence": [
+          "We developed a classifier to label topics in the history of present illness (HPI) notes, including demographics, diagnosis history, and symptoms/signs, among others. A random sample of 515 history of present illness notes was taken, and each of the notes was manually annotated by one of eight annotators using the software Multi-document Annotation Environment (MAE) BIBREF20 . MAE provides an interactive GUI for annotators and exports the results of each annotation as an XML file with text spans and their associated labels for additional processing. 40% of the HPI notes were labeled by clinicians and 60% by non-clinicians. Table TABREF5 shows the instructions given to the annotators for each of the 10 labels. The entire HPI note was labeled with one of the labels, and instructions were given to label each clause in a sentence with the same label when possible."
+        ],
+        "evidence_block_ids": [
+          20
+        ],
+        "evidence_paragraph_ids": [
+          20
+        ]
+      }
+    ],
+    "doc_uuid": "1810.12085",
+    "doc_path": "qasper://1810.12085",
+    "qasper_question_id": "ceb767e33fde4b927e730f893db5ece947ffb0d8",
+    "title": "Extractive Summarization of EHR Discharge Notes",
+    "evidence_block_ids": [
+      20
+    ],
+    "evidence_paragraph_ids": [
+      20
+    ],
+    "output": "{\n  \"answer_short\": \"demographics, diagnosis history, symptoms/signs, among others\",\n  \"answer_rationale\": \"Text 1 states: 'We developed a classifier to label topics in the history of present illness (HPI) notes, including demographics, diagnosis history, and symptoms/signs, among others.' This directly lists the topics labeled.\"\n}",
+    "retrieved_node_ids": [
+      20,
+      35,
+      37,
+      29,
+      15,
+      28,
+      27,
+      21,
+      8,
+      2
+    ],
+    "answer_short": "demographics, diagnosis history, symptoms/signs, among others",
+    "answer_rationale": "Text 1 states: 'We developed a classifier to label topics in the history of present illness (HPI) notes, including demographics, diagnosis history, and symptoms/signs, among others.' This directly lists the topics labeled.",
+    "supporting_block_ids": [
+      20,
+      35,
+      37,
+      29,
+      15,
+      28,
+      27,
+      21,
+      8,
+      2
+    ]
+  },
+  {
+    "question": "did they compare with other extractive summarization methods?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": false,
+        "evidence": [
+          "We evaluated our model on the 515 annotated history of present illness notes, which were split in a 70% train set, 15% development set, and a 15% test set. The model is trained using the Adam algorithm for gradient-based optimization BIBREF25 with an initial learning rate = 0.001 and decay = 0.9. A dropout rate of 0.5 was applied for regularization, and each batch size = 20. The model ran for 20 epochs and was halted early if there was no improvement after 3 epochs.",
+          "We evaluated the impact of character embeddings, the choice of pretrained w2v embeddings, and the addition of learned word embeddings on model performance on the dev set. We report performance of the best performing model on the test set.",
+          "Table TABREF16 compares dev set performance of the model using various pretrained word embeddings, with and without character embeddings, and with pretrained versus learned word embeddings. The first row in each section is the performance of the model architecture described in the methods section for comparison. Models using word embeddings trained on the discharge summaries performed better than word embeddings trained on all MIMIC notes, likely because the discharge summary word embeddings better captured word use in discharge summaries alone. Interestingly, the continuous bag of words embeddings outperformed skip gram embeddings, which is surprising because the skip gram architecture typically works better for infrequent words BIBREF26 . As expected, inclusion of character embeddings increases performance by approximately 3%. The model with word embeddings learned in the model achieves the highest performance on the dev set (0.886), which may be because the pretrained worm embeddings were trained on a previous version of MIMIC. As a result, some words in the discharge summaries, such as mi-spelled words or rarer diseases and medications, did not have associated word embeddings. Performing a simple spell correction on out of vocab words may improve performance with pretrained word embeddings."
+        ],
+        "evidence_block_ids": [
+          32,
+          33,
+          34
+        ],
+        "evidence_paragraph_ids": [
+          32,
+          33,
+          34
+        ]
+      }
+    ],
+    "doc_uuid": "1810.12085",
+    "doc_path": "qasper://1810.12085",
+    "qasper_question_id": "c2cb6c4500d9e02fc9a1bdffd22c3df69655189f",
+    "title": "Extractive Summarization of EHR Discharge Notes",
+    "evidence_block_ids": [
+      32,
+      33,
+      34
+    ],
+    "evidence_paragraph_ids": [
+      32,
+      33,
+      34
+    ],
+    "output": "{\n  \"answer_short\": \"Not answerable\",\n  \"answer_rationale\": \"The retrieved documents discuss extractive summarization methods, their limitations, and evaluations, but none explicitly state that the authors compared their method with other extractive summarization methods. While they mention creating a dataset for evaluation and referencing related work, direct comparison with other extractive methods is not detailed.\"\n}",
+    "retrieved_node_ids": [
+      40,
+      8,
+      18,
+      2,
+      13,
+      6,
+      9,
+      17,
+      4,
+      34
+    ],
+    "answer_short": "Not answerable",
+    "answer_rationale": "The retrieved documents discuss extractive summarization methods, their limitations, and evaluations, but none explicitly state that the authors compared their method with other extractive summarization methods. While they mention creating a dataset for evaluation and referencing related work, direct comparison with other extractive methods is not detailed.",
+    "supporting_block_ids": [
+      40,
+      8,
+      18,
+      2,
+      13,
+      6,
+      9,
+      17,
+      4,
+      34
+    ]
+  },
+  {
+    "question": "what datasets were used?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "MIMIC-III"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "MIMIC-III is a freely available, deidentified database containing electronic health records of patients admitted to an Intensive Care Unit (ICU) at Beth Israel Deaconess Medical Center between 2001 and 2012. The database contains all of the notes associated with each patient's time spent in the ICU as well as 55,177 discharge reports and 4,475 discharge addendums for 41,127 distinct patients. Only the original discharge reports were included in our analyses. Each discharge summary was divided into sections (Date of Birth, Sex, Chief Complaint, Major Surgical or Invasive Procedure, History of Present Illness, etc.) using a regular expression."
+        ],
+        "evidence_block_ids": [
+          11
+        ],
+        "evidence_paragraph_ids": [
+          11
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "MIMIC-III"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "MIMIC-III is a freely available, deidentified database containing electronic health records of patients admitted to an Intensive Care Unit (ICU) at Beth Israel Deaconess Medical Center between 2001 and 2012. The database contains all of the notes associated with each patient's time spent in the ICU as well as 55,177 discharge reports and 4,475 discharge addendums for 41,127 distinct patients. Only the original discharge reports were included in our analyses. Each discharge summary was divided into sections (Date of Birth, Sex, Chief Complaint, Major Surgical or Invasive Procedure, History of Present Illness, etc.) using a regular expression."
+        ],
+        "evidence_block_ids": [
+          11
+        ],
+        "evidence_paragraph_ids": [
+          11
+        ]
+      }
+    ],
+    "doc_uuid": "1810.12085",
+    "doc_path": "qasper://1810.12085",
+    "qasper_question_id": "c571deefe93f0a41b60f9886db119947648e967c",
+    "title": "Extractive Summarization of EHR Discharge Notes",
+    "evidence_block_ids": [
+      11
+    ],
+    "evidence_paragraph_ids": [
+      11
+    ],
+    "output": "{\n  \"answer_short\": \"MIMIC-III\",\n  \"answer_rationale\": \"Text 4 explicitly states that MIMIC-III is the dataset used, describing it as a deidentified database containing electronic health records from ICU patients. Text 10 also references MIMIC (v30) as the source for pretrained word embeddings, confirming its use in the study.\"\n}",
+    "retrieved_node_ids": [
+      32,
+      35,
+      31,
+      11,
+      15,
+      22,
+      34,
+      20,
+      36,
+      23
+    ],
+    "answer_short": "MIMIC-III",
+    "answer_rationale": "Text 4 explicitly states that MIMIC-III is the dataset used, describing it as a deidentified database containing electronic health records from ICU patients. Text 10 also references MIMIC (v30) as the source for pretrained word embeddings, confirming its use in the study.",
+    "supporting_block_ids": [
+      32,
+      35,
+      31,
+      11,
+      15,
+      22,
+      34,
+      20,
+      36,
+      23
+    ]
+  }
+]

@@ -1,0 +1,79 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Named entity recognition (NER) is a challenging problem in Natural Language Processing, and often serves as an important step for many popular applications, such as information extraction and question answering. NER requires phrases referring to entities in text be identified and assigned to particular entity types, thus can be naturally modeled as a sequence labeling task. In recent years, a lot of progress has been made on NER by applying sequential models such as conditional random field (CRF) or neural network models such as long short-term memory (LSTM) (e.g., BIBREF0, BIBREF1, BIBREF2, BIBREF3). Yet this task still remains a challenging one, especially in social media domain such as tweets, partially because of informality and noise of such text and low frequencies of distinctive named entities BIBREF4.\n[source_id=5] Chinese is a language that consists of sequential Chinese characters without capitalization information and delimitation between words. Rather than words as in English or Romance languages, the equivalence of an English word in Chinese may contain one or several Chinese characters. Thus Chinese word segmentation is needed as a first step before entity mentions can be recognized. The outputs of Chinese word segmentation are often used as features to support named entity recognition. In the neural network based models, the boundary information can be extracted from hidden layers of a Chinese word segmentation model (e.g., BIBREF5, BIBREF6).\n[source_id=6] Relying on outputs of Chinese word segmentation has its own challenge, because Chinese word segmentation is often influenced by the following four factors. First, models trained from corpora in other languages, even if not language-specific such as in BIBREF3, cannot be directly applied to Chinese text. Some efforts have been made on Chinese word segmentation recently BIBREF7, BIBREF8, BIBREF9, BIBREF10. Second, differences in segmentation criteria exist among labeled corpora. For instance, in the PKU’s People’s Daily corpus, a person's family name and given name is segmented into two tokens, while in the Penn Chinese Treebank corpus they are segmented into one BIBREF11. Third, for entity mentions that are compound words, models may separate them into fragmented words BIBREF12. Many Chinese words are also morphemes, and separated entity mention fragments may be falsely combined with adjacent words. Fourth, current sequential models perform poorly in identifying named entities with long dependency. Yet many named entities expand over a long range, especially organization names and location names.\n[source_id=7] Errors caused by Chinese word segmentation can generate a cascading failure, which hurt the performance of downstream tasks such as NER. Latest developments in Chinese NER (e.g., BIBREF13, BIBREF14, BIBREF5, BIBREF15, BIBREF16, BIBREF17) have yet shown little focus on this issue. BIBREF12 found that by assembling these single words back together, information groups and sentence structure are better reserved, which could benefit downstream tasks such as NER.\n[source_id=8] Inspired by BIBREF12, we integrate in this paper a boundary assembling step into the state-of-the-art LSTM model for Chinese word segmentation, and feed the output into a CRF model for NER, resulting in a 2% absolute improvement on the overall F1 score over current state-of-the-art methods.\n[source_id=9] This paper is organized as follows. In Section SECREF2 we discuss our model, which consists of an LSTM module for Chinese word segmentation, a boundary assembling step for more accurate word segmentation, and a CRF module for NER. We show the experiment results and discuss the model performance in Section SECREF3. We conclude in Section SECREF4.",
+  "score": 5.445697962922601,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "child_qasper_evidence_texts": [
+    "Named entity recognition (NER) is a challenging problem in Natural Language Processing, and often serves as an important step for many popular applications, such as information extraction and question answering. NER requires phrases referring to entities in text be identified and assigned to particular entity types, thus can be naturally modeled as a sequence labeling task. In recent years, a lot of progress has been made on NER by applying sequential models such as conditional random field (CRF) or neural network models such as long short-term memory (LSTM) (e.g., BIBREF0, BIBREF1, BIBREF2, BIBREF3). Yet this task still remains a challenging one, especially in social media domain such as tweets, partially because of informality and noise of such text and low frequencies of distinctive named entities BIBREF4.",
+    "Chinese is a language that consists of sequential Chinese characters without capitalization information and delimitation between words. Rather than words as in English or Romance languages, the equivalence of an English word in Chinese may contain one or several Chinese characters. Thus Chinese word segmentation is needed as a first step before entity mentions can be recognized. The outputs of Chinese word segmentation are often used as features to support named entity recognition. In the neural network based models, the boundary information can be extracted from hidden layers of a Chinese word segmentation model (e.g., BIBREF5, BIBREF6).",
+    "Relying on outputs of Chinese word segmentation has its own challenge, because Chinese word segmentation is often influenced by the following four factors. First, models trained from corpora in other languages, even if not language-specific such as in BIBREF3, cannot be directly applied to Chinese text. Some efforts have been made on Chinese word segmentation recently BIBREF7, BIBREF8, BIBREF9, BIBREF10. Second, differences in segmentation criteria exist among labeled corpora. For instance, in the PKU’s People’s Daily corpus, a person's family name and given name is segmented into two tokens, while in the Penn Chinese Treebank corpus they are segmented into one BIBREF11. Third, for entity mentions that are compound words, models may separate them into fragmented words BIBREF12. Many Chinese words are also morphemes, and separated entity mention fragments may be falsely combined with adjacent words. Fourth, current sequential models perform poorly in identifying named entities with long dependency. Yet many named entities expand over a long range, especially organization names and location names.",
+    "Errors caused by Chinese word segmentation can generate a cascading failure, which hurt the performance of downstream tasks such as NER. Latest developments in Chinese NER (e.g., BIBREF13, BIBREF14, BIBREF5, BIBREF15, BIBREF16, BIBREF17) have yet shown little focus on this issue. BIBREF12 found that by assembling these single words back together, information groups and sentence structure are better reserved, which could benefit downstream tasks such as NER.",
+    "Inspired by BIBREF12, we integrate in this paper a boundary assembling step into the state-of-the-art LSTM model for Chinese word segmentation, and feed the output into a CRF model for NER, resulting in a 2% absolute improvement on the overall F1 score over current state-of-the-art methods.",
+    "This paper is organized as follows. In Section SECREF2 we discuss our model, which consists of an LSTM module for Chinese word segmentation, a boundary assembling step for more accurate word segmentation, and a CRF module for NER. We show the experiment results and discuss the model performance in Section SECREF3. We conclude in Section SECREF4."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

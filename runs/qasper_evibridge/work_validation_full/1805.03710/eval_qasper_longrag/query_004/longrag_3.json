@@ -1,0 +1,133 @@
+{
+  "id": "longrag_3",
+  "content": "[Section] Subword LexVec\n[source_id=21] The LexVec BIBREF7 model factorizes the PPMI-weighted word-context co-occurrence matrix using stochastic gradient descent.\n[source_id=22] $$PPMI_{wc} = max(0, \\log \\frac{M_{wc} \\; M_{**}}{ M_{w*} \\; M_{*c} })$$   (Eq. 3)\n[source_id=23] where $M$ is the word-context co-occurrence matrix constructed by sliding a window of fixed size centered over every target word\n[source_id=24] $w$ in the subsampled BIBREF2 training corpus and incrementing cell $M_{wc}$ for every context word $c$ appearing within this window (forming a $(w,c)$ pair). LexVec adjusts the PPMI matrix using context distribution smoothing BIBREF3 .\n[source_id=25] With the PPMI matrix calculated, the sliding window process is repeated and the following loss functions are minimized for every observed $(w,c)$ pair and target word $w$ :\n[source_id=26] $$L_{wc} &= \\frac{1}{2} (u_w^\\top v_c - PPMI_{wc})^2 \\\\\n\nL_{w} &= \\frac{1}{2} \\sum \\limits _{i=1}^k{\\mathbf {E}_{c_i \\sim P_n(c)} (u_w^\\top v_{c_i} - PPMI_{wc_i})^2 }$$   (Eq. 4)\n[source_id=27] where $u_w$ and $v_c$ are $d$ -dimensional word and context vectors. The second loss function describes how, for each target word, $k$ negative samples BIBREF2 are drawn from the smoothed context unigram distribution.\n[source_id=28] Given a set of subwords $S_w$ for a word $w$ , we follow fastText and replace $u_w$ in eq:lexvec2,eq:lexvec3 by $u^{\\prime }_w$ such that:\n[source_id=29] $$u^{\\prime }_w = \\frac{1}{|S_w| + 1} (u_w + \\sum _{s \\in S_w} q_{hash(s)})$$   (Eq. 5)\n[source_id=30] such that a word is the sum of its word vector and its $d$ -dimensional subword vectors $q_x$ . The number of possible subwords is very large so the function $hash(s)$ hashes a subword to the interval $[1, buckets]$ . For OOV words,\n[source_id=31] $$u^{\\prime }_w = \\frac{1}{|S_w|} \\sum _{s \\in S_w} q_{hash(s)}$$   (Eq. 7)\n[source_id=32] We compare two types of subwords: simple n-grams (like fastText) and unsupervised morphemes. For example, given the word “cat”, we mark beginning and end with angled brackets and use all n-grams of length 3 to 6 as subwords, yielding $S_{\\textnormal {cat}} = \\lbrace  \\textnormal {$ $ ca, at$ $, cat} \\rbrace $ . Morfessor BIBREF11 is used to probabilistically segment words into morphemes. The Morfessor model is trained using raw text so it is entirely unsupervised. For the word “subsequent”, we get $S_{\\textnormal {subsequent}} = \\lbrace  \\textnormal {$ $ sub, sequent$ $} \\rbrace $ .",
+  "score": 1.7301750972461016,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_3",
+  "child_source_node_ids": [
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "child_qasper_evidence_texts": [
+    "The LexVec BIBREF7 model factorizes the PPMI-weighted word-context co-occurrence matrix using stochastic gradient descent.",
+    "$$PPMI_{wc} = max(0, \\log \\frac{M_{wc} \\; M_{**}}{ M_{w*} \\; M_{*c} })$$   (Eq. 3)",
+    "where $M$ is the word-context co-occurrence matrix constructed by sliding a window of fixed size centered over every target word",
+    "$w$ in the subsampled BIBREF2 training corpus and incrementing cell $M_{wc}$ for every context word $c$ appearing within this window (forming a $(w,c)$ pair). LexVec adjusts the PPMI matrix using context distribution smoothing BIBREF3 .",
+    "With the PPMI matrix calculated, the sliding window process is repeated and the following loss functions are minimized for every observed $(w,c)$ pair and target word $w$ :",
+    "$$L_{wc} &= \\frac{1}{2} (u_w^\\top v_c - PPMI_{wc})^2 \\\\\n\nL_{w} &= \\frac{1}{2} \\sum \\limits _{i=1}^k{\\mathbf {E}_{c_i \\sim P_n(c)} (u_w^\\top v_{c_i} - PPMI_{wc_i})^2 }$$   (Eq. 4)",
+    "where $u_w$ and $v_c$ are $d$ -dimensional word and context vectors. The second loss function describes how, for each target word, $k$ negative samples BIBREF2 are drawn from the smoothed context unigram distribution.",
+    "Given a set of subwords $S_w$ for a word $w$ , we follow fastText and replace $u_w$ in eq:lexvec2,eq:lexvec3 by $u^{\\prime }_w$ such that:",
+    "$$u^{\\prime }_w = \\frac{1}{|S_w| + 1} (u_w + \\sum _{s \\in S_w} q_{hash(s)})$$   (Eq. 5)",
+    "such that a word is the sum of its word vector and its $d$ -dimensional subword vectors $q_x$ . The number of possible subwords is very large so the function $hash(s)$ hashes a subword to the interval $[1, buckets]$ . For OOV words,",
+    "$$u^{\\prime }_w = \\frac{1}{|S_w|} \\sum _{s \\in S_w} q_{hash(s)}$$   (Eq. 7)",
+    "We compare two types of subwords: simple n-grams (like fastText) and unsupervised morphemes. For example, given the word “cat”, we mark beginning and end with angled brackets and use all n-grams of length 3 to 6 as subwords, yielding $S_{\\textnormal {cat}} = \\lbrace  \\textnormal {$ $ ca, at$ $, cat} \\rbrace $ . Morfessor BIBREF11 is used to probabilistically segment words into morphemes. The Morfessor model is trained using raw text so it is entirely unsupervised. For the word “subsequent”, we get $S_{\\textnormal {subsequent}} = \\lbrace  \\textnormal {$ $ sub, sequent$ $} \\rbrace $ ."
+  ],
+  "child_pages": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "child_sections": [
+    "Subword LexVec",
+    "Subword LexVec",
+    "Subword LexVec",
+    "Subword LexVec",
+    "Subword LexVec",
+    "Subword LexVec",
+    "Subword LexVec",
+    "Subword LexVec",
+    "Subword LexVec",
+    "Subword LexVec",
+    "Subword LexVec",
+    "Subword LexVec"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Subword LexVec",
+      0
+    ],
+    [
+      "Subword LexVec",
+      1
+    ],
+    [
+      "Subword LexVec",
+      2
+    ],
+    [
+      "Subword LexVec",
+      3
+    ],
+    [
+      "Subword LexVec",
+      4
+    ],
+    [
+      "Subword LexVec",
+      5
+    ],
+    [
+      "Subword LexVec",
+      6
+    ],
+    [
+      "Subword LexVec",
+      7
+    ],
+    [
+      "Subword LexVec",
+      8
+    ],
+    [
+      "Subword LexVec",
+      9
+    ],
+    [
+      "Subword LexVec",
+      10
+    ],
+    [
+      "Subword LexVec",
+      11
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_3",
+  "section_id": "Subword LexVec",
+  "section": "Subword LexVec",
+  "title_path": "Subword LexVec",
+  "block_type": "long_unit"
+}

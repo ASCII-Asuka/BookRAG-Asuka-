@@ -1,0 +1,384 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_7",
+      "content": "[Section] Bilingual Pre-trained LMs ::: Fine-tuning Bilingual LM\n[source_id=27] We create a bilingual LM by plugging foreign language specific parameters to the pre-trained English LM (Figure FIGREF7). The new model has two separate embedding layers and output layers, one for English and one for foreign language. The encoder layer in between is shared. We then fine-tune this model using English and foreign monolingual data. Here, we keep tuning the model on English to ensure that it does not forget what it has learned in English and that we can use the resulting model for zero-shot transfer (§SECREF3). In this step, the encoder parameters are also updated so that in can learn syntactic aspects (i.e., word order, morphological agreement) of the target languages.",
+      "score": 3.851068071343238,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        27
+      ],
+      "child_qasper_evidence_texts": [
+        "We create a bilingual LM by plugging foreign language specific parameters to the pre-trained English LM (Figure FIGREF7). The new model has two separate embedding layers and output layers, one for English and one for foreign language. The encoder layer in between is shared. We then fine-tune this model using English and foreign monolingual data. Here, we keep tuning the model on English to ensure that it does not forget what it has learned in English and that we can use the resulting model for zero-shot transfer (§SECREF3). In this step, the encoder parameters are also updated so that in can learn syntactic aspects (i.e., word order, morphological agreement) of the target languages."
+      ],
+      "child_pages": [
+        7
+      ],
+      "child_sections": [
+        "Bilingual Pre-trained LMs ::: Fine-tuning Bilingual LM"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Bilingual Pre-trained LMs ::: Fine-tuning Bilingual LM",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Bilingual Pre-trained LMs ::: Fine-tuning Bilingual LM",
+      "section": "Bilingual Pre-trained LMs ::: Fine-tuning Bilingual LM",
+      "title_path": "Bilingual Pre-trained LMs ::: Fine-tuning Bilingual LM",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_17",
+      "content": "[Section] Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?\n[source_id=59] All the RAMEN models are built from English and tuned on English for zero-shot cross-lingual tasks. It is reasonable to expect RAMENs do well in those tasks as we have shown in our experiments. But are they also a good feature extractor for supervised tasks? We offer a partial answer to this question by evaluating our model for supervised dependency parsing on UD datasets.\n[source_id=60] We used train/dev/test splits provided in UD to train and evaluate our RAMEN-based parser. Table TABREF38 summarizes the results (LAS) of our supervised parser. For a fair comparison, we choose mBERT as the baseline and all the RAMEN models are initialized from aligned fastText vectors. With the same architecture of 12 Transformer layers, RAMEN$_{\\textsc {base}}$+BERT performs competitive to mBERT and outshines mBERT by +1.2 points for Vietnamese. The best LAS results are obtained by RAMEN$_{\\textsc {large}}$+RoBERTa with 24 Transformer layers. Overall, our results indicate the potential of using contextual representations from RAMEN for supervised tasks.",
+      "score": 3.2133536223288397,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_17",
+      "child_source_node_ids": [
+        59,
+        60
+      ],
+      "child_qasper_evidence_texts": [
+        "All the RAMEN models are built from English and tuned on English for zero-shot cross-lingual tasks. It is reasonable to expect RAMENs do well in those tasks as we have shown in our experiments. But are they also a good feature extractor for supervised tasks? We offer a partial answer to this question by evaluating our model for supervised dependency parsing on UD datasets.",
+        "We used train/dev/test splits provided in UD to train and evaluate our RAMEN-based parser. Table TABREF38 summarizes the results (LAS) of our supervised parser. For a fair comparison, we choose mBERT as the baseline and all the RAMEN models are initialized from aligned fastText vectors. With the same architecture of 12 Transformer layers, RAMEN$_{\\textsc {base}}$+BERT performs competitive to mBERT and outshines mBERT by +1.2 points for Vietnamese. The best LAS results are obtained by RAMEN$_{\\textsc {large}}$+RoBERTa with 24 Transformer layers. Overall, our results indicate the potential of using contextual representations from RAMEN for supervised tasks."
+      ],
+      "child_pages": [
+        17,
+        17
+      ],
+      "child_sections": [
+        "Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?",
+        "Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?",
+          0
+        ],
+        [
+          "Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_17",
+      "section_id": "Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?",
+      "section": "Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?",
+      "title_path": "Analysis ::: Are contextual representations from RAMEN also good for supervised parsing?",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Zero-shot Experiments ::: Hyper-parameters\n[source_id=43] In all the experiments, we tune RAMEN$_{\\textsc {base}}$ for 175,000 updates and RAMEN$_{\\textsc {large}}$ for 275,000 updates where the first 25,000 updates are for language specific parameters. The sequence length is set to 256. The mini-batch size are 64 and 24 when tuning language specific parameters using RAMEN$_{\\textsc {base}}$ and RAMEN$_{\\textsc {large}}$ respectively. For tuning bilingual LMs, we use a mini-batch size of 64 for RAMEN$_{\\textsc {base}}$ and 24 for RAMEN$_{\\textsc {large}}$ where half of the batch are English sequences and the other half are foreign sequences. This strategy of balancing mini-batch has been used in multilingual neural machine translation BIBREF23, BIBREF24.\n[source_id=44] We optimize RAMEN$_{\\textsc {base}}$ using Lookahead optimizer BIBREF25 wrapped around Adam with the learning rate of $10^{-4}$, the number of fast weight updates $k=5$, and interpolation parameter $\\alpha =0.5$. We choose Lookahead optimizer because it has been shown to be robust to the initial parameters of the based optimizer (Adam). For Adam optimizer, we linearly increase the learning rate from $10^{-7}$ to $10^{-4}$ in the first 4000 updates and then follow an inverse square root decay. All RAMEN$_{\\textsc {large}}$ models are optimized with Adam due to memory limit.\n[source_id=45] When fine-tuning RAMEN on XNLI and UD, we use a mini-batch size of 32, Adam's learning rate of $10^{-5}$. The number of epochs are set to 4 and 50 for XNLI and UD tasks respectively. All experiments are carried out on a single Tesla V100 16GB GPU. Each RAMEN$_{\\textsc {base}}$ model is trained within a day and each RAMEN$_{\\textsc {large}}$ is trained within two days.",
+      "score": 2.7459280138077187,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        43,
+        44,
+        45
+      ],
+      "child_qasper_evidence_texts": [
+        "In all the experiments, we tune RAMEN$_{\\textsc {base}}$ for 175,000 updates and RAMEN$_{\\textsc {large}}$ for 275,000 updates where the first 25,000 updates are for language specific parameters. The sequence length is set to 256. The mini-batch size are 64 and 24 when tuning language specific parameters using RAMEN$_{\\textsc {base}}$ and RAMEN$_{\\textsc {large}}$ respectively. For tuning bilingual LMs, we use a mini-batch size of 64 for RAMEN$_{\\textsc {base}}$ and 24 for RAMEN$_{\\textsc {large}}$ where half of the batch are English sequences and the other half are foreign sequences. This strategy of balancing mini-batch has been used in multilingual neural machine translation BIBREF23, BIBREF24.",
+        "We optimize RAMEN$_{\\textsc {base}}$ using Lookahead optimizer BIBREF25 wrapped around Adam with the learning rate of $10^{-4}$, the number of fast weight updates $k=5$, and interpolation parameter $\\alpha =0.5$. We choose Lookahead optimizer because it has been shown to be robust to the initial parameters of the based optimizer (Adam). For Adam optimizer, we linearly increase the learning rate from $10^{-7}$ to $10^{-4}$ in the first 4000 updates and then follow an inverse square root decay. All RAMEN$_{\\textsc {large}}$ models are optimized with Adam due to memory limit.",
+        "When fine-tuning RAMEN on XNLI and UD, we use a mini-batch size of 32, Adam's learning rate of $10^{-5}$. The number of epochs are set to 4 and 50 for XNLI and UD tasks respectively. All experiments are carried out on a single Tesla V100 16GB GPU. Each RAMEN$_{\\textsc {base}}$ model is trained within a day and each RAMEN$_{\\textsc {large}}$ is trained within two days."
+      ],
+      "child_pages": [
+        12,
+        12,
+        12
+      ],
+      "child_sections": [
+        "Zero-shot Experiments ::: Hyper-parameters",
+        "Zero-shot Experiments ::: Hyper-parameters",
+        "Zero-shot Experiments ::: Hyper-parameters"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Zero-shot Experiments ::: Hyper-parameters",
+          0
+        ],
+        [
+          "Zero-shot Experiments ::: Hyper-parameters",
+          1
+        ],
+        [
+          "Zero-shot Experiments ::: Hyper-parameters",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Zero-shot Experiments ::: Hyper-parameters",
+      "section": "Zero-shot Experiments ::: Hyper-parameters",
+      "title_path": "Zero-shot Experiments ::: Hyper-parameters",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Pre-trained models BIBREF0, BIBREF1 have received much of attention recently thanks to their impressive results in many down stream NLP tasks. Additionally, multilingual pre-trained models enable many NLP applications for other languages via zero-short cross-lingual transfer. Zero-shot cross-lingual transfer has shown promising results for rapidly building applications for low resource languages. BIBREF2 show the potential of multilingual-BERT BIBREF0 in zero-shot transfer for a large number of languages from different language families on five NLP tasks, namely, natural language inference, document classification, named entity recognition, part-of-speech tagging, and dependency parsing.\n[source_id=5] Although multilingual models are an important ingredient for enhancing language technology in many languages, recent research on improving pre-trained models puts much emphasis on English BIBREF3, BIBREF4, BIBREF5. The current state of affairs makes it difficult to translate advancements in pre-training from English to non-English languages. To our best knowledge, there are only three available multilingual pre-trained models to date: (1) the multilingual-BERT (mBERT) that supports 104 languages, (2) cross-lingual language model BIBREF6 that supports 100 languages, and (3) Language Agnostic SEntence Representations BIBREF7 that supports 93 languages. Among the three models, LASER is based on neural machine translation approach and strictly requires parallel data to train.\n[source_id=6] Do multilingual models always need to be trained from scratch? Can we transfer linguistic knowledge learned by English pre-trained models to other languages? In this work, we develop a technique to rapidly transfer an existing pre-trained model from English to other languages in an energy efficient way BIBREF8. As the first step, we focus on building a bilingual language model (LM) of English and a target language. Starting from a pre-trained English LM, we learn the target language specific parameters (i.e., word embeddings), while keeping the encoder layers of the pre-trained English LM fixed. We then fine-tune both English and target model to obtain the bilingual LM. We apply our approach to autoencoding language models with masked language model objective and show the advantage of the proposed approach in zero-shot transfer. Our main contributions in this work are:\n[source_id=7] We propose a fast adaptation method for obtaining a bilingual BERT$_{\\textsc {base}}$ of English and a target language within a day using one Tesla V100 16GB GPU.\n[source_id=8] We evaluate our bilingual LMs for six languages on two zero-shot cross-lingual transfer tasks, namely natural language inference BIBREF9 and universal dependency parsing. We show that our models offer competitive performance or even better that mBERT.\n[source_id=9] We illustrate that our bilingual LMs can serve as an excellent feature extractor in supervised dependency parsing task.",
+      "score": 0.7279961843336982,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "child_qasper_evidence_texts": [
+        "Pre-trained models BIBREF0, BIBREF1 have received much of attention recently thanks to their impressive results in many down stream NLP tasks. Additionally, multilingual pre-trained models enable many NLP applications for other languages via zero-short cross-lingual transfer. Zero-shot cross-lingual transfer has shown promising results for rapidly building applications for low resource languages. BIBREF2 show the potential of multilingual-BERT BIBREF0 in zero-shot transfer for a large number of languages from different language families on five NLP tasks, namely, natural language inference, document classification, named entity recognition, part-of-speech tagging, and dependency parsing.",
+        "Although multilingual models are an important ingredient for enhancing language technology in many languages, recent research on improving pre-trained models puts much emphasis on English BIBREF3, BIBREF4, BIBREF5. The current state of affairs makes it difficult to translate advancements in pre-training from English to non-English languages. To our best knowledge, there are only three available multilingual pre-trained models to date: (1) the multilingual-BERT (mBERT) that supports 104 languages, (2) cross-lingual language model BIBREF6 that supports 100 languages, and (3) Language Agnostic SEntence Representations BIBREF7 that supports 93 languages. Among the three models, LASER is based on neural machine translation approach and strictly requires parallel data to train.",
+        "Do multilingual models always need to be trained from scratch? Can we transfer linguistic knowledge learned by English pre-trained models to other languages? In this work, we develop a technique to rapidly transfer an existing pre-trained model from English to other languages in an energy efficient way BIBREF8. As the first step, we focus on building a bilingual language model (LM) of English and a target language. Starting from a pre-trained English LM, we learn the target language specific parameters (i.e., word embeddings), while keeping the encoder layers of the pre-trained English LM fixed. We then fine-tune both English and target model to obtain the bilingual LM. We apply our approach to autoencoding language models with masked language model objective and show the advantage of the proposed approach in zero-shot transfer. Our main contributions in this work are:",
+        "We propose a fast adaptation method for obtaining a bilingual BERT$_{\\textsc {base}}$ of English and a target language within a day using one Tesla V100 16GB GPU.",
+        "We evaluate our bilingual LMs for six languages on two zero-shot cross-lingual transfer tasks, namely natural language inference BIBREF9 and universal dependency parsing. We show that our models offer competitive performance or even better that mBERT.",
+        "We illustrate that our bilingual LMs can serve as an excellent feature extractor in supervised dependency parsing task."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Zero-shot Experiments ::: Data ::: Remark on BPE\n[source_id=36] BIBREF22 show that sharing subwords between languages improves alignments between embedding spaces. BIBREF2 observe a strong correlation between the percentage of overlapping subwords and mBERT's performances for cross-lingual zero-shot transfer. However, in our current approach, subwords between source and target are not shared. A subword that is in both English and foreign vocabulary has two different embeddings.",
+      "score": 0.7274484026337024,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        36
+      ],
+      "child_qasper_evidence_texts": [
+        "BIBREF22 show that sharing subwords between languages improves alignments between embedding spaces. BIBREF2 observe a strong correlation between the percentage of overlapping subwords and mBERT's performances for cross-lingual zero-shot transfer. However, in our current approach, subwords between source and target are not shared. A subword that is in both English and foreign vocabulary has two different embeddings."
+      ],
+      "child_pages": [
+        10
+      ],
+      "child_sections": [
+        "Zero-shot Experiments ::: Data ::: Remark on BPE"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Zero-shot Experiments ::: Data ::: Remark on BPE",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Zero-shot Experiments ::: Data ::: Remark on BPE",
+      "section": "Zero-shot Experiments ::: Data ::: Remark on BPE",
+      "title_path": "Zero-shot Experiments ::: Data ::: Remark on BPE",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_16",
+      "content": "[Section] Analysis ::: Impact of initialization\n[source_id=57] Initializing foreign embeddings is the backbone of our approach. A good initialization leads to better zero-shot transfer results and enables fast adaptation. To verify the importance of a good initialization, we train a RAMEN$_{\\textsc {base}}$+RoBERTa with foreign word-embeddings are initialized randomly from $\\mathcal {N}(0, {1}{d^2})$. For a fair comparison, we use the same hyper-parameters in §SECREF27. Table TABREF36 shows the results of XNLI and UD parsing of random initialization. In comparison to the initialization using aligned fastText vectors, random initialization decreases the zero-shot performance of RAMEN$_{\\textsc {base}}$ by 15.9% for XNLI and 27.8 points for UD parsing on average. We also see that zero-shot parsing of SOV languages (Arabic and Hindi) suffers random initialization.",
+      "score": 0.7121892322206753,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_16",
+      "child_source_node_ids": [
+        57
+      ],
+      "child_qasper_evidence_texts": [
+        "Initializing foreign embeddings is the backbone of our approach. A good initialization leads to better zero-shot transfer results and enables fast adaptation. To verify the importance of a good initialization, we train a RAMEN$_{\\textsc {base}}$+RoBERTa with foreign word-embeddings are initialized randomly from $\\mathcal {N}(0, {1}{d^2})$. For a fair comparison, we use the same hyper-parameters in §SECREF27. Table TABREF36 shows the results of XNLI and UD parsing of random initialization. In comparison to the initialization using aligned fastText vectors, random initialization decreases the zero-shot performance of RAMEN$_{\\textsc {base}}$ by 15.9% for XNLI and 27.8 points for UD parsing on average. We also see that zero-shot parsing of SOV languages (Arabic and Hindi) suffers random initialization."
+      ],
+      "child_pages": [
+        16
+      ],
+      "child_sections": [
+        "Analysis ::: Impact of initialization"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Analysis ::: Impact of initialization",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_16",
+      "section_id": "Analysis ::: Impact of initialization",
+      "section": "Analysis ::: Impact of initialization",
+      "title_path": "Analysis ::: Impact of initialization",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Bilingual Pre-trained LMs ::: Fine-tuning Target Embeddings\n[source_id=25] After initializing foreign word-embeddings, we replace English word-embeddings in the English pre-trained LM with foreign word-embeddings to obtain the foreign LM. We then fine-tune only foreign word-embeddings on monolingual data. The training objective is the same as the training objective of the English pre-trained LM (i.e., masked LM for BERT). Since the trained encoder $\\Psi ()$ is good at capturing association, the purpose of this step is to further optimize target embeddings such that the target LM can utilized the trained encoder for association task. For example, if the words Albert Camus presented in a French input sequence, the self-attention in the encoder more likely attends to words absurde and existentialisme once their embeddings are tuned.",
+      "score": 0.7106499982130683,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        25
+      ],
+      "child_qasper_evidence_texts": [
+        "After initializing foreign word-embeddings, we replace English word-embeddings in the English pre-trained LM with foreign word-embeddings to obtain the foreign LM. We then fine-tune only foreign word-embeddings on monolingual data. The training objective is the same as the training objective of the English pre-trained LM (i.e., masked LM for BERT). Since the trained encoder $\\Psi ()$ is good at capturing association, the purpose of this step is to further optimize target embeddings such that the target LM can utilized the trained encoder for association task. For example, if the words Albert Camus presented in a French input sequence, the self-attention in the encoder more likely attends to words absurde and existentialisme once their embeddings are tuned."
+      ],
+      "child_pages": [
+        6
+      ],
+      "child_sections": [
+        "Bilingual Pre-trained LMs ::: Fine-tuning Target Embeddings"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Bilingual Pre-trained LMs ::: Fine-tuning Target Embeddings",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Bilingual Pre-trained LMs ::: Fine-tuning Target Embeddings",
+      "section": "Bilingual Pre-trained LMs ::: Fine-tuning Target Embeddings",
+      "title_path": "Bilingual Pre-trained LMs ::: Fine-tuning Target Embeddings",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_15",
+      "content": "[Section] Results ::: Universal Dependency Parsing\n[source_id=54] We build on top of RAMEN a graph-based dependency parser BIBREF27. For the purpose of evaluating the contextual representations learned by our model, we do not use part-of-speech tags. Contextualized representations are directly fed into Deep-Biaffine layers to predict arc and label scores. Table TABREF34 presents the Labeled Attachment Scores (LAS) for zero-shot dependency parsing.\n[source_id=55] We first look at the fairest comparison between mBERT and monolingually initialized RAMEN$_{\\textsc {base}}$+BERT. The latter outperforms the former on five languages except Arabic. We observe the largest gain of +5.2 LAS for French. Chinese enjoys +3.1 LAS from our approach. With similar architecture (12 or 24 layers) and initialization (using monolingual or parallel data), RAMEN+RoBERTa performs better than RAMEN+BERT for most of the languages. Arabic and Hindi benefit the most from bigger models. For the other four languages, RAMEN$_{\\textsc {large}}$ renders a modest improvement over RAMEN$_{\\textsc {base}}$.",
+      "score": 0.7089431517746463,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_15",
+      "child_source_node_ids": [
+        54,
+        55
+      ],
+      "child_qasper_evidence_texts": [
+        "We build on top of RAMEN a graph-based dependency parser BIBREF27. For the purpose of evaluating the contextual representations learned by our model, we do not use part-of-speech tags. Contextualized representations are directly fed into Deep-Biaffine layers to predict arc and label scores. Table TABREF34 presents the Labeled Attachment Scores (LAS) for zero-shot dependency parsing.",
+        "We first look at the fairest comparison between mBERT and monolingually initialized RAMEN$_{\\textsc {base}}$+BERT. The latter outperforms the former on five languages except Arabic. We observe the largest gain of +5.2 LAS for French. Chinese enjoys +3.1 LAS from our approach. With similar architecture (12 or 24 layers) and initialization (using monolingual or parallel data), RAMEN+RoBERTa performs better than RAMEN+BERT for most of the languages. Arabic and Hindi benefit the most from bigger models. For the other four languages, RAMEN$_{\\textsc {large}}$ renders a modest improvement over RAMEN$_{\\textsc {base}}$."
+      ],
+      "child_pages": [
+        15,
+        15
+      ],
+      "child_sections": [
+        "Results ::: Universal Dependency Parsing",
+        "Results ::: Universal Dependency Parsing"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results ::: Universal Dependency Parsing",
+          0
+        ],
+        [
+          "Results ::: Universal Dependency Parsing",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_15",
+      "section_id": "Results ::: Universal Dependency Parsing",
+      "section": "Results ::: Universal Dependency Parsing",
+      "title_path": "Results ::: Universal Dependency Parsing",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 54,
+      "content": "We build on top of RAMEN a graph-based dependency parser BIBREF27. For the purpose of evaluating the contextual representations learned by our model, we do not use part-of-speech tags. Contextualized representations are directly fed into Deep-Biaffine layers to predict arc and label scores. Table TABREF34 presents the Labeled Attachment Scores (LAS) for zero-shot dependency parsing.",
+      "qasper_evidence_text": "We build on top of RAMEN a graph-based dependency parser BIBREF27. For the purpose of evaluating the contextual representations learned by our model, we do not use part-of-speech tags. Contextualized representations are directly fed into Deep-Biaffine layers to predict arc and label scores. Table TABREF34 presents the Labeled Attachment Scores (LAS) for zero-shot dependency parsing.",
+      "source_node_id": 54,
+      "node_id": 54,
+      "paragraph_id": 54,
+      "evidence_id": 54,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_15",
+      "rank": 8,
+      "score": 0.7089431517746463,
+      "block_type": "paragraph",
+      "page": 15,
+      "section_id": "Results ::: Universal Dependency Parsing",
+      "section": "Results ::: Universal Dependency Parsing",
+      "title": "Results ::: Universal Dependency Parsing",
+      "hotpot_title": "Results ::: Universal Dependency Parsing",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    }
+  ],
+  "supporting_block_ids": [
+    54
+  ]
+}

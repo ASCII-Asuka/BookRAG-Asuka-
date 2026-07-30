@@ -1,0 +1,392 @@
+[
+  {
+    "question": "What kind of questions are present in the dataset?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "These 8 tasks require different competencies and a different level of understanding of the document to be well answered"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "We introduce a list of 8 different competencies that a reading system should master in order to process reviews and text documents in general. These 8 tasks require different competencies and a different level of understanding of the document to be well answered. For instance, detecting if an aspect is mentioned in a review will require less understanding of the review than predicting explicitly the rating of this aspect. Table TABREF10 presents the 8 tasks we have introduced in this dataset with an example of a question that corresponds to each task. We also provide the expected type of the answer (Yes/No question, rating question...). It can be an additional tool to analyze the errors of the readers."
+        ],
+        "evidence_block_ids": [
+          26
+        ],
+        "evidence_paragraph_ids": [
+          26
+        ]
+      }
+    ],
+    "doc_uuid": "1810.12196",
+    "doc_path": "qasper://1810.12196",
+    "qasper_question_id": "b962cc817a4baf6c56150f0d97097f18ad6cd9ed",
+    "title": "ReviewQA: a relational aspect-based opinion reading dataset",
+    "evidence_block_ids": [
+      26
+    ],
+    "evidence_paragraph_ids": [
+      26
+    ],
+    "output": "{\n  \"answer_short\": \"Binary questions and relational reasoning questions\",\n  \"answer_rationale\": \"Text 1 states that a majority of tasks are binary questions (yes/no), while also mentioning relational questions requiring aspect names as answers. Text 6 and 7 further describe the dataset as containing natural language questions over hotel reviews, divided into 8 groups based on reasoning skills, indicating relational reasoning questions are present.\"\n}",
+    "retrieved_node_ids": [
+      30,
+      12,
+      14,
+      10,
+      13,
+      21,
+      48,
+      29,
+      5,
+      28
+    ],
+    "answer_short": "Binary questions and relational reasoning questions",
+    "answer_rationale": "Text 1 states that a majority of tasks are binary questions (yes/no), while also mentioning relational questions requiring aspect names as answers. Text 6 and 7 further describe the dataset as containing natural language questions over hotel reviews, divided into 8 groups based on reasoning skills, indicating relational reasoning questions are present.",
+    "supporting_block_ids": [
+      30,
+      12,
+      14,
+      10,
+      13,
+      21,
+      48,
+      29,
+      5,
+      28
+    ]
+  },
+  {
+    "question": "What baselines are presented?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Logistic regression",
+          "LSTM",
+          "End-to-end memory networks",
+          "Deep projective reader"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Logistic regression: To produce the representation of the input, we concatenate the Bag-Of-Words representation of the document with the Bag-Of-Words representation of the question. It produces an array of size INLINEFORM0 where INLINEFORM1 is the vocabulary size. Then we use a logistic regression to select the most probable answer among the INLINEFORM2 possibilities.",
+          "LSTM: We start with a concatenation of the sequence of indexes of the document with the sequence of indexes of the question. Them we feed an LSTM network with this vector and use the final state as the representation of the input. Finally, we apply a logistic regression over this representation to produce the final decision.",
+          "End-to-end memory networks: This architecture is based on two different memory cells (input and output) that contain a representation of the document. A controller, initialized with the encoding of the question, is used to calculate an attention between this controller and the representation of the document in the input memory. This attention is them used to re-weight the representation of the document in the output memory. This response from the output memory is them utilized to update the controller. After that, either a matrix is used to project this representation into the answer space either the controller is used to go through an over hop of memory. This architecture allows the model to sequentially look into the initial document seeking for important information regarding the current state of its controller. This model achieves very good performances on the 20 bAbI tasks dataset.",
+          "Deep projective reader: This is a model of our own design, largely inspired by the efficient R-net reader BIBREF12 . The overall architecture is composed of 4 stacked layers: an encoding layer, a question/document attention, a self-attention layer and a projection layer. The following paragraphs briefly describe the overall utility of each of these layers."
+        ],
+        "evidence_block_ids": [
+          35,
+          36,
+          37,
+          38
+        ],
+        "evidence_paragraph_ids": [
+          35,
+          36,
+          37,
+          38
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Logistic regression",
+          "LSTM",
+          "End-to-end memory networks",
+          "Deep projective reader"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "In this section, we present the performance of four different models on our dataset: a logistic regression and three neural models. The first one is a basic LSTM BIBREF20 , the second a MemN2N BIBREF18 and the third one is a model of our own design. This fourth model reuses the encoding layers of the R-net BIBREF12 and we modify the final layers with a projection layer that will be able to select the answer among the set of candidates instead of pointing the answerer directly into the source document.",
+          "Logistic regression: To produce the representation of the input, we concatenate the Bag-Of-Words representation of the document with the Bag-Of-Words representation of the question. It produces an array of size INLINEFORM0 where INLINEFORM1 is the vocabulary size. Then we use a logistic regression to select the most probable answer among the INLINEFORM2 possibilities.",
+          "LSTM: We start with a concatenation of the sequence of indexes of the document with the sequence of indexes of the question. Them we feed an LSTM network with this vector and use the final state as the representation of the input. Finally, we apply a logistic regression over this representation to produce the final decision.",
+          "End-to-end memory networks: This architecture is based on two different memory cells (input and output) that contain a representation of the document. A controller, initialized with the encoding of the question, is used to calculate an attention between this controller and the representation of the document in the input memory. This attention is them used to re-weight the representation of the document in the output memory. This response from the output memory is them utilized to update the controller. After that, either a matrix is used to project this representation into the answer space either the controller is used to go through an over hop of memory. This architecture allows the model to sequentially look into the initial document seeking for important information regarding the current state of its controller. This model achieves very good performances on the 20 bAbI tasks dataset.",
+          "Deep projective reader: This is a model of our own design, largely inspired by the efficient R-net reader BIBREF12 . The overall architecture is composed of 4 stacked layers: an encoding layer, a question/document attention, a self-attention layer and a projection layer. The following paragraphs briefly describe the overall utility of each of these layers."
+        ],
+        "evidence_block_ids": [
+          34,
+          35,
+          36,
+          37,
+          38
+        ],
+        "evidence_paragraph_ids": [
+          34,
+          35,
+          36,
+          37,
+          38
+        ]
+      }
+    ],
+    "doc_uuid": "1810.12196",
+    "doc_path": "qasper://1810.12196",
+    "qasper_question_id": "fb5fb11e7d01b9f9efe3db3417b8faf4f8d6931f",
+    "title": "ReviewQA: a relational aspect-based opinion reading dataset",
+    "evidence_block_ids": [
+      35,
+      36,
+      37,
+      38,
+      34
+    ],
+    "evidence_paragraph_ids": [
+      35,
+      36,
+      37,
+      38,
+      34
+    ],
+    "output": "{\n  \"answer_short\": \"logistic regression, simple LSTM network, MemN2N, deep projective reader\",\n  \"answer_rationale\": \"Text 2 (page=12) explicitly states that Table TABREF19 displays the performance of the 4 baselines on the ReviewQA's test set, which are: logistic regression, simple LSTM network, MemN2N, and deep projective reader. These are the only baselines mentioned in the retrieved documents.\"\n}",
+    "retrieved_node_ids": [
+      12,
+      46,
+      13,
+      5,
+      14,
+      11,
+      15,
+      41,
+      34,
+      8
+    ],
+    "answer_short": "logistic regression, simple LSTM network, MemN2N, deep projective reader",
+    "answer_rationale": "Text 2 (page=12) explicitly states that Table TABREF19 displays the performance of the 4 baselines on the ReviewQA's test set, which are: logistic regression, simple LSTM network, MemN2N, and deep projective reader. These are the only baselines mentioned in the retrieved documents.",
+    "supporting_block_ids": [
+      12,
+      46,
+      13,
+      5,
+      14,
+      11,
+      15,
+      41,
+      34,
+      8
+    ]
+  },
+  {
+    "question": "What tasks were evaluated?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "ReviewQA's test set"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Table TABREF19 displays the performance of the 4 baselines on the ReviewQA's test set. These results are the performance achieved by our own implementation of these 4 models. According to our results, the simple LSTM network and the MemN2N perform very poorly on this dataset. Especially on the most advanced reasoning tasks. Indeed, the task 5 which corresponds to the prediction of the exact rating of an aspect seems to be very challenging for these model. Maybe the tokenization by sentence to create the memory blocks of the MemN2N, which is appropriated in the case of the bAbI tasks, is not a good representation of the documents when it has to handle human generated comments. However, the logistic regression achieves reasonable performance on these tasks, and do not suffer from catastrophic performance on any tasks. Its worst result comes on task 6 and one of the reason is probably that this architecture is not designed to predict a list of answers. On the contrary, the deep projective reader achieves encouraging on this dataset. It outperforms all the other baselines, with very good scores on the first fourth tasks. The question/document and document/document attention layers proposed in BIBREF12 seem once again to produce rich encodings of the inputs which are relevant for our projection layer."
+        ],
+        "evidence_block_ids": [
+          46
+        ],
+        "evidence_paragraph_ids": [
+          46
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "Detection of an aspect in a review, Prediction of the customer general satisfaction, Prediction of the global trend of an aspect in a given review, Prediction of whether the rating of a given aspect is above or under a given value, Prediction of the exact rating of an aspect in a review, Prediction of the list of all the positive/negative aspects mentioned in the review, Comparison between aspects, Prediction of the strengths and weaknesses in a review",
+        "yes_no": null,
+        "evidence": [
+          "We introduce a list of 8 different competencies that a reading system should master in order to process reviews and text documents in general. These 8 tasks require different competencies and a different level of understanding of the document to be well answered. For instance, detecting if an aspect is mentioned in a review will require less understanding of the review than predicting explicitly the rating of this aspect. Table TABREF10 presents the 8 tasks we have introduced in this dataset with an example of a question that corresponds to each task. We also provide the expected type of the answer (Yes/No question, rating question...). It can be an additional tool to analyze the errors of the readers."
+        ],
+        "evidence_block_ids": [
+          26
+        ],
+        "evidence_paragraph_ids": [
+          26
+        ]
+      }
+    ],
+    "doc_uuid": "1810.12196",
+    "doc_path": "qasper://1810.12196",
+    "qasper_question_id": "52f8a3e3cd5d42126b5307adc740b71510a6bdf5",
+    "title": "ReviewQA: a relational aspect-based opinion reading dataset",
+    "evidence_block_ids": [
+      46,
+      26
+    ],
+    "evidence_paragraph_ids": [
+      46,
+      26
+    ],
+    "output": "{\n  \"answer_short\": \"8 different competencies\",\n  \"answer_rationale\": \"Text 1 states: 'We introduce a list of 8 different competencies that a reading system should master...'. Text 5 reinforces this by mentioning 'These questions are divided into 8 groups, regarding the competency required to be answered.'\"\n}",
+    "retrieved_node_ids": [
+      26,
+      15,
+      29,
+      7,
+      21,
+      28,
+      25,
+      46,
+      5,
+      48
+    ],
+    "answer_short": "8 different competencies",
+    "answer_rationale": "Text 1 states: 'We introduce a list of 8 different competencies that a reading system should master...'. Text 5 reinforces this by mentioning 'These questions are divided into 8 groups, regarding the competency required to be answered.'",
+    "supporting_block_ids": [
+      26,
+      15,
+      29,
+      7,
+      21,
+      28,
+      25,
+      46,
+      5,
+      48
+    ]
+  },
+  {
+    "question": "What language are the reviews in?",
+    "answer": [
+      {
+        "unanswerable": true,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "English"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "In order to generate more paraphrases of the questions, we used a backtranslation method to enrich them. The idea is to use a translation model that will translate our human-generated questions into another language, and then translate them back to English. This double translation will introduce rewordings of the questions that we will be able to integrate into this dataset. This approach has been used in BIBREF7 to perform data augmentation on the training set. For this purpose, we have trained a fairseq BIBREF19 model to translate sentences from English to French and for French to English. In order to preserve the quality of the sentences we have so far, we only keep the most probable translation of each original sentence. Indeed a beam search is used during the translation to predict the most probable translations which mean that we each translation comes with an associated probability. By selecting only the first translations, we almost double the number of questions without degrading the quality of the questions proposed in the dataset."
+        ],
+        "evidence_block_ids": [
+          32
+        ],
+        "evidence_paragraph_ids": [
+          32
+        ]
+      }
+    ],
+    "doc_uuid": "1810.12196",
+    "doc_path": "qasper://1810.12196",
+    "qasper_question_id": "2236386729105f5cf42f73cc055ce3acdea2d452",
+    "title": "ReviewQA: a relational aspect-based opinion reading dataset",
+    "evidence_block_ids": [
+      32
+    ],
+    "evidence_paragraph_ids": [
+      32
+    ],
+    "output": "{\n  \"answer_short\": \"English\",\n  \"answer_rationale\": \"The reviews are extracted from the TripAdvisor website, which primarily operates in English, and the dataset is used for natural language processing tasks in English. The context of the documents indicates that the reviews are in English, as they are part of a machine reading dataset for hotel reviews, and no other language is mentioned.\"\n}",
+    "retrieved_node_ids": [
+      23,
+      25,
+      28,
+      21,
+      7,
+      26,
+      48,
+      2,
+      29,
+      19
+    ],
+    "answer_short": "English",
+    "answer_rationale": "The reviews are extracted from the TripAdvisor website, which primarily operates in English, and the dataset is used for natural language processing tasks in English. The context of the documents indicates that the reviews are in English, as they are part of a machine reading dataset for hotel reviews, and no other language is mentioned.",
+    "supporting_block_ids": [
+      23,
+      25,
+      28,
+      21,
+      7,
+      26,
+      48,
+      2,
+      29,
+      19
+    ]
+  },
+  {
+    "question": "Where are the hotel reviews from?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "TripAdvisor"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Following concepts proposed in the 20 bAbI tasks BIBREF4 or in the visual question-answering dataset CLEVR BIBREF9 , we think that the challenge, limited to the detection of relevant passages in a document, is only the first step in building systems that truly understand text. The second step is the ability of reasoning with the relevant information extracted from a document. To set up this challenge, we propose to leverage on a hotel reviews corpus that requires reasoning skills to answer natural language questions. The reviews we used have been extracted from TripAdvisor and originally proposed in BIBREF10 , BIBREF11 . In the original data, each review comes with a set of rated aspects among the seventh available: Business service, Check in / Front Desk, Cleanliness, Location, Room, Sleep Quality, Value and for all the reviews an Overall rating. In this articles we propose to exploit these data to create a dataset of question-answering that will challenge 8 competencies of the reader."
+        ],
+        "evidence_block_ids": [
+          7
+        ],
+        "evidence_paragraph_ids": [
+          7
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "TripAdvisor"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Following concepts proposed in the 20 bAbI tasks BIBREF4 or in the visual question-answering dataset CLEVR BIBREF9 , we think that the challenge, limited to the detection of relevant passages in a document, is only the first step in building systems that truly understand text. The second step is the ability of reasoning with the relevant information extracted from a document. To set up this challenge, we propose to leverage on a hotel reviews corpus that requires reasoning skills to answer natural language questions. The reviews we used have been extracted from TripAdvisor and originally proposed in BIBREF10 , BIBREF11 . In the original data, each review comes with a set of rated aspects among the seventh available: Business service, Check in / Front Desk, Cleanliness, Location, Room, Sleep Quality, Value and for all the reviews an Overall rating. In this articles we propose to exploit these data to create a dataset of question-answering that will challenge 8 competencies of the reader."
+        ],
+        "evidence_block_ids": [
+          7
+        ],
+        "evidence_paragraph_ids": [
+          7
+        ]
+      }
+    ],
+    "doc_uuid": "1810.12196",
+    "doc_path": "qasper://1810.12196",
+    "qasper_question_id": "18942ab8c365955da3fd8fc901dfb1a3b65c1be1",
+    "title": "ReviewQA: a relational aspect-based opinion reading dataset",
+    "evidence_block_ids": [
+      7
+    ],
+    "evidence_paragraph_ids": [
+      7
+    ],
+    "output": "{\n  \"answer_short\": \"TripAdvisor\",\n  \"answer_rationale\": \"Text 1 and Text 3 both state that the hotel reviews were extracted from the TripAdvisor website. Text 1 explicitly mentions \\\"reviews extracted from the TripAdvisor website,\\\" and Text 3 confirms \\\"The reviews we used have been extracted from TripAdvisor.\\\"\"\n}",
+    "retrieved_node_ids": [
+      23,
+      21,
+      7,
+      2,
+      28,
+      25,
+      19,
+      26,
+      29,
+      48
+    ],
+    "answer_short": "TripAdvisor",
+    "answer_rationale": "Text 1 and Text 3 both state that the hotel reviews were extracted from the TripAdvisor website. Text 1 explicitly mentions \"reviews extracted from the TripAdvisor website,\" and Text 3 confirms \"The reviews we used have been extracted from TripAdvisor.\"",
+    "supporting_block_ids": [
+      23,
+      21,
+      7,
+      2,
+      28,
+      25,
+      19,
+      26,
+      29,
+      48
+    ]
+  }
+]

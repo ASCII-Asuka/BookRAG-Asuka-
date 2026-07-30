@@ -1,0 +1,713 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_26",
+      "content": "[Section] Conclusion\n[source_id=180] In this paper, we carried out an empirical study of machine learning and deep learning methods for Recognizing Question Entailment in the medical domain using several datasets. We developed a RQE-based QA system to answer new medical questions using existing question-answer pairs. We built and shared a collection of 47K medical question-answer pairs. Our QA approach outperformed the best results on TREC-2017 LiveQA medical test questions. The proposed approach can be applied and adapted to open-domain as well as specific-domain QA. Deep learning models achieved interesting results on open-domain and clinical datasets, but obtained a lower performance on consumer health questions. We will continue investigating other network architectures including transfer learning, as well as creation of a large collection of consumer health questions for training to improve the performance of DL models. Future work also includes exploring integration of a Question Focus Recognition module to enhance candidate question retrieval, and expanding our question-answer collection.",
+      "score": 10.575916761629802,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_26",
+      "child_source_node_ids": [
+        180
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper, we carried out an empirical study of machine learning and deep learning methods for Recognizing Question Entailment in the medical domain using several datasets. We developed a RQE-based QA system to answer new medical questions using existing question-answer pairs. We built and shared a collection of 47K medical question-answer pairs. Our QA approach outperformed the best results on TREC-2017 LiveQA medical test questions. The proposed approach can be applied and adapted to open-domain as well as specific-domain QA. Deep learning models achieved interesting results on open-domain and clinical datasets, but obtained a lower performance on consumer health questions. We will continue investigating other network architectures including transfer learning, as well as creation of a large collection of consumer health questions for training to improve the performance of DL models. Future work also includes exploring integration of a Question Focus Recognition module to enhance candidate question retrieval, and expanding our question-answer collection."
+      ],
+      "child_pages": [
+        26
+      ],
+      "child_sections": [
+        "Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_26",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] One of the challenges in large-scale information retrieval (IR) is to develop fine-grained and domain-specific methods to answer natural language questions. Despite the availability of numerous sources and datasets for answer retrieval, Question Answering (QA) remains a challenging problem due to the difficulty of the question understanding and answer extraction tasks. One of the promising tracks investigated in QA is to map new questions to formerly answered questions that are `similar'. In this paper, we propose a novel QA approach based on Recognizing Question Entailment (RQE) and we describe the QA system and resources that we built and evaluated on real medical questions. First, we compare machine learning and deep learning methods for RQE using different kinds of datasets, including textual inference, question similarity and entailment in both the open and clinical domains. Second, we combine IR models with the best RQE method to select entailed questions and rank the retrieved answers. To study the end-to-end QA approach, we built the MedQuAD collection of 47,457 question-answer pairs from trusted medical sources, that we introduce and share in the scope of this paper. Following the evaluation process used in TREC 2017 LiveQA, we find that our approach exceeds the best results of the medical task with a 29.8% increase over the best official score. The evaluation results also support the relevance of question entailment for QA and highlight the effectiveness of combining IR and RQE for future QA efforts. Our findings also show that relying on a restricted set of reliable answer sources can bring a substantial improvement in medical QA.",
+      "score": 9.50959575413869,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "One of the challenges in large-scale information retrieval (IR) is to develop fine-grained and domain-specific methods to answer natural language questions. Despite the availability of numerous sources and datasets for answer retrieval, Question Answering (QA) remains a challenging problem due to the difficulty of the question understanding and answer extraction tasks. One of the promising tracks investigated in QA is to map new questions to formerly answered questions that are `similar'. In this paper, we propose a novel QA approach based on Recognizing Question Entailment (RQE) and we describe the QA system and resources that we built and evaluated on real medical questions. First, we compare machine learning and deep learning methods for RQE using different kinds of datasets, including textual inference, question similarity and entailment in both the open and clinical domains. Second, we combine IR models with the best RQE method to select entailed questions and rank the retrieved answers. To study the end-to-end QA approach, we built the MedQuAD collection of 47,457 question-answer pairs from trusted medical sources, that we introduce and share in the scope of this paper. Following the evaluation process used in TREC 2017 LiveQA, we find that our approach exceeds the best results of the medical task with a 29.8% increase over the best official score. The evaluation results also support the relevance of question entailment for QA and highlight the effectiveness of combining IR and RQE for future QA efforts. Our findings also show that relying on a restricted set of reliable answer sources can bring a substantial improvement in medical QA."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Related Work on Question Similarity and Entailment\n[source_id=30] Several efforts focused on recognizing similar questions. Jeon et al. BIBREF35 showed that a retrieval model based on translation probabilities learned from a question and answer archive can recognize semantically similar questions. Duan et al. BIBREF36 proposed a dedicated language modeling approach for question search, using question topic (user's interest) and question focus (certain aspect of the topic).\n[source_id=31] Lately, these efforts were supported by a task on Question-Question similarity introduced in the community QA challenge at SemEval (task 3B) BIBREF3 . Given a new question, the task focused on reranking all similar questions retrieved by a search engine, assuming that the answers to the similar questions will be correct answers for the new question. Different machine learning and deep learning approaches were tested in the scope of SemEval 2016 BIBREF3 and 2017 BIBREF4 task 3B. The best performing system in 2017 achieved a MAP of 47.22% using supervised Logistic Regression that combined different unsupervised similarity measures such as Cosine and Soft-Cosine BIBREF37 . The second best system achieved 46.93% MAP with a learning-to-rank method using Logistic Regression and a rich set of features including lexical and semantic features as well as embeddings generated by different neural networks (siamese, Bi-LSTM, GRU and CNNs) BIBREF38 . In the scope of this challenge, a dataset was collected from Qatar Living forum for training. We refer to this dataset as SemEval-cQA.\n[source_id=32] In another effort, an answer-based definition of RQE was proposed and tested BIBREF1 . The authors introduced a dataset of clinical questions and used a feature-based method that provided an Accuracy of 75% on consumer health questions. We will call this dataset Clinical-QE. Dos Santos et al. BIBREF5 proposed a new approach to retrieve semantically equivalent questions combining a bag-of-words representation with a distributed vector representation created by a CNN and user data collected from two Stack Exchange communities. Lei et al. BIBREF7 proposed a recurrent and convolutional model (gated convolution) to map questions to their semantic representations. The models were pre-trained within an encoder-decoder framework.",
+      "score": 7.550623189089006,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        30,
+        31,
+        32
+      ],
+      "child_qasper_evidence_texts": [
+        "Several efforts focused on recognizing similar questions. Jeon et al. BIBREF35 showed that a retrieval model based on translation probabilities learned from a question and answer archive can recognize semantically similar questions. Duan et al. BIBREF36 proposed a dedicated language modeling approach for question search, using question topic (user's interest) and question focus (certain aspect of the topic).",
+        "Lately, these efforts were supported by a task on Question-Question similarity introduced in the community QA challenge at SemEval (task 3B) BIBREF3 . Given a new question, the task focused on reranking all similar questions retrieved by a search engine, assuming that the answers to the similar questions will be correct answers for the new question. Different machine learning and deep learning approaches were tested in the scope of SemEval 2016 BIBREF3 and 2017 BIBREF4 task 3B. The best performing system in 2017 achieved a MAP of 47.22% using supervised Logistic Regression that combined different unsupervised similarity measures such as Cosine and Soft-Cosine BIBREF37 . The second best system achieved 46.93% MAP with a learning-to-rank method using Logistic Regression and a rich set of features including lexical and semantic features as well as embeddings generated by different neural networks (siamese, Bi-LSTM, GRU and CNNs) BIBREF38 . In the scope of this challenge, a dataset was collected from Qatar Living forum for training. We refer to this dataset as SemEval-cQA.",
+        "In another effort, an answer-based definition of RQE was proposed and tested BIBREF1 . The authors introduced a dataset of clinical questions and used a feature-based method that provided an Accuracy of 75% on consumer health questions. We will call this dataset Clinical-QE. Dos Santos et al. BIBREF5 proposed a new approach to retrieve semantically equivalent questions combining a bag-of-words representation with a distributed vector representation created by a CNN and user data collected from two Stack Exchange communities. Lei et al. BIBREF7 proposed a recurrent and convolutional model (gated convolution) to map questions to their semantic representations. The models were pre-trained within an encoder-decoder framework."
+      ],
+      "child_pages": [
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "Related Work on Question Similarity and Entailment",
+        "Related Work on Question Similarity and Entailment",
+        "Related Work on Question Similarity and Entailment"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work on Question Similarity and Entailment",
+          0
+        ],
+        [
+          "Related Work on Question Similarity and Entailment",
+          1
+        ],
+        [
+          "Related Work on Question Similarity and Entailment",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Related Work on Question Similarity and Entailment",
+      "section": "Related Work on Question Similarity and Entailment",
+      "title_path": "Related Work on Question Similarity and Entailment",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] With the availability of rich data on users' locations, profiles and search history, personalization has become the leading trend in large-scale information retrieval. However, efficiency through personalization is not yet the most suitable model when tackling domain-specific searches. This is due to several factors, such as the lexical and semantic challenges of domain-specific data that often include advanced argumentation and complex contextual information, the higher sparseness of relevant information sources, and the more pronounced lack of similarities between users' searches.\n[source_id=5] A recent study on expert search strategies among healthcare information professionals BIBREF0 showed that, for a given search task, they spend an average of 60 minutes per collection or database, 3 minutes to examine the relevance of each document, and 4 hours of total search time. When written in steps, their search strategy spans over 15 lines and can reach up to 105 lines.\n[source_id=6] With the abundance of information sources in the medical domain, consumers are more and more faced with a similar challenge, one that needs dedicated solutions that can adapt to the heterogeneity and specifics of health-related information.\n[source_id=7] Dedicated Question Answering (QA) systems are one of the viable solutions to this problem as they are designed to understand natural language questions without relying on external information on the users.\n[source_id=8] In the context of QA, the goal of Recognizing Question Entailment (RQE) is to retrieve answers to a premise question ( INLINEFORM0 ) by retrieving inferred or entailed questions, called hypothesis questions ( INLINEFORM1 ) that already have associated answers. Therefore, we define the entailment relation between two questions as: a question INLINEFORM2 entails a question INLINEFORM3 if every answer to INLINEFORM4 is also a correct answer to INLINEFORM5 BIBREF1 .\n[source_id=9] RQE is particularly relevant due to the increasing numbers of similar questions posted online BIBREF2 and its ability to solve differently the challenging issues of question understanding and answer extraction. In addition to being used to find relevant answers, these resources can also be used in training models able to recognize inference relations and similarity between questions.\n[source_id=10] Question similarity has recently attracted international challenges BIBREF3 , BIBREF4 and several research efforts proposing a wide range of approaches, including Logistic Regression, Recurrent Neural Networks (RNNs), Long Short Term Memory cells (LSTMs), and Convolutional Neural Networks (CNNs) BIBREF5 , BIBREF6 , BIBREF1 , BIBREF7 .\n[source_id=11] In this paper, we study question entailment in the medical domain and the effectiveness of the end-to-end RQE-based QA approach by evaluating the relevance of the retrieved answers. Although entailment was attempted in QA before BIBREF8 , BIBREF9 , BIBREF10 , as far as we know, we are the first to introduce and evaluate a full medical question answering approach based on question entailment for free-text questions. Our contributions are:\n[source_id=12] The next section is dedicated to related work on question answering, question similarity and entailment. In Section SECREF3 , we present two machine learning (ML) and deep learning (DL) methods for RQE and compare their performance using open-domain and clinical datasets. Section SECREF4 describes the new collection of medical question-answer pairs. In Section SECREF5 , we describe our RQE-based approach for QA. Section SECREF6 presents our evaluation of the retrieved answers and the results obtained on TREC 2017 LiveQA medical questions.",
+      "score": 7.327714699855539,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "child_qasper_evidence_texts": [
+        "With the availability of rich data on users' locations, profiles and search history, personalization has become the leading trend in large-scale information retrieval. However, efficiency through personalization is not yet the most suitable model when tackling domain-specific searches. This is due to several factors, such as the lexical and semantic challenges of domain-specific data that often include advanced argumentation and complex contextual information, the higher sparseness of relevant information sources, and the more pronounced lack of similarities between users' searches.",
+        "A recent study on expert search strategies among healthcare information professionals BIBREF0 showed that, for a given search task, they spend an average of 60 minutes per collection or database, 3 minutes to examine the relevance of each document, and 4 hours of total search time. When written in steps, their search strategy spans over 15 lines and can reach up to 105 lines.",
+        "With the abundance of information sources in the medical domain, consumers are more and more faced with a similar challenge, one that needs dedicated solutions that can adapt to the heterogeneity and specifics of health-related information.",
+        "Dedicated Question Answering (QA) systems are one of the viable solutions to this problem as they are designed to understand natural language questions without relying on external information on the users.",
+        "In the context of QA, the goal of Recognizing Question Entailment (RQE) is to retrieve answers to a premise question ( INLINEFORM0 ) by retrieving inferred or entailed questions, called hypothesis questions ( INLINEFORM1 ) that already have associated answers. Therefore, we define the entailment relation between two questions as: a question INLINEFORM2 entails a question INLINEFORM3 if every answer to INLINEFORM4 is also a correct answer to INLINEFORM5 BIBREF1 .",
+        "RQE is particularly relevant due to the increasing numbers of similar questions posted online BIBREF2 and its ability to solve differently the challenging issues of question understanding and answer extraction. In addition to being used to find relevant answers, these resources can also be used in training models able to recognize inference relations and similarity between questions.",
+        "Question similarity has recently attracted international challenges BIBREF3 , BIBREF4 and several research efforts proposing a wide range of approaches, including Logistic Regression, Recurrent Neural Networks (RNNs), Long Short Term Memory cells (LSTMs), and Convolutional Neural Networks (CNNs) BIBREF5 , BIBREF6 , BIBREF1 , BIBREF7 .",
+        "In this paper, we study question entailment in the medical domain and the effectiveness of the end-to-end RQE-based QA approach by evaluating the relevance of the retrieved answers. Although entailment was attempted in QA before BIBREF8 , BIBREF9 , BIBREF10 , as far as we know, we are the first to introduce and evaluate a full medical question answering approach based on question entailment for free-text questions. Our contributions are:",
+        "The next section is dedicated to related work on question answering, question similarity and entailment. In Section SECREF3 , we present two machine learning (ML) and deep learning (DL) methods for RQE and compare their performance using open-domain and clinical datasets. Section SECREF4 describes the new collection of medical question-answer pairs. In Section SECREF5 , we describe our RQE-based approach for QA. Section SECREF6 presents our evaluation of the retrieved answers and the results obtained on TREC 2017 LiveQA medical questions."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ],
+        [
+          "Introduction",
+          6
+        ],
+        [
+          "Introduction",
+          7
+        ],
+        [
+          "Introduction",
+          8
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Deep Learning Model\n[source_id=47] To recognize entailment between two questions INLINEFORM0 (premise) and INLINEFORM1 (hypothesis), we adapted the neural network proposed by Bowman et al. BIBREF13 . Our DL model, presented in Figure FIGREF20 , consists of three 600d ReLU layers, with a bottom layer taking the concatenated sentence representations as input and a top layer feeding a softmax classifier. The sentence embedding model sums the Recurrent neural network (RNN) embeddings of its words. The word embeddings are first initialized with pretrained GloVe vectors. This adaptation provided the best performance in previous experiments with RQE data.\n[source_id=48] GloVe is an unsupervised learning algorithm to generate vector representations for words BIBREF42 . Training is performed on aggregated word co-occurrence statistics from a large corpus, and the resulting representations show interesting linear substructures of the word vector space. We use the pretrained common crawl version with 840B tokens and 300d vectors, which are not updated during training.",
+      "score": 6.776107152808049,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        47,
+        48
+      ],
+      "child_qasper_evidence_texts": [
+        "To recognize entailment between two questions INLINEFORM0 (premise) and INLINEFORM1 (hypothesis), we adapted the neural network proposed by Bowman et al. BIBREF13 . Our DL model, presented in Figure FIGREF20 , consists of three 600d ReLU layers, with a bottom layer taking the concatenated sentence representations as input and a top layer feeding a softmax classifier. The sentence embedding model sums the Recurrent neural network (RNN) embeddings of its words. The word embeddings are first initialized with pretrained GloVe vectors. This adaptation provided the best performance in previous experiments with RQE data.",
+        "GloVe is an unsupervised learning algorithm to generate vector representations for words BIBREF42 . Training is performed on aggregated word co-occurrence statistics from a large corpus, and the resulting representations show interesting linear substructures of the word vector space. We use the pretrained common crawl version with 840B tokens and 300d vectors, which are not updated during training."
+      ],
+      "child_pages": [
+        8,
+        8
+      ],
+      "child_sections": [
+        "Deep Learning Model",
+        "Deep Learning Model"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Deep Learning Model",
+          0
+        ],
+        [
+          "Deep Learning Model",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Deep Learning Model",
+      "section": "Deep Learning Model",
+      "title_path": "Deep Learning Model",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Related Work on Question Answering\n[source_id=21] Classical QA systems face two main challenges related to question analysis and answer extraction. Several QA approaches were proposed in the literature for the open domain BIBREF16 , BIBREF17 and the medical domain BIBREF18 , BIBREF19 , BIBREF20 . A variety of methods were developed for question analysis, focus (topic) recognition and question type identification BIBREF21 , BIBREF22 , BIBREF23 , BIBREF24 . Similarly, many different approaches tackled document or passage retrieval and answer selection and (re)ranking BIBREF25 , BIBREF26 , BIBREF27 .\n[source_id=22] An alternative approach consists in finding similar questions or FAQs that are already answered BIBREF28 , BIBREF29 . One of the earliest question answering systems based on finding similar questions and re-using the existing answers was FAQ FINDER BIBREF30 . Another system that complements the existing Q&A services of NetWellness is SimQ BIBREF2 , which allows retrieval of similar web-based consumer health questions. SimQ uses syntactic and semantic features to compute similarity between questions, and UMLS BIBREF31 as a standardized semantic knowledge source. The system achieves 72.2% precision, 78.0% recall and 75.0% F-score on NetWellness questions. However, the method was evaluated only on one question similarity dataset, and the retrieved answers were not evaluated.\n[source_id=23] The aim of the medical task at TREC 2017 LiveQA was to develop techniques for answering complex questions such as consumer health questions, as well as to identify relevant answer sources that can comply with the sensitivity of medical information retrieval.\n[source_id=24] The CMU-OAQA system BIBREF32 achieved the best performance of 0.637 average score on the medical task by using an attentional encoder-decoder model for paraphrase identification and answer ranking. The Quora question-similarity dataset was used for training. The PRNA system BIBREF33 achieved the second best performance in the medical task with 0.49 average score using Wikipedia as the first answer source and Yahoo and Google searches as secondary answer sources. Each medical question was decomposed into several subquestions. To extract the answer from the selected text passage, a bi-directional attention model trained on the SQUAD dataset was used.\n[source_id=25] Deep neural network models have been pushing the limits of performance achieved in QA related tasks using large training datasets. The results obtained by CMU-OAQA and PRNA showed that large open-domain datasets were beneficial for the medical domain. However, the best system (CMU-OAQA) relying on the same training data obtained a score of 1.139 on the LiveQA open-domain task.\n[source_id=26] While this gap in performance can be explained in part by the discrepancies between the medical test questions and the open-domain questions, it also highlights the need for larger medical datasets to support deep learning approaches in dealing with the linguistic complexity of consumer health questions and the challenge of finding correct and complete answers.\n[source_id=27] Another technique was used by ECNU-ICA team BIBREF34 based on learning question similarity via two long short-term memory (LSTM) networks applied to obtain the semantic representations of the questions. To construct a collection of similar question pairs, they searched community question answering sites such as Yahoo! and Answers.com. In contrast, the ECNU-ICA system achieved the best performance of 1.895 in the open-domain task but an average score of only 0.402 in the medical task. As the ECNU-ICA approach also relied on a neural network for question matching, this result shows that training attention-based decoder-encoder networks on the Quora dataset generalized better to the medical domain than training LSTMs on similar questions from Yahoo! and Answers.com.\n[source_id=28] The CMU-LiveMedQA team BIBREF20 designed a specific system for the medical task. Using only the provided training datasets and the assumption that each question contains only one focus, the CMU-LiveMedQA system obtained an average score of 0.353. They used a convolutional neural network (CNN) model to classify a question into a restricted set of 10 question types and crawled \"relevant\" online web pages to find the answers. However, the results were lower than those achieved by the systems relying on finding similar answered questions. These results support the relevance of similar question matching for the end-to-end QA task as a new way of approaching QA instead of the classical QA approaches based on Question Analysis and Answer Retrieval.",
+      "score": 5.3462433993513425,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "child_qasper_evidence_texts": [
+        "Classical QA systems face two main challenges related to question analysis and answer extraction. Several QA approaches were proposed in the literature for the open domain BIBREF16 , BIBREF17 and the medical domain BIBREF18 , BIBREF19 , BIBREF20 . A variety of methods were developed for question analysis, focus (topic) recognition and question type identification BIBREF21 , BIBREF22 , BIBREF23 , BIBREF24 . Similarly, many different approaches tackled document or passage retrieval and answer selection and (re)ranking BIBREF25 , BIBREF26 , BIBREF27 .",
+        "An alternative approach consists in finding similar questions or FAQs that are already answered BIBREF28 , BIBREF29 . One of the earliest question answering systems based on finding similar questions and re-using the existing answers was FAQ FINDER BIBREF30 . Another system that complements the existing Q&A services of NetWellness is SimQ BIBREF2 , which allows retrieval of similar web-based consumer health questions. SimQ uses syntactic and semantic features to compute similarity between questions, and UMLS BIBREF31 as a standardized semantic knowledge source. The system achieves 72.2% precision, 78.0% recall and 75.0% F-score on NetWellness questions. However, the method was evaluated only on one question similarity dataset, and the retrieved answers were not evaluated.",
+        "The aim of the medical task at TREC 2017 LiveQA was to develop techniques for answering complex questions such as consumer health questions, as well as to identify relevant answer sources that can comply with the sensitivity of medical information retrieval.",
+        "The CMU-OAQA system BIBREF32 achieved the best performance of 0.637 average score on the medical task by using an attentional encoder-decoder model for paraphrase identification and answer ranking. The Quora question-similarity dataset was used for training. The PRNA system BIBREF33 achieved the second best performance in the medical task with 0.49 average score using Wikipedia as the first answer source and Yahoo and Google searches as secondary answer sources. Each medical question was decomposed into several subquestions. To extract the answer from the selected text passage, a bi-directional attention model trained on the SQUAD dataset was used.",
+        "Deep neural network models have been pushing the limits of performance achieved in QA related tasks using large training datasets. The results obtained by CMU-OAQA and PRNA showed that large open-domain datasets were beneficial for the medical domain. However, the best system (CMU-OAQA) relying on the same training data obtained a score of 1.139 on the LiveQA open-domain task.",
+        "While this gap in performance can be explained in part by the discrepancies between the medical test questions and the open-domain questions, it also highlights the need for larger medical datasets to support deep learning approaches in dealing with the linguistic complexity of consumer health questions and the challenge of finding correct and complete answers.",
+        "Another technique was used by ECNU-ICA team BIBREF34 based on learning question similarity via two long short-term memory (LSTM) networks applied to obtain the semantic representations of the questions. To construct a collection of similar question pairs, they searched community question answering sites such as Yahoo! and Answers.com. In contrast, the ECNU-ICA system achieved the best performance of 1.895 in the open-domain task but an average score of only 0.402 in the medical task. As the ECNU-ICA approach also relied on a neural network for question matching, this result shows that training attention-based decoder-encoder networks on the Quora dataset generalized better to the medical domain than training LSTMs on similar questions from Yahoo! and Answers.com.",
+        "The CMU-LiveMedQA team BIBREF20 designed a specific system for the medical task. Using only the provided training datasets and the assumption that each question contains only one focus, the CMU-LiveMedQA system obtained an average score of 0.353. They used a convolutional neural network (CNN) model to classify a question into a restricted set of 10 question types and crawled \"relevant\" online web pages to find the answers. However, the results were lower than those achieved by the systems relying on finding similar answered questions. These results support the relevance of similar question matching for the end-to-end QA task as a new way of approaching QA instead of the classical QA approaches based on Question Analysis and Answer Retrieval."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Related Work on Question Answering",
+        "Related Work on Question Answering",
+        "Related Work on Question Answering",
+        "Related Work on Question Answering",
+        "Related Work on Question Answering",
+        "Related Work on Question Answering",
+        "Related Work on Question Answering",
+        "Related Work on Question Answering"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work on Question Answering",
+          0
+        ],
+        [
+          "Related Work on Question Answering",
+          1
+        ],
+        [
+          "Related Work on Question Answering",
+          2
+        ],
+        [
+          "Related Work on Question Answering",
+          3
+        ],
+        [
+          "Related Work on Question Answering",
+          4
+        ],
+        [
+          "Related Work on Question Answering",
+          5
+        ],
+        [
+          "Related Work on Question Answering",
+          6
+        ],
+        [
+          "Related Work on Question Answering",
+          7
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Related Work on Question Answering",
+      "section": "Related Work on Question Answering",
+      "title_path": "Related Work on Question Answering",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Datasets Used for the RQE Study\n[source_id=54] We evaluate the RQE methods (i.e. deep learning model and logistic regression classifier) using two datasets of sentence pairs (SNLI and multiNLI), and three datasets of question pairs (Quora, Clinical-QE, and SemEval-cQA).\n[source_id=55] The Stanford Natural Language Inference corpus (SNLI) BIBREF13 contains 569,037 sentence pairs written by humans based on image captioning. The training set of the MultiNLI corpus BIBREF14 consists of 393,000 pairs of sentences from five genres of written and spoken English (e.g. Travel, Government). Two other \"matched\" and \"mismatched\" sets are also available for development (20,000 pairs). Both SNLI and multiNLI consider three types of relationships between sentences: entailment, neutral and contradiction. We converted the contradiction and neutral labels to the same non-entailment class.\n[source_id=56] The QUORA dataset of similar questions was recently published with 404,279 question pairs. We randomly selected three distinct subsets (80%/10%/10%) for training (323,423 pairs), development (40,428 pairs) and test (40,428 pairs).\n[source_id=57] The clinical-QE dataset BIBREF1 contains 8,588 question pairs and was constructed using 4,655 clinical questions asked by family doctors BIBREF45 . We randomly selected three distinct subsets (80%/10%/10%) for training (6,870 pairs), development (859 pairs) and test (859 pairs).\n[source_id=58] The question similarity dataset of SemEval 2016 Task 3B (SemEval-cQA) BIBREF3 contains 3,869 question pairs and aims to re-rank a list of related questions according to their similarity to the original question. The same dataset was used for SemEval 2017 Task 3 BIBREF4 .\n[source_id=59] To construct our test dataset, we used a publicly shared set of Consumer Health Questions (CHQs) received by the U.S. National Library of Medicine (NLM), and annotated with named entities, question types, and focus BIBREF46 , BIBREF47 . The CHQ dataset consists of 1,721 consumer information requests manually annotated with subquestions, each identified by a question type and a focus.\n[source_id=60] First, we selected automatically harvested FAQs, from U.S. National Institutes of Health (NIH) websites, that share both the same focus and the same question type with the CHQs. As FAQs are most often very short, we first assume that the CHQ entails the FAQ. Two sets of pairs were constructed: (i) positive pairs of CHQs and FAQs sharing at least one common question type and the question focus, and (ii) negative pairs corresponding to a focus mismatch or type mismatch. For each category of negative examples, we randomly selected the same number of pairs for a balanced dataset. Then, we manually validated the constructed pairs and corrected the positive and negative labels when needed. The final RQE dataset contains 850 CHQ-FAQ pairs with 405 positive and 445 negative pairs. Table TABREF26 presents examples from the five training datasets (SNLI, MultiNLI, SemEval-cQA, Clinical-QE and Quora) and the new test dataset of medical CHQ-FAQ pairs.",
+      "score": 5.243274801306926,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60
+      ],
+      "child_qasper_evidence_texts": [
+        "We evaluate the RQE methods (i.e. deep learning model and logistic regression classifier) using two datasets of sentence pairs (SNLI and multiNLI), and three datasets of question pairs (Quora, Clinical-QE, and SemEval-cQA).",
+        "The Stanford Natural Language Inference corpus (SNLI) BIBREF13 contains 569,037 sentence pairs written by humans based on image captioning. The training set of the MultiNLI corpus BIBREF14 consists of 393,000 pairs of sentences from five genres of written and spoken English (e.g. Travel, Government). Two other \"matched\" and \"mismatched\" sets are also available for development (20,000 pairs). Both SNLI and multiNLI consider three types of relationships between sentences: entailment, neutral and contradiction. We converted the contradiction and neutral labels to the same non-entailment class.",
+        "The QUORA dataset of similar questions was recently published with 404,279 question pairs. We randomly selected three distinct subsets (80%/10%/10%) for training (323,423 pairs), development (40,428 pairs) and test (40,428 pairs).",
+        "The clinical-QE dataset BIBREF1 contains 8,588 question pairs and was constructed using 4,655 clinical questions asked by family doctors BIBREF45 . We randomly selected three distinct subsets (80%/10%/10%) for training (6,870 pairs), development (859 pairs) and test (859 pairs).",
+        "The question similarity dataset of SemEval 2016 Task 3B (SemEval-cQA) BIBREF3 contains 3,869 question pairs and aims to re-rank a list of related questions according to their similarity to the original question. The same dataset was used for SemEval 2017 Task 3 BIBREF4 .",
+        "To construct our test dataset, we used a publicly shared set of Consumer Health Questions (CHQs) received by the U.S. National Library of Medicine (NLM), and annotated with named entities, question types, and focus BIBREF46 , BIBREF47 . The CHQ dataset consists of 1,721 consumer information requests manually annotated with subquestions, each identified by a question type and a focus.",
+        "First, we selected automatically harvested FAQs, from U.S. National Institutes of Health (NIH) websites, that share both the same focus and the same question type with the CHQs. As FAQs are most often very short, we first assume that the CHQ entails the FAQ. Two sets of pairs were constructed: (i) positive pairs of CHQs and FAQs sharing at least one common question type and the question focus, and (ii) negative pairs corresponding to a focus mismatch or type mismatch. For each category of negative examples, we randomly selected the same number of pairs for a balanced dataset. Then, we manually validated the constructed pairs and corrected the positive and negative labels when needed. The final RQE dataset contains 850 CHQ-FAQ pairs with 405 positive and 445 negative pairs. Table TABREF26 presents examples from the five training datasets (SNLI, MultiNLI, SemEval-cQA, Clinical-QE and Quora) and the new test dataset of medical CHQ-FAQ pairs."
+      ],
+      "child_pages": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ],
+      "child_sections": [
+        "Datasets Used for the RQE Study",
+        "Datasets Used for the RQE Study",
+        "Datasets Used for the RQE Study",
+        "Datasets Used for the RQE Study",
+        "Datasets Used for the RQE Study",
+        "Datasets Used for the RQE Study",
+        "Datasets Used for the RQE Study"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Datasets Used for the RQE Study",
+          0
+        ],
+        [
+          "Datasets Used for the RQE Study",
+          1
+        ],
+        [
+          "Datasets Used for the RQE Study",
+          2
+        ],
+        [
+          "Datasets Used for the RQE Study",
+          3
+        ],
+        [
+          "Datasets Used for the RQE Study",
+          4
+        ],
+        [
+          "Datasets Used for the RQE Study",
+          5
+        ],
+        [
+          "Datasets Used for the RQE Study",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Datasets Used for the RQE Study",
+      "section": "Datasets Used for the RQE Study",
+      "title_path": "Datasets Used for the RQE Study",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_15",
+      "content": "[Section] Question Types\n[source_id=78] The question types were derived after the manual evaluation of 1,721 consumer health questions. Our taxonomy includes 16 types about Diseases, 20 types about Drugs and one type (Information) for the other named entities such as Procedures, Medical exams and Treatments. We describe below the considered question types and examples of associated question patterns.\n[source_id=79] Question Types about Diseases (16): Information, Research (or Clinical Trial), Causes, Treatment, Prevention, Diagnosis (Exams and Tests), Prognosis, Complications, Symptoms, Inheritance, Susceptibility, Genetic changes, Frequency, Considerations, Contact a medical professional, Support Groups.\n[source_id=80] Examples:\n[source_id=81] What research (or clinical trial) is being done for DISEASE?\n[source_id=82] What is the outlook for DISEASE?\n[source_id=83] How many people are affected by DISEASE?\n[source_id=84] When to contact a medical professional about DISEASE?\n[source_id=85] Who is at risk for DISEASE?\n[source_id=86] Where to find support for people with DISEASE?\n[source_id=87] Question Types About Drugs (20): Information, Interaction with medications, Interaction with food, Interaction with herbs and supplements, Important warning, Special instructions, Brand names, How does it work, How effective is it, Indication, Contraindication, Learn more, Side effects, Emergency or overdose, Severe reaction, Forget a dose, Dietary, Why get vaccinated, Storage and disposal, Usage, Dose.\n[source_id=88] Examples:\n[source_id=89] Are there interactions between DRUG and herbs and supplements?\n[source_id=90] What important warning or information should I know about DRUG?\n[source_id=91] Are there safety concerns or special precautions about DRUG?\n[source_id=92] What is the action of DRUG and how does it work?\n[source_id=93] Who should get DRUG and why is it prescribed?\n[source_id=94] What to do in case of a severe reaction to DRUG?\n[source_id=95] Question Type for other medical entities (e.g. Procedure, Exam, Treatment): Information.\n[source_id=96] What is Coronary Artery Bypass Surgery?\n[source_id=97] What are Liver Function Tests?",
+      "score": 4.369778082733782,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_15",
+      "child_source_node_ids": [
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97
+      ],
+      "child_qasper_evidence_texts": [
+        "The question types were derived after the manual evaluation of 1,721 consumer health questions. Our taxonomy includes 16 types about Diseases, 20 types about Drugs and one type (Information) for the other named entities such as Procedures, Medical exams and Treatments. We describe below the considered question types and examples of associated question patterns.",
+        "Question Types about Diseases (16): Information, Research (or Clinical Trial), Causes, Treatment, Prevention, Diagnosis (Exams and Tests), Prognosis, Complications, Symptoms, Inheritance, Susceptibility, Genetic changes, Frequency, Considerations, Contact a medical professional, Support Groups.",
+        "Examples:",
+        "What research (or clinical trial) is being done for DISEASE?",
+        "What is the outlook for DISEASE?",
+        "How many people are affected by DISEASE?",
+        "When to contact a medical professional about DISEASE?",
+        "Who is at risk for DISEASE?",
+        "Where to find support for people with DISEASE?",
+        "Question Types About Drugs (20): Information, Interaction with medications, Interaction with food, Interaction with herbs and supplements, Important warning, Special instructions, Brand names, How does it work, How effective is it, Indication, Contraindication, Learn more, Side effects, Emergency or overdose, Severe reaction, Forget a dose, Dietary, Why get vaccinated, Storage and disposal, Usage, Dose.",
+        "Examples:",
+        "Are there interactions between DRUG and herbs and supplements?",
+        "What important warning or information should I know about DRUG?",
+        "Are there safety concerns or special precautions about DRUG?",
+        "What is the action of DRUG and how does it work?",
+        "Who should get DRUG and why is it prescribed?",
+        "What to do in case of a severe reaction to DRUG?",
+        "Question Type for other medical entities (e.g. Procedure, Exam, Treatment): Information.",
+        "What is Coronary Artery Bypass Surgery?",
+        "What are Liver Function Tests?"
+      ],
+      "child_pages": [
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15
+      ],
+      "child_sections": [
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types",
+        "Question Types"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Question Types",
+          0
+        ],
+        [
+          "Question Types",
+          1
+        ],
+        [
+          "Question Types",
+          2
+        ],
+        [
+          "Question Types",
+          3
+        ],
+        [
+          "Question Types",
+          4
+        ],
+        [
+          "Question Types",
+          5
+        ],
+        [
+          "Question Types",
+          6
+        ],
+        [
+          "Question Types",
+          7
+        ],
+        [
+          "Question Types",
+          8
+        ],
+        [
+          "Question Types",
+          9
+        ],
+        [
+          "Question Types",
+          10
+        ],
+        [
+          "Question Types",
+          11
+        ],
+        [
+          "Question Types",
+          12
+        ],
+        [
+          "Question Types",
+          13
+        ],
+        [
+          "Question Types",
+          14
+        ],
+        [
+          "Question Types",
+          15
+        ],
+        [
+          "Question Types",
+          16
+        ],
+        [
+          "Question Types",
+          17
+        ],
+        [
+          "Question Types",
+          18
+        ],
+        [
+          "Question Types",
+          19
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_15",
+      "section_id": "Question Types",
+      "section": "Question Types",
+      "title_path": "Question Types",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 10,
+      "content": "Question similarity has recently attracted international challenges BIBREF3 , BIBREF4 and several research efforts proposing a wide range of approaches, including Logistic Regression, Recurrent Neural Networks (RNNs), Long Short Term Memory cells (LSTMs), and Convolutional Neural Networks (CNNs) BIBREF5 , BIBREF6 , BIBREF1 , BIBREF7 .",
+      "qasper_evidence_text": "Question similarity has recently attracted international challenges BIBREF3 , BIBREF4 and several research efforts proposing a wide range of approaches, including Logistic Regression, Recurrent Neural Networks (RNNs), Long Short Term Memory cells (LSTMs), and Convolutional Neural Networks (CNNs) BIBREF5 , BIBREF6 , BIBREF1 , BIBREF7 .",
+      "source_node_id": 10,
+      "node_id": 10,
+      "paragraph_id": 10,
+      "evidence_id": 10,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 4,
+      "score": 7.327714699855539,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 6,
+      "hotpot_sent_id": 6,
+      "supporting_rank": 1
+    },
+    {
+      "id": 5,
+      "content": "A recent study on expert search strategies among healthcare information professionals BIBREF0 showed that, for a given search task, they spend an average of 60 minutes per collection or database, 3 minutes to examine the relevance of each document, and 4 hours of total search time. When written in steps, their search strategy spans over 15 lines and can reach up to 105 lines.",
+      "qasper_evidence_text": "A recent study on expert search strategies among healthcare information professionals BIBREF0 showed that, for a given search task, they spend an average of 60 minutes per collection or database, 3 minutes to examine the relevance of each document, and 4 hours of total search time. When written in steps, their search strategy spans over 15 lines and can reach up to 105 lines.",
+      "source_node_id": 5,
+      "node_id": 5,
+      "paragraph_id": 5,
+      "evidence_id": 5,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 4,
+      "score": 7.327714699855539,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 3
+    }
+  ],
+  "supporting_block_ids": [
+    10,
+    5
+  ]
+}

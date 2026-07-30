@@ -1,0 +1,588 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_2",
+      "content": "[Section] Related work\n[source_id=12] Several dimensionality reduction algorithms such as RBM, autoencoders, subspace multinomial models (SMM) are used to obtain a low dimensional representation of documents from a simple BOW representation and then classify it using a simple linear classifiers BIBREF11, BIBREF12, BIBREF13, BIBREF4. In BIBREF14 hierarchical attention networks are used for document classification. They evaluate their model on several datasets with average number of words around 150. Character-level CNN are explored in BIBREF15 but it is prohibitive for very long documents. In BIBREF16, dataset collected from arXiv papers is used for classification. For classification, they sample random blocks of words and use them together for classification instead of using full document which may work well as arXiv papers are usually coherent and well written on a well defined topic. Their method may not work well on spoken conversations as random block of words usually do not represent topic of full conversation.\n[source_id=13] Several researchers addressed the problem of predicting customer satisfaction BIBREF6, BIBREF7, BIBREF8, BIBREF9. In most of these works, logistic regression, SVM, CNN are applied on different kinds of representations.\n[source_id=14] In BIBREF17, authors use BERT for document classification but the average document length is less than BERT maximum length 512. TransformerXL BIBREF2 is an extension to the Transformer architecture that allows it to better deal with long inputs for the language modelling task. It relies on the auto-regressive property of the model, which is not the case in our tasks.",
+      "score": 4.3562573713991615,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        12,
+        13,
+        14
+      ],
+      "child_qasper_evidence_texts": [
+        "Several dimensionality reduction algorithms such as RBM, autoencoders, subspace multinomial models (SMM) are used to obtain a low dimensional representation of documents from a simple BOW representation and then classify it using a simple linear classifiers BIBREF11, BIBREF12, BIBREF13, BIBREF4. In BIBREF14 hierarchical attention networks are used for document classification. They evaluate their model on several datasets with average number of words around 150. Character-level CNN are explored in BIBREF15 but it is prohibitive for very long documents. In BIBREF16, dataset collected from arXiv papers is used for classification. For classification, they sample random blocks of words and use them together for classification instead of using full document which may work well as arXiv papers are usually coherent and well written on a well defined topic. Their method may not work well on spoken conversations as random block of words usually do not represent topic of full conversation.",
+        "Several researchers addressed the problem of predicting customer satisfaction BIBREF6, BIBREF7, BIBREF8, BIBREF9. In most of these works, logistic regression, SVM, CNN are applied on different kinds of representations.",
+        "In BIBREF17, authors use BERT for document classification but the average document length is less than BERT maximum length 512. TransformerXL BIBREF2 is an extension to the Transformer architecture that allows it to better deal with long inputs for the language modelling task. It relies on the auto-regressive property of the model, which is not the case in our tasks."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Related work",
+        "Related work",
+        "Related work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related work",
+          0
+        ],
+        [
+          "Related work",
+          1
+        ],
+        [
+          "Related work",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Related work",
+      "section": "Related work",
+      "title_path": "Related work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Results\n[source_id=45] Table TABREF25 presents results using pre-trained BERT features. We extracted features from the pooled output of final transformer block as these were shown to be working well for most of the tasks BIBREF1. The features extracted from a pre-trained BERT model without any fine-tuning lead to a sub-par performance. However, We also notice that ToBERT model exploited the pre-trained BERT features better than RoBERT. It also converged faster than RoBERT. Table TABREF26 shows results using features extracted after fine-tuning BERT model with our datasets. Significant improvements can be observed compared to using pre-trained BERT features. Also, it can be noticed that ToBERT outperforms RoBERT on Fisher and 20newsgroups dataset by 13.63% and 0.81% respectively. On CSAT, ToBERT performs slightly worse than RoBERT but it is not statistically significant as this dataset is small.\n[source_id=46] Table TABREF27 presents results using fine-tuned BERT predictions instead of the pooled output from final transformer block. For each document, having obtained segment-wise predictions we can obtain final prediction for the whole document in three ways:\n[source_id=47] Compute the average of all segment-wise predictions and find the most probable class;\n[source_id=48] Find the most frequently predicted class;\n[source_id=49] Train a classification model.\n[source_id=50] It can be observed from Table TABREF27 that a simple averaging operation or taking most frequent predicted class works competitively for CSAT and 20newsgroups but not for the Fisher dataset. We believe the improvements from using RoBERT or ToBERT, compared to simple averaging or most frequent operations, are proportional to the fraction of long documents in the dataset. CSAT and 20newsgroups have (on average) significantly shorter documents than Fisher, as seen in Fig. FIGREF21. Also, significant improvements for Fisher could be because of less confident predictions from BERT model as this dataset has 40 classes. Fig. FIGREF31 presents the comparison of average voting and ToBERT for various document length ranges for Fisher dataset. We used fine-tuned BERT segment-level predictions (P) for this analysis. It can be observed that ToBERT outperforms average voting in every interval. To the best of our knowledge, this is a state-of-the-art result reported on the Fisher dataset.\n[source_id=51] Table TABREF32 presents the effect of position embeddings on the model performance. It can be observed that position embeddings did not significantly affect the model performance for Fisher and 20newsgroups, but they helped slightly in CSAT prediction (an absolute improvement of 0.64% F1-score). We think that this is explained by the fact that Fisher and 20newsgroups are topic identification tasks, and the topic does not change much throughout these documents. However, CSAT may vary during the call, and in some cases a naive assumption that the sequential nature of the transcripts is irrelevant may lead to wrong conclusions.\n[source_id=52] Table TABREF33 compares our results with previous works. It can be seen that our model ToBERT outperforms CNN based experiments by significant margin on CSAT and Fisher datasets. For CSAT dataset, we used multi-scale CNN (MS-CNN) as the baseline, given its strong results on Fisher and 20newsgroups. The setup was replicated from BIBREF5 for comparison. We also see that our result on 20 newsgroups is 0.6% worse than the state-of-the-art.",
+      "score": 2.6328329170194826,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ],
+      "child_qasper_evidence_texts": [
+        "Table TABREF25 presents results using pre-trained BERT features. We extracted features from the pooled output of final transformer block as these were shown to be working well for most of the tasks BIBREF1. The features extracted from a pre-trained BERT model without any fine-tuning lead to a sub-par performance. However, We also notice that ToBERT model exploited the pre-trained BERT features better than RoBERT. It also converged faster than RoBERT. Table TABREF26 shows results using features extracted after fine-tuning BERT model with our datasets. Significant improvements can be observed compared to using pre-trained BERT features. Also, it can be noticed that ToBERT outperforms RoBERT on Fisher and 20newsgroups dataset by 13.63% and 0.81% respectively. On CSAT, ToBERT performs slightly worse than RoBERT but it is not statistically significant as this dataset is small.",
+        "Table TABREF27 presents results using fine-tuned BERT predictions instead of the pooled output from final transformer block. For each document, having obtained segment-wise predictions we can obtain final prediction for the whole document in three ways:",
+        "Compute the average of all segment-wise predictions and find the most probable class;",
+        "Find the most frequently predicted class;",
+        "Train a classification model.",
+        "It can be observed from Table TABREF27 that a simple averaging operation or taking most frequent predicted class works competitively for CSAT and 20newsgroups but not for the Fisher dataset. We believe the improvements from using RoBERT or ToBERT, compared to simple averaging or most frequent operations, are proportional to the fraction of long documents in the dataset. CSAT and 20newsgroups have (on average) significantly shorter documents than Fisher, as seen in Fig. FIGREF21. Also, significant improvements for Fisher could be because of less confident predictions from BERT model as this dataset has 40 classes. Fig. FIGREF31 presents the comparison of average voting and ToBERT for various document length ranges for Fisher dataset. We used fine-tuned BERT segment-level predictions (P) for this analysis. It can be observed that ToBERT outperforms average voting in every interval. To the best of our knowledge, this is a state-of-the-art result reported on the Fisher dataset.",
+        "Table TABREF32 presents the effect of position embeddings on the model performance. It can be observed that position embeddings did not significantly affect the model performance for Fisher and 20newsgroups, but they helped slightly in CSAT prediction (an absolute improvement of 0.64% F1-score). We think that this is explained by the fact that Fisher and 20newsgroups are topic identification tasks, and the topic does not change much throughout these documents. However, CSAT may vary during the call, and in some cases a naive assumption that the sequential nature of the transcripts is irrelevant may lead to wrong conclusions.",
+        "Table TABREF33 compares our results with previous works. It can be seen that our model ToBERT outperforms CNN based experiments by significant margin on CSAT and Fisher datasets. For CSAT dataset, we used multi-scale CNN (MS-CNN) as the baseline, given its strong results on Fisher and 20newsgroups. The setup was replicated from BIBREF5 for comparison. We also see that our result on 20 newsgroups is 0.6% worse than the state-of-the-art."
+      ],
+      "child_pages": [
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "child_sections": [
+        "Results",
+        "Results",
+        "Results",
+        "Results",
+        "Results",
+        "Results",
+        "Results",
+        "Results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results",
+          0
+        ],
+        [
+          "Results",
+          1
+        ],
+        [
+          "Results",
+          2
+        ],
+        [
+          "Results",
+          3
+        ],
+        [
+          "Results",
+          4
+        ],
+        [
+          "Results",
+          5
+        ],
+        [
+          "Results",
+          6
+        ],
+        [
+          "Results",
+          7
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Results",
+      "section": "Results",
+      "title_path": "Results",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_13",
+      "content": "[Section] Conclusions\n[source_id=54] In this paper, we presented two methods for long documents using BERT model: RoBERT and ToBERT. We evaluated our experiments on two classification tasks - customer satisfaction prediction and topic identification - using 3 datasets: CSAT, 20newsgroups and Fisher. We observed that ToBERT outperforms RoBERT on pre-trained BERT features and fine-tuned BERT features for all our tasks. Also, we noticed that fine-tuned BERT performs better than pre-trained BERT. We have shown that both RoBERT and ToBERT improved the simple baselines of taking an average (or the most frequent) of segment-wise predictions for long documents to obtain final prediction. Position embeddings did not significantly affect our models performance, but slightly improved the accuracy on the CSAT task. We obtained the best results on Fisher dataset and good improvements for CSAT task compared to the CNN baseline. It is interesting to note that the longer the average input in a given task, the bigger improvement we observe w.r.t. the baseline for that task. Our results confirm that both RoBERT and ToBERT can be used for long sequences with competitive performance and quick fine-tuning procedure. For future work, we shall focus on training models on long documents directly (i.e. in an end-to-end manner).",
+      "score": 2.5893202415297134,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_13",
+      "child_source_node_ids": [
+        54
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper, we presented two methods for long documents using BERT model: RoBERT and ToBERT. We evaluated our experiments on two classification tasks - customer satisfaction prediction and topic identification - using 3 datasets: CSAT, 20newsgroups and Fisher. We observed that ToBERT outperforms RoBERT on pre-trained BERT features and fine-tuned BERT features for all our tasks. Also, we noticed that fine-tuned BERT performs better than pre-trained BERT. We have shown that both RoBERT and ToBERT improved the simple baselines of taking an average (or the most frequent) of segment-wise predictions for long documents to obtain final prediction. Position embeddings did not significantly affect our models performance, but slightly improved the accuracy on the CSAT task. We obtained the best results on Fisher dataset and good improvements for CSAT task compared to the CNN baseline. It is interesting to note that the longer the average input in a given task, the bigger improvement we observe w.r.t. the baseline for that task. Our results confirm that both RoBERT and ToBERT can be used for long sequences with competitive performance and quick fine-tuning procedure. For future work, we shall focus on training models on long documents directly (i.e. in an end-to-end manner)."
+      ],
+      "child_pages": [
+        13
+      ],
+      "child_sections": [
+        "Conclusions"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusions",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_13",
+      "section_id": "Conclusions",
+      "section": "Conclusions",
+      "title_path": "Conclusions",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Bidirectional Encoder Representations from Transformers (BERT) is a novel Transformer BIBREF0 model, which recently achieved state-of-the-art performance in several language understanding tasks, such as question answering, natural language inference, semantic similarity, sentiment analysis, and others BIBREF1. While well-suited to dealing with relatively short sequences, Transformers suffer from a major issue that hinders their applicability in classification of long sequences, i.e. they are able to consume only a limited context of symbols as their input BIBREF2.\n[source_id=5] There are several natural language (NLP) processing tasks that involve such long sequences. Of particular interest are topic identification of spoken conversations BIBREF3, BIBREF4, BIBREF5 and call center customer satisfaction prediction BIBREF6, BIBREF7, BIBREF8, BIBREF9. Call center conversations, while usually quite short and to the point, often involve agents trying to solve very complex issues that the customers experience, resulting in some calls taking even an hour or more. For speech analytics purposes, these calls are typically transcribed using an automatic speech recognition (ASR) system, and processed in textual representations further down the NLP pipeline. These transcripts sometimes exceed the length of 5000 words. Furthermore, temporal information might play an important role in tasks like CSAT. For example, a customer may be angry at the beginning of the call, but after her issue is resolved, she would be very satisfied with the way it was handled. Therefore, simple bag of words models, or any model that does not include temporal dependencies between the inputs, may not be well-suited to handle this category of tasks. This motivates us to employ model such as BERT in this task.\n[source_id=6] In this paper, we propose a method that builds upon BERT's architecture. We split the input text sequence into shorter segments in order to obtain a representation for each of them using BERT. Then, we use either a recurrent LSTM BIBREF10 network, or another Transformer, to perform the actual classification. We call these techniques Recurrence over BERT (RoBERT) and Transformer over BERT (ToBERT). Given that these models introduce a hierarchy of representations (segment-wise and document-wise), we refer to them as Hierarchical Transformers. To the best of our knowledge, no attempt has been done before to use the Transformer architecture for classification of such long sequences.\n[source_id=7] Our novel contributions are:\n[source_id=8] Two extensions - RoBERT and ToBERT - to the BERT model, which enable its application in classification of long texts by performing segmentation and using another layer on top of the segment representations.\n[source_id=9] State-of-the-art results on the Fisher topic classification task.\n[source_id=10] Significant improvement on the CSAT prediction task over the MS-CNN model.",
+      "score": 2.396634150563339,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "child_qasper_evidence_texts": [
+        "Bidirectional Encoder Representations from Transformers (BERT) is a novel Transformer BIBREF0 model, which recently achieved state-of-the-art performance in several language understanding tasks, such as question answering, natural language inference, semantic similarity, sentiment analysis, and others BIBREF1. While well-suited to dealing with relatively short sequences, Transformers suffer from a major issue that hinders their applicability in classification of long sequences, i.e. they are able to consume only a limited context of symbols as their input BIBREF2.",
+        "There are several natural language (NLP) processing tasks that involve such long sequences. Of particular interest are topic identification of spoken conversations BIBREF3, BIBREF4, BIBREF5 and call center customer satisfaction prediction BIBREF6, BIBREF7, BIBREF8, BIBREF9. Call center conversations, while usually quite short and to the point, often involve agents trying to solve very complex issues that the customers experience, resulting in some calls taking even an hour or more. For speech analytics purposes, these calls are typically transcribed using an automatic speech recognition (ASR) system, and processed in textual representations further down the NLP pipeline. These transcripts sometimes exceed the length of 5000 words. Furthermore, temporal information might play an important role in tasks like CSAT. For example, a customer may be angry at the beginning of the call, but after her issue is resolved, she would be very satisfied with the way it was handled. Therefore, simple bag of words models, or any model that does not include temporal dependencies between the inputs, may not be well-suited to handle this category of tasks. This motivates us to employ model such as BERT in this task.",
+        "In this paper, we propose a method that builds upon BERT's architecture. We split the input text sequence into shorter segments in order to obtain a representation for each of them using BERT. Then, we use either a recurrent LSTM BIBREF10 network, or another Transformer, to perform the actual classification. We call these techniques Recurrence over BERT (RoBERT) and Transformer over BERT (ToBERT). Given that these models introduce a hierarchy of representations (segment-wise and document-wise), we refer to them as Hierarchical Transformers. To the best of our knowledge, no attempt has been done before to use the Transformer architecture for classification of such long sequences.",
+        "Our novel contributions are:",
+        "Two extensions - RoBERT and ToBERT - to the BERT model, which enable its application in classification of long texts by performing segmentation and using another layer on top of the segment representations.",
+        "State-of-the-art results on the Fisher topic classification task.",
+        "Significant improvement on the CSAT prediction task over the MS-CNN model."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ],
+        [
+          "Introduction",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Method ::: Recurrence over BERT\n[source_id=23] Given that BERT is limited to a particular input length, we split the input sequence into segments of a fixed size with overlap. For each of these segments, we obtain H or P from BERT model. We then stack these segment-level representations into a sequence, which serves as input to a small (100-dimensional) LSTM layer. Its output serves as a document embedding. Finally, we use two fully connected layers with ReLU (30-dimensional) and softmax (the same dimensionality as the number of classes) activations to obtain the final predictions.\n[source_id=24] With this approach, we overcome BERT's computational complexity, reducing it to $O(n/k * k^2) = O(nk)$ for RoBERT, with $k$ denoting the segment size (the LSTM component has negligible linear complexity $O(k)$). The positional embeddings are also no longer an issue.",
+      "score": 1.5750946691582688,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        23,
+        24
+      ],
+      "child_qasper_evidence_texts": [
+        "Given that BERT is limited to a particular input length, we split the input sequence into segments of a fixed size with overlap. For each of these segments, we obtain H or P from BERT model. We then stack these segment-level representations into a sequence, which serves as input to a small (100-dimensional) LSTM layer. Its output serves as a document embedding. Finally, we use two fully connected layers with ReLU (30-dimensional) and softmax (the same dimensionality as the number of classes) activations to obtain the final predictions.",
+        "With this approach, we overcome BERT's computational complexity, reducing it to $O(n/k * k^2) = O(nk)$ for RoBERT, with $k$ denoting the segment size (the LSTM component has negligible linear complexity $O(k)$). The positional embeddings are also no longer an issue."
+      ],
+      "child_pages": [
+        4,
+        4
+      ],
+      "child_sections": [
+        "Method ::: Recurrence over BERT",
+        "Method ::: Recurrence over BERT"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Method ::: Recurrence over BERT",
+          0
+        ],
+        [
+          "Method ::: Recurrence over BERT",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Method ::: Recurrence over BERT",
+      "section": "Method ::: Recurrence over BERT",
+      "title_path": "Method ::: Recurrence over BERT",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Experiments ::: 20 newsgroups\n[source_id=37] 20 newsgroups data set is one of the frequently used datasets in the text processing community for text classification and text clustering. This data set contains approximately 20,000 English documents from 20 topics to be identified, with 11314 documents for training and 7532 for testing. In this work, we used only 90% of documents for training and the remaining 10% for validation. For fair comparison with other publications, we used 53160 words vocabulary set available in the datasets website.",
+      "score": 1.2360334537548234,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        37
+      ],
+      "child_qasper_evidence_texts": [
+        "20 newsgroups data set is one of the frequently used datasets in the text processing community for text classification and text clustering. This data set contains approximately 20,000 English documents from 20 topics to be identified, with 11314 documents for training and 7532 for testing. In this work, we used only 90% of documents for training and the remaining 10% for validation. For fair comparison with other publications, we used 53160 words vocabulary set available in the datasets website."
+      ],
+      "child_pages": [
+        8
+      ],
+      "child_sections": [
+        "Experiments ::: 20 newsgroups"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments ::: 20 newsgroups",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Experiments ::: 20 newsgroups",
+      "section": "Experiments ::: 20 newsgroups",
+      "title_path": "Experiments ::: 20 newsgroups",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Experiments\n[source_id=29] We evaluated our models on 3 different datasets:\n[source_id=30] CSAT dataset for CSAT prediction, consisting of spoken transcripts (automatic via ASR).\n[source_id=31] 20 newsgroups for topic identification task, consisting of written text;\n[source_id=32] Fisher Phase 1 corpus for topic identification task, consisting of spoken transcripts (manual);",
+      "score": 1.0649150175609832,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        29,
+        30,
+        31,
+        32
+      ],
+      "child_qasper_evidence_texts": [
+        "We evaluated our models on 3 different datasets:",
+        "CSAT dataset for CSAT prediction, consisting of spoken transcripts (automatic via ASR).",
+        "20 newsgroups for topic identification task, consisting of written text;",
+        "Fisher Phase 1 corpus for topic identification task, consisting of spoken transcripts (manual);"
+      ],
+      "child_pages": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "child_sections": [
+        "Experiments",
+        "Experiments",
+        "Experiments",
+        "Experiments"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments",
+          0
+        ],
+        [
+          "Experiments",
+          1
+        ],
+        [
+          "Experiments",
+          2
+        ],
+        [
+          "Experiments",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Experiments",
+      "section": "Experiments",
+      "title_path": "Experiments",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Method ::: BERT\n[source_id=16] Because our work builds heavily upon BERT, we provide a brief summary of its features. BERT is built upon the Transformer architecture BIBREF0, which uses self-attention, feed-forward layers, residual connections and layer normalization as the main building blocks. It has two pre-training objectives:\n[source_id=17] Masked language modelling - some of the words in a sentence are being masked and the model has to predict them based on the context (note the difference from the typical autoregressive language model training objective);\n[source_id=18] Next sentence prediction - given two input sequences, decide whether the second one is the next sentence or not.\n[source_id=19] BERT has been shown to beat the state-of-the-art performance on 11 tasks with no modifications to the model architecture, besides adding a task-specific output layer BIBREF1. We follow same procedure suggested in BIBREF1 for our tasks. Fig. FIGREF8 shows the BERT model for classification. We obtain two kinds of representation from BERT: pooled output from last transformer block, denoted by H, and posterior probabilities, denoted by P. There are two variants of BERT - BERT-Base and BERT-Large. In this work we are using BERT-Base for faster training and experimentation, however, our methods are applicable to BERT-Large as well. BERT-Base and BERT-Large are different in model parameters such as number of transformer blocks, number of self-attention heads. Total number of parameters in BERT-Base are 110M and 340M in BERT-Large.\n[source_id=20] BERT suffers from major limitations in terms of handling long sequences. Firstly, the self-attention layer has a quadratic complexity $O(n^2)$ in terms of the sequence length $n$ BIBREF0. Secondly, BERT uses a learned positional embeddings scheme BIBREF1, which means that it won't likely be able to generalize to positions beyond those seen in the training data.\n[source_id=21] To investigate the effect of fine-tuning BERT on task performance, we use either the pre-trained BERT weights, or the weights from a BERT fine-tuned on the task-specific dataset on a segment-level (i.e. we preserve the original label but fine-tune on each segment separately instead of on the whole text sequence). We compare these results to using the fine-tuned segment-level BERT predictions directly as inputs to the next layer.",
+      "score": 1.020819573428003,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "child_qasper_evidence_texts": [
+        "Because our work builds heavily upon BERT, we provide a brief summary of its features. BERT is built upon the Transformer architecture BIBREF0, which uses self-attention, feed-forward layers, residual connections and layer normalization as the main building blocks. It has two pre-training objectives:",
+        "Masked language modelling - some of the words in a sentence are being masked and the model has to predict them based on the context (note the difference from the typical autoregressive language model training objective);",
+        "Next sentence prediction - given two input sequences, decide whether the second one is the next sentence or not.",
+        "BERT has been shown to beat the state-of-the-art performance on 11 tasks with no modifications to the model architecture, besides adding a task-specific output layer BIBREF1. We follow same procedure suggested in BIBREF1 for our tasks. Fig. FIGREF8 shows the BERT model for classification. We obtain two kinds of representation from BERT: pooled output from last transformer block, denoted by H, and posterior probabilities, denoted by P. There are two variants of BERT - BERT-Base and BERT-Large. In this work we are using BERT-Base for faster training and experimentation, however, our methods are applicable to BERT-Large as well. BERT-Base and BERT-Large are different in model parameters such as number of transformer blocks, number of self-attention heads. Total number of parameters in BERT-Base are 110M and 340M in BERT-Large.",
+        "BERT suffers from major limitations in terms of handling long sequences. Firstly, the self-attention layer has a quadratic complexity $O(n^2)$ in terms of the sequence length $n$ BIBREF0. Secondly, BERT uses a learned positional embeddings scheme BIBREF1, which means that it won't likely be able to generalize to positions beyond those seen in the training data.",
+        "To investigate the effect of fine-tuning BERT on task performance, we use either the pre-trained BERT weights, or the weights from a BERT fine-tuned on the task-specific dataset on a segment-level (i.e. we preserve the original label but fine-tune on each segment separately instead of on the whole text sequence). We compare these results to using the fine-tuned segment-level BERT predictions directly as inputs to the next layer."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Method ::: BERT",
+        "Method ::: BERT",
+        "Method ::: BERT",
+        "Method ::: BERT",
+        "Method ::: BERT",
+        "Method ::: BERT"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Method ::: BERT",
+          0
+        ],
+        [
+          "Method ::: BERT",
+          1
+        ],
+        [
+          "Method ::: BERT",
+          2
+        ],
+        [
+          "Method ::: BERT",
+          3
+        ],
+        [
+          "Method ::: BERT",
+          4
+        ],
+        [
+          "Method ::: BERT",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Method ::: BERT",
+      "section": "Method ::: BERT",
+      "title_path": "Method ::: BERT",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 30,
+      "content": "CSAT dataset for CSAT prediction, consisting of spoken transcripts (automatic via ASR).",
+      "qasper_evidence_text": "CSAT dataset for CSAT prediction, consisting of spoken transcripts (automatic via ASR).",
+      "source_node_id": 30,
+      "node_id": 30,
+      "paragraph_id": 30,
+      "evidence_id": 30,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_6",
+      "rank": 7,
+      "score": 1.0649150175609832,
+      "block_type": "paragraph",
+      "page": 6,
+      "section_id": "Experiments",
+      "section": "Experiments",
+      "title": "Experiments",
+      "hotpot_title": "Experiments",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 1
+    },
+    {
+      "id": 31,
+      "content": "20 newsgroups for topic identification task, consisting of written text;",
+      "qasper_evidence_text": "20 newsgroups for topic identification task, consisting of written text;",
+      "source_node_id": 31,
+      "node_id": 31,
+      "paragraph_id": 31,
+      "evidence_id": 31,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_6",
+      "rank": 7,
+      "score": 1.0649150175609832,
+      "block_type": "paragraph",
+      "page": 6,
+      "section_id": "Experiments",
+      "section": "Experiments",
+      "title": "Experiments",
+      "hotpot_title": "Experiments",
+      "sent_id": 2,
+      "hotpot_sent_id": 2,
+      "supporting_rank": 2
+    },
+    {
+      "id": 32,
+      "content": "Fisher Phase 1 corpus for topic identification task, consisting of spoken transcripts (manual);",
+      "qasper_evidence_text": "Fisher Phase 1 corpus for topic identification task, consisting of spoken transcripts (manual);",
+      "source_node_id": 32,
+      "node_id": 32,
+      "paragraph_id": 32,
+      "evidence_id": 32,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_6",
+      "rank": 7,
+      "score": 1.0649150175609832,
+      "block_type": "paragraph",
+      "page": 6,
+      "section_id": "Experiments",
+      "section": "Experiments",
+      "title": "Experiments",
+      "hotpot_title": "Experiments",
+      "sent_id": 3,
+      "hotpot_sent_id": 3,
+      "supporting_rank": 3
+    },
+    {
+      "id": 54,
+      "content": "In this paper, we presented two methods for long documents using BERT model: RoBERT and ToBERT. We evaluated our experiments on two classification tasks - customer satisfaction prediction and topic identification - using 3 datasets: CSAT, 20newsgroups and Fisher. We observed that ToBERT outperforms RoBERT on pre-trained BERT features and fine-tuned BERT features for all our tasks. Also, we noticed that fine-tuned BERT performs better than pre-trained BERT. We have shown that both RoBERT and ToBERT improved the simple baselines of taking an average (or the most frequent) of segment-wise predictions for long documents to obtain final prediction. Position embeddings did not significantly affect our models performance, but slightly improved the accuracy on the CSAT task. We obtained the best results on Fisher dataset and good improvements for CSAT task compared to the CNN baseline. It is interesting to note that the longer the average input in a given task, the bigger improvement we observe w.r.t. the baseline for that task. Our results confirm that both RoBERT and ToBERT can be used for long sequences with competitive performance and quick fine-tuning procedure. For future work, we shall focus on training models on long documents directly (i.e. in an end-to-end manner).",
+      "qasper_evidence_text": "In this paper, we presented two methods for long documents using BERT model: RoBERT and ToBERT. We evaluated our experiments on two classification tasks - customer satisfaction prediction and topic identification - using 3 datasets: CSAT, 20newsgroups and Fisher. We observed that ToBERT outperforms RoBERT on pre-trained BERT features and fine-tuned BERT features for all our tasks. Also, we noticed that fine-tuned BERT performs better than pre-trained BERT. We have shown that both RoBERT and ToBERT improved the simple baselines of taking an average (or the most frequent) of segment-wise predictions for long documents to obtain final prediction. Position embeddings did not significantly affect our models performance, but slightly improved the accuracy on the CSAT task. We obtained the best results on Fisher dataset and good improvements for CSAT task compared to the CNN baseline. It is interesting to note that the longer the average input in a given task, the bigger improvement we observe w.r.t. the baseline for that task. Our results confirm that both RoBERT and ToBERT can be used for long sequences with competitive performance and quick fine-tuning procedure. For future work, we shall focus on training models on long documents directly (i.e. in an end-to-end manner).",
+      "source_node_id": 54,
+      "node_id": 54,
+      "paragraph_id": 54,
+      "evidence_id": 54,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_13",
+      "rank": 3,
+      "score": 2.5893202415297134,
+      "block_type": "paragraph",
+      "page": 13,
+      "section_id": "Conclusions",
+      "section": "Conclusions",
+      "title": "Conclusions",
+      "hotpot_title": "Conclusions",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 4
+    }
+  ],
+  "supporting_block_ids": [
+    30,
+    31,
+    32,
+    54
+  ]
+}

@@ -1,0 +1,583 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Pre-trained deep neural network language models such as ELMo, GPT, BERT and XLNet have recently achieved state-of-the-art performance on a variety of language understanding tasks. However, their size makes them impractical for a number of scenarios, especially on mobile and edge devices. In particular, the input word embedding matrix accounts for a significant proportion of the model's memory footprint, due to the large input vocabulary and embedding dimensions. Knowledge distillation techniques have had success at compressing large neural network models, but they are ineffective at yielding student models with vocabularies different from the original teacher models. We introduce a novel knowledge distillation technique for training a student model with a significantly smaller vocabulary as well as lower embedding and hidden state dimensions. Specifically, we employ a dual-training mechanism that trains the teacher and student models simultaneously to obtain optimal word embeddings for the student vocabulary. We combine this approach with learning shared projection matrices that transfer layer-wise knowledge from the teacher model to the student model. Our method is able to compress the BERT_BASE model by more than 60x, with only a minor drop in downstream task metrics, resulting in a language model with a footprint of under 7MB. Experimental results also demonstrate higher compression efficiency and accuracy when compared with other state-of-the-art compression techniques.",
+      "score": 13.383809886603453,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Pre-trained deep neural network language models such as ELMo, GPT, BERT and XLNet have recently achieved state-of-the-art performance on a variety of language understanding tasks. However, their size makes them impractical for a number of scenarios, especially on mobile and edge devices. In particular, the input word embedding matrix accounts for a significant proportion of the model's memory footprint, due to the large input vocabulary and embedding dimensions. Knowledge distillation techniques have had success at compressing large neural network models, but they are ineffective at yielding student models with vocabularies different from the original teacher models. We introduce a novel knowledge distillation technique for training a student model with a significantly smaller vocabulary as well as lower embedding and hidden state dimensions. Specifically, we employ a dual-training mechanism that trains the teacher and student models simultaneously to obtain optimal word embeddings for the student vocabulary. We combine this approach with learning shared projection matrices that transfer layer-wise knowledge from the teacher model to the student model. Our method is able to compress the BERT_BASE model by more than 60x, with only a minor drop in downstream task metrics, resulting in a language model with a footprint of under 7MB. Experimental results also demonstrate higher compression efficiency and accuracy when compared with other state-of-the-art compression techniques."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Methodology ::: Optimal Subword Embeddings via Knowledge Distillation\n[source_id=21] We follow the general knowledge distillation paradigm of training a small student model from a large teacher model. Our teacher model is a 12-layer uncased BERTBASE, trained with 30522 WordPiece tokens and 768-dimensional embeddings and hidden states. We denote the teacher model parameters by $\\theta _{t}$. Our student model consists of an equal number of transformer layers with parameters denoted by $\\theta _{s}$, but with a smaller vocabulary as well as embedding/hidden dimensions, illustrated in Figure FIGREF4. Using the same WordPiece algorithm and training corpus as BERT, we obtain a vocabulary of 4928 WordPieces, which we use for the student model.\n[source_id=22] WordPiece tokens BIBREF14 are sub-word units obtained by applying a greedy segmentation algorithm to the training corpus: a desired number (say, $D$) of WordPieces are chosen such that the segmented corpus is minimal in the number of WordPieces used. A cursory look at both vocabularies reveals that $93.9\\%$ of the WordPieces in the student vocabulary also exist in the teacher vocabulary, suggesting room for a reduction in the WordPiece vocabulary size from 30K tokens.\n[source_id=23] Since we seek to train a general-purpose student language model, we elect to reuse the teacher model's original training objective to optimize the student model, i.e., masked language modeling and next sentence prediction, before any fine-tuning. In the former task, words in context are randomly masked, and the language model needs to predict those words given the masked context. In the latter task, given a pair of sentences, the language model predicts whether the pair is consistent.\n[source_id=24] However, since the student vocabulary is not a complete subset of the teacher vocabulary, the two vocabularies may tokenize the same words differently. As a result, the outputs of the teacher and student model for the masked language modeling task may not align. Even with the high overlap between the two vocabularies, the need to train the student embedding from scratch, and the change in embedding dimension precludes existing knowledge distillation techniques, which rely on the alignment of both models' output spaces. As a result, we explore two alternative approaches that enable implicit transfer of knowledge to the student model, which we describe below.",
+      "score": 8.442647061766012,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        21,
+        22,
+        23,
+        24
+      ],
+      "child_qasper_evidence_texts": [
+        "We follow the general knowledge distillation paradigm of training a small student model from a large teacher model. Our teacher model is a 12-layer uncased BERTBASE, trained with 30522 WordPiece tokens and 768-dimensional embeddings and hidden states. We denote the teacher model parameters by $\\theta _{t}$. Our student model consists of an equal number of transformer layers with parameters denoted by $\\theta _{s}$, but with a smaller vocabulary as well as embedding/hidden dimensions, illustrated in Figure FIGREF4. Using the same WordPiece algorithm and training corpus as BERT, we obtain a vocabulary of 4928 WordPieces, which we use for the student model.",
+        "WordPiece tokens BIBREF14 are sub-word units obtained by applying a greedy segmentation algorithm to the training corpus: a desired number (say, $D$) of WordPieces are chosen such that the segmented corpus is minimal in the number of WordPieces used. A cursory look at both vocabularies reveals that $93.9\\%$ of the WordPieces in the student vocabulary also exist in the teacher vocabulary, suggesting room for a reduction in the WordPiece vocabulary size from 30K tokens.",
+        "Since we seek to train a general-purpose student language model, we elect to reuse the teacher model's original training objective to optimize the student model, i.e., masked language modeling and next sentence prediction, before any fine-tuning. In the former task, words in context are randomly masked, and the language model needs to predict those words given the masked context. In the latter task, given a pair of sentences, the language model predicts whether the pair is consistent.",
+        "However, since the student vocabulary is not a complete subset of the teacher vocabulary, the two vocabularies may tokenize the same words differently. As a result, the outputs of the teacher and student model for the masked language modeling task may not align. Even with the high overlap between the two vocabularies, the need to train the student embedding from scratch, and the change in embedding dimension precludes existing knowledge distillation techniques, which rely on the alignment of both models' output spaces. As a result, we explore two alternative approaches that enable implicit transfer of knowledge to the student model, which we describe below."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+          0
+        ],
+        [
+          "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+          1
+        ],
+        [
+          "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+          2
+        ],
+        [
+          "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+      "section": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+      "title_path": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Recently, contextual-aware language models such as ELMo BIBREF0, GPT BIBREF1, BERT BIBREF2 and XLNet BIBREF3 have shown to greatly outperform traditional word embedding models including Word2Vec BIBREF4 and GloVe BIBREF5 in a variety of NLP tasks. These pre-trained language models, when fine-tuned on downstream language understanding tasks such as sentiment classification BIBREF6, natural language inference BIBREF7 and reading comprehension BIBREF8, BIBREF9, have achieved state-of-the-art performance. However, the large number of parameters in these models, often above hundreds of millions, makes it impossible to host them on resource-constrained tasks such as doing real-time inference on mobile and edge devices.\n[source_id=5] Besides utilizing model quantization techniques BIBREF10, BIBREF11 which aim to reduce the floating-point accuracy of the parameters, significant recent research has focused on knowledge distillation BIBREF12, BIBREF13 techniques. Here, the goal is to train a small-footprint student model by borrowing knowledge, such as through a soft predicted label distribution, from a larger pre-trained teacher model.\n[source_id=6] However, a significant bottleneck that has been overlooked by previous efforts is the input vocabulary size and its corresponding word embedding matrix, often accounting for a significant proportion of all model parameters. For instance, the embedding table of the BERTBASE model, comprising over 30K WordPiece tokens BIBREF14, accounts for over $21\\%$ of the model size. While there has been existing work on reducing NLP model vocabulary sizes BIBREF15, distillation techniques cannot utilize these, since they require the student and teacher models to share the same vocabulary and output space. This profoundly limits their potential to further reduce model sizes.\n[source_id=7] We present two novel ideas to improve the effectiveness of knowledge distillation, in particular for BERT, with the focus on bringing down model sizes to as much as a few mega-bytes. Our model is among the first to propose to use a significantly smaller vocabulary for the student model learned during distillation. In addition, instead of distilling solely on the teacher model's final-layer outputs, our model leverages layer-wise teacher model parameters to directly optimize the parameters of the corresponding layers in the student model. Specifically, our contributions are:\n[source_id=8] [leftmargin=*]\n[source_id=9] Dual Training: Our teacher and student models have different vocabularies and incompatible tokenizations for the same sequence. To address this during distillation, we feed the teacher model a mix of teacher vocabulary-tokenized and student vocabulary-tokenized words within a single sequence. Coupled with the masked language modeling task, this encourages an implicit alignment of the teacher and student WordPiece embeddings, since the student vocabulary embedding may be used as context to predict a word tokenized by the teacher vocabulary and vice versa.\n[source_id=10] Shared Variable Projections: To minimize the loss of information from reducing the hidden state dimension, we introduce a separate loss to align the teacher and student models' trainable variables. This allows for more direct layer-wise transfer of knowledge to the student model.\n[source_id=11] Using the combination of dual training and shared variable projections, we train a 12-layer highly-compressed student BERT model, achieving a maximum compression ratio of $\\sim $61.94x (with 48 dimension size) compared to the teacher BERTBASE model. We conduct experiments for measuring both generalized language modeling perspective and for downstream tasks, demonstrating competitive performance with high compression ratios for both families of tasks.",
+      "score": 7.176949367053338,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "child_qasper_evidence_texts": [
+        "Recently, contextual-aware language models such as ELMo BIBREF0, GPT BIBREF1, BERT BIBREF2 and XLNet BIBREF3 have shown to greatly outperform traditional word embedding models including Word2Vec BIBREF4 and GloVe BIBREF5 in a variety of NLP tasks. These pre-trained language models, when fine-tuned on downstream language understanding tasks such as sentiment classification BIBREF6, natural language inference BIBREF7 and reading comprehension BIBREF8, BIBREF9, have achieved state-of-the-art performance. However, the large number of parameters in these models, often above hundreds of millions, makes it impossible to host them on resource-constrained tasks such as doing real-time inference on mobile and edge devices.",
+        "Besides utilizing model quantization techniques BIBREF10, BIBREF11 which aim to reduce the floating-point accuracy of the parameters, significant recent research has focused on knowledge distillation BIBREF12, BIBREF13 techniques. Here, the goal is to train a small-footprint student model by borrowing knowledge, such as through a soft predicted label distribution, from a larger pre-trained teacher model.",
+        "However, a significant bottleneck that has been overlooked by previous efforts is the input vocabulary size and its corresponding word embedding matrix, often accounting for a significant proportion of all model parameters. For instance, the embedding table of the BERTBASE model, comprising over 30K WordPiece tokens BIBREF14, accounts for over $21\\%$ of the model size. While there has been existing work on reducing NLP model vocabulary sizes BIBREF15, distillation techniques cannot utilize these, since they require the student and teacher models to share the same vocabulary and output space. This profoundly limits their potential to further reduce model sizes.",
+        "We present two novel ideas to improve the effectiveness of knowledge distillation, in particular for BERT, with the focus on bringing down model sizes to as much as a few mega-bytes. Our model is among the first to propose to use a significantly smaller vocabulary for the student model learned during distillation. In addition, instead of distilling solely on the teacher model's final-layer outputs, our model leverages layer-wise teacher model parameters to directly optimize the parameters of the corresponding layers in the student model. Specifically, our contributions are:",
+        "[leftmargin=*]",
+        "Dual Training: Our teacher and student models have different vocabularies and incompatible tokenizations for the same sequence. To address this during distillation, we feed the teacher model a mix of teacher vocabulary-tokenized and student vocabulary-tokenized words within a single sequence. Coupled with the masked language modeling task, this encourages an implicit alignment of the teacher and student WordPiece embeddings, since the student vocabulary embedding may be used as context to predict a word tokenized by the teacher vocabulary and vice versa.",
+        "Shared Variable Projections: To minimize the loss of information from reducing the hidden state dimension, we introduce a separate loss to align the teacher and student models' trainable variables. This allows for more direct layer-wise transfer of knowledge to the student model.",
+        "Using the combination of dual training and shared variable projections, we train a 12-layer highly-compressed student BERT model, achieving a maximum compression ratio of $\\sim $61.94x (with 48 dimension size) compared to the teacher BERTBASE model. We conduct experiments for measuring both generalized language modeling perspective and for downstream tasks, demonstrating competitive performance with high compression ratios for both families of tasks."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ],
+        [
+          "Introduction",
+          6
+        ],
+        [
+          "Introduction",
+          7
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Results\n[source_id=52] Table TABREF20 contains masked word prediction accuracy figures for the different models and the NoKD baseline. We observe that dual training significantly improves over the baseline for all model dimensions, and that both shared projection losses added to dual training further improve the word prediction accuracy. It is interesting to note that for all model dimensions, SharedProjUp projecting into the teacher space outperforms SharedProjDown, significantly so for dimension 48. Expectedly, there is a noticeable performance drop going from 192 to 96 to 48-dimensional hidden state models. Note that because of the differing teacher and student model vocabularies, masked word prediction accuracy for the teacher BERTBASE model is not directly comparable with the student models.\n[source_id=53] Table TABREF21 shows results on the downstream language understanding tasks, as well as model sizes, for our approaches, the BERTBASE teacher model, and the PKD and NoKD baselines. We note that models trained with our proposed approaches perform strongly and consistently improve upon the identically parametrized NoKD baselines, indicating that the dual training and shared projection techniques are effective, without incurring significant losses against the BERTBASE teacher model. Comparing with the PKD baseline, our 192-dimensional models, achieving a higher compression rate than either of the PKD models, perform better than the 3-layer PKD baseline and are competitive with the larger 6-layer baseline on task accuracy while being nearly 5 times as small.\n[source_id=54] Another observation we make is that the performance drop from 192-dimensional to 96-dimensional models is minimal (less than 2% for most tasks). For the MRPC task, in fact, the 96-dimensional model trained with dual training achieves an accuracy of 80.5%, which is higher than even the PKD 6-layer baseline with nearly 12 times as many parameters. Finally, our highly-compressed 48-dimensional models also perform respectably: the best 48-dimensional models are in a similar performance bracket as the 3-layer PKD model, a model 25 times larger by memory footprint.",
+      "score": 7.151808891770683,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        52,
+        53,
+        54
+      ],
+      "child_qasper_evidence_texts": [
+        "Table TABREF20 contains masked word prediction accuracy figures for the different models and the NoKD baseline. We observe that dual training significantly improves over the baseline for all model dimensions, and that both shared projection losses added to dual training further improve the word prediction accuracy. It is interesting to note that for all model dimensions, SharedProjUp projecting into the teacher space outperforms SharedProjDown, significantly so for dimension 48. Expectedly, there is a noticeable performance drop going from 192 to 96 to 48-dimensional hidden state models. Note that because of the differing teacher and student model vocabularies, masked word prediction accuracy for the teacher BERTBASE model is not directly comparable with the student models.",
+        "Table TABREF21 shows results on the downstream language understanding tasks, as well as model sizes, for our approaches, the BERTBASE teacher model, and the PKD and NoKD baselines. We note that models trained with our proposed approaches perform strongly and consistently improve upon the identically parametrized NoKD baselines, indicating that the dual training and shared projection techniques are effective, without incurring significant losses against the BERTBASE teacher model. Comparing with the PKD baseline, our 192-dimensional models, achieving a higher compression rate than either of the PKD models, perform better than the 3-layer PKD baseline and are competitive with the larger 6-layer baseline on task accuracy while being nearly 5 times as small.",
+        "Another observation we make is that the performance drop from 192-dimensional to 96-dimensional models is minimal (less than 2% for most tasks). For the MRPC task, in fact, the 96-dimensional model trained with dual training achieves an accuracy of 80.5%, which is higher than even the PKD 6-layer baseline with nearly 12 times as many parameters. Finally, our highly-compressed 48-dimensional models also perform respectably: the best 48-dimensional models are in a similar performance bracket as the 3-layer PKD model, a model 25 times larger by memory footprint."
+      ],
+      "child_pages": [
+        12,
+        12,
+        12
+      ],
+      "child_sections": [
+        "Results",
+        "Results",
+        "Results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results",
+          0
+        ],
+        [
+          "Results",
+          1
+        ],
+        [
+          "Results",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Results",
+      "section": "Results",
+      "title_path": "Results",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_13",
+      "content": "[Section] Discussion\n[source_id=56] Shared projections and model performance: We see that for downstream task performance, dual training still consistently improves upon the direct fine-tuning approach for virtually all experiments. The effect of shared variable projection, however, is less pronounced, with consistent improvements visible only for MRPC and for the 48-dimensional models i.e. the smallest dataset and models respectively in our experiments. This aligns with our intuition for variable projection as a more direct way to provide a training signal from the teacher model internals, which can assume more importance for a low-data or small-model scenario. However, for larger models and more data, the linear projection of parameters may be reducing the degrees of freedom available to the model, since linear projection is a fairly simple function to align the teacher and student parameter spaces.\n[source_id=57] A related comparison of interest is between up-projection and down-projection of the model variables: we note up-projection does visibly better on the language modeling task and slightly better on the downstream tasks. The parameters of a well-trained teacher model represent a high-quality local minimum in the teacher space, which may be easier to search for during up-projection.\n[source_id=58] Vocabulary size tradeoffs: Issues with input vocabulary size are peculiar to problems in natural language processing: they do not always apply to other areas such as computer vision, where a small fixed number of symbols can encode most inputs. There has been some work on reducing input vocabulary sizes for NLP, but typically not targeting model compression. One concern with reducing the vocabularies of NLP models is it pushes the average tokenized sequence lengths up, making model training harder. In this work, however, we consider classification tasks on shorter texts, which are not as affected by input sequence lengths as, say, tasks such as machine translation are. Furthermore, many real-world applications revolve around short text inputs, which is why a better trade-off between vocabulary size and sequence lengths may be worthwhile for such applications.\n[source_id=59] Order of distillation and fine-tuning: Most of the existing work on distilling language models such as BERT and reporting results on downstream tasks, including some of the baselines in this work, first fine-tune a teacher model on the downstream tasks, and then distill this model. Our goal in this work, however, is to explore the limits to which BERT's language modeling capacity itself, and how much of it is driven by its large WordPiece vocabulary. We leave experiments on distilling fine-tuned teacher models, potentially yielding better results on downstream tasks, to future work.",
+      "score": 6.897609309120069,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_13",
+      "child_source_node_ids": [
+        56,
+        57,
+        58,
+        59
+      ],
+      "child_qasper_evidence_texts": [
+        "Shared projections and model performance: We see that for downstream task performance, dual training still consistently improves upon the direct fine-tuning approach for virtually all experiments. The effect of shared variable projection, however, is less pronounced, with consistent improvements visible only for MRPC and for the 48-dimensional models i.e. the smallest dataset and models respectively in our experiments. This aligns with our intuition for variable projection as a more direct way to provide a training signal from the teacher model internals, which can assume more importance for a low-data or small-model scenario. However, for larger models and more data, the linear projection of parameters may be reducing the degrees of freedom available to the model, since linear projection is a fairly simple function to align the teacher and student parameter spaces.",
+        "A related comparison of interest is between up-projection and down-projection of the model variables: we note up-projection does visibly better on the language modeling task and slightly better on the downstream tasks. The parameters of a well-trained teacher model represent a high-quality local minimum in the teacher space, which may be easier to search for during up-projection.",
+        "Vocabulary size tradeoffs: Issues with input vocabulary size are peculiar to problems in natural language processing: they do not always apply to other areas such as computer vision, where a small fixed number of symbols can encode most inputs. There has been some work on reducing input vocabulary sizes for NLP, but typically not targeting model compression. One concern with reducing the vocabularies of NLP models is it pushes the average tokenized sequence lengths up, making model training harder. In this work, however, we consider classification tasks on shorter texts, which are not as affected by input sequence lengths as, say, tasks such as machine translation are. Furthermore, many real-world applications revolve around short text inputs, which is why a better trade-off between vocabulary size and sequence lengths may be worthwhile for such applications.",
+        "Order of distillation and fine-tuning: Most of the existing work on distilling language models such as BERT and reporting results on downstream tasks, including some of the baselines in this work, first fine-tune a teacher model on the downstream tasks, and then distill this model. Our goal in this work, however, is to explore the limits to which BERT's language modeling capacity itself, and how much of it is driven by its large WordPiece vocabulary. We leave experiments on distilling fine-tuned teacher models, potentially yielding better results on downstream tasks, to future work."
+      ],
+      "child_pages": [
+        13,
+        13,
+        13,
+        13
+      ],
+      "child_sections": [
+        "Discussion",
+        "Discussion",
+        "Discussion",
+        "Discussion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Discussion",
+          0
+        ],
+        [
+          "Discussion",
+          1
+        ],
+        [
+          "Discussion",
+          2
+        ],
+        [
+          "Discussion",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_13",
+      "section_id": "Discussion",
+      "section": "Discussion",
+      "title_path": "Discussion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Related Work\n[source_id=13] Research in neural network model compression has been concomitant with the rise in popularity of neural networks themselves, since these models have often been memory-intensive for the hardware of their time. Work in model compression for NLP applications falls broadly into four categories: matrix approximation, parameter pruning/sharing, weight quantization and knowledge distillation.\n[source_id=14] A family of approaches BIBREF16, BIBREF17 seeks to compress the matrix parameters of the models by low-rank approximation i.e. the full-rank matrix parameter is approximated using multiple low-rank matrices, thereby reducing the effective number of model parameters. Another line of work explores parameter pruning and sharing-based methods BIBREF18, BIBREF19, BIBREF20, BIBREF21, which explore the redundancy in model parameters and try to remove redundant weights as well as neurons, for a variety of neural network architectures.\n[source_id=15] Model weight quantization techniques BIBREF22, BIBREF23, BIBREF24, BIBREF25 focus on mapping model weights to lower-precision integers and floating-point numbers. These can be especially effective with hardware supporting efficient low-precision calculations. More recently, BIBREF26 apply quantization to BERT-based transformer models.\n[source_id=16] Knowledge distillation BIBREF12, BIBREF13 differs from the other discussed approaches: the smaller student model may be parametrized differently from the bigger teacher model, affording more modeling freedom. Teaching a student model to match the soft output label distributions from a larger model alongside the hard ground-truth distribution works well for many tasks, such as machine translation BIBREF27 and language modeling BIBREF28.\n[source_id=17] Not limited to the teacher model outputs, some approaches perform knowledge distillation via attention transfer BIBREF29, or via feature maps or intermediate model outputs BIBREF30, BIBREF31, BIBREF32. More relevant to current work, BIBREF33 and BIBREF34 employ variants of these techniques to BERT model compression by reducing the number of transformer layers. However, as explained before, these approaches are not immediately applicable to our setting due to incompatible teacher and student model vocabularies, and do not focus sufficiently on the embedding matrix size BIBREF35.",
+      "score": 6.703339626374328,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "child_qasper_evidence_texts": [
+        "Research in neural network model compression has been concomitant with the rise in popularity of neural networks themselves, since these models have often been memory-intensive for the hardware of their time. Work in model compression for NLP applications falls broadly into four categories: matrix approximation, parameter pruning/sharing, weight quantization and knowledge distillation.",
+        "A family of approaches BIBREF16, BIBREF17 seeks to compress the matrix parameters of the models by low-rank approximation i.e. the full-rank matrix parameter is approximated using multiple low-rank matrices, thereby reducing the effective number of model parameters. Another line of work explores parameter pruning and sharing-based methods BIBREF18, BIBREF19, BIBREF20, BIBREF21, which explore the redundancy in model parameters and try to remove redundant weights as well as neurons, for a variety of neural network architectures.",
+        "Model weight quantization techniques BIBREF22, BIBREF23, BIBREF24, BIBREF25 focus on mapping model weights to lower-precision integers and floating-point numbers. These can be especially effective with hardware supporting efficient low-precision calculations. More recently, BIBREF26 apply quantization to BERT-based transformer models.",
+        "Knowledge distillation BIBREF12, BIBREF13 differs from the other discussed approaches: the smaller student model may be parametrized differently from the bigger teacher model, affording more modeling freedom. Teaching a student model to match the soft output label distributions from a larger model alongside the hard ground-truth distribution works well for many tasks, such as machine translation BIBREF27 and language modeling BIBREF28.",
+        "Not limited to the teacher model outputs, some approaches perform knowledge distillation via attention transfer BIBREF29, or via feature maps or intermediate model outputs BIBREF30, BIBREF31, BIBREF32. More relevant to current work, BIBREF33 and BIBREF34 employ variants of these techniques to BERT model compression by reducing the number of transformer layers. However, as explained before, these approaches are not immediately applicable to our setting due to incompatible teacher and student model vocabularies, and do not focus sufficiently on the embedding matrix size BIBREF35."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Related Work",
+        "Related Work",
+        "Related Work",
+        "Related Work",
+        "Related Work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work",
+          0
+        ],
+        [
+          "Related Work",
+          1
+        ],
+        [
+          "Related Work",
+          2
+        ],
+        [
+          "Related Work",
+          3
+        ],
+        [
+          "Related Work",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Related Work",
+      "section": "Related Work",
+      "title_path": "Related Work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Experiments ::: Evaluation Tasks and Datasets\n[source_id=44] For explicit evaluation of the generalized language perspective of the distilled student language models, we use the Reddit dataset BIBREF40 to measure word mask prediction accuracy of the student models, since the language used on Reddit is different from that in the training corpora. The dataset is preprocessed similarly to the training corpora, except we do not need to tokenize it using the teacher vocabulary, since we only run and evaluate the student models.\n[source_id=45] For implicit evaluation on downstream language understanding tasks, we fine-tune and evaluate the distilled student models on three tasks from the GLUE benchmark BIBREF41:\n[source_id=46] [leftmargin=*,topsep=0pt]\n[source_id=47] Stanford Sentiment Treebank (SST-2) BIBREF6, a two-way sentence sentiment classification task with 67K training instances,\n[source_id=48] Microsoft Research Paraphrase Corpus (MRPC) BIBREF42, a two-way sentence pair classification task to identify paraphrases, with 3.7K training instances, and\n[source_id=49] Multi-Genre Natural Language Inference (MNLI) BIBREF7, a three-way sentence pair classification task with 393K training instances, to identify premise-hypothesis relations. There are separate development and test sets for genre-matched and genre-mismatched premise-hypothesis pairs; we tune our models solely on the genre-matched development set.\n[source_id=50] For all downstream task evaluations, we fine-tune for 10 epochs using LAMB with a learning rate of 0.0002 and batch size of 32. Since our language models are trained with a maximum sequence length of 128 tokens, we do not evaluate on reading comprehension datasets such as SQuAD BIBREF8 or RACE BIBREF9, which require models supporting longer sequences.",
+      "score": 5.667058380939929,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
+      ],
+      "child_qasper_evidence_texts": [
+        "For explicit evaluation of the generalized language perspective of the distilled student language models, we use the Reddit dataset BIBREF40 to measure word mask prediction accuracy of the student models, since the language used on Reddit is different from that in the training corpora. The dataset is preprocessed similarly to the training corpora, except we do not need to tokenize it using the teacher vocabulary, since we only run and evaluate the student models.",
+        "For implicit evaluation on downstream language understanding tasks, we fine-tune and evaluate the distilled student models on three tasks from the GLUE benchmark BIBREF41:",
+        "[leftmargin=*,topsep=0pt]",
+        "Stanford Sentiment Treebank (SST-2) BIBREF6, a two-way sentence sentiment classification task with 67K training instances,",
+        "Microsoft Research Paraphrase Corpus (MRPC) BIBREF42, a two-way sentence pair classification task to identify paraphrases, with 3.7K training instances, and",
+        "Multi-Genre Natural Language Inference (MNLI) BIBREF7, a three-way sentence pair classification task with 393K training instances, to identify premise-hypothesis relations. There are separate development and test sets for genre-matched and genre-mismatched premise-hypothesis pairs; we tune our models solely on the genre-matched development set.",
+        "For all downstream task evaluations, we fine-tune for 10 epochs using LAMB with a learning rate of 0.0002 and batch size of 32. Since our language models are trained with a maximum sequence length of 128 tokens, we do not evaluate on reading comprehension datasets such as SQuAD BIBREF8 or RACE BIBREF9, which require models supporting longer sequences."
+      ],
+      "child_pages": [
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "child_sections": [
+        "Experiments ::: Evaluation Tasks and Datasets",
+        "Experiments ::: Evaluation Tasks and Datasets",
+        "Experiments ::: Evaluation Tasks and Datasets",
+        "Experiments ::: Evaluation Tasks and Datasets",
+        "Experiments ::: Evaluation Tasks and Datasets",
+        "Experiments ::: Evaluation Tasks and Datasets",
+        "Experiments ::: Evaluation Tasks and Datasets"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments ::: Evaluation Tasks and Datasets",
+          0
+        ],
+        [
+          "Experiments ::: Evaluation Tasks and Datasets",
+          1
+        ],
+        [
+          "Experiments ::: Evaluation Tasks and Datasets",
+          2
+        ],
+        [
+          "Experiments ::: Evaluation Tasks and Datasets",
+          3
+        ],
+        [
+          "Experiments ::: Evaluation Tasks and Datasets",
+          4
+        ],
+        [
+          "Experiments ::: Evaluation Tasks and Datasets",
+          5
+        ],
+        [
+          "Experiments ::: Evaluation Tasks and Datasets",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Experiments ::: Evaluation Tasks and Datasets",
+      "section": "Experiments ::: Evaluation Tasks and Datasets",
+      "title_path": "Experiments ::: Evaluation Tasks and Datasets",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Methodology ::: Dual Training\n[source_id=26] During distillation, for a given training sequence input to the teacher model, we propose to mix the teacher and student vocabularies by randomly selecting (with a probability $p_{DT}$, a hyperparameter) tokens from the sequence to segment using the student vocabulary, with the other tokens segmented using the teacher vocabulary. As illustrated in Figure FIGREF4, given the input context [ `I', `like', `machine', `learning'], the words `I' and `machine' are segmented using the teacher vocabulary (in green), while `like' and `learning' are segmented using the student vocabulary (in blue). Similar to cross-lingual training in BIBREF36, this encourages alignment of the representations for the same word as per the teacher and student vocabularies. This is effected through the masked language modeling task: the model now needs to learn to predict words from the student vocabulary using context words segmented using the teacher vocabulary, and vice versa.\n[source_id=27] The expectation is that the student embeddings can be learned effectively this way from the teacher embeddings as well as model parameters $\\theta _{t}$. Note that we perform dual training only for the teacher model inputs: the student model receives words segmented exclusively using the student vocabulary. Also, during masked language modeling, the model uses different softmax layers for the teacher and the student vocabularies depending on which one was used to segment the word in question.",
+      "score": 5.609168914423665,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        26,
+        27
+      ],
+      "child_qasper_evidence_texts": [
+        "During distillation, for a given training sequence input to the teacher model, we propose to mix the teacher and student vocabularies by randomly selecting (with a probability $p_{DT}$, a hyperparameter) tokens from the sequence to segment using the student vocabulary, with the other tokens segmented using the teacher vocabulary. As illustrated in Figure FIGREF4, given the input context [ `I', `like', `machine', `learning'], the words `I' and `machine' are segmented using the teacher vocabulary (in green), while `like' and `learning' are segmented using the student vocabulary (in blue). Similar to cross-lingual training in BIBREF36, this encourages alignment of the representations for the same word as per the teacher and student vocabularies. This is effected through the masked language modeling task: the model now needs to learn to predict words from the student vocabulary using context words segmented using the teacher vocabulary, and vice versa.",
+        "The expectation is that the student embeddings can be learned effectively this way from the teacher embeddings as well as model parameters $\\theta _{t}$. Note that we perform dual training only for the teacher model inputs: the student model receives words segmented exclusively using the student vocabulary. Also, during masked language modeling, the model uses different softmax layers for the teacher and the student vocabularies depending on which one was used to segment the word in question."
+      ],
+      "child_pages": [
+        5,
+        5
+      ],
+      "child_sections": [
+        "Methodology ::: Dual Training",
+        "Methodology ::: Dual Training"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Methodology ::: Dual Training",
+          0
+        ],
+        [
+          "Methodology ::: Dual Training",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Methodology ::: Dual Training",
+      "section": "Methodology ::: Dual Training",
+      "title_path": "Methodology ::: Dual Training",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 2,
+      "content": "Pre-trained deep neural network language models such as ELMo, GPT, BERT and XLNet have recently achieved state-of-the-art performance on a variety of language understanding tasks. However, their size makes them impractical for a number of scenarios, especially on mobile and edge devices. In particular, the input word embedding matrix accounts for a significant proportion of the model's memory footprint, due to the large input vocabulary and embedding dimensions. Knowledge distillation techniques have had success at compressing large neural network models, but they are ineffective at yielding student models with vocabularies different from the original teacher models. We introduce a novel knowledge distillation technique for training a student model with a significantly smaller vocabulary as well as lower embedding and hidden state dimensions. Specifically, we employ a dual-training mechanism that trains the teacher and student models simultaneously to obtain optimal word embeddings for the student vocabulary. We combine this approach with learning shared projection matrices that transfer layer-wise knowledge from the teacher model to the student model. Our method is able to compress the BERT_BASE model by more than 60x, with only a minor drop in downstream task metrics, resulting in a language model with a footprint of under 7MB. Experimental results also demonstrate higher compression efficiency and accuracy when compared with other state-of-the-art compression techniques.",
+      "qasper_evidence_text": "Pre-trained deep neural network language models such as ELMo, GPT, BERT and XLNet have recently achieved state-of-the-art performance on a variety of language understanding tasks. However, their size makes them impractical for a number of scenarios, especially on mobile and edge devices. In particular, the input word embedding matrix accounts for a significant proportion of the model's memory footprint, due to the large input vocabulary and embedding dimensions. Knowledge distillation techniques have had success at compressing large neural network models, but they are ineffective at yielding student models with vocabularies different from the original teacher models. We introduce a novel knowledge distillation technique for training a student model with a significantly smaller vocabulary as well as lower embedding and hidden state dimensions. Specifically, we employ a dual-training mechanism that trains the teacher and student models simultaneously to obtain optimal word embeddings for the student vocabulary. We combine this approach with learning shared projection matrices that transfer layer-wise knowledge from the teacher model to the student model. Our method is able to compress the BERT_BASE model by more than 60x, with only a minor drop in downstream task metrics, resulting in a language model with a footprint of under 7MB. Experimental results also demonstrate higher compression efficiency and accuracy when compared with other state-of-the-art compression techniques.",
+      "source_node_id": 2,
+      "node_id": 2,
+      "paragraph_id": 2,
+      "evidence_id": 2,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_0",
+      "rank": 1,
+      "score": 13.383809886603453,
+      "block_type": "paragraph",
+      "page": 0,
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title": "Abstract",
+      "hotpot_title": "Abstract",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 24,
+      "content": "However, since the student vocabulary is not a complete subset of the teacher vocabulary, the two vocabularies may tokenize the same words differently. As a result, the outputs of the teacher and student model for the masked language modeling task may not align. Even with the high overlap between the two vocabularies, the need to train the student embedding from scratch, and the change in embedding dimension precludes existing knowledge distillation techniques, which rely on the alignment of both models' output spaces. As a result, we explore two alternative approaches that enable implicit transfer of knowledge to the student model, which we describe below.",
+      "qasper_evidence_text": "However, since the student vocabulary is not a complete subset of the teacher vocabulary, the two vocabularies may tokenize the same words differently. As a result, the outputs of the teacher and student model for the masked language modeling task may not align. Even with the high overlap between the two vocabularies, the need to train the student embedding from scratch, and the change in embedding dimension precludes existing knowledge distillation techniques, which rely on the alignment of both models' output spaces. As a result, we explore two alternative approaches that enable implicit transfer of knowledge to the student model, which we describe below.",
+      "source_node_id": 24,
+      "node_id": 24,
+      "paragraph_id": 24,
+      "evidence_id": 24,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 2,
+      "score": 8.442647061766012,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+      "section": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+      "title": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+      "hotpot_title": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+      "sent_id": 3,
+      "hotpot_sent_id": 3,
+      "supporting_rank": 2
+    },
+    {
+      "id": 6,
+      "content": "However, a significant bottleneck that has been overlooked by previous efforts is the input vocabulary size and its corresponding word embedding matrix, often accounting for a significant proportion of all model parameters. For instance, the embedding table of the BERTBASE model, comprising over 30K WordPiece tokens BIBREF14, accounts for over $21\\%$ of the model size. While there has been existing work on reducing NLP model vocabulary sizes BIBREF15, distillation techniques cannot utilize these, since they require the student and teacher models to share the same vocabulary and output space. This profoundly limits their potential to further reduce model sizes.",
+      "qasper_evidence_text": "However, a significant bottleneck that has been overlooked by previous efforts is the input vocabulary size and its corresponding word embedding matrix, often accounting for a significant proportion of all model parameters. For instance, the embedding table of the BERTBASE model, comprising over 30K WordPiece tokens BIBREF14, accounts for over $21\\%$ of the model size. While there has been existing work on reducing NLP model vocabulary sizes BIBREF15, distillation techniques cannot utilize these, since they require the student and teacher models to share the same vocabulary and output space. This profoundly limits their potential to further reduce model sizes.",
+      "source_node_id": 6,
+      "node_id": 6,
+      "paragraph_id": 6,
+      "evidence_id": 6,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 3,
+      "score": 7.176949367053338,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 2,
+      "hotpot_sent_id": 2,
+      "supporting_rank": 3
+    }
+  ],
+  "supporting_block_ids": [
+    2,
+    24,
+    6
+  ]
+}

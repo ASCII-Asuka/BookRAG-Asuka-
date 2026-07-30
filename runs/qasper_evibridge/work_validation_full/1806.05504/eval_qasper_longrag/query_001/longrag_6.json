@@ -1,0 +1,79 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Base model\n[source_id=24] As our base model, we employ a basic encoder-decoder RNN used in most neural machine translation BIBREF2 and text summarization BIBREF15 tasks. We employ a two-layer bidirectional GRU (BiGRU) as the recurrent unit of the encoder. The BiGRU consists of a forward and backward GRU, which results to sequences of forward and backward hidden states $(\\overrightarrow{h}_1, \\overrightarrow{h}_2, ..., \\overrightarrow{h}_n)$ and $(\\overleftarrow{h}_1, \\overleftarrow{h}_2, ..., \\overleftarrow{h}_n)$ , respectively: $\n\\overrightarrow{h}_i &= GRU(x_i, \\overrightarrow{h}_{i-1}) \\\\\n\\overleftarrow{h}_i &= GRU(x_i, \\overleftarrow{h}_{i+1}) \\nonumber $\n[source_id=25] The forward and backward hidden states are concatenated to get the hidden state vectors of the tokens (i.e. $h_i = [\\overrightarrow{h}_i; \\overleftarrow{h}_i]$ ). The final states of the forward and backward GRU are also concatenated to create the final text representation vector of the encoder $s = [\\overrightarrow{h}_n; \\overleftarrow{h}_1]$ . These values are calculated per layer, where $x_t$ of the second layer is $h_t$ of the first layer. The final text representation vectors are projected by a fully connected layer and are passed to the decoder as the initial hidden states $s_0 = s$ .\n[source_id=26] For the decoder, we use a two-layer uni-directional GRU with attention. At each time step $t$ , the previous token $y_{t-1}$ , the previous hidden state $s_{t-1}$ , and the previous context vector $c_{t-1}$ are passed to a GRU to calculate the new hidden state $s_t$ , as shown in the equation below.\n[source_id=27] $$s_t = GRU(w_{t-1}, s_{t-1}, c_{t-1}) \\nonumber $$   (Eq. 9)\n[source_id=28] The context vector $c_t$ is computed using the additive attention mechanism BIBREF2 , which matches the current decoder state $s_t$ and each encoder state $h_i$ to get an importance score. The scores are then passed to a softmax and are used to pool the encoder states using weighted sum. The final pooled vector is the context vector, as shown in the equations below. $\ng_{t,i} &= v_a^\\top tanh(W_a s_{t-1} + U_a h_i) \\\\\na_{t,i} &= \\frac{exp(g_{t,i})}{\\sum _i exp(g_{t,i})} \\\\\nc_t &= \\sum _i a_{t,i} h_i \\nonumber $\n[source_id=29] Finally, the previous token $y_{t-1}$ , the current context vector $c_t$ , and the current decoder state $s_t$ are used to generate the current word $y_t$ with a softmax layer over the decoder vocabulary, as shown below. $\no_t &= W_w w_{t-1} + W_c c_t + W_s s_t \\\\\np(y_t | y_{<t}) &= softmax(W_o o_t) \\nonumber $",
+  "score": 3.363627521006557,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "child_qasper_evidence_texts": [
+    "As our base model, we employ a basic encoder-decoder RNN used in most neural machine translation BIBREF2 and text summarization BIBREF15 tasks. We employ a two-layer bidirectional GRU (BiGRU) as the recurrent unit of the encoder. The BiGRU consists of a forward and backward GRU, which results to sequences of forward and backward hidden states $(\\overrightarrow{h}_1, \\overrightarrow{h}_2, ..., \\overrightarrow{h}_n)$ and $(\\overleftarrow{h}_1, \\overleftarrow{h}_2, ..., \\overleftarrow{h}_n)$ , respectively: $\n\\overrightarrow{h}_i &= GRU(x_i, \\overrightarrow{h}_{i-1}) \\\\\n\\overleftarrow{h}_i &= GRU(x_i, \\overleftarrow{h}_{i+1}) \\nonumber $",
+    "The forward and backward hidden states are concatenated to get the hidden state vectors of the tokens (i.e. $h_i = [\\overrightarrow{h}_i; \\overleftarrow{h}_i]$ ). The final states of the forward and backward GRU are also concatenated to create the final text representation vector of the encoder $s = [\\overrightarrow{h}_n; \\overleftarrow{h}_1]$ . These values are calculated per layer, where $x_t$ of the second layer is $h_t$ of the first layer. The final text representation vectors are projected by a fully connected layer and are passed to the decoder as the initial hidden states $s_0 = s$ .",
+    "For the decoder, we use a two-layer uni-directional GRU with attention. At each time step $t$ , the previous token $y_{t-1}$ , the previous hidden state $s_{t-1}$ , and the previous context vector $c_{t-1}$ are passed to a GRU to calculate the new hidden state $s_t$ , as shown in the equation below.",
+    "$$s_t = GRU(w_{t-1}, s_{t-1}, c_{t-1}) \\nonumber $$   (Eq. 9)",
+    "The context vector $c_t$ is computed using the additive attention mechanism BIBREF2 , which matches the current decoder state $s_t$ and each encoder state $h_i$ to get an importance score. The scores are then passed to a softmax and are used to pool the encoder states using weighted sum. The final pooled vector is the context vector, as shown in the equations below. $\ng_{t,i} &= v_a^\\top tanh(W_a s_{t-1} + U_a h_i) \\\\\na_{t,i} &= \\frac{exp(g_{t,i})}{\\sum _i exp(g_{t,i})} \\\\\nc_t &= \\sum _i a_{t,i} h_i \\nonumber $",
+    "Finally, the previous token $y_{t-1}$ , the current context vector $c_t$ , and the current decoder state $s_t$ are used to generate the current word $y_t$ with a softmax layer over the decoder vocabulary, as shown below. $\no_t &= W_w w_{t-1} + W_c c_t + W_s s_t \\\\\np(y_t | y_{<t}) &= softmax(W_o o_t) \\nonumber $"
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Base model",
+    "Base model",
+    "Base model",
+    "Base model",
+    "Base model",
+    "Base model"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Base model",
+      0
+    ],
+    [
+      "Base model",
+      1
+    ],
+    [
+      "Base model",
+      2
+    ],
+    [
+      "Base model",
+      3
+    ],
+    [
+      "Base model",
+      4
+    ],
+    [
+      "Base model",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Base model",
+  "section": "Base model",
+  "title_path": "Base model",
+  "block_type": "long_unit"
+}

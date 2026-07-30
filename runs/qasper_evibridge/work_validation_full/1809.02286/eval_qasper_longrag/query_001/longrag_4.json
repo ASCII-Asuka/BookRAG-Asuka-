@@ -1,0 +1,88 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Tree-LSTM\n[source_id=21] The LSTM BIBREF1 architecture was first introduced as an extension of the RNN architecture to mitigate the vanishing and exploding gradient problems. In addition, several works have discovered that applying the LSTM cell into tree structures can be an effective means of modeling sentence representations.\n[source_id=22] To be formal, the composition function of the cell in a tree-LSTM can be formulated as follows:\n[source_id=23] $$ \n\\begin{bmatrix}\n\\mathbf {i} \\\\\n\\mathbf {f}_l \\\\\n\\mathbf {f}_r \\\\\n\\mathbf {o} \\\\\n\\mathbf {g}\n\\end{bmatrix}\n=\n\\begin{bmatrix}\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\tanh \\end{bmatrix}\n\\Bigg ( \\mathbf {W}\n\\begin{bmatrix}\n\\mathbf {h}_l \\\\\n\\mathbf {h}_r \\\\\n\\end{bmatrix}\n+ \\mathbf {b} \\Bigg )$$   (Eq. 8)\n[source_id=24] $$ \n\\mathbf {c} = \\mathbf {f}_l \\odot \\mathbf {c}_l + \\mathbf {f}_r \\odot \\mathbf {c}_r + \\mathbf {i} \\odot \\mathbf {g}\\\\$$   (Eq. 9)\n[source_id=25] where $\\mathbf {h}, \\mathbf {c} \\in \\mathbb {R}^{d}$ indicate the hidden state and cell state of the LSTM cell, and $\\mathbf {h}_l, \\mathbf {h}_r, \\mathbf {c}_l, \\mathbf {c}_r \\in \\mathbb {R}^{d}$ the hidden states and cell states of a left and right child. $\\mathbf {g} \\in \\mathbb {R}^{d}$ is the newly composed input for the cell and $\\mathbf {i}, \\mathbf {f}_{l}, \\mathbf {f}_{r}, \\mathbf {o} \\in \\mathbb {R}^{d}$ represent an input gate, two forget gates (left, right), and an output gate respectively. $\\mathbf {W} \\in \\mathbb {R}^{5d\\times 2d}$ and $\\mathbf {b} \\in \\mathbb {R}^{5d}$ are trainable parameters. $\\sigma $ corresponds to the sigmoid function, $\\tanh $ to the hyperbolic tangent, and $\\odot $ to element-wise multiplication.\n[source_id=26] Note the equations assume that there are only two children for each node, i.e. binary or binarized trees, following the standard in the literature. While RvNN models can be constructed on any tree structure, in this work we only consider constituency trees as inputs.\n[source_id=27] In spite of the obvious upside that recursive models have in being so flexible, they are known for being difficult to fully utilize with batch computations as compared to other neural architectures because of the diversity of structure found across sentences. To alleviate this problem, BIBREF8 ( BIBREF8 ) proposed the SPINN model, which brings a shift-reduce algorithm to the tree-LSTM. As SPINN simplifies the process of constructing a tree into only two operations, i.e. shift and reduce, it can support more effective parallel computations while enjoying the advantages of tree structures. For efficiency, our model also starts from our own SPINN re-implementation, whose function is exactly the same as that of the tree-LSTM.",
+  "score": 1.980795509579241,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "child_qasper_evidence_texts": [
+    "The LSTM BIBREF1 architecture was first introduced as an extension of the RNN architecture to mitigate the vanishing and exploding gradient problems. In addition, several works have discovered that applying the LSTM cell into tree structures can be an effective means of modeling sentence representations.",
+    "To be formal, the composition function of the cell in a tree-LSTM can be formulated as follows:",
+    "$$ \n\\begin{bmatrix}\n\\mathbf {i} \\\\\n\\mathbf {f}_l \\\\\n\\mathbf {f}_r \\\\\n\\mathbf {o} \\\\\n\\mathbf {g}\n\\end{bmatrix}\n=\n\\begin{bmatrix}\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\tanh \\end{bmatrix}\n\\Bigg ( \\mathbf {W}\n\\begin{bmatrix}\n\\mathbf {h}_l \\\\\n\\mathbf {h}_r \\\\\n\\end{bmatrix}\n+ \\mathbf {b} \\Bigg )$$   (Eq. 8)",
+    "$$ \n\\mathbf {c} = \\mathbf {f}_l \\odot \\mathbf {c}_l + \\mathbf {f}_r \\odot \\mathbf {c}_r + \\mathbf {i} \\odot \\mathbf {g}\\\\$$   (Eq. 9)",
+    "where $\\mathbf {h}, \\mathbf {c} \\in \\mathbb {R}^{d}$ indicate the hidden state and cell state of the LSTM cell, and $\\mathbf {h}_l, \\mathbf {h}_r, \\mathbf {c}_l, \\mathbf {c}_r \\in \\mathbb {R}^{d}$ the hidden states and cell states of a left and right child. $\\mathbf {g} \\in \\mathbb {R}^{d}$ is the newly composed input for the cell and $\\mathbf {i}, \\mathbf {f}_{l}, \\mathbf {f}_{r}, \\mathbf {o} \\in \\mathbb {R}^{d}$ represent an input gate, two forget gates (left, right), and an output gate respectively. $\\mathbf {W} \\in \\mathbb {R}^{5d\\times 2d}$ and $\\mathbf {b} \\in \\mathbb {R}^{5d}$ are trainable parameters. $\\sigma $ corresponds to the sigmoid function, $\\tanh $ to the hyperbolic tangent, and $\\odot $ to element-wise multiplication.",
+    "Note the equations assume that there are only two children for each node, i.e. binary or binarized trees, following the standard in the literature. While RvNN models can be constructed on any tree structure, in this work we only consider constituency trees as inputs.",
+    "In spite of the obvious upside that recursive models have in being so flexible, they are known for being difficult to fully utilize with batch computations as compared to other neural architectures because of the diversity of structure found across sentences. To alleviate this problem, BIBREF8 ( BIBREF8 ) proposed the SPINN model, which brings a shift-reduce algorithm to the tree-LSTM. As SPINN simplifies the process of constructing a tree into only two operations, i.e. shift and reduce, it can support more effective parallel computations while enjoying the advantages of tree structures. For efficiency, our model also starts from our own SPINN re-implementation, whose function is exactly the same as that of the tree-LSTM."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Tree-LSTM",
+    "Tree-LSTM",
+    "Tree-LSTM",
+    "Tree-LSTM",
+    "Tree-LSTM",
+    "Tree-LSTM",
+    "Tree-LSTM"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Tree-LSTM",
+      0
+    ],
+    [
+      "Tree-LSTM",
+      1
+    ],
+    [
+      "Tree-LSTM",
+      2
+    ],
+    [
+      "Tree-LSTM",
+      3
+    ],
+    [
+      "Tree-LSTM",
+      4
+    ],
+    [
+      "Tree-LSTM",
+      5
+    ],
+    [
+      "Tree-LSTM",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Tree-LSTM",
+  "section": "Tree-LSTM",
+  "title_path": "Tree-LSTM",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,564 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_13",
+      "content": "[Section] Implementation Details\n[source_id=70] We employ Jieba for Chinese word segmentation and keep the top INLINEFORM0 frequent words. The word embedding size is set to 128 and the other low-frequency words are replaced with the mark <UNK>. The hidden size of GRU is set to 128 for each direction in Bi-GRU. In the pair-wise attentive reader, the hidden state is set to 256 for mGRu. In the CNN layer, filter windows are set to 1, 3, 4, and 5 with each filter containing 200 feature maps. We add a dropout layer BIBREF38 after the CNN layer with a dropout rate of INLINEFORM1 . We use Adam BIBREF32 for training and set learning rate to INLINEFORM2 , INLINEFORM3 to INLINEFORM4 , INLINEFORM5 to INLINEFORM6 , INLINEFORM7 to INLINEFORM8 , batch size to 64. We employ precision, recall, F1 and accuracy for evaluation metrics. We repeat all the experiments for 10 times, and report the average results.",
+      "score": 5.969326269158904,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_13",
+      "child_source_node_ids": [
+        70
+      ],
+      "child_qasper_evidence_texts": [
+        "We employ Jieba for Chinese word segmentation and keep the top INLINEFORM0 frequent words. The word embedding size is set to 128 and the other low-frequency words are replaced with the mark <UNK>. The hidden size of GRU is set to 128 for each direction in Bi-GRU. In the pair-wise attentive reader, the hidden state is set to 256 for mGRu. In the CNN layer, filter windows are set to 1, 3, 4, and 5 with each filter containing 200 feature maps. We add a dropout layer BIBREF38 after the CNN layer with a dropout rate of INLINEFORM1 . We use Adam BIBREF32 for training and set learning rate to INLINEFORM2 , INLINEFORM3 to INLINEFORM4 , INLINEFORM5 to INLINEFORM6 , INLINEFORM7 to INLINEFORM8 , batch size to 64. We employ precision, recall, F1 and accuracy for evaluation metrics. We repeat all the experiments for 10 times, and report the average results."
+      ],
+      "child_pages": [
+        13
+      ],
+      "child_sections": [
+        "Implementation Details"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Implementation Details",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_13",
+      "section_id": "Implementation Details",
+      "section": "Implementation Details",
+      "title_path": "Implementation Details",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Dataset Construction for Evaluation\n[source_id=64] Since none of the datasets from previous works have been published, we decide to build a new one. We randomly collect INLINEFORM0 cases from China Judgments Online, among which INLINEFORM1 cases are for training, INLINEFORM2 each for validation and testing. Among the original cases, INLINEFORM3 are granted divorce and others not. There are INLINEFORM4 valid pleas in total, with INLINEFORM5 supported and INLINEFORM6 rejected. Note that, if the divorce plea in a case is not granted, the other pleas of this case will not be considered by the judge. Case materials are all natural language sentences, with averagely INLINEFORM7 tokens per fact description and INLINEFORM8 per plea. There are 62 relevant law articles in total, each with INLINEFORM9 tokens averagely. Note that the case documents include special typographical signals, making it easy to extract labeled data with regular expression.\n[source_id=65] We apply some rules with legal prior to preprocess the dataset according to previous works BIBREF33 , BIBREF34 , BIBREF35 , which have proved effective in our experiments.\n[source_id=66] Name Replacement: All names in case documents are replaced with marks indicating their roles, instead of simply anonymizing them, e.g. <Plantiff>, <Defendant>, <Daughter_x> and so on. Since “all are equal before the law”, names should make no more difference than what role they take.\n[source_id=67] Law Article Filtration : Since most accessible divorce proceeding documents do not contain ground-truth fine-grained articles, we use an unsupervised method instead. First, we extract all the articles from the law text with regular expression. Afterwards, we select the most relevant 10 articles according to the fact descriptions as follows. We obtain sentence representation with CBOW BIBREF36 , BIBREF37 weighted by inverse document frequency, and calculate cosine distance between cases and law articles. Word embeddings are pre-trained with Chinese Wikipedia pages. As the final step, we extract top 5 relevant articles for each sample respectively from the main marriage law articles and their interpretations, which are equally important. We manually check the extracted articles for 100 cases to ensure that the extraction quality is fairly good and acceptable.\n[source_id=68] The filtration process is automatic and fully unsupervised since the original documents have no ground-truth labels for fine-grained law articles, and coarse-grained law-articles only provide limited information. We also experiment with the ground-truth articles, but only a small fraction of them has fine-grained ones, and they are usually not available in real-world scenarios.",
+      "score": 4.782353842363803,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        64,
+        65,
+        66,
+        67,
+        68
+      ],
+      "child_qasper_evidence_texts": [
+        "Since none of the datasets from previous works have been published, we decide to build a new one. We randomly collect INLINEFORM0 cases from China Judgments Online, among which INLINEFORM1 cases are for training, INLINEFORM2 each for validation and testing. Among the original cases, INLINEFORM3 are granted divorce and others not. There are INLINEFORM4 valid pleas in total, with INLINEFORM5 supported and INLINEFORM6 rejected. Note that, if the divorce plea in a case is not granted, the other pleas of this case will not be considered by the judge. Case materials are all natural language sentences, with averagely INLINEFORM7 tokens per fact description and INLINEFORM8 per plea. There are 62 relevant law articles in total, each with INLINEFORM9 tokens averagely. Note that the case documents include special typographical signals, making it easy to extract labeled data with regular expression.",
+        "We apply some rules with legal prior to preprocess the dataset according to previous works BIBREF33 , BIBREF34 , BIBREF35 , which have proved effective in our experiments.",
+        "Name Replacement: All names in case documents are replaced with marks indicating their roles, instead of simply anonymizing them, e.g. <Plantiff>, <Defendant>, <Daughter_x> and so on. Since “all are equal before the law”, names should make no more difference than what role they take.",
+        "Law Article Filtration : Since most accessible divorce proceeding documents do not contain ground-truth fine-grained articles, we use an unsupervised method instead. First, we extract all the articles from the law text with regular expression. Afterwards, we select the most relevant 10 articles according to the fact descriptions as follows. We obtain sentence representation with CBOW BIBREF36 , BIBREF37 weighted by inverse document frequency, and calculate cosine distance between cases and law articles. Word embeddings are pre-trained with Chinese Wikipedia pages. As the final step, we extract top 5 relevant articles for each sample respectively from the main marriage law articles and their interpretations, which are equally important. We manually check the extracted articles for 100 cases to ensure that the extraction quality is fairly good and acceptable.",
+        "The filtration process is automatic and fully unsupervised since the original documents have no ground-truth labels for fine-grained law articles, and coarse-grained law-articles only provide limited information. We also experiment with the ground-truth articles, but only a small fraction of them has fine-grained ones, and they are usually not available in real-world scenarios."
+      ],
+      "child_pages": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "child_sections": [
+        "Dataset Construction for Evaluation",
+        "Dataset Construction for Evaluation",
+        "Dataset Construction for Evaluation",
+        "Dataset Construction for Evaluation",
+        "Dataset Construction for Evaluation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Dataset Construction for Evaluation",
+          0
+        ],
+        [
+          "Dataset Construction for Evaluation",
+          1
+        ],
+        [
+          "Dataset Construction for Evaluation",
+          2
+        ],
+        [
+          "Dataset Construction for Evaluation",
+          3
+        ],
+        [
+          "Dataset Construction for Evaluation",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Dataset Construction for Evaluation",
+      "section": "Dataset Construction for Evaluation",
+      "title_path": "Dataset Construction for Evaluation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Pair-Wise Attentive Reader\n[source_id=44] How to model the interactions among the input text is the most important problem in reading comprehension. In AutoJudge, we employ a pair-wise attentive reader to process INLINEFORM0 and INLINEFORM1 respectively. More specifically, we propose to use pair-wise mutual attention mechanism to capture the complex semantic interaction between text pairs, as well as increasing the interpretability of AutoJudge.\n[source_id=45] For each input pair INLINEFORM0 or INLINEFORM1 , we employ pair-wise mutual attention to select relevant information from fact descriptions INLINEFORM2 and produce more informative representation sequences.\n[source_id=46] As a variant of the original attention mechanism BIBREF28 , we design the pair-wise mutual attention unit as a GRU with internal memories denoted as mGRU.\n[source_id=47] Taking the representation sequence pair INLINEFORM0 for instance, mGRU stores the fact sequence INLINEFORM1 into its memories. For each timestamp INLINEFORM2 , it selects relevant fact information INLINEFORM3 from the memories as follows, DISPLAYFORM0\n[source_id=48] Here, the weight INLINEFORM0 is the softmax value as DISPLAYFORM0\n[source_id=49] Note that, INLINEFORM0 represents the relevance between INLINEFORM1 and INLINEFORM2 . It is calculated as follows, DISPLAYFORM0\n[source_id=50] Here, INLINEFORM0 is the last hidden state in the GRU, which will be introduced in the following part. INLINEFORM1 is a weight vector, and INLINEFORM2 , INLINEFORM3 , INLINEFORM4 are attention metrics of our proposed pair-wise attention mechanism.\n[source_id=51] With the relevant fact information INLINEFORM0 and INLINEFORM1 , we get the INLINEFORM2 -th input of mGRU as DISPLAYFORM0\n[source_id=52] where INLINEFORM0 indicates the concatenation operation.\n[source_id=53] Then, we feed INLINEFORM0 into GRU to get more informative representation sequence INLINEFORM1 as follows, DISPLAYFORM0\n[source_id=54] For the input pair INLINEFORM0 , we can get INLINEFORM1 in the same way. Therefore, we omit the implementation details Here.\n[source_id=55] Similar structures with attention mechanism are also applied in BIBREF5 , BIBREF30 , BIBREF31 , BIBREF28 to obtain mutually aware representations in reading comprehension models, which significantly improve the performance of this task.",
+      "score": 2.552022548321527,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "child_qasper_evidence_texts": [
+        "How to model the interactions among the input text is the most important problem in reading comprehension. In AutoJudge, we employ a pair-wise attentive reader to process INLINEFORM0 and INLINEFORM1 respectively. More specifically, we propose to use pair-wise mutual attention mechanism to capture the complex semantic interaction between text pairs, as well as increasing the interpretability of AutoJudge.",
+        "For each input pair INLINEFORM0 or INLINEFORM1 , we employ pair-wise mutual attention to select relevant information from fact descriptions INLINEFORM2 and produce more informative representation sequences.",
+        "As a variant of the original attention mechanism BIBREF28 , we design the pair-wise mutual attention unit as a GRU with internal memories denoted as mGRU.",
+        "Taking the representation sequence pair INLINEFORM0 for instance, mGRU stores the fact sequence INLINEFORM1 into its memories. For each timestamp INLINEFORM2 , it selects relevant fact information INLINEFORM3 from the memories as follows, DISPLAYFORM0",
+        "Here, the weight INLINEFORM0 is the softmax value as DISPLAYFORM0",
+        "Note that, INLINEFORM0 represents the relevance between INLINEFORM1 and INLINEFORM2 . It is calculated as follows, DISPLAYFORM0",
+        "Here, INLINEFORM0 is the last hidden state in the GRU, which will be introduced in the following part. INLINEFORM1 is a weight vector, and INLINEFORM2 , INLINEFORM3 , INLINEFORM4 are attention metrics of our proposed pair-wise attention mechanism.",
+        "With the relevant fact information INLINEFORM0 and INLINEFORM1 , we get the INLINEFORM2 -th input of mGRU as DISPLAYFORM0",
+        "where INLINEFORM0 indicates the concatenation operation.",
+        "Then, we feed INLINEFORM0 into GRU to get more informative representation sequence INLINEFORM1 as follows, DISPLAYFORM0",
+        "For the input pair INLINEFORM0 , we can get INLINEFORM1 in the same way. Therefore, we omit the implementation details Here.",
+        "Similar structures with attention mechanism are also applied in BIBREF5 , BIBREF30 , BIBREF31 , BIBREF28 to obtain mutually aware representations in reading comprehension models, which significantly improve the performance of this task."
+      ],
+      "child_pages": [
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9
+      ],
+      "child_sections": [
+        "Pair-Wise Attentive Reader",
+        "Pair-Wise Attentive Reader",
+        "Pair-Wise Attentive Reader",
+        "Pair-Wise Attentive Reader",
+        "Pair-Wise Attentive Reader",
+        "Pair-Wise Attentive Reader",
+        "Pair-Wise Attentive Reader",
+        "Pair-Wise Attentive Reader",
+        "Pair-Wise Attentive Reader",
+        "Pair-Wise Attentive Reader",
+        "Pair-Wise Attentive Reader",
+        "Pair-Wise Attentive Reader"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Pair-Wise Attentive Reader",
+          0
+        ],
+        [
+          "Pair-Wise Attentive Reader",
+          1
+        ],
+        [
+          "Pair-Wise Attentive Reader",
+          2
+        ],
+        [
+          "Pair-Wise Attentive Reader",
+          3
+        ],
+        [
+          "Pair-Wise Attentive Reader",
+          4
+        ],
+        [
+          "Pair-Wise Attentive Reader",
+          5
+        ],
+        [
+          "Pair-Wise Attentive Reader",
+          6
+        ],
+        [
+          "Pair-Wise Attentive Reader",
+          7
+        ],
+        [
+          "Pair-Wise Attentive Reader",
+          8
+        ],
+        [
+          "Pair-Wise Attentive Reader",
+          9
+        ],
+        [
+          "Pair-Wise Attentive Reader",
+          10
+        ],
+        [
+          "Pair-Wise Attentive Reader",
+          11
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Pair-Wise Attentive Reader",
+      "section": "Pair-Wise Attentive Reader",
+      "title_path": "Pair-Wise Attentive Reader",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_17",
+      "content": "[Section] Case Study\n[source_id=91] We visualize the heat maps of attention results. As shown in Fig. FIGREF47 , deeper background color represents larger attention score. The attention score is calculated with Eq. ( EQREF15 ). We take the average of the resulting INLINEFORM0 attention matrix over the time dimension to obtain attention values for each word.\n[source_id=92] The visualization demonstrates that the attention mechanism can capture relevant patterns and semantics in accordance with different pleas in different cases.\n[source_id=93] As for the failed samples, the most common reason comes from the anonymity issue, which is also shown in Fig. FIGREF47 . As mentioned above, we conduct name replacement. However, some critical elements are also anonymized by the government, due to the privacy issue. These elements are sometimes important to judgment prediction. For example, determination of the key factor long-time separation is relevant to the explicit dates, which are anonymized.",
+      "score": 1.1805313035079976,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_17",
+      "child_source_node_ids": [
+        91,
+        92,
+        93
+      ],
+      "child_qasper_evidence_texts": [
+        "We visualize the heat maps of attention results. As shown in Fig. FIGREF47 , deeper background color represents larger attention score. The attention score is calculated with Eq. ( EQREF15 ). We take the average of the resulting INLINEFORM0 attention matrix over the time dimension to obtain attention values for each word.",
+        "The visualization demonstrates that the attention mechanism can capture relevant patterns and semantics in accordance with different pleas in different cases.",
+        "As for the failed samples, the most common reason comes from the anonymity issue, which is also shown in Fig. FIGREF47 . As mentioned above, we conduct name replacement. However, some critical elements are also anonymized by the government, due to the privacy issue. These elements are sometimes important to judgment prediction. For example, determination of the key factor long-time separation is relevant to the explicit dates, which are anonymized."
+      ],
+      "child_pages": [
+        17,
+        17,
+        17
+      ],
+      "child_sections": [
+        "Case Study",
+        "Case Study",
+        "Case Study"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Case Study",
+          0
+        ],
+        [
+          "Case Study",
+          1
+        ],
+        [
+          "Case Study",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_17",
+      "section_id": "Case Study",
+      "section": "Case Study",
+      "title_path": "Case Study",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Text Encoder\n[source_id=40] As illustrated in Fig. FIGREF6 , Text Encoder aims to encode the word sequences of inputs into continuous representation sequences.\n[source_id=41] Formally, consider a fact description INLINEFORM0 , a plea INLINEFORM1 , and the relevant law articles INLINEFORM2 , where INLINEFORM3 denotes the INLINEFORM4 -th word in the sequence and INLINEFORM5 are the lengths of word sequences INLINEFORM6 respectively. First, we convert the words to their respective word embeddings to obtain INLINEFORM7 , INLINEFORM8 and INLINEFORM9 , where INLINEFORM10 . Afterwards, we employ bi-directional GRU BIBREF27 , BIBREF28 , BIBREF29 to produce the encoded representation INLINEFORM11 of all words as follows: DISPLAYFORM0\n[source_id=42] Note that, we adopt different bi-directional GRUs to encode fact descriptions, pleas, and law articles respectively(denoted as INLINEFORM0 , INLINEFORM1 , and INLINEFORM2 ). With these text encoders, INLINEFORM3 , INLINEFORM4 , and INLINEFORM5 are converting into INLINEFORM6 , INLINEFORM7 , and INLINEFORM8 .",
+      "score": 1.0559439144198601,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        40,
+        41,
+        42
+      ],
+      "child_qasper_evidence_texts": [
+        "As illustrated in Fig. FIGREF6 , Text Encoder aims to encode the word sequences of inputs into continuous representation sequences.",
+        "Formally, consider a fact description INLINEFORM0 , a plea INLINEFORM1 , and the relevant law articles INLINEFORM2 , where INLINEFORM3 denotes the INLINEFORM4 -th word in the sequence and INLINEFORM5 are the lengths of word sequences INLINEFORM6 respectively. First, we convert the words to their respective word embeddings to obtain INLINEFORM7 , INLINEFORM8 and INLINEFORM9 , where INLINEFORM10 . Afterwards, we employ bi-directional GRU BIBREF27 , BIBREF28 , BIBREF29 to produce the encoded representation INLINEFORM11 of all words as follows: DISPLAYFORM0",
+        "Note that, we adopt different bi-directional GRUs to encode fact descriptions, pleas, and law articles respectively(denoted as INLINEFORM0 , INLINEFORM1 , and INLINEFORM2 ). With these text encoders, INLINEFORM3 , INLINEFORM4 , and INLINEFORM5 are converting into INLINEFORM6 , INLINEFORM7 , and INLINEFORM8 ."
+      ],
+      "child_pages": [
+        8,
+        8,
+        8
+      ],
+      "child_sections": [
+        "Text Encoder",
+        "Text Encoder",
+        "Text Encoder"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Text Encoder",
+          0
+        ],
+        [
+          "Text Encoder",
+          1
+        ],
+        [
+          "Text Encoder",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Text Encoder",
+      "section": "Text Encoder",
+      "title_path": "Text Encoder",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_14",
+      "content": "[Section] Baselines\n[source_id=72] For comparison, we adopt and re-implement three kinds of baselines as follows:\n[source_id=73] We implement an SVM with lexical features in accordance with previous works BIBREF16 , BIBREF17 , BIBREF1 , BIBREF15 , BIBREF4 and select the best feature set on the development set.\n[source_id=74] We implement and fine-tune a series of neural text classifiers, including attention-based method BIBREF3 and other methods we deem important. CNN BIBREF18 and GRU BIBREF27 , BIBREF21 take as input the concatenation of fact description and plea. Similarly, CNN/GRU+law refers to using the concatenation of fact description, plea and law articles as inputs.\n[source_id=75] We implement and train some off-the-shelf RC models, including r-net BIBREF5 and AoA BIBREF6 , which are the leading models on SQuAD leaderboard. In our initial experiments, these models take fact description as passage and plea as query. Further, Law articles are added to the fact description as a part of the reading materials, which is a simple way to consider them as well.",
+      "score": 1.0045736699345698,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_14",
+      "child_source_node_ids": [
+        72,
+        73,
+        74,
+        75
+      ],
+      "child_qasper_evidence_texts": [
+        "For comparison, we adopt and re-implement three kinds of baselines as follows:",
+        "We implement an SVM with lexical features in accordance with previous works BIBREF16 , BIBREF17 , BIBREF1 , BIBREF15 , BIBREF4 and select the best feature set on the development set.",
+        "We implement and fine-tune a series of neural text classifiers, including attention-based method BIBREF3 and other methods we deem important. CNN BIBREF18 and GRU BIBREF27 , BIBREF21 take as input the concatenation of fact description and plea. Similarly, CNN/GRU+law refers to using the concatenation of fact description, plea and law articles as inputs.",
+        "We implement and train some off-the-shelf RC models, including r-net BIBREF5 and AoA BIBREF6 , which are the leading models on SQuAD leaderboard. In our initial experiments, these models take fact description as passage and plea as query. Further, Law articles are added to the fact description as a part of the reading materials, which is a simple way to consider them as well."
+      ],
+      "child_pages": [
+        14,
+        14,
+        14,
+        14
+      ],
+      "child_sections": [
+        "Baselines",
+        "Baselines",
+        "Baselines",
+        "Baselines"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Baselines",
+          0
+        ],
+        [
+          "Baselines",
+          1
+        ],
+        [
+          "Baselines",
+          2
+        ],
+        [
+          "Baselines",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_14",
+      "section_id": "Baselines",
+      "section": "Baselines",
+      "title_path": "Baselines",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Text Classification\n[source_id=20] As the basis of previous judgment prediction works, typical text classification task takes a single text content as input and predicts the category it belongs to. Recent works usually employ neural networks to model the internal structure of a single input BIBREF18 , BIBREF19 , BIBREF20 , BIBREF21 .\n[source_id=21] There also exists another thread of text classification called entailment prediction. Methods proposed in BIBREF22 , BIBREF23 are intended for complementary inputs, but the mechanisms can be considered as a simplified version of reading comprehension.",
+      "score": 0.8994081634793715,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        20,
+        21
+      ],
+      "child_qasper_evidence_texts": [
+        "As the basis of previous judgment prediction works, typical text classification task takes a single text content as input and predicts the category it belongs to. Recent works usually employ neural networks to model the internal structure of a single input BIBREF18 , BIBREF19 , BIBREF20 , BIBREF21 .",
+        "There also exists another thread of text classification called entailment prediction. Methods proposed in BIBREF22 , BIBREF23 are intended for complementary inputs, but the mechanisms can be considered as a simplified version of reading comprehension."
+      ],
+      "child_pages": [
+        3,
+        3
+      ],
+      "child_sections": [
+        "Text Classification",
+        "Text Classification"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Text Classification",
+          0
+        ],
+        [
+          "Text Classification",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Text Classification",
+      "section": "Text Classification",
+      "title_path": "Text Classification",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_16",
+      "content": "[Section] Ablation Test\n[source_id=83] AutoJudge is characterized by the incorporation of pair-wise attentive reader, law articles, and a CNN output layer, as well as some pre-processing with legal prior. We design ablation tests respectively to evaluate the effectiveness of these modules. When taken off the attention mechanism, AutoJudge degrades into a GRU on which a CNN is stacked. When taken off law articles, the CNN output layer only takes INLINEFORM0 as input. Besides, our model is tested respectively without name-replacement or unsupervised selection of law articles (i.e. passing the whole law text). As mentioned above, we system use law articles extracted with unsupervised method, so we also experiment with ground-truth law articles.\n[source_id=84] Results are shown in Table TABREF38 . We can infer that:\n[source_id=85] (1) The performance drops significantly after removing the attention layer or excluding the law articles, which is consistent with the comparison between AutoJudge and baselines. The result verifies that both the reading mechanism and incorporation of law articles are important and effective.\n[source_id=86] (2) After replacing CNN with an LSTM layer, performance drops as much as INLINEFORM0 in accuracy and INLINEFORM1 in F1 score. The reason may be the redundancy of RNNs. AutoJudge has employed several GRU layers to encode text sequences. Another RNN layer may be useless to capture sequential dependencies, while CNN can catch the local structure in convolution windows.\n[source_id=87] (3) Motivated by existing rule-based works, we conduct data pre-processing on cases, including name replacement and law article filtration. If we remove the pre-processing operations, the performance drops considerably. It demonstrates that applying the prior knowledge in legal filed would benefit the understanding of legal cases.\n[source_id=88] It's intuitive that the quality of the retrieved law articles would affect the final performance. As is shown in Table TABREF38 , feeding the whole law text without filtration results in worse performance. However, when we train and evaluate our model with ground truth articles, the performance is boosted by nearly INLINEFORM0 in both F1 and Acc. The performance improvement is quite limited compared to that in previous work BIBREF3 for the following reasons: (1) As mentioned above, most case documents only contain coarse-grained articles, and only a small number of them contain fine-grained ones, which has limited information in themselves. (2) Unlike in criminal cases where the application of an article indicates the corresponding crime, law articles in civil cases work as reference, and can be applied in both the cases of supports and rejects. As law articles cut both ways for the judgment result, this is one of the characteristics that distinguishes civil cases from criminal ones. We also need to remember that, the performance of INLINEFORM1 in accuracy or INLINEFORM2 in F1 score is unattainable in real-world setting for automatic prediction where ground-truth articles are not available.\n[source_id=89] In the area of civil cases, the understanding of the case materials and how they interact is a critical factor. The inclusion of law articles is not enough. As is shown in Table TABREF38 , compared to feeding the model with an un-selected set of law articles, taking away the reading mechanism results in greater performance drop. Therefore, the ability to read, understand and select relevant information from the complex multi-sourced case materials is necessary. It's even more important in real world since we don't have access to ground-truth law articles to make predictions.",
+      "score": 0.7845568584475264,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_16",
+      "child_source_node_ids": [
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89
+      ],
+      "child_qasper_evidence_texts": [
+        "AutoJudge is characterized by the incorporation of pair-wise attentive reader, law articles, and a CNN output layer, as well as some pre-processing with legal prior. We design ablation tests respectively to evaluate the effectiveness of these modules. When taken off the attention mechanism, AutoJudge degrades into a GRU on which a CNN is stacked. When taken off law articles, the CNN output layer only takes INLINEFORM0 as input. Besides, our model is tested respectively without name-replacement or unsupervised selection of law articles (i.e. passing the whole law text). As mentioned above, we system use law articles extracted with unsupervised method, so we also experiment with ground-truth law articles.",
+        "Results are shown in Table TABREF38 . We can infer that:",
+        "(1) The performance drops significantly after removing the attention layer or excluding the law articles, which is consistent with the comparison between AutoJudge and baselines. The result verifies that both the reading mechanism and incorporation of law articles are important and effective.",
+        "(2) After replacing CNN with an LSTM layer, performance drops as much as INLINEFORM0 in accuracy and INLINEFORM1 in F1 score. The reason may be the redundancy of RNNs. AutoJudge has employed several GRU layers to encode text sequences. Another RNN layer may be useless to capture sequential dependencies, while CNN can catch the local structure in convolution windows.",
+        "(3) Motivated by existing rule-based works, we conduct data pre-processing on cases, including name replacement and law article filtration. If we remove the pre-processing operations, the performance drops considerably. It demonstrates that applying the prior knowledge in legal filed would benefit the understanding of legal cases.",
+        "It's intuitive that the quality of the retrieved law articles would affect the final performance. As is shown in Table TABREF38 , feeding the whole law text without filtration results in worse performance. However, when we train and evaluate our model with ground truth articles, the performance is boosted by nearly INLINEFORM0 in both F1 and Acc. The performance improvement is quite limited compared to that in previous work BIBREF3 for the following reasons: (1) As mentioned above, most case documents only contain coarse-grained articles, and only a small number of them contain fine-grained ones, which has limited information in themselves. (2) Unlike in criminal cases where the application of an article indicates the corresponding crime, law articles in civil cases work as reference, and can be applied in both the cases of supports and rejects. As law articles cut both ways for the judgment result, this is one of the characteristics that distinguishes civil cases from criminal ones. We also need to remember that, the performance of INLINEFORM1 in accuracy or INLINEFORM2 in F1 score is unattainable in real-world setting for automatic prediction where ground-truth articles are not available.",
+        "In the area of civil cases, the understanding of the case materials and how they interact is a critical factor. The inclusion of law articles is not enough. As is shown in Table TABREF38 , compared to feeding the model with an un-selected set of law articles, taking away the reading mechanism results in greater performance drop. Therefore, the ability to read, understand and select relevant information from the complex multi-sourced case materials is necessary. It's even more important in real world since we don't have access to ground-truth law articles to make predictions."
+      ],
+      "child_pages": [
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16
+      ],
+      "child_sections": [
+        "Ablation Test",
+        "Ablation Test",
+        "Ablation Test",
+        "Ablation Test",
+        "Ablation Test",
+        "Ablation Test",
+        "Ablation Test"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Ablation Test",
+          0
+        ],
+        [
+          "Ablation Test",
+          1
+        ],
+        [
+          "Ablation Test",
+          2
+        ],
+        [
+          "Ablation Test",
+          3
+        ],
+        [
+          "Ablation Test",
+          4
+        ],
+        [
+          "Ablation Test",
+          5
+        ],
+        [
+          "Ablation Test",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_16",
+      "section_id": "Ablation Test",
+      "section": "Ablation Test",
+      "title_path": "Ablation Test",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 70,
+      "content": "We employ Jieba for Chinese word segmentation and keep the top INLINEFORM0 frequent words. The word embedding size is set to 128 and the other low-frequency words are replaced with the mark <UNK>. The hidden size of GRU is set to 128 for each direction in Bi-GRU. In the pair-wise attentive reader, the hidden state is set to 256 for mGRu. In the CNN layer, filter windows are set to 1, 3, 4, and 5 with each filter containing 200 feature maps. We add a dropout layer BIBREF38 after the CNN layer with a dropout rate of INLINEFORM1 . We use Adam BIBREF32 for training and set learning rate to INLINEFORM2 , INLINEFORM3 to INLINEFORM4 , INLINEFORM5 to INLINEFORM6 , INLINEFORM7 to INLINEFORM8 , batch size to 64. We employ precision, recall, F1 and accuracy for evaluation metrics. We repeat all the experiments for 10 times, and report the average results.",
+      "qasper_evidence_text": "We employ Jieba for Chinese word segmentation and keep the top INLINEFORM0 frequent words. The word embedding size is set to 128 and the other low-frequency words are replaced with the mark <UNK>. The hidden size of GRU is set to 128 for each direction in Bi-GRU. In the pair-wise attentive reader, the hidden state is set to 256 for mGRu. In the CNN layer, filter windows are set to 1, 3, 4, and 5 with each filter containing 200 feature maps. We add a dropout layer BIBREF38 after the CNN layer with a dropout rate of INLINEFORM1 . We use Adam BIBREF32 for training and set learning rate to INLINEFORM2 , INLINEFORM3 to INLINEFORM4 , INLINEFORM5 to INLINEFORM6 , INLINEFORM7 to INLINEFORM8 , batch size to 64. We employ precision, recall, F1 and accuracy for evaluation metrics. We repeat all the experiments for 10 times, and report the average results.",
+      "source_node_id": 70,
+      "node_id": 70,
+      "paragraph_id": 70,
+      "evidence_id": 70,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_13",
+      "rank": 1,
+      "score": 5.969326269158904,
+      "block_type": "paragraph",
+      "page": 13,
+      "section_id": "Implementation Details",
+      "section": "Implementation Details",
+      "title": "Implementation Details",
+      "hotpot_title": "Implementation Details",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    }
+  ],
+  "supporting_block_ids": [
+    70
+  ]
+}

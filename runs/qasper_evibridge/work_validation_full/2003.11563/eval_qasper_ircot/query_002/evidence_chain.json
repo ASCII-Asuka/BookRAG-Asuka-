@@ -1,0 +1,127 @@
+{
+  "strategy": "ircot",
+  "thoughts": [
+    "The retrieved evidence discusses model training and testing procedures but does not explicitly mention evaluation metrics. Further retrieval may be needed to identify specific metrics used.",
+    "The evidence mentions model evaluation using a development set and discusses performance gains from random oversampling, but does not explicitly list evaluation metrics such as accuracy, F1-score, or others.",
+    "The newly retrieved evidence mentions F1 score as a metric used in evaluation, particularly in the context of development set performance and weight tuning."
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "retrieval_query": "What metrics are used in evaluation?",
+      "thought": "The retrieved evidence discusses model training and testing procedures but does not explicitly mention evaluation metrics. Further retrieval may be needed to identify specific metrics used.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 63,
+          "score": 4.532122411829459,
+          "content": "While the same span of text cannot have multiple named entity labels, it can have different propaganda labels. We get around this problem by picking one of the labels at random. Additionally, so as to speed up training, we only train our model on those sentences that contain some propagandistic fragment. In hindsight, we note that both these decisions were not ideal and discuss what we might have otherwise done in Section SECREF7.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "While the same span of text cannot have multiple named entity labels, it can have different propaganda labels. We get around this problem by picking one of the labels at random. Additionally, so as to speed up training, we only train our model on those sentences that contain some propagandistic fragment. In hindsight, we note that both these decisions were not ideal and discuss what we might have otherwise done in Section SECREF7.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 45,
+          "score": 3.7939540269071537,
+          "content": "When testing our models, we split the labelled training data into two non-overlapping parts: the first one, consisting of 75% of the training data is used to train models, whereas the other is used to test the effectiveness of the models. All models are trained and tested on the same split to ensure comparability. Similarly, to ensure that our models remain comparable, we continue to train on the same 75% of the training set even when testing on the development set.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "When testing our models, we split the labelled training data into two non-overlapping parts: the first one, consisting of 75% of the training data is used to train models, whereas the other is used to test the effectiveness of the models. All models are trained and tested on the same split to ensure comparability. Similarly, to ensure that our models remain comparable, we continue to train on the same 75% of the training set even when testing on the development set.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 37,
+          "score": 3.3311599532056895,
+          "content": "One of the most interesting aspects of the data provided for this task is the notable difference between the training and the development/test sets. We emphasise that this difference is realistic and reflective of real world news data, in which major stories are often accompanied by the introduction of new terms, names, and even phrases. This is because the training data is a subset of past data while the model is to be used on future data which deals with different newsworthy topics.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "One of the most interesting aspects of the data provided for this task is the notable difference between the training and the development/test sets. We emphasise that this difference is realistic and reflective of real world news data, in which major stories are often accompanied by the introduction of new terms, names, and even phrases. This is because the training data is a subset of past data while the model is to be used on future data which deals with different newsworthy topics.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "retrieval_query": "What metrics are used in evaluation?\nThought 1: The retrieved evidence discusses model training and testing procedures but does not explicitly mention evaluation metrics. Further retrieval may be needed to identify specific metrics used.",
+      "thought": "The evidence mentions model evaluation using a development set and discusses performance gains from random oversampling, but does not explicitly list evaluation metrics such as accuracy, F1-score, or others.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 60,
+          "score": 15.781043736108952,
+          "content": "We do not include the complete results of our experiments here due to space constraints but include them along with charts and program code on our project website. Based on this exploration we find that the best weights for this particular dataset are 1 for non-propaganda and 4 for propaganda and we use this to train the final model used to submit results to the leaderboard. We also found that adding Part of Speech tags and Named Entity information to BERT embeddings by concatenating these one-hot vectors to the BERT embeddings does not improve model performance. We describe these results in Section SECREF5.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "We do not include the complete results of our experiments here due to space constraints but include them along with charts and program code on our project website. Based on this exploration we find that the best weights for this particular dataset are 1 for non-propaganda and 4 for propaganda and we use this to train the final model used to submit results to the leaderboard. We also found that adding Part of Speech tags and Named Entity information to BERT embeddings by concatenating these one-hot vectors to the BERT embeddings does not improve model performance. We describe these results in Section SECREF5.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 50,
+          "score": 13.640903147333509,
+          "content": "We observe that BERT without augmentation consistently outperforms BERT with augmentation in the experiments when the model is trained on 75% of the training data and evaluated on the rest, i.e trained and evaluated on similar data, coming from the same distribution. This is consistent with observations by Wei et al. wei2019eda that contextual word embeddings do not gain from data augmentation. The fact that we shuffle the training data prior to splitting it into training and testing subsets could imply that the model is learning to associate topic words, such as `Mueller', as propaganda. However, when we perform model evaluation using the development set, which is dissimilar to the training, we observe that synonym insertion and word dropping techniques also do not bring performance gains, while random oversampling increases performance over base BERT by 4%. Synonym insertion provides results very similar to base BERT, while random deletion harms model performance producing lower scores. We believe that this could be attributed to the fact that synonym insertion and random word dropping involve the introduction of noise to the data, while oversampling does not. As we are working with natural language data, this type of noise can in fact change the meaning of the sentence. Oversampling on the other hand purely increases the importance of the minority class by repeating training on the unchanged instances.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "We observe that BERT without augmentation consistently outperforms BERT with augmentation in the experiments when the model is trained on 75% of the training data and evaluated on the rest, i.e trained and evaluated on similar data, coming from the same distribution. This is consistent with observations by Wei et al. wei2019eda that contextual word embeddings do not gain from data augmentation. The fact that we shuffle the training data prior to splitting it into training and testing subsets could imply that the model is learning to associate topic words, such as `Mueller', as propaganda. However, when we perform model evaluation using the development set, which is dissimilar to the training, we observe that synonym insertion and word dropping techniques also do not bring performance gains, while random oversampling increases performance over base BERT by 4%. Synonym insertion provides results very similar to base BERT, while random deletion harms model performance producing lower scores. We believe that this could be attributed to the fact that synonym insertion and random word dropping involve the introduction of noise to the data, while oversampling does not. As we are working with natural language data, this type of noise can in fact change the meaning of the sentence. Oversampling on the other hand purely increases the importance of the minority class by repeating training on the unchanged instances.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 45,
+          "score": 12.850462274589898,
+          "content": "When testing our models, we split the labelled training data into two non-overlapping parts: the first one, consisting of 75% of the training data is used to train models, whereas the other is used to test the effectiveness of the models. All models are trained and tested on the same split to ensure comparability. Similarly, to ensure that our models remain comparable, we continue to train on the same 75% of the training set even when testing on the development set.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "When testing our models, we split the labelled training data into two non-overlapping parts: the first one, consisting of 75% of the training data is used to train models, whereas the other is used to test the effectiveness of the models. All models are trained and tested on the same split to ensure comparability. Similarly, to ensure that our models remain comparable, we continue to train on the same 75% of the training set even when testing on the development set.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "retrieval_query": "What metrics are used in evaluation?\nThought 1: The retrieved evidence discusses model training and testing procedures but does not explicitly mention evaluation metrics. Further retrieval may be needed to identify specific metrics used.\nThought 2: The evidence mentions model evaluation using a development set and discusses performance gains from random oversampling, but does not explicitly list evaluation metrics such as accuracy, F1-score, or others.",
+      "thought": "The newly retrieved evidence mentions F1 score as a metric used in evaluation, particularly in the context of development set performance and weight tuning.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 50,
+          "score": 36.751746003432885,
+          "content": "We observe that BERT without augmentation consistently outperforms BERT with augmentation in the experiments when the model is trained on 75% of the training data and evaluated on the rest, i.e trained and evaluated on similar data, coming from the same distribution. This is consistent with observations by Wei et al. wei2019eda that contextual word embeddings do not gain from data augmentation. The fact that we shuffle the training data prior to splitting it into training and testing subsets could imply that the model is learning to associate topic words, such as `Mueller', as propaganda. However, when we perform model evaluation using the development set, which is dissimilar to the training, we observe that synonym insertion and word dropping techniques also do not bring performance gains, while random oversampling increases performance over base BERT by 4%. Synonym insertion provides results very similar to base BERT, while random deletion harms model performance producing lower scores. We believe that this could be attributed to the fact that synonym insertion and random word dropping involve the introduction of noise to the data, while oversampling does not. As we are working with natural language data, this type of noise can in fact change the meaning of the sentence. Oversampling on the other hand purely increases the importance of the minority class by repeating training on the unchanged instances.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "We observe that BERT without augmentation consistently outperforms BERT with augmentation in the experiments when the model is trained on 75% of the training data and evaluated on the rest, i.e trained and evaluated on similar data, coming from the same distribution. This is consistent with observations by Wei et al. wei2019eda that contextual word embeddings do not gain from data augmentation. The fact that we shuffle the training data prior to splitting it into training and testing subsets could imply that the model is learning to associate topic words, such as `Mueller', as propaganda. However, when we perform model evaluation using the development set, which is dissimilar to the training, we observe that synonym insertion and word dropping techniques also do not bring performance gains, while random oversampling increases performance over base BERT by 4%. Synonym insertion provides results very similar to base BERT, while random deletion harms model performance producing lower scores. We believe that this could be attributed to the fact that synonym insertion and random word dropping involve the introduction of noise to the data, while oversampling does not. As we are working with natural language data, this type of noise can in fact change the meaning of the sentence. Oversampling on the other hand purely increases the importance of the minority class by repeating training on the unchanged instances.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 59,
+          "score": 27.304991656010056,
+          "content": "We explore the validity of this by performing several experiments with different weights assigned to the minority class. We note that in our experiments use significantly higher weights than the weights proportional to class frequencies in the training data, that are common in literature BIBREF17. Rather than directly using the class proportions of the training set, we show that tuning weights based on performance on the development set is more beneficial. Figure FIGREF22 shows the results of these experiments wherein we are able to maintain the precision on the subset of the training set used for testing while reducing its recall and thus generalising the model. The fact that the model is generalising on a dissimilar dataset is confirmed by the increase in the development set F1 score. We note that the gains are not infinite and that a balance must be struck based on the amount of generalisation and the corresponding loss in accuracy. The exact weight to use for the best transfer of classification accuracy is related to the dissimilarity of that other dataset and hence is to be obtained experimentally through hyperparameter search. Our experiments showed that a value of 4 is best suited for this task.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "We explore the validity of this by performing several experiments with different weights assigned to the minority class. We note that in our experiments use significantly higher weights than the weights proportional to class frequencies in the training data, that are common in literature BIBREF17. Rather than directly using the class proportions of the training set, we show that tuning weights based on performance on the development set is more beneficial. Figure FIGREF22 shows the results of these experiments wherein we are able to maintain the precision on the subset of the training set used for testing while reducing its recall and thus generalising the model. The fact that the model is generalising on a dissimilar dataset is confirmed by the increase in the development set F1 score. We note that the gains are not infinite and that a balance must be struck based on the amount of generalisation and the corresponding loss in accuracy. The exact weight to use for the best transfer of classification accuracy is related to the dissimilarity of that other dataset and hence is to be obtained experimentally through hyperparameter search. Our experiments showed that a value of 4 is best suited for this task.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 60,
+          "score": 25.26197769462699,
+          "content": "We do not include the complete results of our experiments here due to space constraints but include them along with charts and program code on our project website. Based on this exploration we find that the best weights for this particular dataset are 1 for non-propaganda and 4 for propaganda and we use this to train the final model used to submit results to the leaderboard. We also found that adding Part of Speech tags and Named Entity information to BERT embeddings by concatenating these one-hot vectors to the BERT embeddings does not improve model performance. We describe these results in Section SECREF5.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "We do not include the complete results of our experiments here due to space constraints but include them along with charts and program code on our project website. Based on this exploration we find that the best weights for this particular dataset are 1 for non-propaganda and 4 for propaganda and we use this to train the final model used to submit results to the leaderboard. We also found that adding Part of Speech tags and Named Entity information to BERT embeddings by concatenating these one-hot vectors to the BERT embeddings does not improve model performance. We describe these results in Section SECREF5.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    }
+  ],
+  "retrieved_block_ids": [
+    63,
+    45,
+    37,
+    60,
+    50,
+    59
+  ],
+  "supporting_block_ids": [
+    59,
+    50
+  ]
+}

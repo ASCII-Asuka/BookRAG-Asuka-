@@ -1,0 +1,79 @@
+{
+  "id": "longrag_14",
+  "content": "[Section] Results\n[source_id=60] We first compare all four models, Pointer-Gen, Pointer-Gen-RL+ROUGE, Pointer-Gen-RL-SEN, and Pointer-Gen-ARL-SEN, to existing models with ROUGE in Table TABREF25 to establish that our model produces relevant headlines and we leave the sensationalism for human evaluation. Note that we only compare our models to commonly used strong summarization baselines, to validate that our implementation achieves comparable performance to existing work. In our implementation, Pointer-Gen achieves a 34.51 RG-1 score, 22.21 RG-2 score, and 31.68 RG-L score, which is similar to the results of gu2016incorporating. Pointer-Gen+ARL-SEN, although optimized for the sensationalism reward, achieves similar performance to our Pointer-Gen baseline, which means that Pointer-Gen+ARL-SEN still keeps its summarization ability. An example of headlines generated from different models in Table TABREF29 shows that Pointer-Gen and Pointer-Gen+RL-ROUGE learns to summarize the main point of the article: “The Nikon D600 camera is reported to have black spots when taking photos”. Pointer-Gen+RL-SEN makes the headline more sensational by blaming Nikon for attributing the damage to the smog. Pointer-Gen+ARL-SEN generates the most sensational headline by exaggerating the result “Getting a serious trouble!” to maximize user's attention.\n[source_id=61] We then compare different models using the sensationalism score in Table TABREF30. The Pointer-Gen baseline model achieves a 42.6% sensationalism score, which is the minimum that a typical summarization model achieves. By filtering out low-sensational headlines, Pointer-Gen+Same-FT and Pointer-Gen+Pos-FT achieves higher sensationalism scores, which implies the effectiveness of our sensationalism scorer. Our Pointer-Gen+ARL-SEN model achieves the best performance of 60.8%. This is an absolute improvement of 18.2% over the Pointer-Gen baseline. The Chi-square test on the results confirms that Pointer-Gen+ARL-SEN is statistically significantly more sensational than all the other baseline models, with the largest p-value less than 0.01. Also, we find that the test set headlines achieves 57.8% sensationalism score, much larger than Pointer-Gen baseline, which also supports our intuition that generated headlines will be less sensational than the original one. On the other hand, we found that Pointer-Gen+Pos is much worse than other baselines. The reason is that training on sensational samples alone discards around 80% of the whole training set that is also helpful for maintaining relevance and a good language model. It shows the necessity of using RL.\n[source_id=62] UTF8gbsn\n[source_id=63] In addition, both Pointer-Gen+RL-SEN and Pointer-Gen+ARL-SEN, which use the sensationalism score as the reward, obtain statistically better results than Pointer-Gen+RL-ROUGE and Pointer-Gen, with a p-value less than 0.05 by a Chi-square test. This result shows the effectiveness of RL to generate more sensational headlines. The reason is that even though our noisy classifier could also learn to classify domains, the generator during RL training is not allowed to increase the reward by shifting domains but encouraged to generate more sensational headlines, due to the consistency constraint on the domains of the headline and the article. Furthermore, Poiner-Gen+ARL-SEN gets better performance than Pointer-Gen+RL-SEN, which confirms the superiority of the ARL loss function. We also visualize in Figure FIGREF31 a comparison between Pointer-Gen+ARL-SEN and Pointer-Gen+RL-SEN according to how sensational the test set headlines are. The blue bars denote the smaller scores between the two models. For example, if the blue bar is 0.6, it means that the worse model between Pointer-Gen+RL-SEN and Pointer-Gen+ARL-SEN achieves 0.6. And the color of orange/black further indicates the better model and its score. We find that Pointer-Gen+ARL-SEN outperforms Pointer-Gen+RL-SEN for most cases. The improvement is higher when the test set headlines are not sensational (the sensationalism score is less than 0.5), which may be attributed to the higher ratio of RL training on non-sensational headlines.\n[source_id=64] Apart from the sensationalism evaluation, we measure the fluency of the headlines generated from different models. Fluency scores in Table TABREF30 show that Pointer-Gen+RL-SEN and Pointer-Gen+ARL-SEN achieve comparable fluency performance to Pointer-Gen and Pointer-Gen+RL-ROUGE. Test set headlines achieve the best performance among all models, but the difference is not statistically significant. Also, we observe that fine-tuning on sensational headlines will hurt the performance, both in sensationalism and fluency.\n[source_id=65] After manually checking the outputs, we observe that our model is able to generate sensational headlines using diverse sensationalization strategies. These strategies include, but are not limited to, creating a curiosity gap, asking questions, highlighting numbers, being emotional and emphasizing the user. Examples can be found in Table TABREF32.",
+  "score": 1.280937018158424,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_14",
+  "child_source_node_ids": [
+    60,
+    61,
+    62,
+    63,
+    64,
+    65
+  ],
+  "child_qasper_evidence_texts": [
+    "We first compare all four models, Pointer-Gen, Pointer-Gen-RL+ROUGE, Pointer-Gen-RL-SEN, and Pointer-Gen-ARL-SEN, to existing models with ROUGE in Table TABREF25 to establish that our model produces relevant headlines and we leave the sensationalism for human evaluation. Note that we only compare our models to commonly used strong summarization baselines, to validate that our implementation achieves comparable performance to existing work. In our implementation, Pointer-Gen achieves a 34.51 RG-1 score, 22.21 RG-2 score, and 31.68 RG-L score, which is similar to the results of gu2016incorporating. Pointer-Gen+ARL-SEN, although optimized for the sensationalism reward, achieves similar performance to our Pointer-Gen baseline, which means that Pointer-Gen+ARL-SEN still keeps its summarization ability. An example of headlines generated from different models in Table TABREF29 shows that Pointer-Gen and Pointer-Gen+RL-ROUGE learns to summarize the main point of the article: “The Nikon D600 camera is reported to have black spots when taking photos”. Pointer-Gen+RL-SEN makes the headline more sensational by blaming Nikon for attributing the damage to the smog. Pointer-Gen+ARL-SEN generates the most sensational headline by exaggerating the result “Getting a serious trouble!” to maximize user's attention.",
+    "We then compare different models using the sensationalism score in Table TABREF30. The Pointer-Gen baseline model achieves a 42.6% sensationalism score, which is the minimum that a typical summarization model achieves. By filtering out low-sensational headlines, Pointer-Gen+Same-FT and Pointer-Gen+Pos-FT achieves higher sensationalism scores, which implies the effectiveness of our sensationalism scorer. Our Pointer-Gen+ARL-SEN model achieves the best performance of 60.8%. This is an absolute improvement of 18.2% over the Pointer-Gen baseline. The Chi-square test on the results confirms that Pointer-Gen+ARL-SEN is statistically significantly more sensational than all the other baseline models, with the largest p-value less than 0.01. Also, we find that the test set headlines achieves 57.8% sensationalism score, much larger than Pointer-Gen baseline, which also supports our intuition that generated headlines will be less sensational than the original one. On the other hand, we found that Pointer-Gen+Pos is much worse than other baselines. The reason is that training on sensational samples alone discards around 80% of the whole training set that is also helpful for maintaining relevance and a good language model. It shows the necessity of using RL.",
+    "UTF8gbsn",
+    "In addition, both Pointer-Gen+RL-SEN and Pointer-Gen+ARL-SEN, which use the sensationalism score as the reward, obtain statistically better results than Pointer-Gen+RL-ROUGE and Pointer-Gen, with a p-value less than 0.05 by a Chi-square test. This result shows the effectiveness of RL to generate more sensational headlines. The reason is that even though our noisy classifier could also learn to classify domains, the generator during RL training is not allowed to increase the reward by shifting domains but encouraged to generate more sensational headlines, due to the consistency constraint on the domains of the headline and the article. Furthermore, Poiner-Gen+ARL-SEN gets better performance than Pointer-Gen+RL-SEN, which confirms the superiority of the ARL loss function. We also visualize in Figure FIGREF31 a comparison between Pointer-Gen+ARL-SEN and Pointer-Gen+RL-SEN according to how sensational the test set headlines are. The blue bars denote the smaller scores between the two models. For example, if the blue bar is 0.6, it means that the worse model between Pointer-Gen+RL-SEN and Pointer-Gen+ARL-SEN achieves 0.6. And the color of orange/black further indicates the better model and its score. We find that Pointer-Gen+ARL-SEN outperforms Pointer-Gen+RL-SEN for most cases. The improvement is higher when the test set headlines are not sensational (the sensationalism score is less than 0.5), which may be attributed to the higher ratio of RL training on non-sensational headlines.",
+    "Apart from the sensationalism evaluation, we measure the fluency of the headlines generated from different models. Fluency scores in Table TABREF30 show that Pointer-Gen+RL-SEN and Pointer-Gen+ARL-SEN achieve comparable fluency performance to Pointer-Gen and Pointer-Gen+RL-ROUGE. Test set headlines achieve the best performance among all models, but the difference is not statistically significant. Also, we observe that fine-tuning on sensational headlines will hurt the performance, both in sensationalism and fluency.",
+    "After manually checking the outputs, we observe that our model is able to generate sensational headlines using diverse sensationalization strategies. These strategies include, but are not limited to, creating a curiosity gap, asking questions, highlighting numbers, being emotional and emphasizing the user. Examples can be found in Table TABREF32."
+  ],
+  "child_pages": [
+    14,
+    14,
+    14,
+    14,
+    14,
+    14
+  ],
+  "child_sections": [
+    "Results",
+    "Results",
+    "Results",
+    "Results",
+    "Results",
+    "Results"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Results",
+      0
+    ],
+    [
+      "Results",
+      1
+    ],
+    [
+      "Results",
+      2
+    ],
+    [
+      "Results",
+      3
+    ],
+    [
+      "Results",
+      4
+    ],
+    [
+      "Results",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_14",
+  "section_id": "Results",
+  "section": "Results",
+  "title_path": "Results",
+  "block_type": "long_unit"
+}

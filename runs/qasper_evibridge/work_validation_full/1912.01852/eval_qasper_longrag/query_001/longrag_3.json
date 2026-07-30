@@ -1,0 +1,124 @@
+{
+  "id": "longrag_3",
+  "content": "[Section] Method ::: Training Loss\n[source_id=13] To formally describe the model, let $E$ be the encoder network, $D$ be the decoder network, $C_s$ be the singer classification network and $C_p$ be the pitch regression network. Let $v_j$ denote the embedding vector of singer $j$, $s^j$ denote an input audio of singer $j$ and $p(s^j)$ denote the extracted pitch of $s^j$. Now given an input audio sequence $s^j$ and a target singer $k$ where $j,k = 1,2,...,N$ and $N$ is the number of singers, the output of the model is\n[source_id=14] Note that $D$ is an autoregressive model which would feed the output back to itself. The reconstruction loss is\n[source_id=15] where $\\mathcal {L}_{ce}(o, y)$ is the cross entropy loss applied to each element of $o$ and $y$. However, only reconstruction loss is not enough to train the model to learn to convert singing voice between different singers because it just forces the model to reconstruct the input voice. Therefore, a singer classification loss(also named domain confusion loss BIBREF0) is applied to make the encoder to learn a singer invariant representation\n[source_id=16] Furthermore, a pitch regression loss is introduced to force the encoder to learn a pitch-independent representation and make the whole model obtain the pitch information from $p(s^j)$ rather than directly from the input audio\n[source_id=17] where $\\mathcal {L}_{mse}(a, b)$ is the mean square error function $\\frac{1}{m}||a-b||_2^2$ and m is the number of elements in $a$. The overall loss we minimize to train the model is\n[source_id=18] where $\\lambda $ and $\\mu $ are two weight factors. Furthermore, the adversarial loss used to train the singer classifier and pitch regression network is\n[source_id=19] In the training process, we minimize $\\mathcal {L}_{ad}$ and $\\mathcal {L}_{total}$ alternately, that is\n[source_id=20] Optimize $C_s$ and $C_p$ one step using $\\mathcal {L}_{ad}$ as the objective function.\n[source_id=21] Optimize the whole model one step using $\\mathcal {L}_{total}$ as the objective function.\n[source_id=22] Go back to step 1.\n[source_id=23] Furthermore, backtranslation and mixup techniques BIBREF0 are also used to improve the quality of the converted singing voice.",
+  "score": 6.119311915714445,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_3",
+  "child_source_node_ids": [
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "child_qasper_evidence_texts": [
+    "To formally describe the model, let $E$ be the encoder network, $D$ be the decoder network, $C_s$ be the singer classification network and $C_p$ be the pitch regression network. Let $v_j$ denote the embedding vector of singer $j$, $s^j$ denote an input audio of singer $j$ and $p(s^j)$ denote the extracted pitch of $s^j$. Now given an input audio sequence $s^j$ and a target singer $k$ where $j,k = 1,2,...,N$ and $N$ is the number of singers, the output of the model is",
+    "Note that $D$ is an autoregressive model which would feed the output back to itself. The reconstruction loss is",
+    "where $\\mathcal {L}_{ce}(o, y)$ is the cross entropy loss applied to each element of $o$ and $y$. However, only reconstruction loss is not enough to train the model to learn to convert singing voice between different singers because it just forces the model to reconstruct the input voice. Therefore, a singer classification loss(also named domain confusion loss BIBREF0) is applied to make the encoder to learn a singer invariant representation",
+    "Furthermore, a pitch regression loss is introduced to force the encoder to learn a pitch-independent representation and make the whole model obtain the pitch information from $p(s^j)$ rather than directly from the input audio",
+    "where $\\mathcal {L}_{mse}(a, b)$ is the mean square error function $\\frac{1}{m}||a-b||_2^2$ and m is the number of elements in $a$. The overall loss we minimize to train the model is",
+    "where $\\lambda $ and $\\mu $ are two weight factors. Furthermore, the adversarial loss used to train the singer classifier and pitch regression network is",
+    "In the training process, we minimize $\\mathcal {L}_{ad}$ and $\\mathcal {L}_{total}$ alternately, that is",
+    "Optimize $C_s$ and $C_p$ one step using $\\mathcal {L}_{ad}$ as the objective function.",
+    "Optimize the whole model one step using $\\mathcal {L}_{total}$ as the objective function.",
+    "Go back to step 1.",
+    "Furthermore, backtranslation and mixup techniques BIBREF0 are also used to improve the quality of the converted singing voice."
+  ],
+  "child_pages": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "child_sections": [
+    "Method ::: Training Loss",
+    "Method ::: Training Loss",
+    "Method ::: Training Loss",
+    "Method ::: Training Loss",
+    "Method ::: Training Loss",
+    "Method ::: Training Loss",
+    "Method ::: Training Loss",
+    "Method ::: Training Loss",
+    "Method ::: Training Loss",
+    "Method ::: Training Loss",
+    "Method ::: Training Loss"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Method ::: Training Loss",
+      0
+    ],
+    [
+      "Method ::: Training Loss",
+      1
+    ],
+    [
+      "Method ::: Training Loss",
+      2
+    ],
+    [
+      "Method ::: Training Loss",
+      3
+    ],
+    [
+      "Method ::: Training Loss",
+      4
+    ],
+    [
+      "Method ::: Training Loss",
+      5
+    ],
+    [
+      "Method ::: Training Loss",
+      6
+    ],
+    [
+      "Method ::: Training Loss",
+      7
+    ],
+    [
+      "Method ::: Training Loss",
+      8
+    ],
+    [
+      "Method ::: Training Loss",
+      9
+    ],
+    [
+      "Method ::: Training Loss",
+      10
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_3",
+  "section_id": "Method ::: Training Loss",
+  "section": "Method ::: Training Loss",
+  "title_path": "Method ::: Training Loss",
+  "block_type": "long_unit"
+}

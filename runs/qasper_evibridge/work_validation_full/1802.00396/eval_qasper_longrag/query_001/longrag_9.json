@@ -1,0 +1,331 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Data and Measurements\n[source_id=37] We draw on the newly released UN General Debate Corpus BIBREF11 which contains every country statement in the UN General Debate between 1970 and 2014. The General Debate (GD) takes place every September at the start of each new session of the UN General Assembly (UNGA). It provides all member states with the opportunity to address the UNGA and to present their perspective on key issues in world politics. Governments use their GD statements to put on the record their position on events that have occurred during the past year and on longer-term underlying issues in world politics related to issues such as conflict, terrorism, development, human rights, and climate change.\n[source_id=38] A principal difference between GD statements and UNGA voting is that the GD statements are not institutionally connected to decision-making in the UN. As a result, governments are free to discuss the issues they consider to be of greatest importance in world politics, regardless of whether an issue is on the formal agenda of the UNGA. Therefore, as BIBREF32 notes, the General Debate acts “as a barometer of international opinion on important issues, even those not on the agenda for that particular session.” In providing information about states' preferences on world politics, the GD provides a valuable data source for measuring polarization in International Relations. In addition to being the one major forum where states present their views on international politics free from external constraints, the fact that it takes place annually and includes all UN member states enables comparison over time and across countries. Readers are encouraged to consult BIBREF11 for a comprehensive introduction to the corpus.\n[source_id=39] As mentioned in the main text, we discuss an example where disagreement is obvious in states' GD speeches but less obvious in their voting behavior. Consider the following brief excerpts from the GD speeches of Greece and Turkey in 1974.\n[source_id=40] Greece: On 15 July a coup, condemned by all of us, was staged to overthrow Archbishop Makarios, the legitimate, elected President of the Republic. This coup was not directed against the Turkish Cypriot community of the island... During the fighting while the coup was in progress, not a single Turkish Cypriot was killed or injured. Yet five days later, large Turkish invasion forces were landing in Cyprus and the Turkish Air Force was launching indiscriminate attacks against unarmed civilians, under the flimsy pretext of protecting the Turkish Cypriot minority on the island, which, I repeat, had not been harmed in any way... Two hours later, the Turkish troops were on the move again, sowing death and destruction, killing United Nations troops, bombing hospitals and schools. Repeated cease-fire calls by the Security Council went unheeded. Turkey even ignored the ceasefire proclaimed by its own Prime Minister on 16 August 1974.\n[source_id=41] Turkey: Turkey has constantly had to face faits accomplis of increasingly serious scope, particularly since 1963. The most recent and the most serious of these faits accomplis was, as we all know, that of 15 July last: a foreign Power undertook a coup d'etat which it had long been fomenting and the purpose of which was to annex the island... The coup d'etat of 15 July was directed precisely against the Turkish community and was directly aimed at the annexation of the island to Greece... I have not, however, finished correcting all the false allegations and baseless charges made by my colleague. I reserve the right to do so when we speak on this matter before the General Assembly. My Greek colleague's speech, unfortunately, shows the nature of the atmosphere in which the debate will take place on the future of the two communities, Turkish and Greek, in the island.\n[source_id=42] The two representatives are outlining their positions on the controversy related to the Turkish invasion of Cyprus. Expressed disagreement on this topic is clearly present in the speeches, but as mentioned in the main paper, the two countries' voting ideal points for that year at the most similar amongst all NATO members. A further example is illustrated in the speeches and voting habits of India and Pakistan in 1999, the year the two countries went to war (the Kargil War). Consider the following excerpts from their General Debate statements that year:\n[source_id=43] Pakistan: The Kargil crisis was a manifestation of the deeper malaise spawned by the unresolved Kashmir problem and India's escalating repression of the Kashmiri people. India launched a massive military operation in Kargil and threatened a wider conflict by mobilizing its armed forces all along the Pakistan-India international border. Pakistan acted with restraint... India's repression in Jammu and Kashmir has killed thousands of Kashmiris, forced hundreds of thousands into exile, led to three wars between Pakistan and India and consigned the two countries to a relationship of endemic conflict and mistrust.\n[source_id=44] India: Premeditated aggression by regular forces was committed against India. Not simply was the Lahore Declaration violated, but so was the Simla Agreement, which had prevented conflict for more than a quarter of a century. In self-defence, yet with the utmost restraint, India took all necessary and appropriate steps to evict the aggressor forces from its territory.... We have been greatly disappointed by this compulsive hostility of Pakistan, because it is an aberration in our region today, where all the other South Asian Association for Regional Cooperation (SAARC) countries are at peace with each other, and are trying, bilaterally and through the SAARC mechanisms, to tackle together the great challenge of development.\n[source_id=45] Tensions are clearly present in the textual data of the respective countries. That same year, however, India and Pakistan casted very similar votes in the UN, with ideal points of -0.797 and -0.739, respectively. Therefore, both sources of data appear to provide useful signals of different aspects of underlying state preferences.\n[source_id=46] Before proceeding to the description of our word embeddings approach, it is useful to first explore the corpus through commonly used measures of disagreement, namely Wordscore and Euclidean distance. Further, the network polarization measure known as modularity is also used to explore the levels of polarization exhibited in roll call data versus speeches. First, a bag-of-words (BOW) representation of the speeches is obtained through tokenization, stemming, removal of stop words, conversion to lower case, and the removal of punctuation, symbols, and numbers. We keep only the features which appear at least 5 times in 3 documents and apply term frequency-inverse document frequency (TF-IDF) weighting to the matrix. This yields a document term frequency matrix for each year.\n[source_id=47] The most frequently used text scaling method in political science is Wordscore BIBREF33 . Word frequencies in the document are used to classify the document into one of two categories. With Wordscore, the learning is supervised using training documents that are known to belong to each of the two categories so that the chosen dimension is substantively defined by the choice of training documents. Here we apply the approach to UNGD statements to calculate levels of disagreement. In Figure FIGREF19 , Wordscore detects in both cases a decline in polarization towards the end of the Cold War and a modest increase after the end of the Cold War. This broadly aligns with expectations in international relations research.\n[source_id=48] Second, we compare this Wordscore disagreement to the Euclidean distances between the US and Russia and the US and China and present these for each session over time. These are calculated using: DISPLAYFORM0\n[source_id=49] where INLINEFORM0 and INLINEFORM1 are TF-IDF vectors for the individual states. The results of this measure of disagreement are presented in Figure FIGREF20 . The distances closely align with the Wordscore results for US-Russia and US-China dyads. Polarization broadly decreases towards the end of the Cold War and then increases afterwards.\n[source_id=50] Although these measures provide useful aggregate information, they offer little by way of high-resolution information on preference divergence. Further, unlike at the national legislative level, polarity in IR is more than simple disagreement. Polarization refers to “the degree to which the foreign policies of nations within a single cluster are similar to each other, and the degree to which the foreign policies of nations in different clusters are dissimilar\" BIBREF9 . Continuing with the BOW representation of the speeches, it is instructive to explore preference polarization using a more sophisticated measure which captures this theoretical definition.\n[source_id=51] Modularity is a recently developed community detection heuristic in the network sciences which attempts to partition a network such that the total number of intra-community edges is optimized relative to a baseline expectation from an appropriate null model (i.e. a random graph) BIBREF22 . This aligns with our theoretical definition via its comparison of within-group ties with other subgroup ties. The intuition is that a community should have more or stronger ties among the actors within the community compared to ties with actors in other communities. Modularity is measured between [0,1] where higher levels of modularity indicate stronger divisions in a given network, and therefore higher levels of polarization. The algorithm can be expressed as: DISPLAYFORM0\n[source_id=52] where INLINEFORM0 is the total weight of the edges in the network, INLINEFORM1 is the weighted degree of the INLINEFORM2 th node, INLINEFORM3 is the community to which INLINEFORM4 belongs, and INLINEFORM5 = 1 if INLINEFORM6 and INLINEFORM7 belong to the same community, and 0 otherwise BIBREF34 . Since modularity optimization is an NP-complete problem, we utilize the greedy variant which is implemented through the igraph package.\n[source_id=53] This approach has enjoyed widespread network science employment by applied mathematicians and physicists BIBREF35 , and has surfaced in political science studies of international trade BIBREF36 and international law BIBREF37 . As a direct measure of polarization, this approach has been used to measure roll call polarization in the US Congress BIBREF23 , BIBREF24 , BIBREF25 , as well as the UNGA BIBREF22 . To bridge from roll call data to our speeches, it is instructive to replicate the findings of BIBREF22 using ideal point data based on votes and to compare this to a simple weighted graph based on the cosine similarity of the speeches between states over time. Cosine similarity is well established in the natural language processing literature but has also received recent attention in political science BIBREF38 . This provides a measure of similarity between two vectors of an inner product space which measures the cosine of the angle between them and is expressed as: DISPLAYFORM0\n[source_id=54] where INLINEFORM0 and INLINEFORM1 are vectors of attributes (i.e. term frequency vectors), and INLINEFORM2 and INLINEFORM3 are components of vectors INLINEFORM4 and INLINEFORM5 (i.e. term frequencies), respectively. In the case of text, similarity scores are bounded to positive space [0,1]. Finally, we normalize using: DISPLAYFORM0\n[source_id=55] The result is an INLINEFORM0 adjacency matrix INLINEFORM1 where INLINEFORM2 contains the normalized textual similarity score (i.e. weighted edge) for each pair of states INLINEFORM3 and INLINEFORM4 .\n[source_id=56] We replicate the results of BIBREF22 using ideal point data, which is represented as the gray line. The blue line represents the modularity calculated on the speeches. Information on the roll call data can be found in BIBREF21 and BIBREF10 . Our aim here is to establish a preliminary idea of how polarization changes over time in these two sources of data. To the extent that the patterns diverge, both sources of data provide potentially different information about underlying preferences.\n[source_id=57] In line with the simple measures presented above, both networks in Figure FIGREF24 exhibit generally decreasing levels of polarization towards the end of the Cold War and then subsequent increases or stagnation afterwards. Interestingly, the speech network displays slightly higher levels of polarization than the ideal point network. This indicates that more heterogeneity exists in speeches than votes, and aligns with Figure 1 and Figure 2a in the main body of the paper.\n[source_id=58] For NATO-Warsaw in Figure FIGREF25 , the speech network follows a similar trend as using roll call data alone: polarity decreases towards the end of the Cold War. It appears, however, that the speech weighted network picks up higher variation in preferences, which indicates that looking to ideal point data alone might over- or under-estimate levels of preference polarization at certain points in time. Finally, the West-Rest alignment provides further confirmation that polarity can be detected in the votes and speeches: West-Rest members exhibit higher levels of polarization compared to the Assembly-level. Polarization exhibits a downward trend in the post-Cold War era – the period in which scholars note an increased prominence of liberal, interdependent globalization. These results align with the trends found by BIBREF22 . These results indicate that weighted word counts provide useful information, but we aim to leverage the information in the speeches in a more sophisticated way and in a way that can increase our confidence that divergence is not simply due to differences in word choice. For this task, we move beyond the BOW approach and use vector space representations.\n[source_id=59] At present, the development of vector space models for textual data is one of the areas that has attracted the most research interest in natural language processing. This interest is motivated by the desire to move away from simple counts and weights of words, towards representations which can preserve word context and linguistic features of human speech. Studies find that these approaches are not only intuitively desirable, but also increase classification accuracy in machine learning tasks.\n[source_id=60] Vector space approaches involve the embedding of document features from one dimension per word space to a continuous, lower dimensional vector space. Each document feature is represented as a real-valued vector and it has been shown that these representations retain desirable syntactical qualities, such as context and structure of speech. Traditionally, dimensionality reduction could be obtained through latent semantic analysis (LSA) used to factorize the feature matrices, but two recently developed models have been introduced which rely on different logic: word2vec from Mikolov and the research group at Google, and the global vectors for word representations (GloVe) unsupervised learning algorithm from the Stanford Natural Language Processing group.\n[source_id=61] We use GloVe introduced by BIBREF15 because while LSA tends to maximize the statistical information used, it does not perform well on analogy tasks. Word2vec does better on the analogy test but does not utilize statistics of the corpus because it trains on local context windows. GloVe was introduced to help bridge this gap and combine both desirable qualities. It is a log bilinear, weighted least squares model that trains on global word-word co-occurence counts and thus makes efficient use of the statistics. BIBREF15 show that their approach yields state-of-the-art performance on the word analogy task. GloVe is sometimes criticized for scalability issues but given that we are working with a fixed size corpus this does not pose an issue for our analysis. Readers are encouraged to consult the GloVe paper for full model details, but we describe our approach and decisions here. The model is expressed as: DISPLAYFORM0\n[source_id=62] where INLINEFORM0 represents parameters, INLINEFORM1 is the vocabulary size, INLINEFORM2 and INLINEFORM3 are column and row word vectors, INLINEFORM4 is the co-occurrence matrix of all pairs of words that ever co-occur, and INLINEFORM5 is a weighting function which assigns lower weights to words which frequently co-occur. This lattermost term serves as a cap on very frequent words, for example articles like “the\" which provide little predictive information. The algorithm seeks to minimize the distance between the inner product of the word vectors and the log count of the co-occurrence of the two words. Compared to skip-gram approaches which update at each context window, it is clear from the utilization of INLINEFORM6 that the model trains relatively quickly since it uses the known corpus statistic of word co-occurrences for the entire corpus at once.\n[source_id=63] We first stem, tokenize, and convert the words to lowercase. Unlike a BOW approach, however, the punctuation is retained. The model is trained on each individual year in the corpus with the vocabulary pruned to include a minimum term count of 4 across documents and the term must exist in 25% of the documents. These relatively stringent parameter levels are employed because we train on individual years in order to avoid language drift over time and to ensure that our estimated embeddings correspond to the exact policy language used in a given year. We employ a skip gram window of 4 and search using a word vector size of 50. At present, we follow the computer science literature suggestion of tuning these parameters until reasonable and reliable linear combinations of language are located. Future work should explore in greater detail how systematic tuning decisions for social science applications can be made.\n[source_id=64] Mikolov and collaborors introduce a new evaluation scheme based on word analogies that examines dimensions of difference in vector space, as opposed to scalar distances between vectors BIBREF13 , BIBREF14 . In order to validate the quality of the located embeddings, we thus follow current standard practice and assess whether reasonable linear combinations of words can be returned. The main body of the paper presents three examples, and a further example is presented here: DISPLAYFORM0\n[source_id=65] where INLINEFORM0 describes a vector space location of the given feature and the cosine distance between each vector space location is added or subtracted to find the closest vector space feature (presented on the right hand-side of the equality with the cosine similarity printed underneath). The example is interpreted as: if we add the location of INLINEFORM1 to INLINEFORM2 , we arrive at the vector space location of the word INLINEFORM3 . This, as well as the examples presented in the main body, provide some indication that intuitive and reasonable embeddings have been located.\n[source_id=66] Vector space representations are particularly promising for the measurement of polarization. In contrast to a BOW approach, we want to know not only that two actors use (dis)similar words, but we want high resolution insights into how and when they speak differently on different topics. For example, we would like to capture the dissimilarity of statements like \"we oppose the proliferation of nuclear weapons\" versus \"the proliferation of atom bombs is necessary.\" The words “necessary\" and “oppose\" would be counted in a BOW matrix, but their usage in the context of nuclear weapons would be lost. Further, if one state says “nuclear weapon\" and another says “atomic bomb,\" the two phrases have no words in common and the phrases will be thought to be distant or dissimilar, despite referring to the same thing. Although BOW approaches often perform very well, for the measurement of polarization in IR, we need to make sure that the differences uncovered are not simply due to different word usage or policy topics being discussed.\n[source_id=67] To measure expressed (dis)agreement in these speeches, it is necessary to derive a document-level representation of the learned embeddings. Although well-established measurements based on cosine similarity, Euclidean distance, or Pearson correlations could be applied to the word embeddings, we utilized the relaxed variant of a newly introduced document distance measure that exploits information contained in both the word embeddings and term-document matrices: the (relaxed) Word Mover's Distance (RWMD) BIBREF17 .\n[source_id=68] WMD innovates by leveraging the finding that embedding distances between word vectors are semantically meaningful. WMD represents text documents as a weighted point cloud of embedded words where the distance between two documents is the minimum cumulative distance that words from document A would need to travel to match exactly the point cloud of document B. This has been shown to yield state-of-the-art classification accuracy BIBREF39 . Although WMD is relatively fast to compute, we use the relaxed variant (RWMD), which results in tighter bounds and is shown to yield lower test error rates. In short, this relaxes the optimization problem through the removal of one of the two constraints. If we let INLINEFORM0 and INLINEFORM1 be the BOW representations of two documents in the INLINEFORM2 dimensional simplex of word distributions which we obtained above, we can express RWMD as: DISPLAYFORM0\n[source_id=69] where INLINEFORM0 is a sparse flow matrix where INLINEFORM1 denotes how much of word INLINEFORM2 in INLINEFORM3 travels to word INLINEFORM4 in INLINEFORM5 and INLINEFORM6 is defined to be the distance between the two documents as the minimum weighted cumulative cost required to move all words from INLINEFORM7 to INLINEFORM8 . Then, the optimal solution is found when each word in INLINEFORM9 moves all of its probability mass to the most similar word in INLINEFORM10 . This optimal matrix INLINEFORM11 is decided by: DISPLAYFORM0\n[source_id=70] where INLINEFORM0 is the distance of interest which we normalize and convert to a similarity score using equation 4 above and INLINEFORM1 , respectively. The result is a list of INLINEFORM2 matrices INLINEFORM3 for each year in the corpus where INLINEFORM4 is the speech similarity score between states INLINEFORM5 and INLINEFORM6 for the given year in the corpus with the diagonals of the matrices set to 0.",
+  "score": 3.287203487014531,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70
+  ],
+  "child_qasper_evidence_texts": [
+    "We draw on the newly released UN General Debate Corpus BIBREF11 which contains every country statement in the UN General Debate between 1970 and 2014. The General Debate (GD) takes place every September at the start of each new session of the UN General Assembly (UNGA). It provides all member states with the opportunity to address the UNGA and to present their perspective on key issues in world politics. Governments use their GD statements to put on the record their position on events that have occurred during the past year and on longer-term underlying issues in world politics related to issues such as conflict, terrorism, development, human rights, and climate change.",
+    "A principal difference between GD statements and UNGA voting is that the GD statements are not institutionally connected to decision-making in the UN. As a result, governments are free to discuss the issues they consider to be of greatest importance in world politics, regardless of whether an issue is on the formal agenda of the UNGA. Therefore, as BIBREF32 notes, the General Debate acts “as a barometer of international opinion on important issues, even those not on the agenda for that particular session.” In providing information about states' preferences on world politics, the GD provides a valuable data source for measuring polarization in International Relations. In addition to being the one major forum where states present their views on international politics free from external constraints, the fact that it takes place annually and includes all UN member states enables comparison over time and across countries. Readers are encouraged to consult BIBREF11 for a comprehensive introduction to the corpus.",
+    "As mentioned in the main text, we discuss an example where disagreement is obvious in states' GD speeches but less obvious in their voting behavior. Consider the following brief excerpts from the GD speeches of Greece and Turkey in 1974.",
+    "Greece: On 15 July a coup, condemned by all of us, was staged to overthrow Archbishop Makarios, the legitimate, elected President of the Republic. This coup was not directed against the Turkish Cypriot community of the island... During the fighting while the coup was in progress, not a single Turkish Cypriot was killed or injured. Yet five days later, large Turkish invasion forces were landing in Cyprus and the Turkish Air Force was launching indiscriminate attacks against unarmed civilians, under the flimsy pretext of protecting the Turkish Cypriot minority on the island, which, I repeat, had not been harmed in any way... Two hours later, the Turkish troops were on the move again, sowing death and destruction, killing United Nations troops, bombing hospitals and schools. Repeated cease-fire calls by the Security Council went unheeded. Turkey even ignored the ceasefire proclaimed by its own Prime Minister on 16 August 1974.",
+    "Turkey: Turkey has constantly had to face faits accomplis of increasingly serious scope, particularly since 1963. The most recent and the most serious of these faits accomplis was, as we all know, that of 15 July last: a foreign Power undertook a coup d'etat which it had long been fomenting and the purpose of which was to annex the island... The coup d'etat of 15 July was directed precisely against the Turkish community and was directly aimed at the annexation of the island to Greece... I have not, however, finished correcting all the false allegations and baseless charges made by my colleague. I reserve the right to do so when we speak on this matter before the General Assembly. My Greek colleague's speech, unfortunately, shows the nature of the atmosphere in which the debate will take place on the future of the two communities, Turkish and Greek, in the island.",
+    "The two representatives are outlining their positions on the controversy related to the Turkish invasion of Cyprus. Expressed disagreement on this topic is clearly present in the speeches, but as mentioned in the main paper, the two countries' voting ideal points for that year at the most similar amongst all NATO members. A further example is illustrated in the speeches and voting habits of India and Pakistan in 1999, the year the two countries went to war (the Kargil War). Consider the following excerpts from their General Debate statements that year:",
+    "Pakistan: The Kargil crisis was a manifestation of the deeper malaise spawned by the unresolved Kashmir problem and India's escalating repression of the Kashmiri people. India launched a massive military operation in Kargil and threatened a wider conflict by mobilizing its armed forces all along the Pakistan-India international border. Pakistan acted with restraint... India's repression in Jammu and Kashmir has killed thousands of Kashmiris, forced hundreds of thousands into exile, led to three wars between Pakistan and India and consigned the two countries to a relationship of endemic conflict and mistrust.",
+    "India: Premeditated aggression by regular forces was committed against India. Not simply was the Lahore Declaration violated, but so was the Simla Agreement, which had prevented conflict for more than a quarter of a century. In self-defence, yet with the utmost restraint, India took all necessary and appropriate steps to evict the aggressor forces from its territory.... We have been greatly disappointed by this compulsive hostility of Pakistan, because it is an aberration in our region today, where all the other South Asian Association for Regional Cooperation (SAARC) countries are at peace with each other, and are trying, bilaterally and through the SAARC mechanisms, to tackle together the great challenge of development.",
+    "Tensions are clearly present in the textual data of the respective countries. That same year, however, India and Pakistan casted very similar votes in the UN, with ideal points of -0.797 and -0.739, respectively. Therefore, both sources of data appear to provide useful signals of different aspects of underlying state preferences.",
+    "Before proceeding to the description of our word embeddings approach, it is useful to first explore the corpus through commonly used measures of disagreement, namely Wordscore and Euclidean distance. Further, the network polarization measure known as modularity is also used to explore the levels of polarization exhibited in roll call data versus speeches. First, a bag-of-words (BOW) representation of the speeches is obtained through tokenization, stemming, removal of stop words, conversion to lower case, and the removal of punctuation, symbols, and numbers. We keep only the features which appear at least 5 times in 3 documents and apply term frequency-inverse document frequency (TF-IDF) weighting to the matrix. This yields a document term frequency matrix for each year.",
+    "The most frequently used text scaling method in political science is Wordscore BIBREF33 . Word frequencies in the document are used to classify the document into one of two categories. With Wordscore, the learning is supervised using training documents that are known to belong to each of the two categories so that the chosen dimension is substantively defined by the choice of training documents. Here we apply the approach to UNGD statements to calculate levels of disagreement. In Figure FIGREF19 , Wordscore detects in both cases a decline in polarization towards the end of the Cold War and a modest increase after the end of the Cold War. This broadly aligns with expectations in international relations research.",
+    "Second, we compare this Wordscore disagreement to the Euclidean distances between the US and Russia and the US and China and present these for each session over time. These are calculated using: DISPLAYFORM0",
+    "where INLINEFORM0 and INLINEFORM1 are TF-IDF vectors for the individual states. The results of this measure of disagreement are presented in Figure FIGREF20 . The distances closely align with the Wordscore results for US-Russia and US-China dyads. Polarization broadly decreases towards the end of the Cold War and then increases afterwards.",
+    "Although these measures provide useful aggregate information, they offer little by way of high-resolution information on preference divergence. Further, unlike at the national legislative level, polarity in IR is more than simple disagreement. Polarization refers to “the degree to which the foreign policies of nations within a single cluster are similar to each other, and the degree to which the foreign policies of nations in different clusters are dissimilar\" BIBREF9 . Continuing with the BOW representation of the speeches, it is instructive to explore preference polarization using a more sophisticated measure which captures this theoretical definition.",
+    "Modularity is a recently developed community detection heuristic in the network sciences which attempts to partition a network such that the total number of intra-community edges is optimized relative to a baseline expectation from an appropriate null model (i.e. a random graph) BIBREF22 . This aligns with our theoretical definition via its comparison of within-group ties with other subgroup ties. The intuition is that a community should have more or stronger ties among the actors within the community compared to ties with actors in other communities. Modularity is measured between [0,1] where higher levels of modularity indicate stronger divisions in a given network, and therefore higher levels of polarization. The algorithm can be expressed as: DISPLAYFORM0",
+    "where INLINEFORM0 is the total weight of the edges in the network, INLINEFORM1 is the weighted degree of the INLINEFORM2 th node, INLINEFORM3 is the community to which INLINEFORM4 belongs, and INLINEFORM5 = 1 if INLINEFORM6 and INLINEFORM7 belong to the same community, and 0 otherwise BIBREF34 . Since modularity optimization is an NP-complete problem, we utilize the greedy variant which is implemented through the igraph package.",
+    "This approach has enjoyed widespread network science employment by applied mathematicians and physicists BIBREF35 , and has surfaced in political science studies of international trade BIBREF36 and international law BIBREF37 . As a direct measure of polarization, this approach has been used to measure roll call polarization in the US Congress BIBREF23 , BIBREF24 , BIBREF25 , as well as the UNGA BIBREF22 . To bridge from roll call data to our speeches, it is instructive to replicate the findings of BIBREF22 using ideal point data based on votes and to compare this to a simple weighted graph based on the cosine similarity of the speeches between states over time. Cosine similarity is well established in the natural language processing literature but has also received recent attention in political science BIBREF38 . This provides a measure of similarity between two vectors of an inner product space which measures the cosine of the angle between them and is expressed as: DISPLAYFORM0",
+    "where INLINEFORM0 and INLINEFORM1 are vectors of attributes (i.e. term frequency vectors), and INLINEFORM2 and INLINEFORM3 are components of vectors INLINEFORM4 and INLINEFORM5 (i.e. term frequencies), respectively. In the case of text, similarity scores are bounded to positive space [0,1]. Finally, we normalize using: DISPLAYFORM0",
+    "The result is an INLINEFORM0 adjacency matrix INLINEFORM1 where INLINEFORM2 contains the normalized textual similarity score (i.e. weighted edge) for each pair of states INLINEFORM3 and INLINEFORM4 .",
+    "We replicate the results of BIBREF22 using ideal point data, which is represented as the gray line. The blue line represents the modularity calculated on the speeches. Information on the roll call data can be found in BIBREF21 and BIBREF10 . Our aim here is to establish a preliminary idea of how polarization changes over time in these two sources of data. To the extent that the patterns diverge, both sources of data provide potentially different information about underlying preferences.",
+    "In line with the simple measures presented above, both networks in Figure FIGREF24 exhibit generally decreasing levels of polarization towards the end of the Cold War and then subsequent increases or stagnation afterwards. Interestingly, the speech network displays slightly higher levels of polarization than the ideal point network. This indicates that more heterogeneity exists in speeches than votes, and aligns with Figure 1 and Figure 2a in the main body of the paper.",
+    "For NATO-Warsaw in Figure FIGREF25 , the speech network follows a similar trend as using roll call data alone: polarity decreases towards the end of the Cold War. It appears, however, that the speech weighted network picks up higher variation in preferences, which indicates that looking to ideal point data alone might over- or under-estimate levels of preference polarization at certain points in time. Finally, the West-Rest alignment provides further confirmation that polarity can be detected in the votes and speeches: West-Rest members exhibit higher levels of polarization compared to the Assembly-level. Polarization exhibits a downward trend in the post-Cold War era – the period in which scholars note an increased prominence of liberal, interdependent globalization. These results align with the trends found by BIBREF22 . These results indicate that weighted word counts provide useful information, but we aim to leverage the information in the speeches in a more sophisticated way and in a way that can increase our confidence that divergence is not simply due to differences in word choice. For this task, we move beyond the BOW approach and use vector space representations.",
+    "At present, the development of vector space models for textual data is one of the areas that has attracted the most research interest in natural language processing. This interest is motivated by the desire to move away from simple counts and weights of words, towards representations which can preserve word context and linguistic features of human speech. Studies find that these approaches are not only intuitively desirable, but also increase classification accuracy in machine learning tasks.",
+    "Vector space approaches involve the embedding of document features from one dimension per word space to a continuous, lower dimensional vector space. Each document feature is represented as a real-valued vector and it has been shown that these representations retain desirable syntactical qualities, such as context and structure of speech. Traditionally, dimensionality reduction could be obtained through latent semantic analysis (LSA) used to factorize the feature matrices, but two recently developed models have been introduced which rely on different logic: word2vec from Mikolov and the research group at Google, and the global vectors for word representations (GloVe) unsupervised learning algorithm from the Stanford Natural Language Processing group.",
+    "We use GloVe introduced by BIBREF15 because while LSA tends to maximize the statistical information used, it does not perform well on analogy tasks. Word2vec does better on the analogy test but does not utilize statistics of the corpus because it trains on local context windows. GloVe was introduced to help bridge this gap and combine both desirable qualities. It is a log bilinear, weighted least squares model that trains on global word-word co-occurence counts and thus makes efficient use of the statistics. BIBREF15 show that their approach yields state-of-the-art performance on the word analogy task. GloVe is sometimes criticized for scalability issues but given that we are working with a fixed size corpus this does not pose an issue for our analysis. Readers are encouraged to consult the GloVe paper for full model details, but we describe our approach and decisions here. The model is expressed as: DISPLAYFORM0",
+    "where INLINEFORM0 represents parameters, INLINEFORM1 is the vocabulary size, INLINEFORM2 and INLINEFORM3 are column and row word vectors, INLINEFORM4 is the co-occurrence matrix of all pairs of words that ever co-occur, and INLINEFORM5 is a weighting function which assigns lower weights to words which frequently co-occur. This lattermost term serves as a cap on very frequent words, for example articles like “the\" which provide little predictive information. The algorithm seeks to minimize the distance between the inner product of the word vectors and the log count of the co-occurrence of the two words. Compared to skip-gram approaches which update at each context window, it is clear from the utilization of INLINEFORM6 that the model trains relatively quickly since it uses the known corpus statistic of word co-occurrences for the entire corpus at once.",
+    "We first stem, tokenize, and convert the words to lowercase. Unlike a BOW approach, however, the punctuation is retained. The model is trained on each individual year in the corpus with the vocabulary pruned to include a minimum term count of 4 across documents and the term must exist in 25% of the documents. These relatively stringent parameter levels are employed because we train on individual years in order to avoid language drift over time and to ensure that our estimated embeddings correspond to the exact policy language used in a given year. We employ a skip gram window of 4 and search using a word vector size of 50. At present, we follow the computer science literature suggestion of tuning these parameters until reasonable and reliable linear combinations of language are located. Future work should explore in greater detail how systematic tuning decisions for social science applications can be made.",
+    "Mikolov and collaborors introduce a new evaluation scheme based on word analogies that examines dimensions of difference in vector space, as opposed to scalar distances between vectors BIBREF13 , BIBREF14 . In order to validate the quality of the located embeddings, we thus follow current standard practice and assess whether reasonable linear combinations of words can be returned. The main body of the paper presents three examples, and a further example is presented here: DISPLAYFORM0",
+    "where INLINEFORM0 describes a vector space location of the given feature and the cosine distance between each vector space location is added or subtracted to find the closest vector space feature (presented on the right hand-side of the equality with the cosine similarity printed underneath). The example is interpreted as: if we add the location of INLINEFORM1 to INLINEFORM2 , we arrive at the vector space location of the word INLINEFORM3 . This, as well as the examples presented in the main body, provide some indication that intuitive and reasonable embeddings have been located.",
+    "Vector space representations are particularly promising for the measurement of polarization. In contrast to a BOW approach, we want to know not only that two actors use (dis)similar words, but we want high resolution insights into how and when they speak differently on different topics. For example, we would like to capture the dissimilarity of statements like \"we oppose the proliferation of nuclear weapons\" versus \"the proliferation of atom bombs is necessary.\" The words “necessary\" and “oppose\" would be counted in a BOW matrix, but their usage in the context of nuclear weapons would be lost. Further, if one state says “nuclear weapon\" and another says “atomic bomb,\" the two phrases have no words in common and the phrases will be thought to be distant or dissimilar, despite referring to the same thing. Although BOW approaches often perform very well, for the measurement of polarization in IR, we need to make sure that the differences uncovered are not simply due to different word usage or policy topics being discussed.",
+    "To measure expressed (dis)agreement in these speeches, it is necessary to derive a document-level representation of the learned embeddings. Although well-established measurements based on cosine similarity, Euclidean distance, or Pearson correlations could be applied to the word embeddings, we utilized the relaxed variant of a newly introduced document distance measure that exploits information contained in both the word embeddings and term-document matrices: the (relaxed) Word Mover's Distance (RWMD) BIBREF17 .",
+    "WMD innovates by leveraging the finding that embedding distances between word vectors are semantically meaningful. WMD represents text documents as a weighted point cloud of embedded words where the distance between two documents is the minimum cumulative distance that words from document A would need to travel to match exactly the point cloud of document B. This has been shown to yield state-of-the-art classification accuracy BIBREF39 . Although WMD is relatively fast to compute, we use the relaxed variant (RWMD), which results in tighter bounds and is shown to yield lower test error rates. In short, this relaxes the optimization problem through the removal of one of the two constraints. If we let INLINEFORM0 and INLINEFORM1 be the BOW representations of two documents in the INLINEFORM2 dimensional simplex of word distributions which we obtained above, we can express RWMD as: DISPLAYFORM0",
+    "where INLINEFORM0 is a sparse flow matrix where INLINEFORM1 denotes how much of word INLINEFORM2 in INLINEFORM3 travels to word INLINEFORM4 in INLINEFORM5 and INLINEFORM6 is defined to be the distance between the two documents as the minimum weighted cumulative cost required to move all words from INLINEFORM7 to INLINEFORM8 . Then, the optimal solution is found when each word in INLINEFORM9 moves all of its probability mass to the most similar word in INLINEFORM10 . This optimal matrix INLINEFORM11 is decided by: DISPLAYFORM0",
+    "where INLINEFORM0 is the distance of interest which we normalize and convert to a similarity score using equation 4 above and INLINEFORM1 , respectively. The result is a list of INLINEFORM2 matrices INLINEFORM3 for each year in the corpus where INLINEFORM4 is the speech similarity score between states INLINEFORM5 and INLINEFORM6 for the given year in the corpus with the diagonals of the matrices set to 0."
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements",
+    "Data and Measurements"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Data and Measurements",
+      0
+    ],
+    [
+      "Data and Measurements",
+      1
+    ],
+    [
+      "Data and Measurements",
+      2
+    ],
+    [
+      "Data and Measurements",
+      3
+    ],
+    [
+      "Data and Measurements",
+      4
+    ],
+    [
+      "Data and Measurements",
+      5
+    ],
+    [
+      "Data and Measurements",
+      6
+    ],
+    [
+      "Data and Measurements",
+      7
+    ],
+    [
+      "Data and Measurements",
+      8
+    ],
+    [
+      "Data and Measurements",
+      9
+    ],
+    [
+      "Data and Measurements",
+      10
+    ],
+    [
+      "Data and Measurements",
+      11
+    ],
+    [
+      "Data and Measurements",
+      12
+    ],
+    [
+      "Data and Measurements",
+      13
+    ],
+    [
+      "Data and Measurements",
+      14
+    ],
+    [
+      "Data and Measurements",
+      15
+    ],
+    [
+      "Data and Measurements",
+      16
+    ],
+    [
+      "Data and Measurements",
+      17
+    ],
+    [
+      "Data and Measurements",
+      18
+    ],
+    [
+      "Data and Measurements",
+      19
+    ],
+    [
+      "Data and Measurements",
+      20
+    ],
+    [
+      "Data and Measurements",
+      21
+    ],
+    [
+      "Data and Measurements",
+      22
+    ],
+    [
+      "Data and Measurements",
+      23
+    ],
+    [
+      "Data and Measurements",
+      24
+    ],
+    [
+      "Data and Measurements",
+      25
+    ],
+    [
+      "Data and Measurements",
+      26
+    ],
+    [
+      "Data and Measurements",
+      27
+    ],
+    [
+      "Data and Measurements",
+      28
+    ],
+    [
+      "Data and Measurements",
+      29
+    ],
+    [
+      "Data and Measurements",
+      30
+    ],
+    [
+      "Data and Measurements",
+      31
+    ],
+    [
+      "Data and Measurements",
+      32
+    ],
+    [
+      "Data and Measurements",
+      33
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Data and Measurements",
+  "section": "Data and Measurements",
+  "title_path": "Data and Measurements",
+  "block_type": "long_unit"
+}

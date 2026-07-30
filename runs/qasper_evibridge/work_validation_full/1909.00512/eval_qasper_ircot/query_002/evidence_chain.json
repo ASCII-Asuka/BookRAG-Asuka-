@@ -1,0 +1,127 @@
+{
+  "strategy": "ircot",
+  "thoughts": [
+    "The evidence discusses contextualized representations and their comparison to static embeddings via MEV, but does not explain how static embeddings are actually calculated.",
+    "The evidence discusses MEV and how static embeddings explain variance in contextualized representations, but does not explain the actual calculation method for static embeddings themselves.",
+    "The evidence discusses MEV and how static embeddings explain variance in contextualized representations, but does not explain the actual calculation method for static embeddings themselves."
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "retrieval_query": "How do they calculate a static embedding for each word?",
+      "thought": "The evidence discusses contextualized representations and their comparison to static embeddings via MEV, but does not explain how static embeddings are actually calculated.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 33,
+          "score": 7.7218689798086935,
+          "content": "$\\textit {MEV}_\\ell (w)$ is the proportion of variance in $w$'s contextualized representations for a given layer that can be explained by their first principal component. It gives us an upper bound on how well a static embedding could replace a word's contextualized representations. The closer $\\textit {MEV}_\\ell (w)$ is to 0, the poorer a replacement a static embedding would be; if $\\textit {MEV}_\\ell (w) = 1$, then a static embedding would be a perfect replacement for the contextualized representations.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "$\\textit {MEV}_\\ell (w)$ is the proportion of variance in $w$'s contextualized representations for a given layer that can be explained by their first principal component. It gives us an upper bound on how well a static embedding could replace a word's contextualized representations. The closer $\\textit {MEV}_\\ell (w)$ is to 0, the poorer a replacement a static embedding would be; if $\\textit {MEV}_\\ell (w) = 1$, then a static embedding would be a perfect replacement for the contextualized representations.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 37,
+          "score": 7.229165965402429,
+          "content": "Since contextuality measures are calculated for each layer of a contextualizing model, we calculate separate baselines for each layer as well. We then subtract from each measure its respective baseline to get the anisotropy-adjusted contexuality measure. For example, the anisotropy-adjusted self-similarity is",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "Since contextuality measures are calculated for each layer of a contextualizing model, we calculate separate baselines for each layer as well. We then subtract from each measure its respective baseline to get the anisotropy-adjusted contexuality measure. For example, the anisotropy-adjusted self-similarity is",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 50,
+          "score": 6.943220440234519,
+          "content": "As noted earlier, contextualized representations are more context-specific in upper layers of ELMo, BERT, and GPT-2. However, how does this increased context-specificity manifest in the vector space? Do word representations in the same sentence converge to a single point, or do they remain distinct from one another while still being distinct from their representations in other contexts? To answer this question, we can measure a sentence's intra-sentence similarity. Recall from Definition 2 that the intra-sentence similarity of a sentence, in a given layer of a given model, is the average cosine similarity between each of its word representations and their mean, adjusted for anisotropy. In Figure FIGREF25, we plot the average intra-sentence similarity of 500 uniformly randomly sampled sentences.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "As noted earlier, contextualized representations are more context-specific in upper layers of ELMo, BERT, and GPT-2. However, how does this increased context-specificity manifest in the vector space? Do word representations in the same sentence converge to a single point, or do they remain distinct from one another while still being distinct from their representations in other contexts? To answer this question, we can measure a sentence's intra-sentence similarity. Recall from Definition 2 that the intra-sentence similarity of a sentence, in a given layer of a given model, is the average cosine similarity between each of its word representations and their mean, adjusted for anisotropy. In Figure FIGREF25, we plot the average intra-sentence similarity of 500 uniformly randomly sampled sentences.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "retrieval_query": "How do they calculate a static embedding for each word?\nThought 1: The evidence discusses contextualized representations and their comparison to static embeddings via MEV, but does not explain how static embeddings are actually calculated.",
+      "thought": "The evidence discusses MEV and how static embeddings explain variance in contextualized representations, but does not explain the actual calculation method for static embeddings themselves.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 33,
+          "score": 21.065280235044074,
+          "content": "$\\textit {MEV}_\\ell (w)$ is the proportion of variance in $w$'s contextualized representations for a given layer that can be explained by their first principal component. It gives us an upper bound on how well a static embedding could replace a word's contextualized representations. The closer $\\textit {MEV}_\\ell (w)$ is to 0, the poorer a replacement a static embedding would be; if $\\textit {MEV}_\\ell (w) = 1$, then a static embedding would be a perfect replacement for the contextualized representations.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "$\\textit {MEV}_\\ell (w)$ is the proportion of variance in $w$'s contextualized representations for a given layer that can be explained by their first principal component. It gives us an upper bound on how well a static embedding could replace a word's contextualized representations. The closer $\\textit {MEV}_\\ell (w)$ is to 0, the poorer a replacement a static embedding would be; if $\\textit {MEV}_\\ell (w) = 1$, then a static embedding would be a perfect replacement for the contextualized representations.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 68,
+          "score": 16.131917242707523,
+          "content": "In this paper, we investigated how contextual contextualized word representations truly are. For one, we found that upper layers of ELMo, BERT, and GPT-2 produce more context-specific representations than lower layers. This increased context-specificity is always accompanied by increased anisotropy. However, context-specificity also manifests differently across the three models; the anisotropy-adjusted similarity between words in the same sentence is highest in ELMo but almost non-existent in GPT-2. We ultimately found that after adjusting for anisotropy, on average, less than 5% of the variance in a word's contextualized representations could be explained by a static embedding. This means that even in the best-case scenario, in all layers of all models, static word embeddings would be a poor replacement for contextualized ones. These insights help explain some of the remarkable success that contextualized representations have had on a diverse array of NLP tasks.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "In this paper, we investigated how contextual contextualized word representations truly are. For one, we found that upper layers of ELMo, BERT, and GPT-2 produce more context-specific representations than lower layers. This increased context-specificity is always accompanied by increased anisotropy. However, context-specificity also manifests differently across the three models; the anisotropy-adjusted similarity between words in the same sentence is highest in ELMo but almost non-existent in GPT-2. We ultimately found that after adjusting for anisotropy, on average, less than 5% of the variance in a word's contextualized representations could be explained by a static embedding. This means that even in the best-case scenario, in all layers of all models, static word embeddings would be a poor replacement for contextualized ones. These insights help explain some of the remarkable success that contextualized representations have had on a diverse array of NLP tasks.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 60,
+          "score": 15.986306011941995,
+          "content": "In no layer of ELMo, BERT, or GPT-2 can more than 5% of the variance in a word's contextualized representations be explained by a static embedding, on average. Though not visible in Figure FIGREF29, the raw MEV of many words is actually below the anisotropy baseline: i.e., a greater proportion of the variance across all words can be explained by a single vector than can the variance across all representations of a single word. Note that the 5% threshold represents the best-case scenario, and there is no theoretical guarantee that a word vector obtained using GloVe, for example, would be similar to the static embedding that maximizes MEV. This suggests that contextualizing models are not simply assigning one of a finite number of word-sense representations to each word – otherwise, the proportion of variance explained would be much higher. Even the average raw MEV is below 5% for all layers of ELMo and BERT; only for GPT-2 is the raw MEV non-negligible, being around 30% on average for layers 2 to 11 due to extremely high anisotropy.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "In no layer of ELMo, BERT, or GPT-2 can more than 5% of the variance in a word's contextualized representations be explained by a static embedding, on average. Though not visible in Figure FIGREF29, the raw MEV of many words is actually below the anisotropy baseline: i.e., a greater proportion of the variance across all words can be explained by a single vector than can the variance across all representations of a single word. Note that the 5% threshold represents the best-case scenario, and there is no theoretical guarantee that a word vector obtained using GloVe, for example, would be similar to the static embedding that maximizes MEV. This suggests that contextualizing models are not simply assigning one of a finite number of word-sense representations to each word – otherwise, the proportion of variance explained would be much higher. Even the average raw MEV is below 5% for all layers of ELMo and BERT; only for GPT-2 is the raw MEV non-negligible, being around 30% on average for layers 2 to 11 due to extremely high anisotropy.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "retrieval_query": "How do they calculate a static embedding for each word?\nThought 1: The evidence discusses contextualized representations and their comparison to static embeddings via MEV, but does not explain how static embeddings are actually calculated.\nThought 2: The evidence discusses MEV and how static embeddings explain variance in contextualized representations, but does not explain the actual calculation method for static embeddings themselves.",
+      "thought": "The evidence discusses MEV and how static embeddings explain variance in contextualized representations, but does not explain the actual calculation method for static embeddings themselves.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 33,
+          "score": 33.823722430762274,
+          "content": "$\\textit {MEV}_\\ell (w)$ is the proportion of variance in $w$'s contextualized representations for a given layer that can be explained by their first principal component. It gives us an upper bound on how well a static embedding could replace a word's contextualized representations. The closer $\\textit {MEV}_\\ell (w)$ is to 0, the poorer a replacement a static embedding would be; if $\\textit {MEV}_\\ell (w) = 1$, then a static embedding would be a perfect replacement for the contextualized representations.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "$\\textit {MEV}_\\ell (w)$ is the proportion of variance in $w$'s contextualized representations for a given layer that can be explained by their first principal component. It gives us an upper bound on how well a static embedding could replace a word's contextualized representations. The closer $\\textit {MEV}_\\ell (w)$ is to 0, the poorer a replacement a static embedding would be; if $\\textit {MEV}_\\ell (w) = 1$, then a static embedding would be a perfect replacement for the contextualized representations.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 68,
+          "score": 32.5030598578628,
+          "content": "In this paper, we investigated how contextual contextualized word representations truly are. For one, we found that upper layers of ELMo, BERT, and GPT-2 produce more context-specific representations than lower layers. This increased context-specificity is always accompanied by increased anisotropy. However, context-specificity also manifests differently across the three models; the anisotropy-adjusted similarity between words in the same sentence is highest in ELMo but almost non-existent in GPT-2. We ultimately found that after adjusting for anisotropy, on average, less than 5% of the variance in a word's contextualized representations could be explained by a static embedding. This means that even in the best-case scenario, in all layers of all models, static word embeddings would be a poor replacement for contextualized ones. These insights help explain some of the remarkable success that contextualized representations have had on a diverse array of NLP tasks.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "In this paper, we investigated how contextual contextualized word representations truly are. For one, we found that upper layers of ELMo, BERT, and GPT-2 produce more context-specific representations than lower layers. This increased context-specificity is always accompanied by increased anisotropy. However, context-specificity also manifests differently across the three models; the anisotropy-adjusted similarity between words in the same sentence is highest in ELMo but almost non-existent in GPT-2. We ultimately found that after adjusting for anisotropy, on average, less than 5% of the variance in a word's contextualized representations could be explained by a static embedding. This means that even in the best-case scenario, in all layers of all models, static word embeddings would be a poor replacement for contextualized ones. These insights help explain some of the remarkable success that contextualized representations have had on a diverse array of NLP tasks.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 60,
+          "score": 28.572887846412044,
+          "content": "In no layer of ELMo, BERT, or GPT-2 can more than 5% of the variance in a word's contextualized representations be explained by a static embedding, on average. Though not visible in Figure FIGREF29, the raw MEV of many words is actually below the anisotropy baseline: i.e., a greater proportion of the variance across all words can be explained by a single vector than can the variance across all representations of a single word. Note that the 5% threshold represents the best-case scenario, and there is no theoretical guarantee that a word vector obtained using GloVe, for example, would be similar to the static embedding that maximizes MEV. This suggests that contextualizing models are not simply assigning one of a finite number of word-sense representations to each word – otherwise, the proportion of variance explained would be much higher. Even the average raw MEV is below 5% for all layers of ELMo and BERT; only for GPT-2 is the raw MEV non-negligible, being around 30% on average for layers 2 to 11 due to extremely high anisotropy.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "In no layer of ELMo, BERT, or GPT-2 can more than 5% of the variance in a word's contextualized representations be explained by a static embedding, on average. Though not visible in Figure FIGREF29, the raw MEV of many words is actually below the anisotropy baseline: i.e., a greater proportion of the variance across all words can be explained by a single vector than can the variance across all representations of a single word. Note that the 5% threshold represents the best-case scenario, and there is no theoretical guarantee that a word vector obtained using GloVe, for example, would be similar to the static embedding that maximizes MEV. This suggests that contextualizing models are not simply assigning one of a finite number of word-sense representations to each word – otherwise, the proportion of variance explained would be much higher. Even the average raw MEV is below 5% for all layers of ELMo and BERT; only for GPT-2 is the raw MEV non-negligible, being around 30% on average for layers 2 to 11 due to extremely high anisotropy.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    }
+  ],
+  "retrieved_block_ids": [
+    33,
+    37,
+    50,
+    68,
+    60
+  ],
+  "supporting_block_ids": [
+    33,
+    50,
+    60
+  ]
+}

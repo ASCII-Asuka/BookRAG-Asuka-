@@ -1,0 +1,70 @@
+{
+  "id": "longrag_10",
+  "content": "[Section] Implementation Details\n[source_id=44] We implement all the models with the same PyTorch framework. Below, we summarize the implementation details that are key for reproducing results for each model:\n[source_id=45] SSE: This model can converge very fast, for example, 2 or 3 epochs for the SNLI dataset. We control the convergence speed by updating the learning rate for each epoch: specifically, $lr=\\frac{1}{2^{\\frac{epoch\\_i}{2}}}*{init\\_lr}$ , where $init\\_lr$ is the initial learning rate and $epoch\\_i$ is the index of current epoch.\n[source_id=46] DecAtt: It is important to use gradient clipping for this model: for each gradient update, we check the L2 norm of all the gradient values, if it is greater than a threshold $b$ , we scale the gradient by a factor $\\alpha = b/L2\\_norm$ . Another useful procedure is to assemble batches of sentences with similar length.\n[source_id=47] ESIM: Similar but different from DecAtt, ESIM batches sentences with varied length and uses masks to filter out padding information. In order to batch the parse trees within Tree-LSTM recursion, we follow Bowman et al.'s bowman-EtAl:2016:P16-1 procedure that converts tree structures into the linear sequential structure of a shift reduce parser. Two additional masks are used for producing left and right children of a tree node.\n[source_id=48] PWIM: The cosine and Euclidean distances used in the word interaction layer have smaller values for similar vectors while dot products have larger values. The performance increases if we add a negative sign to make all the vector similarity measurements behave consistently.",
+  "score": 0.06405514284446485,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_10",
+  "child_source_node_ids": [
+    44,
+    45,
+    46,
+    47,
+    48
+  ],
+  "child_qasper_evidence_texts": [
+    "We implement all the models with the same PyTorch framework. Below, we summarize the implementation details that are key for reproducing results for each model:",
+    "SSE: This model can converge very fast, for example, 2 or 3 epochs for the SNLI dataset. We control the convergence speed by updating the learning rate for each epoch: specifically, $lr=\\frac{1}{2^{\\frac{epoch\\_i}{2}}}*{init\\_lr}$ , where $init\\_lr$ is the initial learning rate and $epoch\\_i$ is the index of current epoch.",
+    "DecAtt: It is important to use gradient clipping for this model: for each gradient update, we check the L2 norm of all the gradient values, if it is greater than a threshold $b$ , we scale the gradient by a factor $\\alpha = b/L2\\_norm$ . Another useful procedure is to assemble batches of sentences with similar length.",
+    "ESIM: Similar but different from DecAtt, ESIM batches sentences with varied length and uses masks to filter out padding information. In order to batch the parse trees within Tree-LSTM recursion, we follow Bowman et al.'s bowman-EtAl:2016:P16-1 procedure that converts tree structures into the linear sequential structure of a shift reduce parser. Two additional masks are used for producing left and right children of a tree node.",
+    "PWIM: The cosine and Euclidean distances used in the word interaction layer have smaller values for similar vectors while dot products have larger values. The performance increases if we add a negative sign to make all the vector similarity measurements behave consistently."
+  ],
+  "child_pages": [
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "child_sections": [
+    "Implementation Details",
+    "Implementation Details",
+    "Implementation Details",
+    "Implementation Details",
+    "Implementation Details"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Implementation Details",
+      0
+    ],
+    [
+      "Implementation Details",
+      1
+    ],
+    [
+      "Implementation Details",
+      2
+    ],
+    [
+      "Implementation Details",
+      3
+    ],
+    [
+      "Implementation Details",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_10",
+  "section_id": "Implementation Details",
+  "section": "Implementation Details",
+  "title_path": "Implementation Details",
+  "block_type": "long_unit"
+}

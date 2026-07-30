@@ -1,0 +1,88 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Entity encoding submodule\n[source_id=31] After performing entity linking to the input text using the ELS, we receive a sequential list of linked entities, arranged based on their location in the text. We embed these entities to $d$ -dimensional vectors $E = \\lbrace e_1, e_2, ..., e_m\\rbrace $ where $e_i \\in \\mathbb {R}^d$ . Since these entities may still contain ambiguity, it is necessary to resolve them before applying them to the base model. Based on the idea that an ambiguous entity can be disambiguated using its neighboring entities, we introduce two kinds of disambiguating encoders below.\n[source_id=32] One way to disambiguate an entity is by using all the other entities, putting more importance to entities that are nearer. For this purpose, we employ an RNN-based model to globally disambiguate the entities. Specifically, we use BiGRU and concatenate the forward and backward hidden state vectors as the new entity vector: $\n\\overrightarrow{h}_i &= GRU(e_i, \\overrightarrow{h}_{i-1}) \\\\\n\\overleftarrow{h}_i &= GRU(e_i, \\overleftarrow{h}_{i+1}) \\\\\ne^{\\prime }_i &= [\\overrightarrow{h}_i; \\overleftarrow{h}_i] \\nonumber $\n[source_id=33] Another way to disambiguate an entity is by using only the direct neighbors of the entity, putting no importance value to entities that are far. To do this, we employ a CNN-based model to locally disambiguate the entities. Specifically, we do the convolution operation using filter matrices $W_f \\in \\mathbb {R}^{h \\times d}$ with filter size $h$ to a window of $h$ words. We do this for different sizes of $h$ . This produces new feature vectors $c_{i,h}$ as shown below, where $f(.)$ is a non-linear function: $\nc_{i,h} = f([e_{i-(h-1)/2}; ...; e_{i+h(+1)/2}]^\\top W_f + b_f) \\nonumber $\n[source_id=34] The convolution operation reduces the number of entities differently depending on the filter size $h$ . To prevent loss of information and to produce the same amount of feature vectors $c_{i,h}$ , we pad the entity list dynamically such that when the filter size is $h$ , the number of paddings on each side is $(h-1)/2$ . The filter size $h$ therefore refers to the number of entities used to disambiguate a middle entity. Finally, we concatenate all feature vectors of different $h$ 's for each $i$ as the new entity vector: $\ne^{\\prime }_i = [c_{i,h_1}; c_{i, h_2}; ...] \\nonumber $\n[source_id=35] The question on which disambiguating encoder is better has been a debate; some argued that using only the local context is appropriate BIBREF16 while some claimed that additionally using global context also helps BIBREF17 . The RNN-based encoder is good as it smartly makes use of all entities, however it may perform bad when there are many entities as it introduces noise when using a far entity during disambiguation. The CNN-based encoder is good as it minimizes the noise by totally ignoring far entities when disambiguating, however determining the appropriate filter sizes $h$ needs engineering. Overall, we argue that when the input text is short (e.g. a sentence), both encoders perform comparably, otherwise when the input text is long (e.g. a document), the CNN-based encoder performs better.\n[source_id=36] It is obvious that not all entities need to be disambiguated. When a correctly linked and already adequately disambiguated entity is disambiguated again, it would make the entity very context-specific and might not be suitable for the summarization task. Our entity encoding submodule therefore uses a selective mechanism that decides whether to use the disambiguating encoder or not. This is done by introducing a selective disambiguation gate $d$ . The final entity vector $\\tilde{e}_i$ is calculated as the linear transformation of $e_i$ and $e^{\\prime }_i$ : $\ne^{\\prime }_i &= encoder(e_i) \\\\\nd &= \\sigma (W_d e^{\\prime }_i + b_d) \\\\\n\\tilde{e}_i &= d \\times f(W_x e_i + b_x) + \\\\ & \\quad (1-d) \\times f(W_y e^{\\prime }_i + b_y) \\nonumber $\n[source_id=37] The full entity encoding submodule is illustrated in Figure 3 . Ultimately, the submodule outputs the disambiguated entity vectors $\\tilde{E} = \\lbrace \\tilde{e}_1, \\tilde{e}_2, ..., \\tilde{e}_m\\rbrace $ .",
+  "score": 2.030092193935184,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37
+  ],
+  "child_qasper_evidence_texts": [
+    "After performing entity linking to the input text using the ELS, we receive a sequential list of linked entities, arranged based on their location in the text. We embed these entities to $d$ -dimensional vectors $E = \\lbrace e_1, e_2, ..., e_m\\rbrace $ where $e_i \\in \\mathbb {R}^d$ . Since these entities may still contain ambiguity, it is necessary to resolve them before applying them to the base model. Based on the idea that an ambiguous entity can be disambiguated using its neighboring entities, we introduce two kinds of disambiguating encoders below.",
+    "One way to disambiguate an entity is by using all the other entities, putting more importance to entities that are nearer. For this purpose, we employ an RNN-based model to globally disambiguate the entities. Specifically, we use BiGRU and concatenate the forward and backward hidden state vectors as the new entity vector: $\n\\overrightarrow{h}_i &= GRU(e_i, \\overrightarrow{h}_{i-1}) \\\\\n\\overleftarrow{h}_i &= GRU(e_i, \\overleftarrow{h}_{i+1}) \\\\\ne^{\\prime }_i &= [\\overrightarrow{h}_i; \\overleftarrow{h}_i] \\nonumber $",
+    "Another way to disambiguate an entity is by using only the direct neighbors of the entity, putting no importance value to entities that are far. To do this, we employ a CNN-based model to locally disambiguate the entities. Specifically, we do the convolution operation using filter matrices $W_f \\in \\mathbb {R}^{h \\times d}$ with filter size $h$ to a window of $h$ words. We do this for different sizes of $h$ . This produces new feature vectors $c_{i,h}$ as shown below, where $f(.)$ is a non-linear function: $\nc_{i,h} = f([e_{i-(h-1)/2}; ...; e_{i+h(+1)/2}]^\\top W_f + b_f) \\nonumber $",
+    "The convolution operation reduces the number of entities differently depending on the filter size $h$ . To prevent loss of information and to produce the same amount of feature vectors $c_{i,h}$ , we pad the entity list dynamically such that when the filter size is $h$ , the number of paddings on each side is $(h-1)/2$ . The filter size $h$ therefore refers to the number of entities used to disambiguate a middle entity. Finally, we concatenate all feature vectors of different $h$ 's for each $i$ as the new entity vector: $\ne^{\\prime }_i = [c_{i,h_1}; c_{i, h_2}; ...] \\nonumber $",
+    "The question on which disambiguating encoder is better has been a debate; some argued that using only the local context is appropriate BIBREF16 while some claimed that additionally using global context also helps BIBREF17 . The RNN-based encoder is good as it smartly makes use of all entities, however it may perform bad when there are many entities as it introduces noise when using a far entity during disambiguation. The CNN-based encoder is good as it minimizes the noise by totally ignoring far entities when disambiguating, however determining the appropriate filter sizes $h$ needs engineering. Overall, we argue that when the input text is short (e.g. a sentence), both encoders perform comparably, otherwise when the input text is long (e.g. a document), the CNN-based encoder performs better.",
+    "It is obvious that not all entities need to be disambiguated. When a correctly linked and already adequately disambiguated entity is disambiguated again, it would make the entity very context-specific and might not be suitable for the summarization task. Our entity encoding submodule therefore uses a selective mechanism that decides whether to use the disambiguating encoder or not. This is done by introducing a selective disambiguation gate $d$ . The final entity vector $\\tilde{e}_i$ is calculated as the linear transformation of $e_i$ and $e^{\\prime }_i$ : $\ne^{\\prime }_i &= encoder(e_i) \\\\\nd &= \\sigma (W_d e^{\\prime }_i + b_d) \\\\\n\\tilde{e}_i &= d \\times f(W_x e_i + b_x) + \\\\ & \\quad (1-d) \\times f(W_y e^{\\prime }_i + b_y) \\nonumber $",
+    "The full entity encoding submodule is illustrated in Figure 3 . Ultimately, the submodule outputs the disambiguated entity vectors $\\tilde{E} = \\lbrace \\tilde{e}_1, \\tilde{e}_2, ..., \\tilde{e}_m\\rbrace $ ."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Entity encoding submodule",
+    "Entity encoding submodule",
+    "Entity encoding submodule",
+    "Entity encoding submodule",
+    "Entity encoding submodule",
+    "Entity encoding submodule",
+    "Entity encoding submodule"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Entity encoding submodule",
+      0
+    ],
+    [
+      "Entity encoding submodule",
+      1
+    ],
+    [
+      "Entity encoding submodule",
+      2
+    ],
+    [
+      "Entity encoding submodule",
+      3
+    ],
+    [
+      "Entity encoding submodule",
+      4
+    ],
+    [
+      "Entity encoding submodule",
+      5
+    ],
+    [
+      "Entity encoding submodule",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Entity encoding submodule",
+  "section": "Entity encoding submodule",
+  "title_path": "Entity encoding submodule",
+  "block_type": "long_unit"
+}

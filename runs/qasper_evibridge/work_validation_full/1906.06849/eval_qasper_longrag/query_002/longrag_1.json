@@ -1,0 +1,61 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] CLIR systems retrieve documents written in a language that is different from search query language BIBREF0 . The primary objective of CLIR is to translate or project a query into the language of the document repository BIBREF1 , which we refer to as Retrieval Corpus (RC). To this end, common CLIR approaches translate search queries using a Machine Translation (MT) model and then use a monolingual IR system to retrieve from RC. In this process, a translation model is treated as a black box BIBREF2 , and it is usually trained on a sentence level parallel corpus, which we refer to as Translation Corpus (TC).\n[source_id=5] We address a pitfall of using existing MT models for query translation BIBREF1 . An MT model trained on TC does not have any knowledge of RC. In an extreme setting, where there are no common terms between the target side of TC and RC, a well trained and tested translation model would fail because of vocabulary mismatch between the translated query and documents of RC. Assuming a relaxed scenario where some commonality exists between two corpora, a translation model might still perform poorly, favoring terms that are more likely in TC but rare in RC. Our hypothesis is that a search query translation model would perform better if a translated query term is likely to appear in the both retrieval and translation corpora, a property we call balanced translation.\n[source_id=6] To achieve balanced translations, it is desired to construct an MT model that is aware of RC vocabulary. Different types of MT approaches have been adopted for CLIR task, such as dictionary-based MT, rule-based MT, statistical MT etc. BIBREF3 . However, to the best of our knowledge, a neural search query translation approach has yet to be taken by the community. NMT models with attention based encoder-decoder techniques have achieved state-of-the-art performance for several language pairs BIBREF4 . We propose a multi-task learning NMT architecture that takes RC vocabulary into account by learning Relevance-based Auxiliary Task (RAT). RAT is inspired from two word embedding learning approaches: Relevance-based Word Embedding (RWE) BIBREF5 and Continuous Bag of Words (CBOW) embedding BIBREF6 . We show that learning NMT with RAT enables it to generate balanced translation.\n[source_id=7] NMT models learn to encode the meaning of a source sentence and decode the meaning to generate words in a target language BIBREF7 . In the proposed multi-task learning model, RAT shares the decoder embedding and final representation layer with NMT. Our architecture answers the following question: In the decoding stage, can we restrict an NMT model so that it does not only generate terms that are highly likely in TC?. We show that training a strong baseline NMT with RAT roughly achieves 16% improvement over the baseline. Using a qualitative analysis, we further show that RAT works as a regularizer and prohibits NMT to overfit to TC vocabulary.",
+  "score": 1.0138743588004702,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7
+  ],
+  "child_qasper_evidence_texts": [
+    "CLIR systems retrieve documents written in a language that is different from search query language BIBREF0 . The primary objective of CLIR is to translate or project a query into the language of the document repository BIBREF1 , which we refer to as Retrieval Corpus (RC). To this end, common CLIR approaches translate search queries using a Machine Translation (MT) model and then use a monolingual IR system to retrieve from RC. In this process, a translation model is treated as a black box BIBREF2 , and it is usually trained on a sentence level parallel corpus, which we refer to as Translation Corpus (TC).",
+    "We address a pitfall of using existing MT models for query translation BIBREF1 . An MT model trained on TC does not have any knowledge of RC. In an extreme setting, where there are no common terms between the target side of TC and RC, a well trained and tested translation model would fail because of vocabulary mismatch between the translated query and documents of RC. Assuming a relaxed scenario where some commonality exists between two corpora, a translation model might still perform poorly, favoring terms that are more likely in TC but rare in RC. Our hypothesis is that a search query translation model would perform better if a translated query term is likely to appear in the both retrieval and translation corpora, a property we call balanced translation.",
+    "To achieve balanced translations, it is desired to construct an MT model that is aware of RC vocabulary. Different types of MT approaches have been adopted for CLIR task, such as dictionary-based MT, rule-based MT, statistical MT etc. BIBREF3 . However, to the best of our knowledge, a neural search query translation approach has yet to be taken by the community. NMT models with attention based encoder-decoder techniques have achieved state-of-the-art performance for several language pairs BIBREF4 . We propose a multi-task learning NMT architecture that takes RC vocabulary into account by learning Relevance-based Auxiliary Task (RAT). RAT is inspired from two word embedding learning approaches: Relevance-based Word Embedding (RWE) BIBREF5 and Continuous Bag of Words (CBOW) embedding BIBREF6 . We show that learning NMT with RAT enables it to generate balanced translation.",
+    "NMT models learn to encode the meaning of a source sentence and decode the meaning to generate words in a target language BIBREF7 . In the proposed multi-task learning model, RAT shares the decoder embedding and final representation layer with NMT. Our architecture answers the following question: In the decoding stage, can we restrict an NMT model so that it does not only generate terms that are highly likely in TC?. We show that training a strong baseline NMT with RAT roughly achieves 16% improvement over the baseline. Using a qualitative analysis, we further show that RAT works as a regularizer and prohibits NMT to overfit to TC vocabulary."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

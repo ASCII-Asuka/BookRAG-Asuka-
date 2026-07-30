@@ -1,0 +1,294 @@
+{
+  "ranked_results": [
+    {
+      "id": 13,
+      "content": "Our classifier achieves 0.65 accuracy and 0.65 averaged F1 score on the test set while a random classifier would only achieve 0.50 accuracy and 0.50 averaged F1 score. This confirms that the predicted sensationalism score can partially capture the sensationalism of headlines. On the other hand, a more natural choice is to take headlines with few comments as negative examples. Thus, we train another baseline classifier on a crawled balanced sensationalism corpus of 84k headlines where the positive headlines have at least 28 comments and the negative headlines have less than 5 comments. However, the results on the test set show that the baseline classifier gets 60% accuracy, which is worse than the proposed classifier (which achieves 65%). The reason could be that the balanced sensationalism corpus are sampled from different distributions from the test set and it is hard for the trained model to generalize. Therefore, we choose the proposed one as our sensationalism scorer. Therefore, our next challenge is to show that how to leverage this noisy sensationalism reward to generate sensational headlines.",
+      "score": 0.03225806451612903,
+      "rrf_score": 0.03225806451612903,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 2,
+        "dense": 2
+      },
+      "chunk_id": 7,
+      "source_chunk_index": 0,
+      "source_node_id": 13,
+      "node_id": 13,
+      "paragraph_id": 13,
+      "evidence_id": 13,
+      "qasper_evidence_text": "Our classifier achieves 0.65 accuracy and 0.65 averaged F1 score on the test set while a random classifier would only achieve 0.50 accuracy and 0.50 averaged F1 score. This confirms that the predicted sensationalism score can partially capture the sensationalism of headlines. On the other hand, a more natural choice is to take headlines with few comments as negative examples. Thus, we train another baseline classifier on a crawled balanced sensationalism corpus of 84k headlines where the positive headlines have at least 28 comments and the negative headlines have less than 5 comments. However, the results on the test set show that the baseline classifier gets 60% accuracy, which is worse than the proposed classifier (which achieves 65%). The reason could be that the balanced sensationalism corpus are sampled from different distributions from the test set and it is hard for the trained model to generalize. Therefore, we choose the proposed one as our sensationalism scorer. Therefore, our next challenge is to show that how to leverage this noisy sensationalism reward to generate sensational headlines.",
+      "pdf_id": 13,
+      "page": 5,
+      "node_type": "text",
+      "section_id": "Sensationalism Scorer ::: Results and Discussion",
+      "section": "Sensationalism Scorer ::: Results and Discussion",
+      "title_path": "Sensationalism Scorer ::: Results and Discussion",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 6,
+      "content": "Secondly, after training a sensationalism scorer on our sensationalism dataset, a natural way to generate sensational headlines is to maximize the sensationalism score using reinforcement learning (RL). However, the following shows an example of a RL model maximizing the sensationalism score by generating a very unnatural sentence, while its sensationalism scorer gave a very high score of 0.99996: UTF8gbsn 十个可穿戴产品的设计原则这消息消息可惜说明 Ten design principles for wearable devices, this message message pity introduction. This happens because the sensationalism scorer can make mistakes and RL can generate unnatural phrases which fools our sensationalism scorer. Thus, how to effectively leverage RL with noisy rewards remains an open problem. To deal with the noisy reward, we introduce Auto-tuned Reinforcement Learning (ARL). Our model automatically tunes the ratio between MLE and RL based on how sensational the training headline is. In this way, we effectively take advantage of RL with a noisy reward to generate headlines that are both sensational and fluent.",
+      "score": 0.031544957774465976,
+      "rrf_score": 0.031544957774465976,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 1,
+        "dense": 6
+      },
+      "chunk_id": 3,
+      "source_chunk_index": 0,
+      "source_node_id": 6,
+      "node_id": 6,
+      "paragraph_id": 6,
+      "evidence_id": 6,
+      "qasper_evidence_text": "Secondly, after training a sensationalism scorer on our sensationalism dataset, a natural way to generate sensational headlines is to maximize the sensationalism score using reinforcement learning (RL). However, the following shows an example of a RL model maximizing the sensationalism score by generating a very unnatural sentence, while its sensationalism scorer gave a very high score of 0.99996: UTF8gbsn 十个可穿戴产品的设计原则这消息消息可惜说明 Ten design principles for wearable devices, this message message pity introduction. This happens because the sensationalism scorer can make mistakes and RL can generate unnatural phrases which fools our sensationalism scorer. Thus, how to effectively leverage RL with noisy rewards remains an open problem. To deal with the noisy reward, we introduce Auto-tuned Reinforcement Learning (ARL). Our model automatically tunes the ratio between MLE and RL based on how sensational the training headline is. In this way, we effectively take advantage of RL with a noisy reward to generate headlines that are both sensational and fluent.",
+      "pdf_id": 6,
+      "page": 2,
+      "node_type": "text",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 9,
+      "content": "To evaluate the sensationalism intensity score $\\alpha _{\\text{sen}}$ of a headline, we collect a sensationalism dataset and then train a sensationalism scorer. For the sensationalism dataset collection, we choose headlines with many comments from popular online websites as positive samples. For the negative samples, we propose to use the generated headlines from a sentence summarization model. Intuitively, the summarization model, which is trained to preserve the semantic meaning, will lose the sensationalization ability and thus the generated negative samples will be less sensational than the original one, similar to the obfuscation of style after back-translation BIBREF4. For example, an original headline like UTF8gbsn“一趟挣10万？铁总增开申通、顺丰专列\" (One trip to earn 100 thousand? China Railway opens new Shentong and Shunfeng special lines) will become UTF8gbsn“中铁总将增开京广两列快递专列\" (China Railway opens two special lines for express) from the baseline model, which loses the sensational phrases of UTF8gbsn“一趟挣10万？\" (One trip to earn 100 thousand?) . We then train the sensationalism scorer by classifying sensational and non-sensational headlines using a one-layer CNN with a binary cross entropy loss $L_{\\text{sen}}$. Firstly, 1-D convolution is used to extract word features from the input embeddings of a headline. This is followed by a ReLU activation layer and a max-pooling layer along the time dimension. All features from different channels are concatenated together and projected to the sensationalism score by adding another fully connected layer with sigmoid activation. Binary cross entropy is used to compute the loss $L_{\\text{sen}}$.",
+      "score": 0.031544957774465976,
+      "rrf_score": 0.031544957774465976,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 6,
+        "dense": 1
+      },
+      "chunk_id": 5,
+      "source_chunk_index": 0,
+      "source_node_id": 9,
+      "node_id": 9,
+      "paragraph_id": 9,
+      "evidence_id": 9,
+      "qasper_evidence_text": "To evaluate the sensationalism intensity score $\\alpha _{\\text{sen}}$ of a headline, we collect a sensationalism dataset and then train a sensationalism scorer. For the sensationalism dataset collection, we choose headlines with many comments from popular online websites as positive samples. For the negative samples, we propose to use the generated headlines from a sentence summarization model. Intuitively, the summarization model, which is trained to preserve the semantic meaning, will lose the sensationalization ability and thus the generated negative samples will be less sensational than the original one, similar to the obfuscation of style after back-translation BIBREF4. For example, an original headline like UTF8gbsn“一趟挣10万？铁总增开申通、顺丰专列\" (One trip to earn 100 thousand? China Railway opens new Shentong and Shunfeng special lines) will become UTF8gbsn“中铁总将增开京广两列快递专列\" (China Railway opens two special lines for express) from the baseline model, which loses the sensational phrases of UTF8gbsn“一趟挣10万？\" (One trip to earn 100 thousand?) . We then train the sensationalism scorer by classifying sensational and non-sensational headlines using a one-layer CNN with a binary cross entropy loss $L_{\\text{sen}}$. Firstly, 1-D convolution is used to extract word features from the input embeddings of a headline. This is followed by a ReLU activation layer and a max-pooling layer along the time dimension. All features from different channels are concatenated together and projected to the sensationalism score by adding another fully connected layer with sigmoid activation. Binary cross entropy is used to compute the loss $L_{\\text{sen}}$.",
+      "pdf_id": 9,
+      "page": 3,
+      "node_type": "text",
+      "section_id": "Sensationalism Scorer",
+      "section": "Sensationalism Scorer",
+      "title_path": "Sensationalism Scorer",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 5,
+      "content": "To generate sensational headlines, there are two main challenges. Firstly, there is a lack of sensationalism scorer to measure how sensational a headline is. Some researchers have tried to manually label headlines as clickbait or non-clickbait BIBREF2, BIBREF3. However, these human-annotated datasets are usually small and expensive to collect. To capture a large variety of sensationalization patterns, we need a cheap and easy way to collect a large number of sensational headlines. Thus, we propose a distant supervision strategy to collect a sensationalism dataset. We regard headlines receiving lots of comments as sensational samples and the headlines generated by a summarization model as non-sensational samples. Experimental results show that by distinguishing these two types of headlines, we can partially teach the model a sense of being sensational.",
+      "score": 0.03149801587301587,
+      "rrf_score": 0.03149801587301587,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 3,
+        "dense": 4
+      },
+      "chunk_id": 2,
+      "source_chunk_index": 0,
+      "source_node_id": 5,
+      "node_id": 5,
+      "paragraph_id": 5,
+      "evidence_id": 5,
+      "qasper_evidence_text": "To generate sensational headlines, there are two main challenges. Firstly, there is a lack of sensationalism scorer to measure how sensational a headline is. Some researchers have tried to manually label headlines as clickbait or non-clickbait BIBREF2, BIBREF3. However, these human-annotated datasets are usually small and expensive to collect. To capture a large variety of sensationalization patterns, we need a cheap and easy way to collect a large number of sensational headlines. Thus, we propose a distant supervision strategy to collect a sensationalism dataset. We regard headlines receiving lots of comments as sensational samples and the headlines generated by a summarization model as non-sensational samples. Experimental results show that by distinguishing these two types of headlines, we can partially teach the model a sense of being sensational.",
+      "pdf_id": 5,
+      "page": 2,
+      "node_type": "text",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 7,
+      "content": "The major contributions of this paper are as follows: 1) To the best of our knowledge, we propose the first-ever model that tackles the sensational headline generation task with reinforcement learning techniques. 2) Without human-annotated data, we propose a distant supervision strategy to train a sensationalism scorer as a reward function.3) We propose a novel loss function, Auto-tuned Reinforcement Learning, to give dynamic weights to balance between MLE and RL. Our code will be released .",
+      "score": 0.02967032967032967,
+      "rrf_score": 0.02967032967032967,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 10,
+        "dense": 5
+      },
+      "chunk_id": 4,
+      "source_chunk_index": 0,
+      "source_node_id": 7,
+      "node_id": 7,
+      "paragraph_id": 7,
+      "evidence_id": 7,
+      "qasper_evidence_text": "The major contributions of this paper are as follows: 1) To the best of our knowledge, we propose the first-ever model that tackles the sensational headline generation task with reinforcement learning techniques. 2) Without human-annotated data, we propose a distant supervision strategy to train a sensationalism scorer as a reward function.3) We propose a novel loss function, Auto-tuned Reinforcement Learning, to give dynamic weights to balance between MLE and RL. Our code will be released .",
+      "pdf_id": 7,
+      "page": 2,
+      "node_type": "text",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 32,
+      "content": "Applying the naive mixed training method using sensationalism score as the reward is not obvious/trivial in our task. The main reason is that our sensationalism reward is notably more noisy and more fragile than the ROUGE-L reward or abstractive reward used in the summarization task BIBREF7, BIBREF8. A higher ROUGE-L F1 reward in summarization indicates higher overlapping ratio between generation and true summary statistically, but our sensationalism reward is a learned score which is fragile to be fooled with unnatural samples.",
+      "score": 0.028373015873015873,
+      "rrf_score": 0.028373015873015873,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 20,
+        "dense": 3
+      },
+      "chunk_id": 21,
+      "source_chunk_index": 0,
+      "source_node_id": 32,
+      "node_id": 32,
+      "paragraph_id": 32,
+      "evidence_id": 32,
+      "qasper_evidence_text": "Applying the naive mixed training method using sensationalism score as the reward is not obvious/trivial in our task. The main reason is that our sensationalism reward is notably more noisy and more fragile than the ROUGE-L reward or abstractive reward used in the summarization task BIBREF7, BIBREF8. A higher ROUGE-L F1 reward in summarization indicates higher overlapping ratio between generation and true summary statistically, but our sensationalism reward is a learned score which is fragile to be fooled with unnatural samples.",
+      "pdf_id": 32,
+      "page": 10,
+      "node_type": "text",
+      "section_id": "Sensational Headline Generation ::: Training Methods ::: Auto-tuned Reinforcement Learning",
+      "section": "Sensational Headline Generation ::: Training Methods ::: Auto-tuned Reinforcement Learning",
+      "title_path": "Sensational Headline Generation ::: Training Methods ::: Auto-tuned Reinforcement Learning",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 61,
+      "content": "We then compare different models using the sensationalism score in Table TABREF30. The Pointer-Gen baseline model achieves a 42.6% sensationalism score, which is the minimum that a typical summarization model achieves. By filtering out low-sensational headlines, Pointer-Gen+Same-FT and Pointer-Gen+Pos-FT achieves higher sensationalism scores, which implies the effectiveness of our sensationalism scorer. Our Pointer-Gen+ARL-SEN model achieves the best performance of 60.8%. This is an absolute improvement of 18.2% over the Pointer-Gen baseline. The Chi-square test on the results confirms that Pointer-Gen+ARL-SEN is statistically significantly more sensational than all the other baseline models, with the largest p-value less than 0.01. Also, we find that the test set headlines achieves 57.8% sensationalism score, much larger than Pointer-Gen baseline, which also supports our intuition that generated headlines will be less sensational than the original one. On the other hand, we found that Pointer-Gen+Pos is much worse than other baselines. The reason is that training on sensational samples alone discards around 80% of the whole training set that is also helpful for maintaining relevance and a good language model. It shows the necessity of using RL.",
+      "score": 0.027777777777777776,
+      "rrf_score": 0.027777777777777776,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 12,
+        "dense": 12
+      },
+      "chunk_id": 45,
+      "source_chunk_index": 0,
+      "source_node_id": 61,
+      "node_id": 61,
+      "paragraph_id": 61,
+      "evidence_id": 61,
+      "qasper_evidence_text": "We then compare different models using the sensationalism score in Table TABREF30. The Pointer-Gen baseline model achieves a 42.6% sensationalism score, which is the minimum that a typical summarization model achieves. By filtering out low-sensational headlines, Pointer-Gen+Same-FT and Pointer-Gen+Pos-FT achieves higher sensationalism scores, which implies the effectiveness of our sensationalism scorer. Our Pointer-Gen+ARL-SEN model achieves the best performance of 60.8%. This is an absolute improvement of 18.2% over the Pointer-Gen baseline. The Chi-square test on the results confirms that Pointer-Gen+ARL-SEN is statistically significantly more sensational than all the other baseline models, with the largest p-value less than 0.01. Also, we find that the test set headlines achieves 57.8% sensationalism score, much larger than Pointer-Gen baseline, which also supports our intuition that generated headlines will be less sensational than the original one. On the other hand, we found that Pointer-Gen+Pos is much worse than other baselines. The reason is that training on sensational samples alone discards around 80% of the whole training set that is also helpful for maintaining relevance and a good language model. It shows the necessity of using RL.",
+      "pdf_id": 61,
+      "page": 15,
+      "node_type": "text",
+      "section_id": "Results",
+      "section": "Results",
+      "title_path": "Results",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 72,
+      "content": "In this paper, we propose a model that generates sensational headlines without labeled data using Reinforcement Learning. Firstly, we propose a distant supervision strategy to train the sensationalism scorer. As a result, we achieve 65% accuracy between the predicted sensationalism score and human evaluation. To effectively leverage this noisy sensationalism score as the reward for RL, we propose a novel loss function, ARL, to automatically balance RL with MLE. Human evaluation confirms the effectiveness of both our sensationalism scorer and ARL to generate more sensational headlines. Future work can be improving the sensationalism scorer and investigating the applications of dynamic balancing methods between RL and MLE in textGANBIBREF23. Our work also raises the ethical questions about generating sensational headlines, which can be further explored.",
+      "score": 0.027673192771084338,
+      "rrf_score": 0.027673192771084338,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 4,
+        "dense": 23
+      },
+      "chunk_id": 54,
+      "source_chunk_index": 0,
+      "source_node_id": 72,
+      "node_id": 72,
+      "paragraph_id": 72,
+      "evidence_id": 72,
+      "qasper_evidence_text": "In this paper, we propose a model that generates sensational headlines without labeled data using Reinforcement Learning. Firstly, we propose a distant supervision strategy to train the sensationalism scorer. As a result, we achieve 65% accuracy between the predicted sensationalism score and human evaluation. To effectively leverage this noisy sensationalism score as the reward for RL, we propose a novel loss function, ARL, to automatically balance RL with MLE. Human evaluation confirms the effectiveness of both our sensationalism scorer and ARL to generate more sensational headlines. Future work can be improving the sensationalism scorer and investigating the applications of dynamic balancing methods between RL and MLE in textGANBIBREF23. Our work also raises the ethical questions about generating sensational headlines, which can be further explored.",
+      "pdf_id": 72,
+      "page": 17,
+      "node_type": "text",
+      "section_id": "Conclusion and Future Work",
+      "section": "Conclusion and Future Work",
+      "title_path": "Conclusion and Future Work",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 2,
+      "content": "Sensational headlines are headlines that capture people's attention and generate reader interest. Conventional abstractive headline generation methods, unlike human writers, do not optimize for maximal reader attention. In this paper, we propose a model that generates sensational headlines without labeled data. We first train a sensationalism scorer by classifying online headlines with many comments (\"clickbait\") against a baseline of headlines generated from a summarization model. The score from the sensationalism scorer is used as the reward for a reinforcement learner. However, maximizing the noisy sensationalism reward will generate unnatural phrases instead of sensational headlines. To effectively leverage this noisy reward, we propose a novel loss function, Auto-tuned Reinforcement Learning (ARL), to dynamically balance reinforcement learning (RL) with maximum likelihood estimation (MLE). Human evaluation shows that 60.8% of samples generated by our model are sensational, which is significantly better than the Pointer-Gen baseline and other RL models.",
+      "score": 0.027583600982429624,
+      "rrf_score": 0.027583600982429624,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 7,
+        "dense": 19
+      },
+      "chunk_id": 0,
+      "source_chunk_index": 0,
+      "source_node_id": 2,
+      "node_id": 2,
+      "paragraph_id": 2,
+      "evidence_id": 2,
+      "qasper_evidence_text": "Sensational headlines are headlines that capture people's attention and generate reader interest. Conventional abstractive headline generation methods, unlike human writers, do not optimize for maximal reader attention. In this paper, we propose a model that generates sensational headlines without labeled data. We first train a sensationalism scorer by classifying online headlines with many comments (\"clickbait\") against a baseline of headlines generated from a summarization model. The score from the sensationalism scorer is used as the reward for a reinforcement learner. However, maximizing the noisy sensationalism reward will generate unnatural phrases instead of sensational headlines. To effectively leverage this noisy reward, we propose a novel loss function, Auto-tuned Reinforcement Learning (ARL), to dynamically balance reinforcement learning (RL) with maximum likelihood estimation (MLE). Human evaluation shows that 60.8% of samples generated by our model are sensational, which is significantly better than the Pointer-Gen baseline and other RL models.",
+      "pdf_id": 2,
+      "page": 1,
+      "node_type": "text",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 70,
+      "content": "Modeling sensationalism is also related to modeling emotion. Emotion has been well investigated in both word levelBIBREF28, BIBREF29 and sentence levelBIBREF30, BIBREF31, BIBREF32, BIBREF33, BIBREF34. It has also been considered an important factor in engaging interactive systemsBIBREF35, BIBREF36, BIBREF37. Although we observe that sensational headlines contain emotion, it is still not clear which emotion and how emotions will influence the sensationalism.",
+      "score": 0.027579737335834898,
+      "rrf_score": 0.027579737335834898,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 5,
+        "dense": 22
+      },
+      "chunk_id": 53,
+      "source_chunk_index": 0,
+      "source_node_id": 70,
+      "node_id": 70,
+      "paragraph_id": 70,
+      "evidence_id": 70,
+      "qasper_evidence_text": "Modeling sensationalism is also related to modeling emotion. Emotion has been well investigated in both word levelBIBREF28, BIBREF29 and sentence levelBIBREF30, BIBREF31, BIBREF32, BIBREF33, BIBREF34. It has also been considered an important factor in engaging interactive systemsBIBREF35, BIBREF36, BIBREF37. Although we observe that sensational headlines contain emotion, it is still not clear which emotion and how emotions will influence the sensationalism.",
+      "pdf_id": 70,
+      "page": 16,
+      "node_type": "text",
+      "section_id": "Related Work",
+      "section": "Related Work",
+      "title_path": "Related Work",
+      "block_type": "paragraph"
+    }
+  ]
+}

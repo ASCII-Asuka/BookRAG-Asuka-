@@ -1,0 +1,160 @@
+{
+  "id": "longrag_10",
+  "content": "[Section] Evaluation - SentEval\n[source_id=51] SentEval BIBREF6 is a popular toolkit to evaluate the quality of sentence embeddings. Sentence embeddings are used as features for a logistic regression classifier. The logistic regression classifier is trained on various tasks in a 10-fold cross-validation setup and the prediction accuracy is computed for the test-fold.\n[source_id=52] The purpose of SBERT sentence embeddings are not to be used for transfer learning for other tasks. Here, we think fine-tuning BERT as described by devlin2018bert for new tasks is the more suitable method, as it updates all layers of the BERT network. However, SentEval can still give an impression on the quality of our sentence embeddings for various tasks.\n[source_id=53] We compare the SBERT sentence embeddings to other sentence embeddings methods on the following seven SentEval transfer tasks:\n[source_id=54] MR: Sentiment prediction for movie reviews snippets on a five start scale BIBREF25.\n[source_id=55] CR: Sentiment prediction of customer product reviews BIBREF26.\n[source_id=56] SUBJ: Subjectivity prediction of sentences from movie reviews and plot summaries BIBREF27.\n[source_id=57] MPQA: Phrase level opinion polarity classification from newswire BIBREF28.\n[source_id=58] SST: Stanford Sentiment Treebank with binary labels BIBREF29.\n[source_id=59] TREC: Fine grained question-type classification from TREC BIBREF30.\n[source_id=60] MRPC: Microsoft Research Paraphrase Corpus from parallel news sources BIBREF31.\n[source_id=61] The results can be found in Table TABREF15. SBERT is able to achieve the best performance in 5 out of 7 tasks. The average performance increases by about 2 percentage points compared to InferSent as well as the Universal Sentence Encoder. Even though transfer learning is not the purpose of SBERT, it outperforms other state-of-the-art sentence embeddings methods on this task.\n[source_id=62] It appears that the sentence embeddings from SBERT capture well sentiment information: We observe large improvements for all sentiment tasks (MR, CR, and SST) from SentEval in comparison to InferSent and Universal Sentence Encoder.\n[source_id=63] The only dataset where SBERT is significantly worse than Universal Sentence Encoder is the TREC dataset. Universal Sentence Encoder was pre-trained on question-answering data, which appears to be beneficial for the question-type classification task of the TREC dataset.\n[source_id=64] Average BERT embeddings or using the CLS-token output from a BERT network achieved bad results for various STS tasks (Table TABREF6), worse than average GloVe embeddings. However, for SentEval, average BERT embeddings and the BERT CLS-token output achieves decent results (Table TABREF15), outperforming average GloVe embeddings. The reason for this are the different setups. For the STS tasks, we used cosine-similarity to estimate the similarities between sentence embeddings. Cosine-similarity treats all dimensions equally. In contrast, SentEval fits a logistic regression classifier to the sentence embeddings. This allows that certain dimensions can have higher or lower impact on the classification result.\n[source_id=65] We conclude that average BERT embeddings / CLS-token output from BERT return sentence embeddings that are infeasible to be used with cosine-similarity or with Manhatten / Euclidean distance. For transfer learning, they yield slightly worse results than InferSent or Universal Sentence Encoder. However, using the described fine-tuning setup with a siamese network structure on NLI datasets yields sentence embeddings that achieve a new state-of-the-art for the SentEval toolkit.",
+  "score": 4.035421404731257,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_10",
+  "child_source_node_ids": [
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65
+  ],
+  "child_qasper_evidence_texts": [
+    "SentEval BIBREF6 is a popular toolkit to evaluate the quality of sentence embeddings. Sentence embeddings are used as features for a logistic regression classifier. The logistic regression classifier is trained on various tasks in a 10-fold cross-validation setup and the prediction accuracy is computed for the test-fold.",
+    "The purpose of SBERT sentence embeddings are not to be used for transfer learning for other tasks. Here, we think fine-tuning BERT as described by devlin2018bert for new tasks is the more suitable method, as it updates all layers of the BERT network. However, SentEval can still give an impression on the quality of our sentence embeddings for various tasks.",
+    "We compare the SBERT sentence embeddings to other sentence embeddings methods on the following seven SentEval transfer tasks:",
+    "MR: Sentiment prediction for movie reviews snippets on a five start scale BIBREF25.",
+    "CR: Sentiment prediction of customer product reviews BIBREF26.",
+    "SUBJ: Subjectivity prediction of sentences from movie reviews and plot summaries BIBREF27.",
+    "MPQA: Phrase level opinion polarity classification from newswire BIBREF28.",
+    "SST: Stanford Sentiment Treebank with binary labels BIBREF29.",
+    "TREC: Fine grained question-type classification from TREC BIBREF30.",
+    "MRPC: Microsoft Research Paraphrase Corpus from parallel news sources BIBREF31.",
+    "The results can be found in Table TABREF15. SBERT is able to achieve the best performance in 5 out of 7 tasks. The average performance increases by about 2 percentage points compared to InferSent as well as the Universal Sentence Encoder. Even though transfer learning is not the purpose of SBERT, it outperforms other state-of-the-art sentence embeddings methods on this task.",
+    "It appears that the sentence embeddings from SBERT capture well sentiment information: We observe large improvements for all sentiment tasks (MR, CR, and SST) from SentEval in comparison to InferSent and Universal Sentence Encoder.",
+    "The only dataset where SBERT is significantly worse than Universal Sentence Encoder is the TREC dataset. Universal Sentence Encoder was pre-trained on question-answering data, which appears to be beneficial for the question-type classification task of the TREC dataset.",
+    "Average BERT embeddings or using the CLS-token output from a BERT network achieved bad results for various STS tasks (Table TABREF6), worse than average GloVe embeddings. However, for SentEval, average BERT embeddings and the BERT CLS-token output achieves decent results (Table TABREF15), outperforming average GloVe embeddings. The reason for this are the different setups. For the STS tasks, we used cosine-similarity to estimate the similarities between sentence embeddings. Cosine-similarity treats all dimensions equally. In contrast, SentEval fits a logistic regression classifier to the sentence embeddings. This allows that certain dimensions can have higher or lower impact on the classification result.",
+    "We conclude that average BERT embeddings / CLS-token output from BERT return sentence embeddings that are infeasible to be used with cosine-similarity or with Manhatten / Euclidean distance. For transfer learning, they yield slightly worse results than InferSent or Universal Sentence Encoder. However, using the described fine-tuning setup with a siamese network structure on NLI datasets yields sentence embeddings that achieve a new state-of-the-art for the SentEval toolkit."
+  ],
+  "child_pages": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "child_sections": [
+    "Evaluation - SentEval",
+    "Evaluation - SentEval",
+    "Evaluation - SentEval",
+    "Evaluation - SentEval",
+    "Evaluation - SentEval",
+    "Evaluation - SentEval",
+    "Evaluation - SentEval",
+    "Evaluation - SentEval",
+    "Evaluation - SentEval",
+    "Evaluation - SentEval",
+    "Evaluation - SentEval",
+    "Evaluation - SentEval",
+    "Evaluation - SentEval",
+    "Evaluation - SentEval",
+    "Evaluation - SentEval"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Evaluation - SentEval",
+      0
+    ],
+    [
+      "Evaluation - SentEval",
+      1
+    ],
+    [
+      "Evaluation - SentEval",
+      2
+    ],
+    [
+      "Evaluation - SentEval",
+      3
+    ],
+    [
+      "Evaluation - SentEval",
+      4
+    ],
+    [
+      "Evaluation - SentEval",
+      5
+    ],
+    [
+      "Evaluation - SentEval",
+      6
+    ],
+    [
+      "Evaluation - SentEval",
+      7
+    ],
+    [
+      "Evaluation - SentEval",
+      8
+    ],
+    [
+      "Evaluation - SentEval",
+      9
+    ],
+    [
+      "Evaluation - SentEval",
+      10
+    ],
+    [
+      "Evaluation - SentEval",
+      11
+    ],
+    [
+      "Evaluation - SentEval",
+      12
+    ],
+    [
+      "Evaluation - SentEval",
+      13
+    ],
+    [
+      "Evaluation - SentEval",
+      14
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_10",
+  "section_id": "Evaluation - SentEval",
+  "section": "Evaluation - SentEval",
+  "title_path": "Evaluation - SentEval",
+  "block_type": "long_unit"
+}

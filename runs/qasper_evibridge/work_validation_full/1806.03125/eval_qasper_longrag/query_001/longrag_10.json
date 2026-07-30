@@ -1,0 +1,106 @@
+{
+  "id": "longrag_10",
+  "content": "[Section] Text classification experiment\n[source_id=109] In this experiment, we performed text classification among the classes in the Reuters-8 database. We compared the classification using the word subspace, and its weighted extension, based on MSM (to which we will refer as MSM and TF-MSM, respectively) with the baselines presented in Section \"Related Work\" : MVB, MNB, LSA, and SVM. Since none of the baseline methods work with vector set classification, we also compared to a simple baseline for comparing sets of vectors, defined as the average of similarities between all vector pair combinations of two given sets. For two matrices ${A}$ and ${B}$ , containing the sets of vectors $\\lbrace  {x}^{i}_a \\rbrace _{i = 1}^{N_A}$ and $\\lbrace  {x}^{i}_b \\rbrace _{i = 1}^{N_B}$ , respectively, where $N_A$ and $N_B$ are the number of main words in each set, the similarity is defined as:\n[source_id=110] $$Sim_{(A,B)} = \\frac{1}{N_A N_B}\\sum _{i}^{N_A}\\sum _{j}^{N_B}{{x}_a^i}^{\\top }{x}_b^j.$$   (Eq. 41)\n[source_id=111] We refer to this baseline as similarity average (SA). For this method, we only considered one occurrence of each word in each set.\n[source_id=112] Different features were used, depending on the method. Classification with SA, MSM, and TF-MSM was performed using word2vec features, to which we refer as w2v. For MVB, due to its nature, only bag-of-words features with binary weights were used (binBOW). For the same reason, we only used bag-of-words features with term-frequency weights (tfBOW) with MNB. Classification with LSA and SVM is usually performed using bag-of-words features and, therefore, we tested with binBOW, tfBOW, and with the term-frequency inverse document-frequency weight, tfidfBOW. We also tested them using word2vec vectors. In this case, we considered each word vector from all documents in each class to be a single sample.\n[source_id=113] To determine the dimensions of the class subspaces and query subspace of MSM and TF-MSM, and the dimension of the approximation performed by LSA, we performed a 10-fold cross validation, wherein each fold, the data were randomly divided into train (60%), validation (20%) and test set (20%).\n[source_id=114] The results can be seen in Table 2 . The simplest baseline, SA with w2v, achieved an accuracy rate of 78.73%. This result is important because it shows the validity of the word2vec representation, performing better than more elaborate methods based on BOW, such as MVB with binBOW.\n[source_id=115] LSA with BOW features was almost 10% more accurate than SA, where the best results with binary weights were achieved with an approximation with 130 dimensions, with TF weights were achieved with 50 dimensions, and with TF-IDF weights were achieved with 30 dimensions. SVM with BOW features was about 3% more accurate than LSA, with binary weights leading to a higher accuracy rate.\n[source_id=116] It is interesting to note that despite the reasonably high accuracy rates achieved using LSA and SVM with BOW features, they poorly performed when using w2v features.\n[source_id=117] Among the baselines, the best method was MNB with tfBOW features, with an accuracy of 91.47%, being the only conventional method to outperform MSM. MSM with w2v had an accuracy rate of 90.62%, with the best results achieved with word subspace dimensions for the training classes ranging from 150 to 181, and for the query ranging from 3 to 217. Incorporating the frequency information in the subspace modeling resulted in higher accuracy, with TF-MSM achieving 92.01%, with dimensions of word subspaces for training classes ranging from 150 to 172, and for the query, ranging from 2 to 109. To confirm that TF-MSM is significantly more accurate than MNB, we performed a t-test to compare their results. It resulted in a p-value of 0.031, which shows that at a 95% significance level, TF-MSM has produced better results.",
+  "score": 4.198473048019872,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_10",
+  "child_source_node_ids": [
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117
+  ],
+  "child_qasper_evidence_texts": [
+    "In this experiment, we performed text classification among the classes in the Reuters-8 database. We compared the classification using the word subspace, and its weighted extension, based on MSM (to which we will refer as MSM and TF-MSM, respectively) with the baselines presented in Section \"Related Work\" : MVB, MNB, LSA, and SVM. Since none of the baseline methods work with vector set classification, we also compared to a simple baseline for comparing sets of vectors, defined as the average of similarities between all vector pair combinations of two given sets. For two matrices ${A}$ and ${B}$ , containing the sets of vectors $\\lbrace  {x}^{i}_a \\rbrace _{i = 1}^{N_A}$ and $\\lbrace  {x}^{i}_b \\rbrace _{i = 1}^{N_B}$ , respectively, where $N_A$ and $N_B$ are the number of main words in each set, the similarity is defined as:",
+    "$$Sim_{(A,B)} = \\frac{1}{N_A N_B}\\sum _{i}^{N_A}\\sum _{j}^{N_B}{{x}_a^i}^{\\top }{x}_b^j.$$   (Eq. 41)",
+    "We refer to this baseline as similarity average (SA). For this method, we only considered one occurrence of each word in each set.",
+    "Different features were used, depending on the method. Classification with SA, MSM, and TF-MSM was performed using word2vec features, to which we refer as w2v. For MVB, due to its nature, only bag-of-words features with binary weights were used (binBOW). For the same reason, we only used bag-of-words features with term-frequency weights (tfBOW) with MNB. Classification with LSA and SVM is usually performed using bag-of-words features and, therefore, we tested with binBOW, tfBOW, and with the term-frequency inverse document-frequency weight, tfidfBOW. We also tested them using word2vec vectors. In this case, we considered each word vector from all documents in each class to be a single sample.",
+    "To determine the dimensions of the class subspaces and query subspace of MSM and TF-MSM, and the dimension of the approximation performed by LSA, we performed a 10-fold cross validation, wherein each fold, the data were randomly divided into train (60%), validation (20%) and test set (20%).",
+    "The results can be seen in Table 2 . The simplest baseline, SA with w2v, achieved an accuracy rate of 78.73%. This result is important because it shows the validity of the word2vec representation, performing better than more elaborate methods based on BOW, such as MVB with binBOW.",
+    "LSA with BOW features was almost 10% more accurate than SA, where the best results with binary weights were achieved with an approximation with 130 dimensions, with TF weights were achieved with 50 dimensions, and with TF-IDF weights were achieved with 30 dimensions. SVM with BOW features was about 3% more accurate than LSA, with binary weights leading to a higher accuracy rate.",
+    "It is interesting to note that despite the reasonably high accuracy rates achieved using LSA and SVM with BOW features, they poorly performed when using w2v features.",
+    "Among the baselines, the best method was MNB with tfBOW features, with an accuracy of 91.47%, being the only conventional method to outperform MSM. MSM with w2v had an accuracy rate of 90.62%, with the best results achieved with word subspace dimensions for the training classes ranging from 150 to 181, and for the query ranging from 3 to 217. Incorporating the frequency information in the subspace modeling resulted in higher accuracy, with TF-MSM achieving 92.01%, with dimensions of word subspaces for training classes ranging from 150 to 172, and for the query, ranging from 2 to 109. To confirm that TF-MSM is significantly more accurate than MNB, we performed a t-test to compare their results. It resulted in a p-value of 0.031, which shows that at a 95% significance level, TF-MSM has produced better results."
+  ],
+  "child_pages": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "child_sections": [
+    "Text classification experiment",
+    "Text classification experiment",
+    "Text classification experiment",
+    "Text classification experiment",
+    "Text classification experiment",
+    "Text classification experiment",
+    "Text classification experiment",
+    "Text classification experiment",
+    "Text classification experiment"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Text classification experiment",
+      0
+    ],
+    [
+      "Text classification experiment",
+      1
+    ],
+    [
+      "Text classification experiment",
+      2
+    ],
+    [
+      "Text classification experiment",
+      3
+    ],
+    [
+      "Text classification experiment",
+      4
+    ],
+    [
+      "Text classification experiment",
+      5
+    ],
+    [
+      "Text classification experiment",
+      6
+    ],
+    [
+      "Text classification experiment",
+      7
+    ],
+    [
+      "Text classification experiment",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_10",
+  "section_id": "Text classification experiment",
+  "section": "Text classification experiment",
+  "title_path": "Text classification experiment",
+  "block_type": "long_unit"
+}

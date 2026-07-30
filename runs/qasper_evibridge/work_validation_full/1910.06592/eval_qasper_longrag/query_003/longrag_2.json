@@ -1,0 +1,124 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Methodology\n[source_id=11] Given a news Twitter account, we read its tweets from the account's timeline. Then we sort the tweets by the posting date in ascending way and we split them into $N$ chunks. Each chunk consists of a sorted sequence of tweets labeled by the label of its corresponding account. We extract a set of features from each chunk and we feed them into a recurrent neural network to model the sequential flow of the chunks' tweets. We use an attention layer with dropout to attend over the most important tweets in each chunk. Finally, the representation is fed into a softmax layer to produce a probability distribution over the account types and thus predict the factuality of the accounts. Since we have many chunks for each account, the label for an account is obtained by taking the majority class of the account's chunks.\n[source_id=12] Input Representation. Let $t$ be a Twitter account that contains $m$ tweets. These tweets are sorted by date and split into a sequence of chunks $ck = \\langle ck_1, \\ldots , ck_n \\rangle $, where each $ck_i$ contains $s$ tweets. Each tweet in $ck_i$ is represented by a vector $v \\in {\\rm I\\!R}^d$ , where $v$ is the concatenation of a set of features' vectors, that is $v = \\langle f_1, \\ldots , f_n \\rangle $. Each feature vector $f_i$ is built by counting the presence of tweet's words in a set of lexical lists. The final representation of the tweet is built by averaging the single word vectors.\n[source_id=13] Features. We argue that different kinds of features like the sentiment of the text, morality, and other text-based features are critical to detect the nonfactual Twitter accounts by utilizing their occurrence during reporting the news in an account's timeline. We employ a rich set of features borrowed from previous works in fake news, bias, and rumors detection BIBREF0, BIBREF1, BIBREF8, BIBREF9.\n[source_id=14] [leftmargin=4mm]\n[source_id=15] Emotion: We build an emotions vector using word occurrences of 15 emotion types from two available emotional lexicons. We use the NRC lexicon BIBREF10, which contains $\\sim $14K words labeled using the eight Plutchik's emotions BIBREF11. The other lexicon is SentiSense BIBREF12 which is a concept-based affective lexicon that attaches emotional meanings to concepts from the WordNet lexical database. It has $\\sim $5.5 words labeled with emotions from a set of 14 emotional categories We use the categories that do not exist in the NRC lexicon.\n[source_id=16] Sentiment: We extract the sentiment of the tweets by employing EffectWordNet BIBREF13, SenticNet BIBREF14, NRC BIBREF10, and subj_lexicon BIBREF15, where each has the two sentiment classes, positive and negative.\n[source_id=17] Morality: Features based on morality foundation theory BIBREF16 where words are labeled in one of the following 10 categories (care, harm, fairness, cheating, loyalty, betrayal, authority, subversion, sanctity, and degradation).\n[source_id=18] Style: We use canonical stylistic features, such as the count of question marks, exclamation marks, consecutive characters and letters, links, hashtags, users' mentions. In addition, we extract the uppercase ratio and the tweet length.\n[source_id=19] Words embeddings: We extract words embeddings of the words of the tweet using $Glove\\-840B-300d$ BIBREF17 pretrained model. The tweet final representation is obtained by averaging its words embeddings.\n[source_id=20] Model. To account for chunk sequences we make use of a de facto standard approach and opt for a recurrent neural model using long short-term memory (LSTM) BIBREF18. In our model, the sequence consists of a sequence of tweets belonging to one chunk (Figure FIGREF11). The LSTM learns the hidden state $h\\textsubscript {t}$ by capturing the previous timesteps (past tweets). The produced hidden state $h\\textsubscript {t}$ at each time step is passed to the attention layer which computes a `context' vector $c\\textsubscript {t}$ as the weighted mean of the state sequence $h$ by:\n[source_id=21] Where $T$ is the total number of timesteps in the input sequence and $\\alpha \\textsubscript {tj}$ is a weight computed at each time step $j$ for each state hj.",
+  "score": 0.886880661785411,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
+  ],
+  "child_qasper_evidence_texts": [
+    "Given a news Twitter account, we read its tweets from the account's timeline. Then we sort the tweets by the posting date in ascending way and we split them into $N$ chunks. Each chunk consists of a sorted sequence of tweets labeled by the label of its corresponding account. We extract a set of features from each chunk and we feed them into a recurrent neural network to model the sequential flow of the chunks' tweets. We use an attention layer with dropout to attend over the most important tweets in each chunk. Finally, the representation is fed into a softmax layer to produce a probability distribution over the account types and thus predict the factuality of the accounts. Since we have many chunks for each account, the label for an account is obtained by taking the majority class of the account's chunks.",
+    "Input Representation. Let $t$ be a Twitter account that contains $m$ tweets. These tweets are sorted by date and split into a sequence of chunks $ck = \\langle ck_1, \\ldots , ck_n \\rangle $, where each $ck_i$ contains $s$ tweets. Each tweet in $ck_i$ is represented by a vector $v \\in {\\rm I\\!R}^d$ , where $v$ is the concatenation of a set of features' vectors, that is $v = \\langle f_1, \\ldots , f_n \\rangle $. Each feature vector $f_i$ is built by counting the presence of tweet's words in a set of lexical lists. The final representation of the tweet is built by averaging the single word vectors.",
+    "Features. We argue that different kinds of features like the sentiment of the text, morality, and other text-based features are critical to detect the nonfactual Twitter accounts by utilizing their occurrence during reporting the news in an account's timeline. We employ a rich set of features borrowed from previous works in fake news, bias, and rumors detection BIBREF0, BIBREF1, BIBREF8, BIBREF9.",
+    "[leftmargin=4mm]",
+    "Emotion: We build an emotions vector using word occurrences of 15 emotion types from two available emotional lexicons. We use the NRC lexicon BIBREF10, which contains $\\sim $14K words labeled using the eight Plutchik's emotions BIBREF11. The other lexicon is SentiSense BIBREF12 which is a concept-based affective lexicon that attaches emotional meanings to concepts from the WordNet lexical database. It has $\\sim $5.5 words labeled with emotions from a set of 14 emotional categories We use the categories that do not exist in the NRC lexicon.",
+    "Sentiment: We extract the sentiment of the tweets by employing EffectWordNet BIBREF13, SenticNet BIBREF14, NRC BIBREF10, and subj_lexicon BIBREF15, where each has the two sentiment classes, positive and negative.",
+    "Morality: Features based on morality foundation theory BIBREF16 where words are labeled in one of the following 10 categories (care, harm, fairness, cheating, loyalty, betrayal, authority, subversion, sanctity, and degradation).",
+    "Style: We use canonical stylistic features, such as the count of question marks, exclamation marks, consecutive characters and letters, links, hashtags, users' mentions. In addition, we extract the uppercase ratio and the tweet length.",
+    "Words embeddings: We extract words embeddings of the words of the tweet using $Glove\\-840B-300d$ BIBREF17 pretrained model. The tweet final representation is obtained by averaging its words embeddings.",
+    "Model. To account for chunk sequences we make use of a de facto standard approach and opt for a recurrent neural model using long short-term memory (LSTM) BIBREF18. In our model, the sequence consists of a sequence of tweets belonging to one chunk (Figure FIGREF11). The LSTM learns the hidden state $h\\textsubscript {t}$ by capturing the previous timesteps (past tweets). The produced hidden state $h\\textsubscript {t}$ at each time step is passed to the attention layer which computes a `context' vector $c\\textsubscript {t}$ as the weighted mean of the state sequence $h$ by:",
+    "Where $T$ is the total number of timesteps in the input sequence and $\\alpha \\textsubscript {tj}$ is a weight computed at each time step $j$ for each state hj."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Methodology",
+    "Methodology",
+    "Methodology",
+    "Methodology",
+    "Methodology",
+    "Methodology",
+    "Methodology",
+    "Methodology",
+    "Methodology",
+    "Methodology",
+    "Methodology"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Methodology",
+      0
+    ],
+    [
+      "Methodology",
+      1
+    ],
+    [
+      "Methodology",
+      2
+    ],
+    [
+      "Methodology",
+      3
+    ],
+    [
+      "Methodology",
+      4
+    ],
+    [
+      "Methodology",
+      5
+    ],
+    [
+      "Methodology",
+      6
+    ],
+    [
+      "Methodology",
+      7
+    ],
+    [
+      "Methodology",
+      8
+    ],
+    [
+      "Methodology",
+      9
+    ],
+    [
+      "Methodology",
+      10
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Methodology",
+  "section": "Methodology",
+  "title_path": "Methodology",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,70 @@
+{
+  "id": "longrag_8",
+  "content": "[Section] Dataset ::: Data Distribution\n[source_id=37] One of the most interesting aspects of the data provided for this task is the notable difference between the training and the development/test sets. We emphasise that this difference is realistic and reflective of real world news data, in which major stories are often accompanied by the introduction of new terms, names, and even phrases. This is because the training data is a subset of past data while the model is to be used on future data which deals with different newsworthy topics.\n[source_id=38] We demonstrate this difference statistically by using a method for finding the similarity of corpora suggested by BIBREF14. We use the Wilcoxon signed-rank test BIBREF15 which compares the frequency counts of randomly sampled elements from different datasets to determine if those datasets have a statistically similar distribution of elements.\n[source_id=39] We implement this as follows. For each of the training, development and test sets, we extract all words (retaining the repeats) while ignoring a set of stopwords (identified through the Python Natural Language Toolkit). We then extract 10,000 samples (with replacements) for various pairs of these datasets (training, development, and test sets along with splits of each of these datasets). Finally, we use comparative word frequencies from the two sets to calculate the p-value using the Wilcoxon signed-rank test. Table TABREF15 provides the minimum and maximum p-values and their interpretations for ten such runs of each pair reported.\n[source_id=40] With p-value less than 0.05, we show that the train, development and test sets are self-similar and also significantly different from each other. In measuring self-similarity, we split each dataset after shuffling all sentences. While this comparison is made at the sentence level (as opposed to the article level), it is consistent with the granularity used for propaganda detection, which is also at the sentence level. We also perform measurements of self similarity after splitting the data at the article level and find that the conclusions of similarity between the sets hold with a p-value threshold of 0.001, where p-values for similarity between the training and dev/test sets are orders of magnitude lower compared to self-similarity. Since we use random sampling we run this test 10 times and present the both the maximum and minimum p-values. We include the similarity between 25% of a dataset and the remaining 75% of that set because that is the train/test ratio we use in our experiments, further described in our methodology (Section SECREF4).\n[source_id=41] This analysis shows that while all splits of each of the datasets are statistically similar, the training set (and the split of the training set that we use for experimentation) are significantly different from the development and test sets. While our analysis does show that the development and the test sets are dissimilar, we note (based on the p-values) that they are significantly more similar to each other than they are to the training set.",
+  "score": 2.421361506795336,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_8",
+  "child_source_node_ids": [
+    37,
+    38,
+    39,
+    40,
+    41
+  ],
+  "child_qasper_evidence_texts": [
+    "One of the most interesting aspects of the data provided for this task is the notable difference between the training and the development/test sets. We emphasise that this difference is realistic and reflective of real world news data, in which major stories are often accompanied by the introduction of new terms, names, and even phrases. This is because the training data is a subset of past data while the model is to be used on future data which deals with different newsworthy topics.",
+    "We demonstrate this difference statistically by using a method for finding the similarity of corpora suggested by BIBREF14. We use the Wilcoxon signed-rank test BIBREF15 which compares the frequency counts of randomly sampled elements from different datasets to determine if those datasets have a statistically similar distribution of elements.",
+    "We implement this as follows. For each of the training, development and test sets, we extract all words (retaining the repeats) while ignoring a set of stopwords (identified through the Python Natural Language Toolkit). We then extract 10,000 samples (with replacements) for various pairs of these datasets (training, development, and test sets along with splits of each of these datasets). Finally, we use comparative word frequencies from the two sets to calculate the p-value using the Wilcoxon signed-rank test. Table TABREF15 provides the minimum and maximum p-values and their interpretations for ten such runs of each pair reported.",
+    "With p-value less than 0.05, we show that the train, development and test sets are self-similar and also significantly different from each other. In measuring self-similarity, we split each dataset after shuffling all sentences. While this comparison is made at the sentence level (as opposed to the article level), it is consistent with the granularity used for propaganda detection, which is also at the sentence level. We also perform measurements of self similarity after splitting the data at the article level and find that the conclusions of similarity between the sets hold with a p-value threshold of 0.001, where p-values for similarity between the training and dev/test sets are orders of magnitude lower compared to self-similarity. Since we use random sampling we run this test 10 times and present the both the maximum and minimum p-values. We include the similarity between 25% of a dataset and the remaining 75% of that set because that is the train/test ratio we use in our experiments, further described in our methodology (Section SECREF4).",
+    "This analysis shows that while all splits of each of the datasets are statistically similar, the training set (and the split of the training set that we use for experimentation) are significantly different from the development and test sets. While our analysis does show that the development and the test sets are dissimilar, we note (based on the p-values) that they are significantly more similar to each other than they are to the training set."
+  ],
+  "child_pages": [
+    8,
+    8,
+    8,
+    8,
+    8
+  ],
+  "child_sections": [
+    "Dataset ::: Data Distribution",
+    "Dataset ::: Data Distribution",
+    "Dataset ::: Data Distribution",
+    "Dataset ::: Data Distribution",
+    "Dataset ::: Data Distribution"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Dataset ::: Data Distribution",
+      0
+    ],
+    [
+      "Dataset ::: Data Distribution",
+      1
+    ],
+    [
+      "Dataset ::: Data Distribution",
+      2
+    ],
+    [
+      "Dataset ::: Data Distribution",
+      3
+    ],
+    [
+      "Dataset ::: Data Distribution",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_8",
+  "section_id": "Dataset ::: Data Distribution",
+  "section": "Dataset ::: Data Distribution",
+  "title_path": "Dataset ::: Data Distribution",
+  "block_type": "long_unit"
+}

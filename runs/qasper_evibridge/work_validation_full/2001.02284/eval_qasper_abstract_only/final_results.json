@@ -1,0 +1,188 @@
+[
+  {
+    "question": "Do they use off-the-shelf NLP systems to build their assitant?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": false,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": false,
+        "evidence": [
+          "Natural Language Understanding (NLU): We implemented an NLU unit utilizing handcrafted rules, Regular Expressions (RegEx) and Elasticsearch (ES) API. The NLU module contains following functionalities:",
+          "Dialogue Manager consists of the Dialogue State Tracker (DST), that maintains a representation of the current dialog state, and of the Policy Learner (PL) that defines the next system action. In our model, the system's next action is defined by the state of the previously obtained information stored in the Information Dictionary. For instance, if the system recognizes that the student works on the final examination, it also understands (defined by the logic in the predefined rules) that there is no need to ask for sub-topic because the final examination always corresponds to a chapter level (due to the design of OMB+ platform). If the system identifies that the user has difficulties in solving a quiz, it has to ask for the corresponding topic and sub-topic if not yet provided by a user (because the quiz always refers to a section level). To determine all of the potential dialogue flows, we implemented Mutually Exclusive Rules (MER), which indicate that two events $e_{1}$ and $e_{2}$ are mutually exclusive or disjoint if they cannot both occur at the same time (thus, the intersection of these events is empty: $P(A \\cap B) = 0$). Additionally, we defined transition and mapping rules. The formal explanation of rules can be found in Section SECREF12 of the Appendix. Following the rules, we generated 56 state transitions, which define next system actions. Being on a new dialogue state, the system compares the extracted (i.e., updated) information in the ID with the valid dialogue states (see Section SECREF12 of the Appendix for the explanation of the validness) and picks the mapped action as the next system's action."
+        ],
+        "evidence_block_ids": [
+          30,
+          34
+        ],
+        "evidence_paragraph_ids": [
+          30,
+          34
+        ]
+      }
+    ],
+    "doc_uuid": "2001.02284",
+    "doc_path": "qasper://2001.02284",
+    "qasper_question_id": "ee417fea65f9b1029455797671da0840c8c1abbe",
+    "title": "Multipurpose Intelligent Process Automation via Conversational Assistant",
+    "evidence_block_ids": [
+      30,
+      34
+    ],
+    "evidence_paragraph_ids": [
+      30,
+      34
+    ],
+    "output": "{\n  \"answer_short\": \"Not answerable\",\n  \"answer_rationale\": \"The retrieved document discusses the implementation of an IPA conversational assistant in an industrial setting with limited structured data and mentions using Transfer Learning, but it does not mention whether off-the-shelf NLP systems are used.\"\n}",
+    "retrieved_node_ids": [
+      2
+    ],
+    "answer_short": "Not answerable",
+    "answer_rationale": "The retrieved document discusses the implementation of an IPA conversational assistant in an industrial setting with limited structured data and mentions using Transfer Learning, but it does not mention whether off-the-shelf NLP systems are used.",
+    "supporting_block_ids": [
+      2
+    ]
+  },
+  {
+    "question": "How does the IPA label data after interacting with users?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "It defined a sequence labeling task to extract custom entities from user input and label the next action (out of 13  custom actions defined).",
+        "yes_no": null,
+        "evidence": [
+          "Named Entity Recognition: We defined a sequence labeling task to extract custom entities from user input. We assumed seven (7) possible entities (see Table TABREF43) to be recognized by the model: topic, subtopic, examination mode and level, question number, intent, as well as the entity other for remaining words in the utterance. Since the data obtained from the rule-based system already contains information on the entities extracted from each user query (i.e., by means of Elasticsearch), we could use it to train a domain-specific NER unit. However, since the user-input was informal, the same information could be provided in different writing styles. That means that a single entity could have different surface forms (e.g., synonyms, writing styles) (although entities that we extracted from the rule-based system were all converted to a universal standard, e.g., official chapter names). To consider all of the variable entity forms while post-labeling the original dataset, we defined generic entity names (e.g., chapter, question nr.) and mapped variations of entities from the user input (e.g., Chapter = [Elementary Calculus, Chapter $I$, ...]) to them.",
+          "Next Action Prediction: We defined a classification problem to predict the system's next action according to the given user input. We assumed 13 custom actions (see Table TABREF42) that we considered being our labels. In the conversational dataset, each input was automatically labeled by the rule-based system with the corresponding next action and the dialogue-id. Thus, no additional post-labeling was required. We investigated two settings:"
+        ],
+        "evidence_block_ids": [
+          70,
+          71
+        ],
+        "evidence_paragraph_ids": [
+          70,
+          71
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Plain dialogues with unique dialogue indexes",
+          "Plain Information Dictionary information (e.g., extracted entities) collected for the whole dialogue",
+          "Pairs of questions (i.e., user requests) and responses (i.e., bot responses)",
+          "Triples in the form of (User Request, Next Action, Response)"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Plain dialogues with unique dialogue indexes;",
+          "Plain Information Dictionary information (e.g., extracted entities) collected for the whole dialogue;",
+          "Pairs of questions (i.e., user requests) and responses (i.e., bot responses) with the unique dialogue- and turn-indexes;",
+          "Triples in the form of (User Request, Next Action, Response). Information on the next system's action could be employed to train a Dialogue Manager unit with (deep-) machine learning algorithms;"
+        ],
+        "evidence_block_ids": [
+          57,
+          58,
+          59,
+          60
+        ],
+        "evidence_paragraph_ids": [
+          57,
+          58,
+          59,
+          60
+        ]
+      }
+    ],
+    "doc_uuid": "2001.02284",
+    "doc_path": "qasper://2001.02284",
+    "qasper_question_id": "ca5a82b54cb707c9b947aa8445aac51ea218b23a",
+    "title": "Multipurpose Intelligent Process Automation via Conversational Assistant",
+    "evidence_block_ids": [
+      70,
+      71,
+      57,
+      58,
+      59,
+      60
+    ],
+    "evidence_paragraph_ids": [
+      70,
+      71,
+      57,
+      58,
+      59,
+      60
+    ],
+    "output": "{\n  \"answer_short\": \"by augmenting the resources with structured and to some extent labeled training data\",\n  \"answer_rationale\": \"The retrieved document states that the IPA system 'augments the resources with structured and to some extent labeled training data' by interacting with users, which directly answers the question.\"\n}",
+    "retrieved_node_ids": [
+      2
+    ],
+    "answer_short": "by augmenting the resources with structured and to some extent labeled training data",
+    "answer_rationale": "The retrieved document states that the IPA system 'augments the resources with structured and to some extent labeled training data' by interacting with users, which directly answers the question.",
+    "supporting_block_ids": [
+      2
+    ]
+  },
+  {
+    "question": "What kind of repetitive and time-consuming activities does their assistant handle?",
+    "answer": [
+      {
+        "unanswerable": true,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          " What kind of topic (or sub-topic) a student has a problem with",
+          "At which examination mode (i.e., quiz, chapter level training or exercise, section level training or exercise, or final examination) the student is working right now",
+          " the exact question number and exact problem formulation"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "In general, student questions can be grouped into three main categories: organizational questions (e.g., course certificate), contextual questions (e.g., content, theorem) and mathematical questions (e.g., exercises, solutions). To assist a student with a mathematical question, a tutor has to know the following regular information: What kind of topic (or sub-topic) a student has a problem with. At which examination mode (i.e., quiz, chapter level training or exercise, section level training or exercise, or final examination) the student is working right now. And finally, the exact question number and exact problem formulation. This means that a tutor has to request the same information every time a new dialogue opens, which is very time consuming and could be successfully solved by means of an IPA dialogue bot."
+        ],
+        "evidence_block_ids": [
+          16
+        ],
+        "evidence_paragraph_ids": [
+          16
+        ]
+      }
+    ],
+    "doc_uuid": "2001.02284",
+    "doc_path": "qasper://2001.02284",
+    "qasper_question_id": "da55bd769721b878dd17f07f124a37a0a165db02",
+    "title": "Multipurpose Intelligent Process Automation via Conversational Assistant",
+    "evidence_block_ids": [
+      16
+    ],
+    "evidence_paragraph_ids": [
+      16
+    ],
+    "output": "{\n  \"answer_short\": \"repetitive, routine and low-cognitive tasks\",\n  \"answer_rationale\": \"Text 1 explicitly states that Intelligent Process Automation (IPA) assists knowledge workers by taking care of 'repetitive, routine and low-cognitive tasks', which directly answers the question about the kind of activities handled by the assistant.\"\n}",
+    "retrieved_node_ids": [
+      2
+    ],
+    "answer_short": "repetitive, routine and low-cognitive tasks",
+    "answer_rationale": "Text 1 explicitly states that Intelligent Process Automation (IPA) assists knowledge workers by taking care of 'repetitive, routine and low-cognitive tasks', which directly answers the question about the kind of activities handled by the assistant.",
+    "supporting_block_ids": [
+      2
+    ]
+  }
+]

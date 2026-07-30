@@ -1,0 +1,90 @@
+{
+  "strategy": "ircot",
+  "thoughts": [
+    "The model architecture is not explicitly mentioned in the retrieved evidence, but it states that the same architecture is used for ASR and ST models for simplicity.",
+    "The model architecture for ASR and ST follows berard2018end with 3 decoder layers, and MT uses a Transformer base architecture with 3 encoder and decoder layers and 0.3 dropout."
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "retrieval_query": "What is the architecture of their model?",
+      "thought": "The model architecture is not explicitly mentioned in the retrieved evidence, but it states that the same architecture is used for ASR and ST models for simplicity.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 31,
+          "score": 5.126722505120525,
+          "content": "MT models take transcripts (without punctuation) as inputs and outputs translations (with punctuation). For simplicity, we do not change the text preprocessing methods for MT to correct this mismatch. Moreover, this mismatch also exists in cascading ST systems, where MT model inputs are the outputs of an ASR model. Table TABREF20 shows the BLEU scores of MT models. We notice that the results are consistent with what we see from ASR models. For example thanks to abundant training data, French has a decent BLEU score of 29.8/25.4. German doesn't perform well, because of less richness of content (transcripts). The other languages are low resource in CoVoST and it is difficult to train decent models without additional data or pre-training techniques.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "MT models take transcripts (without punctuation) as inputs and outputs translations (with punctuation). For simplicity, we do not change the text preprocessing methods for MT to correct this mismatch. Moreover, this mismatch also exists in cascading ST systems, where MT model inputs are the outputs of an ASR model. Table TABREF20 shows the BLEU scores of MT models. We notice that the results are consistent with what we see from ASR models. For example thanks to abundant training data, French has a decent BLEU score of 29.8/25.4. German doesn't perform well, because of less richness of content (transcripts). The other languages are low resource in CoVoST and it is difficult to train decent models without additional data or pre-training techniques.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 35,
+          "score": 4.543047684789981,
+          "content": "In CoVoST, large portion of transcripts are covered by multiple speakers with different genders, accents and age groups. Besides the standard corpus-level BLEU scores, we also want to evaluate model output variance on the same content (transcript) but different speakers. We hence propose to group samples (and their sentence BLEU scores) by transcript, and then calculate average per-group mean and average coefficient of variation defined as follows:",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "In CoVoST, large portion of transcripts are covered by multiple speakers with different genders, accents and age groups. Besides the standard corpus-level BLEU scores, we also want to evaluate model output variance on the same content (transcript) but different speakers. We hence propose to group samples (and their sentence BLEU scores) by transcript, and then calculate average per-group mean and average coefficient of variation defined as follows:",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 29,
+          "score": 4.396609059610892,
+          "content": "For simplicity, we use the same model architecture for ASR and ST, although we do not leverage ASR models to pretrain ST model encoders later. Table TABREF18 shows the word error rate (WER) and character error rate (CER) for ASR models. We see that French and German perform the best given they are the two highest resource languages in CoVoST. The other languages are relatively low resource (especially Turkish and Swedish) and the ASR models are having difficulties to learn from this data.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "For simplicity, we use the same model architecture for ASR and ST, although we do not leverage ASR models to pretrain ST model encoders later. Table TABREF18 shows the word error rate (WER) and character error rate (CER) for ASR models. We see that French and German perform the best given they are the two highest resource languages in CoVoST. The other languages are relatively low resource (especially Turkish and Swedish) and the ASR models are having difficulties to learn from this data.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "retrieval_query": "What is the architecture of their model?\nThought 1: The model architecture is not explicitly mentioned in the retrieved evidence, but it states that the same architecture is used for ASR and ST models for simplicity.",
+      "thought": "The model architecture for ASR and ST follows berard2018end with 3 decoder layers, and MT uses a Transformer base architecture with 3 encoder and decoder layers and 0.3 dropout.",
+      "stop": true,
+      "retrieved": [
+        {
+          "id": 29,
+          "score": 25.838271403437822,
+          "content": "For simplicity, we use the same model architecture for ASR and ST, although we do not leverage ASR models to pretrain ST model encoders later. Table TABREF18 shows the word error rate (WER) and character error rate (CER) for ASR models. We see that French and German perform the best given they are the two highest resource languages in CoVoST. The other languages are relatively low resource (especially Turkish and Swedish) and the ASR models are having difficulties to learn from this data.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "For simplicity, we use the same model architecture for ASR and ST, although we do not leverage ASR models to pretrain ST model encoders later. Table TABREF18 shows the word error rate (WER) and character error rate (CER) for ASR models. We see that French and German perform the best given they are the two highest resource languages in CoVoST. The other languages are relatively low resource (especially Turkish and Swedish) and the ASR models are having difficulties to learn from this data.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 25,
+          "score": 22.496664071489118,
+          "content": "Our ASR and ST models follow the architecture in berard2018end, but have 3 decoder layers like that in pino2019harnessing. For MT, we use a Transformer base architecture BIBREF15, but with 3 encoder layers, 3 decoder layers and 0.3 dropout. We use a batch size of 10,000 frames for ASR and ST, and a batch size of 4,000 tokens for MT. We train all models using Fairseq BIBREF20 for up to 200,000 updates. We use SpecAugment BIBREF21 for ASR and ST to alleviate overfitting.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "Our ASR and ST models follow the architecture in berard2018end, but have 3 decoder layers like that in pino2019harnessing. For MT, we use a Transformer base architecture BIBREF15, but with 3 encoder layers, 3 decoder layers and 0.3 dropout. We use a batch size of 10,000 frames for ASR and ST, and a batch size of 4,000 tokens for MT. We train all models using Fairseq BIBREF20 for up to 200,000 updates. We use SpecAugment BIBREF21 for ASR and ST to alleviate overfitting.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 31,
+          "score": 19.668336300897813,
+          "content": "MT models take transcripts (without punctuation) as inputs and outputs translations (with punctuation). For simplicity, we do not change the text preprocessing methods for MT to correct this mismatch. Moreover, this mismatch also exists in cascading ST systems, where MT model inputs are the outputs of an ASR model. Table TABREF20 shows the BLEU scores of MT models. We notice that the results are consistent with what we see from ASR models. For example thanks to abundant training data, French has a decent BLEU score of 29.8/25.4. German doesn't perform well, because of less richness of content (transcripts). The other languages are low resource in CoVoST and it is difficult to train decent models without additional data or pre-training techniques.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "MT models take transcripts (without punctuation) as inputs and outputs translations (with punctuation). For simplicity, we do not change the text preprocessing methods for MT to correct this mismatch. Moreover, this mismatch also exists in cascading ST systems, where MT model inputs are the outputs of an ASR model. Table TABREF20 shows the BLEU scores of MT models. We notice that the results are consistent with what we see from ASR models. For example thanks to abundant training data, French has a decent BLEU score of 29.8/25.4. German doesn't perform well, because of less richness of content (transcripts). The other languages are low resource in CoVoST and it is difficult to train decent models without additional data or pre-training techniques.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    }
+  ],
+  "retrieved_block_ids": [
+    31,
+    35,
+    29,
+    25
+  ],
+  "supporting_block_ids": [
+    25,
+    29,
+    31
+  ]
+}

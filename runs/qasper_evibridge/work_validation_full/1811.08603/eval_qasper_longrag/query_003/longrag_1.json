@@ -1,0 +1,106 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] This work is licensed under a Creative Commons Attribution 4.0 International License. License details: http://creativecommons.org/licenses/by/4.0/\n[source_id=5] Entity linking (EL), mapping entity mentions in texts to a given knowledge base (KB), serves as a fundamental role in many fields, such as question answering BIBREF0 , semantic search BIBREF1 , and information extraction BIBREF2 , BIBREF3 . However, this task is non-trivial because entity mentions are usually ambiguous. As shown in Figure FIGREF1 , the mention England refers to three entities in KB, and an entity linking system should be capable of identifying the correct entity as England cricket team rather than England and England national football team.\n[source_id=6] Entity linking is typically broken down into two main phases: (i) candidate generation obtains a set of referent entities in KB for each mention, and (ii) named entity disambiguation selects the possible candidate entity by solving a ranking problem. The key challenge lies in the ranking model that computes the relevance between candidates and the corresponding mentions based on the information both in texts and KBs BIBREF4 . In terms of the features used for ranking, we classify existing EL models into two groups: local models to resolve mentions independently relying on textual context information from the surrounding words BIBREF5 , BIBREF6 , BIBREF7 , BIBREF8 , and global (collective) models, which are the main focus of this paper, that encourage the target entities of all mentions in a document to be topically coherent BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 , BIBREF13 , BIBREF14 .\n[source_id=7] Global models usually build an entity graph based on KBs to capture coherent entities for all identified mentions in a document, where the nodes are entities, and edges denote their relations. The graph provides highly discriminative semantic signals (e.g., entity relatedness) that are unavailable to local model BIBREF15 . For example (Figure FIGREF1 ), an EL model seemly cannot find sufficient disambiguation clues for the mention England from its surrounding words, unless it utilizes the coherence information of consistent topic “cricket\" among adjacent mentions England, Hussain, and Essex. Although the global model has achieved significant improvements, its limitation is threefold:\n[source_id=8] To mitigate the first limitation, recent EL studies introduce neural network (NN) models due to its amazing feature abstraction and generalization ability. In such models, words/entities are represented by low dimensional vectors in a continuous space, and features for mention as well as candidate entities are automatically learned from data BIBREF4 . However, existing NN-based methods for EL are either local models BIBREF16 , BIBREF17 or merely use word/entity embeddings for feature extraction and rely on another modules for collective disambiguation, which thus cannot fully utilize the power of NN models for collective EL BIBREF18 , BIBREF19 , BIBREF20 .\n[source_id=9] The second drawback of the global approach has been alleviated through approximate optimization techniques, such as PageRank/random walks BIBREF21 , graph pruning BIBREF22 , ranking SVMs BIBREF23 , or loopy belief propagation (LBP) BIBREF18 , BIBREF24 . However, these methods are not differentiable and thus difficult to be integrated into neural network models (the solution for the first limitation).\n[source_id=10] To overcome the third issue of inadequate training data, BIBREF17 has explored a massive amount of hyperlinks in Wikipedia, but these potential annotations for EL contain much noise, which may distract a naive disambiguation model BIBREF6 .\n[source_id=11] In this paper, we propose a novel Neural Collective Entity Linking model (NCEL), which performs global EL combining deep neural networks with Graph Convolutional Network (GCN) BIBREF25 , BIBREF26 that allows flexible encoding of entity graphs. It integrates both local contextual information and global interdependence of mentions in a document, and is efficiently trainable in an end-to-end fashion. Particularly, we introduce attention mechanism to robustly model local contextual information by selecting informative words and filtering out the noise. On the other hand, we apply GCNs to improve discriminative signals of candidate entities by exploiting the rich structure underlying the correct entities. To alleviate the global computations, we propose to convolute on the subgraph of adjacent mentions. Thus, the overall coherence shall be achieved in a chain-like way via a sliding window over the document. To the best of our knowledge, this is the first effort to develop a unified model for neural collective entity linking.\n[source_id=12] In experiments, we first verify the efficiency of NCEL via theoretically comparing its time complexity with other collective alternatives. Afterwards, we train our neural model using collected Wikipedia hyperlinks instead of dataset-specific annotations, and perform evaluations on five public available benchmarks. The results show that NCEL consistently outperforms various baselines with a favorable generalization ability. Finally, we further present the performance on a challenging dataset WW BIBREF19 as well as qualitative results, investigating the effectiveness of each key module.",
+  "score": 2.933631511478561,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "child_qasper_evidence_texts": [
+    "This work is licensed under a Creative Commons Attribution 4.0 International License. License details: http://creativecommons.org/licenses/by/4.0/",
+    "Entity linking (EL), mapping entity mentions in texts to a given knowledge base (KB), serves as a fundamental role in many fields, such as question answering BIBREF0 , semantic search BIBREF1 , and information extraction BIBREF2 , BIBREF3 . However, this task is non-trivial because entity mentions are usually ambiguous. As shown in Figure FIGREF1 , the mention England refers to three entities in KB, and an entity linking system should be capable of identifying the correct entity as England cricket team rather than England and England national football team.",
+    "Entity linking is typically broken down into two main phases: (i) candidate generation obtains a set of referent entities in KB for each mention, and (ii) named entity disambiguation selects the possible candidate entity by solving a ranking problem. The key challenge lies in the ranking model that computes the relevance between candidates and the corresponding mentions based on the information both in texts and KBs BIBREF4 . In terms of the features used for ranking, we classify existing EL models into two groups: local models to resolve mentions independently relying on textual context information from the surrounding words BIBREF5 , BIBREF6 , BIBREF7 , BIBREF8 , and global (collective) models, which are the main focus of this paper, that encourage the target entities of all mentions in a document to be topically coherent BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 , BIBREF13 , BIBREF14 .",
+    "Global models usually build an entity graph based on KBs to capture coherent entities for all identified mentions in a document, where the nodes are entities, and edges denote their relations. The graph provides highly discriminative semantic signals (e.g., entity relatedness) that are unavailable to local model BIBREF15 . For example (Figure FIGREF1 ), an EL model seemly cannot find sufficient disambiguation clues for the mention England from its surrounding words, unless it utilizes the coherence information of consistent topic “cricket\" among adjacent mentions England, Hussain, and Essex. Although the global model has achieved significant improvements, its limitation is threefold:",
+    "To mitigate the first limitation, recent EL studies introduce neural network (NN) models due to its amazing feature abstraction and generalization ability. In such models, words/entities are represented by low dimensional vectors in a continuous space, and features for mention as well as candidate entities are automatically learned from data BIBREF4 . However, existing NN-based methods for EL are either local models BIBREF16 , BIBREF17 or merely use word/entity embeddings for feature extraction and rely on another modules for collective disambiguation, which thus cannot fully utilize the power of NN models for collective EL BIBREF18 , BIBREF19 , BIBREF20 .",
+    "The second drawback of the global approach has been alleviated through approximate optimization techniques, such as PageRank/random walks BIBREF21 , graph pruning BIBREF22 , ranking SVMs BIBREF23 , or loopy belief propagation (LBP) BIBREF18 , BIBREF24 . However, these methods are not differentiable and thus difficult to be integrated into neural network models (the solution for the first limitation).",
+    "To overcome the third issue of inadequate training data, BIBREF17 has explored a massive amount of hyperlinks in Wikipedia, but these potential annotations for EL contain much noise, which may distract a naive disambiguation model BIBREF6 .",
+    "In this paper, we propose a novel Neural Collective Entity Linking model (NCEL), which performs global EL combining deep neural networks with Graph Convolutional Network (GCN) BIBREF25 , BIBREF26 that allows flexible encoding of entity graphs. It integrates both local contextual information and global interdependence of mentions in a document, and is efficiently trainable in an end-to-end fashion. Particularly, we introduce attention mechanism to robustly model local contextual information by selecting informative words and filtering out the noise. On the other hand, we apply GCNs to improve discriminative signals of candidate entities by exploiting the rich structure underlying the correct entities. To alleviate the global computations, we propose to convolute on the subgraph of adjacent mentions. Thus, the overall coherence shall be achieved in a chain-like way via a sliding window over the document. To the best of our knowledge, this is the first effort to develop a unified model for neural collective entity linking.",
+    "In experiments, we first verify the efficiency of NCEL via theoretically comparing its time complexity with other collective alternatives. Afterwards, we train our neural model using collected Wikipedia hyperlinks instead of dataset-specific annotations, and perform evaluations on five public available benchmarks. The results show that NCEL consistently outperforms various baselines with a favorable generalization ability. Finally, we further present the performance on a challenging dataset WW BIBREF19 as well as qualitative results, investigating the effectiveness of each key module."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ],
+    [
+      "Introduction",
+      7
+    ],
+    [
+      "Introduction",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

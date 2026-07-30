@@ -1,0 +1,133 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Low dimensional word representations (embeddings) have become a key component in modern NLP systems for language modeling, parsing, sentiment classification, and many others. These embeddings are usually derived by employing the distributional hypothesis: that similar words appear in similar contexts BIBREF0 .\n[source_id=5] The models that perform the word embedding can be divided into two classes: predictive, which learn a target or context word distribution, and counting, which use a raw, weighted, or factored word-context co-occurrence matrix BIBREF1 . The most well-known predictive model, which has become eponymous with word embedding, is word2vec BIBREF2 . Popular counting models include PPMI-SVD BIBREF3 , GloVe BIBREF4 , and LexVec BIBREF5 .\n[source_id=6] These models all learn word-level representations, which presents two main problems: 1) Learned information is not explicitly shared among the representations as each word has an independent vector. 2) There is no clear way to represent out-of-vocabulary (OOV) words.\n[source_id=7] fastText BIBREF6 addresses these issues in the Skip-gram word2vec model by representing a word by the sum of a unique vector and a set of shared character n-grams (from hereon simply referred to as n-grams) vectors. This addresses both issues above as learned information is shared through the n-gram vectors and from these OOV word representations can be constructed.\n[source_id=8] In this paper we propose incorporating subword information into counting models using a strategy similar to fastText.\n[source_id=9] We use LexVec as the counting model as it generally outperforms PPMI-SVD and GloVe on intrinsic and extrinsic evaluations BIBREF7 , BIBREF8 , BIBREF9 , BIBREF10 , but the method proposed here should transfer to GloVe unchanged.\n[source_id=10] The LexVec objective is modified such that a word's vector is the sum of all its subword vectors.\n[source_id=11] We compare 1) the use of n-gram subwords, like fastText, and 2) unsupervised morphemes identified using Morfessor BIBREF11 to learn whether more linguistically motivated subwords offer any advantage over simple n-grams.\n[source_id=12] To evaluate the impact subword information has on in-vocabulary (IV) word representations, we run intrinsic evaluations consisting of word similarity and word analogy tasks. The incorporation of subword information results in similar gains (and losses) to that of fastText over Skip-gram. Whereas incorporating n-gram subwords tends to capture more syntactic information, unsupervised morphemes better preserve semantics while also improving syntactic results. Given that intrinsic performance can correlate poorly with performance on downstream tasks BIBREF12 , we also conduct evaluation using the VecEval suite of tasks BIBREF13 , in which\n[source_id=13] all subword models, including fastText, show no significant improvement over word-level models.\n[source_id=14] We verify the model's ability to represent OOV words by quantitatively evaluating nearest-neighbors. Results show that, like fastText, both LexVec n-gram and (to a lesser degree) unsupervised morpheme models give coherent answers.\n[source_id=15] This paper discusses related word ( $§$ \"Related Work\" ), introduces the subword LexVec model ( $§$ \"Subword LexVec\" ), describes experiments ( $§$ \"Materials\" ), analyzes results ( $§$ \"Results\" ), and concludes with ideas for future works ( $§$ \"Conclusion and Future Work\" ).",
+  "score": 1.9790265373200464,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "child_qasper_evidence_texts": [
+    "Low dimensional word representations (embeddings) have become a key component in modern NLP systems for language modeling, parsing, sentiment classification, and many others. These embeddings are usually derived by employing the distributional hypothesis: that similar words appear in similar contexts BIBREF0 .",
+    "The models that perform the word embedding can be divided into two classes: predictive, which learn a target or context word distribution, and counting, which use a raw, weighted, or factored word-context co-occurrence matrix BIBREF1 . The most well-known predictive model, which has become eponymous with word embedding, is word2vec BIBREF2 . Popular counting models include PPMI-SVD BIBREF3 , GloVe BIBREF4 , and LexVec BIBREF5 .",
+    "These models all learn word-level representations, which presents two main problems: 1) Learned information is not explicitly shared among the representations as each word has an independent vector. 2) There is no clear way to represent out-of-vocabulary (OOV) words.",
+    "fastText BIBREF6 addresses these issues in the Skip-gram word2vec model by representing a word by the sum of a unique vector and a set of shared character n-grams (from hereon simply referred to as n-grams) vectors. This addresses both issues above as learned information is shared through the n-gram vectors and from these OOV word representations can be constructed.",
+    "In this paper we propose incorporating subword information into counting models using a strategy similar to fastText.",
+    "We use LexVec as the counting model as it generally outperforms PPMI-SVD and GloVe on intrinsic and extrinsic evaluations BIBREF7 , BIBREF8 , BIBREF9 , BIBREF10 , but the method proposed here should transfer to GloVe unchanged.",
+    "The LexVec objective is modified such that a word's vector is the sum of all its subword vectors.",
+    "We compare 1) the use of n-gram subwords, like fastText, and 2) unsupervised morphemes identified using Morfessor BIBREF11 to learn whether more linguistically motivated subwords offer any advantage over simple n-grams.",
+    "To evaluate the impact subword information has on in-vocabulary (IV) word representations, we run intrinsic evaluations consisting of word similarity and word analogy tasks. The incorporation of subword information results in similar gains (and losses) to that of fastText over Skip-gram. Whereas incorporating n-gram subwords tends to capture more syntactic information, unsupervised morphemes better preserve semantics while also improving syntactic results. Given that intrinsic performance can correlate poorly with performance on downstream tasks BIBREF12 , we also conduct evaluation using the VecEval suite of tasks BIBREF13 , in which",
+    "all subword models, including fastText, show no significant improvement over word-level models.",
+    "We verify the model's ability to represent OOV words by quantitatively evaluating nearest-neighbors. Results show that, like fastText, both LexVec n-gram and (to a lesser degree) unsupervised morpheme models give coherent answers.",
+    "This paper discusses related word ( $§$ \"Related Work\" ), introduces the subword LexVec model ( $§$ \"Subword LexVec\" ), describes experiments ( $§$ \"Materials\" ), analyzes results ( $§$ \"Results\" ), and concludes with ideas for future works ( $§$ \"Conclusion and Future Work\" )."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ],
+    [
+      "Introduction",
+      7
+    ],
+    [
+      "Introduction",
+      8
+    ],
+    [
+      "Introduction",
+      9
+    ],
+    [
+      "Introduction",
+      10
+    ],
+    [
+      "Introduction",
+      11
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

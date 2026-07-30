@@ -1,0 +1,88 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Tag Recommendation Approaches\n[source_id=20] We implement three types of tag recommendation approaches, i.e., (i) popularity-based, (ii) similarity-based (i.e., using content information), and (iii) hybrid approaches. Due to the lack of personalized tags (i.e., we do not know which user has assigned a tag), we do not implement other types of algorithms such as collaborative filtering BIBREF8 . In total, we evaluate 19 different algorithms to recommend tags for annotating e-books.\n[source_id=21] Popularity-based approaches. We recommend the most frequently used tags in the dataset, which is a common strategy for tag recommendations BIBREF9 . That is, a most popular INLINEFORM0 approach for editor tags and a most popular INLINEFORM1 approach for Amazon search terms. For e-books, for which we also have author (= INLINEFORM2 and INLINEFORM3 ) or BISAC (= INLINEFORM4 and INLINEFORM5 ) information, we use these features to further filter the recommended tags, i.e., to only recommend tags that were used to annotate e-books of a specific author or a specific BISAC.\n[source_id=22] We combine both data sources (i.e., editor tags and Amazon search terms) using a round-robin combination strategy, which ensures an equal weight for both sources. This gives us three additional popularity-based algorithms (= INLINEFORM0 , INLINEFORM1 and INLINEFORM2 ).\n[source_id=23] Similarity-based approaches. We exploit the textual content of e-books (i.e., description or title) to recommend relevant tags BIBREF10 . For this, we first employ a content-based filtering approach BIBREF11 based on TF-IDF BIBREF12 to find top- INLINEFORM0 similar e-books. For each of the similar e-books, we then either extract the assigned editor tags (= INLINEFORM2 and INLINEFORM3 ) or the Amazon search terms (= INLINEFORM4 and INLINEFORM5 ). To combine the tags of the top- INLINEFORM6 similar e-books, we use the cross-source algorithm BIBREF13 , which favors tags that were used to annotate more than one similar e-book (i.e., tags that come from multiple recommendation sources). The final tag relevancy is calculated as: DISPLAYFORM0\n[source_id=24] where INLINEFORM0 denotes the number of distinct e-books, which yielded the recommendation of tag INLINEFORM1 , to favor tags that come from multiple sources and INLINEFORM2 is the similarity score of the corresponding e-book. We again use a round-robin strategy to combine both data sources (= INLINEFORM3 and INLINEFORM4 ).\n[source_id=25] Hybrid approaches. We use the previously mentioned cross-source algorithm BIBREF13 to construct four hybrid recommendation approaches. In this case, tags are favored that are recommended by more than one algorithm.\n[source_id=26] Hence, to create a popularity-based hybrid (= INLINEFORM0 ), we combine the best three performing popularity-based approaches from the ones (i) without any contextual signal, (ii) with the author as context, and (iii) with BISAC as context. In the case of the similarity-based hybrid (= INLINEFORM1 ), we utilize the two best performing similarity-based approaches from the ones (i) which use the title, and (ii) which use the description text. We further define INLINEFORM2 , a hybrid approach that combines the three popularity-based methods of INLINEFORM3 and the two similarity-based approaches of INLINEFORM4 . Finally, we define INLINEFORM5 as a hybrid approach that uses the best performing popularity-based and the best performing similarity-based approach (see Figure FIGREF11 in Section SECREF4 for more details about the particular algorithm combinations).",
+  "score": 2.027629236429806,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26
+  ],
+  "child_qasper_evidence_texts": [
+    "We implement three types of tag recommendation approaches, i.e., (i) popularity-based, (ii) similarity-based (i.e., using content information), and (iii) hybrid approaches. Due to the lack of personalized tags (i.e., we do not know which user has assigned a tag), we do not implement other types of algorithms such as collaborative filtering BIBREF8 . In total, we evaluate 19 different algorithms to recommend tags for annotating e-books.",
+    "Popularity-based approaches. We recommend the most frequently used tags in the dataset, which is a common strategy for tag recommendations BIBREF9 . That is, a most popular INLINEFORM0 approach for editor tags and a most popular INLINEFORM1 approach for Amazon search terms. For e-books, for which we also have author (= INLINEFORM2 and INLINEFORM3 ) or BISAC (= INLINEFORM4 and INLINEFORM5 ) information, we use these features to further filter the recommended tags, i.e., to only recommend tags that were used to annotate e-books of a specific author or a specific BISAC.",
+    "We combine both data sources (i.e., editor tags and Amazon search terms) using a round-robin combination strategy, which ensures an equal weight for both sources. This gives us three additional popularity-based algorithms (= INLINEFORM0 , INLINEFORM1 and INLINEFORM2 ).",
+    "Similarity-based approaches. We exploit the textual content of e-books (i.e., description or title) to recommend relevant tags BIBREF10 . For this, we first employ a content-based filtering approach BIBREF11 based on TF-IDF BIBREF12 to find top- INLINEFORM0 similar e-books. For each of the similar e-books, we then either extract the assigned editor tags (= INLINEFORM2 and INLINEFORM3 ) or the Amazon search terms (= INLINEFORM4 and INLINEFORM5 ). To combine the tags of the top- INLINEFORM6 similar e-books, we use the cross-source algorithm BIBREF13 , which favors tags that were used to annotate more than one similar e-book (i.e., tags that come from multiple recommendation sources). The final tag relevancy is calculated as: DISPLAYFORM0",
+    "where INLINEFORM0 denotes the number of distinct e-books, which yielded the recommendation of tag INLINEFORM1 , to favor tags that come from multiple sources and INLINEFORM2 is the similarity score of the corresponding e-book. We again use a round-robin strategy to combine both data sources (= INLINEFORM3 and INLINEFORM4 ).",
+    "Hybrid approaches. We use the previously mentioned cross-source algorithm BIBREF13 to construct four hybrid recommendation approaches. In this case, tags are favored that are recommended by more than one algorithm.",
+    "Hence, to create a popularity-based hybrid (= INLINEFORM0 ), we combine the best three performing popularity-based approaches from the ones (i) without any contextual signal, (ii) with the author as context, and (iii) with BISAC as context. In the case of the similarity-based hybrid (= INLINEFORM1 ), we utilize the two best performing similarity-based approaches from the ones (i) which use the title, and (ii) which use the description text. We further define INLINEFORM2 , a hybrid approach that combines the three popularity-based methods of INLINEFORM3 and the two similarity-based approaches of INLINEFORM4 . Finally, we define INLINEFORM5 as a hybrid approach that uses the best performing popularity-based and the best performing similarity-based approach (see Figure FIGREF11 in Section SECREF4 for more details about the particular algorithm combinations)."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Tag Recommendation Approaches",
+    "Tag Recommendation Approaches",
+    "Tag Recommendation Approaches",
+    "Tag Recommendation Approaches",
+    "Tag Recommendation Approaches",
+    "Tag Recommendation Approaches",
+    "Tag Recommendation Approaches"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Tag Recommendation Approaches",
+      0
+    ],
+    [
+      "Tag Recommendation Approaches",
+      1
+    ],
+    [
+      "Tag Recommendation Approaches",
+      2
+    ],
+    [
+      "Tag Recommendation Approaches",
+      3
+    ],
+    [
+      "Tag Recommendation Approaches",
+      4
+    ],
+    [
+      "Tag Recommendation Approaches",
+      5
+    ],
+    [
+      "Tag Recommendation Approaches",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Tag Recommendation Approaches",
+  "section": "Tag Recommendation Approaches",
+  "title_path": "Tag Recommendation Approaches",
+  "block_type": "long_unit"
+}

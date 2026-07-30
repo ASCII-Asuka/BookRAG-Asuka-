@@ -1,0 +1,34 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Proposed methodology ::: Model Architecture\n[source_id=27] The Embedding Layer is initialized using pre-trained word embeddings of dimension 200 from Twitter data that have been described in a previous sub-section. After the Embedding Layer, we are applying a Spatial Dropout Layer, which drops a certain percentage of dimensions from each word vector in the training sample. The role of Dropout is to improve generalization performance by preventing activations from becoming strongly correlated BIBREF18. Spatial Dropout, which has been proposed in BIBREF19, is an alternative way to use dropout with convolutional neural networks as it is able to dropout entire feature maps from the convolutional layer which are then not used during pooling. After that, the word embeddings are passing through a one-layer MLP, which has tanh as activation function and 128 hidden units, in order to project them in the vector space of our problem considering that they have been pre-trained using text that has a different subject. In the next step the embeddings are fed in a unidirectional GRU having 1 Stacked Layer and size 128. We prefer GRU than LSTM, because it is more efficient computationally. Also the basic advantage of LSTM which is the ability to keep in memory large text documents, does not hold here, because tweets supposed to be not too large text documents. The output states of the GRU are passing through four self-attentions like the one described above BIBREF9, because we are using one attention per category (see Fig. FIGREF7). Finally, a one-layer MLP having 128 nodes and ReLU as activation function computes the final score for each category. At this final stage we have avoided using a softmax function to decide the harassment type considering that the tweet is a harassment, otherwise we had to train our models taking into account only the harassment tweets and this might have been a problem as the dataset is not large enough.",
+  "score": 2.1977362404987586,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    27
+  ],
+  "child_qasper_evidence_texts": [
+    "The Embedding Layer is initialized using pre-trained word embeddings of dimension 200 from Twitter data that have been described in a previous sub-section. After the Embedding Layer, we are applying a Spatial Dropout Layer, which drops a certain percentage of dimensions from each word vector in the training sample. The role of Dropout is to improve generalization performance by preventing activations from becoming strongly correlated BIBREF18. Spatial Dropout, which has been proposed in BIBREF19, is an alternative way to use dropout with convolutional neural networks as it is able to dropout entire feature maps from the convolutional layer which are then not used during pooling. After that, the word embeddings are passing through a one-layer MLP, which has tanh as activation function and 128 hidden units, in order to project them in the vector space of our problem considering that they have been pre-trained using text that has a different subject. In the next step the embeddings are fed in a unidirectional GRU having 1 Stacked Layer and size 128. We prefer GRU than LSTM, because it is more efficient computationally. Also the basic advantage of LSTM which is the ability to keep in memory large text documents, does not hold here, because tweets supposed to be not too large text documents. The output states of the GRU are passing through four self-attentions like the one described above BIBREF9, because we are using one attention per category (see Fig. FIGREF7). Finally, a one-layer MLP having 128 nodes and ReLU as activation function computes the final score for each category. At this final stage we have avoided using a softmax function to decide the harassment type considering that the tweet is a harassment, otherwise we had to train our models taking into account only the harassment tweets and this might have been a problem as the dataset is not large enough."
+  ],
+  "child_pages": [
+    7
+  ],
+  "child_sections": [
+    "Proposed methodology ::: Model Architecture"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Proposed methodology ::: Model Architecture",
+      0
+    ]
+  ],
+  "child_block_types": [
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Proposed methodology ::: Model Architecture",
+  "section": "Proposed methodology ::: Model Architecture",
+  "title_path": "Proposed methodology ::: Model Architecture",
+  "block_type": "long_unit"
+}

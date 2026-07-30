@@ -1,0 +1,61 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Framework ::: Entity Tagging\n[source_id=12] We use the same BiLSTM-CRF model proposed by Huang et al. BIBREF2. An illustration of the architecture is shown in Figure FIGREF6 . Given a sequence (or sentence) of n tokens, $r = (w_1, w_2,..., w_n)$, we use a fine-tuned ELMo model to generate contextual word embeddings for all the tokens in the sentence, where a token refers to a word or punctuation. We denote the ELMo embedding, $x$, for a token $w$ in the sentence $r$ by $x = ELMo(w|r)$. The notation and the procedure described here can be adopted for Flair embeddings or other embeddings. Now, given a sequence of tokens in ELMo embeddings, $X =(x_1, x_2, ..., x_n)$, the BiLSTM layer generates a matrix of scores, $P(\\theta )$ of size $n \\times k$, where $k$ is the number of tag types, and $\\theta $ is the parameters of the BiLSTM. To simplify notation, we will omit the $\\theta $ and write $P$. Then, $P_{i,j}$ denotes the score of the token, $x_i$, being assigned to the $j$th tag. Since certain constraints may exist in the transition between tags, an \"O\" tag should not be followed by an \"I\" tag, for example, a transition matrix, $A$, of dimension $(k+2)\\times (k+2)$, is initialized to model the constraints. The learnable parameters, $A_{i,j}$, represent the probability of the $j$th tag follows the $i$th tag in a sequence. For example, if we index the tags by: 1:“B”, 2:“I”, and 3:“O”, then $A_{1,3}$ would be the probability that an “O” tag follows a “B” tag. A beginning transition and an end transition are inserted in $A$ and hence $A$ is of dimension $(k+2)\\times (k+2)$.\n[source_id=13] Given a sequence of tags, $Y=(y_1,y_2,...,y_n)$, where each $y_i$, $1\\le i \\le n$, corresponds to an index of the tags, the score of the sequence is then given by\n[source_id=14] The probability of the sequence of tags is then calculated by a softmax,\n[source_id=15] where $\\lbrace Y_x\\rbrace $ denotes the set of all possible tag sequences. During training, the objective function is to maximize $\\log (P(Y|X))$ by adjusting $A$ and $P$.",
+  "score": 2.453338803364147,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    12,
+    13,
+    14,
+    15
+  ],
+  "child_qasper_evidence_texts": [
+    "We use the same BiLSTM-CRF model proposed by Huang et al. BIBREF2. An illustration of the architecture is shown in Figure FIGREF6 . Given a sequence (or sentence) of n tokens, $r = (w_1, w_2,..., w_n)$, we use a fine-tuned ELMo model to generate contextual word embeddings for all the tokens in the sentence, where a token refers to a word or punctuation. We denote the ELMo embedding, $x$, for a token $w$ in the sentence $r$ by $x = ELMo(w|r)$. The notation and the procedure described here can be adopted for Flair embeddings or other embeddings. Now, given a sequence of tokens in ELMo embeddings, $X =(x_1, x_2, ..., x_n)$, the BiLSTM layer generates a matrix of scores, $P(\\theta )$ of size $n \\times k$, where $k$ is the number of tag types, and $\\theta $ is the parameters of the BiLSTM. To simplify notation, we will omit the $\\theta $ and write $P$. Then, $P_{i,j}$ denotes the score of the token, $x_i$, being assigned to the $j$th tag. Since certain constraints may exist in the transition between tags, an \"O\" tag should not be followed by an \"I\" tag, for example, a transition matrix, $A$, of dimension $(k+2)\\times (k+2)$, is initialized to model the constraints. The learnable parameters, $A_{i,j}$, represent the probability of the $j$th tag follows the $i$th tag in a sequence. For example, if we index the tags by: 1:“B”, 2:“I”, and 3:“O”, then $A_{1,3}$ would be the probability that an “O” tag follows a “B” tag. A beginning transition and an end transition are inserted in $A$ and hence $A$ is of dimension $(k+2)\\times (k+2)$.",
+    "Given a sequence of tags, $Y=(y_1,y_2,...,y_n)$, where each $y_i$, $1\\le i \\le n$, corresponds to an index of the tags, the score of the sequence is then given by",
+    "The probability of the sequence of tags is then calculated by a softmax,",
+    "where $\\lbrace Y_x\\rbrace $ denotes the set of all possible tag sequences. During training, the objective function is to maximize $\\log (P(Y|X))$ by adjusting $A$ and $P$."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Framework ::: Entity Tagging",
+    "Framework ::: Entity Tagging",
+    "Framework ::: Entity Tagging",
+    "Framework ::: Entity Tagging"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Framework ::: Entity Tagging",
+      0
+    ],
+    [
+      "Framework ::: Entity Tagging",
+      1
+    ],
+    [
+      "Framework ::: Entity Tagging",
+      2
+    ],
+    [
+      "Framework ::: Entity Tagging",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Framework ::: Entity Tagging",
+  "section": "Framework ::: Entity Tagging",
+  "title_path": "Framework ::: Entity Tagging",
+  "block_type": "long_unit"
+}

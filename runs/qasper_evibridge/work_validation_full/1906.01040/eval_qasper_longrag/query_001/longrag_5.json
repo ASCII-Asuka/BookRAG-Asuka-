@@ -1,0 +1,70 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Word-level experiments\n[source_id=17] We sampled 200 unique words (listed in Table 2 ) from the 10,000 most common words in the Project Gutenberg novels in proportion to their frequency in the corpus. The 10k words collectively have a prevalence of 80.6% in the corpus. Of the 200 sampled words, 147 (73.5%) contained phonemes that our preliminary phoneme study suggested might be illusionable. For these 147 words, we paired audio clips spoken by the speaker with illusory video dubs of the speaker saying the words with appropriately switched out phonemes. We tested these videos on 20 naive test subjects who did not participate in the preliminary study. Each subject watched half of the words and listened without video to the other half of the words, and were given the instructions: \"Write down what you hear. What you hear may or may not be sensical. Also write down if a clip sounds unclear to you. Not that a clip may sound nonsensical but clear.\" Subjects were allowed up to three plays of each clip.\n[source_id=18] We found that watching the illusory videos led to an average miscomprehension rate of 24.8%, a relative 148% increase from the baseline of listening to the audio alone (Table 3 ). The illusory videos made people less confident about their correct answers, with an additional 5.1% of words being heard correctly but unclearly, compared to 2.1% for audio only. For 17% of the 200 words, the illusory videos increased the error rates by more than 30% above the audio-only baseline.\n[source_id=19] To create a predictive model for word-level illusionability, we used illusionable phonemes enriched with positional information as features. Explicitly, for each of the 10 illusionable phonemes, we created three features from the phoneme being in an initial position (being the first phoneme of the word), a medial position (having phonemes come before and after), or a final position (being the last phoneme of the word). We then represented each word with a binary bag-of-words model BIBREF23 , giving each of the 30 phonemes-with-phonetic-context features a value of 1 if present in the word and 0 otherwise. We performed ridge regression on these features with a constant term. We searched for the optimal $l2$ regularization constant among the values [0.1, 1, 10, 100] and picked the optimal one based on training set performance. The train:test split was in the proportion 85%:15% and was randomly chosen for each trial. Across 10k randomized trials, we obtain average training and test set correlations of $91.1\\pm 0.6\\%$ and $44.6\\pm 28.9\\%$ respectively.\n[source_id=20] Our final model achieves an out-of-sample correlation of 57% between predicted and observed illusionabilites. Here, the observed illusionability of the words is calculated as the difference between the accuracy of watchers of the illusory videos and the accuracy of listeners, where “accuracy” is defined as the fraction of respondents who were correct. For each word, the predicted illusionability is calculated from doing inference on that word using the averaged regression coefficients of the regression trials where the word is not in the training set.\n[source_id=21] Our predicted illusionability is also calibrated, in the sense that for the words predicted to have an illusionability <0.1, the mean empirical illusionability is 0.04; for words with predicted illusionability in the interval [0.1, 0.2] the mean empirical illusionability is 0.14; for predicted illusionability between [0.2, 0.3] the mean observed is 0.27; and for predicted illusionability >0.3, the mean observed is 0.50. Figure 2 visually depicts the match between the observed and predicted word illusionabilities.",
+  "score": 1.0401053672785694,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    17,
+    18,
+    19,
+    20,
+    21
+  ],
+  "child_qasper_evidence_texts": [
+    "We sampled 200 unique words (listed in Table 2 ) from the 10,000 most common words in the Project Gutenberg novels in proportion to their frequency in the corpus. The 10k words collectively have a prevalence of 80.6% in the corpus. Of the 200 sampled words, 147 (73.5%) contained phonemes that our preliminary phoneme study suggested might be illusionable. For these 147 words, we paired audio clips spoken by the speaker with illusory video dubs of the speaker saying the words with appropriately switched out phonemes. We tested these videos on 20 naive test subjects who did not participate in the preliminary study. Each subject watched half of the words and listened without video to the other half of the words, and were given the instructions: \"Write down what you hear. What you hear may or may not be sensical. Also write down if a clip sounds unclear to you. Not that a clip may sound nonsensical but clear.\" Subjects were allowed up to three plays of each clip.",
+    "We found that watching the illusory videos led to an average miscomprehension rate of 24.8%, a relative 148% increase from the baseline of listening to the audio alone (Table 3 ). The illusory videos made people less confident about their correct answers, with an additional 5.1% of words being heard correctly but unclearly, compared to 2.1% for audio only. For 17% of the 200 words, the illusory videos increased the error rates by more than 30% above the audio-only baseline.",
+    "To create a predictive model for word-level illusionability, we used illusionable phonemes enriched with positional information as features. Explicitly, for each of the 10 illusionable phonemes, we created three features from the phoneme being in an initial position (being the first phoneme of the word), a medial position (having phonemes come before and after), or a final position (being the last phoneme of the word). We then represented each word with a binary bag-of-words model BIBREF23 , giving each of the 30 phonemes-with-phonetic-context features a value of 1 if present in the word and 0 otherwise. We performed ridge regression on these features with a constant term. We searched for the optimal $l2$ regularization constant among the values [0.1, 1, 10, 100] and picked the optimal one based on training set performance. The train:test split was in the proportion 85%:15% and was randomly chosen for each trial. Across 10k randomized trials, we obtain average training and test set correlations of $91.1\\pm 0.6\\%$ and $44.6\\pm 28.9\\%$ respectively.",
+    "Our final model achieves an out-of-sample correlation of 57% between predicted and observed illusionabilites. Here, the observed illusionability of the words is calculated as the difference between the accuracy of watchers of the illusory videos and the accuracy of listeners, where “accuracy” is defined as the fraction of respondents who were correct. For each word, the predicted illusionability is calculated from doing inference on that word using the averaged regression coefficients of the regression trials where the word is not in the training set.",
+    "Our predicted illusionability is also calibrated, in the sense that for the words predicted to have an illusionability <0.1, the mean empirical illusionability is 0.04; for words with predicted illusionability in the interval [0.1, 0.2] the mean empirical illusionability is 0.14; for predicted illusionability between [0.2, 0.3] the mean observed is 0.27; and for predicted illusionability >0.3, the mean observed is 0.50. Figure 2 visually depicts the match between the observed and predicted word illusionabilities."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Word-level experiments",
+    "Word-level experiments",
+    "Word-level experiments",
+    "Word-level experiments",
+    "Word-level experiments"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Word-level experiments",
+      0
+    ],
+    [
+      "Word-level experiments",
+      1
+    ],
+    [
+      "Word-level experiments",
+      2
+    ],
+    [
+      "Word-level experiments",
+      3
+    ],
+    [
+      "Word-level experiments",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Word-level experiments",
+  "section": "Word-level experiments",
+  "title_path": "Word-level experiments",
+  "block_type": "long_unit"
+}

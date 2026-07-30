@@ -1,0 +1,79 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Models\n[source_id=47] We first use a simple word matching baseline, by selecting the answer that has the highest literal overlap with the text. In case of a tie, we randomly select one of the answers.\n[source_id=48] The second baseline is a sliding window approach that looks at windows of INLINEFORM0 tokens on the text. Each text and each answer are represented as a sequence of word embeddings. The embeddings for each window of size INLINEFORM1 and each answer are then averaged to derive window and answer representations, respectively. The answer with the lowest cosine distance to one of the windows of the text is then selected as correct.\n[source_id=49] We employ a simple neural model as a third baseline. In this model, each text, question, and answer is represented by a vector. For a given sequence of words INLINEFORM0 , we compute this representation by averaging over the components of the word embeddings INLINEFORM1 that correspond to a word INLINEFORM2 , and then apply a linear transformation using a weight matrix. This procedure is applied to each answer INLINEFORM3 to derive an answer representation INLINEFORM4 . The representation of a text INLINEFORM5 and of a question INLINEFORM6 are computed in the same way. We use different weight matrices for INLINEFORM7 , INLINEFORM8 and INLINEFORM9 , respectively. A combined representation INLINEFORM10 for the text–question pair is then constructed using a bilinear transformation matrix INLINEFORM11 : DISPLAYFORM0\n[source_id=50] We compute a score for each answer by using the dot product and pass the scores for both answers through a softmax layer for prediction. The probability INLINEFORM0 for an answer INLINEFORM1 to be correct is thus defined as: DISPLAYFORM0\n[source_id=51] The attentive reader is a well-established machine comprehension model that reaches good performance e.g. on the CNN/Daily Mail corpus BIBREF14 , BIBREF15 . We use the model formulation by chen2016thorough and lai2017race, who employ bilinear weight functions to compute both attention and answer-text fit. Bi-directional GRUs are used to encode questions, texts and answers into hidden representations. For a question INLINEFORM0 and an answer INLINEFORM1 , the last state of the GRUs, INLINEFORM2 and INLINEFORM3 , are used as representations, while the text is encoded as a sequence of hidden states INLINEFORM4 . We then compute an attention score INLINEFORM5 for each hidden state INLINEFORM6 using the question representation INLINEFORM7 , a weight matrix INLINEFORM8 , and an attention bias INLINEFORM9 . Last, a text representation INLINEFORM10 is computed as a weighted average of the hidden representations: DISPLAYFORM0\n[source_id=52] The probability INLINEFORM0 of answer INLINEFORM1 being correct is then predicted using another bilinear weight matrix INLINEFORM2 , followed by an application of the softmax function over both answer options for the question: DISPLAYFORM0",
+  "score": 2.593776662608847,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    47,
+    48,
+    49,
+    50,
+    51,
+    52
+  ],
+  "child_qasper_evidence_texts": [
+    "We first use a simple word matching baseline, by selecting the answer that has the highest literal overlap with the text. In case of a tie, we randomly select one of the answers.",
+    "The second baseline is a sliding window approach that looks at windows of INLINEFORM0 tokens on the text. Each text and each answer are represented as a sequence of word embeddings. The embeddings for each window of size INLINEFORM1 and each answer are then averaged to derive window and answer representations, respectively. The answer with the lowest cosine distance to one of the windows of the text is then selected as correct.",
+    "We employ a simple neural model as a third baseline. In this model, each text, question, and answer is represented by a vector. For a given sequence of words INLINEFORM0 , we compute this representation by averaging over the components of the word embeddings INLINEFORM1 that correspond to a word INLINEFORM2 , and then apply a linear transformation using a weight matrix. This procedure is applied to each answer INLINEFORM3 to derive an answer representation INLINEFORM4 . The representation of a text INLINEFORM5 and of a question INLINEFORM6 are computed in the same way. We use different weight matrices for INLINEFORM7 , INLINEFORM8 and INLINEFORM9 , respectively. A combined representation INLINEFORM10 for the text–question pair is then constructed using a bilinear transformation matrix INLINEFORM11 : DISPLAYFORM0",
+    "We compute a score for each answer by using the dot product and pass the scores for both answers through a softmax layer for prediction. The probability INLINEFORM0 for an answer INLINEFORM1 to be correct is thus defined as: DISPLAYFORM0",
+    "The attentive reader is a well-established machine comprehension model that reaches good performance e.g. on the CNN/Daily Mail corpus BIBREF14 , BIBREF15 . We use the model formulation by chen2016thorough and lai2017race, who employ bilinear weight functions to compute both attention and answer-text fit. Bi-directional GRUs are used to encode questions, texts and answers into hidden representations. For a question INLINEFORM0 and an answer INLINEFORM1 , the last state of the GRUs, INLINEFORM2 and INLINEFORM3 , are used as representations, while the text is encoded as a sequence of hidden states INLINEFORM4 . We then compute an attention score INLINEFORM5 for each hidden state INLINEFORM6 using the question representation INLINEFORM7 , a weight matrix INLINEFORM8 , and an attention bias INLINEFORM9 . Last, a text representation INLINEFORM10 is computed as a weighted average of the hidden representations: DISPLAYFORM0",
+    "The probability INLINEFORM0 of answer INLINEFORM1 being correct is then predicted using another bilinear weight matrix INLINEFORM2 , followed by an application of the softmax function over both answer options for the question: DISPLAYFORM0"
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Models",
+    "Models",
+    "Models",
+    "Models",
+    "Models",
+    "Models"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Models",
+      0
+    ],
+    [
+      "Models",
+      1
+    ],
+    [
+      "Models",
+      2
+    ],
+    [
+      "Models",
+      3
+    ],
+    [
+      "Models",
+      4
+    ],
+    [
+      "Models",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Models",
+  "section": "Models",
+  "title_path": "Models",
+  "block_type": "long_unit"
+}

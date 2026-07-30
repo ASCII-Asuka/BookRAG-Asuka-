@@ -1,0 +1,97 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] The ability of semantic reasoning is essential for advanced natural language understanding (NLU) systems. Many NLU tasks that take sentence pairs as input, such as natural language inference (NLI) and machine reading comprehension (MRC), heavily rely on the ability of sophisticated semantic reasoning. For instance, the NLI task aims to determine whether the hypothesis sentence (e.g., a woman is sleeping) can be inferred from the premise sentence (e.g., a woman is talking on the phone). This requires the model to read and understand sentence pairs to make the specific semantic inference.\n[source_id=5] Bidirectional Encoder Representations from Transformer (BERT) BIBREF1 has shown strong ability in semantic reasoning. It was recently proposed and obtained impressive results on many tasks, ranging from text classification, natural language inference, and machine reading comprehension. BERT achieves this by employing two objectives in the pre-training, i.e., the masked language modeling (Masked LM) and the next sentence prediction (NSP). Intuitively, the Masked LM task concerns word-level knowledge, and the NSP task captures the global document-level information. The goal of NSP is to identify whether an input sentence is next to another input sentence. From the ablation study BIBREF1, the NSP task is quite useful for the downstream NLI and MRC tasks (e.g., +3.5% absolute gain on the Question NLI (QNLI) BIBREF2 task).\n[source_id=6] Despite its usefulness, we suggest that BERT has not made full use of the document-level knowledge. The sentences in the negative samples used in NSP are randomly drawn from other documents. Therefore, to discriminate against these sentences, BERT is prone to aggregating the shallow semantic, e.g., topic, neglecting context clues useful for detailed reasoning. In other words, the canonical NSP task would encourage the model to recognize the correlation between sentences, rather than obtaining the ability of semantic entailment. This setting weakens the BERT model from learning specific semantic for inference. Another issue that renders NSP less effective is that BERT is order-sensitive. Performance degradation was observed on typical NLI tasks when the order of two input sentences are reversed during the BERT fine-tuning phase. It is reasonable as the NSP task can be roughly analogy to the NLI task when the input comes as (premise, hypothesis), considering the causal order among sentences. However, this identity between NSP and NLI is compromised when the sentences are swapped.\n[source_id=7] Based on these considerations, we propose a simple yet effective method, i.e., introducing a IsPrev category to the classification task, which is a symmetric label of IsNext of NSP. The input of samples with IsPrev is the reverse of those with IsNext label. The advantages of using this previous sentence prediction (PSP) are three folds. (1) Learning the contrast between NSP and PSP forces the model to extract more detailed semantic, thereby the model is more capable of discriminating the correlation and entailment. (2) NSP and PSP are symmetric. This symmetric regularization alleviates the influence of the order of the input pair. (3) Empirical results indicate that our method is beneficial for all the semantic reasoning tasks that take sentence pair as input.\n[source_id=8] In addition, to further incorporating the document-level knowledge, NSP and PSP are extended with non-successive sentences, where the label smoothing technique is adopted. The proposed method yields a considerable improvement in our experiments. We evaluate the ability of semantic reasoning on standard NLI and MRC benchmarks, including the challenging HANS dataset BIBREF0. Analytical work on the HANS dataset provides a more comprehensible perspective towards the proposed method. Furthermore, the results on the Chinese benchmarks are provided to demonstrate its generality.\n[source_id=9] In summary, this work makes the following contributions:\n[source_id=10] The supervision signal from the original NSP task is weak for semantic inference. Therefore, a novel method is proposed to remedy the asymmetric issue and enhance the reasoning ability.\n[source_id=11] Both empirical and analytical evaluations are provided on the NLI and MRC datasets, which verifies the effectiveness of using more document-level knowledge.",
+  "score": 0.9516172717736654,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "child_qasper_evidence_texts": [
+    "The ability of semantic reasoning is essential for advanced natural language understanding (NLU) systems. Many NLU tasks that take sentence pairs as input, such as natural language inference (NLI) and machine reading comprehension (MRC), heavily rely on the ability of sophisticated semantic reasoning. For instance, the NLI task aims to determine whether the hypothesis sentence (e.g., a woman is sleeping) can be inferred from the premise sentence (e.g., a woman is talking on the phone). This requires the model to read and understand sentence pairs to make the specific semantic inference.",
+    "Bidirectional Encoder Representations from Transformer (BERT) BIBREF1 has shown strong ability in semantic reasoning. It was recently proposed and obtained impressive results on many tasks, ranging from text classification, natural language inference, and machine reading comprehension. BERT achieves this by employing two objectives in the pre-training, i.e., the masked language modeling (Masked LM) and the next sentence prediction (NSP). Intuitively, the Masked LM task concerns word-level knowledge, and the NSP task captures the global document-level information. The goal of NSP is to identify whether an input sentence is next to another input sentence. From the ablation study BIBREF1, the NSP task is quite useful for the downstream NLI and MRC tasks (e.g., +3.5% absolute gain on the Question NLI (QNLI) BIBREF2 task).",
+    "Despite its usefulness, we suggest that BERT has not made full use of the document-level knowledge. The sentences in the negative samples used in NSP are randomly drawn from other documents. Therefore, to discriminate against these sentences, BERT is prone to aggregating the shallow semantic, e.g., topic, neglecting context clues useful for detailed reasoning. In other words, the canonical NSP task would encourage the model to recognize the correlation between sentences, rather than obtaining the ability of semantic entailment. This setting weakens the BERT model from learning specific semantic for inference. Another issue that renders NSP less effective is that BERT is order-sensitive. Performance degradation was observed on typical NLI tasks when the order of two input sentences are reversed during the BERT fine-tuning phase. It is reasonable as the NSP task can be roughly analogy to the NLI task when the input comes as (premise, hypothesis), considering the causal order among sentences. However, this identity between NSP and NLI is compromised when the sentences are swapped.",
+    "Based on these considerations, we propose a simple yet effective method, i.e., introducing a IsPrev category to the classification task, which is a symmetric label of IsNext of NSP. The input of samples with IsPrev is the reverse of those with IsNext label. The advantages of using this previous sentence prediction (PSP) are three folds. (1) Learning the contrast between NSP and PSP forces the model to extract more detailed semantic, thereby the model is more capable of discriminating the correlation and entailment. (2) NSP and PSP are symmetric. This symmetric regularization alleviates the influence of the order of the input pair. (3) Empirical results indicate that our method is beneficial for all the semantic reasoning tasks that take sentence pair as input.",
+    "In addition, to further incorporating the document-level knowledge, NSP and PSP are extended with non-successive sentences, where the label smoothing technique is adopted. The proposed method yields a considerable improvement in our experiments. We evaluate the ability of semantic reasoning on standard NLI and MRC benchmarks, including the challenging HANS dataset BIBREF0. Analytical work on the HANS dataset provides a more comprehensible perspective towards the proposed method. Furthermore, the results on the Chinese benchmarks are provided to demonstrate its generality.",
+    "In summary, this work makes the following contributions:",
+    "The supervision signal from the original NSP task is weak for semantic inference. Therefore, a novel method is proposed to remedy the asymmetric issue and enhance the reasoning ability.",
+    "Both empirical and analytical evaluations are provided on the NLI and MRC datasets, which verifies the effectiveness of using more document-level knowledge."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ],
+    [
+      "Introduction",
+      7
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

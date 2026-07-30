@@ -1,0 +1,93 @@
+{
+  "question": "what datasets were used?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "diacritized corpus that was used to train the RDI BIBREF7 diacritizer and the Farasa diacritizer BIBREF31",
+        "WikiNews test set BIBREF31",
+        " large collection of fully diacritized classical texts (2.7M tokens) from a book publisher"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "For MSA, we acquired the diacritized corpus that was used to train the RDI BIBREF7 diacritizer and the Farasa diacritizer BIBREF31. The corpus contains 9.7M tokens with approximately 194K unique surface forms (excluding numbers and punctuation marks). The corpus covers multiple genres such as politics and sports and is a mix of MSA and CA. This corpus is considerably larger than the Arabic Treebank BIBREF35 and is more consistent in its diacritization. For testing, we used the freely available WikiNews test set BIBREF31, which is composed of 70 MSA WikiNews articles (18,300 tokens) and evenly covers a variety of genres including politics, economics, health, science and technology, sports, arts and culture.",
+        "For CA, we obtained a large collection of fully diacritized classical texts (2.7M tokens) from a book publisher, and we held-out a small subset of 5,000 sentences (approximately 400k words) for testing. Then, we used the remaining sentences to train the CA models."
+      ],
+      "evidence_block_ids": [
+        15,
+        16
+      ],
+      "evidence_paragraph_ids": [
+        15,
+        16
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "the diacritized corpus that was used to train the RDI BIBREF7 diacritizer ",
+        "WikiNews ",
+        "a large collection of fully diacritized classical texts"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "Modern Standard Arabic (MSA) and Classical Arabic (CA) have two types of vowels, namely long vowels, which are explicitly written, and short vowels, aka diacritics, which are typically omitted in writing but are reintroduced by readers to properly pronounce words. Since diacritics disambiguate the sense of the words in context and their syntactic roles in sentences, automatic diacritic recovery is essential for applications such as text-to-speech and educational tools for language learners, who may not know how to properly verbalize words. Diacritics have two types, namely: core-word (CW) diacritics, which are internal to words and specify lexical selection; and case-endings (CE), which appear on the last letter of word stems, typically specifying their syntactic role. For example, the word “ktb” (كتب>) can have multiple diacritized forms such as “katab” (كَتَب> – meaning “he wrote”) “kutub” (كُتُب> – “books”). While “katab” can only assume one CE, namely “fatHa” (“a”), “kutub” can accept the CEs: “damma” (“u”) (nominal – ex. subject), “a” (accusative – ex. object), “kasra” (“i”) (genitive – ex. PP predicate), or their nunations. There are 14 diacritic combinations. When used as CEs, they typically convey specific syntactic information, namely: fatHa “a” for accusative nouns, past verbs and subjunctive present verbs; kasra “i” for genitive nouns; damma “u” for nominative nouns and indicative present verbs; sukun “o” for jussive present verbs and imperative verbs. FatHa, kasra and damma can be preceded by shadda “$\\sim $” for gemination (consonant doubling) and/or converted to nunation forms following some grammar rules. In addition, according to Arabic orthography and phonology, some words take a virtual (null) “#” marker when they end with certain characters (ex: long vowels). This applies also to all non-Arabic words (ex: punctuation, digits, Latin words, etc.). Generally, function words, adverbs and foreign named entities (NEs) have set CEs (sukun, fatHa or virtual). Similar to other Semitic languages, Arabic allows flexible Verb-Subject-Object as well as Verb-Object-Subject constructs BIBREF1. Such flexibility creates inherent ambiguity, which is resolved by diacritics as in “r$>$Y Emr Ely” (رأى عمر علي> Omar saw Ali/Ali saw Omar). In the absence of diacritics it is not clear who saw whom. Similarly, in the sub-sentence “kAn Alm&tmr AltAsE” (كان المؤتمر التاسع>), if the last word, is a predicate of the verb “kAn”, then the sentence would mean “this conference was the ninth” and would receive a fatHa (a) as a case ending. Conversely, if it was an adjective to the “conference”, then the sentence would mean “the ninth conference was ...” and would receive a damma (u) as a case ending. Thus, a consideration of context is required for proper disambiguation. Due to the inter-word dependence of CEs, they are typically harder to predict compared to core-word diacritics BIBREF2, BIBREF3, BIBREF4, BIBREF5, with CEER of state-of-the-art systems being in double digits compared to nearly 3% for word-cores. Since recovering CEs is akin to shallow parsing BIBREF6 and requires morphological and syntactic processing, it is a difficult problem in Arabic NLP. In this paper, we focus on recovering both CW diacritics and CEs. We employ two separate Deep Neural Network (DNN) architectures for recovering both kinds of diacritic types. We use character-level and word-level bidirectional Long-Short Term Memory (biLSTM) based recurrent neural models for CW diacritic and CE recovery respectively. We train models for both Modern Standard Arabic (MSA) and Classical Arabic (CA). For CW diacritics, the model is informed using word segmentation information and a unigram language model. We also employ a unigram language model to perform post correction on the model output. We achieve word error rates for CW diacritics of 2.9% and 2.2% for MSA and CA. The MSA word error rate is 6% lower than the best results in the literature (the RDI diacritizer BIBREF7). The CE model is trained with a rich set of surface, morphological, and syntactic features. The proposed features would aid the biLSTM model in capturing syntactic dependencies indicated by Part-Of-Speech (POS) tags, gender and number features, morphological patterns, and affixes. We show that our model achieves a case ending error rate (CEER) of 3.7% for MSA and 2.5% for CA. For MSA, this CEER is more than 60% lower than other state-of-the-art systems such as Farasa and the RDI diacritizer, which are trained on the same dataset and achieve CEERs of 10.7% and 14.4% respectively. The contributions of this paper are as follows:",
+        "For MSA, we acquired the diacritized corpus that was used to train the RDI BIBREF7 diacritizer and the Farasa diacritizer BIBREF31. The corpus contains 9.7M tokens with approximately 194K unique surface forms (excluding numbers and punctuation marks). The corpus covers multiple genres such as politics and sports and is a mix of MSA and CA. This corpus is considerably larger than the Arabic Treebank BIBREF35 and is more consistent in its diacritization. For testing, we used the freely available WikiNews test set BIBREF31, which is composed of 70 MSA WikiNews articles (18,300 tokens) and evenly covers a variety of genres including politics, economics, health, science and technology, sports, arts and culture.",
+        "For CA, we obtained a large collection of fully diacritized classical texts (2.7M tokens) from a book publisher, and we held-out a small subset of 5,000 sentences (approximately 400k words) for testing. Then, we used the remaining sentences to train the CA models."
+      ],
+      "evidence_block_ids": [
+        4,
+        15,
+        16
+      ],
+      "evidence_paragraph_ids": [
+        4,
+        15,
+        16
+      ]
+    }
+  ],
+  "doc_uuid": "2002.01207",
+  "doc_path": "qasper://2002.01207",
+  "qasper_question_id": "2740e3d7d33173664c1c5ab292c7ec75ff6e0802",
+  "title": "Arabic Diacritic Recovery Using a Feature-Rich biLSTM Model",
+  "evidence_block_ids": [
+    15,
+    16,
+    4
+  ],
+  "evidence_paragraph_ids": [
+    15,
+    16,
+    4
+  ],
+  "output": "{\n  \"answer_short\": \"WikiNews dataset, 5,000 held-out sentences for CA, diacritized corpus used to train RDI and Farasa diacritizers\",\n  \"answer_rationale\": \"Text 4 mentions using the WikiNews test set for MSA testing and a held-out 5,000 sentences for CA testing. Text 3 confirms using WikiNews for MSA testing and the 5,000 sentences for CA. Text 4 also states that for training, they used the diacritized corpus from RDI and Farasa diacritizers. These are the datasets explicitly referenced in the documents.\"\n}",
+  "retrieved_node_ids": [
+    31,
+    30,
+    52,
+    15,
+    37,
+    20,
+    16,
+    33,
+    32,
+    12
+  ],
+  "answer_short": "WikiNews dataset, 5,000 held-out sentences for CA, diacritized corpus used to train RDI and Farasa diacritizers",
+  "answer_rationale": "Text 4 mentions using the WikiNews test set for MSA testing and a held-out 5,000 sentences for CA testing. Text 3 confirms using WikiNews for MSA testing and the 5,000 sentences for CA. Text 4 also states that for training, they used the diacritized corpus from RDI and Farasa diacritizers. These are the datasets explicitly referenced in the documents.",
+  "supporting_block_ids": [
+    31,
+    30,
+    52,
+    15,
+    37,
+    20,
+    16,
+    33,
+    32,
+    12
+  ]
+}

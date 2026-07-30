@@ -1,0 +1,294 @@
+[
+  {
+    "question": "How they extract \"structured answer-relevant relation\"?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "Using the OpenIE toolbox and applying heuristic rules to select the most relevant relation.",
+        "yes_no": null,
+        "evidence": [
+          "To address this issue, we extract the structured answer-relevant relations from sentences and propose a method to jointly model such structured relation and the unstructured sentence for question generation. The structured answer-relevant relation is likely to be to the point context and thus can help keep the generated question to the point. For example, Figure FIGREF1 shows our framework can extract the right answer-relevant relation (“The daily mean temperature in January”, “is”, “32.6$^\\circ $F (0.3$^\\circ $C)”) among multiple facts. With the help of such structured information, our model is less likely to be confused by sentences with a complex structure. Specifically, we firstly extract multiple relations with an off-the-shelf Open Information Extraction (OpenIE) toolbox BIBREF7, then we select the relation that is most relevant to the answer with carefully designed heuristic rules."
+        ],
+        "evidence_block_ids": [
+          8
+        ],
+        "evidence_paragraph_ids": [
+          8
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "off-the-shelf toolbox of OpenIE"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "We utilize an off-the-shelf toolbox of OpenIE to the derive structured answer-relevant relations from sentences as to the point contexts. Relations extracted by OpenIE can be represented either in a triple format or in an n-ary format with several secondary arguments, and we employ the latter to keep the extractions as informative as possible and avoid extracting too many similar relations in different granularities from one sentence. We join all arguments in the extracted n-ary relation into a sequence as our to the point context. Figure FIGREF5 shows n-ary relations extracted from OpenIE. As we can see, OpenIE extracts multiple relations for complex sentences. Here we select the most informative relation according to three criteria in the order of descending importance: (1) having the maximal number of overlapped tokens between the answer and the relation; (2) being assigned the highest confidence score by OpenIE; (3) containing maximum non-stop words. As shown in Figure FIGREF5, our criteria can select answer-relevant relations (waved in Figure FIGREF5), which is especially useful for sentences with extraneous information. In rare cases, OpenIE cannot extract any relation, we treat the sentence itself as the to the point context."
+        ],
+        "evidence_block_ids": [
+          17
+        ],
+        "evidence_paragraph_ids": [
+          17
+        ]
+      }
+    ],
+    "doc_uuid": "1910.06036",
+    "doc_path": "qasper://1910.06036",
+    "qasper_question_id": "1d197cbcac7b3f4015416f0152a6692e881ada6c",
+    "title": "Improving Question Generation With to the Point Context",
+    "evidence_block_ids": [
+      8,
+      17
+    ],
+    "evidence_paragraph_ids": [
+      8,
+      17
+    ],
+    "output": "{\n  \"answer_short\": \"They extract structured answer-relevant relations using an off-the-shelf OpenIE toolbox and select the most relevant relation with heuristic rules.\",\n  \"answer_rationale\": \"Text 1 states that they use an off-the-shelf OpenIE toolbox to extract multiple relations and then select the most relevant one using heuristic rules. Text 2 elaborates that OpenIE is used to derive structured relations, which are then represented in n-ary format, and the most informative relation is selected based on criteria like token overlap, confidence score, and non-stop words. This process is further supported by Text 5, which introduces the protocol for extracting structured answer-relevant relations.\"\n}",
+    "retrieved_node_ids": [
+      8,
+      17,
+      2,
+      57,
+      12,
+      58,
+      9,
+      20,
+      62,
+      68
+    ],
+    "answer_short": "They extract structured answer-relevant relations using an off-the-shelf OpenIE toolbox and select the most relevant relation with heuristic rules.",
+    "answer_rationale": "Text 1 states that they use an off-the-shelf OpenIE toolbox to extract multiple relations and then select the most relevant one using heuristic rules. Text 2 elaborates that OpenIE is used to derive structured relations, which are then represented in n-ary format, and the most informative relation is selected based on criteria like token overlap, confidence score, and non-stop words. This process is further supported by Text 5, which introduces the protocol for extracting structured answer-relevant relations.",
+    "supporting_block_ids": [
+      8,
+      17,
+      2,
+      57,
+      12,
+      58,
+      9,
+      20,
+      62,
+      68
+    ]
+  },
+  {
+    "question": "How big are significant improvements?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "Metrics show better results on all metrics compared to baseline except Bleu1  on Zhou split (worse by 0.11 compared to baseline). Bleu1 score on DuSplit is 45.66 compared to best baseline 43.47, other metrics on average by 1",
+        "yes_no": null,
+        "evidence": [
+          "Table TABREF30 shows automatic evaluation results for our model and baselines (copied from their papers). Our proposed model which combines structured answer-relevant relations and unstructured sentences achieves significant improvements over proximity-based answer-aware models BIBREF9, BIBREF15 on both dataset splits. Presumably, our structured answer-relevant relation is a generalization of the context explored by the proximity-based methods because they can only capture short dependencies around answer fragments while our extractions can capture both short and long dependencies given the answer fragments. Moreover, our proposed framework is a general one to jointly leverage structured relations and unstructured sentences. All compared baseline models which only consider unstructured sentences can be further enhanced under our framework."
+        ],
+        "evidence_block_ids": [
+          57
+        ],
+        "evidence_paragraph_ids": [
+          57
+        ]
+      }
+    ],
+    "doc_uuid": "1910.06036",
+    "doc_path": "qasper://1910.06036",
+    "qasper_question_id": "92294820ac0d9421f086139e816354970f066d8a",
+    "title": "Improving Question Generation With to the Point Context",
+    "evidence_block_ids": [
+      57
+    ],
+    "evidence_paragraph_ids": [
+      57
+    ],
+    "output": "{\n  \"answer_short\": \"significant improvements\",\n  \"answer_rationale\": \"Text 1 states that the proposed model achieves significant improvements on several automatic evaluation metrics. Text 2 and Text 4 further confirm that the model achieves significant and consistent improvements over baselines, especially when the distance between the answer and relevant context increases.\"\n}",
+    "retrieved_node_ids": [
+      2,
+      57,
+      58,
+      10,
+      62,
+      7,
+      64,
+      45,
+      65,
+      54
+    ],
+    "answer_short": "significant improvements",
+    "answer_rationale": "Text 1 states that the proposed model achieves significant improvements on several automatic evaluation metrics. Text 2 and Text 4 further confirm that the model achieves significant and consistent improvements over baselines, especially when the distance between the answer and relevant context increases.",
+    "supporting_block_ids": [
+      2,
+      57,
+      58,
+      10,
+      62,
+      7,
+      64,
+      45,
+      65,
+      54
+    ]
+  },
+  {
+    "question": "What metrics do they use?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "BLEU-1 (B1), BLEU-2 (B2), BLEU-3 (B3), BLEU-4 (B4) BIBREF17, METEOR (MET) BIBREF18 and ROUGE-L (R-L) BIBREF19"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "We evaluate with all commonly-used metrics in question generation BIBREF13: BLEU-1 (B1), BLEU-2 (B2), BLEU-3 (B3), BLEU-4 (B4) BIBREF17, METEOR (MET) BIBREF18 and ROUGE-L (R-L) BIBREF19. We use the evaluation script released by Chen2015MicrosoftCC."
+        ],
+        "evidence_block_ids": [
+          42
+        ],
+        "evidence_paragraph_ids": [
+          42
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "BLEU-1 (B1)",
+          "BLEU-2 (B2)",
+          "BLEU-3 (B3)",
+          "BLEU-4 (B4)",
+          "METEOR (MET)",
+          "ROUGE-L (R-L)"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "We evaluate with all commonly-used metrics in question generation BIBREF13: BLEU-1 (B1), BLEU-2 (B2), BLEU-3 (B3), BLEU-4 (B4) BIBREF17, METEOR (MET) BIBREF18 and ROUGE-L (R-L) BIBREF19. We use the evaluation script released by Chen2015MicrosoftCC."
+        ],
+        "evidence_block_ids": [
+          42
+        ],
+        "evidence_paragraph_ids": [
+          42
+        ]
+      }
+    ],
+    "doc_uuid": "1910.06036",
+    "doc_path": "qasper://1910.06036",
+    "qasper_question_id": "477d9d3376af4d938bb01280fe48d9ae7c9cf7f7",
+    "title": "Improving Question Generation With to the Point Context",
+    "evidence_block_ids": [
+      42
+    ],
+    "evidence_paragraph_ids": [
+      42
+    ],
+    "output": "{\n  \"answer_short\": \"BLEU-1 (B1), BLEU-2 (B2), BLEU-3 (B3), BLEU-4 (B4), METEOR (MET) and ROUGE-L (R-L)\",\n  \"answer_rationale\": \"Text 1 explicitly lists the metrics used for evaluation: BLEU-1 (B1), BLEU-2 (B2), BLEU-3 (B3), BLEU-4 (B4), METEOR (MET), and ROUGE-L (R-L).\"\n}",
+    "retrieved_node_ids": [
+      42,
+      2,
+      68,
+      23,
+      53,
+      34,
+      27,
+      54,
+      64,
+      32
+    ],
+    "answer_short": "BLEU-1 (B1), BLEU-2 (B2), BLEU-3 (B3), BLEU-4 (B4), METEOR (MET) and ROUGE-L (R-L)",
+    "answer_rationale": "Text 1 explicitly lists the metrics used for evaluation: BLEU-1 (B1), BLEU-2 (B2), BLEU-3 (B3), BLEU-4 (B4), METEOR (MET), and ROUGE-L (R-L).",
+    "supporting_block_ids": [
+      42,
+      2,
+      68,
+      23,
+      53,
+      34,
+      27,
+      54,
+      64,
+      32
+    ]
+  },
+  {
+    "question": "On what datasets are experiments performed?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "SQuAD"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "We conduct experiments on the SQuAD dataset BIBREF3. It contains 536 Wikipedia articles and 100k crowd-sourced question-answer pairs. The questions are written by crowd-workers and the answers are spans of tokens in the articles. We employ two different data splits by following Zhou2017NeuralQG and Du2017LearningTA . In Zhou2017NeuralQG, the original SQuAD development set is evenly divided into dev and test sets, while Du2017LearningTA treats SQuAD development set as its development set and splits original SQuAD training set into a training set and a test set. We also filter out questions which do not have any overlapped non-stop words with the corresponding sentences and perform some preprocessing steps, such as tokenization and sentence splitting. The data statistics are given in Table TABREF27."
+        ],
+        "evidence_block_ids": [
+          41
+        ],
+        "evidence_paragraph_ids": [
+          41
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "SQuAD"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Question Generation (QG) is the task of automatically creating questions from a range of inputs, such as natural language text BIBREF0, knowledge base BIBREF1 and image BIBREF2. QG is an increasingly important area in NLP with various application scenarios such as intelligence tutor systems, open-domain chatbots and question answering dataset construction. In this paper, we focus on question generation from reading comprehension materials like SQuAD BIBREF3. As shown in Figure FIGREF1, given a sentence in the reading comprehension paragraph and the text fragment (i.e., the answer) that we want to ask about, we aim to generate a question that is asked about the specified answer."
+        ],
+        "evidence_block_ids": [
+          4
+        ],
+        "evidence_paragraph_ids": [
+          4
+        ]
+      }
+    ],
+    "doc_uuid": "1910.06036",
+    "doc_path": "qasper://1910.06036",
+    "qasper_question_id": "f225a9f923e4cdd836dd8fe097848da06ec3e0cc",
+    "title": "Improving Question Generation With to the Point Context",
+    "evidence_block_ids": [
+      41,
+      4
+    ],
+    "evidence_paragraph_ids": [
+      41,
+      4
+    ],
+    "output": "{\n  \"answer_short\": \"SQuAD dataset\",\n  \"answer_rationale\": \"Text 1 explicitly states: 'We conduct experiments on the SQuAD dataset BIBREF3.' This directly answers the question about the datasets on which experiments are performed.\"\n}",
+    "retrieved_node_ids": [
+      41,
+      10,
+      55,
+      57,
+      4,
+      68,
+      58,
+      2,
+      42,
+      46
+    ],
+    "answer_short": "SQuAD dataset",
+    "answer_rationale": "Text 1 explicitly states: 'We conduct experiments on the SQuAD dataset BIBREF3.' This directly answers the question about the datasets on which experiments are performed.",
+    "supporting_block_ids": [
+      41,
+      10,
+      55,
+      57,
+      4,
+      68,
+      58,
+      2,
+      42,
+      46
+    ]
+  }
+]

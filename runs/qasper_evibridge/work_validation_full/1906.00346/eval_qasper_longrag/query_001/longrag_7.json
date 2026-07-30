@@ -1,0 +1,70 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Fine-tuning\n[source_id=56] After obtaining pre-trained visit representation for each visit, for a prediction task on a multi-visit sequence data, we aggregate all the visit embedding and add a prediction layer for the medication recommendation task. To be specific, from pre-training on all visits, we have a pre-trained Transformer encoder, which can then be used to get the visit embedding $\\mathbf {v}_*^\\tau $ at time $\\tau $ . The known diagnosis codes $\\mathcal {C}_d^t$ at the prediction time $t$ is also represented using the same model as $\\mathbf {v}_*^t$ . Concatenating the mean of previous diagnoses visit embeddings and medication visit embeddings, also the last diagnoses visit embedding, we built an MLP based prediction layer to predict the recommended medication codes as in Equation 23 .\n[source_id=57] $$\\mathbf {y}_t = \\mathrm {Sigmoid}(\\mathbf {W}_1 [(\\frac{1}{t}\\sum _{\\tau < t} \\mathbf {v}_d^\\tau ) || (\\frac{1}{t}\\sum _{\\tau < t} \\mathbf {v}_m^\\tau ) ||\\mathbf {v}_d^t] + b)$$   (Eq. 23)\n[source_id=58] where $\\mathbf {W}_1 \\in \\mathbb {R}^{|\\mathcal {C}_m| \\times 3d} $ is a learnable transformation matrix.\n[source_id=59] Given the true labels $\\hat{\\mathbf {y}}_t$ at each time stamp $t$ , the loss function for the whole EHR sequence (i.e. a patient) is\n[source_id=60] $$\\mathcal {L} = - \\frac{1}{T-1} \\sum _{t=2}^T (\\mathbf {y}_t^\\intercal \\log (\\hat{\\mathbf {y}}_t) + (1 - \\mathbf {y}_t^\\intercal ) \\log (1 - \\hat{\\mathbf {y}}_t))$$   (Eq. 24)",
+  "score": 0.9399992232093176,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    56,
+    57,
+    58,
+    59,
+    60
+  ],
+  "child_qasper_evidence_texts": [
+    "After obtaining pre-trained visit representation for each visit, for a prediction task on a multi-visit sequence data, we aggregate all the visit embedding and add a prediction layer for the medication recommendation task. To be specific, from pre-training on all visits, we have a pre-trained Transformer encoder, which can then be used to get the visit embedding $\\mathbf {v}_*^\\tau $ at time $\\tau $ . The known diagnosis codes $\\mathcal {C}_d^t$ at the prediction time $t$ is also represented using the same model as $\\mathbf {v}_*^t$ . Concatenating the mean of previous diagnoses visit embeddings and medication visit embeddings, also the last diagnoses visit embedding, we built an MLP based prediction layer to predict the recommended medication codes as in Equation 23 .",
+    "$$\\mathbf {y}_t = \\mathrm {Sigmoid}(\\mathbf {W}_1 [(\\frac{1}{t}\\sum _{\\tau < t} \\mathbf {v}_d^\\tau ) || (\\frac{1}{t}\\sum _{\\tau < t} \\mathbf {v}_m^\\tau ) ||\\mathbf {v}_d^t] + b)$$   (Eq. 23)",
+    "where $\\mathbf {W}_1 \\in \\mathbb {R}^{|\\mathcal {C}_m| \\times 3d} $ is a learnable transformation matrix.",
+    "Given the true labels $\\hat{\\mathbf {y}}_t$ at each time stamp $t$ , the loss function for the whole EHR sequence (i.e. a patient) is",
+    "$$\\mathcal {L} = - \\frac{1}{T-1} \\sum _{t=2}^T (\\mathbf {y}_t^\\intercal \\log (\\hat{\\mathbf {y}}_t) + (1 - \\mathbf {y}_t^\\intercal ) \\log (1 - \\hat{\\mathbf {y}}_t))$$   (Eq. 24)"
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Fine-tuning",
+    "Fine-tuning",
+    "Fine-tuning",
+    "Fine-tuning",
+    "Fine-tuning"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Fine-tuning",
+      0
+    ],
+    [
+      "Fine-tuning",
+      1
+    ],
+    [
+      "Fine-tuning",
+      2
+    ],
+    [
+      "Fine-tuning",
+      3
+    ],
+    [
+      "Fine-tuning",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Fine-tuning",
+  "section": "Fine-tuning",
+  "title_path": "Fine-tuning",
+  "block_type": "long_unit"
+}

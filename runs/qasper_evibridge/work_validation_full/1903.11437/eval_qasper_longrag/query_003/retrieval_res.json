@@ -1,0 +1,516 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_20",
+      "content": "[Section] Conclusion\n[source_id=77] In this paper, we have analyzed various ways to integrate monolingual data in an NMT framework, focusing on their impact on quality and domain adaptation. While confirming the effectiveness of BT, our study also proposed significantly cheaper ways to improve the baseline performance, using a slightly modified copy of the target, instead of its full BT. When no high quality BT is available, using GANs to make the pseudo-source sentences closer to natural source sentences is an efficient solution for domain adaptation.\n[source_id=78] To recap our answers to our initial questions: the quality of BT actually matters for NMT (cf. § SECREF8 ) and it seems that, even though artificial source are lexically less diverse and syntactically complex than real sentence, their monotonicity is a facilitating factor. We have studied cheaper alternatives and found out that copies of the target, if properly noised (§ SECREF4 ), and even better, if used with GANs, could be almost as good as low quality BTs (§ SECREF5 ): BT is only worth its cost when good BT can be generated. Finally, BT seems preferable to integrating external LM - at least in our data condition (§ SECREF6 ). Further experiments with larger LMs are needed to confirm this observation, and also to evaluate the complementarity of both strategies. More work is needed to better understand the impact of BT on subparts of the network (§ SECREF7 ).\n[source_id=79] In future work, we plan to investigate other cheap ways to generate artificial data. The experimental setup we proposed may also benefit from a refining of the data selection strategies to focus on the most useful monolingual sentences.",
+      "score": 5.3500635940047045,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_20",
+      "child_source_node_ids": [
+        77,
+        78,
+        79
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper, we have analyzed various ways to integrate monolingual data in an NMT framework, focusing on their impact on quality and domain adaptation. While confirming the effectiveness of BT, our study also proposed significantly cheaper ways to improve the baseline performance, using a slightly modified copy of the target, instead of its full BT. When no high quality BT is available, using GANs to make the pseudo-source sentences closer to natural source sentences is an efficient solution for domain adaptation.",
+        "To recap our answers to our initial questions: the quality of BT actually matters for NMT (cf. § SECREF8 ) and it seems that, even though artificial source are lexically less diverse and syntactically complex than real sentence, their monotonicity is a facilitating factor. We have studied cheaper alternatives and found out that copies of the target, if properly noised (§ SECREF4 ), and even better, if used with GANs, could be almost as good as low quality BTs (§ SECREF5 ): BT is only worth its cost when good BT can be generated. Finally, BT seems preferable to integrating external LM - at least in our data condition (§ SECREF6 ). Further experiments with larger LMs are needed to confirm this observation, and also to evaluate the complementarity of both strategies. More work is needed to better understand the impact of BT on subparts of the network (§ SECREF7 ).",
+        "In future work, we plan to investigate other cheap ways to generate artificial data. The experimental setup we proposed may also benefit from a refining of the data selection strategies to focus on the most useful monolingual sentences."
+      ],
+      "child_pages": [
+        20,
+        20,
+        20
+      ],
+      "child_sections": [
+        "Conclusion",
+        "Conclusion",
+        "Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion",
+          0
+        ],
+        [
+          "Conclusion",
+          1
+        ],
+        [
+          "Conclusion",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_20",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] The quality of Back-Translation\n[source_id=18] BT requires the availability of an MT system in the reverse translation direction. We consider here three MT systems of increasing quality:\n[source_id=19] backtrans-bad: this is a very poor SMT system trained using only 50k parallel sentences from the out-of-domain data, and no additional monolingual data. For this system as for the next one, we use Moses BIBREF17 out-of-the-box, computing alignments with Fastalign BIBREF18 , with a minimal pre-processing (basic tokenization). This setting provides us with a pessimistic estimate of what we could get in low-resource conditions.\n[source_id=20] backtrans-good: these are much larger SMT systems, which use the same parallel data as the baseline NMTs (see § SECREF4 ) and all the English monolingual data available for the WMT 2017 shared tasks, totalling approximately 174M sentences. These systems are strong, yet relatively cheap to build.\n[source_id=21] backtrans-nmt: these are the best NMT systems we could train, using settings that replicate the forward translation NMTs.\n[source_id=22] Note that we do not use any in-domain (Europarl) data to train these systems. Their performance is reported in Table TABREF7 , where we observe a 12 BLEU points gap between the worst and best systems (for both languages).\n[source_id=23] As noted eg. in BIBREF19 , BIBREF20 , artificial parallel data obtained through forward-translation (FT) can also prove advantageous and we also consider a FT system (fwdtrans-nmt): in this case the target side of the corpus is artificial and is generated using the baseline NMT applied to a natural source.\n[source_id=24] Our results (see Table TABREF6 ) replicate the findings of BIBREF2 : large gains can be obtained from BT (nearly INLINEFORM0 BLEU in French and German); better artificial data yields better translation systems. Interestingly, our best Moses system is almost as good as the NMT and an order of magnitude faster to train. Improvements obtained with the bad system are much smaller; contrary to the better MTs, this system is even detrimental for the out-of-domain test.\n[source_id=25] Gains with forward translation are significant, as in BIBREF21 , albeit about half as good as with BT, and result in small improvements for the in-domain and for the out-of-domain tests. Experiments combining forward and backward translation (backfwdtrans-nmt), each using a half of the available artificial data, do not outperform the best BT results.\n[source_id=26] We finally note the large remaining difference between BT data and natural data, even though they only differ in their source side. This shows that at least in our domain-adaptation settings, BT does not really act as a regularizer, contrarily to the findings of BIBREF4 , BIBREF11 . Figure FIGREF13 displays the learning curves of these two systems. We observe that backtrans-nmt improves quickly in the earliest updates and then stays horizontal, whereas natural continues improving, even after 400k updates. Therefore BT does not help to avoid overfitting, it actually encourages it, which may be due “easier” training examples (cf. § SECREF15 ).",
+      "score": 4.983728329072446,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "child_qasper_evidence_texts": [
+        "BT requires the availability of an MT system in the reverse translation direction. We consider here three MT systems of increasing quality:",
+        "backtrans-bad: this is a very poor SMT system trained using only 50k parallel sentences from the out-of-domain data, and no additional monolingual data. For this system as for the next one, we use Moses BIBREF17 out-of-the-box, computing alignments with Fastalign BIBREF18 , with a minimal pre-processing (basic tokenization). This setting provides us with a pessimistic estimate of what we could get in low-resource conditions.",
+        "backtrans-good: these are much larger SMT systems, which use the same parallel data as the baseline NMTs (see § SECREF4 ) and all the English monolingual data available for the WMT 2017 shared tasks, totalling approximately 174M sentences. These systems are strong, yet relatively cheap to build.",
+        "backtrans-nmt: these are the best NMT systems we could train, using settings that replicate the forward translation NMTs.",
+        "Note that we do not use any in-domain (Europarl) data to train these systems. Their performance is reported in Table TABREF7 , where we observe a 12 BLEU points gap between the worst and best systems (for both languages).",
+        "As noted eg. in BIBREF19 , BIBREF20 , artificial parallel data obtained through forward-translation (FT) can also prove advantageous and we also consider a FT system (fwdtrans-nmt): in this case the target side of the corpus is artificial and is generated using the baseline NMT applied to a natural source.",
+        "Our results (see Table TABREF6 ) replicate the findings of BIBREF2 : large gains can be obtained from BT (nearly INLINEFORM0 BLEU in French and German); better artificial data yields better translation systems. Interestingly, our best Moses system is almost as good as the NMT and an order of magnitude faster to train. Improvements obtained with the bad system are much smaller; contrary to the better MTs, this system is even detrimental for the out-of-domain test.",
+        "Gains with forward translation are significant, as in BIBREF21 , albeit about half as good as with BT, and result in small improvements for the in-domain and for the out-of-domain tests. Experiments combining forward and backward translation (backfwdtrans-nmt), each using a half of the available artificial data, do not outperform the best BT results.",
+        "We finally note the large remaining difference between BT data and natural data, even though they only differ in their source side. This shows that at least in our domain-adaptation settings, BT does not really act as a regularizer, contrarily to the findings of BIBREF4 , BIBREF11 . Figure FIGREF13 displays the learning curves of these two systems. We observe that backtrans-nmt improves quickly in the earliest updates and then stays horizontal, whereas natural continues improving, even after 400k updates. Therefore BT does not help to avoid overfitting, it actually encourages it, which may be due “easier” training examples (cf. § SECREF15 )."
+      ],
+      "child_pages": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "The quality of Back-Translation",
+        "The quality of Back-Translation",
+        "The quality of Back-Translation",
+        "The quality of Back-Translation",
+        "The quality of Back-Translation",
+        "The quality of Back-Translation",
+        "The quality of Back-Translation",
+        "The quality of Back-Translation",
+        "The quality of Back-Translation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "The quality of Back-Translation",
+          0
+        ],
+        [
+          "The quality of Back-Translation",
+          1
+        ],
+        [
+          "The quality of Back-Translation",
+          2
+        ],
+        [
+          "The quality of Back-Translation",
+          3
+        ],
+        [
+          "The quality of Back-Translation",
+          4
+        ],
+        [
+          "The quality of Back-Translation",
+          5
+        ],
+        [
+          "The quality of Back-Translation",
+          6
+        ],
+        [
+          "The quality of Back-Translation",
+          7
+        ],
+        [
+          "The quality of Back-Translation",
+          8
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "The quality of Back-Translation",
+      "section": "The quality of Back-Translation",
+      "title_path": "The quality of Back-Translation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_16",
+      "content": "[Section] Re-analyzing the effects of BT\n[source_id=65] As a follow up of previous discussions, we analyze the effect of BT on the internals of the network. Arguably, using a copy of the target sentence instead of a natural source should not be helpful for the encoder, but is it also the case with a strong BT? What are the effects on the attention model?",
+      "score": 3.443586120865706,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_16",
+      "child_source_node_ids": [
+        65
+      ],
+      "child_qasper_evidence_texts": [
+        "As a follow up of previous discussions, we analyze the effect of BT on the internals of the network. Arguably, using a copy of the target sentence instead of a natural source should not be helpful for the encoder, but is it also the case with a strong BT? What are the effects on the attention model?"
+      ],
+      "child_pages": [
+        16
+      ],
+      "child_sections": [
+        "Re-analyzing the effects of BT"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Re-analyzing the effects of BT",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_16",
+      "section_id": "Re-analyzing the effects of BT",
+      "section": "Re-analyzing the effects of BT",
+      "title_path": "Re-analyzing the effects of BT",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Properties of back-translated data\n[source_id=28] Comparing the natural and artificial sources of our parallel data wrt. several linguistic and distributional properties, we observe that (see Fig. FIGREF21 - FIGREF22 ):\n[source_id=29] artificial sources are on average shorter than natural ones: when using BT, cases where the source is shorter than the target are rarer; cases when they have the same length are more frequent.\n[source_id=30] automatic word alignments between artificial sources tend to be more monotonic than when using natural sources, as measured by the average Kendall INLINEFORM0 of source-target alignments BIBREF22 : for French-English the respective numbers are 0.048 (natural) and 0.018 (artificial); for German-English 0.068 and 0.053. Using more monotonic sentence pairs turns out to be a facilitating factor for NMT, as also noted by BIBREF20 .\n[source_id=31] syntactically, artificial sources are simpler than real data; We observe significant differences in the distributions of tree depths.\n[source_id=32] distributionally, plain word occurrences in artificial sources are more concentrated; this also translates into both a slower increase of the number of types wrt. the number of sentences and a smaller number of rare events.\n[source_id=33] The intuition is that properties (i) and (ii) should help translation as compared to natural source, while property (iv) should be detrimental. We checked (ii) by building systems with only 10M words from the natural parallel data selecting these data either randomly or based on the regularity of their word alignments. Results in Table TABREF23 show that the latter is much preferable for the overall performance. This might explain that the mostly monotonic BT from Moses are almost as good as the fluid BT from NMT and that both boost the baseline.",
+      "score": 3.365903193977541,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "child_qasper_evidence_texts": [
+        "Comparing the natural and artificial sources of our parallel data wrt. several linguistic and distributional properties, we observe that (see Fig. FIGREF21 - FIGREF22 ):",
+        "artificial sources are on average shorter than natural ones: when using BT, cases where the source is shorter than the target are rarer; cases when they have the same length are more frequent.",
+        "automatic word alignments between artificial sources tend to be more monotonic than when using natural sources, as measured by the average Kendall INLINEFORM0 of source-target alignments BIBREF22 : for French-English the respective numbers are 0.048 (natural) and 0.018 (artificial); for German-English 0.068 and 0.053. Using more monotonic sentence pairs turns out to be a facilitating factor for NMT, as also noted by BIBREF20 .",
+        "syntactically, artificial sources are simpler than real data; We observe significant differences in the distributions of tree depths.",
+        "distributionally, plain word occurrences in artificial sources are more concentrated; this also translates into both a slower increase of the number of types wrt. the number of sentences and a smaller number of rare events.",
+        "The intuition is that properties (i) and (ii) should help translation as compared to natural source, while property (iv) should be detrimental. We checked (ii) by building systems with only 10M words from the natural parallel data selecting these data either randomly or based on the regularity of their word alignments. Results in Table TABREF23 show that the latter is much preferable for the overall performance. This might explain that the mostly monotonic BT from Moses are almost as good as the fluid BT from NMT and that both boost the baseline."
+      ],
+      "child_pages": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "child_sections": [
+        "Properties of back-translated data",
+        "Properties of back-translated data",
+        "Properties of back-translated data",
+        "Properties of back-translated data",
+        "Properties of back-translated data",
+        "Properties of back-translated data"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Properties of back-translated data",
+          0
+        ],
+        [
+          "Properties of back-translated data",
+          1
+        ],
+        [
+          "Properties of back-translated data",
+          2
+        ],
+        [
+          "Properties of back-translated data",
+          3
+        ],
+        [
+          "Properties of back-translated data",
+          4
+        ],
+        [
+          "Properties of back-translated data",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Properties of back-translated data",
+      "section": "Properties of back-translated data",
+      "title_path": "Properties of back-translated data",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Neural Machine Translation (MT) has radically changed the way systems are developed. A major difference with the previous generation (Phrase-Based MT) is the way monolingual target data, which often abounds, is used in these two paradigms. While Phrase-Based MT can seamlessly integrate very large language models trained on billions of sentences, the best option for Neural MT developers seems to be the generation of artificial parallel data through \\textsl{back-translation} - a technique that fails to fully take advantage of existing datasets. In this paper, we conduct a systematic study of back-translation, comparing alternative uses of monolingual data, as well as multiple data generation procedures. Our findings confirm that back-translation is very effective and give new explanations as to why this is the case. We also introduce new data simulation techniques that are almost as effective, yet much cheaper to implement.",
+      "score": 3.2749940517024188,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Neural Machine Translation (MT) has radically changed the way systems are developed. A major difference with the previous generation (Phrase-Based MT) is the way monolingual target data, which often abounds, is used in these two paradigms. While Phrase-Based MT can seamlessly integrate very large language models trained on billions of sentences, the best option for Neural MT developers seems to be the generation of artificial parallel data through \\textsl{back-translation} - a technique that fails to fully take advantage of existing datasets. In this paper, we conduct a systematic study of back-translation, comparing alternative uses of monolingual data, as well as multiple data generation procedures. Our findings confirm that back-translation is very effective and give new explanations as to why this is the case. We also introduce new data simulation techniques that are almost as effective, yet much cheaper to implement."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_14",
+      "content": "[Section] LM Setup\n[source_id=61] We have followed BIBREF29 and reimplemented their deep-fusion technique. It requires to first independently learn a RNN-LM on the in-domain target data with a cross-entropy objective; then to train the optimal combination of the translation and the language models by adding the hidden state of the RNN-LM as an additional input to the softmax layer of the decoder. Our RNN-LMs are trained using dl4mt with the target side of the parallel data and the Europarl corpus (about 6M sentences for both French and German), using a one-layer GRU with the same dimension as the MT decoder (1024).",
+      "score": 3.0696867809661317,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_14",
+      "child_source_node_ids": [
+        61
+      ],
+      "child_qasper_evidence_texts": [
+        "We have followed BIBREF29 and reimplemented their deep-fusion technique. It requires to first independently learn a RNN-LM on the in-domain target data with a cross-entropy objective; then to train the optimal combination of the translation and the language models by adding the hidden state of the RNN-LM as an additional input to the softmax layer of the decoder. Our RNN-LMs are trained using dl4mt with the target side of the parallel data and the Europarl corpus (about 6M sentences for both French and German), using a one-layer GRU with the same dimension as the MT decoder (1024)."
+      ],
+      "child_pages": [
+        14
+      ],
+      "child_sections": [
+        "LM Setup"
+      ],
+      "child_hotpot_facts": [
+        [
+          "LM Setup",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_14",
+      "section_id": "LM Setup",
+      "section": "LM Setup",
+      "title_path": "LM Setup",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Copy+marking+noise is not so stupid\n[source_id=43] We observe that the copy setup has only a small impact on the English-French system, for which the baseline is already strong. This is less true for English-German where simple copies yield a significant improvement. Performance drops for both language pairs in the copy-dummies setup.\n[source_id=44] We achieve our best gains with the copy-marked setup, which is the best way to use a copy of the target (although the performance on the out-of-domain tests is at most the same as the baseline). Such gains may look surprising, since the NMT model does not need to learn to translate but only to copy the source. This is indeed what happens: to confirm this, we built a fake test set having identical source and target side (in French). The average cross-entropy for this test set is 0.33, very close to 0, to be compared with an average cost of 58.52 when we process an actual source (in English). This means that the model has learned to copy words from source to target with no difficulty, even for sentences not seen in training. A follow-up question is whether training a copying task instead of a translation task limits the improvement: would the NMT learn better if the task was harder? To measure this, we introduce noise in the target sentences copied onto the source, following the procedure of BIBREF26 : it deletes random words and performs a small random permutation of the remaining words. Results (+ Source noise) show no difference for the French in-domain test sets, but bring the out-of-domain score to the level of the baseline. Finally, we observe a significant improvement on German in-domain test sets, compared to the baseline (about +1.5 BLEU). This last setup is even almost as good as the backtrans-nmt condition (see § SECREF8 ) for German. This shows that learning to reorder and predict missing words can more effectively serve our purposes than simply learning to copy.",
+      "score": 2.8400726168585724,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        43,
+        44
+      ],
+      "child_qasper_evidence_texts": [
+        "We observe that the copy setup has only a small impact on the English-French system, for which the baseline is already strong. This is less true for English-German where simple copies yield a significant improvement. Performance drops for both language pairs in the copy-dummies setup.",
+        "We achieve our best gains with the copy-marked setup, which is the best way to use a copy of the target (although the performance on the out-of-domain tests is at most the same as the baseline). Such gains may look surprising, since the NMT model does not need to learn to translate but only to copy the source. This is indeed what happens: to confirm this, we built a fake test set having identical source and target side (in French). The average cross-entropy for this test set is 0.33, very close to 0, to be compared with an average cost of 58.52 when we process an actual source (in English). This means that the model has learned to copy words from source to target with no difficulty, even for sentences not seen in training. A follow-up question is whether training a copying task instead of a translation task limits the improvement: would the NMT learn better if the task was harder? To measure this, we introduce noise in the target sentences copied onto the source, following the procedure of BIBREF26 : it deletes random words and performs a small random permutation of the remaining words. Results (+ Source noise) show no difference for the French in-domain test sets, but bring the out-of-domain score to the level of the baseline. Finally, we observe a significant improvement on German in-domain test sets, compared to the baseline (about +1.5 BLEU). This last setup is even almost as good as the backtrans-nmt condition (see § SECREF8 ) for German. This shows that learning to reorder and predict missing words can more effectively serve our purposes than simply learning to copy."
+      ],
+      "child_pages": [
+        9,
+        9
+      ],
+      "child_sections": [
+        "Copy+marking+noise is not so stupid",
+        "Copy+marking+noise is not so stupid"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Copy+marking+noise is not so stupid",
+          0
+        ],
+        [
+          "Copy+marking+noise is not so stupid",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Copy+marking+noise is not so stupid",
+      "section": "Copy+marking+noise is not so stupid",
+      "title_path": "Copy+marking+noise is not so stupid",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Stupid Back-Translation\n[source_id=35] We now analyze the effect of using much simpler data generation schemes, which do not require the availability of a backward translation engine.",
+      "score": 2.4293922177392724,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        35
+      ],
+      "child_qasper_evidence_texts": [
+        "We now analyze the effect of using much simpler data generation schemes, which do not require the availability of a backward translation engine."
+      ],
+      "child_pages": [
+        7
+      ],
+      "child_sections": [
+        "Stupid Back-Translation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Stupid Back-Translation",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Stupid Back-Translation",
+      "section": "Stupid Back-Translation",
+      "title_path": "Stupid Back-Translation",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 77,
+      "content": "In this paper, we have analyzed various ways to integrate monolingual data in an NMT framework, focusing on their impact on quality and domain adaptation. While confirming the effectiveness of BT, our study also proposed significantly cheaper ways to improve the baseline performance, using a slightly modified copy of the target, instead of its full BT. When no high quality BT is available, using GANs to make the pseudo-source sentences closer to natural source sentences is an efficient solution for domain adaptation.",
+      "qasper_evidence_text": "In this paper, we have analyzed various ways to integrate monolingual data in an NMT framework, focusing on their impact on quality and domain adaptation. While confirming the effectiveness of BT, our study also proposed significantly cheaper ways to improve the baseline performance, using a slightly modified copy of the target, instead of its full BT. When no high quality BT is available, using GANs to make the pseudo-source sentences closer to natural source sentences is an efficient solution for domain adaptation.",
+      "source_node_id": 77,
+      "node_id": 77,
+      "paragraph_id": 77,
+      "evidence_id": 77,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_20",
+      "rank": 1,
+      "score": 5.3500635940047045,
+      "block_type": "paragraph",
+      "page": 20,
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title": "Conclusion",
+      "hotpot_title": "Conclusion",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 29,
+      "content": "artificial sources are on average shorter than natural ones: when using BT, cases where the source is shorter than the target are rarer; cases when they have the same length are more frequent.",
+      "qasper_evidence_text": "artificial sources are on average shorter than natural ones: when using BT, cases where the source is shorter than the target are rarer; cases when they have the same length are more frequent.",
+      "source_node_id": 29,
+      "node_id": 29,
+      "paragraph_id": 29,
+      "evidence_id": 29,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_6",
+      "rank": 4,
+      "score": 3.365903193977541,
+      "block_type": "paragraph",
+      "page": 6,
+      "section_id": "Properties of back-translated data",
+      "section": "Properties of back-translated data",
+      "title": "Properties of back-translated data",
+      "hotpot_title": "Properties of back-translated data",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 2
+    },
+    {
+      "id": 30,
+      "content": "automatic word alignments between artificial sources tend to be more monotonic than when using natural sources, as measured by the average Kendall INLINEFORM0 of source-target alignments BIBREF22 : for French-English the respective numbers are 0.048 (natural) and 0.018 (artificial); for German-English 0.068 and 0.053. Using more monotonic sentence pairs turns out to be a facilitating factor for NMT, as also noted by BIBREF20 .",
+      "qasper_evidence_text": "automatic word alignments between artificial sources tend to be more monotonic than when using natural sources, as measured by the average Kendall INLINEFORM0 of source-target alignments BIBREF22 : for French-English the respective numbers are 0.048 (natural) and 0.018 (artificial); for German-English 0.068 and 0.053. Using more monotonic sentence pairs turns out to be a facilitating factor for NMT, as also noted by BIBREF20 .",
+      "source_node_id": 30,
+      "node_id": 30,
+      "paragraph_id": 30,
+      "evidence_id": 30,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_6",
+      "rank": 4,
+      "score": 3.365903193977541,
+      "block_type": "paragraph",
+      "page": 6,
+      "section_id": "Properties of back-translated data",
+      "section": "Properties of back-translated data",
+      "title": "Properties of back-translated data",
+      "hotpot_title": "Properties of back-translated data",
+      "sent_id": 2,
+      "hotpot_sent_id": 2,
+      "supporting_rank": 3
+    },
+    {
+      "id": 26,
+      "content": "We finally note the large remaining difference between BT data and natural data, even though they only differ in their source side. This shows that at least in our domain-adaptation settings, BT does not really act as a regularizer, contrarily to the findings of BIBREF4 , BIBREF11 . Figure FIGREF13 displays the learning curves of these two systems. We observe that backtrans-nmt improves quickly in the earliest updates and then stays horizontal, whereas natural continues improving, even after 400k updates. Therefore BT does not help to avoid overfitting, it actually encourages it, which may be due “easier” training examples (cf. § SECREF15 ).",
+      "qasper_evidence_text": "We finally note the large remaining difference between BT data and natural data, even though they only differ in their source side. This shows that at least in our domain-adaptation settings, BT does not really act as a regularizer, contrarily to the findings of BIBREF4 , BIBREF11 . Figure FIGREF13 displays the learning curves of these two systems. We observe that backtrans-nmt improves quickly in the earliest updates and then stays horizontal, whereas natural continues improving, even after 400k updates. Therefore BT does not help to avoid overfitting, it actually encourages it, which may be due “easier” training examples (cf. § SECREF15 ).",
+      "source_node_id": 26,
+      "node_id": 26,
+      "paragraph_id": 26,
+      "evidence_id": 26,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_5",
+      "rank": 2,
+      "score": 4.983728329072446,
+      "block_type": "paragraph",
+      "page": 5,
+      "section_id": "The quality of Back-Translation",
+      "section": "The quality of Back-Translation",
+      "title": "The quality of Back-Translation",
+      "hotpot_title": "The quality of Back-Translation",
+      "sent_id": 8,
+      "hotpot_sent_id": 8,
+      "supporting_rank": 4
+    }
+  ],
+  "supporting_block_ids": [
+    77,
+    29,
+    30,
+    26
+  ]
+}

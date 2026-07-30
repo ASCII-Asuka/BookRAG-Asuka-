@@ -1,0 +1,70 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Data Collection and Processing ::: Common Voice (CoVo)\n[source_id=7] Common Voice BIBREF10 is a crowdsourcing speech recognition corpus with an open CC0 license. Contributors record voice clips by reading from a bank of donated sentences. Each voice clip was validated by at least two other users. Most of the sentences are covered by multiple speakers, with potentially different genders, age groups or accents.\n[source_id=8] Raw CoVo data contains samples that passed validation as well as those that did not. To build CoVoST, we only use the former one and reuse the official train-development-test partition of the validated data. As of January 2020, the latest CoVo 2019-06-12 release includes 29 languages. CoVoST is currently built on that release and covers the following 11 languages: French, German, Dutch, Russian, Spanish, Italian, Turkish, Persian, Swedish, Mongolian and Chinese.\n[source_id=9] Validated transcripts were sent to professional translators. Note that the translators had access to the transcripts but not the corresponding voice clips since clips would not carry additional information. Since transcripts were duplicated due to multiple speakers, we deduplicated the transcripts before sending them to translators. As a result, different voice clips of the same content (transcript) will have identical translations in CoVoST for train, development and test splits.\n[source_id=10] In order to control the quality of the professional translations, we applied various sanity checks to the translations BIBREF11. 1) For German-English, French-English and Russian-English translations, we computed sentence-level BLEU BIBREF12 with the NLTK BIBREF13 implementation between the human translations and the automatic translations produced by a state-of-the-art system BIBREF14 (the French-English system was a Transformer big BIBREF15 separately trained on WMT14). We applied this method to these three language pairs only as we are confident about the quality of the corresponding systems. Translations with a score that was too low were manually inspected and sent back to the translators when needed. 2) We manually inspected examples where the source transcript was identical to the translation. 3) We measured the perplexity of the translations using a language model trained on a large amount of clean monolingual data BIBREF14. We manually inspected examples where the translation had a high perplexity and sent them back to translators accordingly. 4) We computed the ratio of English characters in the translations. We manually inspected examples with a low ratio and sent them back to translators accordingly. 5) Finally, we used VizSeq BIBREF16 to calculate similarity scores between transcripts and translations based on LASER cross-lingual sentence embeddings BIBREF17. Samples with low scores were manually inspected and sent back for translation when needed.\n[source_id=11] We also sanity check the overlaps of train, development and test sets in terms of transcripts and voice clips (via MD5 file hashing), and confirm they are totally disjoint.",
+  "score": 2.0447083873897136,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "child_qasper_evidence_texts": [
+    "Common Voice BIBREF10 is a crowdsourcing speech recognition corpus with an open CC0 license. Contributors record voice clips by reading from a bank of donated sentences. Each voice clip was validated by at least two other users. Most of the sentences are covered by multiple speakers, with potentially different genders, age groups or accents.",
+    "Raw CoVo data contains samples that passed validation as well as those that did not. To build CoVoST, we only use the former one and reuse the official train-development-test partition of the validated data. As of January 2020, the latest CoVo 2019-06-12 release includes 29 languages. CoVoST is currently built on that release and covers the following 11 languages: French, German, Dutch, Russian, Spanish, Italian, Turkish, Persian, Swedish, Mongolian and Chinese.",
+    "Validated transcripts were sent to professional translators. Note that the translators had access to the transcripts but not the corresponding voice clips since clips would not carry additional information. Since transcripts were duplicated due to multiple speakers, we deduplicated the transcripts before sending them to translators. As a result, different voice clips of the same content (transcript) will have identical translations in CoVoST for train, development and test splits.",
+    "In order to control the quality of the professional translations, we applied various sanity checks to the translations BIBREF11. 1) For German-English, French-English and Russian-English translations, we computed sentence-level BLEU BIBREF12 with the NLTK BIBREF13 implementation between the human translations and the automatic translations produced by a state-of-the-art system BIBREF14 (the French-English system was a Transformer big BIBREF15 separately trained on WMT14). We applied this method to these three language pairs only as we are confident about the quality of the corresponding systems. Translations with a score that was too low were manually inspected and sent back to the translators when needed. 2) We manually inspected examples where the source transcript was identical to the translation. 3) We measured the perplexity of the translations using a language model trained on a large amount of clean monolingual data BIBREF14. We manually inspected examples where the translation had a high perplexity and sent them back to translators accordingly. 4) We computed the ratio of English characters in the translations. We manually inspected examples with a low ratio and sent them back to translators accordingly. 5) Finally, we used VizSeq BIBREF16 to calculate similarity scores between transcripts and translations based on LASER cross-lingual sentence embeddings BIBREF17. Samples with low scores were manually inspected and sent back for translation when needed.",
+    "We also sanity check the overlaps of train, development and test sets in terms of transcripts and voice clips (via MD5 file hashing), and confirm they are totally disjoint."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Data Collection and Processing ::: Common Voice (CoVo)",
+    "Data Collection and Processing ::: Common Voice (CoVo)",
+    "Data Collection and Processing ::: Common Voice (CoVo)",
+    "Data Collection and Processing ::: Common Voice (CoVo)",
+    "Data Collection and Processing ::: Common Voice (CoVo)"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Data Collection and Processing ::: Common Voice (CoVo)",
+      0
+    ],
+    [
+      "Data Collection and Processing ::: Common Voice (CoVo)",
+      1
+    ],
+    [
+      "Data Collection and Processing ::: Common Voice (CoVo)",
+      2
+    ],
+    [
+      "Data Collection and Processing ::: Common Voice (CoVo)",
+      3
+    ],
+    [
+      "Data Collection and Processing ::: Common Voice (CoVo)",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Data Collection and Processing ::: Common Voice (CoVo)",
+  "section": "Data Collection and Processing ::: Common Voice (CoVo)",
+  "title_path": "Data Collection and Processing ::: Common Voice (CoVo)",
+  "block_type": "long_unit"
+}

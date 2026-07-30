@@ -1,0 +1,52 @@
+{
+  "id": "longrag_8",
+  "content": "[Section] Experiments and Results ::: Implementation and Results Analysis\n[source_id=30] For the implementation of our neural network, we used pytorch-pretrained-bert library containing the pre-trained BERT model, text tokenizer, and pre-trained WordPiece. As the implementation environment, we use Google Colaboratory tool which is a free research tool with a Tesla K80 GPU and 12G RAM. Based on our experiments, we trained our classifier with a batch size of 32 for 3 epochs. The dropout probability is set to 0.1 for all layers. Adam optimizer is used with a learning rate of 2e-5. As an input, we tokenized each tweet with the BERT tokenizer. It contains invalid characters removal, punctuation splitting, and lowercasing the words. Based on the original BERT BIBREF11, we split words to subword units using WordPiece tokenization. As tweets are short texts, we set the maximum sequence length to 64 and in any shorter or longer length case it will be padded with zero values or truncated to the maximum length.\n[source_id=31] We consider 80% of each dataset as training data to update the weights in the fine-tuning phase, 10% as validation data to measure the out-of-sample performance of the model during training, and 10% as test data to measure the out-of-sample performance after training. To prevent overfitting, we use stratified sampling to select 0.8, 0.1, and 0.1 portions of tweets from each class (racism/sexism/neither or hate/offensive/neither) for train, validation, and test. Classes' distribution of train, validation, and test datasets are shown in Table TABREF16.\n[source_id=32] As it is understandable from Tables TABREF16(classdistributionwaseem) and TABREF16(classdistributiondavidson), we are dealing with imbalance datasets with various classes’ distribution. Since hate speech and offensive languages are real phenomena, we did not perform oversampling or undersampling techniques to adjust the classes’ distribution and tried to supply the datasets as realistic as possible. We evaluate the effect of different fine-tuning strategies on the performance of our model. Table TABREF17 summarized the obtained results for fine-tuning strategies along with the official baselines. We use Waseem and Hovy BIBREF5, Davidson et al. BIBREF9, and Waseem et al. BIBREF10 as baselines and compare the results with our different fine-tuning strategies using pre-trained BERTbase model. The evaluation results are reported on the test dataset and on three different metrics: precision, recall, and weighted-average F1-score. We consider weighted-average F1-score as the most robust metric versus class imbalance, which gives insight into the performance of our proposed models. According to Table TABREF17, F1-scores of all BERT based fine-tuning strategies except BERT + nonlinear classifier on top of BERT are higher than the baselines. Using the pre-trained BERT model as initial embeddings and fine-tuning the model with a fully connected linear classifier (BERTbase) outperforms previous baselines yielding F1-score of 81% and 91% for datasets of Waseem and Davidson respectively. Inserting a CNN to pre-trained BERT model for fine-tuning on downstream task provides the best results as F1- score of 88% and 92% for datasets of Waseem and Davidson and it clearly exceeds the baselines. Intuitively, this makes sense that combining all pre-trained BERT layers with a CNN yields better results in which our model uses all the information included in different layers of pre-trained BERT during the fine-tuning phase. This information contains both syntactical and contextual features coming from lower layers to higher layers of BERT.",
+  "score": 1.3795596071758605,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_8",
+  "child_source_node_ids": [
+    30,
+    31,
+    32
+  ],
+  "child_qasper_evidence_texts": [
+    "For the implementation of our neural network, we used pytorch-pretrained-bert library containing the pre-trained BERT model, text tokenizer, and pre-trained WordPiece. As the implementation environment, we use Google Colaboratory tool which is a free research tool with a Tesla K80 GPU and 12G RAM. Based on our experiments, we trained our classifier with a batch size of 32 for 3 epochs. The dropout probability is set to 0.1 for all layers. Adam optimizer is used with a learning rate of 2e-5. As an input, we tokenized each tweet with the BERT tokenizer. It contains invalid characters removal, punctuation splitting, and lowercasing the words. Based on the original BERT BIBREF11, we split words to subword units using WordPiece tokenization. As tweets are short texts, we set the maximum sequence length to 64 and in any shorter or longer length case it will be padded with zero values or truncated to the maximum length.",
+    "We consider 80% of each dataset as training data to update the weights in the fine-tuning phase, 10% as validation data to measure the out-of-sample performance of the model during training, and 10% as test data to measure the out-of-sample performance after training. To prevent overfitting, we use stratified sampling to select 0.8, 0.1, and 0.1 portions of tweets from each class (racism/sexism/neither or hate/offensive/neither) for train, validation, and test. Classes' distribution of train, validation, and test datasets are shown in Table TABREF16.",
+    "As it is understandable from Tables TABREF16(classdistributionwaseem) and TABREF16(classdistributiondavidson), we are dealing with imbalance datasets with various classes’ distribution. Since hate speech and offensive languages are real phenomena, we did not perform oversampling or undersampling techniques to adjust the classes’ distribution and tried to supply the datasets as realistic as possible. We evaluate the effect of different fine-tuning strategies on the performance of our model. Table TABREF17 summarized the obtained results for fine-tuning strategies along with the official baselines. We use Waseem and Hovy BIBREF5, Davidson et al. BIBREF9, and Waseem et al. BIBREF10 as baselines and compare the results with our different fine-tuning strategies using pre-trained BERTbase model. The evaluation results are reported on the test dataset and on three different metrics: precision, recall, and weighted-average F1-score. We consider weighted-average F1-score as the most robust metric versus class imbalance, which gives insight into the performance of our proposed models. According to Table TABREF17, F1-scores of all BERT based fine-tuning strategies except BERT + nonlinear classifier on top of BERT are higher than the baselines. Using the pre-trained BERT model as initial embeddings and fine-tuning the model with a fully connected linear classifier (BERTbase) outperforms previous baselines yielding F1-score of 81% and 91% for datasets of Waseem and Davidson respectively. Inserting a CNN to pre-trained BERT model for fine-tuning on downstream task provides the best results as F1- score of 88% and 92% for datasets of Waseem and Davidson and it clearly exceeds the baselines. Intuitively, this makes sense that combining all pre-trained BERT layers with a CNN yields better results in which our model uses all the information included in different layers of pre-trained BERT during the fine-tuning phase. This information contains both syntactical and contextual features coming from lower layers to higher layers of BERT."
+  ],
+  "child_pages": [
+    8,
+    8,
+    8
+  ],
+  "child_sections": [
+    "Experiments and Results ::: Implementation and Results Analysis",
+    "Experiments and Results ::: Implementation and Results Analysis",
+    "Experiments and Results ::: Implementation and Results Analysis"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Experiments and Results ::: Implementation and Results Analysis",
+      0
+    ],
+    [
+      "Experiments and Results ::: Implementation and Results Analysis",
+      1
+    ],
+    [
+      "Experiments and Results ::: Implementation and Results Analysis",
+      2
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_8",
+  "section_id": "Experiments and Results ::: Implementation and Results Analysis",
+  "section": "Experiments and Results ::: Implementation and Results Analysis",
+  "title_path": "Experiments and Results ::: Implementation and Results Analysis",
+  "block_type": "long_unit"
+}

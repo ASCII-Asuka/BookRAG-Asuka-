@@ -1,0 +1,479 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_16",
+      "content": "[Section] Hyperparameters\n[source_id=57] After tuning we found the same set of hyperparameters to work well for both the table-to-text PG-Net, and the inverse information extraction PG-Net. The hidden state size of the biLSTMs was set to 200. The input and output vocabularies were set to 50000 most common words in the corpus, with additional special symbols for table attribute names (such as “birth-date”). The embeddings of the tokens in the vocabulary were initialized with Glove BIBREF43 . Learning rate of INLINEFORM0 was used during training, with the Adam optimizer, and a dropout of INLINEFORM1 was also applied to the outputs of the biLSTM. Models were trained till the loss on the dev set stopped dropping. Maximum length of a decoded text was set to 40 tokens, and that of the tables was set to 120 tokens. Various beam sizes and length normalization penalties were applied for the table-to-text system, which are listed in the main paper. For the information extraction system, we found a beam size of 8 and no length penalty to produce the highest F-score on the dev set.",
+      "score": 4.507228628706688,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_16",
+      "child_source_node_ids": [
+        57
+      ],
+      "child_qasper_evidence_texts": [
+        "After tuning we found the same set of hyperparameters to work well for both the table-to-text PG-Net, and the inverse information extraction PG-Net. The hidden state size of the biLSTMs was set to 200. The input and output vocabularies were set to 50000 most common words in the corpus, with additional special symbols for table attribute names (such as “birth-date”). The embeddings of the tokens in the vocabulary were initialized with Glove BIBREF43 . Learning rate of INLINEFORM0 was used during training, with the Adam optimizer, and a dropout of INLINEFORM1 was also applied to the outputs of the biLSTM. Models were trained till the loss on the dev set stopped dropping. Maximum length of a decoded text was set to 40 tokens, and that of the tables was set to 120 tokens. Various beam sizes and length normalization penalties were applied for the table-to-text system, which are listed in the main paper. For the information extraction system, we found a beam size of 8 and no length penalty to produce the highest F-score on the dev set."
+      ],
+      "child_pages": [
+        16
+      ],
+      "child_sections": [
+        "Hyperparameters"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Hyperparameters",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_16",
+      "section_id": "Hyperparameters",
+      "section": "Hyperparameters",
+      "title_path": "Hyperparameters",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Correlation Comparison\n[source_id=29] We use bootstrap sampling (500 iterations) over the 1100 tables for which we collected human annotations to get an idea of how the correlation of each metric varies with the underlying data. In each iteration, we sample with replacement, tables along with their references and all the generated texts for that table. Then we compute aggregated human evaluation and metric scores for each of the models and compute the correlation between the two. We report the average correlation across all bootstrap samples for each metric in Table TABREF37 . The distribution of correlations for the best performing metrics are shown in Figure FIGREF38 .\n[source_id=30] Table TABREF37 also indicates whether PARENT is significantly better than a baseline metric. BIBREF21 suggest using the William's test for this purpose, but since we are computing correlations between only 4/13 systems at a time, this test has very weak power in our case. Hence, we use the bootstrap samples to obtain a INLINEFORM0 confidence interval of the difference in correlation between PARENT and any other metric and check whether this is above 0 BIBREF27 .\n[source_id=31] Correlations are higher for the systems category than the hyperparams category. The latter is a more difficult setting since very similar models are compared, and hence the variance of the correlations is also high. Commonly used metrics which only rely on the reference (BLEU, ROUGE, METEOR, CIDEr) have only weak correlations with human judgments. In the hyperparams category, these are often negative, implying that tuning models based on these may lead to selecting worse models. BLEU performs the best among these, and adding n-grams from the table as references improves this further (BLEU-T).\n[source_id=32] Among the extractive evaluation metrics, CS, which also only relies on the reference, has poor correlation in the hyperparams category. RG-F, and both variants of the PARENT metric achieve the highest correlation for both settings. There is no significant difference among these for the hyperparams category, but for systems, PARENT-W is significantly better than the other two. While RG-F needs a full information extraction pipeline in its implementation, PARENT-C only relies on co-occurrence counts, and PARENT-W can be used out-of-the-box for any dataset. To our knowledge, this is the first rigorous evaluation of using information extraction for generation evaluation.\n[source_id=33] On this dataset, the word-overlap model showed higher correlation than the co-occurrence model for entailment. In § SECREF47 we will show that for the WebNLG dataset, where more paraphrasing is involved between the table and text, the opposite is true. Lastly, we note that the heuristic for selecting INLINEFORM0 is sufficient to produce high correlations for PARENT, however, if human annotations are available, this can be tuned to produce significantly higher correlations (PARENT*-W/C).",
+      "score": 3.6526443443644085,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "child_qasper_evidence_texts": [
+        "We use bootstrap sampling (500 iterations) over the 1100 tables for which we collected human annotations to get an idea of how the correlation of each metric varies with the underlying data. In each iteration, we sample with replacement, tables along with their references and all the generated texts for that table. Then we compute aggregated human evaluation and metric scores for each of the models and compute the correlation between the two. We report the average correlation across all bootstrap samples for each metric in Table TABREF37 . The distribution of correlations for the best performing metrics are shown in Figure FIGREF38 .",
+        "Table TABREF37 also indicates whether PARENT is significantly better than a baseline metric. BIBREF21 suggest using the William's test for this purpose, but since we are computing correlations between only 4/13 systems at a time, this test has very weak power in our case. Hence, we use the bootstrap samples to obtain a INLINEFORM0 confidence interval of the difference in correlation between PARENT and any other metric and check whether this is above 0 BIBREF27 .",
+        "Correlations are higher for the systems category than the hyperparams category. The latter is a more difficult setting since very similar models are compared, and hence the variance of the correlations is also high. Commonly used metrics which only rely on the reference (BLEU, ROUGE, METEOR, CIDEr) have only weak correlations with human judgments. In the hyperparams category, these are often negative, implying that tuning models based on these may lead to selecting worse models. BLEU performs the best among these, and adding n-grams from the table as references improves this further (BLEU-T).",
+        "Among the extractive evaluation metrics, CS, which also only relies on the reference, has poor correlation in the hyperparams category. RG-F, and both variants of the PARENT metric achieve the highest correlation for both settings. There is no significant difference among these for the hyperparams category, but for systems, PARENT-W is significantly better than the other two. While RG-F needs a full information extraction pipeline in its implementation, PARENT-C only relies on co-occurrence counts, and PARENT-W can be used out-of-the-box for any dataset. To our knowledge, this is the first rigorous evaluation of using information extraction for generation evaluation.",
+        "On this dataset, the word-overlap model showed higher correlation than the co-occurrence model for entailment. In § SECREF47 we will show that for the WebNLG dataset, where more paraphrasing is involved between the table and text, the opposite is true. Lastly, we note that the heuristic for selecting INLINEFORM0 is sufficient to produce high correlations for PARENT, however, if human annotations are available, this can be tuned to produce significantly higher correlations (PARENT*-W/C)."
+      ],
+      "child_pages": [
+        9,
+        9,
+        9,
+        9,
+        9
+      ],
+      "child_sections": [
+        "Correlation Comparison",
+        "Correlation Comparison",
+        "Correlation Comparison",
+        "Correlation Comparison",
+        "Correlation Comparison"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Correlation Comparison",
+          0
+        ],
+        [
+          "Correlation Comparison",
+          1
+        ],
+        [
+          "Correlation Comparison",
+          2
+        ],
+        [
+          "Correlation Comparison",
+          3
+        ],
+        [
+          "Correlation Comparison",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Correlation Comparison",
+      "section": "Correlation Comparison",
+      "title_path": "Correlation Comparison",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Compared Metrics\n[source_id=25] Text only: We compare BLEU BIBREF8 , ROUGE BIBREF9 , METEOR BIBREF18 , CIDEr and CIDEr-D BIBREF25 using their publicly available implementations.\n[source_id=26] Information Extraction based: We compare the CS, RG and RG-F metrics discussed in § SECREF4 .\n[source_id=27] Text & Table: We compare a variant of BLEU, denoted as BLEU-T, where the values from the table are used as additional references. BLEU-T draws inspiration from iBLEU BIBREF26 but instead rewards n-grams which match the table rather than penalizing them. For PARENT, we compare both the word-overlap model (PARENT-W) and the co-occurrence model (PARENT-C) for determining entailment. We also compare versions where a single INLINEFORM0 is tuned on the entire dataset to maximize correlation with human judgments, denoted as PARENT*-W/C.",
+      "score": 3.6135384200242857,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        25,
+        26,
+        27
+      ],
+      "child_qasper_evidence_texts": [
+        "Text only: We compare BLEU BIBREF8 , ROUGE BIBREF9 , METEOR BIBREF18 , CIDEr and CIDEr-D BIBREF25 using their publicly available implementations.",
+        "Information Extraction based: We compare the CS, RG and RG-F metrics discussed in § SECREF4 .",
+        "Text & Table: We compare a variant of BLEU, denoted as BLEU-T, where the values from the table are used as additional references. BLEU-T draws inspiration from iBLEU BIBREF26 but instead rewards n-grams which match the table rather than penalizing them. For PARENT, we compare both the word-overlap model (PARENT-W) and the co-occurrence model (PARENT-C) for determining entailment. We also compare versions where a single INLINEFORM0 is tuned on the entire dataset to maximize correlation with human judgments, denoted as PARENT*-W/C."
+      ],
+      "child_pages": [
+        8,
+        8,
+        8
+      ],
+      "child_sections": [
+        "Compared Metrics",
+        "Compared Metrics",
+        "Compared Metrics"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Compared Metrics",
+          0
+        ],
+        [
+          "Compared Metrics",
+          1
+        ],
+        [
+          "Compared Metrics",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Compared Metrics",
+      "section": "Compared Metrics",
+      "title_path": "Compared Metrics",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Automatically constructed datasets for generating text from semi-structured data (tables), such as WikiBio, often contain reference texts that diverge from the information in the corresponding semi-structured data. We show that metrics which rely solely on the reference texts, such as BLEU and ROUGE, show poor correlation with human judgments when those references diverge. We propose a new metric, PARENT, which aligns n-grams from the reference and generated texts to the semi-structured data before computing their precision and recall. Through a large scale human evaluation study of table-to-text models for WikiBio, we show that PARENT correlates with human judgments better than existing text generation metrics. We also adapt and evaluate the information extraction based evaluation proposed by Wiseman et al (2017), and show that PARENT has comparable correlation to it, while being easier to use. We show that PARENT is also applicable when the reference texts are elicited from humans using the data from the WebNLG challenge.",
+      "score": 3.533805439384306,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Automatically constructed datasets for generating text from semi-structured data (tables), such as WikiBio, often contain reference texts that diverge from the information in the corresponding semi-structured data. We show that metrics which rely solely on the reference texts, such as BLEU and ROUGE, show poor correlation with human judgments when those references diverge. We propose a new metric, PARENT, which aligns n-grams from the reference and generated texts to the semi-structured data before computing their precision and recall. Through a large scale human evaluation study of table-to-text models for WikiBio, we show that PARENT correlates with human judgments better than existing text generation metrics. We also adapt and evaluate the information extraction based evaluation proposed by Wiseman et al (2017), and show that PARENT has comparable correlation to it, while being easier to use. We show that PARENT is also applicable when the reference texts are elicited from humans using the data from the WebNLG challenge."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] WebNLG Dataset\n[source_id=41] To check how PARENT correlates with human judgments when the references are elicited from humans (and less likely to be divergent), we check its correlation with the human ratings provided for the systems competing in the WebNLG challenge BIBREF6 . The task is to generate text describing 1-5 RDF triples (e.g. John E Blaha, birthPlace, San Antonio), and human ratings were collected for the outputs of 9 participating systems on 223 instances. These systems include a mix of pipelined, statistical and neural methods. Each instance has upto 3 reference texts associated with the RDF triples, which we use for evaluation.\n[source_id=42] The human ratings were collected on 3 distinct aspects – grammaticality, fluency and semantics, where semantics corresponds to the degree to which a generated text agrees with the meaning of the underlying RDF triples. We report the correlation of several metrics with these ratings in Table TABREF48 . Both variants of PARENT are either competitive or better than the other metrics in terms of the average correlation to all three aspects. This shows that PARENT is applicable for high quality references as well.\n[source_id=43] While BLEU has the highest correlation for the grammar and fluency aspects, PARENT does best for semantics. This suggests that the inclusion of source tables into the evaluation orients the metric more towards measuring the fidelity of the content of the generation. A similar trend is seen comparing BLEU and BLEU-T. As modern neural text generation systems are typically very fluent, measuring their fidelity is of increasing importance. Between the two entailment models, PARENT-C is better due to its higher correlation with the grammaticality and fluency aspects.\n[source_id=44] The INLINEFORM0 parameter in the calculation of PARENT decides whether to compute recall against the table or the reference (Eq. EQREF22 ). Figure FIGREF50 shows the distribution of the values taken by INLINEFORM1 using the heuristic described in § SECREF3 for instances in both WikiBio and WebNLG. For WikiBio, the recall of the references against the table is generally low, and hence the recall of the generated text relies more on the table. For WebNLG, where the references are elicited from humans, this recall is much higher (often INLINEFORM2 ), and hence the recall of the generated text relies more on the reference.",
+      "score": 3.2505511894046575,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        41,
+        42,
+        43,
+        44
+      ],
+      "child_qasper_evidence_texts": [
+        "To check how PARENT correlates with human judgments when the references are elicited from humans (and less likely to be divergent), we check its correlation with the human ratings provided for the systems competing in the WebNLG challenge BIBREF6 . The task is to generate text describing 1-5 RDF triples (e.g. John E Blaha, birthPlace, San Antonio), and human ratings were collected for the outputs of 9 participating systems on 223 instances. These systems include a mix of pipelined, statistical and neural methods. Each instance has upto 3 reference texts associated with the RDF triples, which we use for evaluation.",
+        "The human ratings were collected on 3 distinct aspects – grammaticality, fluency and semantics, where semantics corresponds to the degree to which a generated text agrees with the meaning of the underlying RDF triples. We report the correlation of several metrics with these ratings in Table TABREF48 . Both variants of PARENT are either competitive or better than the other metrics in terms of the average correlation to all three aspects. This shows that PARENT is applicable for high quality references as well.",
+        "While BLEU has the highest correlation for the grammar and fluency aspects, PARENT does best for semantics. This suggests that the inclusion of source tables into the evaluation orients the metric more towards measuring the fidelity of the content of the generation. A similar trend is seen comparing BLEU and BLEU-T. As modern neural text generation systems are typically very fluent, measuring their fidelity is of increasing importance. Between the two entailment models, PARENT-C is better due to its higher correlation with the grammaticality and fluency aspects.",
+        "The INLINEFORM0 parameter in the calculation of PARENT decides whether to compute recall against the table or the reference (Eq. EQREF22 ). Figure FIGREF50 shows the distribution of the values taken by INLINEFORM1 using the heuristic described in § SECREF3 for instances in both WikiBio and WebNLG. For WikiBio, the recall of the references against the table is generally low, and hence the recall of the generated text relies more on the table. For WebNLG, where the references are elicited from humans, this recall is much higher (often INLINEFORM2 ), and hence the recall of the generated text relies more on the reference."
+      ],
+      "child_pages": [
+        11,
+        11,
+        11,
+        11
+      ],
+      "child_sections": [
+        "WebNLG Dataset",
+        "WebNLG Dataset",
+        "WebNLG Dataset",
+        "WebNLG Dataset"
+      ],
+      "child_hotpot_facts": [
+        [
+          "WebNLG Dataset",
+          0
+        ],
+        [
+          "WebNLG Dataset",
+          1
+        ],
+        [
+          "WebNLG Dataset",
+          2
+        ],
+        [
+          "WebNLG Dataset",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "WebNLG Dataset",
+      "section": "WebNLG Dataset",
+      "title_path": "WebNLG Dataset",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Data & Models\n[source_id=18] Our main experiments are on the WikiBio dataset BIBREF0 , which is automatically constructed and contains many divergent references. In § SECREF47 we also present results on the data released as part of the WebNLG challenge.\n[source_id=19] We developed several models of varying quality for generating text from the tables in WikiBio. This gives us a diverse set of outputs to evaluate the automatic metrics on. Table TABREF32 lists the models along with their hyperparameter settings and their scores from the human evaluation (§ SECREF33 ). Our focus is primarily on neural sequence-to-sequence methods since these are most widely used, but we also include a template-based baseline. All neural models were trained on the WikiBio training set. Training details and sample outputs are included in Appendices SECREF56 & SECREF57 .\n[source_id=20] We divide these models into two categories and measure correlation separately for both the categories. The first category, WikiBio-Systems, includes one model each from the four families listed in Table TABREF32 . This category tests whether a metric can be used to compare different model families with a large variation in the quality of their outputs. The second category, WikiBio-Hyperparams, includes 13 different hyperparameter settings of PG-Net BIBREF19 , which was the best performing system overall. 9 of these were obtained by varying the beam size and length normalization penalty of the decoder network BIBREF23 , and the remaining 4 were obtained by re-scoring beams of size 8 with the information extraction model described in § SECREF4 . All the models in this category produce high quality fluent texts, and differ primarily on the quantity and accuracy of the information they express. Here we are testing whether a metric can be used to compare similar systems with a small variation in performance. This is an important use-case as metrics are often used to tune hyperparameters of a model.",
+      "score": 2.9953605229274975,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        18,
+        19,
+        20
+      ],
+      "child_qasper_evidence_texts": [
+        "Our main experiments are on the WikiBio dataset BIBREF0 , which is automatically constructed and contains many divergent references. In § SECREF47 we also present results on the data released as part of the WebNLG challenge.",
+        "We developed several models of varying quality for generating text from the tables in WikiBio. This gives us a diverse set of outputs to evaluate the automatic metrics on. Table TABREF32 lists the models along with their hyperparameter settings and their scores from the human evaluation (§ SECREF33 ). Our focus is primarily on neural sequence-to-sequence methods since these are most widely used, but we also include a template-based baseline. All neural models were trained on the WikiBio training set. Training details and sample outputs are included in Appendices SECREF56 & SECREF57 .",
+        "We divide these models into two categories and measure correlation separately for both the categories. The first category, WikiBio-Systems, includes one model each from the four families listed in Table TABREF32 . This category tests whether a metric can be used to compare different model families with a large variation in the quality of their outputs. The second category, WikiBio-Hyperparams, includes 13 different hyperparameter settings of PG-Net BIBREF19 , which was the best performing system overall. 9 of these were obtained by varying the beam size and length normalization penalty of the decoder network BIBREF23 , and the remaining 4 were obtained by re-scoring beams of size 8 with the information extraction model described in § SECREF4 . All the models in this category produce high quality fluent texts, and differ primarily on the quantity and accuracy of the information they express. Here we are testing whether a metric can be used to compare similar systems with a small variation in performance. This is an important use-case as metrics are often used to tune hyperparameters of a model."
+      ],
+      "child_pages": [
+        6,
+        6,
+        6
+      ],
+      "child_sections": [
+        "Data & Models",
+        "Data & Models",
+        "Data & Models"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Data & Models",
+          0
+        ],
+        [
+          "Data & Models",
+          1
+        ],
+        [
+          "Data & Models",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Data & Models",
+      "section": "Data & Models",
+      "title_path": "Data & Models",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] The task of generating natural language descriptions of structured data (such as tables) BIBREF2 , BIBREF3 , BIBREF4 has seen a growth in interest with the rise of sequence to sequence models that provide an easy way of encoding tables and generating text from them BIBREF0 , BIBREF1 , BIBREF5 , BIBREF6 .\n[source_id=5] For text generation tasks, the only gold standard metric is to show the output to humans for judging its quality, but this is too expensive to apply repeatedly anytime small modifications are made to a system. Hence, automatic metrics that compare the generated text to one or more reference texts are routinely used to compare models BIBREF7 . For table-to-text generation, automatic evaluation has largely relied on BLEU BIBREF8 and ROUGE BIBREF9 . The underlying assumption behind these metrics is that the reference text is gold-standard, i.e., it is the ideal target text that a system should generate. In practice, however, when datasets are collected automatically and heuristically, the reference texts are often not ideal. Figure FIGREF2 shows an example from the WikiBio dataset BIBREF0 . Here the reference contains extra information which no system can be expected to produce given only the associated table. We call such reference texts divergent from the table.\n[source_id=6] We show that existing automatic metrics, including BLEU, correlate poorly with human judgments when the evaluation sets contain divergent references (§ SECREF36 ). For many table-to-text generation tasks, the tables themselves are in a pseudo-natural language format (e.g., WikiBio, WebNLG BIBREF6 , and E2E-NLG BIBREF10 ). In such cases we propose to compare the generated text to the underlying table as well to improve evaluation. We develop a new metric, PARENT (Precision And Recall of Entailed N-grams from the Table) (§ SECREF3 ). When computing precision, PARENT effectively uses a union of the reference and the table, to reward correct information missing from the reference. When computing recall, it uses an intersection of the reference and the table, to ignore extra incorrect information in the reference. The union and intersection are computed with the help of an entailment model to decide if a text n-gram is entailed by the table. We show that this method is more effective than using the table as an additional reference. Our main contributions are:",
+      "score": 2.7697127705378546,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6
+      ],
+      "child_qasper_evidence_texts": [
+        "The task of generating natural language descriptions of structured data (such as tables) BIBREF2 , BIBREF3 , BIBREF4 has seen a growth in interest with the rise of sequence to sequence models that provide an easy way of encoding tables and generating text from them BIBREF0 , BIBREF1 , BIBREF5 , BIBREF6 .",
+        "For text generation tasks, the only gold standard metric is to show the output to humans for judging its quality, but this is too expensive to apply repeatedly anytime small modifications are made to a system. Hence, automatic metrics that compare the generated text to one or more reference texts are routinely used to compare models BIBREF7 . For table-to-text generation, automatic evaluation has largely relied on BLEU BIBREF8 and ROUGE BIBREF9 . The underlying assumption behind these metrics is that the reference text is gold-standard, i.e., it is the ideal target text that a system should generate. In practice, however, when datasets are collected automatically and heuristically, the reference texts are often not ideal. Figure FIGREF2 shows an example from the WikiBio dataset BIBREF0 . Here the reference contains extra information which no system can be expected to produce given only the associated table. We call such reference texts divergent from the table.",
+        "We show that existing automatic metrics, including BLEU, correlate poorly with human judgments when the evaluation sets contain divergent references (§ SECREF36 ). For many table-to-text generation tasks, the tables themselves are in a pseudo-natural language format (e.g., WikiBio, WebNLG BIBREF6 , and E2E-NLG BIBREF10 ). In such cases we propose to compare the generated text to the underlying table as well to improve evaluation. We develop a new metric, PARENT (Precision And Recall of Entailed N-grams from the Table) (§ SECREF3 ). When computing precision, PARENT effectively uses a union of the reference and the table, to reward correct information missing from the reference. When computing recall, it uses an intersection of the reference and the table, to ignore extra incorrect information in the reference. The union and intersection are computed with the help of an entailment model to decide if a text n-gram is entailed by the table. We show that this method is more effective than using the table as an additional reference. Our main contributions are:"
+      ],
+      "child_pages": [
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Analysis\n[source_id=35] In this section we further analyze the performance of PARENT-W under different conditions, and compare to the other best metrics from Table TABREF37 .\n[source_id=36] To study the correlation as we vary the number of divergent references, we also collected binary labels from workers for whether a reference is entailed by the corresponding table. We define a reference as entailed when it mentions only information which can be inferred from the table. Each table and reference pair was judged by 3 independent workers, and we used the majority vote as the label for that pair. Overall, only INLINEFORM0 of the references were labeled as entailed by the table. Fleiss' INLINEFORM1 was INLINEFORM2 , which indicates a fair agreement. We found the workers sometimes disagreed on what information can be reasonably entailed by the table.\n[source_id=37] Figure FIGREF40 shows the correlations as we vary the percent of entailed examples in the evaluation set of WikiBio. Each point is obtained by fixing the desired proportion of entailed examples, and sampling subsets from the full set which satisfy this proportion. PARENT and RG-F remain stable and show a high correlation across the entire range, whereas BLEU and BLEU-T vary a lot. In the hyperparams category, the latter two have the worst correlation when the evaluation set contains only entailed examples, which may seem surprising. However, on closer examination we found that this subset tends to omit a lot of information from the tables. Systems which produce more information than these references are penalized by BLEU, but not in the human evaluation. PARENT overcomes this issue by measuring recall against the table in addition to the reference.\n[source_id=38] We check how different components in the computation of PARENT contribute to its correlation to human judgments. Specifically, we remove the probability INLINEFORM0 of an n-gram INLINEFORM1 being entailed by the table from Eqs. EQREF19 and EQREF23 . The average correlation for PARENT-W drops to INLINEFORM5 in this case. We also try a variant of PARENT with INLINEFORM6 , which removes the contribution of Table Recall (Eq. EQREF22 ). The average correlation is INLINEFORM7 in this case. With these components, the correlation is INLINEFORM8 , showing that they are crucial to the performance of PARENT.\n[source_id=39] BIBREF28 point out that hill-climbing on an automatic metric is meaningless if that metric has a low instance-level correlation to human judgments. In Table TABREF46 we show the average accuracy of the metrics in making the same judgments as humans between pairs of generated texts. Both variants of PARENT are significantly better than the other metrics, however the best accuracy is only INLINEFORM0 for the binary task. This is a challenging task, since there are typically only subtle differences between the texts. Achieving higher instance-level accuracies will require more sophisticated language understanding models for evaluation.",
+      "score": 2.56524908555628,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "child_qasper_evidence_texts": [
+        "In this section we further analyze the performance of PARENT-W under different conditions, and compare to the other best metrics from Table TABREF37 .",
+        "To study the correlation as we vary the number of divergent references, we also collected binary labels from workers for whether a reference is entailed by the corresponding table. We define a reference as entailed when it mentions only information which can be inferred from the table. Each table and reference pair was judged by 3 independent workers, and we used the majority vote as the label for that pair. Overall, only INLINEFORM0 of the references were labeled as entailed by the table. Fleiss' INLINEFORM1 was INLINEFORM2 , which indicates a fair agreement. We found the workers sometimes disagreed on what information can be reasonably entailed by the table.",
+        "Figure FIGREF40 shows the correlations as we vary the percent of entailed examples in the evaluation set of WikiBio. Each point is obtained by fixing the desired proportion of entailed examples, and sampling subsets from the full set which satisfy this proportion. PARENT and RG-F remain stable and show a high correlation across the entire range, whereas BLEU and BLEU-T vary a lot. In the hyperparams category, the latter two have the worst correlation when the evaluation set contains only entailed examples, which may seem surprising. However, on closer examination we found that this subset tends to omit a lot of information from the tables. Systems which produce more information than these references are penalized by BLEU, but not in the human evaluation. PARENT overcomes this issue by measuring recall against the table in addition to the reference.",
+        "We check how different components in the computation of PARENT contribute to its correlation to human judgments. Specifically, we remove the probability INLINEFORM0 of an n-gram INLINEFORM1 being entailed by the table from Eqs. EQREF19 and EQREF23 . The average correlation for PARENT-W drops to INLINEFORM5 in this case. We also try a variant of PARENT with INLINEFORM6 , which removes the contribution of Table Recall (Eq. EQREF22 ). The average correlation is INLINEFORM7 in this case. With these components, the correlation is INLINEFORM8 , showing that they are crucial to the performance of PARENT.",
+        "BIBREF28 point out that hill-climbing on an automatic metric is meaningless if that metric has a low instance-level correlation to human judgments. In Table TABREF46 we show the average accuracy of the metrics in making the same judgments as humans between pairs of generated texts. Both variants of PARENT are significantly better than the other metrics, however the best accuracy is only INLINEFORM0 for the binary task. This is a challenging task, since there are typically only subtle differences between the texts. Achieving higher instance-level accuracies will require more sophisticated language understanding models for evaluation."
+      ],
+      "child_pages": [
+        10,
+        10,
+        10,
+        10,
+        10
+      ],
+      "child_sections": [
+        "Analysis",
+        "Analysis",
+        "Analysis",
+        "Analysis",
+        "Analysis"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Analysis",
+          0
+        ],
+        [
+          "Analysis",
+          1
+        ],
+        [
+          "Analysis",
+          2
+        ],
+        [
+          "Analysis",
+          3
+        ],
+        [
+          "Analysis",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Analysis",
+      "section": "Analysis",
+      "title_path": "Analysis",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 6,
+      "content": "We show that existing automatic metrics, including BLEU, correlate poorly with human judgments when the evaluation sets contain divergent references (§ SECREF36 ). For many table-to-text generation tasks, the tables themselves are in a pseudo-natural language format (e.g., WikiBio, WebNLG BIBREF6 , and E2E-NLG BIBREF10 ). In such cases we propose to compare the generated text to the underlying table as well to improve evaluation. We develop a new metric, PARENT (Precision And Recall of Entailed N-grams from the Table) (§ SECREF3 ). When computing precision, PARENT effectively uses a union of the reference and the table, to reward correct information missing from the reference. When computing recall, it uses an intersection of the reference and the table, to ignore extra incorrect information in the reference. The union and intersection are computed with the help of an entailment model to decide if a text n-gram is entailed by the table. We show that this method is more effective than using the table as an additional reference. Our main contributions are:",
+      "qasper_evidence_text": "We show that existing automatic metrics, including BLEU, correlate poorly with human judgments when the evaluation sets contain divergent references (§ SECREF36 ). For many table-to-text generation tasks, the tables themselves are in a pseudo-natural language format (e.g., WikiBio, WebNLG BIBREF6 , and E2E-NLG BIBREF10 ). In such cases we propose to compare the generated text to the underlying table as well to improve evaluation. We develop a new metric, PARENT (Precision And Recall of Entailed N-grams from the Table) (§ SECREF3 ). When computing precision, PARENT effectively uses a union of the reference and the table, to reward correct information missing from the reference. When computing recall, it uses an intersection of the reference and the table, to ignore extra incorrect information in the reference. The union and intersection are computed with the help of an entailment model to decide if a text n-gram is entailed by the table. We show that this method is more effective than using the table as an additional reference. Our main contributions are:",
+      "source_node_id": 6,
+      "node_id": 6,
+      "paragraph_id": 6,
+      "evidence_id": 6,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 7,
+      "score": 2.7697127705378546,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 2,
+      "hotpot_sent_id": 2,
+      "supporting_rank": 1
+    },
+    {
+      "id": 4,
+      "content": "The task of generating natural language descriptions of structured data (such as tables) BIBREF2 , BIBREF3 , BIBREF4 has seen a growth in interest with the rise of sequence to sequence models that provide an easy way of encoding tables and generating text from them BIBREF0 , BIBREF1 , BIBREF5 , BIBREF6 .",
+      "qasper_evidence_text": "The task of generating natural language descriptions of structured data (such as tables) BIBREF2 , BIBREF3 , BIBREF4 has seen a growth in interest with the rise of sequence to sequence models that provide an easy way of encoding tables and generating text from them BIBREF0 , BIBREF1 , BIBREF5 , BIBREF6 .",
+      "source_node_id": 4,
+      "node_id": 4,
+      "paragraph_id": 4,
+      "evidence_id": 4,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 7,
+      "score": 2.7697127705378546,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 2
+    }
+  ],
+  "supporting_block_ids": [
+    6,
+    4
+  ]
+}

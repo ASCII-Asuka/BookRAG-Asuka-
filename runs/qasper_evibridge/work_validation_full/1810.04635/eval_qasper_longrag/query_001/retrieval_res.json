@@ -1,0 +1,411 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_10",
+      "content": "[Section] Implementation details\n[source_id=33] Among the variants of the RNN function, we use GRUs as they yield comparable performance to that of the LSTM and include a smaller number of weight parameters BIBREF29 . We use a max encoder step of 750 for the audio input, based on the implementation choices presented in BIBREF30 and 128 for the text input because it covers the maximum length of the transcripts. The vocabulary size of the dataset is 3,747, including the “_UNK_\" token, which represents unknown words, and the “_PAD_\" token, which is used to indicate padding information added while preparing mini-batch data. The number of hidden units and the number of layers in the RNN for each model (ARE, TRE, MDRE and MDREA) are selected based on extensive hyperparameter search experiments. The weights of the hidden units are initialized using orthogonal weights BIBREF31 ], and the text embedding layer is initialized from pretrained word-embedding vectors BIBREF32 .\n[source_id=34] In preparing the textual dataset, we first use the released transcripts of the IEMOCAP dataset for simplicity. To investigate the practical performance, we then process all of the IEMOCAP audio data using an ASR system (the Google Cloud Speech API) and retrieve the transcripts. The performance of the Google ASR system is reflected by its word error rate (WER) of 5.53%.",
+      "score": 7.990400341704017,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        33,
+        34
+      ],
+      "child_qasper_evidence_texts": [
+        "Among the variants of the RNN function, we use GRUs as they yield comparable performance to that of the LSTM and include a smaller number of weight parameters BIBREF29 . We use a max encoder step of 750 for the audio input, based on the implementation choices presented in BIBREF30 and 128 for the text input because it covers the maximum length of the transcripts. The vocabulary size of the dataset is 3,747, including the “_UNK_\" token, which represents unknown words, and the “_PAD_\" token, which is used to indicate padding information added while preparing mini-batch data. The number of hidden units and the number of layers in the RNN for each model (ARE, TRE, MDRE and MDREA) are selected based on extensive hyperparameter search experiments. The weights of the hidden units are initialized using orthogonal weights BIBREF31 ], and the text embedding layer is initialized from pretrained word-embedding vectors BIBREF32 .",
+        "In preparing the textual dataset, we first use the released transcripts of the IEMOCAP dataset for simplicity. To investigate the practical performance, we then process all of the IEMOCAP audio data using an ASR system (the Google Cloud Speech API) and retrieve the transcripts. The performance of the Google ASR system is reflected by its word error rate (WER) of 5.53%."
+      ],
+      "child_pages": [
+        10,
+        10
+      ],
+      "child_sections": [
+        "Implementation details",
+        "Implementation details"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Implementation details",
+          0
+        ],
+        [
+          "Implementation details",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Implementation details",
+      "section": "Implementation details",
+      "title_path": "Implementation details",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Performance evaluation\n[source_id=36] As the dataset is not explicitly split beforehand into training, development, and testing sets, we perform 5-fold cross validation to determine the overall performance of the model. The data in each fold are split into training, development, and testing datasets (8:0.5:1.5, respectively). After training the model, we measure the weighted average precision (WAP) over the 5-fold dataset. We train and evaluate the model 10 times per fold, and the model performance is assessed in terms of the mean score and standard deviation.\n[source_id=37] We examine the WAP values, which are shown in Table 1. First, our ARE model shows the baseline performance because we use minimal audio features, such as the MFCC and prosodic features with simple architectures. On the other hand, the TRE model shows higher performance gain compared to the ARE. From this result, we note that textual data are informative in emotion prediction tasks, and the recurrent encoder model is effective in understanding these types of sequential data. Second, the newly proposed model, MDRE, shows a substantial performance gain. It thus achieves the state-of-the-art performance with a WAP value of 0.718. This result shows that multimodal information is a key factor in affective computing. Lastly, the attention model, MDREA, also outperforms the best existing research results (WAP 0.690 to 0.688) BIBREF19 . However, the MDREA model does not match the performance of the MDRE model, even though it utilizes a more complex architecture. We believe that this result arises because insufficient data are available to properly determine the complex model parameters in the MDREA model. Moreover, we presume that this model will show better performance when the audio signals are aligned with the textual sequence while applying the attention mechanism. We leave the implementation of this point as a future research direction.\n[source_id=38] To investigate the practical performance of the proposed models, we conduct further experiments with the ASR-processed transcript data (see “-ASR” models in Table ). The label accuracy of the processed transcripts is 5.53% WER. The TRE-ASR, MDRE-ASR and MDREA-ASR models reflect degraded performance compared to that of the TRE, MDRE and MDREA models. However, the performance of these models is still competitive; in particular, the MDRE-ASR model outperforms the previous best-performing model, 3CNN-LSTM10H (WAP 0.691 to 0.688).",
+      "score": 5.605196469552229,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        36,
+        37,
+        38
+      ],
+      "child_qasper_evidence_texts": [
+        "As the dataset is not explicitly split beforehand into training, development, and testing sets, we perform 5-fold cross validation to determine the overall performance of the model. The data in each fold are split into training, development, and testing datasets (8:0.5:1.5, respectively). After training the model, we measure the weighted average precision (WAP) over the 5-fold dataset. We train and evaluate the model 10 times per fold, and the model performance is assessed in terms of the mean score and standard deviation.",
+        "We examine the WAP values, which are shown in Table 1. First, our ARE model shows the baseline performance because we use minimal audio features, such as the MFCC and prosodic features with simple architectures. On the other hand, the TRE model shows higher performance gain compared to the ARE. From this result, we note that textual data are informative in emotion prediction tasks, and the recurrent encoder model is effective in understanding these types of sequential data. Second, the newly proposed model, MDRE, shows a substantial performance gain. It thus achieves the state-of-the-art performance with a WAP value of 0.718. This result shows that multimodal information is a key factor in affective computing. Lastly, the attention model, MDREA, also outperforms the best existing research results (WAP 0.690 to 0.688) BIBREF19 . However, the MDREA model does not match the performance of the MDRE model, even though it utilizes a more complex architecture. We believe that this result arises because insufficient data are available to properly determine the complex model parameters in the MDREA model. Moreover, we presume that this model will show better performance when the audio signals are aligned with the textual sequence while applying the attention mechanism. We leave the implementation of this point as a future research direction.",
+        "To investigate the practical performance of the proposed models, we conduct further experiments with the ASR-processed transcript data (see “-ASR” models in Table ). The label accuracy of the processed transcripts is 5.53% WER. The TRE-ASR, MDRE-ASR and MDREA-ASR models reflect degraded performance compared to that of the TRE, MDRE and MDREA models. However, the performance of these models is still competitive; in particular, the MDRE-ASR model outperforms the previous best-performing model, 3CNN-LSTM10H (WAP 0.691 to 0.688)."
+      ],
+      "child_pages": [
+        11,
+        11,
+        11
+      ],
+      "child_sections": [
+        "Performance evaluation",
+        "Performance evaluation",
+        "Performance evaluation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Performance evaluation",
+          0
+        ],
+        [
+          "Performance evaluation",
+          1
+        ],
+        [
+          "Performance evaluation",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Performance evaluation",
+      "section": "Performance evaluation",
+      "title_path": "Performance evaluation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Related work\n[source_id=9] Classical machine learning algorithms, such as hidden Markov models (HMMs), support vector machines (SVMs), and decision tree-based methods, have been employed in speech emotion recognition problems BIBREF11 , BIBREF12 , BIBREF13 . Recently, researchers have proposed various neural network-based architectures to improve the performance of speech emotion recognition. An initial study utilized deep neural networks (DNNs) to extract high-level features from raw audio data and demonstrated its effectiveness in speech emotion recognition BIBREF14 . With the advancement of deep learning methods, more complex neural-based architectures have been proposed. Convolutional neural network (CNN)-based models have been trained on information derived from raw audio signals using spectrograms or audio features such as Mel-frequency cepstral coefficients (MFCCs) and low-level descriptors (LLDs) BIBREF15 , BIBREF16 , BIBREF17 . These neural network-based models are combined to produce higher-complexity models BIBREF18 , BIBREF19 , and these models achieved the best-recorded performance when applied to the IEMOCAP dataset.\n[source_id=10] Another line of research has focused on adopting variant machine learning techniques combined with neural network-based models. One researcher utilized the multiobject learning approach and used gender and naturalness as auxiliary tasks so that the neural network-based model learned more features from a given dataset BIBREF20 . Another researcher investigated transfer learning methods, leveraging external data from related domains BIBREF21 .\n[source_id=11] As emotional dialogue is composed of sound and spoken content, researchers have also investigated the combination of acoustic features and language information, built belief network-based methods of identifying emotional key phrases, and assessed the emotional salience of verbal cues from both phoneme sequences and words BIBREF22 , BIBREF23 . However, none of these studies have utilized information from speech signals and text sequences simultaneously in an end-to-end learning neural network-based model to classify emotions.",
+      "score": 4.255371525770147,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        9,
+        10,
+        11
+      ],
+      "child_qasper_evidence_texts": [
+        "Classical machine learning algorithms, such as hidden Markov models (HMMs), support vector machines (SVMs), and decision tree-based methods, have been employed in speech emotion recognition problems BIBREF11 , BIBREF12 , BIBREF13 . Recently, researchers have proposed various neural network-based architectures to improve the performance of speech emotion recognition. An initial study utilized deep neural networks (DNNs) to extract high-level features from raw audio data and demonstrated its effectiveness in speech emotion recognition BIBREF14 . With the advancement of deep learning methods, more complex neural-based architectures have been proposed. Convolutional neural network (CNN)-based models have been trained on information derived from raw audio signals using spectrograms or audio features such as Mel-frequency cepstral coefficients (MFCCs) and low-level descriptors (LLDs) BIBREF15 , BIBREF16 , BIBREF17 . These neural network-based models are combined to produce higher-complexity models BIBREF18 , BIBREF19 , and these models achieved the best-recorded performance when applied to the IEMOCAP dataset.",
+        "Another line of research has focused on adopting variant machine learning techniques combined with neural network-based models. One researcher utilized the multiobject learning approach and used gender and naturalness as auxiliary tasks so that the neural network-based model learned more features from a given dataset BIBREF20 . Another researcher investigated transfer learning methods, leveraging external data from related domains BIBREF21 .",
+        "As emotional dialogue is composed of sound and spoken content, researchers have also investigated the combination of acoustic features and language information, built belief network-based methods of identifying emotional key phrases, and assessed the emotional salience of verbal cues from both phoneme sequences and words BIBREF22 , BIBREF23 . However, none of these studies have utilized information from speech signals and text sequences simultaneously in an end-to-end learning neural network-based model to classify emotions."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Related work",
+        "Related work",
+        "Related work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related work",
+          0
+        ],
+        [
+          "Related work",
+          1
+        ],
+        [
+          "Related work",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Related work",
+      "section": "Related work",
+      "title_path": "Related work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Recently, deep learning algorithms have successfully addressed problems in various fields, such as image classification, machine translation, speech recognition, text-to-speech generation and other machine learning related areas BIBREF0 , BIBREF1 , BIBREF2 . Similarly, substantial improvements in performance have been obtained when deep learning algorithms have been applied to statistical speech processing BIBREF3 . These fundamental improvements have led researchers to investigate additional topics related to human nature, which have long been objects of study. One such topic involves understanding human emotions and reflecting it through machine intelligence, such as emotional dialogue models BIBREF4 , BIBREF5 .\n[source_id=5] In developing emotionally aware intelligence, the very first step is building robust emotion classifiers that display good performance regardless of the application; this outcome is considered to be one of the fundamental research goals in affective computing BIBREF6 . In particular, the speech emotion recognition task is one of the most important problems in the field of paralinguistics. This field has recently broadened its applications, as it is a crucial factor in optimal human-computer interactions, including dialog systems. The goal of speech emotion recognition is to predict the emotional content of speech and to classify speech according to one of several labels (i.e., happy, sad, neutral, and angry). Various types of deep learning methods have been applied to increase the performance of emotion classifiers; however, this task is still considered to be challenging for several reasons. First, insufficient data for training complex neural network-based models are available, due to the costs associated with human involvement. Second, the characteristics of emotions must be learned from low-level speech signals. Feature-based models display limited skills when applied to this problem.\n[source_id=6] To overcome these limitations, we propose a model that uses high-level text transcription, as well as low-level audio signals, to utilize the information contained within low-resource datasets to a greater degree. Given recent improvements in automatic speech recognition (ASR) technology BIBREF7 , BIBREF2 , BIBREF8 , BIBREF9 , speech transcription can be carried out using audio signals with considerable skill. The emotional content of speech is clearly indicated by the emotion words contained in a sentence BIBREF10 , such as “lovely” and “awesome,” which carry strong emotions compared to generic (non-emotion) words, such as “person” and “day.” Thus, we hypothesize that the speech emotion recognition model will be benefit from the incorporation of high-level textual input.\n[source_id=7] In this paper, we propose a novel deep dual recurrent encoder model that simultaneously utilizes audio and text data in recognizing emotions from speech. Extensive experiments are conducted to investigate the efficacy and properties of the proposed model. Our proposed model outperforms previous state-of-the-art methods by 68.8% to 71.8% when applied to the IEMOCAP dataset, which is one of the most well-studied datasets. Based on an error analysis of the models, we show that our proposed model accurately identifies emotion classes. Moreover, the neutral class misclassification bias frequently exhibited by previous models, which focus on audio features, is less pronounced in our model.",
+      "score": 4.233329392182997,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "child_qasper_evidence_texts": [
+        "Recently, deep learning algorithms have successfully addressed problems in various fields, such as image classification, machine translation, speech recognition, text-to-speech generation and other machine learning related areas BIBREF0 , BIBREF1 , BIBREF2 . Similarly, substantial improvements in performance have been obtained when deep learning algorithms have been applied to statistical speech processing BIBREF3 . These fundamental improvements have led researchers to investigate additional topics related to human nature, which have long been objects of study. One such topic involves understanding human emotions and reflecting it through machine intelligence, such as emotional dialogue models BIBREF4 , BIBREF5 .",
+        "In developing emotionally aware intelligence, the very first step is building robust emotion classifiers that display good performance regardless of the application; this outcome is considered to be one of the fundamental research goals in affective computing BIBREF6 . In particular, the speech emotion recognition task is one of the most important problems in the field of paralinguistics. This field has recently broadened its applications, as it is a crucial factor in optimal human-computer interactions, including dialog systems. The goal of speech emotion recognition is to predict the emotional content of speech and to classify speech according to one of several labels (i.e., happy, sad, neutral, and angry). Various types of deep learning methods have been applied to increase the performance of emotion classifiers; however, this task is still considered to be challenging for several reasons. First, insufficient data for training complex neural network-based models are available, due to the costs associated with human involvement. Second, the characteristics of emotions must be learned from low-level speech signals. Feature-based models display limited skills when applied to this problem.",
+        "To overcome these limitations, we propose a model that uses high-level text transcription, as well as low-level audio signals, to utilize the information contained within low-resource datasets to a greater degree. Given recent improvements in automatic speech recognition (ASR) technology BIBREF7 , BIBREF2 , BIBREF8 , BIBREF9 , speech transcription can be carried out using audio signals with considerable skill. The emotional content of speech is clearly indicated by the emotion words contained in a sentence BIBREF10 , such as “lovely” and “awesome,” which carry strong emotions compared to generic (non-emotion) words, such as “person” and “day.” Thus, we hypothesize that the speech emotion recognition model will be benefit from the incorporation of high-level textual input.",
+        "In this paper, we propose a novel deep dual recurrent encoder model that simultaneously utilizes audio and text data in recognizing emotions from speech. Extensive experiments are conducted to investigate the efficacy and properties of the proposed model. Our proposed model outperforms previous state-of-the-art methods by 68.8% to 71.8% when applied to the IEMOCAP dataset, which is one of the most well-studied datasets. Based on an error analysis of the models, we show that our proposed model accurately identifies emotion classes. Moreover, the neutral class misclassification bias frequently exhibited by previous models, which focus on audio features, is less pronounced in our model."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Text Recurrent Encoder (TRE)\n[source_id=19] We assume that speech transcripts can be extracted from audio signals with high accuracy, given the advancement of ASR technologies BIBREF7 . We attempt to use the processed textual information as another modality in predicting the emotion class of a given signal. To use textual information, a speech transcript is tokenized and indexed into a sequence of tokens using the Natural Language Toolkit (NLTK) BIBREF27 . Each token is then passed through a word-embedding layer that converts a word index to a corresponding 300-dimensional vector that contains additional contextual meaning between words. The sequence of embedded tokens is fed into a text recurrent encoder (TRE) in such a way that the audio MFCC features are encoded using the ARE represented by equation EQREF2 . In this case, INLINEFORM0 is the t- INLINEFORM1 embedded token from the text input. Finally, the emotion class is predicted from the last hidden state of the text-RNN using the softmax function.\n[source_id=20] We use the same training objective as the ARE model, and the predicted probability distribution for the target class is as follows: DISPLAYFORM0\n[source_id=21] where INLINEFORM0 is last hidden state of the text-RNN, INLINEFORM1 , and the INLINEFORM2 and bias INLINEFORM3 are learned model parameters. The lower part of Figure indicates the architecture of the TRE model.",
+      "score": 4.150698109896524,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        19,
+        20,
+        21
+      ],
+      "child_qasper_evidence_texts": [
+        "We assume that speech transcripts can be extracted from audio signals with high accuracy, given the advancement of ASR technologies BIBREF7 . We attempt to use the processed textual information as another modality in predicting the emotion class of a given signal. To use textual information, a speech transcript is tokenized and indexed into a sequence of tokens using the Natural Language Toolkit (NLTK) BIBREF27 . Each token is then passed through a word-embedding layer that converts a word index to a corresponding 300-dimensional vector that contains additional contextual meaning between words. The sequence of embedded tokens is fed into a text recurrent encoder (TRE) in such a way that the audio MFCC features are encoded using the ARE represented by equation EQREF2 . In this case, INLINEFORM0 is the t- INLINEFORM1 embedded token from the text input. Finally, the emotion class is predicted from the last hidden state of the text-RNN using the softmax function.",
+        "We use the same training objective as the ARE model, and the predicted probability distribution for the target class is as follows: DISPLAYFORM0",
+        "where INLINEFORM0 is last hidden state of the text-RNN, INLINEFORM1 , and the INLINEFORM2 and bias INLINEFORM3 are learned model parameters. The lower part of Figure indicates the architecture of the TRE model."
+      ],
+      "child_pages": [
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "Text Recurrent Encoder (TRE)",
+        "Text Recurrent Encoder (TRE)",
+        "Text Recurrent Encoder (TRE)"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Text Recurrent Encoder (TRE)",
+          0
+        ],
+        [
+          "Text Recurrent Encoder (TRE)",
+          1
+        ],
+        [
+          "Text Recurrent Encoder (TRE)",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Text Recurrent Encoder (TRE)",
+      "section": "Text Recurrent Encoder (TRE)",
+      "title_path": "Text Recurrent Encoder (TRE)",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Multimodal Dual Recurrent Encoder (MDRE)\n[source_id=23] We present a novel architecture called the multimodal dual recurrent encoder (MDRE) to overcome the limitations of existing approaches. In this study, we consider multiple modalities, such as MFCC features, prosodic features and transcripts, which contain sequential audio information, statistical audio information and textual information, respectively. These types of data are the same as those used in the ARE and TRE cases. The MDRE model employs two RNNs to encode data from the audio signal and textual inputs independently. The audio-RNN encodes MFCC features from the audio signal using equation EQREF2 . The last hidden state of the audio-RNN is concatenated with the prosodic features to form the final vector representation INLINEFORM0 , and this vector is then passed through a fully connected neural network layer to form the audio encoding vector A. On the other hand, the text-RNN encodes the word sequence of the transcript using equation EQREF2 . The final hidden states of the text-RNN are also passed through another fully connected neural network layer to form a textual encoding vector T. Finally, the emotion class is predicted by applying the softmax function to the concatenation of the vectors A and T. We use the same training objective as the ARE model, and the predicted probability distribution for the target class is as follows: DISPLAYFORM0\n[source_id=24] where INLINEFORM0 is the feed-forward neural network with weight parameter INLINEFORM1 , and INLINEFORM2 , INLINEFORM3 are final encoding vectors from the audio-RNN and text-RNN, respectively. INLINEFORM4 and the bias INLINEFORM5 are learned model parameters.",
+      "score": 3.5533202984777255,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        23,
+        24
+      ],
+      "child_qasper_evidence_texts": [
+        "We present a novel architecture called the multimodal dual recurrent encoder (MDRE) to overcome the limitations of existing approaches. In this study, we consider multiple modalities, such as MFCC features, prosodic features and transcripts, which contain sequential audio information, statistical audio information and textual information, respectively. These types of data are the same as those used in the ARE and TRE cases. The MDRE model employs two RNNs to encode data from the audio signal and textual inputs independently. The audio-RNN encodes MFCC features from the audio signal using equation EQREF2 . The last hidden state of the audio-RNN is concatenated with the prosodic features to form the final vector representation INLINEFORM0 , and this vector is then passed through a fully connected neural network layer to form the audio encoding vector A. On the other hand, the text-RNN encodes the word sequence of the transcript using equation EQREF2 . The final hidden states of the text-RNN are also passed through another fully connected neural network layer to form a textual encoding vector T. Finally, the emotion class is predicted by applying the softmax function to the concatenation of the vectors A and T. We use the same training objective as the ARE model, and the predicted probability distribution for the target class is as follows: DISPLAYFORM0",
+        "where INLINEFORM0 is the feed-forward neural network with weight parameter INLINEFORM1 , and INLINEFORM2 , INLINEFORM3 are final encoding vectors from the audio-RNN and text-RNN, respectively. INLINEFORM4 and the bias INLINEFORM5 are learned model parameters."
+      ],
+      "child_pages": [
+        6,
+        6
+      ],
+      "child_sections": [
+        "Multimodal Dual Recurrent Encoder (MDRE)",
+        "Multimodal Dual Recurrent Encoder (MDRE)"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Multimodal Dual Recurrent Encoder (MDRE)",
+          0
+        ],
+        [
+          "Multimodal Dual Recurrent Encoder (MDRE)",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Multimodal Dual Recurrent Encoder (MDRE)",
+      "section": "Multimodal Dual Recurrent Encoder (MDRE)",
+      "title_path": "Multimodal Dual Recurrent Encoder (MDRE)",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Multimodal Dual Recurrent Encoder with Attention (MDREA)\n[source_id=26] Inspired by the concept of the attention mechanism used in neural machine translation BIBREF28 , we propose a novel multimodal attention method to focus on the specific parts of a transcript that contain strong emotional information, conditioning on the audio information. Figure shows the architecture of the MDREA model. First, the audio data and text data are encoded with the audio-RNN and text-RNN using equation EQREF2 . We then consider the final audio encoding vector INLINEFORM0 as a context vector. As seen in equation EQREF9 , during each time step t, the dot product between the context vector e and the hidden state of the text-RNN at each t-th sequence INLINEFORM1 is evaluated to calculate a similarity score INLINEFORM2 . Using this score INLINEFORM3 as a weight parameter, the weighted sum of the sequences of the hidden state of the text-RNN, INLINEFORM4 , is calculated to generate an attention-application vector Z. This attention-application vector is concatenated with the final encoding vector of the audio-RNN INLINEFORM5 (equation EQREF7 ), which will be passed through the softmax function to predict the emotion class. We use the same training objective as the ARE model, and the predicted probability distribution for the target class is as follows: DISPLAYFORM0\n[source_id=27] where INLINEFORM0 and the bias INLINEFORM1 are learned model parameters.",
+      "score": 3.495506607527247,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        26,
+        27
+      ],
+      "child_qasper_evidence_texts": [
+        "Inspired by the concept of the attention mechanism used in neural machine translation BIBREF28 , we propose a novel multimodal attention method to focus on the specific parts of a transcript that contain strong emotional information, conditioning on the audio information. Figure shows the architecture of the MDREA model. First, the audio data and text data are encoded with the audio-RNN and text-RNN using equation EQREF2 . We then consider the final audio encoding vector INLINEFORM0 as a context vector. As seen in equation EQREF9 , during each time step t, the dot product between the context vector e and the hidden state of the text-RNN at each t-th sequence INLINEFORM1 is evaluated to calculate a similarity score INLINEFORM2 . Using this score INLINEFORM3 as a weight parameter, the weighted sum of the sequences of the hidden state of the text-RNN, INLINEFORM4 , is calculated to generate an attention-application vector Z. This attention-application vector is concatenated with the final encoding vector of the audio-RNN INLINEFORM5 (equation EQREF7 ), which will be passed through the softmax function to predict the emotion class. We use the same training objective as the ARE model, and the predicted probability distribution for the target class is as follows: DISPLAYFORM0",
+        "where INLINEFORM0 and the bias INLINEFORM1 are learned model parameters."
+      ],
+      "child_pages": [
+        7,
+        7
+      ],
+      "child_sections": [
+        "Multimodal Dual Recurrent Encoder with Attention (MDREA)",
+        "Multimodal Dual Recurrent Encoder with Attention (MDREA)"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Multimodal Dual Recurrent Encoder with Attention (MDREA)",
+          0
+        ],
+        [
+          "Multimodal Dual Recurrent Encoder with Attention (MDREA)",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Multimodal Dual Recurrent Encoder with Attention (MDREA)",
+      "section": "Multimodal Dual Recurrent Encoder with Attention (MDREA)",
+      "title_path": "Multimodal Dual Recurrent Encoder with Attention (MDREA)",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Speech emotion recognition is a challenging task, and extensive reliance has been placed on models that use audio features in building well-performing classifiers. In this paper, we propose a novel deep dual recurrent encoder model that utilizes text data and audio signals simultaneously to obtain a better understanding of speech data. As emotional dialogue is composed of sound and spoken content, our model encodes the information from audio and text sequences using dual recurrent neural networks (RNNs) and then combines the information from these sources to predict the emotion class. This architecture analyzes speech data from the signal level to the language level, and it thus utilizes the information within the data more comprehensively than models that focus on audio features. Extensive experiments are conducted to investigate the efficacy and properties of the proposed model. Our proposed model outperforms previous state-of-the-art methods in assigning data to one of four emotion categories (i.e., angry, happy, sad and neutral) when the model is applied to the IEMOCAP dataset, as reflected by accuracies ranging from 68.8% to 71.8%.",
+      "score": 3.1497924230288143,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Speech emotion recognition is a challenging task, and extensive reliance has been placed on models that use audio features in building well-performing classifiers. In this paper, we propose a novel deep dual recurrent encoder model that utilizes text data and audio signals simultaneously to obtain a better understanding of speech data. As emotional dialogue is composed of sound and spoken content, our model encodes the information from audio and text sequences using dual recurrent neural networks (RNNs) and then combines the information from these sources to predict the emotion class. This architecture analyzes speech data from the signal level to the language level, and it thus utilizes the information within the data more comprehensively than models that focus on audio features. Extensive experiments are conducted to investigate the efficacy and properties of the proposed model. Our proposed model outperforms previous state-of-the-art methods in assigning data to one of four emotion categories (i.e., angry, happy, sad and neutral) when the model is applied to the IEMOCAP dataset, as reflected by accuracies ranging from 68.8% to 71.8%."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 34,
+      "content": "In preparing the textual dataset, we first use the released transcripts of the IEMOCAP dataset for simplicity. To investigate the practical performance, we then process all of the IEMOCAP audio data using an ASR system (the Google Cloud Speech API) and retrieve the transcripts. The performance of the Google ASR system is reflected by its word error rate (WER) of 5.53%.",
+      "qasper_evidence_text": "In preparing the textual dataset, we first use the released transcripts of the IEMOCAP dataset for simplicity. To investigate the practical performance, we then process all of the IEMOCAP audio data using an ASR system (the Google Cloud Speech API) and retrieve the transcripts. The performance of the Google ASR system is reflected by its word error rate (WER) of 5.53%.",
+      "source_node_id": 34,
+      "node_id": 34,
+      "paragraph_id": 34,
+      "evidence_id": 34,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_10",
+      "rank": 1,
+      "score": 7.990400341704017,
+      "block_type": "paragraph",
+      "page": 10,
+      "section_id": "Implementation details",
+      "section": "Implementation details",
+      "title": "Implementation details",
+      "hotpot_title": "Implementation details",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 1
+    }
+  ],
+  "supporting_block_ids": [
+    34
+  ]
+}

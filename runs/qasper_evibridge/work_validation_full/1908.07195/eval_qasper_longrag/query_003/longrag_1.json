@@ -1,0 +1,61 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Natural text generation, as a key task in NLP, has been advanced substantially thanks to the flourish of neural models BIBREF0 , BIBREF1 . Typical frameworks such as sequence-to-sequence (seq2seq) have been applied to various generation tasks, including machine translation BIBREF2 and dialogue generation BIBREF3 . The standard paradigm to train such neural models is maximum likelihood estimation (MLE), which maximizes the log-likelihood of observing each word in the text given the ground-truth proceeding context BIBREF4 .\n[source_id=5] Although widely used, MLE suffers from the exposure bias problem BIBREF5 , BIBREF6 : during test, the model sequentially predicts the next word conditioned on its previous generated words while during training conditioned on ground-truth words. To tackle this problem, generative adversarial networks (GAN) with reinforcement learning (RL) training approaches have been introduced to text generation tasks BIBREF7 , BIBREF8 , BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 , BIBREF13 , where the discriminator is trained to distinguish real and generated text samples to provide reward signals for the generator, and the generator is optimized via policy gradient BIBREF7 .\n[source_id=6] However, recent studies have shown that potential issues of training GANs on discrete data are more severe than exposure bias BIBREF14 , BIBREF15 . One of the fundamental issues when generating discrete text samples with GANs is training instability. Updating the generator with policy gradient always leads to an unstable training process because it's difficult for the generator to derive positive and stable reward signals from the discriminator even with careful pre-training BIBREF8 . As a result, the generator gets lost due to the high variance of reward signals and the training process may finally collapse BIBREF16 .\n[source_id=7] In this paper, we propose a novel adversarial training framework called Adversarial Reward Augmented Maximum Likelihood (ARAML) to deal with the instability issue of training GANs for text generation. At each iteration of adversarial training, we first train the discriminator to assign higher rewards to real data than to generated samples. Then, inspired by reward augmented maximum likelihood (RAML) BIBREF17 , the generator is updated on the samples acquired from a stationary distribution with maximum likelihood estimation (MLE), weighted by the discriminator's rewards. This stationary distribution is designed to guarantee that training samples are surrounding the real data, thus the exploration space of our generator is indeed restricted by the MLE training objective, resulting in more stable training. Compared to other text GANs with RL training techniques, our framework acquires samples from the stationary distribution rather than the generator's distribution, and uses RAML training paradigm to optimize the generator instead of policy gradient. Our contributions are mainly as follows:",
+  "score": 7.1854962592043305,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7
+  ],
+  "child_qasper_evidence_texts": [
+    "Natural text generation, as a key task in NLP, has been advanced substantially thanks to the flourish of neural models BIBREF0 , BIBREF1 . Typical frameworks such as sequence-to-sequence (seq2seq) have been applied to various generation tasks, including machine translation BIBREF2 and dialogue generation BIBREF3 . The standard paradigm to train such neural models is maximum likelihood estimation (MLE), which maximizes the log-likelihood of observing each word in the text given the ground-truth proceeding context BIBREF4 .",
+    "Although widely used, MLE suffers from the exposure bias problem BIBREF5 , BIBREF6 : during test, the model sequentially predicts the next word conditioned on its previous generated words while during training conditioned on ground-truth words. To tackle this problem, generative adversarial networks (GAN) with reinforcement learning (RL) training approaches have been introduced to text generation tasks BIBREF7 , BIBREF8 , BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 , BIBREF13 , where the discriminator is trained to distinguish real and generated text samples to provide reward signals for the generator, and the generator is optimized via policy gradient BIBREF7 .",
+    "However, recent studies have shown that potential issues of training GANs on discrete data are more severe than exposure bias BIBREF14 , BIBREF15 . One of the fundamental issues when generating discrete text samples with GANs is training instability. Updating the generator with policy gradient always leads to an unstable training process because it's difficult for the generator to derive positive and stable reward signals from the discriminator even with careful pre-training BIBREF8 . As a result, the generator gets lost due to the high variance of reward signals and the training process may finally collapse BIBREF16 .",
+    "In this paper, we propose a novel adversarial training framework called Adversarial Reward Augmented Maximum Likelihood (ARAML) to deal with the instability issue of training GANs for text generation. At each iteration of adversarial training, we first train the discriminator to assign higher rewards to real data than to generated samples. Then, inspired by reward augmented maximum likelihood (RAML) BIBREF17 , the generator is updated on the samples acquired from a stationary distribution with maximum likelihood estimation (MLE), weighted by the discriminator's rewards. This stationary distribution is designed to guarantee that training samples are surrounding the real data, thus the exploration space of our generator is indeed restricted by the MLE training objective, resulting in more stable training. Compared to other text GANs with RL training techniques, our framework acquires samples from the stationary distribution rather than the generator's distribution, and uses RAML training paradigm to optimize the generator instead of policy gradient. Our contributions are mainly as follows:"
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

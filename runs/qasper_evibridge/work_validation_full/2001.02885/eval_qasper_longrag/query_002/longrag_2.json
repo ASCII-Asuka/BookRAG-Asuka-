@@ -1,0 +1,376 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Methodology and Experimental Setup\n[source_id=14] We use the methodology by Khandelwal and Sawant (BIBREF12), and modify it to support experimentation with multiple models.\n[source_id=15] For Speculation Cue Detection:\n[source_id=16] Input Sentence: It might rain tomorrow.\n[source_id=17] True Labels: Not-A-Cue, Cue, Not-A-Cue, Not-A-Cue.\n[source_id=18] First, this sentence is preprocessed to get the target labels as per the following annotation schema:\n[source_id=19] 1 – Normal Cue 2 – Multiword Cue 3 – Not a cue 4 – Pad token\n[source_id=20] Thus, the preprocessed sequence is as follows:\n[source_id=21] Input Sentence: [It, might, rain, tomorrow]\n[source_id=22] True Labels: [3,1,3,3]\n[source_id=23] Then, we preprocess the input using the tokenizer for the model being used (BERT, XLNet or RoBERTa): splitting each word into one or more tokens, and converting each token to it’s corresponding tokenID, and padding it to the maximum input length of the model. Thus,\n[source_id=24] Input Sentence: [wtt(It), wtt(might), wtt(rain), wtt(tom), wtt(## or), wtt(## row), wtt(〈pad 〉),wtt(〈pad 〉)...]\n[source_id=25] True Labels: [3,1,3,3,3,3,4,4,4,4,...]\n[source_id=26] The word ‘tomorrow' has been split into 3 tokens, ‘tom', ‘##or' and ‘##row'. The function to convert the word to tokenID is represented by wtt.\n[source_id=27] For Speculation Scope Resolution:\n[source_id=28] If a sentence has multiple cues, each cue's scope will be resolved individually.\n[source_id=29] Input Sentence: It might rain tomorrow.\n[source_id=30] True Labels: Out-Of-Scope, Out-Of-Scope, In-Scope, In-Scope.\n[source_id=31] First, this sentence is preprocessed to get the target labels as per the following annotation schema:\n[source_id=32] 0 – Out-Of-Scope 1 – In-Scope\n[source_id=33] Thus, the preprocessed sequence is as follows:\n[source_id=34] True Scope Labels: [0,0,1,1]\n[source_id=35] As for cue detection, we preprocess the input using the tokenizer for the model being used. Additionally, we need to indicate which cue's scope we want to find in the input sentence. We do this by inserting a special token representing the token type (according to the cue detection annotation schema) before the cue word whose scope is being resolved. Here, we want to find the scope of the cue ‘might'. Thus,\n[source_id=36] Input Sentence: [wtt(It), wtt(〈token[1]〉), wtt(might), wtt(rain), wtt(tom), wtt(##or), wtt(##row), wtt(〈pad〉), wtt(〈pad〉)...]\n[source_id=37] True Scope Labels: [0,0,1,1,1,1,0,0,0,0,...]\n[source_id=38] Now, the preprocessed input for cue detection and similarly for scope detection is fed as input to our model as follows:\n[source_id=39] X = Model (Input)\n[source_id=40] Y = W*X + b\n[source_id=41] The W matrix is a matrix of size n_hidden x num_classes (n_hidden is the size of the representation of a token within the model). These logits are fed to the loss function.\n[source_id=42] We use the following variants of each model:\n[source_id=43] BERT: bert-base-uncaseds3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased.tar.gz (The model used by BIBREF12)\n[source_id=44] RoBERTa: roberta-bases3.amazonaws.com/models.huggingface.co/bert/roberta-base-pytorch_model.bin (RoBERTa-base does not have an uncased variant)\n[source_id=45] XLNet: xlnet-base-caseds3.amazonaws.com/models.huggingface.co/bert/xlnet-base-cased-pytorch_model.bin (XLNet-base does not have an uncased variant)\n[source_id=46] The output of the model is a vector of probabilities per token. The loss is calculated for each token, by using the output vector and the true label for that token. We use class weights for the loss function, setting the weight for label 4 to 0 and all other labels to 1 (for cue detection only) to avoid training on padding token’s output.\n[source_id=47] We calculate the scores (Precision, Recall, F1) for the model per word of the input sentence, not per token that was fed to the model, as the tokens could be different for different models leading to inaccurate scores. For the above example, we calculate the output label for the word ‘tomorrow', not for each token it was split into (‘tom', ‘##or' and ‘##row'). To find the label for each word from the tokens it was split into, we experiment with 2 methods:\n[source_id=48] Average: We average the output vectors (softmax probabilities) for each token that the word was split into by the model's tokenizer. In the example above, we average the output of ‘tom', ‘##or' and ‘##row' to get the output for ‘tomorrow'. Then, we take an argmax over the resultant vector. This is then compared with the true label for the original word.\n[source_id=49] First Token: Here, we only consider the first token's probability vector (among all tokens the word was split into) as the output for that word, and get the label by an argmax over this vector. In the example above, we would consider the output vector corresponding to the token ‘tom' as the output for the word ‘tomorrow'.\n[source_id=50] For cue detection, the results are reported for the Average method only, while we report the scores for both Average and First Token for Scope Resolution.\n[source_id=51] For fair comparison, we use the same hyperparameters for the entire architecture for all 3 models. Only the tokenizer and the model are changed for each model. All other hyperparameters are kept same. We finetune the models for 60 epochs, using early stopping with a patience of 6 on the F1 score (word level) on the validation dataset. We use an initial learning rate of 3e-5, with a batch size of 8. We use the Categorical Cross Entropy loss function.\n[source_id=52] We use the Huggingface’s Pytorch Transformer library (BIBREF23) for the models and train all our models on Google Colaboratory.",
+  "score": 2.1041419909326415,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52
+  ],
+  "child_qasper_evidence_texts": [
+    "We use the methodology by Khandelwal and Sawant (BIBREF12), and modify it to support experimentation with multiple models.",
+    "For Speculation Cue Detection:",
+    "Input Sentence: It might rain tomorrow.",
+    "True Labels: Not-A-Cue, Cue, Not-A-Cue, Not-A-Cue.",
+    "First, this sentence is preprocessed to get the target labels as per the following annotation schema:",
+    "1 – Normal Cue 2 – Multiword Cue 3 – Not a cue 4 – Pad token",
+    "Thus, the preprocessed sequence is as follows:",
+    "Input Sentence: [It, might, rain, tomorrow]",
+    "True Labels: [3,1,3,3]",
+    "Then, we preprocess the input using the tokenizer for the model being used (BERT, XLNet or RoBERTa): splitting each word into one or more tokens, and converting each token to it’s corresponding tokenID, and padding it to the maximum input length of the model. Thus,",
+    "Input Sentence: [wtt(It), wtt(might), wtt(rain), wtt(tom), wtt(## or), wtt(## row), wtt(〈pad 〉),wtt(〈pad 〉)...]",
+    "True Labels: [3,1,3,3,3,3,4,4,4,4,...]",
+    "The word ‘tomorrow' has been split into 3 tokens, ‘tom', ‘##or' and ‘##row'. The function to convert the word to tokenID is represented by wtt.",
+    "For Speculation Scope Resolution:",
+    "If a sentence has multiple cues, each cue's scope will be resolved individually.",
+    "Input Sentence: It might rain tomorrow.",
+    "True Labels: Out-Of-Scope, Out-Of-Scope, In-Scope, In-Scope.",
+    "First, this sentence is preprocessed to get the target labels as per the following annotation schema:",
+    "0 – Out-Of-Scope 1 – In-Scope",
+    "Thus, the preprocessed sequence is as follows:",
+    "True Scope Labels: [0,0,1,1]",
+    "As for cue detection, we preprocess the input using the tokenizer for the model being used. Additionally, we need to indicate which cue's scope we want to find in the input sentence. We do this by inserting a special token representing the token type (according to the cue detection annotation schema) before the cue word whose scope is being resolved. Here, we want to find the scope of the cue ‘might'. Thus,",
+    "Input Sentence: [wtt(It), wtt(〈token[1]〉), wtt(might), wtt(rain), wtt(tom), wtt(##or), wtt(##row), wtt(〈pad〉), wtt(〈pad〉)...]",
+    "True Scope Labels: [0,0,1,1,1,1,0,0,0,0,...]",
+    "Now, the preprocessed input for cue detection and similarly for scope detection is fed as input to our model as follows:",
+    "X = Model (Input)",
+    "Y = W*X + b",
+    "The W matrix is a matrix of size n_hidden x num_classes (n_hidden is the size of the representation of a token within the model). These logits are fed to the loss function.",
+    "We use the following variants of each model:",
+    "BERT: bert-base-uncaseds3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased.tar.gz (The model used by BIBREF12)",
+    "RoBERTa: roberta-bases3.amazonaws.com/models.huggingface.co/bert/roberta-base-pytorch_model.bin (RoBERTa-base does not have an uncased variant)",
+    "XLNet: xlnet-base-caseds3.amazonaws.com/models.huggingface.co/bert/xlnet-base-cased-pytorch_model.bin (XLNet-base does not have an uncased variant)",
+    "The output of the model is a vector of probabilities per token. The loss is calculated for each token, by using the output vector and the true label for that token. We use class weights for the loss function, setting the weight for label 4 to 0 and all other labels to 1 (for cue detection only) to avoid training on padding token’s output.",
+    "We calculate the scores (Precision, Recall, F1) for the model per word of the input sentence, not per token that was fed to the model, as the tokens could be different for different models leading to inaccurate scores. For the above example, we calculate the output label for the word ‘tomorrow', not for each token it was split into (‘tom', ‘##or' and ‘##row'). To find the label for each word from the tokens it was split into, we experiment with 2 methods:",
+    "Average: We average the output vectors (softmax probabilities) for each token that the word was split into by the model's tokenizer. In the example above, we average the output of ‘tom', ‘##or' and ‘##row' to get the output for ‘tomorrow'. Then, we take an argmax over the resultant vector. This is then compared with the true label for the original word.",
+    "First Token: Here, we only consider the first token's probability vector (among all tokens the word was split into) as the output for that word, and get the label by an argmax over this vector. In the example above, we would consider the output vector corresponding to the token ‘tom' as the output for the word ‘tomorrow'.",
+    "For cue detection, the results are reported for the Average method only, while we report the scores for both Average and First Token for Scope Resolution.",
+    "For fair comparison, we use the same hyperparameters for the entire architecture for all 3 models. Only the tokenizer and the model are changed for each model. All other hyperparameters are kept same. We finetune the models for 60 epochs, using early stopping with a patience of 6 on the F1 score (word level) on the validation dataset. We use an initial learning rate of 3e-5, with a batch size of 8. We use the Categorical Cross Entropy loss function.",
+    "We use the Huggingface’s Pytorch Transformer library (BIBREF23) for the models and train all our models on Google Colaboratory."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup",
+    "Methodology and Experimental Setup"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Methodology and Experimental Setup",
+      0
+    ],
+    [
+      "Methodology and Experimental Setup",
+      1
+    ],
+    [
+      "Methodology and Experimental Setup",
+      2
+    ],
+    [
+      "Methodology and Experimental Setup",
+      3
+    ],
+    [
+      "Methodology and Experimental Setup",
+      4
+    ],
+    [
+      "Methodology and Experimental Setup",
+      5
+    ],
+    [
+      "Methodology and Experimental Setup",
+      6
+    ],
+    [
+      "Methodology and Experimental Setup",
+      7
+    ],
+    [
+      "Methodology and Experimental Setup",
+      8
+    ],
+    [
+      "Methodology and Experimental Setup",
+      9
+    ],
+    [
+      "Methodology and Experimental Setup",
+      10
+    ],
+    [
+      "Methodology and Experimental Setup",
+      11
+    ],
+    [
+      "Methodology and Experimental Setup",
+      12
+    ],
+    [
+      "Methodology and Experimental Setup",
+      13
+    ],
+    [
+      "Methodology and Experimental Setup",
+      14
+    ],
+    [
+      "Methodology and Experimental Setup",
+      15
+    ],
+    [
+      "Methodology and Experimental Setup",
+      16
+    ],
+    [
+      "Methodology and Experimental Setup",
+      17
+    ],
+    [
+      "Methodology and Experimental Setup",
+      18
+    ],
+    [
+      "Methodology and Experimental Setup",
+      19
+    ],
+    [
+      "Methodology and Experimental Setup",
+      20
+    ],
+    [
+      "Methodology and Experimental Setup",
+      21
+    ],
+    [
+      "Methodology and Experimental Setup",
+      22
+    ],
+    [
+      "Methodology and Experimental Setup",
+      23
+    ],
+    [
+      "Methodology and Experimental Setup",
+      24
+    ],
+    [
+      "Methodology and Experimental Setup",
+      25
+    ],
+    [
+      "Methodology and Experimental Setup",
+      26
+    ],
+    [
+      "Methodology and Experimental Setup",
+      27
+    ],
+    [
+      "Methodology and Experimental Setup",
+      28
+    ],
+    [
+      "Methodology and Experimental Setup",
+      29
+    ],
+    [
+      "Methodology and Experimental Setup",
+      30
+    ],
+    [
+      "Methodology and Experimental Setup",
+      31
+    ],
+    [
+      "Methodology and Experimental Setup",
+      32
+    ],
+    [
+      "Methodology and Experimental Setup",
+      33
+    ],
+    [
+      "Methodology and Experimental Setup",
+      34
+    ],
+    [
+      "Methodology and Experimental Setup",
+      35
+    ],
+    [
+      "Methodology and Experimental Setup",
+      36
+    ],
+    [
+      "Methodology and Experimental Setup",
+      37
+    ],
+    [
+      "Methodology and Experimental Setup",
+      38
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Methodology and Experimental Setup",
+  "section": "Methodology and Experimental Setup",
+  "title_path": "Methodology and Experimental Setup",
+  "block_type": "long_unit"
+}

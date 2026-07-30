@@ -1,0 +1,106 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Automatic summarization, machine translation, question answering, and semantic parsing operations are useful for processing, analyzing, and extracting meaningful information from text. However, when applied to long texts, these tasks usually require some minimal syntactic structure to be identified, such as sentences BIBREF0 , BIBREF1 , BIBREF2 , which always end with a period (“.”) in English BIBREF3 .\n[source_id=5] However, written Thai does not use an explicit end-of-sentence marker to identify sentence boundaries BIBREF4 . Prior works have adapted traditional machine learning models to predict the beginning position of a sentence. The authors of BIBREF5 , BIBREF6 , BIBREF7 proposed traditional models to determine whether a considered space is a sentence boundary based on the words and their part of speech (POS) near the space. Meanwhile, Zhou N. et al. BIBREF8 considered Thai sentence segmentation as a sequence tagging problem and proposed a CRF-based model with n-gram embedding to predict which word is the sentence boundary. This method achieves the state-of-the-art result for Thai sentence segmentation and achieves greater accuracy than other models by approximately 10% on an Orchid dataset BIBREF9 .\n[source_id=6] Several deep learning approaches have been applied in various tasks of natural language processing (NLP), including the long short-term memory BIBREF10 , self-attention BIBREF11 , and other models. Huang Z. et al. BIBREF12 proposed a deep learning sequence tagging model called Bi-LSTM-CRF, which integrates a conditional random field (CRF) module to gain the benefit of both deep learning and traditional machine learning approaches. In their experiments, the Bi-LSTM-CRF model achieved an improved level of accuracy in many NLP sequence tagging tasks, such as named entity recognition, POS tagging and chunking.\n[source_id=7] The CRF module achieved the best result on the Thai sentence segmentation task BIBREF8 ; therefore, we adopt the Bi-LSTM-CRF model as our baseline. This paper makes the following three contributions to improve Bi-LSTM-CRF for sentence segmentation.\n[source_id=8] First, we propose adding n-gram embedding to Bi-LSTM-CRF due to its success in BIBREF8 and BIBREF12 . By including n-gram embedding, the model can capitalize on both approaches. First, the model gains the ability to extract past and future input features and sentence level tag information from Bi-LSTM-CRF; moreover, with the n-gram addition, it can also extract a local representation from n-gram embedding, which helps in capturing word groups that exist near sentence boundary. Although Jacovi A. et al. BIBREF13 reported that a convolutional neural network (CNN) can be used as an n-gram detector to capture local features, we chose n-gram embedding over a CNN due to its better accuracy, as will be shown in Section SECREF8 .\n[source_id=9] Second, we propose adding incorporative distant representation into the model via a self-attention mechanism, which can focus on the keywords of dependent clauses that are far from the considered word. Self-attention has been used in many recent state-of-the-art models, most notably the transformer BIBREF11 and BERT BIBREF14 . BERT has outperformed Bi-LSTM on numerous tasks, including question answering and language inference. Therefore, we choose to use self-attention modules to extract distant representations along with local representations to improve model accuracy.\n[source_id=10] Third, we also apply semi-supervised learning BIBREF15 , allowing us to employ unlimited amounts of unlabeled data, which is particularly important for low-resource languages such as Thai, for which annotation is costly and time-consuming. Many semi-supervised learning approaches have been proposed in the computer vision BIBREF16 , BIBREF17 and natural language processing BIBREF18 , BIBREF19 , BIBREF20 fields. Our choice for semi-supervised learning to enhance model representation is Cross-View Training (CVT) BIBREF20 . Clark K. et al. BIBREF20 claims that CVT can improve the representation layers of the model, which is our goal. However, CVT was not designed to be integrated with self-attention and CRF modules; consequently, we provide a modified version of CVT in this work.\n[source_id=11] Based on the above three contributions, we pursue two main experiments. The first experiment was conducted on two Thai datasets, Orchid and UGWC BIBREF21 , to evaluate our Thai sentence segmentation model. In this case, our model achieves F1 scores of 92.5% and 88.9% on Orchid and UGWC, respectively, and it outperforms all the baseline models. The second experiment was executed on the IWSLT dataset BIBREF22 and involves an English-language punctuation restoration task. This experiment demonstrates that our model is generalizable to different languages. Our model, which does not require pretrained word vectors, improved the overall F1 score by 0.9% compared to the baselines, including a model that uses pretrained word vectors.\n[source_id=12] There are five sections in the remainder of this paper. Section SECREF2 reviews the related works on Thai sentence segmentation, English punctuation restoration and introduces the original CVT. Section SECREF3 describes the proposed model architecture and the integration of cross-view training. The datasets, implementation process and evaluation metrics are explained in Section SECREF4 . The results of the experiments are discussed in Section SECREF5 . Finally, Section SECREF6 concludes the paper.",
+  "score": 7.728366128033533,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "child_qasper_evidence_texts": [
+    "Automatic summarization, machine translation, question answering, and semantic parsing operations are useful for processing, analyzing, and extracting meaningful information from text. However, when applied to long texts, these tasks usually require some minimal syntactic structure to be identified, such as sentences BIBREF0 , BIBREF1 , BIBREF2 , which always end with a period (“.”) in English BIBREF3 .",
+    "However, written Thai does not use an explicit end-of-sentence marker to identify sentence boundaries BIBREF4 . Prior works have adapted traditional machine learning models to predict the beginning position of a sentence. The authors of BIBREF5 , BIBREF6 , BIBREF7 proposed traditional models to determine whether a considered space is a sentence boundary based on the words and their part of speech (POS) near the space. Meanwhile, Zhou N. et al. BIBREF8 considered Thai sentence segmentation as a sequence tagging problem and proposed a CRF-based model with n-gram embedding to predict which word is the sentence boundary. This method achieves the state-of-the-art result for Thai sentence segmentation and achieves greater accuracy than other models by approximately 10% on an Orchid dataset BIBREF9 .",
+    "Several deep learning approaches have been applied in various tasks of natural language processing (NLP), including the long short-term memory BIBREF10 , self-attention BIBREF11 , and other models. Huang Z. et al. BIBREF12 proposed a deep learning sequence tagging model called Bi-LSTM-CRF, which integrates a conditional random field (CRF) module to gain the benefit of both deep learning and traditional machine learning approaches. In their experiments, the Bi-LSTM-CRF model achieved an improved level of accuracy in many NLP sequence tagging tasks, such as named entity recognition, POS tagging and chunking.",
+    "The CRF module achieved the best result on the Thai sentence segmentation task BIBREF8 ; therefore, we adopt the Bi-LSTM-CRF model as our baseline. This paper makes the following three contributions to improve Bi-LSTM-CRF for sentence segmentation.",
+    "First, we propose adding n-gram embedding to Bi-LSTM-CRF due to its success in BIBREF8 and BIBREF12 . By including n-gram embedding, the model can capitalize on both approaches. First, the model gains the ability to extract past and future input features and sentence level tag information from Bi-LSTM-CRF; moreover, with the n-gram addition, it can also extract a local representation from n-gram embedding, which helps in capturing word groups that exist near sentence boundary. Although Jacovi A. et al. BIBREF13 reported that a convolutional neural network (CNN) can be used as an n-gram detector to capture local features, we chose n-gram embedding over a CNN due to its better accuracy, as will be shown in Section SECREF8 .",
+    "Second, we propose adding incorporative distant representation into the model via a self-attention mechanism, which can focus on the keywords of dependent clauses that are far from the considered word. Self-attention has been used in many recent state-of-the-art models, most notably the transformer BIBREF11 and BERT BIBREF14 . BERT has outperformed Bi-LSTM on numerous tasks, including question answering and language inference. Therefore, we choose to use self-attention modules to extract distant representations along with local representations to improve model accuracy.",
+    "Third, we also apply semi-supervised learning BIBREF15 , allowing us to employ unlimited amounts of unlabeled data, which is particularly important for low-resource languages such as Thai, for which annotation is costly and time-consuming. Many semi-supervised learning approaches have been proposed in the computer vision BIBREF16 , BIBREF17 and natural language processing BIBREF18 , BIBREF19 , BIBREF20 fields. Our choice for semi-supervised learning to enhance model representation is Cross-View Training (CVT) BIBREF20 . Clark K. et al. BIBREF20 claims that CVT can improve the representation layers of the model, which is our goal. However, CVT was not designed to be integrated with self-attention and CRF modules; consequently, we provide a modified version of CVT in this work.",
+    "Based on the above three contributions, we pursue two main experiments. The first experiment was conducted on two Thai datasets, Orchid and UGWC BIBREF21 , to evaluate our Thai sentence segmentation model. In this case, our model achieves F1 scores of 92.5% and 88.9% on Orchid and UGWC, respectively, and it outperforms all the baseline models. The second experiment was executed on the IWSLT dataset BIBREF22 and involves an English-language punctuation restoration task. This experiment demonstrates that our model is generalizable to different languages. Our model, which does not require pretrained word vectors, improved the overall F1 score by 0.9% compared to the baselines, including a model that uses pretrained word vectors.",
+    "There are five sections in the remainder of this paper. Section SECREF2 reviews the related works on Thai sentence segmentation, English punctuation restoration and introduces the original CVT. Section SECREF3 describes the proposed model architecture and the integration of cross-view training. The datasets, implementation process and evaluation metrics are explained in Section SECREF4 . The results of the experiments are discussed in Section SECREF5 . Finally, Section SECREF6 concludes the paper."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ],
+    [
+      "Introduction",
+      7
+    ],
+    [
+      "Introduction",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

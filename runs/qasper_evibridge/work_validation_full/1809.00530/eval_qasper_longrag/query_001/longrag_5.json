@@ -1,0 +1,115 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Domain Adaptive Semi-supervised Learning (DAS)\n[source_id=24] We attempt to exploit the information in target data through semi-supervised learning objectives, which are jointly trained with INLINEFORM0 and INLINEFORM1 . Normally, to incorporate target data, we can minimize the cross entropy loss between the true label distributions INLINEFORM2 and the predicted label distributions INLINEFORM3 over target samples. The challenge here is that INLINEFORM4 is unknown, and thus we attempt to estimate it via semi-supervised learning. We use entropy minimization and bootstrapping for this purpose. We will later show in our experiments that both methods are effective, and jointly employing them overall yields the best results.\n[source_id=25] Entropy Minimization: In this method, INLINEFORM0 is estimated as the predicted label distribution INLINEFORM1 , which is a function of INLINEFORM2 and INLINEFORM3 . The loss can thus be written as DISPLAYFORM0\n[source_id=26] Assume the domain discrepancy can be effectively reduced through feature adaptation, by minimizing the entropy penalty, training of the classifier is influenced by the unlabeled target data and will generally maximize the margins between the target examples and the decision boundaries, increasing the prediction confidence on the target domain.\n[source_id=27] Self-ensemble Bootstrapping: Another way to estimate INLINEFORM0 corresponds to bootstrapping. The idea is to estimate the unknown labels as the predictions of the model learned from the previous round of training. Bootstrapping has been explored for domain adaptation in previous works BIBREF18 , BIBREF19 . However, in their methods, domain discrepancy was not explicitly minimized via feature adaptation. Applying bootstrapping or other semi-supervised learning techniques in this case may worsen the results as the classifier can perform quite bad on the target data.\n[source_id=28] [t] Pseudocode for training DAS INLINEFORM0 , INLINEFORM1 , INLINEFORM2 , INLINEFORM3 INLINEFORM4 = ensembling momentum, INLINEFORM5 INLINEFORM6 = weight ramp-up function INLINEFORM7 INLINEFORM8 INLINEFORM9 each minibatch INLINEFORM10 , INLINEFORM11 , INLINEFORM12 in\n[source_id=29] INLINEFORM0 , INLINEFORM1 , INLINEFORM2 compute loss INLINEFORM3 on INLINEFORM4 compute loss INLINEFORM5 on INLINEFORM6 compute loss INLINEFORM7 on INLINEFORM8 compute loss INLINEFORM9 on INLINEFORM10 INLINEFORM11\n[source_id=30] update network parameters INLINEFORM0 , for INLINEFORM1 INLINEFORM2 INLINEFORM3\n[source_id=31] Inspired by the ensembling method proposed in BIBREF21 , we estimate INLINEFORM0 by forming ensemble predictions of labels during training, using the outputs on different training epochs. The loss is formulated as follows: DISPLAYFORM0\n[source_id=32] where INLINEFORM0 denotes the estimated labels computed on the ensemble predictions from different epochs. The loss is applied on all documents. It serves for bootstrapping on the unlabeled target data, and it also serves as a regularization that encourages the network predictions to be consistent in different training epochs. INLINEFORM1 is jointly trained with INLINEFORM2 , INLINEFORM3 , and INLINEFORM4 . Algorithm SECREF6 illustrates the overall training process of the proposed domain adaptive semi-supervised learning (DAS) framework.\n[source_id=33] In Algorithm SECREF6 , INLINEFORM0 , INLINEFORM1 , and INLINEFORM2 are weights to balance the effects of INLINEFORM3 , INLINEFORM4 , and INLINEFORM5 respectively. INLINEFORM6 and INLINEFORM7 are constant hyper-parameters. We set INLINEFORM8 as a Gaussian curve to ramp up the weight from 0 to INLINEFORM9 . This is to ensure the ramp-up of the bootstrapping loss component is slow enough in the beginning of the training. After each training epoch, we compute INLINEFORM10 which denotes the predictions made by the network in current epoch, and then the ensemble prediction INLINEFORM11 is updated as a weighted average of the outputs from previous epochs and the current epoch, with recent epochs having larger weight. For generating estimated labels INLINEFORM12 , INLINEFORM13 is converted to a one-hot vector where the entry with the maximum value is set to one and other entries are set to zeros. The self-ensemble bootstrapping is a generalized version of bootstrappings that only use the outputs from the previous round of training BIBREF18 , BIBREF19 . The ensemble prediction is likely to be closer to the correct, unknown labels of the target data.",
+  "score": 2.775701914270246,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33
+  ],
+  "child_qasper_evidence_texts": [
+    "We attempt to exploit the information in target data through semi-supervised learning objectives, which are jointly trained with INLINEFORM0 and INLINEFORM1 . Normally, to incorporate target data, we can minimize the cross entropy loss between the true label distributions INLINEFORM2 and the predicted label distributions INLINEFORM3 over target samples. The challenge here is that INLINEFORM4 is unknown, and thus we attempt to estimate it via semi-supervised learning. We use entropy minimization and bootstrapping for this purpose. We will later show in our experiments that both methods are effective, and jointly employing them overall yields the best results.",
+    "Entropy Minimization: In this method, INLINEFORM0 is estimated as the predicted label distribution INLINEFORM1 , which is a function of INLINEFORM2 and INLINEFORM3 . The loss can thus be written as DISPLAYFORM0",
+    "Assume the domain discrepancy can be effectively reduced through feature adaptation, by minimizing the entropy penalty, training of the classifier is influenced by the unlabeled target data and will generally maximize the margins between the target examples and the decision boundaries, increasing the prediction confidence on the target domain.",
+    "Self-ensemble Bootstrapping: Another way to estimate INLINEFORM0 corresponds to bootstrapping. The idea is to estimate the unknown labels as the predictions of the model learned from the previous round of training. Bootstrapping has been explored for domain adaptation in previous works BIBREF18 , BIBREF19 . However, in their methods, domain discrepancy was not explicitly minimized via feature adaptation. Applying bootstrapping or other semi-supervised learning techniques in this case may worsen the results as the classifier can perform quite bad on the target data.",
+    "[t] Pseudocode for training DAS INLINEFORM0 , INLINEFORM1 , INLINEFORM2 , INLINEFORM3 INLINEFORM4 = ensembling momentum, INLINEFORM5 INLINEFORM6 = weight ramp-up function INLINEFORM7 INLINEFORM8 INLINEFORM9 each minibatch INLINEFORM10 , INLINEFORM11 , INLINEFORM12 in",
+    "INLINEFORM0 , INLINEFORM1 , INLINEFORM2 compute loss INLINEFORM3 on INLINEFORM4 compute loss INLINEFORM5 on INLINEFORM6 compute loss INLINEFORM7 on INLINEFORM8 compute loss INLINEFORM9 on INLINEFORM10 INLINEFORM11",
+    "update network parameters INLINEFORM0 , for INLINEFORM1 INLINEFORM2 INLINEFORM3",
+    "Inspired by the ensembling method proposed in BIBREF21 , we estimate INLINEFORM0 by forming ensemble predictions of labels during training, using the outputs on different training epochs. The loss is formulated as follows: DISPLAYFORM0",
+    "where INLINEFORM0 denotes the estimated labels computed on the ensemble predictions from different epochs. The loss is applied on all documents. It serves for bootstrapping on the unlabeled target data, and it also serves as a regularization that encourages the network predictions to be consistent in different training epochs. INLINEFORM1 is jointly trained with INLINEFORM2 , INLINEFORM3 , and INLINEFORM4 . Algorithm SECREF6 illustrates the overall training process of the proposed domain adaptive semi-supervised learning (DAS) framework.",
+    "In Algorithm SECREF6 , INLINEFORM0 , INLINEFORM1 , and INLINEFORM2 are weights to balance the effects of INLINEFORM3 , INLINEFORM4 , and INLINEFORM5 respectively. INLINEFORM6 and INLINEFORM7 are constant hyper-parameters. We set INLINEFORM8 as a Gaussian curve to ramp up the weight from 0 to INLINEFORM9 . This is to ensure the ramp-up of the bootstrapping loss component is slow enough in the beginning of the training. After each training epoch, we compute INLINEFORM10 which denotes the predictions made by the network in current epoch, and then the ensemble prediction INLINEFORM11 is updated as a weighted average of the outputs from previous epochs and the current epoch, with recent epochs having larger weight. For generating estimated labels INLINEFORM12 , INLINEFORM13 is converted to a one-hot vector where the entry with the maximum value is set to one and other entries are set to zeros. The self-ensemble bootstrapping is a generalized version of bootstrappings that only use the outputs from the previous round of training BIBREF18 , BIBREF19 . The ensemble prediction is likely to be closer to the correct, unknown labels of the target data."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Domain Adaptive Semi-supervised Learning (DAS)",
+    "Domain Adaptive Semi-supervised Learning (DAS)",
+    "Domain Adaptive Semi-supervised Learning (DAS)",
+    "Domain Adaptive Semi-supervised Learning (DAS)",
+    "Domain Adaptive Semi-supervised Learning (DAS)",
+    "Domain Adaptive Semi-supervised Learning (DAS)",
+    "Domain Adaptive Semi-supervised Learning (DAS)",
+    "Domain Adaptive Semi-supervised Learning (DAS)",
+    "Domain Adaptive Semi-supervised Learning (DAS)",
+    "Domain Adaptive Semi-supervised Learning (DAS)"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Domain Adaptive Semi-supervised Learning (DAS)",
+      0
+    ],
+    [
+      "Domain Adaptive Semi-supervised Learning (DAS)",
+      1
+    ],
+    [
+      "Domain Adaptive Semi-supervised Learning (DAS)",
+      2
+    ],
+    [
+      "Domain Adaptive Semi-supervised Learning (DAS)",
+      3
+    ],
+    [
+      "Domain Adaptive Semi-supervised Learning (DAS)",
+      4
+    ],
+    [
+      "Domain Adaptive Semi-supervised Learning (DAS)",
+      5
+    ],
+    [
+      "Domain Adaptive Semi-supervised Learning (DAS)",
+      6
+    ],
+    [
+      "Domain Adaptive Semi-supervised Learning (DAS)",
+      7
+    ],
+    [
+      "Domain Adaptive Semi-supervised Learning (DAS)",
+      8
+    ],
+    [
+      "Domain Adaptive Semi-supervised Learning (DAS)",
+      9
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Domain Adaptive Semi-supervised Learning (DAS)",
+  "section": "Domain Adaptive Semi-supervised Learning (DAS)",
+  "title_path": "Domain Adaptive Semi-supervised Learning (DAS)",
+  "block_type": "long_unit"
+}

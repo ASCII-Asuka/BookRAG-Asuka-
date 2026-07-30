@@ -1,0 +1,169 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] “Ché saetta previsa vien più lenta.”\n[source_id=5] – Dante Alighieri, Divina Commedia, Paradiso\n[source_id=6] Antisocial behavior is a persistent problem plaguing online conversation platforms; it is both widespread BIBREF0 and potentially damaging to mental and emotional health BIBREF1, BIBREF2. The strain this phenomenon puts on community maintainers has sparked recent interest in computational approaches for assisting human moderators.\n[source_id=7] Prior work in this direction has largely focused on post-hoc identification of various kinds of antisocial behavior, including hate speech BIBREF3, BIBREF4, harassment BIBREF5, personal attacks BIBREF6, and general toxicity BIBREF7. The fact that these approaches only identify antisocial content after the fact limits their practicality as tools for assisting pre-emptive moderation in conversational domains.\n[source_id=8] Addressing this limitation requires forecasting the future derailment of a conversation based on early warning signs, giving the moderators time to potentially intervene before any harm is done (BIBREF8 BIBREF8, BIBREF9 BIBREF9, see BIBREF10 BIBREF10 for a discussion). Such a goal recognizes derailment as emerging from the development of the conversation, and belongs to the broader area of conversational forecasting, which includes future-prediction tasks such as predicting the eventual length of a conversation BIBREF11, whether a persuasion attempt will eventually succeed BIBREF12, BIBREF13, BIBREF14, whether team discussions will eventually lead to an increase in performance BIBREF15, or whether ongoing counseling conversations will eventually be perceived as helpful BIBREF16.\n[source_id=9] Approaching such conversational forecasting problems, however, requires overcoming several inherent modeling challenges. First, conversations are dynamic and their outcome might depend on how subsequent comments interact with each other. Consider the example in Figure FIGREF2: while no individual comment is outright offensive, a human reader can sense a tension emerging from their succession (e.g., dismissive answers to repeated questioning). Thus a forecasting model needs to capture not only the content of each individual comment, but also the relations between comments. Previous work has largely relied on hand-crafted features to capture such relations—e.g., similarity between comments BIBREF16, BIBREF12 or conversation structure BIBREF17, BIBREF18—, though neural attention architectures have also recently shown promise BIBREF19.\n[source_id=10] The second modeling challenge stems from the fact that conversations have an unknown horizon: they can be of varying lengths, and the to-be-forecasted event can occur at any time. So when is it a good time to make a forecast? Prior work has largely proposed two solutions, both resulting in important practical limitations. One solution is to assume (unrealistic) prior knowledge of when the to-be-forecasted event takes place and extract features up to that point BIBREF20, BIBREF8. Another compromising solution is to extract features from a fixed-length window, often at the start of the conversation BIBREF21, BIBREF15, BIBREF16, BIBREF9. Choosing a catch-all window-size is however impractical: short windows will miss information in comments they do not encompass (e.g., a window of only two comments would miss the chain of repeated questioning in comments 3 through 6 of Figure FIGREF2), while longer windows risk missing the to-be-forecasted event altogether if it occurs before the end of the window, which would prevent early detection.\n[source_id=11] In this work we introduce a model for forecasting conversational events that overcomes both these inherent challenges by processing comments, and their relations, as they happen (i.e., in an online fashion). Our main insight is that models with these properties already exist, albeit geared toward generation rather than prediction: recent work in context-aware dialog generation (or “chatbots”) has proposed sequential neural models that make effective use of the intra-conversational dynamics BIBREF22, BIBREF23, BIBREF24, while concomitantly being able to process the conversation as it develops (see BIBREF25 for a survey).\n[source_id=12] In order for these systems to perform well in the generative domain they need to be trained on massive amounts of (unlabeled) conversational data. The main difficulty in directly adapting these models to the supervised domain of conversational forecasting is the relative scarcity of labeled data: for most forecasting tasks, at most a few thousands labeled examples are available, insufficient for the notoriously data-hungry sequential neural models.\n[source_id=13] To overcome this difficulty, we propose to decouple the objective of learning a neural representation of conversational dynamics from the objective of predicting future events. The former can be pre-trained on large amounts of unsupervised data, similarly to how chatbots are trained. The latter can piggy-back on the resulting representation after fine-tuning it for classification using relatively small labeled data. While similar pre-train-then-fine-tune approaches have recently achieved state-of-the-art performance in a number of NLP tasks—including natural language inference, question answering, and commonsense reasoning (discussed in Section SECREF2)—to the best of our knowledge this is the first attempt at applying this paradigm to conversational forecasting.\n[source_id=14] To test the effectiveness of this new architecture in forecasting derailment of online conversations, we develop and distribute two new datasets. The first triples in size the highly curated `Conversations Gone Awry' dataset BIBREF9, where civil-starting Wikipedia Talk Page conversations are crowd-labeled according to whether they eventually lead to personal attacks; the second relies on in-the-wild moderation of the popular subreddit ChangeMyView, where the aim is to forecast whether a discussion will later be subject to moderator action due to “rude or hostile” behavior. In both datasets, our model outperforms existing fixed-window approaches, as well as simpler sequential baselines that cannot account for inter-comment relations. Furthermore, by virtue of its online processing of the conversation, our system can provide substantial prior notice of upcoming derailment, triggering on average 3 comments (or 3 hours) before an overtly toxic comment is posted.\n[source_id=15] To summarize, in this work we:\n[source_id=16] introduce the first model for forecasting conversational events that can capture the dynamics of a conversation as it develops;\n[source_id=17] build two diverse datasets (one entirely new, one extending prior work) for the task of forecasting derailment of online conversations;\n[source_id=18] compare the performance of our model against the current state-of-the-art, and evaluate its ability to provide early warning signs.\n[source_id=19] Our work is motivated by the goal of assisting human moderators of online communities by preemptively signaling at-risk conversations that might deserve their attention. However, we caution that any automated systems might encode or even amplify the biases existing in the training data BIBREF26, BIBREF27, BIBREF28, so a public-facing implementation would need to be exhaustively scrutinized for such biases BIBREF29.",
+  "score": 3.599958622426314,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "child_qasper_evidence_texts": [
+    "“Ché saetta previsa vien più lenta.”",
+    "– Dante Alighieri, Divina Commedia, Paradiso",
+    "Antisocial behavior is a persistent problem plaguing online conversation platforms; it is both widespread BIBREF0 and potentially damaging to mental and emotional health BIBREF1, BIBREF2. The strain this phenomenon puts on community maintainers has sparked recent interest in computational approaches for assisting human moderators.",
+    "Prior work in this direction has largely focused on post-hoc identification of various kinds of antisocial behavior, including hate speech BIBREF3, BIBREF4, harassment BIBREF5, personal attacks BIBREF6, and general toxicity BIBREF7. The fact that these approaches only identify antisocial content after the fact limits their practicality as tools for assisting pre-emptive moderation in conversational domains.",
+    "Addressing this limitation requires forecasting the future derailment of a conversation based on early warning signs, giving the moderators time to potentially intervene before any harm is done (BIBREF8 BIBREF8, BIBREF9 BIBREF9, see BIBREF10 BIBREF10 for a discussion). Such a goal recognizes derailment as emerging from the development of the conversation, and belongs to the broader area of conversational forecasting, which includes future-prediction tasks such as predicting the eventual length of a conversation BIBREF11, whether a persuasion attempt will eventually succeed BIBREF12, BIBREF13, BIBREF14, whether team discussions will eventually lead to an increase in performance BIBREF15, or whether ongoing counseling conversations will eventually be perceived as helpful BIBREF16.",
+    "Approaching such conversational forecasting problems, however, requires overcoming several inherent modeling challenges. First, conversations are dynamic and their outcome might depend on how subsequent comments interact with each other. Consider the example in Figure FIGREF2: while no individual comment is outright offensive, a human reader can sense a tension emerging from their succession (e.g., dismissive answers to repeated questioning). Thus a forecasting model needs to capture not only the content of each individual comment, but also the relations between comments. Previous work has largely relied on hand-crafted features to capture such relations—e.g., similarity between comments BIBREF16, BIBREF12 or conversation structure BIBREF17, BIBREF18—, though neural attention architectures have also recently shown promise BIBREF19.",
+    "The second modeling challenge stems from the fact that conversations have an unknown horizon: they can be of varying lengths, and the to-be-forecasted event can occur at any time. So when is it a good time to make a forecast? Prior work has largely proposed two solutions, both resulting in important practical limitations. One solution is to assume (unrealistic) prior knowledge of when the to-be-forecasted event takes place and extract features up to that point BIBREF20, BIBREF8. Another compromising solution is to extract features from a fixed-length window, often at the start of the conversation BIBREF21, BIBREF15, BIBREF16, BIBREF9. Choosing a catch-all window-size is however impractical: short windows will miss information in comments they do not encompass (e.g., a window of only two comments would miss the chain of repeated questioning in comments 3 through 6 of Figure FIGREF2), while longer windows risk missing the to-be-forecasted event altogether if it occurs before the end of the window, which would prevent early detection.",
+    "In this work we introduce a model for forecasting conversational events that overcomes both these inherent challenges by processing comments, and their relations, as they happen (i.e., in an online fashion). Our main insight is that models with these properties already exist, albeit geared toward generation rather than prediction: recent work in context-aware dialog generation (or “chatbots”) has proposed sequential neural models that make effective use of the intra-conversational dynamics BIBREF22, BIBREF23, BIBREF24, while concomitantly being able to process the conversation as it develops (see BIBREF25 for a survey).",
+    "In order for these systems to perform well in the generative domain they need to be trained on massive amounts of (unlabeled) conversational data. The main difficulty in directly adapting these models to the supervised domain of conversational forecasting is the relative scarcity of labeled data: for most forecasting tasks, at most a few thousands labeled examples are available, insufficient for the notoriously data-hungry sequential neural models.",
+    "To overcome this difficulty, we propose to decouple the objective of learning a neural representation of conversational dynamics from the objective of predicting future events. The former can be pre-trained on large amounts of unsupervised data, similarly to how chatbots are trained. The latter can piggy-back on the resulting representation after fine-tuning it for classification using relatively small labeled data. While similar pre-train-then-fine-tune approaches have recently achieved state-of-the-art performance in a number of NLP tasks—including natural language inference, question answering, and commonsense reasoning (discussed in Section SECREF2)—to the best of our knowledge this is the first attempt at applying this paradigm to conversational forecasting.",
+    "To test the effectiveness of this new architecture in forecasting derailment of online conversations, we develop and distribute two new datasets. The first triples in size the highly curated `Conversations Gone Awry' dataset BIBREF9, where civil-starting Wikipedia Talk Page conversations are crowd-labeled according to whether they eventually lead to personal attacks; the second relies on in-the-wild moderation of the popular subreddit ChangeMyView, where the aim is to forecast whether a discussion will later be subject to moderator action due to “rude or hostile” behavior. In both datasets, our model outperforms existing fixed-window approaches, as well as simpler sequential baselines that cannot account for inter-comment relations. Furthermore, by virtue of its online processing of the conversation, our system can provide substantial prior notice of upcoming derailment, triggering on average 3 comments (or 3 hours) before an overtly toxic comment is posted.",
+    "To summarize, in this work we:",
+    "introduce the first model for forecasting conversational events that can capture the dynamics of a conversation as it develops;",
+    "build two diverse datasets (one entirely new, one extending prior work) for the task of forecasting derailment of online conversations;",
+    "compare the performance of our model against the current state-of-the-art, and evaluate its ability to provide early warning signs.",
+    "Our work is motivated by the goal of assisting human moderators of online communities by preemptively signaling at-risk conversations that might deserve their attention. However, we caution that any automated systems might encode or even amplify the biases existing in the training data BIBREF26, BIBREF27, BIBREF28, so a public-facing implementation would need to be exhaustively scrutinized for such biases BIBREF29."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ],
+    [
+      "Introduction",
+      7
+    ],
+    [
+      "Introduction",
+      8
+    ],
+    [
+      "Introduction",
+      9
+    ],
+    [
+      "Introduction",
+      10
+    ],
+    [
+      "Introduction",
+      11
+    ],
+    [
+      "Introduction",
+      12
+    ],
+    [
+      "Introduction",
+      13
+    ],
+    [
+      "Introduction",
+      14
+    ],
+    [
+      "Introduction",
+      15
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

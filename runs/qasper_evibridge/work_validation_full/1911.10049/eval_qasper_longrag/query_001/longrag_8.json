@@ -1,0 +1,70 @@
+{
+  "id": "longrag_8",
+  "content": "[Section] Evaluation ::: Named Entity Recognition\n[source_id=37] For evaluation of ELMo models on a relevant downstream task, we used named entity recognition (NER) task. NER is an information extraction task that seeks to locate and classify named entity mentions in unstructured text into pre-defined categories such as the person names, organizations, locations, medical codes, time expressions, quantities, monetary values, percentages, etc. To allow comparison of results between languages, we used an adapted version of this task, which uses a reduced set of labels, available in NER datasets for all processed languages. The labels in the used NER datasets are simplified to a common label set of three labels (person - PER, location - LOC, organization - ORG). Each word in the NER dataset is labeled with one of the three mentioned labels or a label 'O' (other, i.e. not a named entity) if it does not fit any of the other three labels. The number of words having each label is shown in Table TABREF19.\n[source_id=38] To measure the performance of ELMo embeddings on the NER task we proceeded as follows. We embedded the text in the datasets sentence by sentence, producing three vectors (one from each ELMo layer) for each token in a sentence. We calculated the average of the three vectors and used it as the input of our recognition model. The input layer was followed by a single LSTM layer with 128 LSTM cells and a dropout layer, randomly dropping 10% of the neurons on both the output and the recurrent branch. The final layer of our model was a time distributed softmax layer with 4 neurons.\n[source_id=39] We used ADAM optimiser BIBREF17 with the learning rate 0.01 and $10^{-5}$ learning rate decay. We used categorical cross-entropy as a loss function and trained the model for 3 epochs. We present the results using the Macro $F_1$ score, that is the average of $F_1$-scores for each of the three NE classes (the class Other is excluded).\n[source_id=40] Since the differences between the tested languages depend more on the properties of the NER datasets than on the quality of embeddings, we can not directly compare ELMo models. For this reason, we take the non-contextual fastText embeddings as a baseline and predict named entities using them. The architecture of the model using fastText embeddings is the same as the one using ELMo embeddings, except that the input uses 300 dimensional fastText embedding vectors, and the model was trained for 5 epochs (instead of 3 as for ELMo). In both cases (ELMo and fastText) we trained and evaluated the model five times, because there is some random component involved in initialization of the neural network model. By training and evaluating multiple times, we minimise this random component.\n[source_id=41] The results are presented in Table TABREF21. We included the evaluation of the original ELMo English model in the same table. NER models have little difficulty distinguishing between types of named entities, but recognizing whether a word is a named entity or not is more difficult. For languages with the smallest NER datasets, Croatian and Lithuanian, ELMo embeddings show the largest improvement over fastText embeddings. However, we can observe significant improvements with ELMo also on English and Finnish, which are among the largest datasets (English being by far the largest). Only on Slovenian dataset did ELMo perform slightly worse than fastText, on all other EMBEDDIA languages, the ELMo embeddings improve the results.",
+  "score": 2.5244868105695746,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_8",
+  "child_source_node_ids": [
+    37,
+    38,
+    39,
+    40,
+    41
+  ],
+  "child_qasper_evidence_texts": [
+    "For evaluation of ELMo models on a relevant downstream task, we used named entity recognition (NER) task. NER is an information extraction task that seeks to locate and classify named entity mentions in unstructured text into pre-defined categories such as the person names, organizations, locations, medical codes, time expressions, quantities, monetary values, percentages, etc. To allow comparison of results between languages, we used an adapted version of this task, which uses a reduced set of labels, available in NER datasets for all processed languages. The labels in the used NER datasets are simplified to a common label set of three labels (person - PER, location - LOC, organization - ORG). Each word in the NER dataset is labeled with one of the three mentioned labels or a label 'O' (other, i.e. not a named entity) if it does not fit any of the other three labels. The number of words having each label is shown in Table TABREF19.",
+    "To measure the performance of ELMo embeddings on the NER task we proceeded as follows. We embedded the text in the datasets sentence by sentence, producing three vectors (one from each ELMo layer) for each token in a sentence. We calculated the average of the three vectors and used it as the input of our recognition model. The input layer was followed by a single LSTM layer with 128 LSTM cells and a dropout layer, randomly dropping 10% of the neurons on both the output and the recurrent branch. The final layer of our model was a time distributed softmax layer with 4 neurons.",
+    "We used ADAM optimiser BIBREF17 with the learning rate 0.01 and $10^{-5}$ learning rate decay. We used categorical cross-entropy as a loss function and trained the model for 3 epochs. We present the results using the Macro $F_1$ score, that is the average of $F_1$-scores for each of the three NE classes (the class Other is excluded).",
+    "Since the differences between the tested languages depend more on the properties of the NER datasets than on the quality of embeddings, we can not directly compare ELMo models. For this reason, we take the non-contextual fastText embeddings as a baseline and predict named entities using them. The architecture of the model using fastText embeddings is the same as the one using ELMo embeddings, except that the input uses 300 dimensional fastText embedding vectors, and the model was trained for 5 epochs (instead of 3 as for ELMo). In both cases (ELMo and fastText) we trained and evaluated the model five times, because there is some random component involved in initialization of the neural network model. By training and evaluating multiple times, we minimise this random component.",
+    "The results are presented in Table TABREF21. We included the evaluation of the original ELMo English model in the same table. NER models have little difficulty distinguishing between types of named entities, but recognizing whether a word is a named entity or not is more difficult. For languages with the smallest NER datasets, Croatian and Lithuanian, ELMo embeddings show the largest improvement over fastText embeddings. However, we can observe significant improvements with ELMo also on English and Finnish, which are among the largest datasets (English being by far the largest). Only on Slovenian dataset did ELMo perform slightly worse than fastText, on all other EMBEDDIA languages, the ELMo embeddings improve the results."
+  ],
+  "child_pages": [
+    8,
+    8,
+    8,
+    8,
+    8
+  ],
+  "child_sections": [
+    "Evaluation ::: Named Entity Recognition",
+    "Evaluation ::: Named Entity Recognition",
+    "Evaluation ::: Named Entity Recognition",
+    "Evaluation ::: Named Entity Recognition",
+    "Evaluation ::: Named Entity Recognition"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Evaluation ::: Named Entity Recognition",
+      0
+    ],
+    [
+      "Evaluation ::: Named Entity Recognition",
+      1
+    ],
+    [
+      "Evaluation ::: Named Entity Recognition",
+      2
+    ],
+    [
+      "Evaluation ::: Named Entity Recognition",
+      3
+    ],
+    [
+      "Evaluation ::: Named Entity Recognition",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_8",
+  "section_id": "Evaluation ::: Named Entity Recognition",
+  "section": "Evaluation ::: Named Entity Recognition",
+  "title_path": "Evaluation ::: Named Entity Recognition",
+  "block_type": "long_unit"
+}

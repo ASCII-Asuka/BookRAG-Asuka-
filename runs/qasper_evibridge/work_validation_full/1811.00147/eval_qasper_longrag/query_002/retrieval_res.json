@@ -1,0 +1,610 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_6",
+      "content": "[Section] Dolores: Learner\n[source_id=26] Having generated a set of paths on knowledge graphs representing local contexts of entities and relations, we are now ready to utilize the machinery of language modeling using deep neural networks to learn Dolores embeddings.\n[source_id=27] While traditional language models model a sentence as a sequence of words, we adopt the same machinery to model knowledge graph embeddings as follows: (a) A word is an (entity, relation) tuple, (b) we model a sentence as a path consisting of (entity, relation) tuples. Note that we have already established how to generate such paths from the knowledge graph using the path generator component.\n[source_id=28] Given such paths, we would like to model the probability of an entity-relation pair given the history and future context by a Bi-Directional Long Short-Term Memory network. In particular, the forward direction LSTM models: $\n\\text{Pr}([e_1,r_1], [e_2,r_2], \\cdots , [e_N, r_N]) =\n$\n[source_id=29] $$\\prod _{t=1}^{N} \\text{Pr}( [e_t, r_t] \\mid [e_1, r_1], [e_2, r_2], \\cdots , [e_{t-1}, r_{t-1}] ).$$   (Eq. 17)\n[source_id=30] Similarly, the backward direction LSTM models: $\n\\text{Pr}([e_1,r_1], [e_2,r_2], \\cdots , [e_N, r_N]) =\n$\n[source_id=31] $$\\prod _{t=1}^{N} \\text{Pr}( [e_t, r_t] \\mid [e_{t+1}, r_{t+1}], \\cdots , [e_{N}, r_{N}] ).$$   (Eq. 18)\n[source_id=32] Figure 2 illustrates this succinctly. At each time-step t, we deal with an entity-relation pair [ $e_t$ , $r_t$ ]. We first map one-hot vectors of the $e_t$ and $r_t$ to an embedding layer, concatenate them to obtain context-independent representations which are then passed through L layers of a Bi-Directional LSTM. Each layer of LSTM outputs the pair's context-dependent representation $\\overrightarrow{h_{t,i}}$ , $\\overleftarrow{h_{t,i}}$ , where i=1, 2, $\\cdots $ , L. Finally, the output of the top layer of LSTM, $\\overrightarrow{h_{t,L}}$ , $\\overleftarrow{h_{t,L}}$ , is used to predict the next pair [ $e_{t+1}$ , $r_t$0 ] and [ $r_t$1 , $r_t$2 ] respectively using a softmax layer. Formally, we jointly maximize the log likelihood of the forward and backward directions:\n[source_id=33] $$\\begin{split}\n\\sum _{t=1}^{N}\\log \\text{Pr}([e_t, r_t]\\mid [e_1, r_1],\\cdots ,[e_{t-1}, r_{t-1}];\\mathbf {\\Theta _{F}})+\\\\\n\\sum _{t=1}^{N}\\log \\text{Pr}([e_t, r_t]\\mid [e_{t+1}, r_{t+1}],\\cdots ,[e_{N}, r_{N}];\\mathbf {\\Theta _{B}}),\n\\end{split}$$   (Eq. 19)\n[source_id=34] where $\\mathbf {\\Theta _{F}}$ = $(\\theta _x, \\overrightarrow{\\theta _{LSTM}}, \\theta _s)$ corresponds to the parameters of the embedding layer, forward-direction LSTM and the softmax layer respectively. Similarly $\\mathbf {\\Theta _{B}}$ = $(\\theta _x, \\overleftarrow{\\theta _{LSTM}}, \\theta _s)$ corresponds to the similar set of parameters for the backward direction. Specifically, note that we share the parameters for the embedding and softmax layer across both directions. We maximize Equation 19 by training the Bi-directional LSTMs using back-propagation through time.\n[source_id=35] After having estimated the parameters of the Dolores learner, we now extract the context-independent and context-dependent representations for each entity and relation and combine them to obtain Dolores embeddings. More specifically, Dolores embeddings are task specific combination of the context-dependent and context-independent representations learned by our learner. Note that our learner (which is an $L$ -layer Bi-Directional LSTM) computes a set of $2L + 1$ representations for each entity-relation pair which we denote by: $\nR_t = [ x_t, \\overrightarrow{h_{t,i}}, \\overleftarrow{h_{t,i}} \\mid i = 1, 2, \\cdots , \\textit {L} ],\n$\n[source_id=36] where $x_t$ is the context-independent embedding and $\\overrightarrow{h_{t,i}}, \\overleftarrow{h_{t,i}}$ correspond to the context-dependent embeddings from layer $i$ .\n[source_id=37] Given a downstream model, Dolores learns a weighted linear combination of the components of $R_t$ to yield a single vector for use in the embedding layer of the downstream model. In particular\n[source_id=38] $$\\texttt {\\textsc {Dolores}}_t = [ x_t , \\sum _{i=1}^{L} \\lambda _i h_{t,i} ],$$   (Eq. 23)\n[source_id=39] where we denote $h_{t,i}$ = [ $\\overrightarrow{h_{t,i}}$ , $\\overleftarrow{h_{t,i}}$ ] and $\\lambda _{i}$ denote task specific learnable weights of the linear combination.\n[source_id=40] While it is obvious that our embeddings can be used as features for new predictive models, it is also very easy to incorporate our learned Dolores embeddings into existing predictive models on knowledge graphs. The only requirement is that the model accepts as input, an embedding layer (for entities and relations). If a model fulfills this requirement (which a large number of neural models on knowledge graphs do), we can just use Dolores embeddings as a drop-in replacement. We just initialize the corresponding embedding layer with Dolores embeddings. In our evaluation below, we show how to improve several state-of-the-art models on various tasks simply by incorporating Dolores as a drop-in replacement to the original embedding layer.",
+      "score": 3.065475334891746,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "child_qasper_evidence_texts": [
+        "Having generated a set of paths on knowledge graphs representing local contexts of entities and relations, we are now ready to utilize the machinery of language modeling using deep neural networks to learn Dolores embeddings.",
+        "While traditional language models model a sentence as a sequence of words, we adopt the same machinery to model knowledge graph embeddings as follows: (a) A word is an (entity, relation) tuple, (b) we model a sentence as a path consisting of (entity, relation) tuples. Note that we have already established how to generate such paths from the knowledge graph using the path generator component.",
+        "Given such paths, we would like to model the probability of an entity-relation pair given the history and future context by a Bi-Directional Long Short-Term Memory network. In particular, the forward direction LSTM models: $\n\\text{Pr}([e_1,r_1], [e_2,r_2], \\cdots , [e_N, r_N]) =\n$",
+        "$$\\prod _{t=1}^{N} \\text{Pr}( [e_t, r_t] \\mid [e_1, r_1], [e_2, r_2], \\cdots , [e_{t-1}, r_{t-1}] ).$$   (Eq. 17)",
+        "Similarly, the backward direction LSTM models: $\n\\text{Pr}([e_1,r_1], [e_2,r_2], \\cdots , [e_N, r_N]) =\n$",
+        "$$\\prod _{t=1}^{N} \\text{Pr}( [e_t, r_t] \\mid [e_{t+1}, r_{t+1}], \\cdots , [e_{N}, r_{N}] ).$$   (Eq. 18)",
+        "Figure 2 illustrates this succinctly. At each time-step t, we deal with an entity-relation pair [ $e_t$ , $r_t$ ]. We first map one-hot vectors of the $e_t$ and $r_t$ to an embedding layer, concatenate them to obtain context-independent representations which are then passed through L layers of a Bi-Directional LSTM. Each layer of LSTM outputs the pair's context-dependent representation $\\overrightarrow{h_{t,i}}$ , $\\overleftarrow{h_{t,i}}$ , where i=1, 2, $\\cdots $ , L. Finally, the output of the top layer of LSTM, $\\overrightarrow{h_{t,L}}$ , $\\overleftarrow{h_{t,L}}$ , is used to predict the next pair [ $e_{t+1}$ , $r_t$0 ] and [ $r_t$1 , $r_t$2 ] respectively using a softmax layer. Formally, we jointly maximize the log likelihood of the forward and backward directions:",
+        "$$\\begin{split}\n\\sum _{t=1}^{N}\\log \\text{Pr}([e_t, r_t]\\mid [e_1, r_1],\\cdots ,[e_{t-1}, r_{t-1}];\\mathbf {\\Theta _{F}})+\\\\\n\\sum _{t=1}^{N}\\log \\text{Pr}([e_t, r_t]\\mid [e_{t+1}, r_{t+1}],\\cdots ,[e_{N}, r_{N}];\\mathbf {\\Theta _{B}}),\n\\end{split}$$   (Eq. 19)",
+        "where $\\mathbf {\\Theta _{F}}$ = $(\\theta _x, \\overrightarrow{\\theta _{LSTM}}, \\theta _s)$ corresponds to the parameters of the embedding layer, forward-direction LSTM and the softmax layer respectively. Similarly $\\mathbf {\\Theta _{B}}$ = $(\\theta _x, \\overleftarrow{\\theta _{LSTM}}, \\theta _s)$ corresponds to the similar set of parameters for the backward direction. Specifically, note that we share the parameters for the embedding and softmax layer across both directions. We maximize Equation 19 by training the Bi-directional LSTMs using back-propagation through time.",
+        "After having estimated the parameters of the Dolores learner, we now extract the context-independent and context-dependent representations for each entity and relation and combine them to obtain Dolores embeddings. More specifically, Dolores embeddings are task specific combination of the context-dependent and context-independent representations learned by our learner. Note that our learner (which is an $L$ -layer Bi-Directional LSTM) computes a set of $2L + 1$ representations for each entity-relation pair which we denote by: $\nR_t = [ x_t, \\overrightarrow{h_{t,i}}, \\overleftarrow{h_{t,i}} \\mid i = 1, 2, \\cdots , \\textit {L} ],\n$",
+        "where $x_t$ is the context-independent embedding and $\\overrightarrow{h_{t,i}}, \\overleftarrow{h_{t,i}}$ correspond to the context-dependent embeddings from layer $i$ .",
+        "Given a downstream model, Dolores learns a weighted linear combination of the components of $R_t$ to yield a single vector for use in the embedding layer of the downstream model. In particular",
+        "$$\\texttt {\\textsc {Dolores}}_t = [ x_t , \\sum _{i=1}^{L} \\lambda _i h_{t,i} ],$$   (Eq. 23)",
+        "where we denote $h_{t,i}$ = [ $\\overrightarrow{h_{t,i}}$ , $\\overleftarrow{h_{t,i}}$ ] and $\\lambda _{i}$ denote task specific learnable weights of the linear combination.",
+        "While it is obvious that our embeddings can be used as features for new predictive models, it is also very easy to incorporate our learned Dolores embeddings into existing predictive models on knowledge graphs. The only requirement is that the model accepts as input, an embedding layer (for entities and relations). If a model fulfills this requirement (which a large number of neural models on knowledge graphs do), we can just use Dolores embeddings as a drop-in replacement. We just initialize the corresponding embedding layer with Dolores embeddings. In our evaluation below, we show how to improve several state-of-the-art models on various tasks simply by incorporating Dolores as a drop-in replacement to the original embedding layer."
+      ],
+      "child_pages": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "child_sections": [
+        "Dolores: Learner",
+        "Dolores: Learner",
+        "Dolores: Learner",
+        "Dolores: Learner",
+        "Dolores: Learner",
+        "Dolores: Learner",
+        "Dolores: Learner",
+        "Dolores: Learner",
+        "Dolores: Learner",
+        "Dolores: Learner",
+        "Dolores: Learner",
+        "Dolores: Learner",
+        "Dolores: Learner",
+        "Dolores: Learner",
+        "Dolores: Learner"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Dolores: Learner",
+          0
+        ],
+        [
+          "Dolores: Learner",
+          1
+        ],
+        [
+          "Dolores: Learner",
+          2
+        ],
+        [
+          "Dolores: Learner",
+          3
+        ],
+        [
+          "Dolores: Learner",
+          4
+        ],
+        [
+          "Dolores: Learner",
+          5
+        ],
+        [
+          "Dolores: Learner",
+          6
+        ],
+        [
+          "Dolores: Learner",
+          7
+        ],
+        [
+          "Dolores: Learner",
+          8
+        ],
+        [
+          "Dolores: Learner",
+          9
+        ],
+        [
+          "Dolores: Learner",
+          10
+        ],
+        [
+          "Dolores: Learner",
+          11
+        ],
+        [
+          "Dolores: Learner",
+          12
+        ],
+        [
+          "Dolores: Learner",
+          13
+        ],
+        [
+          "Dolores: Learner",
+          14
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Dolores: Learner",
+      "section": "Dolores: Learner",
+      "title_path": "Dolores: Learner",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Problem Formulation\n[source_id=12] Given a knowledge graph $G=(E, R)$ where $E$ denotes the set of entities and $R$ denotes the set of relations among those entities, we seek to learn $d$ -dimensional embeddings of the entities and relations. In contrast to previous knowledge graph embedding methods like BIBREF2 , BIBREF9 , BIBREF4 , BIBREF10 , BIBREF5 which are based on shallow models and operates primarily on triples, our method Dolores uses a deep neural model to learn “deep” and “contextualized” knowledge graph embeddings.\n[source_id=13] Having formulated the problem, we now describe Dolores. Dolores consists of two main components:\n[source_id=14] Path Generator This component is responsible for generating a large set of entity-relation chains that reflect the varying contextual usages of entities and relations in the knowledge graph.\n[source_id=15] Learner This component is a deep neural model that takes as input entity-relation chains and learns entity and relation embeddings which are weighted linear combination of internal states of the model thus capturing context dependence.\n[source_id=16] Both of the above components are motivated by recent advances in learning deep representations of words in language modeling. We motivate this below and also highlight key connections that enable us to build on these advances to learn Dolores knowledge graph embeddings.",
+      "score": 2.998002790716959,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "child_qasper_evidence_texts": [
+        "Given a knowledge graph $G=(E, R)$ where $E$ denotes the set of entities and $R$ denotes the set of relations among those entities, we seek to learn $d$ -dimensional embeddings of the entities and relations. In contrast to previous knowledge graph embedding methods like BIBREF2 , BIBREF9 , BIBREF4 , BIBREF10 , BIBREF5 which are based on shallow models and operates primarily on triples, our method Dolores uses a deep neural model to learn “deep” and “contextualized” knowledge graph embeddings.",
+        "Having formulated the problem, we now describe Dolores. Dolores consists of two main components:",
+        "Path Generator This component is responsible for generating a large set of entity-relation chains that reflect the varying contextual usages of entities and relations in the knowledge graph.",
+        "Learner This component is a deep neural model that takes as input entity-relation chains and learns entity and relation embeddings which are weighted linear combination of internal states of the model thus capturing context dependence.",
+        "Both of the above components are motivated by recent advances in learning deep representations of words in language modeling. We motivate this below and also highlight key connections that enable us to build on these advances to learn Dolores knowledge graph embeddings."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Problem Formulation",
+        "Problem Formulation",
+        "Problem Formulation",
+        "Problem Formulation",
+        "Problem Formulation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Problem Formulation",
+          0
+        ],
+        [
+          "Problem Formulation",
+          1
+        ],
+        [
+          "Problem Formulation",
+          2
+        ],
+        [
+          "Problem Formulation",
+          3
+        ],
+        [
+          "Problem Formulation",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Problem Formulation",
+      "section": "Problem Formulation",
+      "title_path": "Problem Formulation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Experimental Settings for Dolores\n[source_id=44] Here, we outline our model settings for learning Dolores embeddings. We generate 20 chains for each node in the knowledge graph, with the length of each chain being 21 (10 relations and 11 entities appear alternately). Our model uses L = 4 LSTM layers with 512 units and 32 dimension projections (projected values are clipped element-wise to within $[-3, 3]$ ). We use residual connections between layers and the batch size is set to 1024 during the training process. We train Dolores for 200 epochs on corresponding datasets with dropout (with the dropout probability is set $0.1$ ). Finally, we use Adam as the optimizer with appropriately chosen learning rates based on a validation set.",
+      "score": 2.4822908069368013,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        44
+      ],
+      "child_qasper_evidence_texts": [
+        "Here, we outline our model settings for learning Dolores embeddings. We generate 20 chains for each node in the knowledge graph, with the length of each chain being 21 (10 relations and 11 entities appear alternately). Our model uses L = 4 LSTM layers with 512 units and 32 dimension projections (projected values are clipped element-wise to within $[-3, 3]$ ). We use residual connections between layers and the batch size is set to 1024 during the training process. We train Dolores for 200 epochs on corresponding datasets with dropout (with the dropout probability is set $0.1$ ). Finally, we use Adam as the optimizer with appropriately chosen learning rates based on a validation set."
+      ],
+      "child_pages": [
+        8
+      ],
+      "child_sections": [
+        "Experimental Settings for Dolores"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experimental Settings for Dolores",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Experimental Settings for Dolores",
+      "section": "Experimental Settings for Dolores",
+      "title_path": "Experimental Settings for Dolores",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] We introduce a new method DOLORES for learning knowledge graph embeddings that effectively captures contextual cues and dependencies among entities and relations. First, we note that short paths on knowledge graphs comprising of chains of entities and relations can encode valuable information regarding their contextual usage. We operationalize this notion by representing knowledge graphs not as a collection of triples but as a collection of entity-relation chains, and learn embeddings for entities and relations using deep neural models that capture such contextual usage. In particular, our model is based on Bi-Directional LSTMs and learn deep representations of entities and relations from constructed entity-relation chains. We show that these representations can very easily be incorporated into existing models to significantly advance the state of the art on several knowledge graph prediction tasks like link prediction, triple classification, and missing relation type prediction (in some cases by at least 9.5%).",
+      "score": 2.4400181485208465,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "We introduce a new method DOLORES for learning knowledge graph embeddings that effectively captures contextual cues and dependencies among entities and relations. First, we note that short paths on knowledge graphs comprising of chains of entities and relations can encode valuable information regarding their contextual usage. We operationalize this notion by representing knowledge graphs not as a collection of triples but as a collection of entity-relation chains, and learn embeddings for entities and relations using deep neural models that capture such contextual usage. In particular, our model is based on Bi-Directional LSTMs and learn deep representations of entities and relations from constructed entity-relation chains. We show that these representations can very easily be incorporated into existing models to significantly advance the state of the art on several knowledge graph prediction tasks like link prediction, triple classification, and missing relation type prediction (in some cases by at least 9.5%)."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Dolores: Path Generator\n[source_id=23] Having motivated the model and discussed preliminaries, we now describe the first component of Dolores – the path generator.\n[source_id=24] Let S denote the set of entity-relation chains obtained by doing random walks in the knowledge graph. We adopt a component of node2vec BIBREF30 to construct S. In particular, we perform a 2nd order random walk with two parameters p and q that determine the degree of breadth-first sampling and depth-first sampling. Specifically as Grover and Leskovec ( BIBREF30 ) described, p controls the likelihood of immediately revisiting a node in the walk whereas q controls whether the walk is biased towards nodes close to starting node or away from starting node. We emphasize that while node2vec has additional steps to learn dense continuous representations of nodes, we adopt only its first component to generate a corpus of random walks representing paths in knowledge graphs.",
+      "score": 1.805679183980861,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        23,
+        24
+      ],
+      "child_qasper_evidence_texts": [
+        "Having motivated the model and discussed preliminaries, we now describe the first component of Dolores – the path generator.",
+        "Let S denote the set of entity-relation chains obtained by doing random walks in the knowledge graph. We adopt a component of node2vec BIBREF30 to construct S. In particular, we perform a 2nd order random walk with two parameters p and q that determine the degree of breadth-first sampling and depth-first sampling. Specifically as Grover and Leskovec ( BIBREF30 ) described, p controls the likelihood of immediately revisiting a node in the walk whereas q controls whether the walk is biased towards nodes close to starting node or away from starting node. We emphasize that while node2vec has additional steps to learn dense continuous representations of nodes, we adopt only its first component to generate a corpus of random walks representing paths in knowledge graphs."
+      ],
+      "child_pages": [
+        5,
+        5
+      ],
+      "child_sections": [
+        "Dolores: Path Generator",
+        "Dolores: Path Generator"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Dolores: Path Generator",
+          0
+        ],
+        [
+          "Dolores: Path Generator",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Dolores: Path Generator",
+      "section": "Dolores: Path Generator",
+      "title_path": "Dolores: Path Generator",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Knowledge graphs BIBREF0 enable structured access to world knowledge and form a key component of several applications like search engines, question answering systems and conversational assistants. Knowledge graphs are typically interpreted as comprising of discrete triples of the form (entityA, relationX, entityB) thus representing a relation (relationX) between entityA and entityB. However, one limitation of only a discrete representation of triples is that it does not easily enable one to infer similarities and potential relations among entities which may be missing in the knowledge graph. Consequently, one popular alternative is to learn dense continuous representations of entities and relations by embedding them in latent continuous vector spaces, while seeking to model the inherent structure of the knowledge graph. Most knowledge graph embedding methods can be classified into two major classes: one class which operates purely on triples like RESCAL BIBREF1 , TransE BIBREF2 , DistMult BIBREF3 , TransD BIBREF4 , ComplEx BIBREF5 , ConvE BIBREF6 and the second class which seeks to incorporate additional information (like multi-hops) BIBREF7 . Learning high-quality knowledge graph embeddings can be quite challenging given that (a) they need to effectively model the contextual usages of entities and relations (b) they would need to be useful for a variety of predictive tasks on knowledge graphs.\n[source_id=5] In this paper, we present a new type of knowledge graph embeddings called Dolores that are both deep and contextualized. Dolores learns both context-independent and context-dependent embeddings of entities and relations through a deep neural sequential model. Figure 1 illustrates the deep contextualized representations learned. Note that the contextually independent entity embeddings (see Figure 1 ) reveal three clusters of entities: writers, philosophers, and musicians. The contextual dependent embeddings in turn effectively account for specific relations. In particular, the context-dependent representations under the relation nationality now nicely cluster the above entities by nationality namely Austrians, Germans, and British/Irish. Similarly Figure 1 shows contextual embeddings given the relation place-lived. Note that these embeddings correctly capture that even though Beethoven and Brahms being Germans, they lived in Vienna and are closer to other Austrian musicians like Schubert.\n[source_id=6] Unlike most knowledge graph embeddings like TransD, TransE BIBREF2 , BIBREF4 etc. which are typically learned using shallow models, the representations learned by Dolores are deep: dependent on an entire path (rather than just a triple), are functions of internal states of a Bi-Directional LSTM and composed of representations learned at various layers potentially capturing varying degrees of abstractions. Dolores is inspired by recent advances in learning word representations (word embeddings) from deep neural language models using Bi-Directional LSTMs BIBREF8 . In particular, we derive connections between the work of Peters et al. ( BIBREF8 ) who learn deep contextualized word embeddings from sentences using a Bi-Directional LSTM based language model and random walks on knowledge graphs. These connections enable us to propose new “deep contextualized” knowledge graph embeddings which we call Dolores embeddings.\n[source_id=7] Knowledge Embeddings learned using Dolores can easily be used as input representations for predictive models on knowledge graphs. More importantly, when existing predictive models use input representations for entities and relations, we can easily replace those representations with Dolores representations and significantly improve the performance of existing models. Specifically, we show that Dolores embeddings advance the state-of-the-art models on various tasks like link prediction, triple classification and missing relation type prediction.\n[source_id=8] To summarize, our contributions are as follows:",
+      "score": 1.231113330893689,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "child_qasper_evidence_texts": [
+        "Knowledge graphs BIBREF0 enable structured access to world knowledge and form a key component of several applications like search engines, question answering systems and conversational assistants. Knowledge graphs are typically interpreted as comprising of discrete triples of the form (entityA, relationX, entityB) thus representing a relation (relationX) between entityA and entityB. However, one limitation of only a discrete representation of triples is that it does not easily enable one to infer similarities and potential relations among entities which may be missing in the knowledge graph. Consequently, one popular alternative is to learn dense continuous representations of entities and relations by embedding them in latent continuous vector spaces, while seeking to model the inherent structure of the knowledge graph. Most knowledge graph embedding methods can be classified into two major classes: one class which operates purely on triples like RESCAL BIBREF1 , TransE BIBREF2 , DistMult BIBREF3 , TransD BIBREF4 , ComplEx BIBREF5 , ConvE BIBREF6 and the second class which seeks to incorporate additional information (like multi-hops) BIBREF7 . Learning high-quality knowledge graph embeddings can be quite challenging given that (a) they need to effectively model the contextual usages of entities and relations (b) they would need to be useful for a variety of predictive tasks on knowledge graphs.",
+        "In this paper, we present a new type of knowledge graph embeddings called Dolores that are both deep and contextualized. Dolores learns both context-independent and context-dependent embeddings of entities and relations through a deep neural sequential model. Figure 1 illustrates the deep contextualized representations learned. Note that the contextually independent entity embeddings (see Figure 1 ) reveal three clusters of entities: writers, philosophers, and musicians. The contextual dependent embeddings in turn effectively account for specific relations. In particular, the context-dependent representations under the relation nationality now nicely cluster the above entities by nationality namely Austrians, Germans, and British/Irish. Similarly Figure 1 shows contextual embeddings given the relation place-lived. Note that these embeddings correctly capture that even though Beethoven and Brahms being Germans, they lived in Vienna and are closer to other Austrian musicians like Schubert.",
+        "Unlike most knowledge graph embeddings like TransD, TransE BIBREF2 , BIBREF4 etc. which are typically learned using shallow models, the representations learned by Dolores are deep: dependent on an entire path (rather than just a triple), are functions of internal states of a Bi-Directional LSTM and composed of representations learned at various layers potentially capturing varying degrees of abstractions. Dolores is inspired by recent advances in learning word representations (word embeddings) from deep neural language models using Bi-Directional LSTMs BIBREF8 . In particular, we derive connections between the work of Peters et al. ( BIBREF8 ) who learn deep contextualized word embeddings from sentences using a Bi-Directional LSTM based language model and random walks on knowledge graphs. These connections enable us to propose new “deep contextualized” knowledge graph embeddings which we call Dolores embeddings.",
+        "Knowledge Embeddings learned using Dolores can easily be used as input representations for predictive models on knowledge graphs. More importantly, when existing predictive models use input representations for entities and relations, we can easily replace those representations with Dolores representations and significantly improve the performance of existing models. Specifically, we show that Dolores embeddings advance the state-of-the-art models on various tasks like link prediction, triple classification and missing relation type prediction.",
+        "To summarize, our contributions are as follows:"
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Conclusion\n[source_id=66] In this paper, we introduce Dolores, a new paradigm of learning knowledge graph embeddings where we learn not only contextual independent embeddings of entities and relations but also multiple context-dependent embeddings each capturing a different layer of abstraction. We demonstrate that by leveraging connections between three seemingly distinct fields namely: (a) large-scale network analysis, (b) natural language processing and (c) knowledge graphs we are able to learn rich knowledge graph embeddings that are deep and contextualized in contrast to prior models that are typically shallow. Moreover, our learned embeddings can be easily incorporated into existing knowledge graph prediction models to improve their performance. Specifically, we show that our embeddings are not only a “drop-in” replacement for existing models that use embedding layers but also significantly improve the state-of-the-art models on a variety of tasks, sometimes by almost $9.5\\%$ . Furthermore, our method is inherently online and scales to large data-sets.\n[source_id=67] Our work also naturally suggests new directions of investigation and research into knowledge graph embeddings. One avenue of research is to investigate the utility of each layer's entity and relation embeddings in specific learning tasks. As was noted by research in computer vision, deep representations learned on one dataset are effective and very useful in transfer-learning tasks BIBREF33 . A natural line of investigation thus revolves around precisely quantifying the effectiveness of these learned embeddings across models and data-sets. Lastly, it would be interesting to see if such knowledge graph embeddings can be used in conjunction with natural language processing models used for relation extraction and named entity recognition from raw textual data.\n[source_id=68] Finally, in a broader perspective, our work introduces two new paradigms of modeling knowledge graphs. First, rather than view a knowledge graph as a collection of triples, we view it as a set of paths between entities. These paths can be represented as a collection of truncated random walks over the knowledge graph and encode rich contextual information between entities and relations. Second, departing from the hitherto well-established paradigm of mapping entities and relations to vectors in $\\mathcal {R}^{d}$ via a mapping function, we learn multiple representations for entities and relations determined by the number of layers in a deep neural network. This enables us to learn knowledge graph embeddings that capture different layers of abstraction – both context-independent and context-dependent allowing for the development of very powerful prediction models to yield superior performance on a variety of prediction tasks.",
+      "score": 1.2297152659369266,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        66,
+        67,
+        68
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper, we introduce Dolores, a new paradigm of learning knowledge graph embeddings where we learn not only contextual independent embeddings of entities and relations but also multiple context-dependent embeddings each capturing a different layer of abstraction. We demonstrate that by leveraging connections between three seemingly distinct fields namely: (a) large-scale network analysis, (b) natural language processing and (c) knowledge graphs we are able to learn rich knowledge graph embeddings that are deep and contextualized in contrast to prior models that are typically shallow. Moreover, our learned embeddings can be easily incorporated into existing knowledge graph prediction models to improve their performance. Specifically, we show that our embeddings are not only a “drop-in” replacement for existing models that use embedding layers but also significantly improve the state-of-the-art models on a variety of tasks, sometimes by almost $9.5\\%$ . Furthermore, our method is inherently online and scales to large data-sets.",
+        "Our work also naturally suggests new directions of investigation and research into knowledge graph embeddings. One avenue of research is to investigate the utility of each layer's entity and relation embeddings in specific learning tasks. As was noted by research in computer vision, deep representations learned on one dataset are effective and very useful in transfer-learning tasks BIBREF33 . A natural line of investigation thus revolves around precisely quantifying the effectiveness of these learned embeddings across models and data-sets. Lastly, it would be interesting to see if such knowledge graph embeddings can be used in conjunction with natural language processing models used for relation extraction and named entity recognition from raw textual data.",
+        "Finally, in a broader perspective, our work introduces two new paradigms of modeling knowledge graphs. First, rather than view a knowledge graph as a collection of triples, we view it as a set of paths between entities. These paths can be represented as a collection of truncated random walks over the knowledge graph and encode rich contextual information between entities and relations. Second, departing from the hitherto well-established paradigm of mapping entities and relations to vectors in $\\mathcal {R}^{d}$ via a mapping function, we learn multiple representations for entities and relations determined by the number of layers in a deep neural network. This enables us to learn knowledge graph embeddings that capture different layers of abstraction – both context-independent and context-dependent allowing for the development of very powerful prediction models to yield superior performance on a variety of prediction tasks."
+      ],
+      "child_pages": [
+        11,
+        11,
+        11
+      ],
+      "child_sections": [
+        "Conclusion",
+        "Conclusion",
+        "Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion",
+          0
+        ],
+        [
+          "Conclusion",
+          1
+        ],
+        [
+          "Conclusion",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Evaluation Tasks\n[source_id=46] We consider three tasks, link prediction, triple classification, and predicting missing relation types BIBREF24 :\n[source_id=47] Link Prediction A common task for knowledge graph completion is link prediction, aiming to predict the missing entity when the other two parts of a triplet (h, r, t) are given. In other words, we need to predict t given (h, r) – tail-entity prediction or predict h given (r, t) – head entity prediction. In-line with prior work BIBREF6 , we report results on link prediction in terms of Mean Reciprocal Rank (MRR), Mean Rank (MR) and Hits@10 on the FB15K-237 dataset in the filtered setting on both sub-tasks: (a) head entity prediction and (b) tail entity prediction. Our results are shown in Table 2 . Note that the present state-of-the-art model, ConvKB achieves an MRR of $(0.375, 0.487)$ on the head and tail link prediction tasks. Observe that simply incorporating Dolores significantly improves the head and tail entity prediction performance by $3.10\\%$ and $7.90\\%$ respectively. Similar improvements are also observed on other metrics like Mean Rank (MR: lower is better) and Hits@10 (higher is better).\n[source_id=48] Triple Classification The task of triple classification is to predict whether a triple (h, r, t) is correct or not. Triple classification is a binary classification task widely explored by previous work BIBREF2 , BIBREF9 , BIBREF10 . Since evaluation of classification needs negative triples, we choose WN11 and FB13, two benchmark datasets and report the results of our evaluation in Table 3 . We note that the present state of the art is the ConvKB model. When we add Dolores to the ConvKB model with our embeddings, observe that we improve the average performance of the state-of-the-art model ConvKB slightly by $0.20$ points (from $88.20$ to $88.40$ ). We believe the improvement achieved by adding Dolores is smaller in terms of absolute size because the state-of-the-art model already has excellent performance on this task ( $88.20$ ) suggesting a much slower improvement curve.\n[source_id=49] Missing Relation Types The goal of the third task is to reason on the paths connecting an entity pair to predict missing relation types. We follow Das et al. ( BIBREF24 ) and use the same dataset released by Neelakantan, Roth, and McCallum ( BIBREF23 ) which is a subset of FreeBase enriched with information from ClueWeb. The dataset consists of a set of triples ( $e_1$ , r, $e_2$ ) and the set of paths connecting the entity pair ( $e_1$ , $e_2$ ) in the knowledge graph. These triples are collected from ClueWeb by considering sentences that contain the entity pair in Freebase. Neelakantan et al. ( BIBREF23 ) infer the relation type by examining the phrase between two entities. We use the same evaluation criterion as used by Das et al. ( BIBREF24 ) and report our results in Table 4 . Note that the current state-of-the-art model from Das et al. ( BIBREF24 ) yields a score of $71.74$ . Adding Dolores to the model improves the score to $74.42$ yielding a $\\textbf {9.5\\%}$ improvement.\n[source_id=50] Altogether, viewing the results on various tasks holistically, we conclude that simply incorporating Dolores into existing state-of-the-art models improves their performance and advances the state of the art on each of these tasks and suggests that our embeddings can be effective in yielding performance gains on a variety of predictive tasks.",
+      "score": 1.035251667752209,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        46,
+        47,
+        48,
+        49,
+        50
+      ],
+      "child_qasper_evidence_texts": [
+        "We consider three tasks, link prediction, triple classification, and predicting missing relation types BIBREF24 :",
+        "Link Prediction A common task for knowledge graph completion is link prediction, aiming to predict the missing entity when the other two parts of a triplet (h, r, t) are given. In other words, we need to predict t given (h, r) – tail-entity prediction or predict h given (r, t) – head entity prediction. In-line with prior work BIBREF6 , we report results on link prediction in terms of Mean Reciprocal Rank (MRR), Mean Rank (MR) and Hits@10 on the FB15K-237 dataset in the filtered setting on both sub-tasks: (a) head entity prediction and (b) tail entity prediction. Our results are shown in Table 2 . Note that the present state-of-the-art model, ConvKB achieves an MRR of $(0.375, 0.487)$ on the head and tail link prediction tasks. Observe that simply incorporating Dolores significantly improves the head and tail entity prediction performance by $3.10\\%$ and $7.90\\%$ respectively. Similar improvements are also observed on other metrics like Mean Rank (MR: lower is better) and Hits@10 (higher is better).",
+        "Triple Classification The task of triple classification is to predict whether a triple (h, r, t) is correct or not. Triple classification is a binary classification task widely explored by previous work BIBREF2 , BIBREF9 , BIBREF10 . Since evaluation of classification needs negative triples, we choose WN11 and FB13, two benchmark datasets and report the results of our evaluation in Table 3 . We note that the present state of the art is the ConvKB model. When we add Dolores to the ConvKB model with our embeddings, observe that we improve the average performance of the state-of-the-art model ConvKB slightly by $0.20$ points (from $88.20$ to $88.40$ ). We believe the improvement achieved by adding Dolores is smaller in terms of absolute size because the state-of-the-art model already has excellent performance on this task ( $88.20$ ) suggesting a much slower improvement curve.",
+        "Missing Relation Types The goal of the third task is to reason on the paths connecting an entity pair to predict missing relation types. We follow Das et al. ( BIBREF24 ) and use the same dataset released by Neelakantan, Roth, and McCallum ( BIBREF23 ) which is a subset of FreeBase enriched with information from ClueWeb. The dataset consists of a set of triples ( $e_1$ , r, $e_2$ ) and the set of paths connecting the entity pair ( $e_1$ , $e_2$ ) in the knowledge graph. These triples are collected from ClueWeb by considering sentences that contain the entity pair in Freebase. Neelakantan et al. ( BIBREF23 ) infer the relation type by examining the phrase between two entities. We use the same evaluation criterion as used by Das et al. ( BIBREF24 ) and report our results in Table 4 . Note that the current state-of-the-art model from Das et al. ( BIBREF24 ) yields a score of $71.74$ . Adding Dolores to the model improves the score to $74.42$ yielding a $\\textbf {9.5\\%}$ improvement.",
+        "Altogether, viewing the results on various tasks holistically, we conclude that simply incorporating Dolores into existing state-of-the-art models improves their performance and advances the state of the art on each of these tasks and suggests that our embeddings can be effective in yielding performance gains on a variety of predictive tasks."
+      ],
+      "child_pages": [
+        9,
+        9,
+        9,
+        9,
+        9
+      ],
+      "child_sections": [
+        "Evaluation Tasks",
+        "Evaluation Tasks",
+        "Evaluation Tasks",
+        "Evaluation Tasks",
+        "Evaluation Tasks"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Evaluation Tasks",
+          0
+        ],
+        [
+          "Evaluation Tasks",
+          1
+        ],
+        [
+          "Evaluation Tasks",
+          2
+        ],
+        [
+          "Evaluation Tasks",
+          3
+        ],
+        [
+          "Evaluation Tasks",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Evaluation Tasks",
+      "section": "Evaluation Tasks",
+      "title_path": "Evaluation Tasks",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 14,
+      "content": "Path Generator This component is responsible for generating a large set of entity-relation chains that reflect the varying contextual usages of entities and relations in the knowledge graph.",
+      "qasper_evidence_text": "Path Generator This component is responsible for generating a large set of entity-relation chains that reflect the varying contextual usages of entities and relations in the knowledge graph.",
+      "source_node_id": 14,
+      "node_id": 14,
+      "paragraph_id": 14,
+      "evidence_id": 14,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_3",
+      "rank": 2,
+      "score": 2.998002790716959,
+      "block_type": "paragraph",
+      "page": 3,
+      "section_id": "Problem Formulation",
+      "section": "Problem Formulation",
+      "title": "Problem Formulation",
+      "hotpot_title": "Problem Formulation",
+      "sent_id": 2,
+      "hotpot_sent_id": 2,
+      "supporting_rank": 1
+    },
+    {
+      "id": 23,
+      "content": "Having motivated the model and discussed preliminaries, we now describe the first component of Dolores – the path generator.",
+      "qasper_evidence_text": "Having motivated the model and discussed preliminaries, we now describe the first component of Dolores – the path generator.",
+      "source_node_id": 23,
+      "node_id": 23,
+      "paragraph_id": 23,
+      "evidence_id": 23,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_5",
+      "rank": 5,
+      "score": 1.805679183980861,
+      "block_type": "paragraph",
+      "page": 5,
+      "section_id": "Dolores: Path Generator",
+      "section": "Dolores: Path Generator",
+      "title": "Dolores: Path Generator",
+      "hotpot_title": "Dolores: Path Generator",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 2
+    },
+    {
+      "id": 24,
+      "content": "Let S denote the set of entity-relation chains obtained by doing random walks in the knowledge graph. We adopt a component of node2vec BIBREF30 to construct S. In particular, we perform a 2nd order random walk with two parameters p and q that determine the degree of breadth-first sampling and depth-first sampling. Specifically as Grover and Leskovec ( BIBREF30 ) described, p controls the likelihood of immediately revisiting a node in the walk whereas q controls whether the walk is biased towards nodes close to starting node or away from starting node. We emphasize that while node2vec has additional steps to learn dense continuous representations of nodes, we adopt only its first component to generate a corpus of random walks representing paths in knowledge graphs.",
+      "qasper_evidence_text": "Let S denote the set of entity-relation chains obtained by doing random walks in the knowledge graph. We adopt a component of node2vec BIBREF30 to construct S. In particular, we perform a 2nd order random walk with two parameters p and q that determine the degree of breadth-first sampling and depth-first sampling. Specifically as Grover and Leskovec ( BIBREF30 ) described, p controls the likelihood of immediately revisiting a node in the walk whereas q controls whether the walk is biased towards nodes close to starting node or away from starting node. We emphasize that while node2vec has additional steps to learn dense continuous representations of nodes, we adopt only its first component to generate a corpus of random walks representing paths in knowledge graphs.",
+      "source_node_id": 24,
+      "node_id": 24,
+      "paragraph_id": 24,
+      "evidence_id": 24,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_5",
+      "rank": 5,
+      "score": 1.805679183980861,
+      "block_type": "paragraph",
+      "page": 5,
+      "section_id": "Dolores: Path Generator",
+      "section": "Dolores: Path Generator",
+      "title": "Dolores: Path Generator",
+      "hotpot_title": "Dolores: Path Generator",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 3
+    }
+  ],
+  "supporting_block_ids": [
+    14,
+    23,
+    24
+  ]
+}

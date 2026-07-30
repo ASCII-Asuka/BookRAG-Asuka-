@@ -1,0 +1,587 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_9",
+      "content": "[Section] Hierarchical seq2seq Generation Model\n[source_id=39] Our question generation model takes the path between an “anchor” and the candidate answer, and outputs a question. We adopt the sequence to sequence architecture as our basic question generation model due to its effectiveness in natural language generation tasks. The hierarchical encoder and the hierarchical attention mechanism are introduced to take into account the structure of the input facts. Facts from external KBs are conventionally integrated into the model using the same way as described in the matching model.\n[source_id=40] As illustrated in Figure 3 , the question generation model contains an encoder and a decoder. We use a hierarchical encoder consisting of two layers to model the meaning of each element (subject, predicate or object) and the relationship between them. Since each element might contain multiple words, we use RNN as the word layer encoder to get the representation of each element. We define the fact level sequence as a path starting from the anchor and ending at the candidate answer. Another RNN is used as the fact level encoder. The last hidden state at the fact layer is fed to the decoder.\n[source_id=41] We develop a hierarchical attention mechanism in the decoder, which first makes soft alignment over the hidden states at the fact layer, the output of which is further used to attend to hidden states at the word level. Specifically, given the decoder hidden state $h^{dec}_{t-1}$ , we use a fact-level attention model $Att_{fct}$ to calculate the contextual vector, which is further combined with the current hidden state $h^{dec}_{t}$ , resulting in $c_{fct}$ . The contextual vector is calculated through weighted averaging over hidden vectors at the fact level, which is given as follows, where $\\odot $ is dot product, $h^{fld}_j$ is the $j$ -th hidden state at the fact layer from the encoder, and $l_f$ is the number of hidden states at the fact level.\n[source_id=42] $$c_{fct} &= GRU(h^{dec}_{t}, \\sum _{j=1}^{{l_f}} \\alpha _{tj}h^{fct}_j) \\\\\n\\alpha _{tj} &= \\frac{ exp(h^{dec}_{t-1} \\odot h^{fct}_j)}{\\sum _{k=1}^{{l_f}}exp(h^{dec}_{t-1} \\odot h^{fct}_k)}$$   (Eq. 19)\n[source_id=43] Similarly, we feed $c_{fct}$ to the word-level attention function $Att_{wrd}$ and calculate over hidden vectors at the word-level. The output $c_{wrd}$ will be concatenated with $h^{dec}_{t}$ to predict the next word.\n[source_id=44] Since many entity names of great importance are rare words from the input, we use the copying mechanism BIBREF20 that learns when to replicate words from the input or to predict words from the target vocabulary. The probability distribution of generating the word $y$ is calculated as follows, in which the $softmax$ function is calculated over a combined logits from both sides.\n[source_id=45] $$\\begin{split}\n&p(y)=\\frac{exp({e_y \\odot W_g[h_t^{dec};c_{wrd}]})+exp(s_c(y))}{Z}\\\\\n&s_c(y) = c_{wrd} \\odot {tanh(W_ch_t^{wrd})}\n\\end{split}$$   (Eq. 20)\n[source_id=46] We train our question generation model with maximum likelihood estimation. The loss function is given as follows, where $D$ is the training corpus. We use beam search in the inference process.\n[source_id=47] $$l = -\\sum _{(x,y)\\in D} \\sum _t log p(y_t |y_{<t}, x)$$   (Eq. 21)\n[source_id=48] An advantage of the model is that external knowledge could be easily incorporated with the same mechanism as we have described in section Incorporating External Knowledge. We enhance the representation of an argument or a predicate by concatenating open KB vectors into encoder hidden states.",
+      "score": 4.845015512315577,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48
+      ],
+      "child_qasper_evidence_texts": [
+        "Our question generation model takes the path between an “anchor” and the candidate answer, and outputs a question. We adopt the sequence to sequence architecture as our basic question generation model due to its effectiveness in natural language generation tasks. The hierarchical encoder and the hierarchical attention mechanism are introduced to take into account the structure of the input facts. Facts from external KBs are conventionally integrated into the model using the same way as described in the matching model.",
+        "As illustrated in Figure 3 , the question generation model contains an encoder and a decoder. We use a hierarchical encoder consisting of two layers to model the meaning of each element (subject, predicate or object) and the relationship between them. Since each element might contain multiple words, we use RNN as the word layer encoder to get the representation of each element. We define the fact level sequence as a path starting from the anchor and ending at the candidate answer. Another RNN is used as the fact level encoder. The last hidden state at the fact layer is fed to the decoder.",
+        "We develop a hierarchical attention mechanism in the decoder, which first makes soft alignment over the hidden states at the fact layer, the output of which is further used to attend to hidden states at the word level. Specifically, given the decoder hidden state $h^{dec}_{t-1}$ , we use a fact-level attention model $Att_{fct}$ to calculate the contextual vector, which is further combined with the current hidden state $h^{dec}_{t}$ , resulting in $c_{fct}$ . The contextual vector is calculated through weighted averaging over hidden vectors at the fact level, which is given as follows, where $\\odot $ is dot product, $h^{fld}_j$ is the $j$ -th hidden state at the fact layer from the encoder, and $l_f$ is the number of hidden states at the fact level.",
+        "$$c_{fct} &= GRU(h^{dec}_{t}, \\sum _{j=1}^{{l_f}} \\alpha _{tj}h^{fct}_j) \\\\\n\\alpha _{tj} &= \\frac{ exp(h^{dec}_{t-1} \\odot h^{fct}_j)}{\\sum _{k=1}^{{l_f}}exp(h^{dec}_{t-1} \\odot h^{fct}_k)}$$   (Eq. 19)",
+        "Similarly, we feed $c_{fct}$ to the word-level attention function $Att_{wrd}$ and calculate over hidden vectors at the word-level. The output $c_{wrd}$ will be concatenated with $h^{dec}_{t}$ to predict the next word.",
+        "Since many entity names of great importance are rare words from the input, we use the copying mechanism BIBREF20 that learns when to replicate words from the input or to predict words from the target vocabulary. The probability distribution of generating the word $y$ is calculated as follows, in which the $softmax$ function is calculated over a combined logits from both sides.",
+        "$$\\begin{split}\n&p(y)=\\frac{exp({e_y \\odot W_g[h_t^{dec};c_{wrd}]})+exp(s_c(y))}{Z}\\\\\n&s_c(y) = c_{wrd} \\odot {tanh(W_ch_t^{wrd})}\n\\end{split}$$   (Eq. 20)",
+        "We train our question generation model with maximum likelihood estimation. The loss function is given as follows, where $D$ is the training corpus. We use beam search in the inference process.",
+        "$$l = -\\sum _{(x,y)\\in D} \\sum _t log p(y_t |y_{<t}, x)$$   (Eq. 21)",
+        "An advantage of the model is that external knowledge could be easily incorporated with the same mechanism as we have described in section Incorporating External Knowledge. We enhance the representation of an argument or a predicate by concatenating open KB vectors into encoder hidden states."
+      ],
+      "child_pages": [
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9
+      ],
+      "child_sections": [
+        "Hierarchical seq2seq Generation Model",
+        "Hierarchical seq2seq Generation Model",
+        "Hierarchical seq2seq Generation Model",
+        "Hierarchical seq2seq Generation Model",
+        "Hierarchical seq2seq Generation Model",
+        "Hierarchical seq2seq Generation Model",
+        "Hierarchical seq2seq Generation Model",
+        "Hierarchical seq2seq Generation Model",
+        "Hierarchical seq2seq Generation Model",
+        "Hierarchical seq2seq Generation Model"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Hierarchical seq2seq Generation Model",
+          0
+        ],
+        [
+          "Hierarchical seq2seq Generation Model",
+          1
+        ],
+        [
+          "Hierarchical seq2seq Generation Model",
+          2
+        ],
+        [
+          "Hierarchical seq2seq Generation Model",
+          3
+        ],
+        [
+          "Hierarchical seq2seq Generation Model",
+          4
+        ],
+        [
+          "Hierarchical seq2seq Generation Model",
+          5
+        ],
+        [
+          "Hierarchical seq2seq Generation Model",
+          6
+        ],
+        [
+          "Hierarchical seq2seq Generation Model",
+          7
+        ],
+        [
+          "Hierarchical seq2seq Generation Model",
+          8
+        ],
+        [
+          "Hierarchical seq2seq Generation Model",
+          9
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Hierarchical seq2seq Generation Model",
+      "section": "Hierarchical seq2seq Generation Model",
+      "title_path": "Hierarchical seq2seq Generation Model",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] QA Model 2: KVMemNet\n[source_id=24] Despite the interpretability of PCNet, the coverage of anchor detection limits the upper bound of the approach. We implement a more powerful method based on the key-value memory network BIBREF19 , KVMemNet for short, which has proven powerful in KB-based question answering.\n[source_id=25] The KVMenNet could be viewed as a “soft” matching approach, which includes a parameterized memory consisting of key-value pairs. Intuitively, keys are used for matching with the question, and values are used for matching to the candidate answer. Given a KB fact ( $subj, pred, obj$ ), We consider both directions and add two key-value pairs in the memory, namely ( $key = subj +pred, value=obj$ ) and ( $key =obj + pred, value=subj$ ). The vectors of arguments/predicates are calculated the same way as described in PCNet. The concatenation of two vectors is used as the key vector $v_{key}$ .\n[source_id=26] Each memory item is assigned a relevance probability by comparing the question to each key.\n[source_id=27] $$\\alpha _{key_i} = {softmax}(v_q \\cdot v_{key_i})$$   (Eq. 12)\n[source_id=28] Afterwards, vectors in memory ( $v_{value}$ ) are weighted summed according to their addressing probabilities, and the vector $v_o$ is returned.\n[source_id=29] $$v_o = \\sum _i \\alpha _{key_i}v_{value_i}$$   (Eq. 13)\n[source_id=30] In PCNet, reasoning over two facts is achieved by incorporating 2-hop paths, while in KVMemNet this is achieved by repeating the memory access process twice. After receiving the result $v_o$ , we update the query with $q_2 = R(v_q + v_o)$ , where $R$ is model parameter. Finally, after a fixed number $n$ hops ( $n=2$ in this work), the resulting vector is used to measure the relevance to candidate answers via the dot product.",
+      "score": 4.284493758638286,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "child_qasper_evidence_texts": [
+        "Despite the interpretability of PCNet, the coverage of anchor detection limits the upper bound of the approach. We implement a more powerful method based on the key-value memory network BIBREF19 , KVMemNet for short, which has proven powerful in KB-based question answering.",
+        "The KVMenNet could be viewed as a “soft” matching approach, which includes a parameterized memory consisting of key-value pairs. Intuitively, keys are used for matching with the question, and values are used for matching to the candidate answer. Given a KB fact ( $subj, pred, obj$ ), We consider both directions and add two key-value pairs in the memory, namely ( $key = subj +pred, value=obj$ ) and ( $key =obj + pred, value=subj$ ). The vectors of arguments/predicates are calculated the same way as described in PCNet. The concatenation of two vectors is used as the key vector $v_{key}$ .",
+        "Each memory item is assigned a relevance probability by comparing the question to each key.",
+        "$$\\alpha _{key_i} = {softmax}(v_q \\cdot v_{key_i})$$   (Eq. 12)",
+        "Afterwards, vectors in memory ( $v_{value}$ ) are weighted summed according to their addressing probabilities, and the vector $v_o$ is returned.",
+        "$$v_o = \\sum _i \\alpha _{key_i}v_{value_i}$$   (Eq. 13)",
+        "In PCNet, reasoning over two facts is achieved by incorporating 2-hop paths, while in KVMemNet this is achieved by repeating the memory access process twice. After receiving the result $v_o$ , we update the query with $q_2 = R(v_q + v_o)$ , where $R$ is model parameter. Finally, after a fixed number $n$ hops ( $n=2$ in this work), the resulting vector is used to measure the relevance to candidate answers via the dot product."
+      ],
+      "child_pages": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "child_sections": [
+        "QA Model 2: KVMemNet",
+        "QA Model 2: KVMemNet",
+        "QA Model 2: KVMemNet",
+        "QA Model 2: KVMemNet",
+        "QA Model 2: KVMemNet",
+        "QA Model 2: KVMemNet",
+        "QA Model 2: KVMemNet"
+      ],
+      "child_hotpot_facts": [
+        [
+          "QA Model 2: KVMemNet",
+          0
+        ],
+        [
+          "QA Model 2: KVMemNet",
+          1
+        ],
+        [
+          "QA Model 2: KVMemNet",
+          2
+        ],
+        [
+          "QA Model 2: KVMemNet",
+          3
+        ],
+        [
+          "QA Model 2: KVMemNet",
+          4
+        ],
+        [
+          "QA Model 2: KVMemNet",
+          5
+        ],
+        [
+          "QA Model 2: KVMemNet",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "QA Model 2: KVMemNet",
+      "section": "QA Model 2: KVMemNet",
+      "title_path": "QA Model 2: KVMemNet",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_14",
+      "content": "[Section] Settings\n[source_id=65] In our experiments, we tune model parameters on the development set and report results on the test set. We design experiments from both ranking-based direction and question generation-based direction. The evaluation metric is precision @1 BIBREF17 , which indicates whether the top ranked result is the correct answer. We further report BLEU score BIBREF27 for the question generation approach.\n[source_id=66] We also adapt BiDAF BIBREF10 , a top-performing reading comprehension model on the SQuAD dataset BIBREF0 as a strong baseline. As BiDAF output a span from the input document as the answer to the given question, we adapt it to KBMRC as a ranking model similarly as the approach used in previous research BIBREF28 . We use BiDAF to select an answer span from a corresponding document based on a given question and select the candidate answer that has maximum overlap with the answer span as the final answer.",
+      "score": 4.259825828338826,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_14",
+      "child_source_node_ids": [
+        65,
+        66
+      ],
+      "child_qasper_evidence_texts": [
+        "In our experiments, we tune model parameters on the development set and report results on the test set. We design experiments from both ranking-based direction and question generation-based direction. The evaluation metric is precision @1 BIBREF17 , which indicates whether the top ranked result is the correct answer. We further report BLEU score BIBREF27 for the question generation approach.",
+        "We also adapt BiDAF BIBREF10 , a top-performing reading comprehension model on the SQuAD dataset BIBREF0 as a strong baseline. As BiDAF output a span from the input document as the answer to the given question, we adapt it to KBMRC as a ranking model similarly as the approach used in previous research BIBREF28 . We use BiDAF to select an answer span from a corresponding document based on a given question and select the candidate answer that has maximum overlap with the answer span as the final answer."
+      ],
+      "child_pages": [
+        14,
+        14
+      ],
+      "child_sections": [
+        "Settings",
+        "Settings"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Settings",
+          0
+        ],
+        [
+          "Settings",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_14",
+      "section_id": "Settings",
+      "section": "Settings",
+      "title_path": "Settings",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] QA Model 1: PCNet\n[source_id=20] We follow BIBREF17 , BIBREF18 bordes2014question,dong-EtAl:2015:ACL-IJCNLP1 and develop PCNet, which is short for path- and context- based neural network. In PCNet, candidate answers come from arguments of the document KB, and each candidate answer is represented with its neighboring arguments and predicates as well as its path from the anchor in the document KB. We use a rule-based approach based on string fuzzy match to detect the anchor. Each argument is measured by $\\sum _{i,j}^{}\\mathbb {I}(arg_i, q_j)$ , where $i$ and $j$ iterate across argument words and question words, respectively. $\\mathbb {I}(x,y)$ is an indicator function whose value is 1 if the minimum edit distance between $x$ and $y$ is no more than 1, otherwise it is 0. The arguments linked to the anchor with 1-hop and 2-hop paths are regarded as candidate answers. Since an argument might include multiple words, such as “the popular angry bird game”, we use GRU based RNN to get the vector representation of each argument/predicate. The path representation $v_{p}$ is computed by averaging the vectors of elements in the path. Similarly, we use another RNN to get the vector of each neighboring argument/predicate, and average them to get the context vector $v_{c}$ .\n[source_id=21] We represent the question $q$ using a bidirectional RNN layer based on the GRU unit. The concatenation of the last hidden vectors from both directions is used as the question vector $v_{q}$ . The dot product is used to measure the semantic relevance between the b b question and two types of evidence.\n[source_id=22] $$f_{qa}(q, a) = v_{q}^{T}v_{p} + v_q^{T}v_{c}$$   (Eq. 10)",
+      "score": 3.7489979868136185,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        20,
+        21,
+        22
+      ],
+      "child_qasper_evidence_texts": [
+        "We follow BIBREF17 , BIBREF18 bordes2014question,dong-EtAl:2015:ACL-IJCNLP1 and develop PCNet, which is short for path- and context- based neural network. In PCNet, candidate answers come from arguments of the document KB, and each candidate answer is represented with its neighboring arguments and predicates as well as its path from the anchor in the document KB. We use a rule-based approach based on string fuzzy match to detect the anchor. Each argument is measured by $\\sum _{i,j}^{}\\mathbb {I}(arg_i, q_j)$ , where $i$ and $j$ iterate across argument words and question words, respectively. $\\mathbb {I}(x,y)$ is an indicator function whose value is 1 if the minimum edit distance between $x$ and $y$ is no more than 1, otherwise it is 0. The arguments linked to the anchor with 1-hop and 2-hop paths are regarded as candidate answers. Since an argument might include multiple words, such as “the popular angry bird game”, we use GRU based RNN to get the vector representation of each argument/predicate. The path representation $v_{p}$ is computed by averaging the vectors of elements in the path. Similarly, we use another RNN to get the vector of each neighboring argument/predicate, and average them to get the context vector $v_{c}$ .",
+        "We represent the question $q$ using a bidirectional RNN layer based on the GRU unit. The concatenation of the last hidden vectors from both directions is used as the question vector $v_{q}$ . The dot product is used to measure the semantic relevance between the b b question and two types of evidence.",
+        "$$f_{qa}(q, a) = v_{q}^{T}v_{p} + v_q^{T}v_{c}$$   (Eq. 10)"
+      ],
+      "child_pages": [
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "QA Model 1: PCNet",
+        "QA Model 1: PCNet",
+        "QA Model 1: PCNet"
+      ],
+      "child_hotpot_facts": [
+        [
+          "QA Model 1: PCNet",
+          0
+        ],
+        [
+          "QA Model 1: PCNet",
+          1
+        ],
+        [
+          "QA Model 1: PCNet",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "QA Model 1: PCNet",
+      "section": "QA Model 1: PCNet",
+      "title_path": "QA Model 1: PCNet",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Approach Overview\n[source_id=11] Our framework consists of a question answering model and a question generation model.\n[source_id=12] We implement two question answering models, which directly measure the semantic similarity between questions and candidate answers in the semantic space. First, to make the model's prediction more explainable, we implement a path based QA model PCNet. In this model, to get candidate answers from the triplets based document for a given question. We first retrieve the an “anchor” point $arg1_i$ or $arg2_i$ in the document fact $f_i$ . These anchors are selected based on edit distance between the words in the questions and the arguments. Then we regard all arguments in the 1-hops and 2-hops fact of the anchors as answers. However, the coverage of the candidate answers can be 100% in the model. We then implement a second end-to-end neural model KVMenNet which covers all the answers but with less interpretability. Both models generate a score $f_{qa}(q, a)$ of each candidate answer.\n[source_id=13] We then implement a generation-based model. The motivation to design this model is that we want to associate natural language phrases with knowledge based representation. It takes semantics of a candidate answer as the input and generates a question $\\hat{q}$ . Then a paraphrasing model gives a score $f_{qg}(q,\\hat{q})$ , which is computed between the generated question $\\hat{q}$ and the original question $q$ , as the ranking score.\n[source_id=14] We get the final scores $S(q,a)$ used for ranking as follows.\n[source_id=15] $$S(q,a) = \\lambda f_{qa}(q, a) + (1-\\lambda ) f_{qg}(q,\\hat{q})$$   (Eq. 7)\n[source_id=16] Moreover, we incorporate side information from external KBs into the three models. The details of how we use external KBs to enhance the representation of elements in the document KB will be described in section Incorporating External Knowledge.",
+      "score": 3.709016406392332,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "child_qasper_evidence_texts": [
+        "Our framework consists of a question answering model and a question generation model.",
+        "We implement two question answering models, which directly measure the semantic similarity between questions and candidate answers in the semantic space. First, to make the model's prediction more explainable, we implement a path based QA model PCNet. In this model, to get candidate answers from the triplets based document for a given question. We first retrieve the an “anchor” point $arg1_i$ or $arg2_i$ in the document fact $f_i$ . These anchors are selected based on edit distance between the words in the questions and the arguments. Then we regard all arguments in the 1-hops and 2-hops fact of the anchors as answers. However, the coverage of the candidate answers can be 100% in the model. We then implement a second end-to-end neural model KVMenNet which covers all the answers but with less interpretability. Both models generate a score $f_{qa}(q, a)$ of each candidate answer.",
+        "We then implement a generation-based model. The motivation to design this model is that we want to associate natural language phrases with knowledge based representation. It takes semantics of a candidate answer as the input and generates a question $\\hat{q}$ . Then a paraphrasing model gives a score $f_{qg}(q,\\hat{q})$ , which is computed between the generated question $\\hat{q}$ and the original question $q$ , as the ranking score.",
+        "We get the final scores $S(q,a)$ used for ranking as follows.",
+        "$$S(q,a) = \\lambda f_{qa}(q, a) + (1-\\lambda ) f_{qg}(q,\\hat{q})$$   (Eq. 7)",
+        "Moreover, we incorporate side information from external KBs into the three models. The details of how we use external KBs to enhance the representation of elements in the document KB will be described in section Incorporating External Knowledge."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Approach Overview",
+        "Approach Overview",
+        "Approach Overview",
+        "Approach Overview",
+        "Approach Overview",
+        "Approach Overview"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Approach Overview",
+          0
+        ],
+        [
+          "Approach Overview",
+          1
+        ],
+        [
+          "Approach Overview",
+          2
+        ],
+        [
+          "Approach Overview",
+          3
+        ],
+        [
+          "Approach Overview",
+          4
+        ],
+        [
+          "Approach Overview",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Approach Overview",
+      "section": "Approach Overview",
+      "title_path": "Approach Overview",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] The Question Generation Model\n[source_id=37] In this section, we present the generation model which generates a question based on the semantics of a candidate answer. Afterward, we introduce how our paraphrasing model, which measures the semantic relevance between the generated question and the original question, is pretrained.",
+      "score": 3.3753568768801396,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        37
+      ],
+      "child_qasper_evidence_texts": [
+        "In this section, we present the generation model which generates a question based on the semantics of a candidate answer. Afterward, we introduce how our paraphrasing model, which measures the semantic relevance between the generated question and the original question, is pretrained."
+      ],
+      "child_pages": [
+        8
+      ],
+      "child_sections": [
+        "The Question Generation Model"
+      ],
+      "child_hotpot_facts": [
+        [
+          "The Question Generation Model",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "The Question Generation Model",
+      "section": "The Question Generation Model",
+      "title_path": "The Question Generation Model",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Training and Inference\n[source_id=32] Let $\\mathcal {D} = \\lbrace (q_i, a_i); i = 1,\n\\ldots , |\\mathcal {D}|\\rbrace $ be the training data consisting of questions $q_i$ paired with their correct answer $a_i$ . We train both matching models with a margin-based ranking loss function, which is calculated as follows, where $m$ is the margin (fixed to $0.1$ ) and $\\bar{a}$ is randomly sampled from a set of incorrect candidates $\\bar{\\mathcal {A}}$ .\n[source_id=33] $$ \n\\sum _{i=1}^{|\\mathcal {D}|} \\sum _{\\tiny {\\bar{a} \\in \\bar{\\mathcal {A}}(q_i)}}\n\\max \\lbrace 0, m - S(q_i,a_i) + S(q_i,\\bar{a})\\rbrace ,$$   (Eq. 15)\n[source_id=34] For testing, given a question $q$ , the model predicts the answer based on the following equation, where $ \\mathcal {A}(q)$ is the candidate answer set.\n[source_id=35] $$\\hat{a} = {\\mbox{argmax}}_{a^{\\prime } \\in \\mathcal {A}(q)} S(q,a^{\\prime })$$   (Eq. 16)",
+      "score": 3.3210230311195534,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        32,
+        33,
+        34,
+        35
+      ],
+      "child_qasper_evidence_texts": [
+        "Let $\\mathcal {D} = \\lbrace (q_i, a_i); i = 1,\n\\ldots , |\\mathcal {D}|\\rbrace $ be the training data consisting of questions $q_i$ paired with their correct answer $a_i$ . We train both matching models with a margin-based ranking loss function, which is calculated as follows, where $m$ is the margin (fixed to $0.1$ ) and $\\bar{a}$ is randomly sampled from a set of incorrect candidates $\\bar{\\mathcal {A}}$ .",
+        "$$ \n\\sum _{i=1}^{|\\mathcal {D}|} \\sum _{\\tiny {\\bar{a} \\in \\bar{\\mathcal {A}}(q_i)}}\n\\max \\lbrace 0, m - S(q_i,a_i) + S(q_i,\\bar{a})\\rbrace ,$$   (Eq. 15)",
+        "For testing, given a question $q$ , the model predicts the answer based on the following equation, where $ \\mathcal {A}(q)$ is the candidate answer set.",
+        "$$\\hat{a} = {\\mbox{argmax}}_{a^{\\prime } \\in \\mathcal {A}(q)} S(q,a^{\\prime })$$   (Eq. 16)"
+      ],
+      "child_pages": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Training and Inference",
+        "Training and Inference",
+        "Training and Inference",
+        "Training and Inference"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Training and Inference",
+          0
+        ],
+        [
+          "Training and Inference",
+          1
+        ],
+        [
+          "Training and Inference",
+          2
+        ],
+        [
+          "Training and Inference",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Training and Inference",
+      "section": "Training and Inference",
+      "title_path": "Training and Inference",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] In recent years, there has been an increasing interest in Machine reading comprehension (MRC), which plays a vital role in the assessment of how well a machine could understand natural language. Several datasets BIBREF0 , BIBREF1 , BIBREF2 for machine reading comprehension have been released in recent years and have driven the evolution of powerful neural models. However, much of the research up to now has been dominated by answering questions that can be well solved solved using superficial information, yet struggles to do accurate natural language understanding and reasoning. For example, BIBREF3 jia2017Adversarial show that existing machine learning systems for MRC perform poorly under adversarial evaluation. Recent developments in MRC datasets BIBREF4 , BIBREF5 , BIBREF6 have heightened the need for deep understanding.\n[source_id=5] Knowledge has a pivotal role in accurately understanding and reasoning natural language in MRC. Previous research BIBREF7 , BIBREF8 has established that human reading comprehension requires both words and world knowledge. In this paper, we consider words and world knowledge in the format of triplets (subject, predicate, object). Specifically, we believe the advantages of using knowledge in MRC are three-fold. First, utilizing knowledge in MRC supports reasoning over multiple triplets because a single triplet may not cover the entire question. Multi-hop reasoning is also a long-standing goal in question answering. Second, building a question answering system based on triplet-style knowledge facilitates the interpretability of the decision making process. Triplets organize the document together with KBs as a graph, where a well-designed model such as PCNet, which we will describe in a later section, expressly reveal rationales for their predictions. Third, representing the documents as knowledge allows for ease of accessing and leveraging the knowledge from external/background knowledge because the knowledge representation of a document is easily consistent with both manually curated and automatically extracted KBs.\n[source_id=6] In this paper, we present knowledge based machine reading comprehension, which requires reasoning over triplet-style knowledge involved in a document. However, we find published dataset do not sufficiently support this task. We conduct preliminary exploration on SQuAD BIBREF0 . We use a strong open IE algorithm BIBREF9 to extract triplets from the documents and observe that only 15% of instances have an answer that is exactly the same as the corresponding subject/object in the extracted triplets. To do knowledge-based MRC, We build a new dataset consisting of 40,047 examples for the knowledge based MRC task. The annotation of this dataset is designed so that successfully answering the questions requires understanding and the knowledge involved in a document. Each instance is composed of a question, a set of triplets derived from a document, and the answer.\n[source_id=7] We implement a framework consisting of both a question answering model and a question generation model, both of which take the knowledge extracted from the document as well as relevant facts from an external knowledge base such as Freebase/ProBase/Reverb/NELL. The question answering model gives each candidate answer a score by measuring the semantic relevance between representation and the candidate answer representation in vector space. The question generation model provides each candidate answer with a score by measuring semantic relevance between the question and the generated question based on the semantics of the candidate answer. We implement an MRC model BiDAF BIBREF10 as a baseline for the proposed dataset. To test the scalability of our approach in leveraging external KBs, we use both manually created and automatically extracted KBs, including Freebase BIBREF11 , ProBase BIBREF12 , NELL BIBREF13 and Reverb BIBREF14 . Experiments show that incorporating evidence from external KBs improves both the matching-based and question generation-based approaches. Qualitative analysis shows the advantages and limitations of our approaches, as well as the remaining challenges.",
+      "score": 3.2770443358247414,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "child_qasper_evidence_texts": [
+        "In recent years, there has been an increasing interest in Machine reading comprehension (MRC), which plays a vital role in the assessment of how well a machine could understand natural language. Several datasets BIBREF0 , BIBREF1 , BIBREF2 for machine reading comprehension have been released in recent years and have driven the evolution of powerful neural models. However, much of the research up to now has been dominated by answering questions that can be well solved solved using superficial information, yet struggles to do accurate natural language understanding and reasoning. For example, BIBREF3 jia2017Adversarial show that existing machine learning systems for MRC perform poorly under adversarial evaluation. Recent developments in MRC datasets BIBREF4 , BIBREF5 , BIBREF6 have heightened the need for deep understanding.",
+        "Knowledge has a pivotal role in accurately understanding and reasoning natural language in MRC. Previous research BIBREF7 , BIBREF8 has established that human reading comprehension requires both words and world knowledge. In this paper, we consider words and world knowledge in the format of triplets (subject, predicate, object). Specifically, we believe the advantages of using knowledge in MRC are three-fold. First, utilizing knowledge in MRC supports reasoning over multiple triplets because a single triplet may not cover the entire question. Multi-hop reasoning is also a long-standing goal in question answering. Second, building a question answering system based on triplet-style knowledge facilitates the interpretability of the decision making process. Triplets organize the document together with KBs as a graph, where a well-designed model such as PCNet, which we will describe in a later section, expressly reveal rationales for their predictions. Third, representing the documents as knowledge allows for ease of accessing and leveraging the knowledge from external/background knowledge because the knowledge representation of a document is easily consistent with both manually curated and automatically extracted KBs.",
+        "In this paper, we present knowledge based machine reading comprehension, which requires reasoning over triplet-style knowledge involved in a document. However, we find published dataset do not sufficiently support this task. We conduct preliminary exploration on SQuAD BIBREF0 . We use a strong open IE algorithm BIBREF9 to extract triplets from the documents and observe that only 15% of instances have an answer that is exactly the same as the corresponding subject/object in the extracted triplets. To do knowledge-based MRC, We build a new dataset consisting of 40,047 examples for the knowledge based MRC task. The annotation of this dataset is designed so that successfully answering the questions requires understanding and the knowledge involved in a document. Each instance is composed of a question, a set of triplets derived from a document, and the answer.",
+        "We implement a framework consisting of both a question answering model and a question generation model, both of which take the knowledge extracted from the document as well as relevant facts from an external knowledge base such as Freebase/ProBase/Reverb/NELL. The question answering model gives each candidate answer a score by measuring the semantic relevance between representation and the candidate answer representation in vector space. The question generation model provides each candidate answer with a score by measuring semantic relevance between the question and the generated question based on the semantics of the candidate answer. We implement an MRC model BiDAF BIBREF10 as a baseline for the proposed dataset. To test the scalability of our approach in leveraging external KBs, we use both manually created and automatically extracted KBs, including Freebase BIBREF11 , ProBase BIBREF12 , NELL BIBREF13 and Reverb BIBREF14 . Experiments show that incorporating evidence from external KBs improves both the matching-based and question generation-based approaches. Qualitative analysis shows the advantages and limitations of our approaches, as well as the remaining challenges."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 39,
+      "content": "Our question generation model takes the path between an “anchor” and the candidate answer, and outputs a question. We adopt the sequence to sequence architecture as our basic question generation model due to its effectiveness in natural language generation tasks. The hierarchical encoder and the hierarchical attention mechanism are introduced to take into account the structure of the input facts. Facts from external KBs are conventionally integrated into the model using the same way as described in the matching model.",
+      "qasper_evidence_text": "Our question generation model takes the path between an “anchor” and the candidate answer, and outputs a question. We adopt the sequence to sequence architecture as our basic question generation model due to its effectiveness in natural language generation tasks. The hierarchical encoder and the hierarchical attention mechanism are introduced to take into account the structure of the input facts. Facts from external KBs are conventionally integrated into the model using the same way as described in the matching model.",
+      "source_node_id": 39,
+      "node_id": 39,
+      "paragraph_id": 39,
+      "evidence_id": 39,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_9",
+      "rank": 1,
+      "score": 4.845015512315577,
+      "block_type": "paragraph",
+      "page": 9,
+      "section_id": "Hierarchical seq2seq Generation Model",
+      "section": "Hierarchical seq2seq Generation Model",
+      "title": "Hierarchical seq2seq Generation Model",
+      "hotpot_title": "Hierarchical seq2seq Generation Model",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 37,
+      "content": "In this section, we present the generation model which generates a question based on the semantics of a candidate answer. Afterward, we introduce how our paraphrasing model, which measures the semantic relevance between the generated question and the original question, is pretrained.",
+      "qasper_evidence_text": "In this section, we present the generation model which generates a question based on the semantics of a candidate answer. Afterward, we introduce how our paraphrasing model, which measures the semantic relevance between the generated question and the original question, is pretrained.",
+      "source_node_id": 37,
+      "node_id": 37,
+      "paragraph_id": 37,
+      "evidence_id": 37,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_8",
+      "rank": 6,
+      "score": 3.3753568768801396,
+      "block_type": "paragraph",
+      "page": 8,
+      "section_id": "The Question Generation Model",
+      "section": "The Question Generation Model",
+      "title": "The Question Generation Model",
+      "hotpot_title": "The Question Generation Model",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 2
+    }
+  ],
+  "supporting_block_ids": [
+    39,
+    37
+  ]
+}

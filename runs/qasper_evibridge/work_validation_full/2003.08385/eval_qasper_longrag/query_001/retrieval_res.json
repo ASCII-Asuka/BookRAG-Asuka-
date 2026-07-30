@@ -1,0 +1,565 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] In recent years many datasets have been created for the task of automated stance detection, advancing natural language understanding systems for political science, opinion research and other application areas. Typically, such benchmarks BIBREF0 are composed of short pieces of text commenting on politicians or public issues and are manually annotated with their stance towards a target entity (e.g. Climate Change, or Trump). However, they are limited in scope on multiple levels BIBREF1.\n[source_id=5] First of all, it is questionable how well current stance detection methods perform in a cross-lingual setting, as the multilingual datasets available today are relatively small, and specific to a single target BIBREF2, BIBREF3. Furthermore, specific models tend to be developed for each single target or pair of targets BIBREF4. Concerns have been raised that cross-target performance is often considerably lower than fully supervised performance BIBREF1.\n[source_id=6] In this paper we propose a much larger dataset that combines multilinguality and a multitude of topics and targets. x-stance comprises more than 150 questions concerning Swiss politics and more than 67k answers given in the last decade by candidates running for political office in Switzerland.\n[source_id=7] Questions are available in four languages: English, Swiss Standard German, French, and Italian. The language of a comment depends on the candidate's region of origin.\n[source_id=8] We have extracted the data from the voting advice application Smartvote. On that platform, candidates respond to questions mainly in categorical form (yes / rather yes / rather no / no). They can also submit a free-text comment in order to justify, explain or differentiate their categorical answer. An example is given in Figure FIGREF1.\n[source_id=9] We transform the dataset into a stance detection task by interpreting the question as a natural-language representation of the target, and the commentary as the input to be classified.\n[source_id=10] The dataset is split into a multilingual training set and into multiple test sets to evaluate zero-shot cross-lingual and cross-target transfer. To provide a baseline, we fine-tune a multilingual Bert model BIBREF5 on x-stance. We show that the baseline accuracy is comparable to previous stance detection benchmarks while leaving ample room for improvement. In addition, multilingual Bert can generalize to a degree both cross-lingually and in a cross-target setting.\n[source_id=11] We have made the dataset and the code for reproducing the baseline model publicly available.",
+      "score": 6.952654110998895,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "child_qasper_evidence_texts": [
+        "In recent years many datasets have been created for the task of automated stance detection, advancing natural language understanding systems for political science, opinion research and other application areas. Typically, such benchmarks BIBREF0 are composed of short pieces of text commenting on politicians or public issues and are manually annotated with their stance towards a target entity (e.g. Climate Change, or Trump). However, they are limited in scope on multiple levels BIBREF1.",
+        "First of all, it is questionable how well current stance detection methods perform in a cross-lingual setting, as the multilingual datasets available today are relatively small, and specific to a single target BIBREF2, BIBREF3. Furthermore, specific models tend to be developed for each single target or pair of targets BIBREF4. Concerns have been raised that cross-target performance is often considerably lower than fully supervised performance BIBREF1.",
+        "In this paper we propose a much larger dataset that combines multilinguality and a multitude of topics and targets. x-stance comprises more than 150 questions concerning Swiss politics and more than 67k answers given in the last decade by candidates running for political office in Switzerland.",
+        "Questions are available in four languages: English, Swiss Standard German, French, and Italian. The language of a comment depends on the candidate's region of origin.",
+        "We have extracted the data from the voting advice application Smartvote. On that platform, candidates respond to questions mainly in categorical form (yes / rather yes / rather no / no). They can also submit a free-text comment in order to justify, explain or differentiate their categorical answer. An example is given in Figure FIGREF1.",
+        "We transform the dataset into a stance detection task by interpreting the question as a natural-language representation of the target, and the commentary as the input to be classified.",
+        "The dataset is split into a multilingual training set and into multiple test sets to evaluate zero-shot cross-lingual and cross-target transfer. To provide a baseline, we fine-tune a multilingual Bert model BIBREF5 on x-stance. We show that the baseline accuracy is comparable to previous stance detection benchmarks while leaving ample room for improvement. In addition, multilingual Bert can generalize to a degree both cross-lingually and in a cross-target setting.",
+        "We have made the dataset and the code for reproducing the baseline model publicly available."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ],
+        [
+          "Introduction",
+          6
+        ],
+        [
+          "Introduction",
+          7
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] The x-stance Dataset ::: Data Collection ::: Language Identification\n[source_id=33] As the API does not provide the language of comments, we employed a language identifier to automatically annotate this information. We used the langdetect library BIBREF13. For each responder we classified all the comments jointly, assuming that responders did not switch code during the answering of the questionnaire.\n[source_id=34] We applied the identifier in a two-step approach. In the first run we allowed the identifier to output all 55 languages that it supports out of the box, plus Romansh, the fourth official language in Switzerland. We found that no Romansh comments were detected and that all unexpected outputs were misclassifications of German, French or Italian comments. We further concluded that little or no Swiss German comments are in the dataset: If they were, some of them would have manifested themselves in the form of misclassifications (e.g. as Dutch).\n[source_id=35] In the second run, drawing from these conclusions, we restricted the identifier's output to English, French, German and Italian.",
+      "score": 6.398371782494748,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        33,
+        34,
+        35
+      ],
+      "child_qasper_evidence_texts": [
+        "As the API does not provide the language of comments, we employed a language identifier to automatically annotate this information. We used the langdetect library BIBREF13. For each responder we classified all the comments jointly, assuming that responders did not switch code during the answering of the questionnaire.",
+        "We applied the identifier in a two-step approach. In the first run we allowed the identifier to output all 55 languages that it supports out of the box, plus Romansh, the fourth official language in Switzerland. We found that no Romansh comments were detected and that all unexpected outputs were misclassifications of German, French or Italian comments. We further concluded that little or no Swiss German comments are in the dataset: If they were, some of them would have manifested themselves in the form of misclassifications (e.g. as Dutch).",
+        "In the second run, drawing from these conclusions, we restricted the identifier's output to English, French, German and Italian."
+      ],
+      "child_pages": [
+        8,
+        8,
+        8
+      ],
+      "child_sections": [
+        "The x-stance Dataset ::: Data Collection ::: Language Identification",
+        "The x-stance Dataset ::: Data Collection ::: Language Identification",
+        "The x-stance Dataset ::: Data Collection ::: Language Identification"
+      ],
+      "child_hotpot_facts": [
+        [
+          "The x-stance Dataset ::: Data Collection ::: Language Identification",
+          0
+        ],
+        [
+          "The x-stance Dataset ::: Data Collection ::: Language Identification",
+          1
+        ],
+        [
+          "The x-stance Dataset ::: Data Collection ::: Language Identification",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "The x-stance Dataset ::: Data Collection ::: Language Identification",
+      "section": "The x-stance Dataset ::: Data Collection ::: Language Identification",
+      "title_path": "The x-stance Dataset ::: Data Collection ::: Language Identification",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] The x-stance Dataset ::: Task Definition\n[source_id=22] The input provided by x-stance is two-fold: (A) a natural language question concerning a political issue; (B) a natural language commentary on a specific stance towards the question.\n[source_id=23] The label to be predicted is either `favor' or `against`. This corresponds to a standard established by BIBREF0. However, x-stance differs from that dataset in that it lacks a `neither' class; all comments refer to either a `favor' or an `against` position. The task posed by x-stance is thus a binary classification task.\n[source_id=24] As an evaluation metric we report the macro-average of the F1-score for `favor' and the F1-score for `against', similar to BIBREF9. We use this metric mainly to strengthen comparability with the previous benchmarks.",
+      "score": 5.792553997363449,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        22,
+        23,
+        24
+      ],
+      "child_qasper_evidence_texts": [
+        "The input provided by x-stance is two-fold: (A) a natural language question concerning a political issue; (B) a natural language commentary on a specific stance towards the question.",
+        "The label to be predicted is either `favor' or `against`. This corresponds to a standard established by BIBREF0. However, x-stance differs from that dataset in that it lacks a `neither' class; all comments refer to either a `favor' or an `against` position. The task posed by x-stance is thus a binary classification task.",
+        "As an evaluation metric we report the macro-average of the F1-score for `favor' and the F1-score for `against', similar to BIBREF9. We use this metric mainly to strengthen comparability with the previous benchmarks."
+      ],
+      "child_pages": [
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "The x-stance Dataset ::: Task Definition",
+        "The x-stance Dataset ::: Task Definition",
+        "The x-stance Dataset ::: Task Definition"
+      ],
+      "child_hotpot_facts": [
+        [
+          "The x-stance Dataset ::: Task Definition",
+          0
+        ],
+        [
+          "The x-stance Dataset ::: Task Definition",
+          1
+        ],
+        [
+          "The x-stance Dataset ::: Task Definition",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "The x-stance Dataset ::: Task Definition",
+      "section": "The x-stance Dataset ::: Task Definition",
+      "title_path": "The x-stance Dataset ::: Task Definition",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_23",
+      "content": "[Section] Baseline Experiments ::: How Important is Consistent Language?\n[source_id=84] The default setup preserves horizontal language consistency in that the language of the questions always matches the language of the comments. For example, the Italian test instances are combined with the Italian version of the questions, even though during training the model has only ever seen the German and French versions of the questions.\n[source_id=85] An alternative concept is vertical language consistency, whereby the questions are consistently presented in one language, regardless of the comment. To test whether horizontal or vertical consistency is more helpful, we train and evaluate M-Bert on a dataset variant where all questions are in their English version. We chose English as a lingua franca because it had the largest share of data during the pretraining of M-Bert.\n[source_id=86] The results are shown in Table TABREF39. While the effect is negligible in most settings, the cross-lingual performance clearly increases when all questions are given in English.",
+      "score": 5.545788794888336,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_23",
+      "child_source_node_ids": [
+        84,
+        85,
+        86
+      ],
+      "child_qasper_evidence_texts": [
+        "The default setup preserves horizontal language consistency in that the language of the questions always matches the language of the comments. For example, the Italian test instances are combined with the Italian version of the questions, even though during training the model has only ever seen the German and French versions of the questions.",
+        "An alternative concept is vertical language consistency, whereby the questions are consistently presented in one language, regardless of the comment. To test whether horizontal or vertical consistency is more helpful, we train and evaluate M-Bert on a dataset variant where all questions are in their English version. We chose English as a lingua franca because it had the largest share of data during the pretraining of M-Bert.",
+        "The results are shown in Table TABREF39. While the effect is negligible in most settings, the cross-lingual performance clearly increases when all questions are given in English."
+      ],
+      "child_pages": [
+        23,
+        23,
+        23
+      ],
+      "child_sections": [
+        "Baseline Experiments ::: How Important is Consistent Language?",
+        "Baseline Experiments ::: How Important is Consistent Language?",
+        "Baseline Experiments ::: How Important is Consistent Language?"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Baseline Experiments ::: How Important is Consistent Language?",
+          0
+        ],
+        [
+          "Baseline Experiments ::: How Important is Consistent Language?",
+          1
+        ],
+        [
+          "Baseline Experiments ::: How Important is Consistent Language?",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_23",
+      "section_id": "Baseline Experiments ::: How Important is Consistent Language?",
+      "section": "Baseline Experiments ::: How Important is Consistent Language?",
+      "title_path": "Baseline Experiments ::: How Important is Consistent Language?",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Related Work ::: Multi-Target Stance Detection\n[source_id=16] The SemEval-2016 task on detecting stance in tweets BIBREF9 offers data concerning multiple targets (Atheism, Climate Change, Feminism, Hillary Clinton, and Abortion). In the supervised subtask A, participants tended to develop a target-specific model for each of those targets. In subtask B cross-target transfer to the target “Donald Trump” was tested, for which no annotated training data were provided. While this required the development of more universal models, their performance was generally much lower.\n[source_id=17] BIBREF4 introduced a multi-target stance dataset which provides two targets per instance. For example, a model designed in this framework is supposed to simultaneously classify a tweet with regard to Clinton and with regard to Trump. While in theory the framework allows for more than two targets, it is still restricted to a finite and clearly defined set of targets. It focuses on modeling the dependencies of multiple targets within the same text sample, while our approach focuses on learning stance detection from many samples with many different targets.",
+      "score": 5.250527838443952,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        16,
+        17
+      ],
+      "child_qasper_evidence_texts": [
+        "The SemEval-2016 task on detecting stance in tweets BIBREF9 offers data concerning multiple targets (Atheism, Climate Change, Feminism, Hillary Clinton, and Abortion). In the supervised subtask A, participants tended to develop a target-specific model for each of those targets. In subtask B cross-target transfer to the target “Donald Trump” was tested, for which no annotated training data were provided. While this required the development of more universal models, their performance was generally much lower.",
+        "BIBREF4 introduced a multi-target stance dataset which provides two targets per instance. For example, a model designed in this framework is supposed to simultaneously classify a tweet with regard to Clinton and with regard to Trump. While in theory the framework allows for more than two targets, it is still restricted to a finite and clearly defined set of targets. It focuses on modeling the dependencies of multiple targets within the same text sample, while our approach focuses on learning stance detection from many samples with many different targets."
+      ],
+      "child_pages": [
+        3,
+        3
+      ],
+      "child_sections": [
+        "Related Work ::: Multi-Target Stance Detection",
+        "Related Work ::: Multi-Target Stance Detection"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work ::: Multi-Target Stance Detection",
+          0
+        ],
+        [
+          "Related Work ::: Multi-Target Stance Detection",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Related Work ::: Multi-Target Stance Detection",
+      "section": "Related Work ::: Multi-Target Stance Detection",
+      "title_path": "Related Work ::: Multi-Target Stance Detection",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_25",
+      "content": "[Section] Baseline Experiments ::: How Important are Spelled-Out Targets?\n[source_id=98] Finally we test whether the target really needs to be represented by natural language (e.g. “Do you support X?”). Namely, an alternative is to represent the target with a trainable embedding instead of a question.\n[source_id=99] In order to fit target embeddings smoothly into our architecture, we represent each target type with a different reserved symbol from the M-Bert vocabulary. Segment A is then set to this symbol instead of a natural language question.\n[source_id=100] The results for this experiment are listed in the bottom row of Table TABREF39. An M-Bert model that learns target embeddings instead of encoding a question performs clearly worse in the supervised and cross-lingual settings. From this we conclude that spelled-out natural language questions provide important linguistic detail that can help in stance detection.",
+      "score": 5.1472065951255725,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_25",
+      "child_source_node_ids": [
+        98,
+        99,
+        100
+      ],
+      "child_qasper_evidence_texts": [
+        "Finally we test whether the target really needs to be represented by natural language (e.g. “Do you support X?”). Namely, an alternative is to represent the target with a trainable embedding instead of a question.",
+        "In order to fit target embeddings smoothly into our architecture, we represent each target type with a different reserved symbol from the M-Bert vocabulary. Segment A is then set to this symbol instead of a natural language question.",
+        "The results for this experiment are listed in the bottom row of Table TABREF39. An M-Bert model that learns target embeddings instead of encoding a question performs clearly worse in the supervised and cross-lingual settings. From this we conclude that spelled-out natural language questions provide important linguistic detail that can help in stance detection."
+      ],
+      "child_pages": [
+        25,
+        25,
+        25
+      ],
+      "child_sections": [
+        "Baseline Experiments ::: How Important are Spelled-Out Targets?",
+        "Baseline Experiments ::: How Important are Spelled-Out Targets?",
+        "Baseline Experiments ::: How Important are Spelled-Out Targets?"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Baseline Experiments ::: How Important are Spelled-Out Targets?",
+          0
+        ],
+        [
+          "Baseline Experiments ::: How Important are Spelled-Out Targets?",
+          1
+        ],
+        [
+          "Baseline Experiments ::: How Important are Spelled-Out Targets?",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_25",
+      "section_id": "Baseline Experiments ::: How Important are Spelled-Out Targets?",
+      "section": "Baseline Experiments ::: How Important are Spelled-Out Targets?",
+      "title_path": "Baseline Experiments ::: How Important are Spelled-Out Targets?",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_24",
+      "content": "[Section] Baseline Experiments ::: How Important are the Segments?\n[source_id=88] In order to rule out that only the questions or only the comments are necessary to optimally solve the task, we conduct some additional experiments:\n[source_id=89] Only use a single segment containing the comment, removing the questions from the training and test data (missing questions).\n[source_id=90] Only use the question and remove the comment (missing comments).\n[source_id=91] In both cases the performance decreases across all evaluation settings (Table TABREF39). The loss in performance is much higher when comments are missing, indicating that the comments contain the most important information about stance. As can be expected, the score achieved without comments is only slightly different from the target-wise majority class baseline.\n[source_id=92] But there is also a loss in performance when the questions are missing, which underlines the importance of pairing both pieces of text. The effect of missing questions is especially strong in the supervised and cross-lingual settings. To illustrate this, we provide in Table TABREF48 some examples of comments that occur with multiple different targets in the training set. Those examples can explain why the target can be essential for disambiguating a stance detection problem. On the other hand, the effect of omitting the questions is less pronounced in the cross-target settings.\n[source_id=93] The above single-segment experiments tell us that both the comment and the question provide crucial information. But it is possible that the M-Bert model, even though trained on both segments, mainly looks at a single segment at test time. To rule this out, we probe the model with randomized data at test time:\n[source_id=94] Test the model on versions of the test sets where the comments remain in place but the questions are shuffled randomly (random questions). We make sure that the random questions come from the same test set and language as the original questions.\n[source_id=95] Keep the questions in place and randomize the comments (random comments). Again we shuffle the comments only within test set boundaries.\n[source_id=96] The results in Table TABREF39 show that the performance of the model decreases in both cases, confirming that it learns to take into account both segments.",
+      "score": 4.934375834213074,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_24",
+      "child_source_node_ids": [
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96
+      ],
+      "child_qasper_evidence_texts": [
+        "In order to rule out that only the questions or only the comments are necessary to optimally solve the task, we conduct some additional experiments:",
+        "Only use a single segment containing the comment, removing the questions from the training and test data (missing questions).",
+        "Only use the question and remove the comment (missing comments).",
+        "In both cases the performance decreases across all evaluation settings (Table TABREF39). The loss in performance is much higher when comments are missing, indicating that the comments contain the most important information about stance. As can be expected, the score achieved without comments is only slightly different from the target-wise majority class baseline.",
+        "But there is also a loss in performance when the questions are missing, which underlines the importance of pairing both pieces of text. The effect of missing questions is especially strong in the supervised and cross-lingual settings. To illustrate this, we provide in Table TABREF48 some examples of comments that occur with multiple different targets in the training set. Those examples can explain why the target can be essential for disambiguating a stance detection problem. On the other hand, the effect of omitting the questions is less pronounced in the cross-target settings.",
+        "The above single-segment experiments tell us that both the comment and the question provide crucial information. But it is possible that the M-Bert model, even though trained on both segments, mainly looks at a single segment at test time. To rule this out, we probe the model with randomized data at test time:",
+        "Test the model on versions of the test sets where the comments remain in place but the questions are shuffled randomly (random questions). We make sure that the random questions come from the same test set and language as the original questions.",
+        "Keep the questions in place and randomize the comments (random comments). Again we shuffle the comments only within test set boundaries.",
+        "The results in Table TABREF39 show that the performance of the model decreases in both cases, confirming that it learns to take into account both segments."
+      ],
+      "child_pages": [
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24
+      ],
+      "child_sections": [
+        "Baseline Experiments ::: How Important are the Segments?",
+        "Baseline Experiments ::: How Important are the Segments?",
+        "Baseline Experiments ::: How Important are the Segments?",
+        "Baseline Experiments ::: How Important are the Segments?",
+        "Baseline Experiments ::: How Important are the Segments?",
+        "Baseline Experiments ::: How Important are the Segments?",
+        "Baseline Experiments ::: How Important are the Segments?",
+        "Baseline Experiments ::: How Important are the Segments?",
+        "Baseline Experiments ::: How Important are the Segments?"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Baseline Experiments ::: How Important are the Segments?",
+          0
+        ],
+        [
+          "Baseline Experiments ::: How Important are the Segments?",
+          1
+        ],
+        [
+          "Baseline Experiments ::: How Important are the Segments?",
+          2
+        ],
+        [
+          "Baseline Experiments ::: How Important are the Segments?",
+          3
+        ],
+        [
+          "Baseline Experiments ::: How Important are the Segments?",
+          4
+        ],
+        [
+          "Baseline Experiments ::: How Important are the Segments?",
+          5
+        ],
+        [
+          "Baseline Experiments ::: How Important are the Segments?",
+          6
+        ],
+        [
+          "Baseline Experiments ::: How Important are the Segments?",
+          7
+        ],
+        [
+          "Baseline Experiments ::: How Important are the Segments?",
+          8
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_24",
+      "section_id": "Baseline Experiments ::: How Important are the Segments?",
+      "section": "Baseline Experiments ::: How Important are the Segments?",
+      "title_path": "Baseline Experiments ::: How Important are the Segments?",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] We extract a large-scale stance detection dataset from comments written by candidates of elections in Switzerland. The dataset consists of German, French and Italian text, allowing for a cross-lingual evaluation of stance detection. It contains 67 000 comments on more than 150 political issues (targets). Unlike stance detection models that have specific target issues, we use the dataset to train a single model on all the issues. To make learning across targets possible, we prepend to each instance a natural question that represents the target (e.g.\"Do you support X?\"). Baseline results from multilingual BERT show that zero-shot cross-lingual and cross-target transfer of stance detection is moderately successful with this approach.",
+      "score": 3.630674058531448,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "We extract a large-scale stance detection dataset from comments written by candidates of elections in Switzerland. The dataset consists of German, French and Italian text, allowing for a cross-lingual evaluation of stance detection. It contains 67 000 comments on more than 150 political issues (targets). Unlike stance detection models that have specific target issues, we use the dataset to train a single model on all the issues. To make learning across targets possible, we prepend to each instance a natural question that represents the target (e.g.\"Do you support X?\"). Baseline results from multilingual BERT show that zero-shot cross-lingual and cross-target transfer of stance detection is moderately successful with this approach."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 4,
+      "content": "In recent years many datasets have been created for the task of automated stance detection, advancing natural language understanding systems for political science, opinion research and other application areas. Typically, such benchmarks BIBREF0 are composed of short pieces of text commenting on politicians or public issues and are manually annotated with their stance towards a target entity (e.g. Climate Change, or Trump). However, they are limited in scope on multiple levels BIBREF1.",
+      "qasper_evidence_text": "In recent years many datasets have been created for the task of automated stance detection, advancing natural language understanding systems for political science, opinion research and other application areas. Typically, such benchmarks BIBREF0 are composed of short pieces of text commenting on politicians or public issues and are manually annotated with their stance towards a target entity (e.g. Climate Change, or Trump). However, they are limited in scope on multiple levels BIBREF1.",
+      "source_node_id": 4,
+      "node_id": 4,
+      "paragraph_id": 4,
+      "evidence_id": 4,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 1,
+      "score": 6.952654110998895,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 10,
+      "content": "The dataset is split into a multilingual training set and into multiple test sets to evaluate zero-shot cross-lingual and cross-target transfer. To provide a baseline, we fine-tune a multilingual Bert model BIBREF5 on x-stance. We show that the baseline accuracy is comparable to previous stance detection benchmarks while leaving ample room for improvement. In addition, multilingual Bert can generalize to a degree both cross-lingually and in a cross-target setting.",
+      "qasper_evidence_text": "The dataset is split into a multilingual training set and into multiple test sets to evaluate zero-shot cross-lingual and cross-target transfer. To provide a baseline, we fine-tune a multilingual Bert model BIBREF5 on x-stance. We show that the baseline accuracy is comparable to previous stance detection benchmarks while leaving ample room for improvement. In addition, multilingual Bert can generalize to a degree both cross-lingually and in a cross-target setting.",
+      "source_node_id": 10,
+      "node_id": 10,
+      "paragraph_id": 10,
+      "evidence_id": 10,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 1,
+      "score": 6.952654110998895,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 6,
+      "hotpot_sent_id": 6,
+      "supporting_rank": 2
+    },
+    {
+      "id": 84,
+      "content": "The default setup preserves horizontal language consistency in that the language of the questions always matches the language of the comments. For example, the Italian test instances are combined with the Italian version of the questions, even though during training the model has only ever seen the German and French versions of the questions.",
+      "qasper_evidence_text": "The default setup preserves horizontal language consistency in that the language of the questions always matches the language of the comments. For example, the Italian test instances are combined with the Italian version of the questions, even though during training the model has only ever seen the German and French versions of the questions.",
+      "source_node_id": 84,
+      "node_id": 84,
+      "paragraph_id": 84,
+      "evidence_id": 84,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_23",
+      "rank": 4,
+      "score": 5.545788794888336,
+      "block_type": "paragraph",
+      "page": 23,
+      "section_id": "Baseline Experiments ::: How Important is Consistent Language?",
+      "section": "Baseline Experiments ::: How Important is Consistent Language?",
+      "title": "Baseline Experiments ::: How Important is Consistent Language?",
+      "hotpot_title": "Baseline Experiments ::: How Important is Consistent Language?",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 3
+    }
+  ],
+  "supporting_block_ids": [
+    4,
+    10,
+    84
+  ]
+}

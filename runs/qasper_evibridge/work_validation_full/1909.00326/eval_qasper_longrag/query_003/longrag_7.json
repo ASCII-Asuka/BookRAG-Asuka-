@@ -1,0 +1,70 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Approach ::: Integrated Gradients\n[source_id=28] In this work, we resort to a gradient-based method, integrated gradients BIBREF9 (IG), which was originally proposed to attribute the model predictions to input features. It exploits the handy model gradient information by integrating first-order derivatives. IG is implementation invariant and does not require neural models to be differentiable or smooth, thereby is suitable for complex neural networks like Transformer. In this work, we use IG to estimate the word importance in an input sentence precisely.\n[source_id=29] Formally, let $\\textbf {x} = (x_1, ..., x_M)$ be the input sentence and $\\textbf {x}^{\\prime }$ be a baseline input. $F$ is a well-trained NMT model, and $F(\\textbf {x})_n$ is the model output (i.e., $P(y_n|\\textbf {y}_{<n},\\textbf {x})$) at time step $n$. Integrated gradients is then defined as the integral of gradients along the straightline path from the baseline $\\textbf {x}^{\\prime }$ to the input $\\textbf {x}$. In detail, the contribution of the $m^{th}$ word in $\\textbf {x}$ to the prediction of $F(\\textbf {x})_n$ is defined as follows.\n[source_id=30] where $\\frac{\\partial {F(\\textbf {x})_n}}{\\partial {\\textbf {x}_m}}$ is the gradient of $F(\\textbf {x})_n$ w.r.t. the embedding of the $m^{th}$ word. In this paper, as suggested, the baseline input $\\textbf {x}^{\\prime }$ is set as a sequence of zero embeddings that has the same sequence length $M$. In this way, we can compute the contribution of a specific input word to a designated output word. Since the above formula is intractable for deep neural models, we approximate it by summing the gradients along a multi-step path from baseline $\\textbf {x}^{\\prime }$ to the input x.\n[source_id=31] where $S$ denotes the number of steps that are uniformly distributed along the path. The IG will be more accurate if a larger S is used. In our preliminary experiments, we varied the steps and found 300 steps yielding fairly good performance.\n[source_id=32] Following the formula, we can calculate the contribution of every input word makes to every output word, forming a contribution matrix of size $M \\times N$, where $N$ is the output sentence length. Given the contribution matrix, we can obtain the word importance of each input word to the entire output sentence. To this end, for each input word, we first aggregate its contribution values to all output words by the sum operation, and then normalize all sums through the Softmax function. Figure FIGREF13 illustrates an example of the calculated word importance and the contribution matrix, where an English sentence is translated into a French sentence using the Transformer model. A negative contribution value indicates that the input word has negative effects on the output word.",
+  "score": 4.339522127348649,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "child_qasper_evidence_texts": [
+    "In this work, we resort to a gradient-based method, integrated gradients BIBREF9 (IG), which was originally proposed to attribute the model predictions to input features. It exploits the handy model gradient information by integrating first-order derivatives. IG is implementation invariant and does not require neural models to be differentiable or smooth, thereby is suitable for complex neural networks like Transformer. In this work, we use IG to estimate the word importance in an input sentence precisely.",
+    "Formally, let $\\textbf {x} = (x_1, ..., x_M)$ be the input sentence and $\\textbf {x}^{\\prime }$ be a baseline input. $F$ is a well-trained NMT model, and $F(\\textbf {x})_n$ is the model output (i.e., $P(y_n|\\textbf {y}_{<n},\\textbf {x})$) at time step $n$. Integrated gradients is then defined as the integral of gradients along the straightline path from the baseline $\\textbf {x}^{\\prime }$ to the input $\\textbf {x}$. In detail, the contribution of the $m^{th}$ word in $\\textbf {x}$ to the prediction of $F(\\textbf {x})_n$ is defined as follows.",
+    "where $\\frac{\\partial {F(\\textbf {x})_n}}{\\partial {\\textbf {x}_m}}$ is the gradient of $F(\\textbf {x})_n$ w.r.t. the embedding of the $m^{th}$ word. In this paper, as suggested, the baseline input $\\textbf {x}^{\\prime }$ is set as a sequence of zero embeddings that has the same sequence length $M$. In this way, we can compute the contribution of a specific input word to a designated output word. Since the above formula is intractable for deep neural models, we approximate it by summing the gradients along a multi-step path from baseline $\\textbf {x}^{\\prime }$ to the input x.",
+    "where $S$ denotes the number of steps that are uniformly distributed along the path. The IG will be more accurate if a larger S is used. In our preliminary experiments, we varied the steps and found 300 steps yielding fairly good performance.",
+    "Following the formula, we can calculate the contribution of every input word makes to every output word, forming a contribution matrix of size $M \\times N$, where $N$ is the output sentence length. Given the contribution matrix, we can obtain the word importance of each input word to the entire output sentence. To this end, for each input word, we first aggregate its contribution values to all output words by the sum operation, and then normalize all sums through the Softmax function. Figure FIGREF13 illustrates an example of the calculated word importance and the contribution matrix, where an English sentence is translated into a French sentence using the Transformer model. A negative contribution value indicates that the input word has negative effects on the output word."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Approach ::: Integrated Gradients",
+    "Approach ::: Integrated Gradients",
+    "Approach ::: Integrated Gradients",
+    "Approach ::: Integrated Gradients",
+    "Approach ::: Integrated Gradients"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Approach ::: Integrated Gradients",
+      0
+    ],
+    [
+      "Approach ::: Integrated Gradients",
+      1
+    ],
+    [
+      "Approach ::: Integrated Gradients",
+      2
+    ],
+    [
+      "Approach ::: Integrated Gradients",
+      3
+    ],
+    [
+      "Approach ::: Integrated Gradients",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Approach ::: Integrated Gradients",
+  "section": "Approach ::: Integrated Gradients",
+  "title_path": "Approach ::: Integrated Gradients",
+  "block_type": "long_unit"
+}

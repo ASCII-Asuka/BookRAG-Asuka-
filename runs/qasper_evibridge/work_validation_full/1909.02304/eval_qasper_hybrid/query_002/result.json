@@ -1,0 +1,81 @@
+{
+  "question": "What is the strong baseline?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "Conditional Copy (CC) model "
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "Table TABREF23 displays the automatic evaluation results on both development and test set. We chose Conditional Copy (CC) model as our baseline, which is the best model in Wiseman. We included reported scores with updated IE model by Puduppully and our implementation's result on CC in this paper. Also, we compared our models with other existing works on this dataset including OpATT BIBREF6 and Neural Content Planning with conditional copy (NCP+CC) BIBREF4. In addition, we implemented three other hierarchical encoders that encoded tables' row dimension information in both record-level and row-level to compare with the hierarchical structure of encoder in our model. The decoder was equipped with dual attention BIBREF9. The one with LSTM cell is similar to the one in N18-2097 with 1 layer from {1,2,3}. The one with CNN cell BIBREF10 has kernel width 3 from {3, 5} and 10 layer from {5,10,15,20}. The one with transformer-style encoder (MHSA) BIBREF11 has 8 head from {8, 10} and 5 layer from {2,3,4,5,6}. The heads and layers mentioned above were for both record-level encoder and row-level encoder respectively. The self-attention (SA) cell we used, as described in Section SECREF3, achieved better overall performance in terms of F1% of CS, CO and BLEU among the hierarchical encoders. Also we implemented a template system same as the one used in Wiseman which outputted eight sentences: an introductory sentence (two teams' points and who win), six top players' statistics (ranked by their points) and a conclusion sentence. We refer the readers to Wiseman's paper for more detailed information on templates. The gold reference's result is also included in Table TABREF23. Overall, our model performs better than other neural models on both development and test set in terms of RG's P%, F1% score of CS, CO and BLEU, indicating our model's clear improvement on generating high-fidelity, informative and fluent texts. Also, our model with three dimension representations outperforms hierarchical encoders with only row dimension representation on development set. This indicates that cell and time dimension representation are important in representing the tables. Compared to reported baseline result in Wiseman, we achieved improvement of $22.27\\%$ in terms of RG, $26.84\\%$ in terms of CS F1%, $35.28\\%$ in terms of CO and $18.75\\%$ in terms of BLEU on test set. Unsurprisingly, template system achieves best on RG P% and CS R% due to the included domain knowledge. Also, the high RG # and low CS P% indicates that template will include vast information while many of them are deemed redundant. In addition, the low CO and low BLEU indicates that the rigid structure of the template will produce texts that aren't as adaptive to the given tables and natural as those produced by neural models. Also, we conducted ablation study on our model to evaluate each component's contribution on development set. Based on the results, the absence of row-level encoder hurts our model's performance across all metrics especially the content selection ability."
+      ],
+      "evidence_block_ids": [
+        38
+      ],
+      "evidence_paragraph_ids": [
+        38
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "delayed copy model (DEL)",
+        " template system (TEM)",
+        "conditional copy (CC)",
+        "NCP+CC (NCP)"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "Row, column and time dimension information are important to the modeling of tables because subtracting any of them will result in performance drop. Also, position embedding is critical when modeling time dimension information according to the results. In addition, record fusion gate plays an important role because BLEU, CO, RG P% and CS P% drop significantly after subtracting it from full model. Results show that each component in the model contributes to the overall performance. In addition, we compare our model with delayed copy model (DEL) BIBREF12 along with gold text, template system (TEM), conditional copy (CC) BIBREF2 and NCP+CC (NCP) BIBREF4. Li's model generate a template at first and then fill in the slots with delayed copy mechanism. Since its result in Li's paper was evaluated by IE model trained by Wiseman and “relexicalization” by Li, we adopted the corresponding IE model and re-implement “relexicalization” as suggested by Li for fair comparison. Please note that CC's evaluation results via our re-implemented “relexicalization” is comparable to the reported result in Li. We applied them on models other than DEL as shown in Table TABREF28 and report DEL's result from BIBREF12's paper. It shows that our model outperform Li's model significantly across all automatic evaluation metrics in Table TABREF28."
+      ],
+      "evidence_block_ids": [
+        39
+      ],
+      "evidence_paragraph_ids": [
+        39
+      ]
+    }
+  ],
+  "doc_uuid": "1909.02304",
+  "doc_path": "qasper://1909.02304",
+  "qasper_question_id": "03c967763e51ef2537793db7902e2c9c17e43e95",
+  "title": "Table-to-Text Generation with Effective Hierarchical Encoder on Three Dimensions (Row, Column and Time)",
+  "evidence_block_ids": [
+    38,
+    39
+  ],
+  "evidence_paragraph_ids": [
+    38,
+    39
+  ],
+  "output": "{\n  \"answer_short\": \"Conditional Copy (CC) model\",\n  \"answer_rationale\": \"Text 3 explicitly states: 'We chose Conditional Copy (CC) model as our baseline, which is the best model in Wiseman.' This directly identifies the strong baseline used in the experiments.\"\n}",
+  "retrieved_node_ids": [
+    46,
+    43,
+    38,
+    16,
+    34,
+    10,
+    42,
+    5,
+    24,
+    44
+  ],
+  "answer_short": "Conditional Copy (CC) model",
+  "answer_rationale": "Text 3 explicitly states: 'We chose Conditional Copy (CC) model as our baseline, which is the best model in Wiseman.' This directly identifies the strong baseline used in the experiments.",
+  "supporting_block_ids": [
+    46,
+    43,
+    38,
+    16,
+    34,
+    10,
+    42,
+    5,
+    24,
+    44
+  ]
+}

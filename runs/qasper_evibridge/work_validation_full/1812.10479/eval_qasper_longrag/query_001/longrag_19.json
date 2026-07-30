@@ -1,0 +1,133 @@
+{
+  "id": "longrag_19",
+  "content": "[Section] Stocks universe result\n[source_id=214] In order to evaluate the contributions of each component of our neural model described in sub:HAN and the effect of using textual data to predict the volatility, we report our results using the following baselines:\n[source_id=215] - News (unimodal price only): This baseline completely ablates (i.e. removes) any architecture related to the news mode, considering only the price encoding and the stock embedding components. Using this ablation we aim to evaluate the influence of news to the volatility prediction problem.\n[source_id=216] + News (End-to-end Sentence Encoders) - NRA: This baseline ablates our proposed new relevance attention (NRA) component, and instead, makes use of the same Daily Averaging method in BIBREF26 , BIBREF27 , where all fixed-sized headline representations on a given day are averaged without taking into account the relevance of each news. We evaluate this baseline for both BiLSTM attention (Att) and BiLSTM max-pooling (MP) sentence encoders. Here, our goal is to asses the true contribution of our NRA component in the case SOTA sentence encoders are taken into account.\n[source_id=217] + News (End-to-End W-L Att Sentence Encoder) + NRA: The Word-Level Attention (W-L Att) sentence encoder implements an attention mechanism directly on top of word embeddings, and, as such, does not consider the order of words in a sentence. This baseline complements the previous one, i.e. it evaluates the influence of the sentence encoder when our full specification is considered.\n[source_id=218] + News (TL Sentence Encoders) + NRA: Makes use of sentence encoders of our two auxiliary TL tasks as fixed features. This baseline aims to address the following questions, namely: What dataset and models are more suitable to transfer to our specific volatility forecasting problem; How End-to-End models, which are trained on top of word embeddings, perform compared to sentence encoders transferred from other tasks.\n[source_id=219] tbl:comparativeallsectors summarizes the test scores for the ablations discussed above. Our best model is the + News (BiLSTM Att) + NRA, which is trained end-to-end and uses our full architecture. The second best model, i.e. + News (BiLSTM MP) + NRA, ranks slightly lower and only differs form the best model in terms of the sentence encoder. The former sentence encoder uses an attention layer (subsec:bilstminneratt) and the the last a max-pooling layer (subsec:bilstmmaxpool), where both layers are placed on top of the LSTM hidden states of each word.\n[source_id=220] Importantly, our experiments show that using news and price (multimodal) to predict the volatility improves the scores by 11% (MSE) and 9% (MAE) when compared with the – News (price only unimodal) model that considers only price features as explanatory variables.\n[source_id=221] When comparing the performance of End-to-End models and the TL auxiliary tasks the following can be observed: The end-to-end models trained with the two SOTA sentence encoders perform better than transferring sentence encoder from both auxiliary tasks. However, our experiments show that the same does not hold for models trained end-to-end relying on the simpler WL-Att sentence encoder, which ignores the order of words in a sentence. In other words, considering the appropriate TL task, it is preferable to transfer a SOTA sentence encoder trained on a larger dataset than learning a less robust sentence encoder in an end-to-end fashion. Moreover, initially, we thought that being the RCV1 a financial domain corpus it would demonstrate a superior performance when compared to the SNLI dataset. Still, the SNLI transfers better than RCV1. We hypothesize that the text categorization task (RCV1 dataset) is not able to capture complex sentence structures at the same level required to perform natural language inference. Particularly to the volatility forecasting problem, our TL results corroborates the same findings in BIBREF17 , where it was shown that SNLI dataset attains the best sentence encoding for a broad range of pure NLP tasks, including, among other, text categorization and sentiment analysis.\n[source_id=222] Significantly, experimental results in tbl:comparativeallsectors clearly demonstrate that our proposed news relevance attention (NRA) outperforms the News Averaging method proposed in previous studies BIBREF26 , BIBREF27 . Even when evaluating our NRA component in conjunction with the more elementary W-L Att sentence encoder it surpass the results of sophisticated sentence encoder using a News Averaging approach. In other words, our results strongly points to the advantage of discriminating noisy from impacting news and the effectiveness of learning to attend the most relevant news.\n[source_id=223] Having analyzed our best model, we now turn to its comparative performance with respect to the widely regarded GARCH(1,1) model described in sec:GARCH.\n[source_id=224] We asses our model performance relative to GARCH(1,1) using standard loss metrics (MSE and MAE) and the regression-based accuracy specified in eq:regressionloss and measured in terms of the coefficient of determination $R^2$ . In addition, we evaluate our model across two different volatility proxies: Garman-Klass ( $\\widehat{\\sigma _{GK}}$ ) (eq:volgk) and Parkinson ( $\\widehat{\\sigma _{PK}}$ ) (eq:volpk). We note that, as reviewed in sub:evalution, these two volatility proxies are statically efficient and proper estimators of the next day volatility.\n[source_id=225] tbl:garchallsectors reports the comparative performance among our best Price + News model (+ News BiLSTM (MP) + NRA), our Price only (unimodal) model and GARCH(1,1). The results clearly demonstrate the superiority of our model, being more accurate than GRACH for both volatility proxies. We note that evaluating the GARCH(1,1) model relying on standard MSE and MAE error metrics should be taken with a grain of salt. BIBREF35 provides the background theory and arguments supporting $R^2$ as the metric of choice to evaluate the predictive power of a volatility model. In any case, the outperformance or our model with respect to GARCH(1,1) permeates all three metrics, name $R^2$ , $MSE$ and $MAE$ .",
+  "score": 4.2455824159283075,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_19",
+  "child_source_node_ids": [
+    214,
+    215,
+    216,
+    217,
+    218,
+    219,
+    220,
+    221,
+    222,
+    223,
+    224,
+    225
+  ],
+  "child_qasper_evidence_texts": [
+    "In order to evaluate the contributions of each component of our neural model described in sub:HAN and the effect of using textual data to predict the volatility, we report our results using the following baselines:",
+    "- News (unimodal price only): This baseline completely ablates (i.e. removes) any architecture related to the news mode, considering only the price encoding and the stock embedding components. Using this ablation we aim to evaluate the influence of news to the volatility prediction problem.",
+    "+ News (End-to-end Sentence Encoders) - NRA: This baseline ablates our proposed new relevance attention (NRA) component, and instead, makes use of the same Daily Averaging method in BIBREF26 , BIBREF27 , where all fixed-sized headline representations on a given day are averaged without taking into account the relevance of each news. We evaluate this baseline for both BiLSTM attention (Att) and BiLSTM max-pooling (MP) sentence encoders. Here, our goal is to asses the true contribution of our NRA component in the case SOTA sentence encoders are taken into account.",
+    "+ News (End-to-End W-L Att Sentence Encoder) + NRA: The Word-Level Attention (W-L Att) sentence encoder implements an attention mechanism directly on top of word embeddings, and, as such, does not consider the order of words in a sentence. This baseline complements the previous one, i.e. it evaluates the influence of the sentence encoder when our full specification is considered.",
+    "+ News (TL Sentence Encoders) + NRA: Makes use of sentence encoders of our two auxiliary TL tasks as fixed features. This baseline aims to address the following questions, namely: What dataset and models are more suitable to transfer to our specific volatility forecasting problem; How End-to-End models, which are trained on top of word embeddings, perform compared to sentence encoders transferred from other tasks.",
+    "tbl:comparativeallsectors summarizes the test scores for the ablations discussed above. Our best model is the + News (BiLSTM Att) + NRA, which is trained end-to-end and uses our full architecture. The second best model, i.e. + News (BiLSTM MP) + NRA, ranks slightly lower and only differs form the best model in terms of the sentence encoder. The former sentence encoder uses an attention layer (subsec:bilstminneratt) and the the last a max-pooling layer (subsec:bilstmmaxpool), where both layers are placed on top of the LSTM hidden states of each word.",
+    "Importantly, our experiments show that using news and price (multimodal) to predict the volatility improves the scores by 11% (MSE) and 9% (MAE) when compared with the – News (price only unimodal) model that considers only price features as explanatory variables.",
+    "When comparing the performance of End-to-End models and the TL auxiliary tasks the following can be observed: The end-to-end models trained with the two SOTA sentence encoders perform better than transferring sentence encoder from both auxiliary tasks. However, our experiments show that the same does not hold for models trained end-to-end relying on the simpler WL-Att sentence encoder, which ignores the order of words in a sentence. In other words, considering the appropriate TL task, it is preferable to transfer a SOTA sentence encoder trained on a larger dataset than learning a less robust sentence encoder in an end-to-end fashion. Moreover, initially, we thought that being the RCV1 a financial domain corpus it would demonstrate a superior performance when compared to the SNLI dataset. Still, the SNLI transfers better than RCV1. We hypothesize that the text categorization task (RCV1 dataset) is not able to capture complex sentence structures at the same level required to perform natural language inference. Particularly to the volatility forecasting problem, our TL results corroborates the same findings in BIBREF17 , where it was shown that SNLI dataset attains the best sentence encoding for a broad range of pure NLP tasks, including, among other, text categorization and sentiment analysis.",
+    "Significantly, experimental results in tbl:comparativeallsectors clearly demonstrate that our proposed news relevance attention (NRA) outperforms the News Averaging method proposed in previous studies BIBREF26 , BIBREF27 . Even when evaluating our NRA component in conjunction with the more elementary W-L Att sentence encoder it surpass the results of sophisticated sentence encoder using a News Averaging approach. In other words, our results strongly points to the advantage of discriminating noisy from impacting news and the effectiveness of learning to attend the most relevant news.",
+    "Having analyzed our best model, we now turn to its comparative performance with respect to the widely regarded GARCH(1,1) model described in sec:GARCH.",
+    "We asses our model performance relative to GARCH(1,1) using standard loss metrics (MSE and MAE) and the regression-based accuracy specified in eq:regressionloss and measured in terms of the coefficient of determination $R^2$ . In addition, we evaluate our model across two different volatility proxies: Garman-Klass ( $\\widehat{\\sigma _{GK}}$ ) (eq:volgk) and Parkinson ( $\\widehat{\\sigma _{PK}}$ ) (eq:volpk). We note that, as reviewed in sub:evalution, these two volatility proxies are statically efficient and proper estimators of the next day volatility.",
+    "tbl:garchallsectors reports the comparative performance among our best Price + News model (+ News BiLSTM (MP) + NRA), our Price only (unimodal) model and GARCH(1,1). The results clearly demonstrate the superiority of our model, being more accurate than GRACH for both volatility proxies. We note that evaluating the GARCH(1,1) model relying on standard MSE and MAE error metrics should be taken with a grain of salt. BIBREF35 provides the background theory and arguments supporting $R^2$ as the metric of choice to evaluate the predictive power of a volatility model. In any case, the outperformance or our model with respect to GARCH(1,1) permeates all three metrics, name $R^2$ , $MSE$ and $MAE$ ."
+  ],
+  "child_pages": [
+    19,
+    19,
+    19,
+    19,
+    19,
+    19,
+    19,
+    19,
+    19,
+    19,
+    19,
+    19
+  ],
+  "child_sections": [
+    "Stocks universe result",
+    "Stocks universe result",
+    "Stocks universe result",
+    "Stocks universe result",
+    "Stocks universe result",
+    "Stocks universe result",
+    "Stocks universe result",
+    "Stocks universe result",
+    "Stocks universe result",
+    "Stocks universe result",
+    "Stocks universe result",
+    "Stocks universe result"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Stocks universe result",
+      0
+    ],
+    [
+      "Stocks universe result",
+      1
+    ],
+    [
+      "Stocks universe result",
+      2
+    ],
+    [
+      "Stocks universe result",
+      3
+    ],
+    [
+      "Stocks universe result",
+      4
+    ],
+    [
+      "Stocks universe result",
+      5
+    ],
+    [
+      "Stocks universe result",
+      6
+    ],
+    [
+      "Stocks universe result",
+      7
+    ],
+    [
+      "Stocks universe result",
+      8
+    ],
+    [
+      "Stocks universe result",
+      9
+    ],
+    [
+      "Stocks universe result",
+      10
+    ],
+    [
+      "Stocks universe result",
+      11
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_19",
+  "section_id": "Stocks universe result",
+  "section": "Stocks universe result",
+  "title_path": "Stocks universe result",
+  "block_type": "long_unit"
+}

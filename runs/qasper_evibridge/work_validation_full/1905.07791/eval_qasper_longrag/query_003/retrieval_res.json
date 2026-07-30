@@ -1,0 +1,456 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_6",
+      "content": "[Section] Predicting Annotation Difficulty\n[source_id=32] We treat difficulty prediction as a regression problem, and propose and evaluate neural model variants for the task. We first train RNN BIBREF19 and CNN BIBREF20 models.\n[source_id=33] We also use the universal sentence encoder (USE) BIBREF6 to induce sentence representations, and train a model using these as features. Following BIBREF6 , we then experiment with an ensemble model that combines the `universal' and task-specific representations to predict annotation difficulty. We expect these universal embeddings to capture general, high-level semantics, and the task specific representations to capture more granular information. Figure 2 depicts the model architecture. Sentences are fed into both the universal sentence encoder and, separately, a task specific neural encoder, yielding two representations. We concatenate these and pass the combined vector to the regression layer.",
+      "score": 10.018525357663938,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        32,
+        33
+      ],
+      "child_qasper_evidence_texts": [
+        "We treat difficulty prediction as a regression problem, and propose and evaluate neural model variants for the task. We first train RNN BIBREF19 and CNN BIBREF20 models.",
+        "We also use the universal sentence encoder (USE) BIBREF6 to induce sentence representations, and train a model using these as features. Following BIBREF6 , we then experiment with an ensemble model that combines the `universal' and task-specific representations to predict annotation difficulty. We expect these universal embeddings to capture general, high-level semantics, and the task specific representations to capture more granular information. Figure 2 depicts the model architecture. Sentences are fed into both the universal sentence encoder and, separately, a task specific neural encoder, yielding two representations. We concatenate these and pass the combined vector to the regression layer."
+      ],
+      "child_pages": [
+        6,
+        6
+      ],
+      "child_sections": [
+        "Predicting Annotation Difficulty",
+        "Predicting Annotation Difficulty"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Predicting Annotation Difficulty",
+          0
+        ],
+        [
+          "Predicting Annotation Difficulty",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Predicting Annotation Difficulty",
+      "section": "Predicting Annotation Difficulty",
+      "title_path": "Predicting Annotation Difficulty",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Modern NLP systems require high-quality annotated data. In specialized domains, expert annotations may be prohibitively expensive. An alternative is to rely on crowdsourcing to reduce costs at the risk of introducing noise. In this paper we demonstrate that directly modeling instance difficulty can be used to improve model performance, and to route instances to appropriate annotators. Our difficulty prediction model combines two learned representations: a `universal' encoder trained on out-of-domain data, and a task-specific encoder. Experiments on a complex biomedical information extraction task using expert and lay annotators show that: (i) simply excluding from the training data instances predicted to be difficult yields a small boost in performance; (ii) using difficulty scores to weight instances during training provides further, consistent gains; (iii) assigning instances predicted to be difficult to domain experts is an effective strategy for task routing. Our experiments confirm the expectation that for specialized tasks expert annotations are higher quality than crowd labels, and hence preferable to obtain if practical. Moreover, augmenting small amounts of expert data with a larger set of lay annotations leads to further improvements in model performance.",
+      "score": 6.453787301002885,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Modern NLP systems require high-quality annotated data. In specialized domains, expert annotations may be prohibitively expensive. An alternative is to rely on crowdsourcing to reduce costs at the risk of introducing noise. In this paper we demonstrate that directly modeling instance difficulty can be used to improve model performance, and to route instances to appropriate annotators. Our difficulty prediction model combines two learned representations: a `universal' encoder trained on out-of-domain data, and a task-specific encoder. Experiments on a complex biomedical information extraction task using expert and lay annotators show that: (i) simply excluding from the training data instances predicted to be difficult yields a small boost in performance; (ii) using difficulty scores to weight instances during training provides further, consistent gains; (iii) assigning instances predicted to be difficult to domain experts is an effective strategy for task routing. Our experiments confirm the expectation that for specialized tasks expert annotations are higher quality than crowd labels, and hence preferable to obtain if practical. Moreover, augmenting small amounts of expert data with a larger set of lay annotations leads to further improvements in model performance."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Assembling training corpora of annotated natural language examples in specialized domains such as biomedicine poses considerable challenges. Experts with the requisite domain knowledge to perform high-quality annotation tend to be expensive, while lay annotators may not have the necessary knowledge to provide high-quality annotations. A practical approach for collecting a sufficiently large corpus would be to use crowdsourcing platforms like Amazon Mechanical Turk (MTurk). However, crowd workers in general are likely to provide noisy annotations BIBREF0 , BIBREF1 , BIBREF2 , an issue exacerbated by the technical nature of specialized content. Some of this noise may reflect worker quality and can be modeled BIBREF0 , BIBREF1 , BIBREF3 , BIBREF4 , but for some instances lay people may simply lack the domain knowledge to provide useful annotation.\n[source_id=5] In this paper we report experiments on the EBM-NLP corpus comprising crowdsourced annotations of medical literature BIBREF5 . We operationalize the concept of annotation difficulty and show how it can be exploited during training to improve information extraction models. We then obtain expert annotations for the abstracts predicted to be most difficult, as well as for a similar number of randomly selected abstracts. The annotation of highly specialized data and the use of lay and expert annotators allow us to examine the following key questions related to lay and expert annotations in specialized domains:\n[source_id=6] Can we predict item difficulty? We define a training instance as difficult if a lay annotator or an automated model disagree on its labeling. We show that difficulty can be predicted, and that it is distinct from inter-annotator agreement. Further, such predictions can be used during training to improve information extraction models.\n[source_id=7] Are there systematic differences between expert and lay annotations? We observe decidedly lower agreement between lay workers as compared to domain experts. Lay annotations have high precision but low recall with respect to expert annotations in the new data that we collected. More generally, we expect lay annotations to be lower quality, which may translate to lower precision, recall, or both, compared to expert annotations. Can one rely solely on lay annotations? Reasonable models can be trained using lay annotations alone, but similar performance can be achieved using markedly less expert data. This suggests that the optimal ratio of expert to crowd annotations for specialized tasks will depend on the cost and availability of domain experts. Expert annotations are preferable whenever its collection is practical. But in real-world settings, a combination of expert and lay annotations is better than using lay data alone.\n[source_id=8] Does it matter what data is annotated by experts? We demonstrate that a system trained on combined data achieves better predictive performance when experts annotate difficult examples rather than instances selected at i.i.d. random.\n[source_id=9] Our contributions in this work are summarized as follows. We define a task difficulty prediction task and show how this is related to, but distinct from, inter-worker agreement. We introduce a new model for difficulty prediction combining learned representations induced via a pre-trained `universal' sentence encoder BIBREF6 , and a sentence encoder learned from scratch for this task. We show that predicting annotation difficulty can be used to improve the task routing and model performance for a biomedical information extraction task. Our results open up a new direction for ensuring corpus quality. We believe that item difficulty prediction will likely be useful in other, non-specialized tasks as well, and that the most effective data collection in specialized domains requires research addressing the fundamental questions we examine here.",
+      "score": 5.374469811419835,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "child_qasper_evidence_texts": [
+        "Assembling training corpora of annotated natural language examples in specialized domains such as biomedicine poses considerable challenges. Experts with the requisite domain knowledge to perform high-quality annotation tend to be expensive, while lay annotators may not have the necessary knowledge to provide high-quality annotations. A practical approach for collecting a sufficiently large corpus would be to use crowdsourcing platforms like Amazon Mechanical Turk (MTurk). However, crowd workers in general are likely to provide noisy annotations BIBREF0 , BIBREF1 , BIBREF2 , an issue exacerbated by the technical nature of specialized content. Some of this noise may reflect worker quality and can be modeled BIBREF0 , BIBREF1 , BIBREF3 , BIBREF4 , but for some instances lay people may simply lack the domain knowledge to provide useful annotation.",
+        "In this paper we report experiments on the EBM-NLP corpus comprising crowdsourced annotations of medical literature BIBREF5 . We operationalize the concept of annotation difficulty and show how it can be exploited during training to improve information extraction models. We then obtain expert annotations for the abstracts predicted to be most difficult, as well as for a similar number of randomly selected abstracts. The annotation of highly specialized data and the use of lay and expert annotators allow us to examine the following key questions related to lay and expert annotations in specialized domains:",
+        "Can we predict item difficulty? We define a training instance as difficult if a lay annotator or an automated model disagree on its labeling. We show that difficulty can be predicted, and that it is distinct from inter-annotator agreement. Further, such predictions can be used during training to improve information extraction models.",
+        "Are there systematic differences between expert and lay annotations? We observe decidedly lower agreement between lay workers as compared to domain experts. Lay annotations have high precision but low recall with respect to expert annotations in the new data that we collected. More generally, we expect lay annotations to be lower quality, which may translate to lower precision, recall, or both, compared to expert annotations. Can one rely solely on lay annotations? Reasonable models can be trained using lay annotations alone, but similar performance can be achieved using markedly less expert data. This suggests that the optimal ratio of expert to crowd annotations for specialized tasks will depend on the cost and availability of domain experts. Expert annotations are preferable whenever its collection is practical. But in real-world settings, a combination of expert and lay annotations is better than using lay data alone.",
+        "Does it matter what data is annotated by experts? We demonstrate that a system trained on combined data achieves better predictive performance when experts annotate difficult examples rather than instances selected at i.i.d. random.",
+        "Our contributions in this work are summarized as follows. We define a task difficulty prediction task and show how this is related to, but distinct from, inter-worker agreement. We introduce a new model for difficulty prediction combining learned representations induced via a pre-trained `universal' sentence encoder BIBREF6 , and a sentence encoder learned from scratch for this task. We show that predicting annotation difficulty can be used to improve the task routing and model performance for a biomedical information extraction task. Our results open up a new direction for ensuring corpus quality. We believe that item difficulty prediction will likely be useful in other, non-specialized tasks as well, and that the most effective data collection in specialized domains requires research addressing the fundamental questions we examine here."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_15",
+      "content": "[Section] Conclusions\n[source_id=69] We have introduced the task of predicting annotation difficulty for biomedical information extraction (IE). We trained neural models using different learned representations to score texts in terms of their difficulty. Results from all models were strong with Pearson’s correlation coefficients higher than 0.45 in almost all evaluations, indicating the feasibility of this task. An ensemble model combining universal and task specific feature sentence vectors yielded the best results.\n[source_id=70] Experiments on biomedical IE tasks show that removing up to $\\sim $ 10% of the sentences predicted to be most difficult did not decrease model performance, and that re-weighting sentences inversely to their difficulty score during training improves predictive performance. Simulations in which difficult examples are routed to experts and other instances to crowd annotators yields the best results, outperforming the strategy of randomly selecting data for expert annotation, and substantially improving upon the approach of relying exclusively on crowd annotations. In future work, routing strategies based on instance difficulty could be further investigated for budget-quality trade-off.",
+      "score": 3.7690622711898785,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_15",
+      "child_source_node_ids": [
+        69,
+        70
+      ],
+      "child_qasper_evidence_texts": [
+        "We have introduced the task of predicting annotation difficulty for biomedical information extraction (IE). We trained neural models using different learned representations to score texts in terms of their difficulty. Results from all models were strong with Pearson’s correlation coefficients higher than 0.45 in almost all evaluations, indicating the feasibility of this task. An ensemble model combining universal and task specific feature sentence vectors yielded the best results.",
+        "Experiments on biomedical IE tasks show that removing up to $\\sim $ 10% of the sentences predicted to be most difficult did not decrease model performance, and that re-weighting sentences inversely to their difficulty score during training improves predictive performance. Simulations in which difficult examples are routed to experts and other instances to crowd annotators yields the best results, outperforming the strategy of randomly selecting data for expert annotation, and substantially improving upon the approach of relying exclusively on crowd annotations. In future work, routing strategies based on instance difficulty could be further investigated for budget-quality trade-off."
+      ],
+      "child_pages": [
+        15,
+        15
+      ],
+      "child_sections": [
+        "Conclusions",
+        "Conclusions"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusions",
+          0
+        ],
+        [
+          "Conclusions",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_15",
+      "section_id": "Conclusions",
+      "section": "Conclusions",
+      "title_path": "Conclusions",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Application Domain\n[source_id=15] Our specific application concerns annotating abstracts of articles that describe the conduct and results of randomized controlled trials (RCTs). Experimentation in this domain has become easy with the recent release of the EBM-NLP BIBREF5 corpus, which includes a reasonably large training dataset annotated via crowdsourcing, and a modest test set labeled by individuals with advanced medical training. More specifically, the training set comprises 4,741 medical article abstracts with crowdsourced annotations indicating snippets (sequences) that describe the Participants (p), Interventions (i), and Outcome (o) elements of the respective RCT, and the test set is composed of 191 abstracts with p, i, o sequence annotations from three medical experts.\n[source_id=16] Table 1 shows an example of difficult and easy examples according to our definition of difficulty. The underlined text demarcates the (consensus) reference label provided by domain experts. In the difficult examples, crowd workers marked text distinct from these reference annotations; whereas in the easy cases they reproduced them with reasonable fidelity. The difficult sentences usually exhibit complicated structure and feature jargon.\n[source_id=17] An abstract may contain some `easy' and some `difficult' sentences. We thus perform our analysis at the sentence level. We split abstracts into sentences using spaCy. We excluded sentences that comprise fewer than two tokens, as these are likely an artifact of errors in sentence splitting. In total, this resulted in 57,505 and 2,428 sentences in the train and test set abstracts, respectively.",
+      "score": 3.7264003893637887,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        15,
+        16,
+        17
+      ],
+      "child_qasper_evidence_texts": [
+        "Our specific application concerns annotating abstracts of articles that describe the conduct and results of randomized controlled trials (RCTs). Experimentation in this domain has become easy with the recent release of the EBM-NLP BIBREF5 corpus, which includes a reasonably large training dataset annotated via crowdsourcing, and a modest test set labeled by individuals with advanced medical training. More specifically, the training set comprises 4,741 medical article abstracts with crowdsourced annotations indicating snippets (sequences) that describe the Participants (p), Interventions (i), and Outcome (o) elements of the respective RCT, and the test set is composed of 191 abstracts with p, i, o sequence annotations from three medical experts.",
+        "Table 1 shows an example of difficult and easy examples according to our definition of difficulty. The underlined text demarcates the (consensus) reference label provided by domain experts. In the difficult examples, crowd workers marked text distinct from these reference annotations; whereas in the easy cases they reproduced them with reasonable fidelity. The difficult sentences usually exhibit complicated structure and feature jargon.",
+        "An abstract may contain some `easy' and some `difficult' sentences. We thus perform our analysis at the sentence level. We split abstracts into sentences using spaCy. We excluded sentences that comprise fewer than two tokens, as these are likely an artifact of errors in sentence splitting. In total, this resulted in 57,505 and 2,428 sentences in the train and test set abstracts, respectively."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Application Domain",
+        "Application Domain",
+        "Application Domain"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Application Domain",
+          0
+        ],
+        [
+          "Application Domain",
+          1
+        ],
+        [
+          "Application Domain",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Application Domain",
+      "section": "Application Domain",
+      "title_path": "Application Domain",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_14",
+      "content": "[Section] How Many Expert Annotations?\n[source_id=65] We established that crowd annotation are still useful in supplementing expert annotations for medical IE. Obtaining expert annotations for the one thousand most difficult instances greatly improved the model performance. However the choice of how many difficult instances to annotate was an uninformed choice. Here we check if less expert data would have yielded similar gains. Future work will need to address how best to choose this parameter for a routing system.\n[source_id=66] We simulate a routing scenario in which we send consecutive batches of the most difficult examples to the experts for annotation. We track changes in performance as we increase the number of most-difficult-articles sent to domain experts. As shown in Figure 4 , adding expert annotations for difficult articles consistently increases F1 scores. The performance gain is mostly from increased recall; the precision changes only a bit with higher quality annotation. This observation implies that crowd workers often fail to mark target tokens, but do not tend to produce large numbers of false positives. We suspect such failures to identify relevant spans/tokens are due to insufficient domain knowledge possessed by crowd workers.\n[source_id=67] The F1 score achieved after re-annotating the 600 most-difficult articles reaches 68.1%, which is close to the performance when re-annotating 1000 random articles. This demonstrates the effectiveness of recognizing difficult instances. The trend when we use up all expert data is still upward, so adding even more expert data is likely to further improve performance. Unfortunately we exhausted our budget and were not able to obtain additional expert annotations. It is likely that as the size of the expert annotations increases, the value of crowd annotations will diminish. This investigation is left for future work.",
+      "score": 3.5732017066799346,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_14",
+      "child_source_node_ids": [
+        65,
+        66,
+        67
+      ],
+      "child_qasper_evidence_texts": [
+        "We established that crowd annotation are still useful in supplementing expert annotations for medical IE. Obtaining expert annotations for the one thousand most difficult instances greatly improved the model performance. However the choice of how many difficult instances to annotate was an uninformed choice. Here we check if less expert data would have yielded similar gains. Future work will need to address how best to choose this parameter for a routing system.",
+        "We simulate a routing scenario in which we send consecutive batches of the most difficult examples to the experts for annotation. We track changes in performance as we increase the number of most-difficult-articles sent to domain experts. As shown in Figure 4 , adding expert annotations for difficult articles consistently increases F1 scores. The performance gain is mostly from increased recall; the precision changes only a bit with higher quality annotation. This observation implies that crowd workers often fail to mark target tokens, but do not tend to produce large numbers of false positives. We suspect such failures to identify relevant spans/tokens are due to insufficient domain knowledge possessed by crowd workers.",
+        "The F1 score achieved after re-annotating the 600 most-difficult articles reaches 68.1%, which is close to the performance when re-annotating 1000 random articles. This demonstrates the effectiveness of recognizing difficult instances. The trend when we use up all expert data is still upward, so adding even more expert data is likely to further improve performance. Unfortunately we exhausted our budget and were not able to obtain additional expert annotations. It is likely that as the size of the expert annotations increases, the value of crowd annotations will diminish. This investigation is left for future work."
+      ],
+      "child_pages": [
+        14,
+        14,
+        14
+      ],
+      "child_sections": [
+        "How Many Expert Annotations?",
+        "How Many Expert Annotations?",
+        "How Many Expert Annotations?"
+      ],
+      "child_hotpot_facts": [
+        [
+          "How Many Expert Annotations?",
+          0
+        ],
+        [
+          "How Many Expert Annotations?",
+          1
+        ],
+        [
+          "How Many Expert Annotations?",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_14",
+      "section_id": "How Many Expert Annotations?",
+      "section": "How Many Expert Annotations?",
+      "title_path": "How Many Expert Annotations?",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Experimental Setup and Results\n[source_id=35] We trained models for each label type separately. Word embeddings were initialized to 300d GloVe vectors BIBREF21 trained on common crawl data; these are fine-tuned during training. We used the Adam optimizer BIBREF22 with learning rate and decay set to 0.001 and 0.99, respectively. We used batch sizes of 16.\n[source_id=36] We used the large version of the universal sentence encoder with a transformer BIBREF23 . We did not update the pretrained sentence encoder parameters during training. All hyperparamaters for all models (including hidden layers, hidden sizes, and dropout) were tuned using Vizier BIBREF24 via 10-fold cross validation on the training set maximizing for F1.\n[source_id=37] As a baseline, we also trained a linear Support-Vector Regression BIBREF25 model on $n$ -gram features ( $n$ ranges from 1 to 3).\n[source_id=38] Table 3 reports Pearson correlation coefficients between the predictions with each of the neural models and the ground truth difficulty scores. Rows 1-4 correspond to individual models, and row 5 reports the ensemble performance. Columns correspond to label type. Results from all models outperform the baseline SVR model: Pearson's correlation coefficients range from 0.550 to 0.622. The regression correlations are the lowest.\n[source_id=39] The RNN model realizes the strongest performance among the stand-alone (non-ensemble) models, outperforming variants that exploit CNN and USE representations. Combining the RNN and USE further improves results. We hypothesize that this is due to complementary sentence information encoded in universal representations.\n[source_id=40] For all models, correlations for Intervention and Outcomes are higher than for Population, which is expected given the difficulty distributions in Figure 1 . In these, the sentences are more uniformly distributed, with a fair number of difficult and easier sentences. By contrast, in Population there are a greater number of easy sentences and considerably fewer difficult sentences, which makes the difficulty ranking task particularly challenging.",
+      "score": 3.526239245251443,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "child_qasper_evidence_texts": [
+        "We trained models for each label type separately. Word embeddings were initialized to 300d GloVe vectors BIBREF21 trained on common crawl data; these are fine-tuned during training. We used the Adam optimizer BIBREF22 with learning rate and decay set to 0.001 and 0.99, respectively. We used batch sizes of 16.",
+        "We used the large version of the universal sentence encoder with a transformer BIBREF23 . We did not update the pretrained sentence encoder parameters during training. All hyperparamaters for all models (including hidden layers, hidden sizes, and dropout) were tuned using Vizier BIBREF24 via 10-fold cross validation on the training set maximizing for F1.",
+        "As a baseline, we also trained a linear Support-Vector Regression BIBREF25 model on $n$ -gram features ( $n$ ranges from 1 to 3).",
+        "Table 3 reports Pearson correlation coefficients between the predictions with each of the neural models and the ground truth difficulty scores. Rows 1-4 correspond to individual models, and row 5 reports the ensemble performance. Columns correspond to label type. Results from all models outperform the baseline SVR model: Pearson's correlation coefficients range from 0.550 to 0.622. The regression correlations are the lowest.",
+        "The RNN model realizes the strongest performance among the stand-alone (non-ensemble) models, outperforming variants that exploit CNN and USE representations. Combining the RNN and USE further improves results. We hypothesize that this is due to complementary sentence information encoded in universal representations.",
+        "For all models, correlations for Intervention and Outcomes are higher than for Population, which is expected given the difficulty distributions in Figure 1 . In these, the sentences are more uniformly distributed, with a fair number of difficult and easier sentences. By contrast, in Population there are a greater number of easy sentences and considerably fewer difficult sentences, which makes the difficulty ranking task particularly challenging."
+      ],
+      "child_pages": [
+        7,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Experimental Setup and Results",
+        "Experimental Setup and Results",
+        "Experimental Setup and Results",
+        "Experimental Setup and Results",
+        "Experimental Setup and Results",
+        "Experimental Setup and Results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experimental Setup and Results",
+          0
+        ],
+        [
+          "Experimental Setup and Results",
+          1
+        ],
+        [
+          "Experimental Setup and Results",
+          2
+        ],
+        [
+          "Experimental Setup and Results",
+          3
+        ],
+        [
+          "Experimental Setup and Results",
+          4
+        ],
+        [
+          "Experimental Setup and Results",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Experimental Setup and Results",
+      "section": "Experimental Setup and Results",
+      "title_path": "Experimental Setup and Results",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Expert annotations of Random and Difficult Instances\n[source_id=55] We re-annotate by experts a subset of most difficult instances and the same number of random instances. As collecting annotations from experts is slow and expensive, we only re-annotate the difficult instances for the interventions extraction task. We re-annotate the abstracts which cover the sentences with predicted difficulty scores in the top 5 percentile. We rank the abstracts from the training set by the count of difficult sentences, and re-annotate the abstracts that contain the most difficult sentences. Constrained by time and budget, we select only 2000 abstracts for re-annotation; 1000 of these are top-ranked, and 1000 are randomly sampled. This re-annotation cost $3,000. We have released the new annotation data at: https://github.com/bepnye/EBM-NLP.\n[source_id=56] Following BIBREF5 , we recruited five medical experts via Up-work with advanced medical training and strong technical reading/writing skills. The expert annotator were asked to read the entire abstract and highlight, using the BRAT toolkit BIBREF26 , all spans describing medical Interventions. Each abstract is only annotated by one expert. We examined 30 re-annotated abstracts to ensure the annotation quality before hiring the annotator.\n[source_id=57] Table 5 presents the results of LSTM-CRF-Pattern model trained on the reannotated difficult subset and the random subset. The first two rows show the results for models trained with expert annotations. The model trained on random data has a slightly better F1 than that trained on the same amount of difficult data. The model trained on random data has higher precision but lower recall.\n[source_id=58] Rows 3 and 4 list the results for models trained on the same data but with crowd annotation. Models trained with expert-annotated data are clearly superior to those trained with crowd labels with respect to F1, indicating that the experts produced higher quality annotations. For crowdsourced annotations, training the model with data sampled at i.i.d. random achieves 2% higher F1 than when difficult instances are used. When expert annotations are used, this difference is less than 1%. This trend in performance may be explained by differences in annotation quality: the randomly sampled set was more consistently annotated by both experts and crowd because the difficult set is harder. However, in both cases expert annotations are better, with a bigger difference between the expert and crowd models on the difficult set.\n[source_id=59] The last row is the model trained on all 5k abstracts with crowd annotations. Its F1 score is lower than either expert model trained on only 20% of data, suggesting that expert annotations should be collected whenever possible. Again the crowd model on complete data has higher precision than expert models but its recall is much lower.",
+      "score": 3.17409526617244,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "child_qasper_evidence_texts": [
+        "We re-annotate by experts a subset of most difficult instances and the same number of random instances. As collecting annotations from experts is slow and expensive, we only re-annotate the difficult instances for the interventions extraction task. We re-annotate the abstracts which cover the sentences with predicted difficulty scores in the top 5 percentile. We rank the abstracts from the training set by the count of difficult sentences, and re-annotate the abstracts that contain the most difficult sentences. Constrained by time and budget, we select only 2000 abstracts for re-annotation; 1000 of these are top-ranked, and 1000 are randomly sampled. This re-annotation cost $3,000. We have released the new annotation data at: https://github.com/bepnye/EBM-NLP.",
+        "Following BIBREF5 , we recruited five medical experts via Up-work with advanced medical training and strong technical reading/writing skills. The expert annotator were asked to read the entire abstract and highlight, using the BRAT toolkit BIBREF26 , all spans describing medical Interventions. Each abstract is only annotated by one expert. We examined 30 re-annotated abstracts to ensure the annotation quality before hiring the annotator.",
+        "Table 5 presents the results of LSTM-CRF-Pattern model trained on the reannotated difficult subset and the random subset. The first two rows show the results for models trained with expert annotations. The model trained on random data has a slightly better F1 than that trained on the same amount of difficult data. The model trained on random data has higher precision but lower recall.",
+        "Rows 3 and 4 list the results for models trained on the same data but with crowd annotation. Models trained with expert-annotated data are clearly superior to those trained with crowd labels with respect to F1, indicating that the experts produced higher quality annotations. For crowdsourced annotations, training the model with data sampled at i.i.d. random achieves 2% higher F1 than when difficult instances are used. When expert annotations are used, this difference is less than 1%. This trend in performance may be explained by differences in annotation quality: the randomly sampled set was more consistently annotated by both experts and crowd because the difficult set is harder. However, in both cases expert annotations are better, with a bigger difference between the expert and crowd models on the difficult set.",
+        "The last row is the model trained on all 5k abstracts with crowd annotations. Its F1 score is lower than either expert model trained on only 20% of data, suggesting that expert annotations should be collected whenever possible. Again the crowd model on complete data has higher precision than expert models but its recall is much lower."
+      ],
+      "child_pages": [
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "child_sections": [
+        "Expert annotations of Random and Difficult Instances",
+        "Expert annotations of Random and Difficult Instances",
+        "Expert annotations of Random and Difficult Instances",
+        "Expert annotations of Random and Difficult Instances",
+        "Expert annotations of Random and Difficult Instances"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Expert annotations of Random and Difficult Instances",
+          0
+        ],
+        [
+          "Expert annotations of Random and Difficult Instances",
+          1
+        ],
+        [
+          "Expert annotations of Random and Difficult Instances",
+          2
+        ],
+        [
+          "Expert annotations of Random and Difficult Instances",
+          3
+        ],
+        [
+          "Expert annotations of Random and Difficult Instances",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Expert annotations of Random and Difficult Instances",
+      "section": "Expert annotations of Random and Difficult Instances",
+      "title_path": "Expert annotations of Random and Difficult Instances",
+      "block_type": "long_unit"
+    }
+  ]
+}

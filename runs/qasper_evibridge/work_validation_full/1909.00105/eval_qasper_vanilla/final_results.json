@@ -1,0 +1,430 @@
+[
+  {
+    "question": "What metrics are used for evaluation?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "Byte-Pair Encoding perplexity  (BPE PPL),\nBLEU-1,\nBLEU-4,\nROUGE-L,\npercentage of distinct unigram (D-1),\npercentage of distinct bigrams(D-2),\nuser matching accuracy(UMA),\nMean Reciprocal Rank(MRR)\nPairwise preference over baseline(PP)",
+        "yes_no": null,
+        "evidence": [
+          "In this work, we investigate how leveraging historical user preferences can improve generation quality over strong baselines in our setting. We compare our personalized models against two baselines. The first is a name-based Nearest-Neighbor model (NN). We initially adapted the Neural Checklist Model of BIBREF0 as a baseline; however, we ultimately use a simple Encoder-Decoder baseline with ingredient attention (Enc-Dec), which provides comparable performance and lower complexity. All personalized models outperform baseline in BPE perplexity (tab:metricsontest) with Prior Name performing the best. While our models exhibit comparable performance to baseline in BLEU-1/4 and ROUGE-L, we generate more diverse (Distinct-1/2: percentage of distinct unigrams and bigrams) and acceptable recipes. BLEU and ROUGE are not the most appropriate metrics for generation quality. A `correct' recipe can be written in many ways with the same main entities (ingredients). As BLEU-1/4 capture structural information via n-gram matching, they are not correlated with subjective recipe quality. This mirrors observations from BIBREF31, BIBREF8.",
+          "We observe that personalized models make more diverse recipes than baseline. They thus perform better in BLEU-1 with more key entities (ingredient mentions) present, but worse in BLEU-4, as these recipes are written in a personalized way and deviate from gold on the phrasal level. Similarly, the `Prior Name' model generates more unigram-diverse recipes than other personalized models and obtains a correspondingly lower BLEU-1 score.",
+          "Our model must learn to generate from a diverse recipe space: in our training data, the average recipe length is 117 tokens with a maximum of 256. There are 13K unique ingredients across all recipes. Rare words dominate the vocabulary: 95% of words appear $<$100 times, accounting for only 1.65% of all word usage. As such, we perform Byte-Pair Encoding (BPE) tokenization BIBREF25, BIBREF26, giving a training vocabulary of 15K tokens across 19M total mentions. User profiles are similarly diverse: 50% of users have consumed $\\le $6 recipes, while 10% of users have consumed $>$45 recipes.",
+          "Personalization: To measure personalization, we evaluate how closely the generated text corresponds to a particular user profile. We compute the likelihood of generated recipes using identical input specifications but conditioned on ten different user profiles—one `gold' user who consumed the original recipe, and nine randomly generated user profiles. Following BIBREF8, we expect the highest likelihood for the recipe conditioned on the gold user. We measure user matching accuracy (UMA)—the proportion where the gold user is ranked highest—and Mean Reciprocal Rank (MRR) BIBREF32 of the gold user. All personalized models beat baselines in both metrics, showing our models personalize generated recipes to the given user profiles. The Prior Name model achieves the best UMA and MRR by a large margin, revealing that prior recipe names are strong signals for personalization. Moreover, the addition of attention mechanisms to capture these signals improves language modeling performance over a strong non-personalized baseline."
+        ],
+        "evidence_block_ids": [
+          36,
+          37,
+          31,
+          39
+        ],
+        "evidence_paragraph_ids": [
+          36,
+          37,
+          31,
+          39
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "BLEU-1/4 and ROUGE-L",
+          "likelihood of generated recipes using identical input specifications but conditioned on ten different user profiles",
+          "user matching accuracy (UMA)",
+          "Mean Reciprocal Rank (MRR)",
+          "neural scoring model from BIBREF33 to measure recipe-level coherence"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "In this work, we investigate how leveraging historical user preferences can improve generation quality over strong baselines in our setting. We compare our personalized models against two baselines. The first is a name-based Nearest-Neighbor model (NN). We initially adapted the Neural Checklist Model of BIBREF0 as a baseline; however, we ultimately use a simple Encoder-Decoder baseline with ingredient attention (Enc-Dec), which provides comparable performance and lower complexity. All personalized models outperform baseline in BPE perplexity (tab:metricsontest) with Prior Name performing the best. While our models exhibit comparable performance to baseline in BLEU-1/4 and ROUGE-L, we generate more diverse (Distinct-1/2: percentage of distinct unigrams and bigrams) and acceptable recipes. BLEU and ROUGE are not the most appropriate metrics for generation quality. A `correct' recipe can be written in many ways with the same main entities (ingredients). As BLEU-1/4 capture structural information via n-gram matching, they are not correlated with subjective recipe quality. This mirrors observations from BIBREF31, BIBREF8.",
+          "Personalization: To measure personalization, we evaluate how closely the generated text corresponds to a particular user profile. We compute the likelihood of generated recipes using identical input specifications but conditioned on ten different user profiles—one `gold' user who consumed the original recipe, and nine randomly generated user profiles. Following BIBREF8, we expect the highest likelihood for the recipe conditioned on the gold user. We measure user matching accuracy (UMA)—the proportion where the gold user is ranked highest—and Mean Reciprocal Rank (MRR) BIBREF32 of the gold user. All personalized models beat baselines in both metrics, showing our models personalize generated recipes to the given user profiles. The Prior Name model achieves the best UMA and MRR by a large margin, revealing that prior recipe names are strong signals for personalization. Moreover, the addition of attention mechanisms to capture these signals improves language modeling performance over a strong non-personalized baseline.",
+          "Recipe Level Coherence: A plausible recipe should possess a coherent step order, and we evaluate this via a metric for recipe-level coherence. We use the neural scoring model from BIBREF33 to measure recipe-level coherence for each generated recipe. Each recipe step is encoded by BERT BIBREF34. Our scoring model is a GRU network that learns the overall recipe step ordering structure by minimizing the cosine similarity of recipe step hidden representations presented in the correct and reverse orders. Once pretrained, our scorer calculates the similarity of a generated recipe to the forward and backwards ordering of its corresponding gold label, giving a score equal to the difference between the former and latter. A higher score indicates better step ordering (with a maximum score of 2). tab:coherencemetrics shows that our personalized models achieve average recipe-level coherence scores of 1.78-1.82, surpassing the baseline at 1.77."
+        ],
+        "evidence_block_ids": [
+          36,
+          39,
+          40
+        ],
+        "evidence_paragraph_ids": [
+          36,
+          39,
+          40
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": " Distinct-1/2, UMA = User Matching Accuracy, MRR\n= Mean Reciprocal Rank, PP = Pairwise preference over baseline (evaluated for 310 recipe pairs per model)",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      }
+    ],
+    "doc_uuid": "1909.00105",
+    "doc_path": "qasper://1909.00105",
+    "qasper_question_id": "5b551ba47d582f2e6467b1b91a8d4d6a30c343ec",
+    "title": "Generating Personalized Recipes from Historical User Preferences",
+    "evidence_block_ids": [
+      36,
+      37,
+      31,
+      39,
+      40
+    ],
+    "evidence_paragraph_ids": [
+      36,
+      37,
+      31,
+      39,
+      40
+    ],
+    "output": "{\n  \"answer_short\": \"BLEU-1/4, ROUGE-L, BPE perplexity, Distinct-1/2, recipe-level coherence score\",\n  \"answer_rationale\": \"The evaluation metrics mentioned in the documents include BLEU-1/4, ROUGE-L, BPE perplexity, Distinct-1/2 for diversity, and a recipe-level coherence score based on a neural scoring model. These are explicitly listed in Text 7 and Text 8, which detail the quantitative measures used for evaluating generation quality and coherence.\"\n}",
+    "retrieved_node_ids": [
+      32,
+      9,
+      10,
+      51,
+      42,
+      8,
+      36,
+      40,
+      6,
+      37
+    ],
+    "answer_short": "BLEU-1/4, ROUGE-L, BPE perplexity, Distinct-1/2, recipe-level coherence score",
+    "answer_rationale": "The evaluation metrics mentioned in the documents include BLEU-1/4, ROUGE-L, BPE perplexity, Distinct-1/2 for diversity, and a recipe-level coherence score based on a neural scoring model. These are explicitly listed in Text 7 and Text 8, which detail the quantitative measures used for evaluating generation quality and coherence.",
+    "supporting_block_ids": [
+      32,
+      9,
+      10,
+      51,
+      42,
+      8,
+      36,
+      40,
+      6,
+      37
+    ]
+  },
+  {
+    "question": "What natural language(s) are the recipes written in?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "English",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "English",
+        "yes_no": null,
+        "evidence": [
+          "Qualitative Analysis: We present sample outputs for a cocktail recipe in tab:samplerecipes, and additional recipes in the appendix. Generation quality progressively improves from generic baseline output to a blended cocktail produced by our best performing model. Models attending over prior recipes explicitly reference ingredients. The Prior Name model further suggests the addition of lemon and mint, which are reasonably associated with previously consumed recipes like coconut mousse and pork skewers."
+        ],
+        "evidence_block_ids": [
+          38
+        ],
+        "evidence_paragraph_ids": [
+          38
+        ]
+      },
+      {
+        "unanswerable": true,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      }
+    ],
+    "doc_uuid": "1909.00105",
+    "doc_path": "qasper://1909.00105",
+    "qasper_question_id": "3cf1edfa6d53a236cf4258afd87c87c0a477e243",
+    "title": "Generating Personalized Recipes from Historical User Preferences",
+    "evidence_block_ids": [
+      38
+    ],
+    "evidence_paragraph_ids": [
+      38
+    ],
+    "output": "{\n  \"answer_short\": \"Not answerable\",\n  \"answer_rationale\": \"The retrieved documents discuss personalized recipe generation, datasets, and models but do not specify the natural language(s) in which the recipes are written.\"\n}",
+    "retrieved_node_ids": [
+      8,
+      6,
+      13,
+      9,
+      4,
+      30,
+      16,
+      44,
+      14,
+      2
+    ],
+    "answer_short": "Not answerable",
+    "answer_rationale": "The retrieved documents discuss personalized recipe generation, datasets, and models but do not specify the natural language(s) in which the recipes are written.",
+    "supporting_block_ids": [
+      8,
+      6,
+      13,
+      9,
+      4,
+      30,
+      16,
+      44,
+      14,
+      2
+    ]
+  },
+  {
+    "question": "What were their results on the new dataset?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "average recipe-level coherence scores of 1.78-1.82",
+          "human evaluators preferred personalized model outputs to baseline 63% of the time"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Recipe Level Coherence: A plausible recipe should possess a coherent step order, and we evaluate this via a metric for recipe-level coherence. We use the neural scoring model from BIBREF33 to measure recipe-level coherence for each generated recipe. Each recipe step is encoded by BERT BIBREF34. Our scoring model is a GRU network that learns the overall recipe step ordering structure by minimizing the cosine similarity of recipe step hidden representations presented in the correct and reverse orders. Once pretrained, our scorer calculates the similarity of a generated recipe to the forward and backwards ordering of its corresponding gold label, giving a score equal to the difference between the former and latter. A higher score indicates better step ordering (with a maximum score of 2). tab:coherencemetrics shows that our personalized models achieve average recipe-level coherence scores of 1.78-1.82, surpassing the baseline at 1.77.",
+          "Human Evaluation: We presented 310 pairs of recipes for pairwise comparison BIBREF8 (details in appendix) between baseline and each personalized model, with results shown in tab:metricsontest. On average, human evaluators preferred personalized model outputs to baseline 63% of the time, confirming that personalized attention improves the semantic plausibility of generated recipes. We also performed a small-scale human coherence survey over 90 recipes, in which 60% of users found recipes generated by personalized models to be more coherent and preferable to those generated by baseline models."
+        ],
+        "evidence_block_ids": [
+          40,
+          42
+        ],
+        "evidence_paragraph_ids": [
+          40,
+          42
+        ]
+      }
+    ],
+    "doc_uuid": "1909.00105",
+    "doc_path": "qasper://1909.00105",
+    "qasper_question_id": "9bfebf8e5bc0bacf0af96a9a951eb7b96b359faa",
+    "title": "Generating Personalized Recipes from Historical User Preferences",
+    "evidence_block_ids": [
+      40,
+      42
+    ],
+    "evidence_paragraph_ids": [
+      40,
+      42
+    ],
+    "output": "{\n  \"answer_short\": \"Human evaluators preferred personalized model outputs to baseline 63% of the time, and 60% of users found personalized model recipes more coherent and preferable.\",\n  \"answer_rationale\": \"Text 3 (page 6) states that human evaluators preferred personalized model outputs to baseline 63% of the time and that 60% of users found personalized model recipes more coherent and preferable. These results are explicitly tied to the test set evaluation on the new dataset.\"\n}",
+    "retrieved_node_ids": [
+      9,
+      32,
+      42,
+      30,
+      47,
+      38,
+      8,
+      37,
+      10,
+      51
+    ],
+    "answer_short": "Human evaluators preferred personalized model outputs to baseline 63% of the time, and 60% of users found personalized model recipes more coherent and preferable.",
+    "answer_rationale": "Text 3 (page 6) states that human evaluators preferred personalized model outputs to baseline 63% of the time and that 60% of users found personalized model recipes more coherent and preferable. These results are explicitly tied to the test set evaluation on the new dataset.",
+    "supporting_block_ids": [
+      9,
+      32,
+      42,
+      30,
+      47,
+      38,
+      8,
+      37,
+      10,
+      51
+    ]
+  },
+  {
+    "question": "What are the baseline models?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "name-based Nearest-Neighbor model (NN)",
+          "Encoder-Decoder baseline with ingredient attention (Enc-Dec)"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "In this work, we investigate how leveraging historical user preferences can improve generation quality over strong baselines in our setting. We compare our personalized models against two baselines. The first is a name-based Nearest-Neighbor model (NN). We initially adapted the Neural Checklist Model of BIBREF0 as a baseline; however, we ultimately use a simple Encoder-Decoder baseline with ingredient attention (Enc-Dec), which provides comparable performance and lower complexity. All personalized models outperform baseline in BPE perplexity (tab:metricsontest) with Prior Name performing the best. While our models exhibit comparable performance to baseline in BLEU-1/4 and ROUGE-L, we generate more diverse (Distinct-1/2: percentage of distinct unigrams and bigrams) and acceptable recipes. BLEU and ROUGE are not the most appropriate metrics for generation quality. A `correct' recipe can be written in many ways with the same main entities (ingredients). As BLEU-1/4 capture structural information via n-gram matching, they are not correlated with subjective recipe quality. This mirrors observations from BIBREF31, BIBREF8."
+        ],
+        "evidence_block_ids": [
+          36
+        ],
+        "evidence_paragraph_ids": [
+          36
+        ]
+      }
+    ],
+    "doc_uuid": "1909.00105",
+    "doc_path": "qasper://1909.00105",
+    "qasper_question_id": "34dc0838632d643f33c8dbfe7bd4b656586582a2",
+    "title": "Generating Personalized Recipes from Historical User Preferences",
+    "evidence_block_ids": [
+      36
+    ],
+    "evidence_paragraph_ids": [
+      36
+    ],
+    "output": "{\n  \"answer_short\": \"Encoder-Decoder baseline with ingredient attention (Enc-Dec)\",\n  \"answer_rationale\": \"Text 4 explicitly states that the two baselines are: 1) a name-based Nearest-Neighbor model (NN), and 2) a simple Encoder-Decoder baseline with ingredient attention (Enc-Dec), which was ultimately used. The text also confirms that the Enc-Dec model was chosen for its comparable performance and lower complexity.\"\n}",
+    "retrieved_node_ids": [
+      42,
+      37,
+      32,
+      36,
+      10,
+      51,
+      38,
+      31,
+      9,
+      8
+    ],
+    "answer_short": "Encoder-Decoder baseline with ingredient attention (Enc-Dec)",
+    "answer_rationale": "Text 4 explicitly states that the two baselines are: 1) a name-based Nearest-Neighbor model (NN), and 2) a simple Encoder-Decoder baseline with ingredient attention (Enc-Dec), which was ultimately used. The text also confirms that the Enc-Dec model was chosen for its comparable performance and lower complexity.",
+    "supporting_block_ids": [
+      42,
+      37,
+      32,
+      36,
+      10,
+      51,
+      38,
+      31,
+      9,
+      8
+    ]
+  },
+  {
+    "question": "How did they obtain the interactions?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "from Food.com"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "We collect a novel dataset of 230K+ recipe texts and 1M+ user interactions (reviews) over 18 years (2000-2018) from Food.com. Here, we restrict to recipes with at least 3 steps, and at least 4 and no more than 20 ingredients. We discard users with fewer than 4 reviews, giving 180K+ recipes and 700K+ reviews, with splits as in tab:recipeixnstats."
+        ],
+        "evidence_block_ids": [
+          30
+        ],
+        "evidence_paragraph_ids": [
+          30
+        ]
+      }
+    ],
+    "doc_uuid": "1909.00105",
+    "doc_path": "qasper://1909.00105",
+    "qasper_question_id": "c77359fb9d3ef96965a9af0396b101f82a0a9de6",
+    "title": "Generating Personalized Recipes from Historical User Preferences",
+    "evidence_block_ids": [
+      30
+    ],
+    "evidence_paragraph_ids": [
+      30
+    ],
+    "output": "{\n  \"answer_short\": \"scraped from Food.com\",\n  \"answer_rationale\": \"Text 1 and Text 3 state that the raw data, including user-recipe interactions (reviews), were scraped from Food.com. This is the source from which the interactions were obtained.\"\n}",
+    "retrieved_node_ids": [
+      47,
+      16,
+      30,
+      51,
+      8,
+      9,
+      32,
+      21,
+      33,
+      22
+    ],
+    "answer_short": "scraped from Food.com",
+    "answer_rationale": "Text 1 and Text 3 state that the raw data, including user-recipe interactions (reviews), were scraped from Food.com. This is the source from which the interactions were obtained.",
+    "supporting_block_ids": [
+      47,
+      16,
+      30,
+      51,
+      8,
+      9,
+      32,
+      21,
+      33,
+      22
+    ]
+  },
+  {
+    "question": "Where do they get the recipes from?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "from Food.com"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "We collect a novel dataset of 230K+ recipe texts and 1M+ user interactions (reviews) over 18 years (2000-2018) from Food.com. Here, we restrict to recipes with at least 3 steps, and at least 4 and no more than 20 ingredients. We discard users with fewer than 4 reviews, giving 180K+ recipes and 700K+ reviews, with splits as in tab:recipeixnstats."
+        ],
+        "evidence_block_ids": [
+          30
+        ],
+        "evidence_paragraph_ids": [
+          30
+        ]
+      }
+    ],
+    "doc_uuid": "1909.00105",
+    "doc_path": "qasper://1909.00105",
+    "qasper_question_id": "1bdc990c7e948724ab04e70867675a334fdd3051",
+    "title": "Generating Personalized Recipes from Historical User Preferences",
+    "evidence_block_ids": [
+      30
+    ],
+    "evidence_paragraph_ids": [
+      30
+    ],
+    "output": "{\n  \"answer_short\": \"Food.com\",\n  \"answer_rationale\": \"Text 4 and Text 5 state that the dataset of recipes and user interactions was collected from Food.com, indicating that the recipes are sourced from this platform.\"\n}",
+    "retrieved_node_ids": [
+      4,
+      8,
+      13,
+      30,
+      47,
+      9,
+      16,
+      44,
+      49,
+      2
+    ],
+    "answer_short": "Food.com",
+    "answer_rationale": "Text 4 and Text 5 state that the dataset of recipes and user interactions was collected from Food.com, indicating that the recipes are sourced from this platform.",
+    "supporting_block_ids": [
+      4,
+      8,
+      13,
+      30,
+      47,
+      9,
+      16,
+      44,
+      49,
+      2
+    ]
+  }
+]

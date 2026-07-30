@@ -1,0 +1,471 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_20",
+      "content": "[Section] Results ::: Automatic Evaluation\n[source_id=59] The results on the CNNDM are summarized in Table TABREF25. The first and second blocks show results of previous extractive and abstractive models, respectively. Results of Step are all listed in the third block. Lead3 is a baseline which simply takes the first three sentences of a document as its summary. BERTExt BIBREF23 is an extractive model fine-tuning on BERT BIBREF2 that outperforms other extractive systems. PTGen BIBREF11, DRM BIBREF26, and DCA BIBREF42 are sequence-to-sequence learning based models extended with copy and coverage mechanism, reinforcement learning, and deep communicating agents individually. BottomUp BIBREF29 assisted summary generation with a word prediction model. BERTAbs BIBREF23 and UniLM BIBREF43 are both pre-training based seq2seq summarization models. We also implemented three abstractive models as our baselines. Transformer-S2S is 6-layer seq2seq Transformer BIBREF9 with random initialization. When we replaced the encoder of Transformer-S2S with $\\text{RoBERTa}_\\text{BASE}$ BIBREF4, $\\text{RoBERTa}_\\text{BASE}$-S2S outperforms Transformer-S2S by nearly 2 ROUGE, which demonstrates the effectiveness of pre-trained models. With even larger pre-trained model $\\text{RoBERTa}_\\text{LARGE}$, $\\text{RoBERTa}$-S2S is comparable with the best published abstractive model UniLM BIBREF43.\n[source_id=60] Based on $\\text{RoBERTa}$-S2S (the sizes of Step and $\\text{RoBERTa}$-S2S are identical), we study the effect of different pre-training tasks (see Section SECREF9). We first pre-train Step on unlabeled documents of CNNDM training split to get quick feedback, denoted as Step (in-domain). From the top part of the third block in Table TABREF25, we can see that Sentence Reordering (SR), Next Sentence Generation (NSG) and Masked Document Generation (MDG) can all improve $\\text{RoBERTa}$-S2S significantly measured by the ROUGE script. Note that according to the ROUGE script, $\\pm 0.22$ ROUGE almost always means a significant difference with $p < 0.05$. Interesting, even Step is pre-trained on 230 million words, it outperforms UniLM that is pre-trained on 3,000 million words BIBREF43. When we pre-train Step on even larger dataset (i.e., GIGA-CM), the results are further improved and Step outperforms all models in comparison, as listed in the bottom part of Table TABREF25.\n[source_id=61] Table TABREF26 presents results on NYT dataset. Following the same evaluation protocol as BIBREF36, we adopted the limited-length recall based ROUGE, where we truncated the predicted summaries to the length of the gold ones. Again, the first and second blocks show results of previous extractive and abstractive models, respectively. Results of Step are listed in the third block. Similar to the trends in CNNDM, Step leads significant performance gains (with $p<0.05$) compared to all other models in Table TABREF26.\n[source_id=62] Among all three pre-training tasks, SR works slightly better than the other two tasks (i.e., NSG and MDG). We also tried to randomly use all the three tasks during training with 1/3 probability each (indicated as ALL). Interesting, we observed that, in general, All outperforms all three tasks when employing unlabeled documents of training splits of CNNDM or NYT, which might be due to limited number of unlabeled documents of the training splits. After adding more data (i.e., GIAG-CM) to pre-training, SR consistently achieves highest ROUGE-2 on both CNNDM and NYT. We conclude that SR is the most effective task for pre-training since sentence reordering task requires comprehensively understanding a document in a wide coverage, going beyond individual words and sentences, which is highly close to the essense of abstractive document summarization.",
+      "score": 5.576720790035713,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_20",
+      "child_source_node_ids": [
+        59,
+        60,
+        61,
+        62
+      ],
+      "child_qasper_evidence_texts": [
+        "The results on the CNNDM are summarized in Table TABREF25. The first and second blocks show results of previous extractive and abstractive models, respectively. Results of Step are all listed in the third block. Lead3 is a baseline which simply takes the first three sentences of a document as its summary. BERTExt BIBREF23 is an extractive model fine-tuning on BERT BIBREF2 that outperforms other extractive systems. PTGen BIBREF11, DRM BIBREF26, and DCA BIBREF42 are sequence-to-sequence learning based models extended with copy and coverage mechanism, reinforcement learning, and deep communicating agents individually. BottomUp BIBREF29 assisted summary generation with a word prediction model. BERTAbs BIBREF23 and UniLM BIBREF43 are both pre-training based seq2seq summarization models. We also implemented three abstractive models as our baselines. Transformer-S2S is 6-layer seq2seq Transformer BIBREF9 with random initialization. When we replaced the encoder of Transformer-S2S with $\\text{RoBERTa}_\\text{BASE}$ BIBREF4, $\\text{RoBERTa}_\\text{BASE}$-S2S outperforms Transformer-S2S by nearly 2 ROUGE, which demonstrates the effectiveness of pre-trained models. With even larger pre-trained model $\\text{RoBERTa}_\\text{LARGE}$, $\\text{RoBERTa}$-S2S is comparable with the best published abstractive model UniLM BIBREF43.",
+        "Based on $\\text{RoBERTa}$-S2S (the sizes of Step and $\\text{RoBERTa}$-S2S are identical), we study the effect of different pre-training tasks (see Section SECREF9). We first pre-train Step on unlabeled documents of CNNDM training split to get quick feedback, denoted as Step (in-domain). From the top part of the third block in Table TABREF25, we can see that Sentence Reordering (SR), Next Sentence Generation (NSG) and Masked Document Generation (MDG) can all improve $\\text{RoBERTa}$-S2S significantly measured by the ROUGE script. Note that according to the ROUGE script, $\\pm 0.22$ ROUGE almost always means a significant difference with $p < 0.05$. Interesting, even Step is pre-trained on 230 million words, it outperforms UniLM that is pre-trained on 3,000 million words BIBREF43. When we pre-train Step on even larger dataset (i.e., GIGA-CM), the results are further improved and Step outperforms all models in comparison, as listed in the bottom part of Table TABREF25.",
+        "Table TABREF26 presents results on NYT dataset. Following the same evaluation protocol as BIBREF36, we adopted the limited-length recall based ROUGE, where we truncated the predicted summaries to the length of the gold ones. Again, the first and second blocks show results of previous extractive and abstractive models, respectively. Results of Step are listed in the third block. Similar to the trends in CNNDM, Step leads significant performance gains (with $p<0.05$) compared to all other models in Table TABREF26.",
+        "Among all three pre-training tasks, SR works slightly better than the other two tasks (i.e., NSG and MDG). We also tried to randomly use all the three tasks during training with 1/3 probability each (indicated as ALL). Interesting, we observed that, in general, All outperforms all three tasks when employing unlabeled documents of training splits of CNNDM or NYT, which might be due to limited number of unlabeled documents of the training splits. After adding more data (i.e., GIAG-CM) to pre-training, SR consistently achieves highest ROUGE-2 on both CNNDM and NYT. We conclude that SR is the most effective task for pre-training since sentence reordering task requires comprehensively understanding a document in a wide coverage, going beyond individual words and sentences, which is highly close to the essense of abstractive document summarization."
+      ],
+      "child_pages": [
+        20,
+        20,
+        20,
+        20
+      ],
+      "child_sections": [
+        "Results ::: Automatic Evaluation",
+        "Results ::: Automatic Evaluation",
+        "Results ::: Automatic Evaluation",
+        "Results ::: Automatic Evaluation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results ::: Automatic Evaluation",
+          0
+        ],
+        [
+          "Results ::: Automatic Evaluation",
+          1
+        ],
+        [
+          "Results ::: Automatic Evaluation",
+          2
+        ],
+        [
+          "Results ::: Automatic Evaluation",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_20",
+      "section_id": "Results ::: Automatic Evaluation",
+      "section": "Results ::: Automatic Evaluation",
+      "title_path": "Results ::: Automatic Evaluation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Abstractive summarization aims to rewrite a long document to its shorter form, which is usually modeled as a sequence-to-sequence (Seq2Seq) learning problem. Seq2Seq Transformers are powerful models for this problem. Unfortunately, training large Seq2Seq Transformers on limited supervised summarization data is challenging. We, therefore, propose STEP (as shorthand for Sequence-to-Sequence Transformer Pre-training), which can be trained on large scale unlabeled documents. Specifically, STEP is pre-trained using three different tasks, namely sentence reordering, next sentence generation, and masked document generation. Experiments on two summarization datasets show that all three tasks can improve performance upon a heavily tuned large Seq2Seq Transformer which already includes a strong pre-trained encoder by a large margin. By using our best task to pre-train STEP, we outperform the best published abstractive model on CNN/DailyMail by 0.8 ROUGE-2 and New York Times by 2.4 ROUGE-2.",
+      "score": 4.384192776634228,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Abstractive summarization aims to rewrite a long document to its shorter form, which is usually modeled as a sequence-to-sequence (Seq2Seq) learning problem. Seq2Seq Transformers are powerful models for this problem. Unfortunately, training large Seq2Seq Transformers on limited supervised summarization data is challenging. We, therefore, propose STEP (as shorthand for Sequence-to-Sequence Transformer Pre-training), which can be trained on large scale unlabeled documents. Specifically, STEP is pre-trained using three different tasks, namely sentence reordering, next sentence generation, and masked document generation. Experiments on two summarization datasets show that all three tasks can improve performance upon a heavily tuned large Seq2Seq Transformer which already includes a strong pre-trained encoder by a large margin. By using our best task to pre-train STEP, we outperform the best published abstractive model on CNN/DailyMail by 0.8 ROUGE-2 and New York Times by 2.4 ROUGE-2."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation\n[source_id=34] The third task we consider is Masked Document Generation (MDG) that learns to recover a document with a masked span of tokens (see Figure FIGREF5). For simplicity, a document consisting of a sequence of tokens is denoted as $X=(x_1, x_2, \\cdots , x_{|X|})$. We randomly sample the length of the span $l$ from a discrete uniform distribution $\\mathcal {U}(a, b)$ and the span start position $k$ from another discrete uniform distribution $\\mathcal {U}(1, |X|-l+1)$ (see Section SECREF4 for more details). Thus, $\\mathcal {M}=(x_k, x_{k+1}, \\cdots , x_{k+l-1})$ is the text span to be masked.\n[source_id=35] One straightforward masking strategy is to replace each token residing in $\\mathcal {M}$ with a special [MASK] token. However, we refrain from doing so because of the following three reasons. Usually, [MASK] tokens will not appear in downstream tasks. Second, entirely masking a continuous sub-sequence of $X$ may make the whole document incomprehensible, which might be too challenging for our model to learn. Third, similar to SR, avoiding replacing every token with [MASK] also helps our model learn the ability of copying tokens from the input while preserving the ability of generating novel tokens.\n[source_id=36] In the sub-sequence $\\mathcal {M}$, each token is processed with one of the three strategies: 1) replaced with the [MASK] token; 2) replaced with a random token; 3) remain unchanged. Inspired by BERT BIBREF2, for 80% tokens, we follow strategy 1). In 10% of cases, we employ strategy 2) and we use strategy 3) for the remaining 10% of cases. Let $\\hat{X}_M$ denote the document after the application of our masking strategy. We could create infinite amount of $\\langle \\hat{X}_M,X\\rangle $ pairs to train Step.\n[source_id=37] During pre-training, we could also employ all the three tasks (i.e., SR, NSG, MDG) together. For each training batch, we randomly choose one task and each task is used for $1/3$ of the time.",
+      "score": 3.949206289194505,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        34,
+        35,
+        36,
+        37
+      ],
+      "child_qasper_evidence_texts": [
+        "The third task we consider is Masked Document Generation (MDG) that learns to recover a document with a masked span of tokens (see Figure FIGREF5). For simplicity, a document consisting of a sequence of tokens is denoted as $X=(x_1, x_2, \\cdots , x_{|X|})$. We randomly sample the length of the span $l$ from a discrete uniform distribution $\\mathcal {U}(a, b)$ and the span start position $k$ from another discrete uniform distribution $\\mathcal {U}(1, |X|-l+1)$ (see Section SECREF4 for more details). Thus, $\\mathcal {M}=(x_k, x_{k+1}, \\cdots , x_{k+l-1})$ is the text span to be masked.",
+        "One straightforward masking strategy is to replace each token residing in $\\mathcal {M}$ with a special [MASK] token. However, we refrain from doing so because of the following three reasons. Usually, [MASK] tokens will not appear in downstream tasks. Second, entirely masking a continuous sub-sequence of $X$ may make the whole document incomprehensible, which might be too challenging for our model to learn. Third, similar to SR, avoiding replacing every token with [MASK] also helps our model learn the ability of copying tokens from the input while preserving the ability of generating novel tokens.",
+        "In the sub-sequence $\\mathcal {M}$, each token is processed with one of the three strategies: 1) replaced with the [MASK] token; 2) replaced with a random token; 3) remain unchanged. Inspired by BERT BIBREF2, for 80% tokens, we follow strategy 1). In 10% of cases, we employ strategy 2) and we use strategy 3) for the remaining 10% of cases. Let $\\hat{X}_M$ denote the document after the application of our masking strategy. We could create infinite amount of $\\langle \\hat{X}_M,X\\rangle $ pairs to train Step.",
+        "During pre-training, we could also employ all the three tasks (i.e., SR, NSG, MDG) together. For each training batch, we randomly choose one task and each task is used for $1/3$ of the time."
+      ],
+      "child_pages": [
+        11,
+        11,
+        11,
+        11
+      ],
+      "child_sections": [
+        "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+          0
+        ],
+        [
+          "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+          1
+        ],
+        [
+          "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+          2
+        ],
+        [
+          "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "title_path": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Large pre-trained language models BIBREF0, BIBREF1, BIBREF2, BIBREF3, BIBREF4 improved the state-of-the-art of various natural language understanding (NLU) tasks such as question answering (e.g., SQuAD; BIBREF5), natural language inference (e.g., MNLI; BIBREF6) as well as text classification BIBREF7. These models (i.e., large LSTMs; BIBREF8 or Transformers; BIBREF9) are pre-trained on large scale unlabeled text with language modeling BIBREF0, BIBREF1, masked language modeling BIBREF2, BIBREF4 and permutation language modeling BIBREF3 objectives. In NLU tasks, pre-trained language models are mostly used as text encoders.\n[source_id=5] Abstractive document summarization aims to rewrite a long document to its shorter form while still retaining its important information. Different from extractive document summarization that extacts important sentences, abstractive document summarization may paraphrase original sentences or delete contents from them. For more details on differences between abstractive and extractive document summary, we refer the interested readers to Nenkova:McKeown:2011 and Section SECREF2. This task is usually framed as a sequence-to-sequence learning problem BIBREF10, BIBREF11. In this paper, we adopt the sequence-to-sequence (seq2seq) Transformer BIBREF9, which has been demonstrated to be the state-of-the-art for seq2seq modeling BIBREF9, BIBREF12. Unfortunately, training large seq2seq Transformers on limited supervised summarization data is challenging BIBREF12 (refer to Section SECREF5). The seq2seq Transformer has an encoder and a decoder Transformer. Abstractive summarization requires both encoding of an input document and generation of a summary usually containing multiple sentences. As mentioned earlier, we can take advantage of recent pre-trained Transformer encoders for the document encoding part as in liu2019text. However, liu2019text leave the decoder randomly initialized. In this paper, we aim to pre-train both the encoder (i.e., the encoding part) and decoder (i.e., the generation part) of a seq2seq Transformer , which is able to improve abstractive summarization performance.\n[source_id=6] Based on the above observations, we propose Step (as shorthand for Sequence-to-Sequence TransformEr Pre-training), which can be pre-trained on large scale unlabeled documents. Specifically, we design three tasks for seq2seq model pre-training, namely Sentence Reordering (SR), Next Sentence Generation (NSG), and Masked Document Generation (MDG). SR learns to recover a document with randomly shuffled sentences. NSG generates the next segment of a document based on its preceding segment. MDG recovers a masked document to its original form. After pre-trianing Step using the three tasks on unlabeled documents, we fine-tune it on supervised summarization datasets.\n[source_id=7] We evaluate our methods on two summarization datasets (i.e., the CNN/DailyMail and the New York Times datasets). Experiments show that all three tasks we propose can improve upon a heavily tuned large seq2seq Transformer which already includes a strong pre-trained encoder by a large margin. Compared to the best published abstractive models, Step improves the ROUGE-2 by 0.8 on the CNN/DailyMail dataset and by 2.4 on the New York Times dataset using our best performing task for pre-training. Human experiments also show that Step can produce significantly better summaries in comparison with recent strong abstractive models.",
+      "score": 3.937206295992962,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "child_qasper_evidence_texts": [
+        "Large pre-trained language models BIBREF0, BIBREF1, BIBREF2, BIBREF3, BIBREF4 improved the state-of-the-art of various natural language understanding (NLU) tasks such as question answering (e.g., SQuAD; BIBREF5), natural language inference (e.g., MNLI; BIBREF6) as well as text classification BIBREF7. These models (i.e., large LSTMs; BIBREF8 or Transformers; BIBREF9) are pre-trained on large scale unlabeled text with language modeling BIBREF0, BIBREF1, masked language modeling BIBREF2, BIBREF4 and permutation language modeling BIBREF3 objectives. In NLU tasks, pre-trained language models are mostly used as text encoders.",
+        "Abstractive document summarization aims to rewrite a long document to its shorter form while still retaining its important information. Different from extractive document summarization that extacts important sentences, abstractive document summarization may paraphrase original sentences or delete contents from them. For more details on differences between abstractive and extractive document summary, we refer the interested readers to Nenkova:McKeown:2011 and Section SECREF2. This task is usually framed as a sequence-to-sequence learning problem BIBREF10, BIBREF11. In this paper, we adopt the sequence-to-sequence (seq2seq) Transformer BIBREF9, which has been demonstrated to be the state-of-the-art for seq2seq modeling BIBREF9, BIBREF12. Unfortunately, training large seq2seq Transformers on limited supervised summarization data is challenging BIBREF12 (refer to Section SECREF5). The seq2seq Transformer has an encoder and a decoder Transformer. Abstractive summarization requires both encoding of an input document and generation of a summary usually containing multiple sentences. As mentioned earlier, we can take advantage of recent pre-trained Transformer encoders for the document encoding part as in liu2019text. However, liu2019text leave the decoder randomly initialized. In this paper, we aim to pre-train both the encoder (i.e., the encoding part) and decoder (i.e., the generation part) of a seq2seq Transformer , which is able to improve abstractive summarization performance.",
+        "Based on the above observations, we propose Step (as shorthand for Sequence-to-Sequence TransformEr Pre-training), which can be pre-trained on large scale unlabeled documents. Specifically, we design three tasks for seq2seq model pre-training, namely Sentence Reordering (SR), Next Sentence Generation (NSG), and Masked Document Generation (MDG). SR learns to recover a document with randomly shuffled sentences. NSG generates the next segment of a document based on its preceding segment. MDG recovers a masked document to its original form. After pre-trianing Step using the three tasks on unlabeled documents, we fine-tune it on supervised summarization datasets.",
+        "We evaluate our methods on two summarization datasets (i.e., the CNN/DailyMail and the New York Times datasets). Experiments show that all three tasks we propose can improve upon a heavily tuned large seq2seq Transformer which already includes a strong pre-trained encoder by a large margin. Compared to the best published abstractive models, Step improves the ROUGE-2 by 0.8 on the CNN/DailyMail dataset and by 2.4 on the New York Times dataset using our best performing task for pre-training. Human experiments also show that Step can produce significantly better summaries in comparison with recent strong abstractive models."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Sequence-to-Sequence Transformer Pre-training ::: Fine-tuning\n[source_id=39] After pre-training Step with the three tasks introduced in Section SECREF9, we fine-tune the model on abstractive document summarization datasets. The fine-tuning process is straightforward. We simply continue to train Step on the supervised document-summary pairs. Similar to other seq2seq summarization models, we do beam search during the generation of summaries.",
+      "score": 3.3437791476499275,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        39
+      ],
+      "child_qasper_evidence_texts": [
+        "After pre-training Step with the three tasks introduced in Section SECREF9, we fine-tune the model on abstractive document summarization datasets. The fine-tuning process is straightforward. We simply continue to train Step on the supervised document-summary pairs. Similar to other seq2seq summarization models, we do beam search during the generation of summaries."
+      ],
+      "child_pages": [
+        12
+      ],
+      "child_sections": [
+        "Sequence-to-Sequence Transformer Pre-training ::: Fine-tuning"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Sequence-to-Sequence Transformer Pre-training ::: Fine-tuning",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Sequence-to-Sequence Transformer Pre-training ::: Fine-tuning",
+      "section": "Sequence-to-Sequence Transformer Pre-training ::: Fine-tuning",
+      "title_path": "Sequence-to-Sequence Transformer Pre-training ::: Fine-tuning",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_22",
+      "content": "[Section] Conclusion\n[source_id=66] We proposed Step, a seq2seq transformer pre-training approach, for abstractive document summarization. Specifically, three pre-training tasks are designed, sentence reordering, next sentence generation, and masked document generation. When we only employ the unlabeled documents in the training splits of summarization datasets to pre-training Step with our proposed tasks, the summarization model based on the pre-trained Step outperforms the best published abstractive system. Involving large scale data to pre-training leads to larger performance gains. By using the best performing pre-training task, Step achieves 0.8 absolute ROUGE-2 improvements on CNN/DailyMail and 2.4 absolute ROUGE-2 improvements on New York Times. In the future, we would like to investigate other tasks to pre-train the seq2seq transformer model. Pre-training for unsupervised abstractive summarization is also an interesting direction and worth exploration.",
+      "score": 3.1381786858608747,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_22",
+      "child_source_node_ids": [
+        66
+      ],
+      "child_qasper_evidence_texts": [
+        "We proposed Step, a seq2seq transformer pre-training approach, for abstractive document summarization. Specifically, three pre-training tasks are designed, sentence reordering, next sentence generation, and masked document generation. When we only employ the unlabeled documents in the training splits of summarization datasets to pre-training Step with our proposed tasks, the summarization model based on the pre-trained Step outperforms the best published abstractive system. Involving large scale data to pre-training leads to larger performance gains. By using the best performing pre-training task, Step achieves 0.8 absolute ROUGE-2 improvements on CNN/DailyMail and 2.4 absolute ROUGE-2 improvements on New York Times. In the future, we would like to investigate other tasks to pre-train the seq2seq transformer model. Pre-training for unsupervised abstractive summarization is also an interesting direction and worth exploration."
+      ],
+      "child_pages": [
+        22
+      ],
+      "child_sections": [
+        "Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_22",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Related Work ::: Abstractive Summarization\n[source_id=13] The goal of abstractive summarization is to generate summaries by rewriting a document, which is a sequence-to-sequence learning problem. seq2seq attentive LSTMs BIBREF8, BIBREF24 are employed in nallapati2016abstractive. Even these models are extended with copy mechanism BIBREF25, coverage model BIBREF11 and reinforcement learning BIBREF26, their results are still very close to that of Lead3 which selects the leading three sentences of a document as its summary. One possible reason is that LSTMs without pre-training are not powerful enough. liu2019text used a seq2seq Transformer model with its encoder initialized with a pre-trained Transformer (i.e., BERT; BIBREF2) and achieved the state-of-the-art performance. Our work goes one step further, we propose a method to pre-train the decoder together with the encoder and then initialize both the encoder and decoder of a summarization model with the pre-trained Transformers.\n[source_id=14] There is also a line of work that bridges extractive and abstractive models with reinforcement learning BIBREF27, attention fusion BIBREF28 and bottom-up attention BIBREF29, while our model is conceptually simpler.",
+      "score": 3.1202981071886127,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        13,
+        14
+      ],
+      "child_qasper_evidence_texts": [
+        "The goal of abstractive summarization is to generate summaries by rewriting a document, which is a sequence-to-sequence learning problem. seq2seq attentive LSTMs BIBREF8, BIBREF24 are employed in nallapati2016abstractive. Even these models are extended with copy mechanism BIBREF25, coverage model BIBREF11 and reinforcement learning BIBREF26, their results are still very close to that of Lead3 which selects the leading three sentences of a document as its summary. One possible reason is that LSTMs without pre-training are not powerful enough. liu2019text used a seq2seq Transformer model with its encoder initialized with a pre-trained Transformer (i.e., BERT; BIBREF2) and achieved the state-of-the-art performance. Our work goes one step further, we propose a method to pre-train the decoder together with the encoder and then initialize both the encoder and decoder of a summarization model with the pre-trained Transformers.",
+        "There is also a line of work that bridges extractive and abstractive models with reinforcement learning BIBREF27, attention fusion BIBREF28 and bottom-up attention BIBREF29, while our model is conceptually simpler."
+      ],
+      "child_pages": [
+        4,
+        4
+      ],
+      "child_sections": [
+        "Related Work ::: Abstractive Summarization",
+        "Related Work ::: Abstractive Summarization"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work ::: Abstractive Summarization",
+          0
+        ],
+        [
+          "Related Work ::: Abstractive Summarization",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Related Work ::: Abstractive Summarization",
+      "section": "Related Work ::: Abstractive Summarization",
+      "title_path": "Related Work ::: Abstractive Summarization",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_18",
+      "content": "[Section] Experimental Setup ::: Implementation Details\n[source_id=53] As mentioned in Section SECREF3, our model is a Seq2Seq Transformer model BIBREF9. The encoder is initialized with the $\\text{RoBERTa}_{\\text{LARGE}}$ model BIBREF4, and therefore they share the same architecture. Specifically, the encoder is a 24-layer Transformer. Each layer has 16 attention heads and its hidden size and feed-forward filter size are 1,024 and 4,096, respectively. The decoder is shallower with 6 layers. The hidden size and number of attention head of the decoder are identical to these of the encoder, but the feed-forward filter size is 2,048. We use a smaller filter size in the decoder to reduce the computational and memory cost. The dropout rates of all layers in the encoder are set to 0.1 and all dropout rates in the decoder are set to 0.3. Our models are optimized using Adam BIBREF40 with $\\beta _1=0.9$, $\\beta _2=0.98$. The other optimization hyper-parameters for pre-training and fine-tuning are different. In the pre-training stage, the encoder is initialized with a pre-trained model while the decoder is randomly initialized. Therefore, we used two separate optimizers for the encoder and decoder with a smaller learning rate for the encoder optimizer. Learning rates of the encoder and decoder are set to $2e-5$ and $1e-4$ with 10,000 warmup steps, respectively. We also adopted the same learning rate schedule strategies as BIBREF9. We used smaller batch sizes for datasets with less examples (i.e., 1,024 for GIGA-CM, 256 for CNNDM and 128 for NYT) to ensure each epoch has sufficient number of model updates. We trained our models until their convergence of validation perplexities (around 30 epochs on GIGA-CM, 60 epochs on CNNDM and 40 epochs on NYT). One epoch on GIGA-CM takes around 24 hours with 8 Nvidia Tesla V100 GPUs. The time costs for different pre-training tasks are close.\n[source_id=54] Most of the hyper-parameters in the fine-tuning stage are the same as these in the pre-training stage. The differences are as follows. The learning rates for both the encoder and decoder are set to $2e-5$ with 4,000 warmup steps, since both the encoder and decoder are already pre-trained. We trained our models for 50 epochs (saved per epoch) and selected the best model w.r.t. ROUGE score on the validation set . During decoding, we applied beam search with beam size of 5. Following BIBREF26, we also blocked repeating trigrams during beam search and tuned the minimum summary length on the validation set. Similar to the pre-training process, the datasets with less instances were fine-tuned with smaller batch size (i.e., 768 for CNNDM and 64 for NYT).",
+      "score": 2.8364321927645144,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_18",
+      "child_source_node_ids": [
+        53,
+        54
+      ],
+      "child_qasper_evidence_texts": [
+        "As mentioned in Section SECREF3, our model is a Seq2Seq Transformer model BIBREF9. The encoder is initialized with the $\\text{RoBERTa}_{\\text{LARGE}}$ model BIBREF4, and therefore they share the same architecture. Specifically, the encoder is a 24-layer Transformer. Each layer has 16 attention heads and its hidden size and feed-forward filter size are 1,024 and 4,096, respectively. The decoder is shallower with 6 layers. The hidden size and number of attention head of the decoder are identical to these of the encoder, but the feed-forward filter size is 2,048. We use a smaller filter size in the decoder to reduce the computational and memory cost. The dropout rates of all layers in the encoder are set to 0.1 and all dropout rates in the decoder are set to 0.3. Our models are optimized using Adam BIBREF40 with $\\beta _1=0.9$, $\\beta _2=0.98$. The other optimization hyper-parameters for pre-training and fine-tuning are different. In the pre-training stage, the encoder is initialized with a pre-trained model while the decoder is randomly initialized. Therefore, we used two separate optimizers for the encoder and decoder with a smaller learning rate for the encoder optimizer. Learning rates of the encoder and decoder are set to $2e-5$ and $1e-4$ with 10,000 warmup steps, respectively. We also adopted the same learning rate schedule strategies as BIBREF9. We used smaller batch sizes for datasets with less examples (i.e., 1,024 for GIGA-CM, 256 for CNNDM and 128 for NYT) to ensure each epoch has sufficient number of model updates. We trained our models until their convergence of validation perplexities (around 30 epochs on GIGA-CM, 60 epochs on CNNDM and 40 epochs on NYT). One epoch on GIGA-CM takes around 24 hours with 8 Nvidia Tesla V100 GPUs. The time costs for different pre-training tasks are close.",
+        "Most of the hyper-parameters in the fine-tuning stage are the same as these in the pre-training stage. The differences are as follows. The learning rates for both the encoder and decoder are set to $2e-5$ with 4,000 warmup steps, since both the encoder and decoder are already pre-trained. We trained our models for 50 epochs (saved per epoch) and selected the best model w.r.t. ROUGE score on the validation set . During decoding, we applied beam search with beam size of 5. Following BIBREF26, we also blocked repeating trigrams during beam search and tuned the minimum summary length on the validation set. Similar to the pre-training process, the datasets with less instances were fine-tuned with smaller batch size (i.e., 768 for CNNDM and 64 for NYT)."
+      ],
+      "child_pages": [
+        18,
+        18
+      ],
+      "child_sections": [
+        "Experimental Setup ::: Implementation Details",
+        "Experimental Setup ::: Implementation Details"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experimental Setup ::: Implementation Details",
+          0
+        ],
+        [
+          "Experimental Setup ::: Implementation Details",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_18",
+      "section_id": "Experimental Setup ::: Implementation Details",
+      "section": "Experimental Setup ::: Implementation Details",
+      "title_path": "Experimental Setup ::: Implementation Details",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 62,
+      "content": "Among all three pre-training tasks, SR works slightly better than the other two tasks (i.e., NSG and MDG). We also tried to randomly use all the three tasks during training with 1/3 probability each (indicated as ALL). Interesting, we observed that, in general, All outperforms all three tasks when employing unlabeled documents of training splits of CNNDM or NYT, which might be due to limited number of unlabeled documents of the training splits. After adding more data (i.e., GIAG-CM) to pre-training, SR consistently achieves highest ROUGE-2 on both CNNDM and NYT. We conclude that SR is the most effective task for pre-training since sentence reordering task requires comprehensively understanding a document in a wide coverage, going beyond individual words and sentences, which is highly close to the essense of abstractive document summarization.",
+      "qasper_evidence_text": "Among all three pre-training tasks, SR works slightly better than the other two tasks (i.e., NSG and MDG). We also tried to randomly use all the three tasks during training with 1/3 probability each (indicated as ALL). Interesting, we observed that, in general, All outperforms all three tasks when employing unlabeled documents of training splits of CNNDM or NYT, which might be due to limited number of unlabeled documents of the training splits. After adding more data (i.e., GIAG-CM) to pre-training, SR consistently achieves highest ROUGE-2 on both CNNDM and NYT. We conclude that SR is the most effective task for pre-training since sentence reordering task requires comprehensively understanding a document in a wide coverage, going beyond individual words and sentences, which is highly close to the essense of abstractive document summarization.",
+      "source_node_id": 62,
+      "node_id": 62,
+      "paragraph_id": 62,
+      "evidence_id": 62,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_20",
+      "rank": 1,
+      "score": 5.576720790035713,
+      "block_type": "paragraph",
+      "page": 20,
+      "section_id": "Results ::: Automatic Evaluation",
+      "section": "Results ::: Automatic Evaluation",
+      "title": "Results ::: Automatic Evaluation",
+      "hotpot_title": "Results ::: Automatic Evaluation",
+      "sent_id": 3,
+      "hotpot_sent_id": 3,
+      "supporting_rank": 1
+    },
+    {
+      "id": 34,
+      "content": "The third task we consider is Masked Document Generation (MDG) that learns to recover a document with a masked span of tokens (see Figure FIGREF5). For simplicity, a document consisting of a sequence of tokens is denoted as $X=(x_1, x_2, \\cdots , x_{|X|})$. We randomly sample the length of the span $l$ from a discrete uniform distribution $\\mathcal {U}(a, b)$ and the span start position $k$ from another discrete uniform distribution $\\mathcal {U}(1, |X|-l+1)$ (see Section SECREF4 for more details). Thus, $\\mathcal {M}=(x_k, x_{k+1}, \\cdots , x_{k+l-1})$ is the text span to be masked.",
+      "qasper_evidence_text": "The third task we consider is Masked Document Generation (MDG) that learns to recover a document with a masked span of tokens (see Figure FIGREF5). For simplicity, a document consisting of a sequence of tokens is denoted as $X=(x_1, x_2, \\cdots , x_{|X|})$. We randomly sample the length of the span $l$ from a discrete uniform distribution $\\mathcal {U}(a, b)$ and the span start position $k$ from another discrete uniform distribution $\\mathcal {U}(1, |X|-l+1)$ (see Section SECREF4 for more details). Thus, $\\mathcal {M}=(x_k, x_{k+1}, \\cdots , x_{k+l-1})$ is the text span to be masked.",
+      "source_node_id": 34,
+      "node_id": 34,
+      "paragraph_id": 34,
+      "evidence_id": 34,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_11",
+      "rank": 3,
+      "score": 3.949206289194505,
+      "block_type": "paragraph",
+      "page": 11,
+      "section_id": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "title": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "hotpot_title": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 2
+    },
+    {
+      "id": 35,
+      "content": "One straightforward masking strategy is to replace each token residing in $\\mathcal {M}$ with a special [MASK] token. However, we refrain from doing so because of the following three reasons. Usually, [MASK] tokens will not appear in downstream tasks. Second, entirely masking a continuous sub-sequence of $X$ may make the whole document incomprehensible, which might be too challenging for our model to learn. Third, similar to SR, avoiding replacing every token with [MASK] also helps our model learn the ability of copying tokens from the input while preserving the ability of generating novel tokens.",
+      "qasper_evidence_text": "One straightforward masking strategy is to replace each token residing in $\\mathcal {M}$ with a special [MASK] token. However, we refrain from doing so because of the following three reasons. Usually, [MASK] tokens will not appear in downstream tasks. Second, entirely masking a continuous sub-sequence of $X$ may make the whole document incomprehensible, which might be too challenging for our model to learn. Third, similar to SR, avoiding replacing every token with [MASK] also helps our model learn the ability of copying tokens from the input while preserving the ability of generating novel tokens.",
+      "source_node_id": 35,
+      "node_id": 35,
+      "paragraph_id": 35,
+      "evidence_id": 35,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_11",
+      "rank": 3,
+      "score": 3.949206289194505,
+      "block_type": "paragraph",
+      "page": 11,
+      "section_id": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "title": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "hotpot_title": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 3
+    },
+    {
+      "id": 36,
+      "content": "In the sub-sequence $\\mathcal {M}$, each token is processed with one of the three strategies: 1) replaced with the [MASK] token; 2) replaced with a random token; 3) remain unchanged. Inspired by BERT BIBREF2, for 80% tokens, we follow strategy 1). In 10% of cases, we employ strategy 2) and we use strategy 3) for the remaining 10% of cases. Let $\\hat{X}_M$ denote the document after the application of our masking strategy. We could create infinite amount of $\\langle \\hat{X}_M,X\\rangle $ pairs to train Step.",
+      "qasper_evidence_text": "In the sub-sequence $\\mathcal {M}$, each token is processed with one of the three strategies: 1) replaced with the [MASK] token; 2) replaced with a random token; 3) remain unchanged. Inspired by BERT BIBREF2, for 80% tokens, we follow strategy 1). In 10% of cases, we employ strategy 2) and we use strategy 3) for the remaining 10% of cases. Let $\\hat{X}_M$ denote the document after the application of our masking strategy. We could create infinite amount of $\\langle \\hat{X}_M,X\\rangle $ pairs to train Step.",
+      "source_node_id": 36,
+      "node_id": 36,
+      "paragraph_id": 36,
+      "evidence_id": 36,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_11",
+      "rank": 3,
+      "score": 3.949206289194505,
+      "block_type": "paragraph",
+      "page": 11,
+      "section_id": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "title": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "hotpot_title": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "sent_id": 2,
+      "hotpot_sent_id": 2,
+      "supporting_rank": 4
+    }
+  ],
+  "supporting_block_ids": [
+    62,
+    34,
+    35,
+    36
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Fine-tuning Bert for Summarization ::: Summarization Encoder\n[source_id=19] Although Bert has been used to fine-tune various NLP tasks, its application to summarization is not as straightforward. Since Bert is trained as a masked-language model, the output vectors are grounded to tokens instead of sentences, while in extractive summarization, most models manipulate sentence-level representations. Although segmentation embeddings represent different sentences in Bert, they only apply to sentence-pair inputs, while in summarization we must encode and manipulate multi-sentential inputs. Figure FIGREF2 illustrates our proposed Bert architecture for Summarization (which we call BertSum).\n[source_id=20] In order to represent individual sentences, we insert external [cls] tokens at the start of each sentence, and each [cls] symbol collects features for the sentence preceding it. We also use interval segment embeddings to distinguish multiple sentences within a document. For $sent_i$ we assign segment embedding $E_A$ or $E_B$ depending on whether $i$ is odd or even. For example, for document $[sent_1, sent_2, sent_3, sent_4, sent_5]$, we would assign embeddings $[E_A, E_B, E_A,E_B, E_A]$. This way, document representations are learned hierarchically where lower Transformer layers represent adjacent sentences, while higher layers, in combination with self-attention, represent multi-sentence discourse.\n[source_id=21] Position embeddings in the original Bert model have a maximum length of 512; we overcome this limitation by adding more position embeddings that are initialized randomly and fine-tuned with other parameters in the encoder.",
+  "score": 1.7798167612795468,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    19,
+    20,
+    21
+  ],
+  "child_qasper_evidence_texts": [
+    "Although Bert has been used to fine-tune various NLP tasks, its application to summarization is not as straightforward. Since Bert is trained as a masked-language model, the output vectors are grounded to tokens instead of sentences, while in extractive summarization, most models manipulate sentence-level representations. Although segmentation embeddings represent different sentences in Bert, they only apply to sentence-pair inputs, while in summarization we must encode and manipulate multi-sentential inputs. Figure FIGREF2 illustrates our proposed Bert architecture for Summarization (which we call BertSum).",
+    "In order to represent individual sentences, we insert external [cls] tokens at the start of each sentence, and each [cls] symbol collects features for the sentence preceding it. We also use interval segment embeddings to distinguish multiple sentences within a document. For $sent_i$ we assign segment embedding $E_A$ or $E_B$ depending on whether $i$ is odd or even. For example, for document $[sent_1, sent_2, sent_3, sent_4, sent_5]$, we would assign embeddings $[E_A, E_B, E_A,E_B, E_A]$. This way, document representations are learned hierarchically where lower Transformer layers represent adjacent sentences, while higher layers, in combination with self-attention, represent multi-sentence discourse.",
+    "Position embeddings in the original Bert model have a maximum length of 512; we overcome this limitation by adding more position embeddings that are initialized randomly and fine-tuned with other parameters in the encoder."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Fine-tuning Bert for Summarization ::: Summarization Encoder",
+    "Fine-tuning Bert for Summarization ::: Summarization Encoder",
+    "Fine-tuning Bert for Summarization ::: Summarization Encoder"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Fine-tuning Bert for Summarization ::: Summarization Encoder",
+      0
+    ],
+    [
+      "Fine-tuning Bert for Summarization ::: Summarization Encoder",
+      1
+    ],
+    [
+      "Fine-tuning Bert for Summarization ::: Summarization Encoder",
+      2
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Fine-tuning Bert for Summarization ::: Summarization Encoder",
+  "section": "Fine-tuning Bert for Summarization ::: Summarization Encoder",
+  "title_path": "Fine-tuning Bert for Summarization ::: Summarization Encoder",
+  "block_type": "long_unit"
+}

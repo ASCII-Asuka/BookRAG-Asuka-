@@ -1,0 +1,88 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] QA Model 2: KVMemNet\n[source_id=24] Despite the interpretability of PCNet, the coverage of anchor detection limits the upper bound of the approach. We implement a more powerful method based on the key-value memory network BIBREF19 , KVMemNet for short, which has proven powerful in KB-based question answering.\n[source_id=25] The KVMenNet could be viewed as a “soft” matching approach, which includes a parameterized memory consisting of key-value pairs. Intuitively, keys are used for matching with the question, and values are used for matching to the candidate answer. Given a KB fact ( $subj, pred, obj$ ), We consider both directions and add two key-value pairs in the memory, namely ( $key = subj +pred, value=obj$ ) and ( $key =obj + pred, value=subj$ ). The vectors of arguments/predicates are calculated the same way as described in PCNet. The concatenation of two vectors is used as the key vector $v_{key}$ .\n[source_id=26] Each memory item is assigned a relevance probability by comparing the question to each key.\n[source_id=27] $$\\alpha _{key_i} = {softmax}(v_q \\cdot v_{key_i})$$   (Eq. 12)\n[source_id=28] Afterwards, vectors in memory ( $v_{value}$ ) are weighted summed according to their addressing probabilities, and the vector $v_o$ is returned.\n[source_id=29] $$v_o = \\sum _i \\alpha _{key_i}v_{value_i}$$   (Eq. 13)\n[source_id=30] In PCNet, reasoning over two facts is achieved by incorporating 2-hop paths, while in KVMemNet this is achieved by repeating the memory access process twice. After receiving the result $v_o$ , we update the query with $q_2 = R(v_q + v_o)$ , where $R$ is model parameter. Finally, after a fixed number $n$ hops ( $n=2$ in this work), the resulting vector is used to measure the relevance to candidate answers via the dot product.",
+  "score": 4.284493758638286,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ],
+  "child_qasper_evidence_texts": [
+    "Despite the interpretability of PCNet, the coverage of anchor detection limits the upper bound of the approach. We implement a more powerful method based on the key-value memory network BIBREF19 , KVMemNet for short, which has proven powerful in KB-based question answering.",
+    "The KVMenNet could be viewed as a “soft” matching approach, which includes a parameterized memory consisting of key-value pairs. Intuitively, keys are used for matching with the question, and values are used for matching to the candidate answer. Given a KB fact ( $subj, pred, obj$ ), We consider both directions and add two key-value pairs in the memory, namely ( $key = subj +pred, value=obj$ ) and ( $key =obj + pred, value=subj$ ). The vectors of arguments/predicates are calculated the same way as described in PCNet. The concatenation of two vectors is used as the key vector $v_{key}$ .",
+    "Each memory item is assigned a relevance probability by comparing the question to each key.",
+    "$$\\alpha _{key_i} = {softmax}(v_q \\cdot v_{key_i})$$   (Eq. 12)",
+    "Afterwards, vectors in memory ( $v_{value}$ ) are weighted summed according to their addressing probabilities, and the vector $v_o$ is returned.",
+    "$$v_o = \\sum _i \\alpha _{key_i}v_{value_i}$$   (Eq. 13)",
+    "In PCNet, reasoning over two facts is achieved by incorporating 2-hop paths, while in KVMemNet this is achieved by repeating the memory access process twice. After receiving the result $v_o$ , we update the query with $q_2 = R(v_q + v_o)$ , where $R$ is model parameter. Finally, after a fixed number $n$ hops ( $n=2$ in this work), the resulting vector is used to measure the relevance to candidate answers via the dot product."
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "QA Model 2: KVMemNet",
+    "QA Model 2: KVMemNet",
+    "QA Model 2: KVMemNet",
+    "QA Model 2: KVMemNet",
+    "QA Model 2: KVMemNet",
+    "QA Model 2: KVMemNet",
+    "QA Model 2: KVMemNet"
+  ],
+  "child_hotpot_facts": [
+    [
+      "QA Model 2: KVMemNet",
+      0
+    ],
+    [
+      "QA Model 2: KVMemNet",
+      1
+    ],
+    [
+      "QA Model 2: KVMemNet",
+      2
+    ],
+    [
+      "QA Model 2: KVMemNet",
+      3
+    ],
+    [
+      "QA Model 2: KVMemNet",
+      4
+    ],
+    [
+      "QA Model 2: KVMemNet",
+      5
+    ],
+    [
+      "QA Model 2: KVMemNet",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "QA Model 2: KVMemNet",
+  "section": "QA Model 2: KVMemNet",
+  "title_path": "QA Model 2: KVMemNet",
+  "block_type": "long_unit"
+}

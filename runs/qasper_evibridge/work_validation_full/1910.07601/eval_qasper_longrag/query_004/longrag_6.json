@@ -1,0 +1,79 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Model Architecture ::: Proposed Model Architecture\n[source_id=24] An audio signal is represented sequence of feature vectors $S=\\lbrace S_1,S_2,...S_T\\rbrace $, where $T$ is the length of the utterance. In the proposed method the concept of a target window is used, to which and embedding is related. A target window $X_t$ is a segment of speech representing features from $S_t$ to $S_{t+C-1}$, where $t \\in \\lbrace 1,2,...T-C+1\\rbrace $ and $C$ denotes the target window size. The left neighbour window of the target window is defined as the segment between $S_{t-N}$ and $S_{t-1}$, and the segment between $S_{t+C}$ and $S_{t+C+N-1}$ represents the right neighbour window of the target window, with $N$ being the single sided neighbour window size. The concatenation of left and right neighbour segments is further referred to $Y_t$. The proposed approach aims to find joint latent factors between target window segment $X_t$ and the concatenation of left and right neighbour window segments $Y_t$, for all segments. For convenience the subscript $t$ is dropped in following derivations where appropriate. Two different context use configurations can be used.\n[source_id=25] Figure FIGREF7 illustrate these two approaches. The audio signal is split into a sequence of left neighbour segment, target segment and right neighbour segment. In the first approach (left side on figure FIGREF7), the concatenation of the left neighbour segment and right neighbour segment ($Y$) is input to a VAE modelBIBREF16, and target window ($X$) is predicted. In the second approach (right side on figure FIGREF7) the target window ($X$) is the input to a VAE model, and neighbour window ($Y$) is predicted.\n[source_id=26] The first approach is referred to as the contextual joint factor synthesis encoder as it aims to synthesise the target frame $X$. Only factors common between input and output can form the basis for such prediction, and the encoded embedding can be considered a representation of these joint factors. Similar to the standard VAE formulations, the objective function of CJFS is given in Eq. DISPLAY_FORM8:\n[source_id=27] The first term represents the reconstruction likelihood between predicted target window segments and the neighbour window segments, and the second term denotes how similar the learned distribution $q(z|Y)$ is to the prior distribution of $z$, $p(z)$\n[source_id=28] In practice, for the reconstruction term can be based on the mean squared error (MSE) between the true target segment and the predicted target segment. For the second term in Eq DISPLAY_FORM8, samples for $p(z)$ are obtained from Gaussian distribution with zero mean and a variance of one ($p(z) \\sim \\mathcal {N} (0,1)$).\n[source_id=29] The second approach is the contextual joint factor analysis encoder. The objective is to predict the temporal context $Y$ based on input from a single centre segment $X$. Again joint factors between the three windows are obtained, and encoded in an embedding. However this time an analysis of one segment is enough. Naturally the training objective function of CJFA is represented by change of variables, as given in Eq DISPLAY_FORM9.",
+  "score": 6.93431475326815,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "child_qasper_evidence_texts": [
+    "An audio signal is represented sequence of feature vectors $S=\\lbrace S_1,S_2,...S_T\\rbrace $, where $T$ is the length of the utterance. In the proposed method the concept of a target window is used, to which and embedding is related. A target window $X_t$ is a segment of speech representing features from $S_t$ to $S_{t+C-1}$, where $t \\in \\lbrace 1,2,...T-C+1\\rbrace $ and $C$ denotes the target window size. The left neighbour window of the target window is defined as the segment between $S_{t-N}$ and $S_{t-1}$, and the segment between $S_{t+C}$ and $S_{t+C+N-1}$ represents the right neighbour window of the target window, with $N$ being the single sided neighbour window size. The concatenation of left and right neighbour segments is further referred to $Y_t$. The proposed approach aims to find joint latent factors between target window segment $X_t$ and the concatenation of left and right neighbour window segments $Y_t$, for all segments. For convenience the subscript $t$ is dropped in following derivations where appropriate. Two different context use configurations can be used.",
+    "Figure FIGREF7 illustrate these two approaches. The audio signal is split into a sequence of left neighbour segment, target segment and right neighbour segment. In the first approach (left side on figure FIGREF7), the concatenation of the left neighbour segment and right neighbour segment ($Y$) is input to a VAE modelBIBREF16, and target window ($X$) is predicted. In the second approach (right side on figure FIGREF7) the target window ($X$) is the input to a VAE model, and neighbour window ($Y$) is predicted.",
+    "The first approach is referred to as the contextual joint factor synthesis encoder as it aims to synthesise the target frame $X$. Only factors common between input and output can form the basis for such prediction, and the encoded embedding can be considered a representation of these joint factors. Similar to the standard VAE formulations, the objective function of CJFS is given in Eq. DISPLAY_FORM8:",
+    "The first term represents the reconstruction likelihood between predicted target window segments and the neighbour window segments, and the second term denotes how similar the learned distribution $q(z|Y)$ is to the prior distribution of $z$, $p(z)$",
+    "In practice, for the reconstruction term can be based on the mean squared error (MSE) between the true target segment and the predicted target segment. For the second term in Eq DISPLAY_FORM8, samples for $p(z)$ are obtained from Gaussian distribution with zero mean and a variance of one ($p(z) \\sim \\mathcal {N} (0,1)$).",
+    "The second approach is the contextual joint factor analysis encoder. The objective is to predict the temporal context $Y$ based on input from a single centre segment $X$. Again joint factors between the three windows are obtained, and encoded in an embedding. However this time an analysis of one segment is enough. Naturally the training objective function of CJFA is represented by change of variables, as given in Eq DISPLAY_FORM9."
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Model Architecture ::: Proposed Model Architecture",
+    "Model Architecture ::: Proposed Model Architecture",
+    "Model Architecture ::: Proposed Model Architecture",
+    "Model Architecture ::: Proposed Model Architecture",
+    "Model Architecture ::: Proposed Model Architecture",
+    "Model Architecture ::: Proposed Model Architecture"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Model Architecture ::: Proposed Model Architecture",
+      0
+    ],
+    [
+      "Model Architecture ::: Proposed Model Architecture",
+      1
+    ],
+    [
+      "Model Architecture ::: Proposed Model Architecture",
+      2
+    ],
+    [
+      "Model Architecture ::: Proposed Model Architecture",
+      3
+    ],
+    [
+      "Model Architecture ::: Proposed Model Architecture",
+      4
+    ],
+    [
+      "Model Architecture ::: Proposed Model Architecture",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Model Architecture ::: Proposed Model Architecture",
+  "section": "Model Architecture ::: Proposed Model Architecture",
+  "title_path": "Model Architecture ::: Proposed Model Architecture",
+  "block_type": "long_unit"
+}

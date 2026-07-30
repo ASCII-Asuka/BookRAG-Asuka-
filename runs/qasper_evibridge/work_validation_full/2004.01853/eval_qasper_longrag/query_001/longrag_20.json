@@ -1,0 +1,61 @@
+{
+  "id": "longrag_20",
+  "content": "[Section] Results ::: Automatic Evaluation\n[source_id=59] The results on the CNNDM are summarized in Table TABREF25. The first and second blocks show results of previous extractive and abstractive models, respectively. Results of Step are all listed in the third block. Lead3 is a baseline which simply takes the first three sentences of a document as its summary. BERTExt BIBREF23 is an extractive model fine-tuning on BERT BIBREF2 that outperforms other extractive systems. PTGen BIBREF11, DRM BIBREF26, and DCA BIBREF42 are sequence-to-sequence learning based models extended with copy and coverage mechanism, reinforcement learning, and deep communicating agents individually. BottomUp BIBREF29 assisted summary generation with a word prediction model. BERTAbs BIBREF23 and UniLM BIBREF43 are both pre-training based seq2seq summarization models. We also implemented three abstractive models as our baselines. Transformer-S2S is 6-layer seq2seq Transformer BIBREF9 with random initialization. When we replaced the encoder of Transformer-S2S with $\\text{RoBERTa}_\\text{BASE}$ BIBREF4, $\\text{RoBERTa}_\\text{BASE}$-S2S outperforms Transformer-S2S by nearly 2 ROUGE, which demonstrates the effectiveness of pre-trained models. With even larger pre-trained model $\\text{RoBERTa}_\\text{LARGE}$, $\\text{RoBERTa}$-S2S is comparable with the best published abstractive model UniLM BIBREF43.\n[source_id=60] Based on $\\text{RoBERTa}$-S2S (the sizes of Step and $\\text{RoBERTa}$-S2S are identical), we study the effect of different pre-training tasks (see Section SECREF9). We first pre-train Step on unlabeled documents of CNNDM training split to get quick feedback, denoted as Step (in-domain). From the top part of the third block in Table TABREF25, we can see that Sentence Reordering (SR), Next Sentence Generation (NSG) and Masked Document Generation (MDG) can all improve $\\text{RoBERTa}$-S2S significantly measured by the ROUGE script. Note that according to the ROUGE script, $\\pm 0.22$ ROUGE almost always means a significant difference with $p < 0.05$. Interesting, even Step is pre-trained on 230 million words, it outperforms UniLM that is pre-trained on 3,000 million words BIBREF43. When we pre-train Step on even larger dataset (i.e., GIGA-CM), the results are further improved and Step outperforms all models in comparison, as listed in the bottom part of Table TABREF25.\n[source_id=61] Table TABREF26 presents results on NYT dataset. Following the same evaluation protocol as BIBREF36, we adopted the limited-length recall based ROUGE, where we truncated the predicted summaries to the length of the gold ones. Again, the first and second blocks show results of previous extractive and abstractive models, respectively. Results of Step are listed in the third block. Similar to the trends in CNNDM, Step leads significant performance gains (with $p<0.05$) compared to all other models in Table TABREF26.\n[source_id=62] Among all three pre-training tasks, SR works slightly better than the other two tasks (i.e., NSG and MDG). We also tried to randomly use all the three tasks during training with 1/3 probability each (indicated as ALL). Interesting, we observed that, in general, All outperforms all three tasks when employing unlabeled documents of training splits of CNNDM or NYT, which might be due to limited number of unlabeled documents of the training splits. After adding more data (i.e., GIAG-CM) to pre-training, SR consistently achieves highest ROUGE-2 on both CNNDM and NYT. We conclude that SR is the most effective task for pre-training since sentence reordering task requires comprehensively understanding a document in a wide coverage, going beyond individual words and sentences, which is highly close to the essense of abstractive document summarization.",
+  "score": 2.4127329077012774,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_20",
+  "child_source_node_ids": [
+    59,
+    60,
+    61,
+    62
+  ],
+  "child_qasper_evidence_texts": [
+    "The results on the CNNDM are summarized in Table TABREF25. The first and second blocks show results of previous extractive and abstractive models, respectively. Results of Step are all listed in the third block. Lead3 is a baseline which simply takes the first three sentences of a document as its summary. BERTExt BIBREF23 is an extractive model fine-tuning on BERT BIBREF2 that outperforms other extractive systems. PTGen BIBREF11, DRM BIBREF26, and DCA BIBREF42 are sequence-to-sequence learning based models extended with copy and coverage mechanism, reinforcement learning, and deep communicating agents individually. BottomUp BIBREF29 assisted summary generation with a word prediction model. BERTAbs BIBREF23 and UniLM BIBREF43 are both pre-training based seq2seq summarization models. We also implemented three abstractive models as our baselines. Transformer-S2S is 6-layer seq2seq Transformer BIBREF9 with random initialization. When we replaced the encoder of Transformer-S2S with $\\text{RoBERTa}_\\text{BASE}$ BIBREF4, $\\text{RoBERTa}_\\text{BASE}$-S2S outperforms Transformer-S2S by nearly 2 ROUGE, which demonstrates the effectiveness of pre-trained models. With even larger pre-trained model $\\text{RoBERTa}_\\text{LARGE}$, $\\text{RoBERTa}$-S2S is comparable with the best published abstractive model UniLM BIBREF43.",
+    "Based on $\\text{RoBERTa}$-S2S (the sizes of Step and $\\text{RoBERTa}$-S2S are identical), we study the effect of different pre-training tasks (see Section SECREF9). We first pre-train Step on unlabeled documents of CNNDM training split to get quick feedback, denoted as Step (in-domain). From the top part of the third block in Table TABREF25, we can see that Sentence Reordering (SR), Next Sentence Generation (NSG) and Masked Document Generation (MDG) can all improve $\\text{RoBERTa}$-S2S significantly measured by the ROUGE script. Note that according to the ROUGE script, $\\pm 0.22$ ROUGE almost always means a significant difference with $p < 0.05$. Interesting, even Step is pre-trained on 230 million words, it outperforms UniLM that is pre-trained on 3,000 million words BIBREF43. When we pre-train Step on even larger dataset (i.e., GIGA-CM), the results are further improved and Step outperforms all models in comparison, as listed in the bottom part of Table TABREF25.",
+    "Table TABREF26 presents results on NYT dataset. Following the same evaluation protocol as BIBREF36, we adopted the limited-length recall based ROUGE, where we truncated the predicted summaries to the length of the gold ones. Again, the first and second blocks show results of previous extractive and abstractive models, respectively. Results of Step are listed in the third block. Similar to the trends in CNNDM, Step leads significant performance gains (with $p<0.05$) compared to all other models in Table TABREF26.",
+    "Among all three pre-training tasks, SR works slightly better than the other two tasks (i.e., NSG and MDG). We also tried to randomly use all the three tasks during training with 1/3 probability each (indicated as ALL). Interesting, we observed that, in general, All outperforms all three tasks when employing unlabeled documents of training splits of CNNDM or NYT, which might be due to limited number of unlabeled documents of the training splits. After adding more data (i.e., GIAG-CM) to pre-training, SR consistently achieves highest ROUGE-2 on both CNNDM and NYT. We conclude that SR is the most effective task for pre-training since sentence reordering task requires comprehensively understanding a document in a wide coverage, going beyond individual words and sentences, which is highly close to the essense of abstractive document summarization."
+  ],
+  "child_pages": [
+    20,
+    20,
+    20,
+    20
+  ],
+  "child_sections": [
+    "Results ::: Automatic Evaluation",
+    "Results ::: Automatic Evaluation",
+    "Results ::: Automatic Evaluation",
+    "Results ::: Automatic Evaluation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Results ::: Automatic Evaluation",
+      0
+    ],
+    [
+      "Results ::: Automatic Evaluation",
+      1
+    ],
+    [
+      "Results ::: Automatic Evaluation",
+      2
+    ],
+    [
+      "Results ::: Automatic Evaluation",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_20",
+  "section_id": "Results ::: Automatic Evaluation",
+  "section": "Results ::: Automatic Evaluation",
+  "title_path": "Results ::: Automatic Evaluation",
+  "block_type": "long_unit"
+}

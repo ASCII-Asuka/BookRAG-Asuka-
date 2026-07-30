@@ -1,0 +1,79 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Model Sensitivity\n[source_id=27] In computer vision, an important factor determining the success of an adversary is the norm constraint on the perturbations allowed to an image ( $|| \\bf x - \\bf x^{\\prime }||_{\\infty } < \\epsilon $ ). Higher values of $\\epsilon $ lead to a higher chance of mis-classification for at least one $\\bf x^{\\prime }$ . Defense methods such as quantization BIBREF22 and thermometer encoding BIBREF23 try to reduce the space of perturbations available to the adversary by making the model invariant to small changes in the input.\n[source_id=28] In NLP, we often get such invariance for free, e.g., for a word-level model, most of the perturbations produced by our character-level adversary lead to an UNK at its input. If the model is robust to the presence of these UNK tokens, there is little room for an adversary to manipulate it. Character-level models, on the other hand, despite their superior performance in many tasks, do not enjoy such invariance. This characteristic invariance could be exploited by an attacker. Thus, to limit the number of different inputs to the classifier, we wish to reduce the number of distinct word recognition outputs that an attacker can induce, not just the number of words on which the model is “fooled”. We denote this property of a model as its sensitivity.\n[source_id=29] We can quantify this notion for a word recognition system $W$ as the expected number of unique outputs it assigns to a set of adversarial perturbations. Given a sentence $s$ from the set of sentences $\\mathcal {S}$ , let $A(s) = {s_1}^{\\prime } , {s_2}^{\\prime }, \\dots , {s_n}^{\\prime }$ denote the set of $n$ perturbations to it under attack type $A$ , and let $V$ be the function that maps strings to an input representation for the downstream classifier. For a word level model, $V$ would transform sentences to a sequence of word ids, mapping OOV words to the same UNK ID. Whereas, for a char (or word+char, word-piece) model, $V$ would map inputs to a sequence of character IDs. Formally, sensitivity is defined as\n[source_id=30] $$S_{W,V}^A=\\mathbb {E}_{s}\\left[\\frac{\\#_{u}(V \\circ W({s_1}^{\\prime }), \\dots , V \\circ W({s_n}^{\\prime }))}{n}\\right] ,$$   (Eq. 12)\n[source_id=31] where $V \\circ W (s_i)$ returns the input representation (of the downstream classifier) for the output string produced by the word-recognizer $W$ using $s_i$ and $\\#_{u}(\\cdot )$ counts the number of unique arguments.\n[source_id=32] Intuitively, we expect a high value of $S_{W, V}^A$ to lead to a lower robustness of the downstream classifier, since the adversary has more degrees of freedom to attack the classifier. Thus, when using word recognition as a defense, it is prudent to design a low sensitivity system with a low error rate. However, as we will demonstrate, there is often a trade-off between sensitivity and error rate.",
+  "score": 2.4384281527193314,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "child_qasper_evidence_texts": [
+    "In computer vision, an important factor determining the success of an adversary is the norm constraint on the perturbations allowed to an image ( $|| \\bf x - \\bf x^{\\prime }||_{\\infty } < \\epsilon $ ). Higher values of $\\epsilon $ lead to a higher chance of mis-classification for at least one $\\bf x^{\\prime }$ . Defense methods such as quantization BIBREF22 and thermometer encoding BIBREF23 try to reduce the space of perturbations available to the adversary by making the model invariant to small changes in the input.",
+    "In NLP, we often get such invariance for free, e.g., for a word-level model, most of the perturbations produced by our character-level adversary lead to an UNK at its input. If the model is robust to the presence of these UNK tokens, there is little room for an adversary to manipulate it. Character-level models, on the other hand, despite their superior performance in many tasks, do not enjoy such invariance. This characteristic invariance could be exploited by an attacker. Thus, to limit the number of different inputs to the classifier, we wish to reduce the number of distinct word recognition outputs that an attacker can induce, not just the number of words on which the model is “fooled”. We denote this property of a model as its sensitivity.",
+    "We can quantify this notion for a word recognition system $W$ as the expected number of unique outputs it assigns to a set of adversarial perturbations. Given a sentence $s$ from the set of sentences $\\mathcal {S}$ , let $A(s) = {s_1}^{\\prime } , {s_2}^{\\prime }, \\dots , {s_n}^{\\prime }$ denote the set of $n$ perturbations to it under attack type $A$ , and let $V$ be the function that maps strings to an input representation for the downstream classifier. For a word level model, $V$ would transform sentences to a sequence of word ids, mapping OOV words to the same UNK ID. Whereas, for a char (or word+char, word-piece) model, $V$ would map inputs to a sequence of character IDs. Formally, sensitivity is defined as",
+    "$$S_{W,V}^A=\\mathbb {E}_{s}\\left[\\frac{\\#_{u}(V \\circ W({s_1}^{\\prime }), \\dots , V \\circ W({s_n}^{\\prime }))}{n}\\right] ,$$   (Eq. 12)",
+    "where $V \\circ W (s_i)$ returns the input representation (of the downstream classifier) for the output string produced by the word-recognizer $W$ using $s_i$ and $\\#_{u}(\\cdot )$ counts the number of unique arguments.",
+    "Intuitively, we expect a high value of $S_{W, V}^A$ to lead to a lower robustness of the downstream classifier, since the adversary has more degrees of freedom to attack the classifier. Thus, when using word recognition as a defense, it is prudent to design a low sensitivity system with a low error rate. However, as we will demonstrate, there is often a trade-off between sensitivity and error rate."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Model Sensitivity",
+    "Model Sensitivity",
+    "Model Sensitivity",
+    "Model Sensitivity",
+    "Model Sensitivity",
+    "Model Sensitivity"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Model Sensitivity",
+      0
+    ],
+    [
+      "Model Sensitivity",
+      1
+    ],
+    [
+      "Model Sensitivity",
+      2
+    ],
+    [
+      "Model Sensitivity",
+      3
+    ],
+    [
+      "Model Sensitivity",
+      4
+    ],
+    [
+      "Model Sensitivity",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Model Sensitivity",
+  "section": "Model Sensitivity",
+  "title_path": "Model Sensitivity",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,124 @@
+{
+  "id": "longrag_3",
+  "content": "[Section] Sequence to Sequence Generation\n[source_id=14] Sequence to Sequence (Seq2Seq) learning was first introduced by BIBREF17 ; together with the soft attention mechanism of BIBREF18 , it has been widely used in natural language generation tasks. BIBREF19 , BIBREF20 used a mixture of generation and pointing to overcome the problem of large vocabulary size. BIBREF21 , BIBREF22 applied Seq2Seq models on summary generation tasks, while BIBREF23 , BIBREF24 generated questions conditioned on documents and answers from machine comprehension datasets. Seq2Seq was also applied on neural sentence simplification BIBREF25 and paraphrase generation tasks BIBREF26 .\n[source_id=15] Given a source text consisting of INLINEFORM0 words INLINEFORM1 , the encoder converts their corresponding embeddings INLINEFORM2 into a set of INLINEFORM3 real-valued vectors INLINEFORM4 with a bidirectional GRU BIBREF27 : DISPLAYFORM0\n[source_id=16] Dropout BIBREF28 is applied to both INLINEFORM0 and INLINEFORM1 for regularization.\n[source_id=17] The decoder is a uni-directional GRU, which generates a new state INLINEFORM0 at each time-step INLINEFORM1 from the word embedding INLINEFORM2 and the recurrent state INLINEFORM3 : DISPLAYFORM0\n[source_id=18] The initial state INLINEFORM0 is derived from the final encoder state INLINEFORM1 by applying a single-layer feed-forward neural net (FNN): INLINEFORM2 . Dropout is applied to both the embeddings INLINEFORM3 and the GRU states INLINEFORM4 .\n[source_id=19] When generating token INLINEFORM0 , in order to better incorporate information from the source text, an attention mechanism BIBREF18 is employed to infer the importance INLINEFORM1 of each source word INLINEFORM2 given the current decoder state INLINEFORM3 . This importance is measured by an energy function with a 2-layer FNN: DISPLAYFORM0\n[source_id=20] The output over all decoding steps INLINEFORM0 thus define a distribution over the source sequence: DISPLAYFORM0\n[source_id=21] These attention scores are then used as weights for a refined representation of the source encodings, which is then concatenated to the decoder state INLINEFORM0 to derive a generative distribution INLINEFORM1 : DISPLAYFORM0\n[source_id=22] where the output size of INLINEFORM0 equals to the target vocabulary size. Subscript INLINEFORM1 indicates the abstractive nature of INLINEFORM2 since it is a distribution over a prescribed vocabulary.\n[source_id=23] We employ the pointer softmax BIBREF19 mechanism to switch between generating a token INLINEFORM0 (from a vocabulary) and pointing (to a token in the source text). Specifically, the pointer softmax module computes a scalar switch INLINEFORM1 at each generation time-step and uses it to interpolate the abstractive distribution INLINEFORM2 over the vocabulary (see Equation EQREF16 ) and the extractive distribution INLINEFORM3 over the source text tokens: DISPLAYFORM0\n[source_id=24] where INLINEFORM0 is conditioned on both the attention-weighted source representation INLINEFORM1 and the decoder state INLINEFORM2 : DISPLAYFORM0",
+  "score": 0.17111193573684821,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_3",
+  "child_source_node_ids": [
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24
+  ],
+  "child_qasper_evidence_texts": [
+    "Sequence to Sequence (Seq2Seq) learning was first introduced by BIBREF17 ; together with the soft attention mechanism of BIBREF18 , it has been widely used in natural language generation tasks. BIBREF19 , BIBREF20 used a mixture of generation and pointing to overcome the problem of large vocabulary size. BIBREF21 , BIBREF22 applied Seq2Seq models on summary generation tasks, while BIBREF23 , BIBREF24 generated questions conditioned on documents and answers from machine comprehension datasets. Seq2Seq was also applied on neural sentence simplification BIBREF25 and paraphrase generation tasks BIBREF26 .",
+    "Given a source text consisting of INLINEFORM0 words INLINEFORM1 , the encoder converts their corresponding embeddings INLINEFORM2 into a set of INLINEFORM3 real-valued vectors INLINEFORM4 with a bidirectional GRU BIBREF27 : DISPLAYFORM0",
+    "Dropout BIBREF28 is applied to both INLINEFORM0 and INLINEFORM1 for regularization.",
+    "The decoder is a uni-directional GRU, which generates a new state INLINEFORM0 at each time-step INLINEFORM1 from the word embedding INLINEFORM2 and the recurrent state INLINEFORM3 : DISPLAYFORM0",
+    "The initial state INLINEFORM0 is derived from the final encoder state INLINEFORM1 by applying a single-layer feed-forward neural net (FNN): INLINEFORM2 . Dropout is applied to both the embeddings INLINEFORM3 and the GRU states INLINEFORM4 .",
+    "When generating token INLINEFORM0 , in order to better incorporate information from the source text, an attention mechanism BIBREF18 is employed to infer the importance INLINEFORM1 of each source word INLINEFORM2 given the current decoder state INLINEFORM3 . This importance is measured by an energy function with a 2-layer FNN: DISPLAYFORM0",
+    "The output over all decoding steps INLINEFORM0 thus define a distribution over the source sequence: DISPLAYFORM0",
+    "These attention scores are then used as weights for a refined representation of the source encodings, which is then concatenated to the decoder state INLINEFORM0 to derive a generative distribution INLINEFORM1 : DISPLAYFORM0",
+    "where the output size of INLINEFORM0 equals to the target vocabulary size. Subscript INLINEFORM1 indicates the abstractive nature of INLINEFORM2 since it is a distribution over a prescribed vocabulary.",
+    "We employ the pointer softmax BIBREF19 mechanism to switch between generating a token INLINEFORM0 (from a vocabulary) and pointing (to a token in the source text). Specifically, the pointer softmax module computes a scalar switch INLINEFORM1 at each generation time-step and uses it to interpolate the abstractive distribution INLINEFORM2 over the vocabulary (see Equation EQREF16 ) and the extractive distribution INLINEFORM3 over the source text tokens: DISPLAYFORM0",
+    "where INLINEFORM0 is conditioned on both the attention-weighted source representation INLINEFORM1 and the decoder state INLINEFORM2 : DISPLAYFORM0"
+  ],
+  "child_pages": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "child_sections": [
+    "Sequence to Sequence Generation",
+    "Sequence to Sequence Generation",
+    "Sequence to Sequence Generation",
+    "Sequence to Sequence Generation",
+    "Sequence to Sequence Generation",
+    "Sequence to Sequence Generation",
+    "Sequence to Sequence Generation",
+    "Sequence to Sequence Generation",
+    "Sequence to Sequence Generation",
+    "Sequence to Sequence Generation",
+    "Sequence to Sequence Generation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Sequence to Sequence Generation",
+      0
+    ],
+    [
+      "Sequence to Sequence Generation",
+      1
+    ],
+    [
+      "Sequence to Sequence Generation",
+      2
+    ],
+    [
+      "Sequence to Sequence Generation",
+      3
+    ],
+    [
+      "Sequence to Sequence Generation",
+      4
+    ],
+    [
+      "Sequence to Sequence Generation",
+      5
+    ],
+    [
+      "Sequence to Sequence Generation",
+      6
+    ],
+    [
+      "Sequence to Sequence Generation",
+      7
+    ],
+    [
+      "Sequence to Sequence Generation",
+      8
+    ],
+    [
+      "Sequence to Sequence Generation",
+      9
+    ],
+    [
+      "Sequence to Sequence Generation",
+      10
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_3",
+  "section_id": "Sequence to Sequence Generation",
+  "section": "Sequence to Sequence Generation",
+  "title_path": "Sequence to Sequence Generation",
+  "block_type": "long_unit"
+}

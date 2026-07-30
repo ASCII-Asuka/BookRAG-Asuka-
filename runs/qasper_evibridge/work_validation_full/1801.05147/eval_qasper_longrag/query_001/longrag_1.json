@@ -1,0 +1,79 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] There has been significant progress on Named Entity Recognition (NER) in recent years using models based on machine learning algorithms BIBREF0 , BIBREF1 , BIBREF2 . As with other Natural Language Processing (NLP) tasks, building NER systems typically requires a massive amount of labeled training data which are annotated by experts. In real applications, we often need to consider new types of entities in new domains where we do not have existing annotated data. For such new types of entities, however, it is very hard to find experts to annotate the data within short time limits and hiring experts is costly and non-scalable, both in terms of time and money.\n[source_id=5] In order to quickly obtain new training data, we can use crowdsourcing as one alternative way at lower cost in a short time. But as an exchange, crowd annotations from non-experts may be of lower quality than those from experts. It is one biggest challenge to build a powerful NER system on such a low quality annotated data. Although we can obtain high quality annotations for each input sentence by majority voting, it can be a waste of human labors to achieve such a goal, especially for some ambiguous sentences which may require a number of annotations to reach an agreement. Thus majority work directly build models on crowd annotations, trying to model the differences among annotators, for example, some of the annotators may be more trustful BIBREF3 , BIBREF4 .\n[source_id=6] Here we focus mainly on the Chinese NER, which is more difficult than NER for other languages such as English for the lack of morphological variations such as capitalization and in particular the uncertainty in word segmentation. The Chinese NE taggers trained on news domain often perform poor in other domains. Although we can alleviate the problem by using character-level tagging to resolve the problem of poor word segmentation performances BIBREF5 , still there exists a large gap when the target domain changes, especially for the texts of social media. Thus, in order to get a good tagger for new domains and also for the conditions of new entity types, we require large amounts of labeled data. Therefore, crowdsourcing is a reasonable solution for these situations.\n[source_id=7] In this paper, we propose an approach to training a Chinese NER system on the crowd-annotated data. Our goal is to extract additional annotator independent features by adversarial training, alleviating the annotation noises of non-experts. The idea of adversarial training in neural networks has been used successfully in several NLP tasks, such as cross-lingual POS tagging BIBREF6 and cross-domain POS tagging BIBREF7 . They use it to reduce the negative influences of the input divergences among different domains or languages, while we use adversarial training to reduce the negative influences brought by different crowd annotators. To our best knowledge, we are the first to apply adversarial training for crowd annotation learning.\n[source_id=8] In the learning framework, we perform adversarial training between the basic NER and an additional worker discriminator. We have a common Bi-LSTM for representing annotator-generic information and a private Bi-LSTM for representing annotator-specific information. We build another label Bi-LSTM by the crowd-annotated NE label sequence which reflects the mind of the crowd annotators who learn entity definitions by reading the annotation guidebook. The common and private Bi-LSTMs are used for NER, while the common and label Bi-LSTMs are used as inputs for the worker discriminator. The parameters of the common Bi-LSTM are learned by adversarial training, maximizing the worker discriminator loss and meanwhile minimizing the NER loss. Thus the resulting features of the common Bi-LSTM are worker invariant and NER sensitive.\n[source_id=9] For evaluation, we create two Chinese NER datasets in two domains: dialog and e-commerce. We require the crowd annotators to label the types of entities, including person, song, brand, product, and so on. Identifying these entities is useful for chatbot and e-commerce platforms BIBREF8 . Then we conduct experiments on the newly created datasets to verify the effectiveness of the proposed adversarial neural network model. The results show that our system outperforms very strong baseline systems. In summary, we make the following contributions:",
+  "score": 3.4548156091136546,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "child_qasper_evidence_texts": [
+    "There has been significant progress on Named Entity Recognition (NER) in recent years using models based on machine learning algorithms BIBREF0 , BIBREF1 , BIBREF2 . As with other Natural Language Processing (NLP) tasks, building NER systems typically requires a massive amount of labeled training data which are annotated by experts. In real applications, we often need to consider new types of entities in new domains where we do not have existing annotated data. For such new types of entities, however, it is very hard to find experts to annotate the data within short time limits and hiring experts is costly and non-scalable, both in terms of time and money.",
+    "In order to quickly obtain new training data, we can use crowdsourcing as one alternative way at lower cost in a short time. But as an exchange, crowd annotations from non-experts may be of lower quality than those from experts. It is one biggest challenge to build a powerful NER system on such a low quality annotated data. Although we can obtain high quality annotations for each input sentence by majority voting, it can be a waste of human labors to achieve such a goal, especially for some ambiguous sentences which may require a number of annotations to reach an agreement. Thus majority work directly build models on crowd annotations, trying to model the differences among annotators, for example, some of the annotators may be more trustful BIBREF3 , BIBREF4 .",
+    "Here we focus mainly on the Chinese NER, which is more difficult than NER for other languages such as English for the lack of morphological variations such as capitalization and in particular the uncertainty in word segmentation. The Chinese NE taggers trained on news domain often perform poor in other domains. Although we can alleviate the problem by using character-level tagging to resolve the problem of poor word segmentation performances BIBREF5 , still there exists a large gap when the target domain changes, especially for the texts of social media. Thus, in order to get a good tagger for new domains and also for the conditions of new entity types, we require large amounts of labeled data. Therefore, crowdsourcing is a reasonable solution for these situations.",
+    "In this paper, we propose an approach to training a Chinese NER system on the crowd-annotated data. Our goal is to extract additional annotator independent features by adversarial training, alleviating the annotation noises of non-experts. The idea of adversarial training in neural networks has been used successfully in several NLP tasks, such as cross-lingual POS tagging BIBREF6 and cross-domain POS tagging BIBREF7 . They use it to reduce the negative influences of the input divergences among different domains or languages, while we use adversarial training to reduce the negative influences brought by different crowd annotators. To our best knowledge, we are the first to apply adversarial training for crowd annotation learning.",
+    "In the learning framework, we perform adversarial training between the basic NER and an additional worker discriminator. We have a common Bi-LSTM for representing annotator-generic information and a private Bi-LSTM for representing annotator-specific information. We build another label Bi-LSTM by the crowd-annotated NE label sequence which reflects the mind of the crowd annotators who learn entity definitions by reading the annotation guidebook. The common and private Bi-LSTMs are used for NER, while the common and label Bi-LSTMs are used as inputs for the worker discriminator. The parameters of the common Bi-LSTM are learned by adversarial training, maximizing the worker discriminator loss and meanwhile minimizing the NER loss. Thus the resulting features of the common Bi-LSTM are worker invariant and NER sensitive.",
+    "For evaluation, we create two Chinese NER datasets in two domains: dialog and e-commerce. We require the crowd annotators to label the types of entities, including person, song, brand, product, and so on. Identifying these entities is useful for chatbot and e-commerce platforms BIBREF8 . Then we conduct experiments on the newly created datasets to verify the effectiveness of the proposed adversarial neural network model. The results show that our system outperforms very strong baseline systems. In summary, we make the following contributions:"
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

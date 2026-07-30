@@ -1,0 +1,88 @@
+{
+  "id": "longrag_3",
+  "content": "[Section] Derailment Datasets\n[source_id=28] We consider two datasets, representing related but slightly different forecasting tasks. The first dataset is an expanded version of the annotated Wikipedia conversations dataset from BIBREF9. This dataset uses carefully-controlled crowdsourced labels, strictly filtered to ensure the conversations are civil up to the moment of a personal attack. This is a useful property for the purposes of model analysis, and hence we focus on this as our primary dataset. However, we are conscious of the possibility that these strict labels may not fully capture the kind of behavior that moderators care about in practice. We therefore introduce a secondary dataset, constructed from the subreddit ChangeMyView (CMV) that does not use post-hoc annotations. Instead, the prediction task is to forecast whether the conversation will be subject to moderator action in the future.\n[source_id=29] Wikipedia data. BIBREF9's `Conversations Gone Awry' dataset consists of 1,270 conversations that took place between Wikipedia editors on publicly accessible talk pages. The conversations are sourced from the WikiConv dataset BIBREF59 and labeled by crowdworkers as either containing a personal attack from within (i.e., hostile behavior by one user in the conversation directed towards another) or remaining civil throughout.\n[source_id=30] A series of controls are implemented to prevent models from picking up on trivial correlations. To prevent models from capturing topic-specific information (e.g., political conversations are more likely to derail), each attack-containing conversation is paired with a clean conversation from the same talk page, where the talk page serves as a proxy for topic. To force models to actually capture conversational dynamics rather than detecting already-existing toxicity, human annotations are used to ensure that all comments preceding a personal attack are civil.\n[source_id=31] To the ends of more effective model training, we elected to expand the `Conversations Gone Awry' dataset, using the original annotation procedure. Since we found that the original data skewed towards shorter conversations, we focused this crowdsourcing run on longer conversations: ones with 4 or more comments preceding the attack. Through this additional crowdsourcing, we expand the dataset to 4,188 conversations, which we are publicly releasing as part of the Cornell Conversational Analysis Toolkit (ConvoKit).\n[source_id=32] We perform an 80-20-20 train/dev/test split, ensuring that paired conversations end up in the same split in order to preserve the topic control. Finally, we randomly sample another 1 million conversations from WikiConv to use for the unsupervised pre-training of the generative component.\n[source_id=33] Reddit CMV data. The CMV dataset is constructed from conversations collected via the Reddit API. In contrast to the Wikipedia-based dataset, we explicitly avoid the use of post-hoc annotation. Instead, we use as our label whether a conversation eventually had a comment removed by a moderator for violation of Rule 2: “Don't be rude or hostile to other users”.\n[source_id=34] Though the lack of post-hoc annotation limits the degree to which we can impose controls on the data (e.g., some conversations may contain toxic comments not flagged by the moderators) we do reproduce as many of the Wikipedia data's controls as we can. Namely, we replicate the topic control pairing by choosing pairs of positive and negative examples that belong to the same top-level post, following BIBREF12; and enforce that the removed comment was made by a user who was previously involved in the conversation. This process results in 6,842 conversations, to which we again apply a pair-preserving 80-20-20 split. Finally, we gather over 600,000 conversations that do not include any removed comment, for unsupervised pre-training.",
+  "score": 1.5439684442648633,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_3",
+  "child_source_node_ids": [
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34
+  ],
+  "child_qasper_evidence_texts": [
+    "We consider two datasets, representing related but slightly different forecasting tasks. The first dataset is an expanded version of the annotated Wikipedia conversations dataset from BIBREF9. This dataset uses carefully-controlled crowdsourced labels, strictly filtered to ensure the conversations are civil up to the moment of a personal attack. This is a useful property for the purposes of model analysis, and hence we focus on this as our primary dataset. However, we are conscious of the possibility that these strict labels may not fully capture the kind of behavior that moderators care about in practice. We therefore introduce a secondary dataset, constructed from the subreddit ChangeMyView (CMV) that does not use post-hoc annotations. Instead, the prediction task is to forecast whether the conversation will be subject to moderator action in the future.",
+    "Wikipedia data. BIBREF9's `Conversations Gone Awry' dataset consists of 1,270 conversations that took place between Wikipedia editors on publicly accessible talk pages. The conversations are sourced from the WikiConv dataset BIBREF59 and labeled by crowdworkers as either containing a personal attack from within (i.e., hostile behavior by one user in the conversation directed towards another) or remaining civil throughout.",
+    "A series of controls are implemented to prevent models from picking up on trivial correlations. To prevent models from capturing topic-specific information (e.g., political conversations are more likely to derail), each attack-containing conversation is paired with a clean conversation from the same talk page, where the talk page serves as a proxy for topic. To force models to actually capture conversational dynamics rather than detecting already-existing toxicity, human annotations are used to ensure that all comments preceding a personal attack are civil.",
+    "To the ends of more effective model training, we elected to expand the `Conversations Gone Awry' dataset, using the original annotation procedure. Since we found that the original data skewed towards shorter conversations, we focused this crowdsourcing run on longer conversations: ones with 4 or more comments preceding the attack. Through this additional crowdsourcing, we expand the dataset to 4,188 conversations, which we are publicly releasing as part of the Cornell Conversational Analysis Toolkit (ConvoKit).",
+    "We perform an 80-20-20 train/dev/test split, ensuring that paired conversations end up in the same split in order to preserve the topic control. Finally, we randomly sample another 1 million conversations from WikiConv to use for the unsupervised pre-training of the generative component.",
+    "Reddit CMV data. The CMV dataset is constructed from conversations collected via the Reddit API. In contrast to the Wikipedia-based dataset, we explicitly avoid the use of post-hoc annotation. Instead, we use as our label whether a conversation eventually had a comment removed by a moderator for violation of Rule 2: “Don't be rude or hostile to other users”.",
+    "Though the lack of post-hoc annotation limits the degree to which we can impose controls on the data (e.g., some conversations may contain toxic comments not flagged by the moderators) we do reproduce as many of the Wikipedia data's controls as we can. Namely, we replicate the topic control pairing by choosing pairs of positive and negative examples that belong to the same top-level post, following BIBREF12; and enforce that the removed comment was made by a user who was previously involved in the conversation. This process results in 6,842 conversations, to which we again apply a pair-preserving 80-20-20 split. Finally, we gather over 600,000 conversations that do not include any removed comment, for unsupervised pre-training."
+  ],
+  "child_pages": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "child_sections": [
+    "Derailment Datasets",
+    "Derailment Datasets",
+    "Derailment Datasets",
+    "Derailment Datasets",
+    "Derailment Datasets",
+    "Derailment Datasets",
+    "Derailment Datasets"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Derailment Datasets",
+      0
+    ],
+    [
+      "Derailment Datasets",
+      1
+    ],
+    [
+      "Derailment Datasets",
+      2
+    ],
+    [
+      "Derailment Datasets",
+      3
+    ],
+    [
+      "Derailment Datasets",
+      4
+    ],
+    [
+      "Derailment Datasets",
+      5
+    ],
+    [
+      "Derailment Datasets",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_3",
+  "section_id": "Derailment Datasets",
+  "section": "Derailment Datasets",
+  "title_path": "Derailment Datasets",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,61 @@
+{
+  "id": "longrag_12",
+  "content": "[Section] Computational Efficiency\n[source_id=74] Sentence embeddings need potentially be computed for Millions of sentences, hence, a high computation speed is desired. In this section, we compare SBERT to average GloVe embeddings, InferSent BIBREF4, and Universal Sentence Encoder BIBREF5.\n[source_id=75] For our comparison we use the sentences from the STS benchmark BIBREF10. We compute average GloVe embeddings using a simple for-loop with python dictionary lookups and NumPy. InferSent is based on PyTorch. For Universal Sentence Encoder, we use the TensorFlow Hub version, which is based on TensorFlow. SBERT is based on PyTorch. For improved computation of sentence embeddings, we implemented a smart batching strategy: Sentences with similar lengths are grouped together and are only padded to the longest element in a mini-batch. This drastically reduces computational overhead from padding tokens.\n[source_id=76] Performances were measured on a server with Intel i7-5820K CPU @ 3.30GHz, Nvidia Tesla V100 GPU, CUDA 9.2 and cuDNN. The results are depicted in Table TABREF26.\n[source_id=77] On CPU, InferSent is about 65% faster than SBERT. This is due to the much simpler network architecture. InferSent uses a single BiLSTM layer, while BERT uses 12 stacked transformer layers. However, an advantage of transformer networks is the computational efficiency on GPUs. There, SBERT with smart batching is about 9% faster than InferSent and about 55% faster than Universal Sentence Encoder. Smart batching achieves a speed-up of 89% on CPU and 48% on GPU. Average GloVe embeddings is obviously by a large margin the fastest method to compute sentence embeddings.",
+  "score": 1.6032724024117957,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_12",
+  "child_source_node_ids": [
+    74,
+    75,
+    76,
+    77
+  ],
+  "child_qasper_evidence_texts": [
+    "Sentence embeddings need potentially be computed for Millions of sentences, hence, a high computation speed is desired. In this section, we compare SBERT to average GloVe embeddings, InferSent BIBREF4, and Universal Sentence Encoder BIBREF5.",
+    "For our comparison we use the sentences from the STS benchmark BIBREF10. We compute average GloVe embeddings using a simple for-loop with python dictionary lookups and NumPy. InferSent is based on PyTorch. For Universal Sentence Encoder, we use the TensorFlow Hub version, which is based on TensorFlow. SBERT is based on PyTorch. For improved computation of sentence embeddings, we implemented a smart batching strategy: Sentences with similar lengths are grouped together and are only padded to the longest element in a mini-batch. This drastically reduces computational overhead from padding tokens.",
+    "Performances were measured on a server with Intel i7-5820K CPU @ 3.30GHz, Nvidia Tesla V100 GPU, CUDA 9.2 and cuDNN. The results are depicted in Table TABREF26.",
+    "On CPU, InferSent is about 65% faster than SBERT. This is due to the much simpler network architecture. InferSent uses a single BiLSTM layer, while BERT uses 12 stacked transformer layers. However, an advantage of transformer networks is the computational efficiency on GPUs. There, SBERT with smart batching is about 9% faster than InferSent and about 55% faster than Universal Sentence Encoder. Smart batching achieves a speed-up of 89% on CPU and 48% on GPU. Average GloVe embeddings is obviously by a large margin the fastest method to compute sentence embeddings."
+  ],
+  "child_pages": [
+    12,
+    12,
+    12,
+    12
+  ],
+  "child_sections": [
+    "Computational Efficiency",
+    "Computational Efficiency",
+    "Computational Efficiency",
+    "Computational Efficiency"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Computational Efficiency",
+      0
+    ],
+    [
+      "Computational Efficiency",
+      1
+    ],
+    [
+      "Computational Efficiency",
+      2
+    ],
+    [
+      "Computational Efficiency",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_12",
+  "section_id": "Computational Efficiency",
+  "section": "Computational Efficiency",
+  "title_path": "Computational Efficiency",
+  "block_type": "long_unit"
+}

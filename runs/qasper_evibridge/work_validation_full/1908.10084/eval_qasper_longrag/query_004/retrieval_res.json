@@ -1,0 +1,600 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] In this publication, we present Sentence-BERT (SBERT), a modification of the BERT network using siamese and triplet networks that is able to derive semantically meaningful sentence embeddings. This enables BERT to be used for certain new tasks, which up-to-now were not applicable for BERT. These tasks include large-scale semantic similarity comparison, clustering, and information retrieval via semantic search.\n[source_id=5] BERT set new state-of-the-art performance on various sentence classification and sentence-pair regression tasks. BERT uses a cross-encoder: Two sentences are passed to the transformer network and the target value is predicted. However, this setup is unsuitable for various pair regression tasks due to too many possible combinations. Finding in a collection of $n=10\\,000$ sentences the pair with the highest similarity requires with BERT $n\\cdot (n-1)/2=49\\,995\\,000$ inference computations. On a modern V100 GPU, this requires about 65 hours. Similar, finding which of the over 40 million existent questions of Quora is the most similar for a new question could be modeled as a pair-wise comparison with BERT, however, answering a single query would require over 50 hours.\n[source_id=6] A common method to address clustering and semantic search is to map each sentence to a vector space such that semantically similar sentences are close. Researchers have started to input individual sentences into BERT and to derive fixed-size sentence embeddings. The most commonly used approach is to average the BERT output layer (known as BERT embeddings) or by using the output of the first token (the [CLS] token). As we will show, this common practice yields rather bad sentence embeddings, often worse than averaging GloVe embeddings BIBREF2.\n[source_id=7] To alleviate this issue, we developed SBERT. The siamese network architecture enables that fixed-sized vectors for input sentences can be derived. Using a similarity measure like cosine-similarity or Manhatten / Euclidean distance, semantically similar sentences can be found. These similarity measures can be performed extremely efficient on modern hardware, allowing SBERT to be used for semantic similarity search as well as for clustering. The complexity for finding the most similar sentence pair in a collection of 10,000 sentences is reduced from 65 hours with BERT to the computation of 10,000 sentence embeddings (5 seconds with SBERT) and computing cosine-similarity (0.01 seconds). By using optimized index structures, finding the most similar Quora question can be reduced from 50 hours to a few milliseconds BIBREF3.\n[source_id=8] We fine-tune SBERT on NLI data, which creates sentence embeddings that significantly outperform other state-of-the-art sentence embedding methods like InferSent BIBREF4 and Universal Sentence Encoder BIBREF5. On seven Semantic Textual Similarity (STS) tasks, SBERT achieves an improvement of 11.7 points compared to InferSent and 5.5 points compared to Universal Sentence Encoder. On SentEval BIBREF6, an evaluation toolkit for sentence embeddings, we achieve an improvement of 2.1 and 2.6 points, respectively.\n[source_id=9] SBERT can be adapted to a specific task. It sets new state-of-the-art performance on a challenging argument similarity dataset BIBREF7 and on a triplet dataset to distinguish sentences from different sections of a Wikipedia article BIBREF8.\n[source_id=10] The paper is structured in the following way: Section SECREF3 presents SBERT, section SECREF4 evaluates SBERT on common STS tasks and on the challenging Argument Facet Similarity (AFS) corpus BIBREF7. Section SECREF5 evaluates SBERT on SentEval. In section SECREF6, we perform an ablation study to test some design aspect of SBERT. In section SECREF7, we compare the computational efficiency of SBERT sentence embeddings in contrast to other state-of-the-art sentence embedding methods.",
+      "score": 3.687397374325619,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "child_qasper_evidence_texts": [
+        "In this publication, we present Sentence-BERT (SBERT), a modification of the BERT network using siamese and triplet networks that is able to derive semantically meaningful sentence embeddings. This enables BERT to be used for certain new tasks, which up-to-now were not applicable for BERT. These tasks include large-scale semantic similarity comparison, clustering, and information retrieval via semantic search.",
+        "BERT set new state-of-the-art performance on various sentence classification and sentence-pair regression tasks. BERT uses a cross-encoder: Two sentences are passed to the transformer network and the target value is predicted. However, this setup is unsuitable for various pair regression tasks due to too many possible combinations. Finding in a collection of $n=10\\,000$ sentences the pair with the highest similarity requires with BERT $n\\cdot (n-1)/2=49\\,995\\,000$ inference computations. On a modern V100 GPU, this requires about 65 hours. Similar, finding which of the over 40 million existent questions of Quora is the most similar for a new question could be modeled as a pair-wise comparison with BERT, however, answering a single query would require over 50 hours.",
+        "A common method to address clustering and semantic search is to map each sentence to a vector space such that semantically similar sentences are close. Researchers have started to input individual sentences into BERT and to derive fixed-size sentence embeddings. The most commonly used approach is to average the BERT output layer (known as BERT embeddings) or by using the output of the first token (the [CLS] token). As we will show, this common practice yields rather bad sentence embeddings, often worse than averaging GloVe embeddings BIBREF2.",
+        "To alleviate this issue, we developed SBERT. The siamese network architecture enables that fixed-sized vectors for input sentences can be derived. Using a similarity measure like cosine-similarity or Manhatten / Euclidean distance, semantically similar sentences can be found. These similarity measures can be performed extremely efficient on modern hardware, allowing SBERT to be used for semantic similarity search as well as for clustering. The complexity for finding the most similar sentence pair in a collection of 10,000 sentences is reduced from 65 hours with BERT to the computation of 10,000 sentence embeddings (5 seconds with SBERT) and computing cosine-similarity (0.01 seconds). By using optimized index structures, finding the most similar Quora question can be reduced from 50 hours to a few milliseconds BIBREF3.",
+        "We fine-tune SBERT on NLI data, which creates sentence embeddings that significantly outperform other state-of-the-art sentence embedding methods like InferSent BIBREF4 and Universal Sentence Encoder BIBREF5. On seven Semantic Textual Similarity (STS) tasks, SBERT achieves an improvement of 11.7 points compared to InferSent and 5.5 points compared to Universal Sentence Encoder. On SentEval BIBREF6, an evaluation toolkit for sentence embeddings, we achieve an improvement of 2.1 and 2.6 points, respectively.",
+        "SBERT can be adapted to a specific task. It sets new state-of-the-art performance on a challenging argument similarity dataset BIBREF7 and on a triplet dataset to distinguish sentences from different sections of a Wikipedia article BIBREF8.",
+        "The paper is structured in the following way: Section SECREF3 presents SBERT, section SECREF4 evaluates SBERT on common STS tasks and on the challenging Argument Facet Similarity (AFS) corpus BIBREF7. Section SECREF5 evaluates SBERT on SentEval. In section SECREF6, we perform an ablation study to test some design aspect of SBERT. In section SECREF7, we compare the computational efficiency of SBERT sentence embeddings in contrast to other state-of-the-art sentence embedding methods."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ],
+        [
+          "Introduction",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Evaluation - Semantic Textual Similarity ::: Argument Facet Similarity\n[source_id=41] We evaluate SBERT on the Argument Facet Similarity (AFS) corpus by MisraEW16. The AFS corpus annotated 6,000 sentential argument pairs from social media dialogs on three controversial topics: gun control, gay marriage, and death penalty. The data was annotated on a scale from 0 (“different topic\") to 5 (“completely equivalent\"). The similarity notion in the AFS corpus is fairly different to the similarity notion in the STS datasets from SemEval. STS data is usually descriptive, while AFS data are argumentative excerpts from dialogs. To be considered similar, arguments must not only make similar claims, but also provide a similar reasoning. Further, the lexical gap between the sentences in AFS is much larger. Hence, simple unsupervised methods as well as state-of-the-art STS systems perform badly on this dataset BIBREF24.\n[source_id=42] We evaluate SBERT on this dataset in two scenarios: 1) As proposed by Misra et al., we evaluate SBERT using 10-fold cross-validation. A draw-back of this evaluation setup is that it is not clear how well approaches generalize to different topics. Hence, 2) we evaluate SBERT in a cross-topic setup. Two topics serve for training and the approach is evaluated on the left-out topic. We repeat this for all three topics and average the results.\n[source_id=43] SBERT is fine-tuned using the Regression Objective Function. The similarity score is computed using cosine-similarity based on the sentence embeddings. We also provide the Pearson correlation $r$ to make the results comparable to Misra et al. However, we showed BIBREF22 that Pearson correlation has some serious drawbacks and should be avoided for comparing STS systems. The results are depicted in Table TABREF12.\n[source_id=44] Unsupervised methods like tf-idf, average GloVe embeddings or InferSent perform rather badly on this dataset with low scores. Training SBERT in the 10-fold cross-validation setup gives a performance that is nearly on-par with BERT.\n[source_id=45] However, in the cross-topic evaluation, we observe a performance drop of SBERT by about 7 points Spearman correlation. To be considered similar, arguments should address the same claims and provide the same reasoning. BERT is able to use attention to compare directly both sentences (e.g. word-by-word comparison), while SBERT must map individual sentences from an unseen topic to a vector space such that arguments with similar claims and reasons are close. This is a much more challenging task, which appears to require more than just two topics for training to work on-par with BERT.",
+      "score": 3.6287736357319407,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        41,
+        42,
+        43,
+        44,
+        45
+      ],
+      "child_qasper_evidence_texts": [
+        "We evaluate SBERT on the Argument Facet Similarity (AFS) corpus by MisraEW16. The AFS corpus annotated 6,000 sentential argument pairs from social media dialogs on three controversial topics: gun control, gay marriage, and death penalty. The data was annotated on a scale from 0 (“different topic\") to 5 (“completely equivalent\"). The similarity notion in the AFS corpus is fairly different to the similarity notion in the STS datasets from SemEval. STS data is usually descriptive, while AFS data are argumentative excerpts from dialogs. To be considered similar, arguments must not only make similar claims, but also provide a similar reasoning. Further, the lexical gap between the sentences in AFS is much larger. Hence, simple unsupervised methods as well as state-of-the-art STS systems perform badly on this dataset BIBREF24.",
+        "We evaluate SBERT on this dataset in two scenarios: 1) As proposed by Misra et al., we evaluate SBERT using 10-fold cross-validation. A draw-back of this evaluation setup is that it is not clear how well approaches generalize to different topics. Hence, 2) we evaluate SBERT in a cross-topic setup. Two topics serve for training and the approach is evaluated on the left-out topic. We repeat this for all three topics and average the results.",
+        "SBERT is fine-tuned using the Regression Objective Function. The similarity score is computed using cosine-similarity based on the sentence embeddings. We also provide the Pearson correlation $r$ to make the results comparable to Misra et al. However, we showed BIBREF22 that Pearson correlation has some serious drawbacks and should be avoided for comparing STS systems. The results are depicted in Table TABREF12.",
+        "Unsupervised methods like tf-idf, average GloVe embeddings or InferSent perform rather badly on this dataset with low scores. Training SBERT in the 10-fold cross-validation setup gives a performance that is nearly on-par with BERT.",
+        "However, in the cross-topic evaluation, we observe a performance drop of SBERT by about 7 points Spearman correlation. To be considered similar, arguments should address the same claims and provide the same reasoning. BERT is able to use attention to compare directly both sentences (e.g. word-by-word comparison), while SBERT must map individual sentences from an unseen topic to a vector space such that arguments with similar claims and reasons are close. This is a much more challenging task, which appears to require more than just two topics for training to work on-par with BERT."
+      ],
+      "child_pages": [
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "child_sections": [
+        "Evaluation - Semantic Textual Similarity ::: Argument Facet Similarity",
+        "Evaluation - Semantic Textual Similarity ::: Argument Facet Similarity",
+        "Evaluation - Semantic Textual Similarity ::: Argument Facet Similarity",
+        "Evaluation - Semantic Textual Similarity ::: Argument Facet Similarity",
+        "Evaluation - Semantic Textual Similarity ::: Argument Facet Similarity"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Evaluation - Semantic Textual Similarity ::: Argument Facet Similarity",
+          0
+        ],
+        [
+          "Evaluation - Semantic Textual Similarity ::: Argument Facet Similarity",
+          1
+        ],
+        [
+          "Evaluation - Semantic Textual Similarity ::: Argument Facet Similarity",
+          2
+        ],
+        [
+          "Evaluation - Semantic Textual Similarity ::: Argument Facet Similarity",
+          3
+        ],
+        [
+          "Evaluation - Semantic Textual Similarity ::: Argument Facet Similarity",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Evaluation - Semantic Textual Similarity ::: Argument Facet Similarity",
+      "section": "Evaluation - Semantic Textual Similarity ::: Argument Facet Similarity",
+      "title_path": "Evaluation - Semantic Textual Similarity ::: Argument Facet Similarity",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Computational Efficiency\n[source_id=74] Sentence embeddings need potentially be computed for Millions of sentences, hence, a high computation speed is desired. In this section, we compare SBERT to average GloVe embeddings, InferSent BIBREF4, and Universal Sentence Encoder BIBREF5.\n[source_id=75] For our comparison we use the sentences from the STS benchmark BIBREF10. We compute average GloVe embeddings using a simple for-loop with python dictionary lookups and NumPy. InferSent is based on PyTorch. For Universal Sentence Encoder, we use the TensorFlow Hub version, which is based on TensorFlow. SBERT is based on PyTorch. For improved computation of sentence embeddings, we implemented a smart batching strategy: Sentences with similar lengths are grouped together and are only padded to the longest element in a mini-batch. This drastically reduces computational overhead from padding tokens.\n[source_id=76] Performances were measured on a server with Intel i7-5820K CPU @ 3.30GHz, Nvidia Tesla V100 GPU, CUDA 9.2 and cuDNN. The results are depicted in Table TABREF26.\n[source_id=77] On CPU, InferSent is about 65% faster than SBERT. This is due to the much simpler network architecture. InferSent uses a single BiLSTM layer, while BERT uses 12 stacked transformer layers. However, an advantage of transformer networks is the computational efficiency on GPUs. There, SBERT with smart batching is about 9% faster than InferSent and about 55% faster than Universal Sentence Encoder. Smart batching achieves a speed-up of 89% on CPU and 48% on GPU. Average GloVe embeddings is obviously by a large margin the fastest method to compute sentence embeddings.",
+      "score": 3.2920731989039798,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        74,
+        75,
+        76,
+        77
+      ],
+      "child_qasper_evidence_texts": [
+        "Sentence embeddings need potentially be computed for Millions of sentences, hence, a high computation speed is desired. In this section, we compare SBERT to average GloVe embeddings, InferSent BIBREF4, and Universal Sentence Encoder BIBREF5.",
+        "For our comparison we use the sentences from the STS benchmark BIBREF10. We compute average GloVe embeddings using a simple for-loop with python dictionary lookups and NumPy. InferSent is based on PyTorch. For Universal Sentence Encoder, we use the TensorFlow Hub version, which is based on TensorFlow. SBERT is based on PyTorch. For improved computation of sentence embeddings, we implemented a smart batching strategy: Sentences with similar lengths are grouped together and are only padded to the longest element in a mini-batch. This drastically reduces computational overhead from padding tokens.",
+        "Performances were measured on a server with Intel i7-5820K CPU @ 3.30GHz, Nvidia Tesla V100 GPU, CUDA 9.2 and cuDNN. The results are depicted in Table TABREF26.",
+        "On CPU, InferSent is about 65% faster than SBERT. This is due to the much simpler network architecture. InferSent uses a single BiLSTM layer, while BERT uses 12 stacked transformer layers. However, an advantage of transformer networks is the computational efficiency on GPUs. There, SBERT with smart batching is about 9% faster than InferSent and about 55% faster than Universal Sentence Encoder. Smart batching achieves a speed-up of 89% on CPU and 48% on GPU. Average GloVe embeddings is obviously by a large margin the fastest method to compute sentence embeddings."
+      ],
+      "child_pages": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "child_sections": [
+        "Computational Efficiency",
+        "Computational Efficiency",
+        "Computational Efficiency",
+        "Computational Efficiency"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Computational Efficiency",
+          0
+        ],
+        [
+          "Computational Efficiency",
+          1
+        ],
+        [
+          "Computational Efficiency",
+          2
+        ],
+        [
+          "Computational Efficiency",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Computational Efficiency",
+      "section": "Computational Efficiency",
+      "title_path": "Computational Efficiency",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Model ::: Training Details\n[source_id=28] We train SBERT on the combination of the SNLI BIBREF13 and the Multi-Genre NLI BIBREF14 dataset. The SNLI is a collection of 570,000 sentence pairs annotated with the labels contradiction, eintailment, and neutral. MultiNLI contains 430,000 sentence pairs and covers a range of genres of spoken and written text. We fine-tune SBERT with a 3-way softmax-classifier objective function for one epoch. We used a batch-size of 16, Adam optimizer with learning rate $2\\mathrm {e}{-5}$, and a linear learning rate warm-up over 10% of the training data. Our default pooling strategy is MEAN.",
+      "score": 3.0806665494637806,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        28
+      ],
+      "child_qasper_evidence_texts": [
+        "We train SBERT on the combination of the SNLI BIBREF13 and the Multi-Genre NLI BIBREF14 dataset. The SNLI is a collection of 570,000 sentence pairs annotated with the labels contradiction, eintailment, and neutral. MultiNLI contains 430,000 sentence pairs and covers a range of genres of spoken and written text. We fine-tune SBERT with a 3-way softmax-classifier objective function for one epoch. We used a batch-size of 16, Adam optimizer with learning rate $2\\mathrm {e}{-5}$, and a linear learning rate warm-up over 10% of the training data. Our default pooling strategy is MEAN."
+      ],
+      "child_pages": [
+        4
+      ],
+      "child_sections": [
+        "Model ::: Training Details"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Model ::: Training Details",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Model ::: Training Details",
+      "section": "Model ::: Training Details",
+      "title_path": "Model ::: Training Details",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Ablation Study\n[source_id=67] We have demonstrated strong empirical results for the quality of SBERT sentence embeddings. In this section, we perform an ablation study of different aspects of SBERT in order to get a better understanding of their relative importance.\n[source_id=68] We evaluated different pooling strategies (MEAN, MAX, and CLS). For the classification objective function, we evaluate different concatenation methods. For each possible configuration, we train SBERT with 10 different random seeds and average the performances.\n[source_id=69] The objective function (classification vs. regression) depends on the annotated dataset. For the classification objective function, we train SBERT-base on the SNLI and the Multi-NLI dataset. For the regression objective function, we train on the training set of the STS benchmark dataset. Performances are measured on the development split of the STS benchmark dataset. Results are shown in Table TABREF23.\n[source_id=70] When trained with the classification objective function on NLI data, the pooling strategy has a rather minor impact. The impact of the concatenation mode is much larger. InferSent BIBREF4 and Universal Sentence Encoder BIBREF5 both use $(u, v, |u-v|, u*v)$ as input for a softmax classifier. However, in our architecture, adding the element-wise $u*v$ decreased the performance.\n[source_id=71] The most important component is the element-wise difference $|u-v|$. Note, that the concatenation mode is only relevant for training the softmax classifier. At inference, when predicting similarities for the STS benchmark dataset, only the sentence embeddings $u$ and $v$ are used in combination with cosine-similarity. The element-wise difference measures the distance between the dimensions of the two sentence embeddings, ensuring that similar pairs are closer and dissimilar pairs are further apart.\n[source_id=72] When trained with the regression objective function, we observe that the pooling strategy has a large impact. There, the MAX strategy perform significantly worse than MEAN or CLS-token strategy. This is in contrast to BIBREF4, who found it beneficial for the BiLSTM-layer of InferSent to use MAX instead of MEAN pooling.",
+      "score": 2.696738193855169,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        67,
+        68,
+        69,
+        70,
+        71,
+        72
+      ],
+      "child_qasper_evidence_texts": [
+        "We have demonstrated strong empirical results for the quality of SBERT sentence embeddings. In this section, we perform an ablation study of different aspects of SBERT in order to get a better understanding of their relative importance.",
+        "We evaluated different pooling strategies (MEAN, MAX, and CLS). For the classification objective function, we evaluate different concatenation methods. For each possible configuration, we train SBERT with 10 different random seeds and average the performances.",
+        "The objective function (classification vs. regression) depends on the annotated dataset. For the classification objective function, we train SBERT-base on the SNLI and the Multi-NLI dataset. For the regression objective function, we train on the training set of the STS benchmark dataset. Performances are measured on the development split of the STS benchmark dataset. Results are shown in Table TABREF23.",
+        "When trained with the classification objective function on NLI data, the pooling strategy has a rather minor impact. The impact of the concatenation mode is much larger. InferSent BIBREF4 and Universal Sentence Encoder BIBREF5 both use $(u, v, |u-v|, u*v)$ as input for a softmax classifier. However, in our architecture, adding the element-wise $u*v$ decreased the performance.",
+        "The most important component is the element-wise difference $|u-v|$. Note, that the concatenation mode is only relevant for training the softmax classifier. At inference, when predicting similarities for the STS benchmark dataset, only the sentence embeddings $u$ and $v$ are used in combination with cosine-similarity. The element-wise difference measures the distance between the dimensions of the two sentence embeddings, ensuring that similar pairs are closer and dissimilar pairs are further apart.",
+        "When trained with the regression objective function, we observe that the pooling strategy has a large impact. There, the MAX strategy perform significantly worse than MEAN or CLS-token strategy. This is in contrast to BIBREF4, who found it beneficial for the BiLSTM-layer of InferSent to use MAX instead of MEAN pooling."
+      ],
+      "child_pages": [
+        11,
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "child_sections": [
+        "Ablation Study",
+        "Ablation Study",
+        "Ablation Study",
+        "Ablation Study",
+        "Ablation Study",
+        "Ablation Study"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Ablation Study",
+          0
+        ],
+        [
+          "Ablation Study",
+          1
+        ],
+        [
+          "Ablation Study",
+          2
+        ],
+        [
+          "Ablation Study",
+          3
+        ],
+        [
+          "Ablation Study",
+          4
+        ],
+        [
+          "Ablation Study",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Ablation Study",
+      "section": "Ablation Study",
+      "title_path": "Ablation Study",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_13",
+      "content": "[Section] Conclusion\n[source_id=79] We showed that BERT out-of-the-box maps sentences to a vector space that is rather unsuitable to be used with common similarity measures like cosine-similarity. The performance for seven STS tasks was below the performance of average GloVe embeddings.\n[source_id=80] To overcome this shortcoming, we presented Sentence-BERT (SBERT). SBERT fine-tunes BERT in a siamese / triplet network architecture. We evaluated the quality on various common benchmarks, where it could achieve a significant improvement over state-of-the-art sentence embeddings methods. Replacing BERT with RoBERTa did not yield a significant improvement in our experiments.\n[source_id=81] SBERT is computationally efficient. On a GPU, it is about 9% faster than InferSent and about 55% faster than Universal Sentence Encoder. SBERT can be used for tasks which are computationally not feasible to be modeled with BERT. For example, clustering of 10,000 sentences with hierarchical clustering requires with BERT about 65 hours, as around 50 Million sentence combinations must be computed. With SBERT, we were able to reduce the effort to about 5 seconds.",
+      "score": 2.4556204202262646,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_13",
+      "child_source_node_ids": [
+        79,
+        80,
+        81
+      ],
+      "child_qasper_evidence_texts": [
+        "We showed that BERT out-of-the-box maps sentences to a vector space that is rather unsuitable to be used with common similarity measures like cosine-similarity. The performance for seven STS tasks was below the performance of average GloVe embeddings.",
+        "To overcome this shortcoming, we presented Sentence-BERT (SBERT). SBERT fine-tunes BERT in a siamese / triplet network architecture. We evaluated the quality on various common benchmarks, where it could achieve a significant improvement over state-of-the-art sentence embeddings methods. Replacing BERT with RoBERTa did not yield a significant improvement in our experiments.",
+        "SBERT is computationally efficient. On a GPU, it is about 9% faster than InferSent and about 55% faster than Universal Sentence Encoder. SBERT can be used for tasks which are computationally not feasible to be modeled with BERT. For example, clustering of 10,000 sentences with hierarchical clustering requires with BERT about 65 hours, as around 50 Million sentence combinations must be computed. With SBERT, we were able to reduce the effort to about 5 seconds."
+      ],
+      "child_pages": [
+        13,
+        13,
+        13
+      ],
+      "child_sections": [
+        "Conclusion",
+        "Conclusion",
+        "Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion",
+          0
+        ],
+        [
+          "Conclusion",
+          1
+        ],
+        [
+          "Conclusion",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_13",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Evaluation - SentEval\n[source_id=51] SentEval BIBREF6 is a popular toolkit to evaluate the quality of sentence embeddings. Sentence embeddings are used as features for a logistic regression classifier. The logistic regression classifier is trained on various tasks in a 10-fold cross-validation setup and the prediction accuracy is computed for the test-fold.\n[source_id=52] The purpose of SBERT sentence embeddings are not to be used for transfer learning for other tasks. Here, we think fine-tuning BERT as described by devlin2018bert for new tasks is the more suitable method, as it updates all layers of the BERT network. However, SentEval can still give an impression on the quality of our sentence embeddings for various tasks.\n[source_id=53] We compare the SBERT sentence embeddings to other sentence embeddings methods on the following seven SentEval transfer tasks:\n[source_id=54] MR: Sentiment prediction for movie reviews snippets on a five start scale BIBREF25.\n[source_id=55] CR: Sentiment prediction of customer product reviews BIBREF26.\n[source_id=56] SUBJ: Subjectivity prediction of sentences from movie reviews and plot summaries BIBREF27.\n[source_id=57] MPQA: Phrase level opinion polarity classification from newswire BIBREF28.\n[source_id=58] SST: Stanford Sentiment Treebank with binary labels BIBREF29.\n[source_id=59] TREC: Fine grained question-type classification from TREC BIBREF30.\n[source_id=60] MRPC: Microsoft Research Paraphrase Corpus from parallel news sources BIBREF31.\n[source_id=61] The results can be found in Table TABREF15. SBERT is able to achieve the best performance in 5 out of 7 tasks. The average performance increases by about 2 percentage points compared to InferSent as well as the Universal Sentence Encoder. Even though transfer learning is not the purpose of SBERT, it outperforms other state-of-the-art sentence embeddings methods on this task.\n[source_id=62] It appears that the sentence embeddings from SBERT capture well sentiment information: We observe large improvements for all sentiment tasks (MR, CR, and SST) from SentEval in comparison to InferSent and Universal Sentence Encoder.\n[source_id=63] The only dataset where SBERT is significantly worse than Universal Sentence Encoder is the TREC dataset. Universal Sentence Encoder was pre-trained on question-answering data, which appears to be beneficial for the question-type classification task of the TREC dataset.\n[source_id=64] Average BERT embeddings or using the CLS-token output from a BERT network achieved bad results for various STS tasks (Table TABREF6), worse than average GloVe embeddings. However, for SentEval, average BERT embeddings and the BERT CLS-token output achieves decent results (Table TABREF15), outperforming average GloVe embeddings. The reason for this are the different setups. For the STS tasks, we used cosine-similarity to estimate the similarities between sentence embeddings. Cosine-similarity treats all dimensions equally. In contrast, SentEval fits a logistic regression classifier to the sentence embeddings. This allows that certain dimensions can have higher or lower impact on the classification result.\n[source_id=65] We conclude that average BERT embeddings / CLS-token output from BERT return sentence embeddings that are infeasible to be used with cosine-similarity or with Manhatten / Euclidean distance. For transfer learning, they yield slightly worse results than InferSent or Universal Sentence Encoder. However, using the described fine-tuning setup with a siamese network structure on NLI datasets yields sentence embeddings that achieve a new state-of-the-art for the SentEval toolkit.",
+      "score": 2.425422204573028,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "child_qasper_evidence_texts": [
+        "SentEval BIBREF6 is a popular toolkit to evaluate the quality of sentence embeddings. Sentence embeddings are used as features for a logistic regression classifier. The logistic regression classifier is trained on various tasks in a 10-fold cross-validation setup and the prediction accuracy is computed for the test-fold.",
+        "The purpose of SBERT sentence embeddings are not to be used for transfer learning for other tasks. Here, we think fine-tuning BERT as described by devlin2018bert for new tasks is the more suitable method, as it updates all layers of the BERT network. However, SentEval can still give an impression on the quality of our sentence embeddings for various tasks.",
+        "We compare the SBERT sentence embeddings to other sentence embeddings methods on the following seven SentEval transfer tasks:",
+        "MR: Sentiment prediction for movie reviews snippets on a five start scale BIBREF25.",
+        "CR: Sentiment prediction of customer product reviews BIBREF26.",
+        "SUBJ: Subjectivity prediction of sentences from movie reviews and plot summaries BIBREF27.",
+        "MPQA: Phrase level opinion polarity classification from newswire BIBREF28.",
+        "SST: Stanford Sentiment Treebank with binary labels BIBREF29.",
+        "TREC: Fine grained question-type classification from TREC BIBREF30.",
+        "MRPC: Microsoft Research Paraphrase Corpus from parallel news sources BIBREF31.",
+        "The results can be found in Table TABREF15. SBERT is able to achieve the best performance in 5 out of 7 tasks. The average performance increases by about 2 percentage points compared to InferSent as well as the Universal Sentence Encoder. Even though transfer learning is not the purpose of SBERT, it outperforms other state-of-the-art sentence embeddings methods on this task.",
+        "It appears that the sentence embeddings from SBERT capture well sentiment information: We observe large improvements for all sentiment tasks (MR, CR, and SST) from SentEval in comparison to InferSent and Universal Sentence Encoder.",
+        "The only dataset where SBERT is significantly worse than Universal Sentence Encoder is the TREC dataset. Universal Sentence Encoder was pre-trained on question-answering data, which appears to be beneficial for the question-type classification task of the TREC dataset.",
+        "Average BERT embeddings or using the CLS-token output from a BERT network achieved bad results for various STS tasks (Table TABREF6), worse than average GloVe embeddings. However, for SentEval, average BERT embeddings and the BERT CLS-token output achieves decent results (Table TABREF15), outperforming average GloVe embeddings. The reason for this are the different setups. For the STS tasks, we used cosine-similarity to estimate the similarities between sentence embeddings. Cosine-similarity treats all dimensions equally. In contrast, SentEval fits a logistic regression classifier to the sentence embeddings. This allows that certain dimensions can have higher or lower impact on the classification result.",
+        "We conclude that average BERT embeddings / CLS-token output from BERT return sentence embeddings that are infeasible to be used with cosine-similarity or with Manhatten / Euclidean distance. For transfer learning, they yield slightly worse results than InferSent or Universal Sentence Encoder. However, using the described fine-tuning setup with a siamese network structure on NLI datasets yields sentence embeddings that achieve a new state-of-the-art for the SentEval toolkit."
+      ],
+      "child_pages": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ],
+      "child_sections": [
+        "Evaluation - SentEval",
+        "Evaluation - SentEval",
+        "Evaluation - SentEval",
+        "Evaluation - SentEval",
+        "Evaluation - SentEval",
+        "Evaluation - SentEval",
+        "Evaluation - SentEval",
+        "Evaluation - SentEval",
+        "Evaluation - SentEval",
+        "Evaluation - SentEval",
+        "Evaluation - SentEval",
+        "Evaluation - SentEval",
+        "Evaluation - SentEval",
+        "Evaluation - SentEval",
+        "Evaluation - SentEval"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Evaluation - SentEval",
+          0
+        ],
+        [
+          "Evaluation - SentEval",
+          1
+        ],
+        [
+          "Evaluation - SentEval",
+          2
+        ],
+        [
+          "Evaluation - SentEval",
+          3
+        ],
+        [
+          "Evaluation - SentEval",
+          4
+        ],
+        [
+          "Evaluation - SentEval",
+          5
+        ],
+        [
+          "Evaluation - SentEval",
+          6
+        ],
+        [
+          "Evaluation - SentEval",
+          7
+        ],
+        [
+          "Evaluation - SentEval",
+          8
+        ],
+        [
+          "Evaluation - SentEval",
+          9
+        ],
+        [
+          "Evaluation - SentEval",
+          10
+        ],
+        [
+          "Evaluation - SentEval",
+          11
+        ],
+        [
+          "Evaluation - SentEval",
+          12
+        ],
+        [
+          "Evaluation - SentEval",
+          13
+        ],
+        [
+          "Evaluation - SentEval",
+          14
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Evaluation - SentEval",
+      "section": "Evaluation - SentEval",
+      "title_path": "Evaluation - SentEval",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Evaluation - Semantic Textual Similarity ::: Supervised STS\n[source_id=37] The STS benchmark (STSb) BIBREF10 provides is a popular dataset to evaluate supervised STS systems. The data includes 8,628 sentence pairs from the three categories captions, news, and forums. It is divided into train (5,749), dev (1,500) and test (1,379). BERT set a new state-of-the-art performance on this dataset by passing both sentences to the network and using a simple regression method for the output.\n[source_id=38] We use the training set to fine-tune SBERT using the regression objective function. At prediction time, we compute the cosine-similarity between the sentence embeddings. All systems are trained with 10 random seeds to counter variances BIBREF23.\n[source_id=39] The results are depicted in Table TABREF10. We experimented with two setups: Only training on STSb, and first training on NLI, then training on STSb. We observe that the later strategy leads to a slight improvement of 1-2 points. This two-step approach had an especially large impact for the BERT cross-encoder, which improved the performance by 3-4 points. We do not observe a significant difference between BERT and RoBERTa.",
+      "score": 1.9010489047586774,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        37,
+        38,
+        39
+      ],
+      "child_qasper_evidence_texts": [
+        "The STS benchmark (STSb) BIBREF10 provides is a popular dataset to evaluate supervised STS systems. The data includes 8,628 sentence pairs from the three categories captions, news, and forums. It is divided into train (5,749), dev (1,500) and test (1,379). BERT set a new state-of-the-art performance on this dataset by passing both sentences to the network and using a simple regression method for the output.",
+        "We use the training set to fine-tune SBERT using the regression objective function. At prediction time, we compute the cosine-similarity between the sentence embeddings. All systems are trained with 10 random seeds to counter variances BIBREF23.",
+        "The results are depicted in Table TABREF10. We experimented with two setups: Only training on STSb, and first training on NLI, then training on STSb. We observe that the later strategy leads to a slight improvement of 1-2 points. This two-step approach had an especially large impact for the BERT cross-encoder, which improved the performance by 3-4 points. We do not observe a significant difference between BERT and RoBERTa."
+      ],
+      "child_pages": [
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Evaluation - Semantic Textual Similarity ::: Supervised STS",
+        "Evaluation - Semantic Textual Similarity ::: Supervised STS",
+        "Evaluation - Semantic Textual Similarity ::: Supervised STS"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Evaluation - Semantic Textual Similarity ::: Supervised STS",
+          0
+        ],
+        [
+          "Evaluation - Semantic Textual Similarity ::: Supervised STS",
+          1
+        ],
+        [
+          "Evaluation - Semantic Textual Similarity ::: Supervised STS",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Evaluation - Semantic Textual Similarity ::: Supervised STS",
+      "section": "Evaluation - Semantic Textual Similarity ::: Supervised STS",
+      "title_path": "Evaluation - Semantic Textual Similarity ::: Supervised STS",
+      "block_type": "long_unit"
+    }
+  ]
+}

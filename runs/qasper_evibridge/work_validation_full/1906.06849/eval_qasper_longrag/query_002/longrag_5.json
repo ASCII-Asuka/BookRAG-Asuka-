@@ -1,0 +1,52 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Multi-task NMT Architecture\n[source_id=18] Our balanced translation architecture is presented in Figure FIGREF3 . This architecture is NMT-model agnostic as we only propose to share two layers common to most NMTs: the trainable target embedding layer and the transformation function BIBREF7 that outputs a probability distribution over the union of the vocabulary of TC and RC. Hence, the size of the vocabulary, INLINEFORM0 , is much larger compared to TC and it enables the model to access RC. In order to show task sharing clearly we placed two shared layers between NMT and RAT in Figure FIGREF3 . We also show the two different paths taken by two different tasks at training time: the NMT path in shown with red arrows while the RAT path is shown in green arrows.\n[source_id=19] On NMT path training loss is computed as the sum of term-wise softmax with cross-entropy loss of the predicted translation and the human translation and it summed over a batch of sentence pairs, INLINEFORM0 . We also use a similar loss function to train word embedding over a set of context ( INLINEFORM1 ) and pivot ( INLINEFORM2 ) pairs formed using INLINEFORM3 as query to retrieve INLINEFORM4 using Query Likelihood (QL) ranker, INLINEFORM5 . This objective is similar to CBOW word embedding as context is used to predict pivot word Here, we use a scaling factor INLINEFORM6 , to have a balance between the gradients from the NMT loss and RAT loss. For RAT, the context is drawn from a context window following BIBREF6 .\n[source_id=20] In the figure, INLINEFORM0 and INLINEFORM1 represents the top document retrieved against INLINEFORM2 . The shuffler component shuffles INLINEFORM3 and INLINEFORM4 and creates (context, pivot) pairs. After that those data points are passed through a fully connected linear projection layer and eventually to the transformation function. Intuitively, the word embedding task is similar to NMT as it tries to assign a large probability mass to a target word given a context. However, it enables the transformation function and decoding layer to assign probability mass not only to terms from TC, but also to terms from RC. This implicitly prohibits NMT to overfit and provides a regularization effect. A similar technique was proposed by BIBREF11 to handle out-of-vocabulary or less frequent words for NMT. For these terms they enabled the transformation (also called the softmax cross-entropy layer) to fairly distribute probability mass among similar words. In contrast, we focus on relevant terms rather than similar terms.",
+  "score": 0.6279464623472535,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    18,
+    19,
+    20
+  ],
+  "child_qasper_evidence_texts": [
+    "Our balanced translation architecture is presented in Figure FIGREF3 . This architecture is NMT-model agnostic as we only propose to share two layers common to most NMTs: the trainable target embedding layer and the transformation function BIBREF7 that outputs a probability distribution over the union of the vocabulary of TC and RC. Hence, the size of the vocabulary, INLINEFORM0 , is much larger compared to TC and it enables the model to access RC. In order to show task sharing clearly we placed two shared layers between NMT and RAT in Figure FIGREF3 . We also show the two different paths taken by two different tasks at training time: the NMT path in shown with red arrows while the RAT path is shown in green arrows.",
+    "On NMT path training loss is computed as the sum of term-wise softmax with cross-entropy loss of the predicted translation and the human translation and it summed over a batch of sentence pairs, INLINEFORM0 . We also use a similar loss function to train word embedding over a set of context ( INLINEFORM1 ) and pivot ( INLINEFORM2 ) pairs formed using INLINEFORM3 as query to retrieve INLINEFORM4 using Query Likelihood (QL) ranker, INLINEFORM5 . This objective is similar to CBOW word embedding as context is used to predict pivot word Here, we use a scaling factor INLINEFORM6 , to have a balance between the gradients from the NMT loss and RAT loss. For RAT, the context is drawn from a context window following BIBREF6 .",
+    "In the figure, INLINEFORM0 and INLINEFORM1 represents the top document retrieved against INLINEFORM2 . The shuffler component shuffles INLINEFORM3 and INLINEFORM4 and creates (context, pivot) pairs. After that those data points are passed through a fully connected linear projection layer and eventually to the transformation function. Intuitively, the word embedding task is similar to NMT as it tries to assign a large probability mass to a target word given a context. However, it enables the transformation function and decoding layer to assign probability mass not only to terms from TC, but also to terms from RC. This implicitly prohibits NMT to overfit and provides a regularization effect. A similar technique was proposed by BIBREF11 to handle out-of-vocabulary or less frequent words for NMT. For these terms they enabled the transformation (also called the softmax cross-entropy layer) to fairly distribute probability mass among similar words. In contrast, we focus on relevant terms rather than similar terms."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Multi-task NMT Architecture",
+    "Multi-task NMT Architecture",
+    "Multi-task NMT Architecture"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Multi-task NMT Architecture",
+      0
+    ],
+    [
+      "Multi-task NMT Architecture",
+      1
+    ],
+    [
+      "Multi-task NMT Architecture",
+      2
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Multi-task NMT Architecture",
+  "section": "Multi-task NMT Architecture",
+  "title_path": "Multi-task NMT Architecture",
+  "block_type": "long_unit"
+}

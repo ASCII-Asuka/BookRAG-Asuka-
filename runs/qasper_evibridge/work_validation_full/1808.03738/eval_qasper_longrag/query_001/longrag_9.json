@@ -1,0 +1,79 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Translation Results (Q2)\n[source_id=51] In this experiment, we analyzed and compared the performance of the SMT and various NMT models on our built dataset. To verify the effectiveness of our data augmented method. We trained the NMT and SMT models on both unaugmented dataset (including 0.46M training pairs) and augmented dataset, and test all the models on the same Test set which is augmented. The models to be tested and their configurations are as follows:\n[source_id=52] SMT. The state-of-art Moses toolkit BIBREF19 was used to train SMT model. We used KenLM BIBREF20 to train a 5-gram language model, and the GIZA++ toolkit to align the data.\n[source_id=53] RNN-based NMT. The basic RNN-based NMT model is based on BIBREF0 which is introduced above. Both the encoder and decoder used 2-layer RNN with 1024 LSTM cells, and the encoder is a bi-directional RNN. The batch size, threshold of element-wise gradient clipping and initial learning rate of Adam optimizer BIBREF21 were set to 128, 5.0 and 0.001. When trained the model on augmented dataset, we used 4-layer RNN. Several techniques were investigated to train the model, including layer-normalization BIBREF22 , RNN-dropout BIBREF23 , and learning rate decay BIBREF1 . The hyper-parameters were chosen empirically and adjusted in the Dev set. Furthermore, we tested the basic NMT model with several techniques, such as target language reversal BIBREF24 (reversing the order of the words in all target sentences, but not source sentences), residual connection BIBREF25 and pre-trained word2vec BIBREF26 . For word embedding pre-training, we collected an external ancient corpus which contains INLINEFORM0 134M tokens.\n[source_id=54] Transformer-NMT. We also trained the Transformer model BIBREF4 which is a strong baseline of NMT on both augmented and unaugmented parallel corpus. The training configuration of the Transformer model is shown in Table TABREF32 . The hyper-parameters are set based on the settings in the paper BIBREF4 and the sizes of our training sets.\n[source_id=55] For the evaluation, we used the average of 1 to 4 gram BLEUs multiplied by a brevity penalty BIBREF27 which computed by multi-bleu.perl in Moses as metrics. The results are reported in Table TABREF34 . For RNN-based NMT, we can see that target language reversal, residual connection, and word2vec can further improve the performance of the basic RNN-based NMT model. However, we find that word2vec and reversal tricks seem no obvious improvement when trained the RNN-based NMT and Transformer models on augmented parallel corpus. For SMT, it performs better than NMT models when they were trained on the unaugmented dataset. Nevertheless, when trained on the augmented dataset, both the RNN-based NMT model and Transformer based NMT model outperform the SMT model. In addition, as with other translation tasks BIBREF4 , the Transformer also performs better than RNN-based NMT.\n[source_id=56] Because the Test set contains both augmented and unaugmented data, it is not surprising that the RNN-based NMT model and Transformer based NMT model trained on unaugmented data would perform poorly. In order to further verify the effect of data augmentation, we report the test results of the models on only unaugmented test data (including 48K test pairs) in Table TABREF35 . From the results, it can be seen that the data augmentation can still improve the models.",
+  "score": 4.159225510094191,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    51,
+    52,
+    53,
+    54,
+    55,
+    56
+  ],
+  "child_qasper_evidence_texts": [
+    "In this experiment, we analyzed and compared the performance of the SMT and various NMT models on our built dataset. To verify the effectiveness of our data augmented method. We trained the NMT and SMT models on both unaugmented dataset (including 0.46M training pairs) and augmented dataset, and test all the models on the same Test set which is augmented. The models to be tested and their configurations are as follows:",
+    "SMT. The state-of-art Moses toolkit BIBREF19 was used to train SMT model. We used KenLM BIBREF20 to train a 5-gram language model, and the GIZA++ toolkit to align the data.",
+    "RNN-based NMT. The basic RNN-based NMT model is based on BIBREF0 which is introduced above. Both the encoder and decoder used 2-layer RNN with 1024 LSTM cells, and the encoder is a bi-directional RNN. The batch size, threshold of element-wise gradient clipping and initial learning rate of Adam optimizer BIBREF21 were set to 128, 5.0 and 0.001. When trained the model on augmented dataset, we used 4-layer RNN. Several techniques were investigated to train the model, including layer-normalization BIBREF22 , RNN-dropout BIBREF23 , and learning rate decay BIBREF1 . The hyper-parameters were chosen empirically and adjusted in the Dev set. Furthermore, we tested the basic NMT model with several techniques, such as target language reversal BIBREF24 (reversing the order of the words in all target sentences, but not source sentences), residual connection BIBREF25 and pre-trained word2vec BIBREF26 . For word embedding pre-training, we collected an external ancient corpus which contains INLINEFORM0 134M tokens.",
+    "Transformer-NMT. We also trained the Transformer model BIBREF4 which is a strong baseline of NMT on both augmented and unaugmented parallel corpus. The training configuration of the Transformer model is shown in Table TABREF32 . The hyper-parameters are set based on the settings in the paper BIBREF4 and the sizes of our training sets.",
+    "For the evaluation, we used the average of 1 to 4 gram BLEUs multiplied by a brevity penalty BIBREF27 which computed by multi-bleu.perl in Moses as metrics. The results are reported in Table TABREF34 . For RNN-based NMT, we can see that target language reversal, residual connection, and word2vec can further improve the performance of the basic RNN-based NMT model. However, we find that word2vec and reversal tricks seem no obvious improvement when trained the RNN-based NMT and Transformer models on augmented parallel corpus. For SMT, it performs better than NMT models when they were trained on the unaugmented dataset. Nevertheless, when trained on the augmented dataset, both the RNN-based NMT model and Transformer based NMT model outperform the SMT model. In addition, as with other translation tasks BIBREF4 , the Transformer also performs better than RNN-based NMT.",
+    "Because the Test set contains both augmented and unaugmented data, it is not surprising that the RNN-based NMT model and Transformer based NMT model trained on unaugmented data would perform poorly. In order to further verify the effect of data augmentation, we report the test results of the models on only unaugmented test data (including 48K test pairs) in Table TABREF35 . From the results, it can be seen that the data augmentation can still improve the models."
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Translation Results (Q2)",
+    "Translation Results (Q2)",
+    "Translation Results (Q2)",
+    "Translation Results (Q2)",
+    "Translation Results (Q2)",
+    "Translation Results (Q2)"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Translation Results (Q2)",
+      0
+    ],
+    [
+      "Translation Results (Q2)",
+      1
+    ],
+    [
+      "Translation Results (Q2)",
+      2
+    ],
+    [
+      "Translation Results (Q2)",
+      3
+    ],
+    [
+      "Translation Results (Q2)",
+      4
+    ],
+    [
+      "Translation Results (Q2)",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Translation Results (Q2)",
+  "section": "Translation Results (Q2)",
+  "title_path": "Translation Results (Q2)",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,68 @@
+{
+  "question": "Did ensemble schemes help in boosting peformance, by how much?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [],
+      "free_form_answer": "The best ensemble topped the best single model by 0.029 in F1 score on dev (external).",
+      "yes_no": null,
+      "evidence": [],
+      "evidence_block_ids": [],
+      "evidence_paragraph_ids": []
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [],
+      "free_form_answer": "They increased F1 Score by 0.029 in Sentence Level Classification, and by 0.044 in Fragment-Level classification",
+      "yes_no": null,
+      "evidence": [
+        "Table TABREF10 shows the scores on dev (internal and external) for SLC task. Observe that the pre-trained embeddings (FastText or BERT) outperform TF-IDF vector representation. In row r2, we apply logistic regression classifier with BERTSentEmb that leads to improved scores over FastTextSentEmb. Subsequently, we augment the sentence vector with additional features that improves F1 on dev (external), however not dev (internal). Next, we initialize CNN by FastTextWordEmb or BERTWordEmb and augment the last hidden layer (before classification) with BERTSentEmb and feature vectors, leading to gains in F1 for both the dev sets. Further, we fine-tune BERT and apply different thresholds in relaxing the decision boundary, where $\\tau \\ge 0.35$ is found optimal.",
+        "We choose the three different models in the ensemble: Logistic Regression, CNN and BERT on fold1 and subsequently an ensemble+ of r3, r6 and r12 from each fold1-5 (i.e., 15 models) to obtain predictions for dev (external). We investigate different ensemble schemes (r17-r19), where we observe that the relax-voting improves recall and therefore, the higher F1 (i.e., 0.673). In postprocess step, we check for repetition propaganda technique by computing cosine similarity between the current sentence and its preceding $w=10$ sentence vectors (i.e., BERTSentEmb) in the document. If the cosine-similarity is greater than $\\lambda \\in \\lbrace .99, .95\\rbrace $, then the current sentence is labeled as propaganda due to repetition. Comparing r19 and r21, we observe a gain in recall, however an overall decrease in F1 applying postprocess.",
+        "Finally, we use the configuration of r19 on the test set. The ensemble+ of (r4, r7 r12) was analyzed after test submission. Table TABREF9 (SLC) shows that our submission is ranked at 4th position.",
+        "Table TABREF11 shows the scores on dev (internal and external) for FLC task. Observe that the features (i.e., polarity, POS and NER in row II) when introduced in LSTM-CRF improves F1. We run multi-grained LSTM-CRF without BERTSentEmb (i.e., row III) and with it (i.e., row IV), where the latter improves scores on dev (internal), however not on dev (external). Finally, we perform multi-tasking with another auxiliary task of PFD. Given the scores on dev (internal and external) using different configurations (rows I-V), it is difficult to infer the optimal configuration. Thus, we choose the two best configurations (II and IV) on dev (internal) set and build an ensemble+ of predictions (discussed in section SECREF6), leading to a boost in recall and thus an improved F1 on dev (external).",
+        "Finally, we use the ensemble+ of (II and IV) from each of the folds 1-3, i.e., $|{\\mathcal {M}}|=6$ models to obtain predictions on test. Table TABREF9 (FLC) shows that our submission is ranked at 3rd position."
+      ],
+      "evidence_block_ids": [
+        22,
+        23,
+        24,
+        26,
+        27
+      ],
+      "evidence_paragraph_ids": [
+        22,
+        23,
+        24,
+        26,
+        27
+      ]
+    }
+  ],
+  "doc_uuid": "1909.06162",
+  "doc_path": "qasper://1909.06162",
+  "qasper_question_id": "2268c9044e868ba0a16e92d2063ada87f68b5d03",
+  "title": "Neural Architectures for Fine-Grained Propaganda Detection in News",
+  "evidence_block_ids": [
+    22,
+    23,
+    24,
+    26,
+    27
+  ],
+  "evidence_paragraph_ids": [
+    22,
+    23,
+    24,
+    26,
+    27
+  ],
+  "output": "{\n  \"answer_short\": \"Not answerable\",\n  \"answer_rationale\": \"The retrieved document mentions that ensemble schemes were investigated to boost performance but does not provide specific quantitative data on the extent of performance improvement.\"\n}",
+  "retrieved_node_ids": [
+    2
+  ],
+  "answer_short": "Not answerable",
+  "answer_rationale": "The retrieved document mentions that ensemble schemes were investigated to boost performance but does not provide specific quantitative data on the extent of performance improvement.",
+  "supporting_block_ids": [
+    2
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "id": "longrag_10",
+  "content": "[Section] Experiments ::: Model variations\n[source_id=43] We consider QA PGNet and Multi-decoder QA PGNet with lookup table embedding as baseline models and improve on the baselines with other variations described below.\n[source_id=44] Apart from learning-based baselines, we also create two naive baselines, one each for the Dosage and Frequency extraction tasks. For Dosage extraction, the baseline we consider is `Nearest Number', where we take the number nearest to the Medication Name as the prediction, and `none' if no number is mentioned or if the Medication Name is not detected in the input. For Frequency extraction, the baseline we consider is `Random Top-3' where we predict a random Frequency tag, from top-3 most frequent ones from our dataset - {`none', `daily', `twice a day'}.\n[source_id=45] Embedding: We developed different variations of our models with a simple lookup table embeddings learned from scratch and using high-performance contextual embeddings, which are ELMo BIBREF11, BERT BIBREF16 and ClinicalBERT BIBREF13 (trained and provided by the authors). Refer to Table TABREF5 for the performance comparisons.\n[source_id=46] We derive embeddings from ELMo by learning a linear combination of its last three layer's hidden states (task-specific fine-tuning BIBREF11). Similarly, for BERT-based embeddings, we take a linear combination of the hidden states from its last four layers, as this combination performs best without increasing the size of the embeddings BIBREF16. Since BERT and ClinicalBERT use word-piece vocabulary and computes sub-word embeddings, we compute word-level embedding by averaging the corresponding sub-word tokens. ELMo and BERT embeddings both have 1024 dimensions, ClinicalBERT have 768 as it is based on BERT base model, and the lookup table have 128 – higher dimension models leads to overfitting.\n[source_id=47] Pertaining Encoder: We trained the PGNet as a summarization task using the clinical summaries and used the trained model to initialize the encoders (and the embeddings) of the corresponding QA models. We use a vocab size of 4073 words, derived from the training dataset with a frequency threshold of 30 for the task. We trained the models using Adagrad optimizer with a learning rate of 0.015, normal gradient clipping set at 2 and trained for around 150000 iterations (stopped using validation dataset). On the summarization task PGNet obtained ROUGE-1 F1 scores of 41.42 with ELMo and 39.15 with BERT embeddings. We compare the effects of pretraining the model in Table: TABREF5, models with `pretrained encoder' had their encoders and embeddings pretrained with the summarization task.",
+  "score": 3.352338265642436,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_10",
+  "child_source_node_ids": [
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "child_qasper_evidence_texts": [
+    "We consider QA PGNet and Multi-decoder QA PGNet with lookup table embedding as baseline models and improve on the baselines with other variations described below.",
+    "Apart from learning-based baselines, we also create two naive baselines, one each for the Dosage and Frequency extraction tasks. For Dosage extraction, the baseline we consider is `Nearest Number', where we take the number nearest to the Medication Name as the prediction, and `none' if no number is mentioned or if the Medication Name is not detected in the input. For Frequency extraction, the baseline we consider is `Random Top-3' where we predict a random Frequency tag, from top-3 most frequent ones from our dataset - {`none', `daily', `twice a day'}.",
+    "Embedding: We developed different variations of our models with a simple lookup table embeddings learned from scratch and using high-performance contextual embeddings, which are ELMo BIBREF11, BERT BIBREF16 and ClinicalBERT BIBREF13 (trained and provided by the authors). Refer to Table TABREF5 for the performance comparisons.",
+    "We derive embeddings from ELMo by learning a linear combination of its last three layer's hidden states (task-specific fine-tuning BIBREF11). Similarly, for BERT-based embeddings, we take a linear combination of the hidden states from its last four layers, as this combination performs best without increasing the size of the embeddings BIBREF16. Since BERT and ClinicalBERT use word-piece vocabulary and computes sub-word embeddings, we compute word-level embedding by averaging the corresponding sub-word tokens. ELMo and BERT embeddings both have 1024 dimensions, ClinicalBERT have 768 as it is based on BERT base model, and the lookup table have 128 – higher dimension models leads to overfitting.",
+    "Pertaining Encoder: We trained the PGNet as a summarization task using the clinical summaries and used the trained model to initialize the encoders (and the embeddings) of the corresponding QA models. We use a vocab size of 4073 words, derived from the training dataset with a frequency threshold of 30 for the task. We trained the models using Adagrad optimizer with a learning rate of 0.015, normal gradient clipping set at 2 and trained for around 150000 iterations (stopped using validation dataset). On the summarization task PGNet obtained ROUGE-1 F1 scores of 41.42 with ELMo and 39.15 with BERT embeddings. We compare the effects of pretraining the model in Table: TABREF5, models with `pretrained encoder' had their encoders and embeddings pretrained with the summarization task."
+  ],
+  "child_pages": [
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "child_sections": [
+    "Experiments ::: Model variations",
+    "Experiments ::: Model variations",
+    "Experiments ::: Model variations",
+    "Experiments ::: Model variations",
+    "Experiments ::: Model variations"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Experiments ::: Model variations",
+      0
+    ],
+    [
+      "Experiments ::: Model variations",
+      1
+    ],
+    [
+      "Experiments ::: Model variations",
+      2
+    ],
+    [
+      "Experiments ::: Model variations",
+      3
+    ],
+    [
+      "Experiments ::: Model variations",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_10",
+  "section_id": "Experiments ::: Model variations",
+  "section": "Experiments ::: Model variations",
+  "title_path": "Experiments ::: Model variations",
+  "block_type": "long_unit"
+}

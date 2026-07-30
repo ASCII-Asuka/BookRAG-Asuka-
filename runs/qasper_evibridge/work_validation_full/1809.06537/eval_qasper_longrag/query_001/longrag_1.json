@@ -1,0 +1,133 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Automatic judgment prediction is to train a machine judge to determine whether a certain plea in a given civil case would be supported or rejected. In countries with civil law system, e.g. mainland China, such process should be done with reference to related law articles and the fact description, as is performed by a human judge. The intuition comes from the fact that under civil law system, law articles act as principles for juridical judgments. Such techniques would have a wide range of promising applications. On the one hand, legal consulting systems could provide better access to high-quality legal resources in a low-cost way to legal outsiders, who suffer from the complicated terminologies. On the other hand, machine judge assistants for professionals would help improve the efficiency of the judicial system. Besides, automated judgment system can help in improving juridical equality and transparency. From another perspective, there are currently 7 times much more civil cases than criminal cases in mainland China, with annual rates of increase of INLINEFORM0 and INLINEFORM1 respectively, making judgment prediction in civil cases a promising application BIBREF0 .\n[source_id=5] Previous works BIBREF1 , BIBREF2 , BIBREF3 , BIBREF4 formalize judgment prediction as the text classification task, regarding either charge names or binary judgments, i.e., support or reject, as the target classes. These works focus on the situation where only one result is expected, e.g., the US Supreme Court's decisions BIBREF2 , and the charge name prediction for criminal cases BIBREF3 . Despite these recent efforts and their progress, automatic judgment prediction in civil law system is still confronted with two main challenges:\n[source_id=6] One-to-Many Relation between Case and Plea. Every single civil case may contain multiple pleas and the result of each plea is co-determined by related law articles and specific aspects of the involved case. For example, in divorce proceedings, judgment of alienation of mutual affection is the key factor for granting divorce but custody of children depends on which side can provide better an environment for children's growth as well as parents' financial condition. Here, different pleas are independent.\n[source_id=7] Heterogeneity of Input Triple. Inputs to a judgment prediction system consist of three heterogeneous yet complementary parts, i.e., fact description, plaintiff's plea, and related law articles. Concatenating them together and treating them simply as a sequence of words as in previous works BIBREF2 , BIBREF1 would cause a great loss of information. This is the same in question-answering where the dual inputs, i.e., query and passage, should be modeled separately.\n[source_id=8] Despite the introduction of the neural networks that can learn better semantic representations of input text, it remains unsolved to incorporate proper mechanisms to integrate the complementary triple of pleas, fact descriptions, and law articles together.\n[source_id=9] Inspired by recent advances in question answering (QA) based reading comprehension (RC) BIBREF5 , BIBREF6 , BIBREF7 , BIBREF8 , we propose the Legal Reading Comprehension (LRC) framework for automatic judgment prediction. LRC incorporates the reading mechanism for better modeling of the complementary inputs above-mentioned, as is done by human judges when referring to legal materials in search of supporting law articles. Reading mechanism, by simulating how human connects and integrates multiple text, has proven an effective module in RC tasks. We argue that applying the reading mechanism in a proper way among the triplets can obtain a better understanding and more informative representation of the original text, and further improve performance . To instantiate the framework, we propose an end-to-end neural network model named AutoJudge.\n[source_id=10] For experiments, we train and evaluate our models in the civil law system of mainland China. We collect and construct a large-scale real-world data set of INLINEFORM0 case documents that the Supreme People's Court of People's Republic of China has made publicly available. Fact description, pleas, and results can be extracted easily from these case documents with regular expressions, since the original documents have special typographical characteristics indicating the discourse structure. We also take into account law articles and their corresponding juridical interpretations. We also implement and evaluate previous methods on our dataset, which prove to be strong baselines.\n[source_id=11] Our experiment results show significant improvements over previous methods. Further experiments demonstrate that our model also achieves considerable improvement over other off-the-shelf state-of-the-art models under classification and question answering framework respectively. Ablation tests carried out by taking off some components of our model further prove its robustness and effectiveness.\n[source_id=12] To sum up, our contributions are as follows:\n[source_id=13] (1) We introduce reading mechanism and re-formalize judgment prediction as Legal Reading Comprehension to better model the complementary inputs.\n[source_id=14] (2) We construct a real-world dataset for experiments, and plan to publish it for further research.\n[source_id=15] (3) Besides baselines from previous works, we also carry out comprehensive experiments comparing different existing deep neural network methods on our dataset. Supported by these experiments, improvements achieved by LRC prove to be robust.",
+  "score": 5.138337186908888,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "child_qasper_evidence_texts": [
+    "Automatic judgment prediction is to train a machine judge to determine whether a certain plea in a given civil case would be supported or rejected. In countries with civil law system, e.g. mainland China, such process should be done with reference to related law articles and the fact description, as is performed by a human judge. The intuition comes from the fact that under civil law system, law articles act as principles for juridical judgments. Such techniques would have a wide range of promising applications. On the one hand, legal consulting systems could provide better access to high-quality legal resources in a low-cost way to legal outsiders, who suffer from the complicated terminologies. On the other hand, machine judge assistants for professionals would help improve the efficiency of the judicial system. Besides, automated judgment system can help in improving juridical equality and transparency. From another perspective, there are currently 7 times much more civil cases than criminal cases in mainland China, with annual rates of increase of INLINEFORM0 and INLINEFORM1 respectively, making judgment prediction in civil cases a promising application BIBREF0 .",
+    "Previous works BIBREF1 , BIBREF2 , BIBREF3 , BIBREF4 formalize judgment prediction as the text classification task, regarding either charge names or binary judgments, i.e., support or reject, as the target classes. These works focus on the situation where only one result is expected, e.g., the US Supreme Court's decisions BIBREF2 , and the charge name prediction for criminal cases BIBREF3 . Despite these recent efforts and their progress, automatic judgment prediction in civil law system is still confronted with two main challenges:",
+    "One-to-Many Relation between Case and Plea. Every single civil case may contain multiple pleas and the result of each plea is co-determined by related law articles and specific aspects of the involved case. For example, in divorce proceedings, judgment of alienation of mutual affection is the key factor for granting divorce but custody of children depends on which side can provide better an environment for children's growth as well as parents' financial condition. Here, different pleas are independent.",
+    "Heterogeneity of Input Triple. Inputs to a judgment prediction system consist of three heterogeneous yet complementary parts, i.e., fact description, plaintiff's plea, and related law articles. Concatenating them together and treating them simply as a sequence of words as in previous works BIBREF2 , BIBREF1 would cause a great loss of information. This is the same in question-answering where the dual inputs, i.e., query and passage, should be modeled separately.",
+    "Despite the introduction of the neural networks that can learn better semantic representations of input text, it remains unsolved to incorporate proper mechanisms to integrate the complementary triple of pleas, fact descriptions, and law articles together.",
+    "Inspired by recent advances in question answering (QA) based reading comprehension (RC) BIBREF5 , BIBREF6 , BIBREF7 , BIBREF8 , we propose the Legal Reading Comprehension (LRC) framework for automatic judgment prediction. LRC incorporates the reading mechanism for better modeling of the complementary inputs above-mentioned, as is done by human judges when referring to legal materials in search of supporting law articles. Reading mechanism, by simulating how human connects and integrates multiple text, has proven an effective module in RC tasks. We argue that applying the reading mechanism in a proper way among the triplets can obtain a better understanding and more informative representation of the original text, and further improve performance . To instantiate the framework, we propose an end-to-end neural network model named AutoJudge.",
+    "For experiments, we train and evaluate our models in the civil law system of mainland China. We collect and construct a large-scale real-world data set of INLINEFORM0 case documents that the Supreme People's Court of People's Republic of China has made publicly available. Fact description, pleas, and results can be extracted easily from these case documents with regular expressions, since the original documents have special typographical characteristics indicating the discourse structure. We also take into account law articles and their corresponding juridical interpretations. We also implement and evaluate previous methods on our dataset, which prove to be strong baselines.",
+    "Our experiment results show significant improvements over previous methods. Further experiments demonstrate that our model also achieves considerable improvement over other off-the-shelf state-of-the-art models under classification and question answering framework respectively. Ablation tests carried out by taking off some components of our model further prove its robustness and effectiveness.",
+    "To sum up, our contributions are as follows:",
+    "(1) We introduce reading mechanism and re-formalize judgment prediction as Legal Reading Comprehension to better model the complementary inputs.",
+    "(2) We construct a real-world dataset for experiments, and plan to publish it for further research.",
+    "(3) Besides baselines from previous works, we also carry out comprehensive experiments comparing different existing deep neural network methods on our dataset. Supported by these experiments, improvements achieved by LRC prove to be robust."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ],
+    [
+      "Introduction",
+      7
+    ],
+    [
+      "Introduction",
+      8
+    ],
+    [
+      "Introduction",
+      9
+    ],
+    [
+      "Introduction",
+      10
+    ],
+    [
+      "Introduction",
+      11
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

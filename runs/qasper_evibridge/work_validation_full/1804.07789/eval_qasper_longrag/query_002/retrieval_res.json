@@ -1,0 +1,456 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_9",
+      "content": "[Section] Hyperparameter tuning\n[source_id=41] We tuned the hyperparameters of all the models using a validation set. As mentioned earlier, we used a bidirectional GRU cell as the function INLINEFORM0 for computing the representation of the fields and the values (see Section SECREF4 ). For all the models, we experimented with GRU state sizes of 128, 256 and 512. The total number of unique words in the corpus is around 400K (this includes the words in the infobox and the descriptions). Of these, we retained only the top 20K words in our vocabulary (same as BIBREF0 ). We initialized the embeddings of these words with 300 dimensional Glove embeddings BIBREF31 . We used Adam BIBREF32 with a learning rate of INLINEFORM1 , INLINEFORM2 and INLINEFORM3 . We trained the model for a maximum of 20 epochs and used early stopping with the patience set to 5 epochs.",
+      "score": 3.4123048341148703,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        41
+      ],
+      "child_qasper_evidence_texts": [
+        "We tuned the hyperparameters of all the models using a validation set. As mentioned earlier, we used a bidirectional GRU cell as the function INLINEFORM0 for computing the representation of the fields and the values (see Section SECREF4 ). For all the models, we experimented with GRU state sizes of 128, 256 and 512. The total number of unique words in the corpus is around 400K (this includes the words in the infobox and the descriptions). Of these, we retained only the top 20K words in our vocabulary (same as BIBREF0 ). We initialized the embeddings of these words with 300 dimensional Glove embeddings BIBREF31 . We used Adam BIBREF32 with a learning rate of INLINEFORM1 , INLINEFORM2 and INLINEFORM3 . We trained the model for a maximum of 20 epochs and used early stopping with the patience set to 5 epochs."
+      ],
+      "child_pages": [
+        9
+      ],
+      "child_sections": [
+        "Hyperparameter tuning"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Hyperparameter tuning",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Hyperparameter tuning",
+      "section": "Hyperparameter tuning",
+      "title_path": "Hyperparameter tuning",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_14",
+      "content": "[Section] Visualizing Attention Weights\n[source_id=52] If the proposed model indeed works well then we should see attention weights that are consistent with the stay on and never look back behavior. To verify this, we plotted the attention weights in cases where the model with gated orthogonalization does better than the model with only bifocal attention. Figure FIGREF21 shows the attention weights corresponding to infobox in Figure FIGREF25 . Notice that the model without gated orthogonalization has attention on both name field and article title while rendering the name. The model with gated orthogonalization, on the other hand, stays on the name field for as long as it is required but then moves and never returns to it (as expected).\n[source_id=53] Due to lack of space, we do not show similar plots for French and German but we would like to mention that, in general, the differences between the attention weights learned by the model with and without gated orthogonalization were more pronounced for the French/German dataset than the English dataset. This is in agreement with the results reported in Table TABREF20 and TABREF20 where the improvements given by gated orthogonalization are more for French/German than for English.",
+      "score": 2.861712790925189,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_14",
+      "child_source_node_ids": [
+        52,
+        53
+      ],
+      "child_qasper_evidence_texts": [
+        "If the proposed model indeed works well then we should see attention weights that are consistent with the stay on and never look back behavior. To verify this, we plotted the attention weights in cases where the model with gated orthogonalization does better than the model with only bifocal attention. Figure FIGREF21 shows the attention weights corresponding to infobox in Figure FIGREF25 . Notice that the model without gated orthogonalization has attention on both name field and article title while rendering the name. The model with gated orthogonalization, on the other hand, stays on the name field for as long as it is required but then moves and never returns to it (as expected).",
+        "Due to lack of space, we do not show similar plots for French and German but we would like to mention that, in general, the differences between the attention weights learned by the model with and without gated orthogonalization were more pronounced for the French/German dataset than the English dataset. This is in agreement with the results reported in Table TABREF20 and TABREF20 where the improvements given by gated orthogonalization are more for French/German than for English."
+      ],
+      "child_pages": [
+        14,
+        14
+      ],
+      "child_sections": [
+        "Visualizing Attention Weights",
+        "Visualizing Attention Weights"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Visualizing Attention Weights",
+          0
+        ],
+        [
+          "Visualizing Attention Weights",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_14",
+      "section_id": "Visualizing Attention Weights",
+      "section": "Visualizing Attention Weights",
+      "title_path": "Visualizing Attention Weights",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Models compared\n[source_id=36] We compare with the following models:\n[source_id=37] 1. BIBREF0 : This is a conditional language model which uses a feed-forward neural network to predict the next word in the description conditioned on local characteristics (i.e., words within a field) and global characteristics (i.e., overall structure of the infobox).\n[source_id=38] 2. BIBREF9 : This model was proposed in the context of the WeatherGov and RoboCup datasets which have a much smaller vocabulary. They use an improved attention model with additional regularizer terms which influence the weights assigned to the fields.\n[source_id=39] 3. Basic Seq2Seq: This is the vanilla encode-attend-decode model BIBREF1 . Further, to deal with the large vocabulary ( INLINEFORM0 400K words) we use a copying mechanism as a post-processing step. Specifically, we identify the time steps at which the decoder produces unknown words (denoted by the special symbol UNK). For each such time step, we look at the attention weights on the input words and replace the UNK word by that input word which has received maximum attention at this timestep. This process is similar to the one described in BIBREF30 . Even lebret2016neural have a copying mechanism tightly integrated with their model.",
+      "score": 2.850049526378908,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        36,
+        37,
+        38,
+        39
+      ],
+      "child_qasper_evidence_texts": [
+        "We compare with the following models:",
+        "1. BIBREF0 : This is a conditional language model which uses a feed-forward neural network to predict the next word in the description conditioned on local characteristics (i.e., words within a field) and global characteristics (i.e., overall structure of the infobox).",
+        "2. BIBREF9 : This model was proposed in the context of the WeatherGov and RoboCup datasets which have a much smaller vocabulary. They use an improved attention model with additional regularizer terms which influence the weights assigned to the fields.",
+        "3. Basic Seq2Seq: This is the vanilla encode-attend-decode model BIBREF1 . Further, to deal with the large vocabulary ( INLINEFORM0 400K words) we use a copying mechanism as a post-processing step. Specifically, we identify the time steps at which the decoder produces unknown words (denoted by the special symbol UNK). For each such time step, we look at the attention weights on the input words and replace the UNK word by that input word which has received maximum attention at this timestep. This process is similar to the one described in BIBREF30 . Even lebret2016neural have a copying mechanism tightly integrated with their model."
+      ],
+      "child_pages": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "child_sections": [
+        "Models compared",
+        "Models compared",
+        "Models compared",
+        "Models compared"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Models compared",
+          0
+        ],
+        [
+          "Models compared",
+          1
+        ],
+        [
+          "Models compared",
+          2
+        ],
+        [
+          "Models compared",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Models compared",
+      "section": "Models compared",
+      "title_path": "Models compared",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_15",
+      "content": "[Section] Out of domain results\n[source_id=55] What if the model sees a different INLINEFORM0 of person at test time? For example, what if the training data does not contain any sportspersons but at test time we encounter the infobox of a sportsperson. This is the same as seeing out-of-domain data at test time. Such a situation is quite expected in the products domain where new products with new features (fields) get frequently added to the catalog. We were interested in three questions here. First, we wanted to see if testing the model on out-of-domain data indeed leads to a drop in the performance. For this, we compared the performance of our best model in two scenarios (i) trained on data from all domains (including the target domain) and tested on the target domain (sports, arts) and (ii) trained on data from all domains except the target domain and tested on the target domain. Comparing rows 1 and 2 of Table TABREF32 we observed a significant drop in the performance. Note that the numbers for sports domain in row 1 are much better than the Arts domain because roughly 40% of the WikiBio training data contains sportspersons.\n[source_id=56] Next, we wanted to see if we can use a small amount of data from the target domain to fine tune a model trained on the out of domain data. We observe that even with very small amounts of target domain data the performance starts improving significantly (see rows 3 and 4 of Table TABREF32 ). Note that if we train a model from scratch with only limited data from the target domain instead of fine-tuning a model trained on a different source domain then the performance is very poor. In particular, training a model from scratch with 10K training instances we get a BLEU score of INLINEFORM0 and INLINEFORM1 for arts and sports respectively. Finally, even though the actual words used for describing a sportsperson (footballer, cricketer, etc.) would be very different from the words used to describe an artist (actor, musician, etc.) they might share many fields (for example, date of birth, occupation, etc.). As seen in Figure FIGREF28 (attention weights corresponding to the infobox in Figure FIGREF27 ), the model predicts the attention weights correctly for common fields (such as occupation) but it is unable to use the right vocabulary to describe the occupation (since it has not seen such words frequently in the training data). However, once we fine tune the model with limited data from the target domain we see that it picks up the new vocabulary and produces a correct description of the occupation.",
+      "score": 2.066738030847584,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_15",
+      "child_source_node_ids": [
+        55,
+        56
+      ],
+      "child_qasper_evidence_texts": [
+        "What if the model sees a different INLINEFORM0 of person at test time? For example, what if the training data does not contain any sportspersons but at test time we encounter the infobox of a sportsperson. This is the same as seeing out-of-domain data at test time. Such a situation is quite expected in the products domain where new products with new features (fields) get frequently added to the catalog. We were interested in three questions here. First, we wanted to see if testing the model on out-of-domain data indeed leads to a drop in the performance. For this, we compared the performance of our best model in two scenarios (i) trained on data from all domains (including the target domain) and tested on the target domain (sports, arts) and (ii) trained on data from all domains except the target domain and tested on the target domain. Comparing rows 1 and 2 of Table TABREF32 we observed a significant drop in the performance. Note that the numbers for sports domain in row 1 are much better than the Arts domain because roughly 40% of the WikiBio training data contains sportspersons.",
+        "Next, we wanted to see if we can use a small amount of data from the target domain to fine tune a model trained on the out of domain data. We observe that even with very small amounts of target domain data the performance starts improving significantly (see rows 3 and 4 of Table TABREF32 ). Note that if we train a model from scratch with only limited data from the target domain instead of fine-tuning a model trained on a different source domain then the performance is very poor. In particular, training a model from scratch with 10K training instances we get a BLEU score of INLINEFORM0 and INLINEFORM1 for arts and sports respectively. Finally, even though the actual words used for describing a sportsperson (footballer, cricketer, etc.) would be very different from the words used to describe an artist (actor, musician, etc.) they might share many fields (for example, date of birth, occupation, etc.). As seen in Figure FIGREF28 (attention weights corresponding to the infobox in Figure FIGREF27 ), the model predicts the attention weights correctly for common fields (such as occupation) but it is unable to use the right vocabulary to describe the occupation (since it has not seen such words frequently in the training data). However, once we fine tune the model with limited data from the target domain we see that it picks up the new vocabulary and produces a correct description of the occupation."
+      ],
+      "child_pages": [
+        15,
+        15
+      ],
+      "child_sections": [
+        "Out of domain results",
+        "Out of domain results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Out of domain results",
+          0
+        ],
+        [
+          "Out of domain results",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_15",
+      "section_id": "Out of domain results",
+      "section": "Out of domain results",
+      "title_path": "Out of domain results",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Fused Bifocal Attention Mechanism\n[source_id=17] Intuitively, when a human writes a description from a table she keeps track of information at two levels. At the macro level, it is important to decide which is the appropriate field to attend to next and at a micro level (i.e., within a field) it is important to know which values to attend to next. To capture this behavior, we use a bifocal attention mechanism as described below.\n[source_id=18] Macro Attention: Consider the INLINEFORM0 -th field INLINEFORM1 which has values INLINEFORM2 . Let INLINEFORM3 be the representation of this field in the infobox. This representation can either be (i) the word embedding of the field name or (ii) some function INLINEFORM4 of the values in the field or (iii) a concatenation of (i) and (ii). The function INLINEFORM5 could simply be the sum or average of the embeddings of the values in the field. Alternately, this function could be a GRU (or LSTM) which treats these values within a field as a sequence and computes the field representation as the final representation of this sequence (i.e., the representation of the last time-step). We found that bidirectional GRU is a better choice for INLINEFORM6 and concatenating the embedding of the field name with this GRU representation works best. Further, using a bidirectional GRU cell to take contextual information from neighboring fields also helps (these are the orange colored cells in the top-left block in Figure FIGREF3 with macro attention). Given these representations INLINEFORM7 for all the INLINEFORM8 fields we compute an attention over the fields (macro level). DISPLAYFORM0\n[source_id=19] where INLINEFORM0 is the state of the decoder at time step INLINEFORM1 . INLINEFORM2 and INLINEFORM3 are parameters, INLINEFORM4 is the total number of fields in the input, INLINEFORM5 is the macro (field level) context vector at the INLINEFORM6 -th time step of the decoder.\n[source_id=20] Micro Attention: Let INLINEFORM0 be the representation of the INLINEFORM1 -th value in a given field. This representation could again either be (i) simply the embedding of this value (ii) or a contextual representation computed using a function INLINEFORM2 which also considers the other values in the field. For example, if INLINEFORM3 are the values in a field then these values can be treated as a sequence and the representation of the INLINEFORM4 -th value can be computed using a bidirectional GRU over this sequence. Once again, we found that using a bi-GRU works better then simply using the embedding of the value. Once we have such a representation computed for all values across all the fields, we compute the attention over these values (micro level) as shown below : DISPLAYFORM0\n[source_id=21] where INLINEFORM0 is the state of the decoder at time step INLINEFORM1 . INLINEFORM2 and INLINEFORM3 are parameters, INLINEFORM4 is the total number of values across all the fields.\n[source_id=22] Fused Attention: Intuitively, the attention weights assigned to a field should have an influence on all the values belonging to the particular field. To ensure this, we reweigh the micro level attention weights based on the corresponding macro level attention weights. In other words, we fuse the attention weights at the two levels as: DISPLAYFORM0\n[source_id=23] where INLINEFORM0 is the field corresponding to the INLINEFORM1 -th value, INLINEFORM2 is the macro level context vector.",
+      "score": 1.9033060322254918,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "child_qasper_evidence_texts": [
+        "Intuitively, when a human writes a description from a table she keeps track of information at two levels. At the macro level, it is important to decide which is the appropriate field to attend to next and at a micro level (i.e., within a field) it is important to know which values to attend to next. To capture this behavior, we use a bifocal attention mechanism as described below.",
+        "Macro Attention: Consider the INLINEFORM0 -th field INLINEFORM1 which has values INLINEFORM2 . Let INLINEFORM3 be the representation of this field in the infobox. This representation can either be (i) the word embedding of the field name or (ii) some function INLINEFORM4 of the values in the field or (iii) a concatenation of (i) and (ii). The function INLINEFORM5 could simply be the sum or average of the embeddings of the values in the field. Alternately, this function could be a GRU (or LSTM) which treats these values within a field as a sequence and computes the field representation as the final representation of this sequence (i.e., the representation of the last time-step). We found that bidirectional GRU is a better choice for INLINEFORM6 and concatenating the embedding of the field name with this GRU representation works best. Further, using a bidirectional GRU cell to take contextual information from neighboring fields also helps (these are the orange colored cells in the top-left block in Figure FIGREF3 with macro attention). Given these representations INLINEFORM7 for all the INLINEFORM8 fields we compute an attention over the fields (macro level). DISPLAYFORM0",
+        "where INLINEFORM0 is the state of the decoder at time step INLINEFORM1 . INLINEFORM2 and INLINEFORM3 are parameters, INLINEFORM4 is the total number of fields in the input, INLINEFORM5 is the macro (field level) context vector at the INLINEFORM6 -th time step of the decoder.",
+        "Micro Attention: Let INLINEFORM0 be the representation of the INLINEFORM1 -th value in a given field. This representation could again either be (i) simply the embedding of this value (ii) or a contextual representation computed using a function INLINEFORM2 which also considers the other values in the field. For example, if INLINEFORM3 are the values in a field then these values can be treated as a sequence and the representation of the INLINEFORM4 -th value can be computed using a bidirectional GRU over this sequence. Once again, we found that using a bi-GRU works better then simply using the embedding of the value. Once we have such a representation computed for all values across all the fields, we compute the attention over these values (micro level) as shown below : DISPLAYFORM0",
+        "where INLINEFORM0 is the state of the decoder at time step INLINEFORM1 . INLINEFORM2 and INLINEFORM3 are parameters, INLINEFORM4 is the total number of values across all the fields.",
+        "Fused Attention: Intuitively, the attention weights assigned to a field should have an influence on all the values belonging to the particular field. To ensure this, we reweigh the micro level attention weights based on the corresponding macro level attention weights. In other words, we fuse the attention weights at the two levels as: DISPLAYFORM0",
+        "where INLINEFORM0 is the field corresponding to the INLINEFORM1 -th value, INLINEFORM2 is the macro level context vector."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Fused Bifocal Attention Mechanism",
+        "Fused Bifocal Attention Mechanism",
+        "Fused Bifocal Attention Mechanism",
+        "Fused Bifocal Attention Mechanism",
+        "Fused Bifocal Attention Mechanism",
+        "Fused Bifocal Attention Mechanism",
+        "Fused Bifocal Attention Mechanism"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Fused Bifocal Attention Mechanism",
+          0
+        ],
+        [
+          "Fused Bifocal Attention Mechanism",
+          1
+        ],
+        [
+          "Fused Bifocal Attention Mechanism",
+          2
+        ],
+        [
+          "Fused Bifocal Attention Mechanism",
+          3
+        ],
+        [
+          "Fused Bifocal Attention Mechanism",
+          4
+        ],
+        [
+          "Fused Bifocal Attention Mechanism",
+          5
+        ],
+        [
+          "Fused Bifocal Attention Mechanism",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Fused Bifocal Attention Mechanism",
+      "section": "Fused Bifocal Attention Mechanism",
+      "title_path": "Fused Bifocal Attention Mechanism",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Human Evaluations\n[source_id=47] To make a qualitative assessment of the generated sentences, we conducted a human study on a sample of 500 Infoboxes which were sampled from English dataset. The annotators for this task were undergraduate and graduate students. For each of these infoboxes, we generated summaries using the basic seq2seq model and our final model with bifocal attention and gated orthogonalization. For each description and for each model, we asked three annotators to rank the output of the systems based on i) adequacy (i.e. does it capture relevant information from the infobox), (ii) fluency (i.e. grammar) and (iii) relative preference (i.e., which of the two outputs would be preferred). Overall the average fluency/adequacy (on a scale of 5) for basic seq2seq model was INLINEFORM0 and INLINEFORM1 for our model respectively.\n[source_id=48] The results from Table TABREF17 suggest that in general gated orthogonalization model performs better than the basic seq2seq model. Additionally, annotators were asked to verify if the generated summaries look natural (i.e, as if they were generated by humans). In 423 out of 500 cases, the annotators said “Yes” suggesting that gated orthogonalization model indeed produces good descriptions.",
+      "score": 1.6295841061784935,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        47,
+        48
+      ],
+      "child_qasper_evidence_texts": [
+        "To make a qualitative assessment of the generated sentences, we conducted a human study on a sample of 500 Infoboxes which were sampled from English dataset. The annotators for this task were undergraduate and graduate students. For each of these infoboxes, we generated summaries using the basic seq2seq model and our final model with bifocal attention and gated orthogonalization. For each description and for each model, we asked three annotators to rank the output of the systems based on i) adequacy (i.e. does it capture relevant information from the infobox), (ii) fluency (i.e. grammar) and (iii) relative preference (i.e., which of the two outputs would be preferred). Overall the average fluency/adequacy (on a scale of 5) for basic seq2seq model was INLINEFORM0 and INLINEFORM1 for our model respectively.",
+        "The results from Table TABREF17 suggest that in general gated orthogonalization model performs better than the basic seq2seq model. Additionally, annotators were asked to verify if the generated summaries look natural (i.e, as if they were generated by humans). In 423 out of 500 cases, the annotators said “Yes” suggesting that gated orthogonalization model indeed produces good descriptions."
+      ],
+      "child_pages": [
+        12,
+        12
+      ],
+      "child_sections": [
+        "Human Evaluations",
+        "Human Evaluations"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Human Evaluations",
+          0
+        ],
+        [
+          "Human Evaluations",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Human Evaluations",
+      "section": "Human Evaluations",
+      "title_path": "Human Evaluations",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Rendering natural language descriptions from structured data is required in a wide variety of commercial applications such as generating descriptions of products, hotels, furniture, etc., from a corresponding table of facts about the entity. Such a table typically contains {field, value} pairs where the field is a property of the entity (e.g., color) and the value is a set of possible assignments to this property (e.g., color = red). Another example of this is the recently introduced task of generating one line biography descriptions from a given Wikipedia infobox BIBREF0 . The Wikipedia infobox serves as a table of facts about a person and the first sentence from the corresponding article serves as a one line description of the person. Figure FIGREF2 illustrates an example input infobox which contains fields such as Born, Residence, Nationality, Fields, Institutions and Alma Mater. Each field further contains some words (e.g., particle physics, many-body theory, etc.). The corresponding description is coherent with the information contained in the infobox.\n[source_id=5] Note that the number of fields in the infobox and the ordering of the fields within the infobox varies from person to person. Given the large size (700K examples) and heterogeneous nature of the dataset which contains biographies of people from different backgrounds (sports, politics, arts, etc.), it is hard to come up with simple rule-based templates for generating natural language descriptions from infoboxes, thereby making a case for data-driven models. Based on the recent success of data-driven neural models for various other NLG tasks BIBREF1 , BIBREF2 , BIBREF3 , BIBREF4 , BIBREF5 , one simple choice is to treat the infobox as a sequence of {field, value} pairs and use a standard seq2seq model for this task. However, such a model is too generic and does not exploit the specific characteristics of this task as explained below. First, note that while generating such descriptions from structured data, a human keeps track of information at two levels. Specifically, at a macro level, she would first decide which field to mention next and then at a micro level decide which of the values in the field needs to be mentioned next. For example, she first decides that at the current step, the field occupation needs attention and then decides which is the next appropriate occupation to attend to from the set of occupations (actor, director, producer, etc.). To enable this, we use a bifocal attention mechanism which computes an attention over fields at a macro level and over values at a micro level. We then fuse these attention weights such that the attention weight for a field also influences the attention over the values within it. Finally, we feed a fused context vector to the decoder which contains both field level and word level information. Note that such two-level attention mechanisms BIBREF6 , BIBREF7 , BIBREF8 have been used in the context of unstructured data (as opposed to structured data in our case), where at a macro level one needs to pay attention to sentences and at a micro level to words in the sentences.\n[source_id=6] Next, we observe that while rendering the output, once the model pays attention to a field (say, occupation) it needs to stay on this field for a few timesteps (till all the occupations are produced in the output). We refer to this as the stay on behavior. Further, we note that once the tokens of a field are referred to, they are usually not referred to later. For example, once all the occupations have been listed in the output we will never visit the occupation field again because there is nothing left to say about it. We refer to this as the never look back behavior. To model the stay on behaviour, we introduce a forget (or remember) gate which acts as a signal to decide when to forget the current field (or equivalently to decide till when to remember the current field). To model the never look back behaviour we introduce a gated orthogonalization mechanism which ensures that once a field is forgotten, subsequent field context vectors fed to the decoder are orthogonal to (or different from) the previous field context vectors.\n[source_id=7] We experiment with the WikiBio dataset BIBREF0 which contains around 700K {infobox, description} pairs and has a vocabulary of around 400K words. We show that the proposed model gives a relative improvement of 21% and 20% as compared to current state of the art models BIBREF0 , BIBREF9 on this dataset. The proposed model also gives a relative improvement of 10% as compared to the basic seq2seq model. Further, we introduce new datasets for French and German on the same lines as the English WikiBio dataset. Even on these two datasets, our model outperforms the state of the art methods mentioned above.",
+      "score": 1.460676516544492,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "child_qasper_evidence_texts": [
+        "Rendering natural language descriptions from structured data is required in a wide variety of commercial applications such as generating descriptions of products, hotels, furniture, etc., from a corresponding table of facts about the entity. Such a table typically contains {field, value} pairs where the field is a property of the entity (e.g., color) and the value is a set of possible assignments to this property (e.g., color = red). Another example of this is the recently introduced task of generating one line biography descriptions from a given Wikipedia infobox BIBREF0 . The Wikipedia infobox serves as a table of facts about a person and the first sentence from the corresponding article serves as a one line description of the person. Figure FIGREF2 illustrates an example input infobox which contains fields such as Born, Residence, Nationality, Fields, Institutions and Alma Mater. Each field further contains some words (e.g., particle physics, many-body theory, etc.). The corresponding description is coherent with the information contained in the infobox.",
+        "Note that the number of fields in the infobox and the ordering of the fields within the infobox varies from person to person. Given the large size (700K examples) and heterogeneous nature of the dataset which contains biographies of people from different backgrounds (sports, politics, arts, etc.), it is hard to come up with simple rule-based templates for generating natural language descriptions from infoboxes, thereby making a case for data-driven models. Based on the recent success of data-driven neural models for various other NLG tasks BIBREF1 , BIBREF2 , BIBREF3 , BIBREF4 , BIBREF5 , one simple choice is to treat the infobox as a sequence of {field, value} pairs and use a standard seq2seq model for this task. However, such a model is too generic and does not exploit the specific characteristics of this task as explained below. First, note that while generating such descriptions from structured data, a human keeps track of information at two levels. Specifically, at a macro level, she would first decide which field to mention next and then at a micro level decide which of the values in the field needs to be mentioned next. For example, she first decides that at the current step, the field occupation needs attention and then decides which is the next appropriate occupation to attend to from the set of occupations (actor, director, producer, etc.). To enable this, we use a bifocal attention mechanism which computes an attention over fields at a macro level and over values at a micro level. We then fuse these attention weights such that the attention weight for a field also influences the attention over the values within it. Finally, we feed a fused context vector to the decoder which contains both field level and word level information. Note that such two-level attention mechanisms BIBREF6 , BIBREF7 , BIBREF8 have been used in the context of unstructured data (as opposed to structured data in our case), where at a macro level one needs to pay attention to sentences and at a micro level to words in the sentences.",
+        "Next, we observe that while rendering the output, once the model pays attention to a field (say, occupation) it needs to stay on this field for a few timesteps (till all the occupations are produced in the output). We refer to this as the stay on behavior. Further, we note that once the tokens of a field are referred to, they are usually not referred to later. For example, once all the occupations have been listed in the output we will never visit the occupation field again because there is nothing left to say about it. We refer to this as the never look back behavior. To model the stay on behaviour, we introduce a forget (or remember) gate which acts as a signal to decide when to forget the current field (or equivalently to decide till when to remember the current field). To model the never look back behaviour we introduce a gated orthogonalization mechanism which ensures that once a field is forgotten, subsequent field context vectors fed to the decoder are orthogonal to (or different from) the previous field context vectors.",
+        "We experiment with the WikiBio dataset BIBREF0 which contains around 700K {infobox, description} pairs and has a vocabulary of around 400K words. We show that the proposed model gives a relative improvement of 21% and 20% as compared to current state of the art models BIBREF0 , BIBREF9 on this dataset. The proposed model also gives a relative improvement of 10% as compared to the basic seq2seq model. Further, we introduce new datasets for French and German on the same lines as the English WikiBio dataset. Even on these two datasets, our model outperforms the state of the art methods mentioned above."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Related work\n[source_id=9] Natural Language Generation has always been of interest to the research community and has received a lot of attention in the past. The approaches for NLG range from (i) rule based approaches (e.g., BIBREF10 , BIBREF11 , BIBREF12 , BIBREF13 , BIBREF14 ) (ii) modular statistical approaches which divide the process into three phases (planning, selection and surface realization) and use data driven approaches for one or more of these phases BIBREF15 , BIBREF16 , BIBREF17 , BIBREF18 , BIBREF19 (iii) hybrid approaches which rely on a combination of handcrafted rules and corpus statistics BIBREF20 , BIBREF21 , BIBREF22 and (iv) the more recent neural network based models BIBREF1 .\n[source_id=10] Neural models for NLG have been proposed in the context of various tasks such as machine translation BIBREF1 , document summarization BIBREF2 , BIBREF4 , paraphrase generation BIBREF23 , image captioning BIBREF24 , video summarization BIBREF25 , query based document summarization BIBREF5 and so on. Most of these models are data hungry and are trained on large amounts of data. On the other hand, NLG from structured data has largely been studied in the context of small datasets such as WeatherGov BIBREF26 , RoboCup BIBREF27 , NFL Recaps BIBREF15 , Prodigy-Meteo BIBREF28 and TUNA Challenge BIBREF29 . Recently weather16 proposed RNN/LSTM based neural encoder-decoder models with attention for WeatherGov and RoboCup datasets.\n[source_id=11] Unlike the datasets mentioned above, the biography dataset introduced by lebret2016neural is larger (700K {table, descriptions} pairs) and has a much larger vocabulary (400K words as opposed to around 350 or fewer words in the above datasets). Further, unlike the feed-forward neural network based model proposed by BIBREF0 we use a sequence to sequence model and introduce components to address the peculiar characteristics of the task. Specifically, we introduce neural components to address the need for attention at two levels and to address the stay on and never look back behaviour required by the decoder. KiddonZC16 have explored the use of checklists to track previously visited ingredients while generating recipes from ingredients. Note that two-level attention mechanisms have also been used in the context of summarization BIBREF6 , document classification BIBREF7 , dialog systems BIBREF8 , etc. However, these works deal with unstructured data (sentences at the higher level and words at a lower level) as opposed to structured data in our case.",
+      "score": 1.2181076472008938,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        9,
+        10,
+        11
+      ],
+      "child_qasper_evidence_texts": [
+        "Natural Language Generation has always been of interest to the research community and has received a lot of attention in the past. The approaches for NLG range from (i) rule based approaches (e.g., BIBREF10 , BIBREF11 , BIBREF12 , BIBREF13 , BIBREF14 ) (ii) modular statistical approaches which divide the process into three phases (planning, selection and surface realization) and use data driven approaches for one or more of these phases BIBREF15 , BIBREF16 , BIBREF17 , BIBREF18 , BIBREF19 (iii) hybrid approaches which rely on a combination of handcrafted rules and corpus statistics BIBREF20 , BIBREF21 , BIBREF22 and (iv) the more recent neural network based models BIBREF1 .",
+        "Neural models for NLG have been proposed in the context of various tasks such as machine translation BIBREF1 , document summarization BIBREF2 , BIBREF4 , paraphrase generation BIBREF23 , image captioning BIBREF24 , video summarization BIBREF25 , query based document summarization BIBREF5 and so on. Most of these models are data hungry and are trained on large amounts of data. On the other hand, NLG from structured data has largely been studied in the context of small datasets such as WeatherGov BIBREF26 , RoboCup BIBREF27 , NFL Recaps BIBREF15 , Prodigy-Meteo BIBREF28 and TUNA Challenge BIBREF29 . Recently weather16 proposed RNN/LSTM based neural encoder-decoder models with attention for WeatherGov and RoboCup datasets.",
+        "Unlike the datasets mentioned above, the biography dataset introduced by lebret2016neural is larger (700K {table, descriptions} pairs) and has a much larger vocabulary (400K words as opposed to around 350 or fewer words in the above datasets). Further, unlike the feed-forward neural network based model proposed by BIBREF0 we use a sequence to sequence model and introduce components to address the peculiar characteristics of the task. Specifically, we introduce neural components to address the need for attention at two levels and to address the stay on and never look back behaviour required by the decoder. KiddonZC16 have explored the use of checklists to track previously visited ingredients while generating recipes from ingredients. Note that two-level attention mechanisms have also been used in the context of summarization BIBREF6 , document classification BIBREF7 , dialog systems BIBREF8 , etc. However, these works deal with unstructured data (sentences at the higher level and words at a lower level) as opposed to structured data in our case."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Related work",
+        "Related work",
+        "Related work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related work",
+          0
+        ],
+        [
+          "Related work",
+          1
+        ],
+        [
+          "Related work",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Related work",
+      "section": "Related work",
+      "title_path": "Related work",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 41,
+      "content": "We tuned the hyperparameters of all the models using a validation set. As mentioned earlier, we used a bidirectional GRU cell as the function INLINEFORM0 for computing the representation of the fields and the values (see Section SECREF4 ). For all the models, we experimented with GRU state sizes of 128, 256 and 512. The total number of unique words in the corpus is around 400K (this includes the words in the infobox and the descriptions). Of these, we retained only the top 20K words in our vocabulary (same as BIBREF0 ). We initialized the embeddings of these words with 300 dimensional Glove embeddings BIBREF31 . We used Adam BIBREF32 with a learning rate of INLINEFORM1 , INLINEFORM2 and INLINEFORM3 . We trained the model for a maximum of 20 epochs and used early stopping with the patience set to 5 epochs.",
+      "qasper_evidence_text": "We tuned the hyperparameters of all the models using a validation set. As mentioned earlier, we used a bidirectional GRU cell as the function INLINEFORM0 for computing the representation of the fields and the values (see Section SECREF4 ). For all the models, we experimented with GRU state sizes of 128, 256 and 512. The total number of unique words in the corpus is around 400K (this includes the words in the infobox and the descriptions). Of these, we retained only the top 20K words in our vocabulary (same as BIBREF0 ). We initialized the embeddings of these words with 300 dimensional Glove embeddings BIBREF31 . We used Adam BIBREF32 with a learning rate of INLINEFORM1 , INLINEFORM2 and INLINEFORM3 . We trained the model for a maximum of 20 epochs and used early stopping with the patience set to 5 epochs.",
+      "source_node_id": 41,
+      "node_id": 41,
+      "paragraph_id": 41,
+      "evidence_id": 41,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_9",
+      "rank": 1,
+      "score": 3.4123048341148703,
+      "block_type": "paragraph",
+      "page": 9,
+      "section_id": "Hyperparameter tuning",
+      "section": "Hyperparameter tuning",
+      "title": "Hyperparameter tuning",
+      "hotpot_title": "Hyperparameter tuning",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    }
+  ],
+  "supporting_block_ids": [
+    41
+  ]
+}

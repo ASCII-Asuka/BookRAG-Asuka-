@@ -1,0 +1,70 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Social media with abundant user-generated posts provide a rich platform for understanding events, opinions and preferences of groups and individuals. These insights are primarily hidden in unstructured forms of social media posts, such as in free-form text or images without tags. Named entity recognition (NER), the task of recognizing named entities from free-form text, is thus a critical step for building structural information, allowing for its use in personalized assistance, recommendations, advertisement, etc.\n[source_id=5] While many previous approaches BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 on NER have shown success for well-formed text in recognizing named entities via word context resolution (e.g. LSTM with word embeddings) combined with character-level features (e.g. CharLSTM/CNN), several additional challenges remain for recognizing named entities from extremely short and coarse text found in social media posts. For instance, short social media posts often do not provide enough textual contexts to resolve polysemous entities (e.g. “monopoly is da best \", where `monopoly' may refer to a board game (named entity) or a term in economics). In addition, noisy text includes a huge number of unknown tokens due to inconsistent lexical notations and frequent mentions of various newly trending entities (e.g. “xoxo Marshmelloooo \", where `Marshmelloooo' is a mis-spelling of a known entity `Marshmello', a music producer), making word embeddings based neural networks NER models vulnerable.\n[source_id=6] To address the challenges above for social media posts, we build upon the state-of-the-art neural architecture for NER with the following two novel approaches (Figure FIGREF1 ). First, we propose to leverage auxiliary modalities for additional context resolution of entities. For example, many popular social media platforms now provide ways to compose a post in multiple modalities - specifically image and text (e.g. Snapchat captions, Twitter posts with image URLs), from which we can obtain additional context for understanding posts. While “monopoly\" in the previous example is ambiguous in its textual form, an accompanying snap image of a board game can help disambiguate among polysemous entities, thereby correctly recognizing it as a named entity.\n[source_id=7] Second, we also propose a general modality attention module which chooses per decoding step the most informative modality among available ones (in our case, word embeddings, character embeddings, or visual features) to extract context from. For example, the modality attention module lets the decoder attenuate the word-level signals for unknown word tokens (“Marshmellooooo\" with trailing `o's) and amplifies character-level features intsead (capitalized first letter, lexical similarity to other known named entity token `Marshmello', etc.), thereby suppressing noise information (“UNK\" token embedding) in decoding steps. Note that most of the previous literature in NER or other NLP tasks combine word and character-level information with naive concatenation, which is vulnerable to noisy social media posts. When an auxiliary image is available, the modality attention module determines to amplify this visual context in disambiguating polysemous entities, or to attenuate visual contexts when they are irrelevant to target named entities, selfies, etc. Note that the proposed modality attention module is distinct from how attention is used in other sequence-to-sequence literature (e.g. attending to a specific token within an input sequence). Section SECREF2 provides the detailed literature review.\n[source_id=8] Our contributions are three-fold: we propose (1) an LSTM-CNN hybrid multimodal NER network that takes as input both image and text for recognition of a named entity in text input. To the best of our knowledge, our approach is the first work to incorporate visual contexts for named entity recognition tasks. (2) We propose a general modality attention module that selectively chooses modalities to extract primary context from, maximizing information gain and suppressing irrelevant contexts from each modality (we treat words, characters, and images as separate modalities). (3) We show that the proposed approaches outperform the state-of-the-art NER models (both with and without using additional visual contexts) on our new MNER dataset SnapCaptions, a large collection of informal and extremely short social media posts paired with unique images.",
+  "score": 3.623968142402294,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "child_qasper_evidence_texts": [
+    "Social media with abundant user-generated posts provide a rich platform for understanding events, opinions and preferences of groups and individuals. These insights are primarily hidden in unstructured forms of social media posts, such as in free-form text or images without tags. Named entity recognition (NER), the task of recognizing named entities from free-form text, is thus a critical step for building structural information, allowing for its use in personalized assistance, recommendations, advertisement, etc.",
+    "While many previous approaches BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 on NER have shown success for well-formed text in recognizing named entities via word context resolution (e.g. LSTM with word embeddings) combined with character-level features (e.g. CharLSTM/CNN), several additional challenges remain for recognizing named entities from extremely short and coarse text found in social media posts. For instance, short social media posts often do not provide enough textual contexts to resolve polysemous entities (e.g. “monopoly is da best \", where `monopoly' may refer to a board game (named entity) or a term in economics). In addition, noisy text includes a huge number of unknown tokens due to inconsistent lexical notations and frequent mentions of various newly trending entities (e.g. “xoxo Marshmelloooo \", where `Marshmelloooo' is a mis-spelling of a known entity `Marshmello', a music producer), making word embeddings based neural networks NER models vulnerable.",
+    "To address the challenges above for social media posts, we build upon the state-of-the-art neural architecture for NER with the following two novel approaches (Figure FIGREF1 ). First, we propose to leverage auxiliary modalities for additional context resolution of entities. For example, many popular social media platforms now provide ways to compose a post in multiple modalities - specifically image and text (e.g. Snapchat captions, Twitter posts with image URLs), from which we can obtain additional context for understanding posts. While “monopoly\" in the previous example is ambiguous in its textual form, an accompanying snap image of a board game can help disambiguate among polysemous entities, thereby correctly recognizing it as a named entity.",
+    "Second, we also propose a general modality attention module which chooses per decoding step the most informative modality among available ones (in our case, word embeddings, character embeddings, or visual features) to extract context from. For example, the modality attention module lets the decoder attenuate the word-level signals for unknown word tokens (“Marshmellooooo\" with trailing `o's) and amplifies character-level features intsead (capitalized first letter, lexical similarity to other known named entity token `Marshmello', etc.), thereby suppressing noise information (“UNK\" token embedding) in decoding steps. Note that most of the previous literature in NER or other NLP tasks combine word and character-level information with naive concatenation, which is vulnerable to noisy social media posts. When an auxiliary image is available, the modality attention module determines to amplify this visual context in disambiguating polysemous entities, or to attenuate visual contexts when they are irrelevant to target named entities, selfies, etc. Note that the proposed modality attention module is distinct from how attention is used in other sequence-to-sequence literature (e.g. attending to a specific token within an input sequence). Section SECREF2 provides the detailed literature review.",
+    "Our contributions are three-fold: we propose (1) an LSTM-CNN hybrid multimodal NER network that takes as input both image and text for recognition of a named entity in text input. To the best of our knowledge, our approach is the first work to incorporate visual contexts for named entity recognition tasks. (2) We propose a general modality attention module that selectively chooses modalities to extract primary context from, maximizing information gain and suppressing irrelevant contexts from each modality (we treat words, characters, and images as separate modalities). (3) We show that the proposed approaches outperform the state-of-the-art NER models (both with and without using additional visual contexts) on our new MNER dataset SnapCaptions, a large collection of informal and extremely short social media posts paired with unique images."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

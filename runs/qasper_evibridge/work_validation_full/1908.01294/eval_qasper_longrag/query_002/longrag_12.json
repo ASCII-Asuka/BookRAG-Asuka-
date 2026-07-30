@@ -1,0 +1,61 @@
+{
+  "id": "longrag_12",
+  "content": "[Section] Effect of local representation\n[source_id=80] To find the effect of local representation, we compare a standard Bi-LSTM-CRF model using our full implementation to the model that includes n-gram embedding to extract local representation. In tab:thairesult,tab:engresult, the standard Bi-LSTM-CRF model is represented as Bi-LSTM-CRF (row (e)), while the models with local features are represented as INLINEFORM0 (row (f)).\n[source_id=81] The results in Table TABREF45 show that using n-gram to obtain the local representation improves the F1 score of the model from 90.9% (row (e)) to 92.4% (row (f)) on the Orchid dataset and from 87.6% (row (e)) to 88.7% (row (f)) on the UGWC dataset. These results occur because many word groups exist that can be used to signal the beginning and end of a sentence in Thai. Word groups always found near sentence boundaries can be categorized into 2 groups. The first group consists of final particles, e.g., “thaiนะ|คะ ” (na | kha), “thaiนะ|ครับ ” (na | khrạb), “thaiเลย|ครับ ” (ley | khrạb), “thaiแล้ว|ครับ ” (laêw | khrạb), and others. These word groups are usually used at the ends of sentences to indicate the formality level. For instance, the model with local representation can detect the sentence boundary at “thaiครับ ” (khrạb) that is followed by “thaiแล้ว ” (laêw), as shown in Fig. , while the model without local representation cannot detect the word as a sentence boundary. The second group consists of conjunctions that are always used at the beginnings of sentences, e.g., “thaiจาก|นั้น (after that) ”, “thaiไม่|งั้น (otherwise) ” and others. The model that uses n-gram to capture word group information is better able to detect word groups near sentence boundaries. Thus, this model can identify these sentence boundaries easily in the Thai language.\n[source_id=82] result/cherrypickngram\n[source_id=83] In contrast, for the English dataset, local representation using n-gram drops the overall F1 score of punctuation restoration from 64.4% (row (e)) to 63.6% (row (f)), as shown in Table TABREF47 . However, the 2-class F1 score increases slightly from 81.4% (row (e)) to 81.8% (row (f)) when compared to the Bi-LSTM-CRF model, which does not integrate n-gram embedding. Common phrases such as ”In spite of”, ”Even though” and ”Due to the fact” might provide strong cues for punctuation; however, such phrases can be found at both the beginnings and in the middle of sentences. Because such phrases can be used in both positions, they may follow commas when they are in the middle of the sentence or periods when they are at the beginning of a sentence. However, they still follow either a period or a comma; consequently, such phrases can still help identify whether the punctuation should be restored, which increases the 2-class F1 score, which considers only the positions of missing punctuation. Moreover, English does not use the concept of a final particle usually found at the end of the sentence—similar to the Thai word group mentioned earlier—including “thaiนะ|คะ ”(na | kha), “thaiนะ|ครับ ”(na | khrạb), “thaiเลย|ครับ ” (ley|khrạb), “thaiแล้ว|ครับ ” (laêw | khrạb) and others. Therefore, the word groups captured by n-gram can only help to identify where punctuation should be restored but they do not help the model determine the type of punctuation that should be restored.",
+  "score": 6.43672727551796,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_12",
+  "child_source_node_ids": [
+    80,
+    81,
+    82,
+    83
+  ],
+  "child_qasper_evidence_texts": [
+    "To find the effect of local representation, we compare a standard Bi-LSTM-CRF model using our full implementation to the model that includes n-gram embedding to extract local representation. In tab:thairesult,tab:engresult, the standard Bi-LSTM-CRF model is represented as Bi-LSTM-CRF (row (e)), while the models with local features are represented as INLINEFORM0 (row (f)).",
+    "The results in Table TABREF45 show that using n-gram to obtain the local representation improves the F1 score of the model from 90.9% (row (e)) to 92.4% (row (f)) on the Orchid dataset and from 87.6% (row (e)) to 88.7% (row (f)) on the UGWC dataset. These results occur because many word groups exist that can be used to signal the beginning and end of a sentence in Thai. Word groups always found near sentence boundaries can be categorized into 2 groups. The first group consists of final particles, e.g., “thaiนะ|คะ ” (na | kha), “thaiนะ|ครับ ” (na | khrạb), “thaiเลย|ครับ ” (ley | khrạb), “thaiแล้ว|ครับ ” (laêw | khrạb), and others. These word groups are usually used at the ends of sentences to indicate the formality level. For instance, the model with local representation can detect the sentence boundary at “thaiครับ ” (khrạb) that is followed by “thaiแล้ว ” (laêw), as shown in Fig. , while the model without local representation cannot detect the word as a sentence boundary. The second group consists of conjunctions that are always used at the beginnings of sentences, e.g., “thaiจาก|นั้น (after that) ”, “thaiไม่|งั้น (otherwise) ” and others. The model that uses n-gram to capture word group information is better able to detect word groups near sentence boundaries. Thus, this model can identify these sentence boundaries easily in the Thai language.",
+    "result/cherrypickngram",
+    "In contrast, for the English dataset, local representation using n-gram drops the overall F1 score of punctuation restoration from 64.4% (row (e)) to 63.6% (row (f)), as shown in Table TABREF47 . However, the 2-class F1 score increases slightly from 81.4% (row (e)) to 81.8% (row (f)) when compared to the Bi-LSTM-CRF model, which does not integrate n-gram embedding. Common phrases such as ”In spite of”, ”Even though” and ”Due to the fact” might provide strong cues for punctuation; however, such phrases can be found at both the beginnings and in the middle of sentences. Because such phrases can be used in both positions, they may follow commas when they are in the middle of the sentence or periods when they are at the beginning of a sentence. However, they still follow either a period or a comma; consequently, such phrases can still help identify whether the punctuation should be restored, which increases the 2-class F1 score, which considers only the positions of missing punctuation. Moreover, English does not use the concept of a final particle usually found at the end of the sentence—similar to the Thai word group mentioned earlier—including “thaiนะ|คะ ”(na | kha), “thaiนะ|ครับ ”(na | khrạb), “thaiเลย|ครับ ” (ley|khrạb), “thaiแล้ว|ครับ ” (laêw | khrạb) and others. Therefore, the word groups captured by n-gram can only help to identify where punctuation should be restored but they do not help the model determine the type of punctuation that should be restored."
+  ],
+  "child_pages": [
+    12,
+    12,
+    12,
+    12
+  ],
+  "child_sections": [
+    "Effect of local representation",
+    "Effect of local representation",
+    "Effect of local representation",
+    "Effect of local representation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Effect of local representation",
+      0
+    ],
+    [
+      "Effect of local representation",
+      1
+    ],
+    [
+      "Effect of local representation",
+      2
+    ],
+    [
+      "Effect of local representation",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_12",
+  "section_id": "Effect of local representation",
+  "section": "Effect of local representation",
+  "title_path": "Effect of local representation",
+  "block_type": "long_unit"
+}

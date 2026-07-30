@@ -1,0 +1,79 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Framework ::: Term Matching\n[source_id=17] The term matching algorithm of Tang et al. BIBREF14 is adopted with some major modifications. First, to identify candidate terms, we use a much looser string search algorithm where we stem the entity words with snowball stemmer and then find candidate terms which contain ANY non-stopword words in the entity. The stemming is mainly used to represent a word in its stem. For example, “legs” becomes “leg”, and “jammed” becomes “jam”. Thus, stemming can provide more tolerance when finding candidates. Similarly, finding candidates using the condition ANY (instead of ALL) also increases the tolerance. However, if the tagged entity contains stopwords such as “in”, “on”, etc., the pool of candidates will naturally grow very large and increase the computation cost for later part, because even completely irrelevant terms may contain stopwords. Therefore, we match based on non-stopwords only. To illustrate the points above, suppose a query is tagged with the entity\n[source_id=18] Ex. 3.1 “severe burns on legs”,\n[source_id=19] and one relevant term is “leg burn”. After stemming, “burns” and “legs” in Ex.UNKREF12 become “burn” and “leg”, respectively, allowing \"leg burn\" to be considered as a candidate. Although the word “severe” is not in the term “leg burn”, the term is still considered a candidate because we selected using ANY. The stopword “on” is ignored when finding candidate terms so that not every term that contains the word “on” is added to the candidate pool. When a candidate term, $C$, is found in this manner for the tagged entity, $E$, we calculate the semantic similarity score, $s$, between $C$ and $E$ in two steps. In the first step, calculate the maximum similarity score for each word in $C$ as shown in Figure FIGREF10. Given a word in the candidate term, $C_i$ ($1 \\le i \\le m$, $m$ is the number of words in the candidate term) and a word in the tagged entity, $E_j$.Their similarity score, $s_{ij}$ (shown as the element in the boxed matrix in Figure FIGREF10), is given by\n[source_id=20] where $ELMo(C_i|C)$ and $ELMo(E_j|E)$ are the ELMo embeddings for the word $C_i$ and $E_j$, respectively. The ELMo embeddings have the same dimension for all words when using the same fine-tuned ELMo model. Thus, we can use a distance function (e.g., the cosine distance), denoted $d(\\cdot )$ in equation DISPLAY_FORM13, to compute the semantic similarity between words. In step 2, we calculate the candidate-entity relevance score (similarity) using the formula\n[source_id=21] where $s_c$ is a score threshold, and $\\mathbb {I} \\lbrace max(\\vec{S_i}) > s_c\\rbrace $ is an indicator function that equals 1 if $max(\\vec{S_i}) > s_c$ or equals 0 if not. In equation DISPLAY_FORM14 we define a metric that measures “information coverage” of the candidate terms with respect to a tagged entity. If the constituent words of a candidate term are relevant to the constituent words in the tagged entity, then the candidate term offers more information coverage. Intuitively, the more relevant words present in the candidate term, the more relevant the candidate is to the tagged entity. The purpose of the cutoff, $s_c$, is to screen the $(C_i,E_j)$ word pairs that are dissimilar, so that they do not contribute to information coverage. One can adjust the strictness of the entity - terminology matching by adjusting $s_c$. The higher we set $s_c$, the fewer candidate terms will be selected for a tagged entity. A normalization factor, $\\frac{1}{m}$, is added to give preference to more concise candidate terms given the same amount of information coverage.\n[source_id=22] We need to create an extra stopword list to include words such as “configuration” and “color”, and exclude these words from the word count for a candidate term. This is because the terms associated with the description of color or configuration usually have the word “color” or “configuration” in them. On the other hand, a user query normally does not contain such words. For example, a tagged entity in a user query could be “round yellow patches”, for which the relevant terminologies include “round configuration” and “yellow color”. Since we applied a normalization factor, $\\frac{1}{m}$, to the relevance score, the word “color” and “configuration” would lower the relevance score because they do not have a counterpart in the tagged entity. Therefore, we need to exclude them from word count. Once the process is complete, calculate $s(C,E)$ for all candidate terms and then we can apply a threshold on all $s(C,E)$ to ignore candidate terms with low information coverage. Finally, rank the terms by their $s(C,E)$ and return the ranked list as the results.",
+  "score": 1.6213093378923304,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    17,
+    18,
+    19,
+    20,
+    21,
+    22
+  ],
+  "child_qasper_evidence_texts": [
+    "The term matching algorithm of Tang et al. BIBREF14 is adopted with some major modifications. First, to identify candidate terms, we use a much looser string search algorithm where we stem the entity words with snowball stemmer and then find candidate terms which contain ANY non-stopword words in the entity. The stemming is mainly used to represent a word in its stem. For example, “legs” becomes “leg”, and “jammed” becomes “jam”. Thus, stemming can provide more tolerance when finding candidates. Similarly, finding candidates using the condition ANY (instead of ALL) also increases the tolerance. However, if the tagged entity contains stopwords such as “in”, “on”, etc., the pool of candidates will naturally grow very large and increase the computation cost for later part, because even completely irrelevant terms may contain stopwords. Therefore, we match based on non-stopwords only. To illustrate the points above, suppose a query is tagged with the entity",
+    "Ex. 3.1 “severe burns on legs”,",
+    "and one relevant term is “leg burn”. After stemming, “burns” and “legs” in Ex.UNKREF12 become “burn” and “leg”, respectively, allowing \"leg burn\" to be considered as a candidate. Although the word “severe” is not in the term “leg burn”, the term is still considered a candidate because we selected using ANY. The stopword “on” is ignored when finding candidate terms so that not every term that contains the word “on” is added to the candidate pool. When a candidate term, $C$, is found in this manner for the tagged entity, $E$, we calculate the semantic similarity score, $s$, between $C$ and $E$ in two steps. In the first step, calculate the maximum similarity score for each word in $C$ as shown in Figure FIGREF10. Given a word in the candidate term, $C_i$ ($1 \\le i \\le m$, $m$ is the number of words in the candidate term) and a word in the tagged entity, $E_j$.Their similarity score, $s_{ij}$ (shown as the element in the boxed matrix in Figure FIGREF10), is given by",
+    "where $ELMo(C_i|C)$ and $ELMo(E_j|E)$ are the ELMo embeddings for the word $C_i$ and $E_j$, respectively. The ELMo embeddings have the same dimension for all words when using the same fine-tuned ELMo model. Thus, we can use a distance function (e.g., the cosine distance), denoted $d(\\cdot )$ in equation DISPLAY_FORM13, to compute the semantic similarity between words. In step 2, we calculate the candidate-entity relevance score (similarity) using the formula",
+    "where $s_c$ is a score threshold, and $\\mathbb {I} \\lbrace max(\\vec{S_i}) > s_c\\rbrace $ is an indicator function that equals 1 if $max(\\vec{S_i}) > s_c$ or equals 0 if not. In equation DISPLAY_FORM14 we define a metric that measures “information coverage” of the candidate terms with respect to a tagged entity. If the constituent words of a candidate term are relevant to the constituent words in the tagged entity, then the candidate term offers more information coverage. Intuitively, the more relevant words present in the candidate term, the more relevant the candidate is to the tagged entity. The purpose of the cutoff, $s_c$, is to screen the $(C_i,E_j)$ word pairs that are dissimilar, so that they do not contribute to information coverage. One can adjust the strictness of the entity - terminology matching by adjusting $s_c$. The higher we set $s_c$, the fewer candidate terms will be selected for a tagged entity. A normalization factor, $\\frac{1}{m}$, is added to give preference to more concise candidate terms given the same amount of information coverage.",
+    "We need to create an extra stopword list to include words such as “configuration” and “color”, and exclude these words from the word count for a candidate term. This is because the terms associated with the description of color or configuration usually have the word “color” or “configuration” in them. On the other hand, a user query normally does not contain such words. For example, a tagged entity in a user query could be “round yellow patches”, for which the relevant terminologies include “round configuration” and “yellow color”. Since we applied a normalization factor, $\\frac{1}{m}$, to the relevance score, the word “color” and “configuration” would lower the relevance score because they do not have a counterpart in the tagged entity. Therefore, we need to exclude them from word count. Once the process is complete, calculate $s(C,E)$ for all candidate terms and then we can apply a threshold on all $s(C,E)$ to ignore candidate terms with low information coverage. Finally, rank the terms by their $s(C,E)$ and return the ranked list as the results."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Framework ::: Term Matching",
+    "Framework ::: Term Matching",
+    "Framework ::: Term Matching",
+    "Framework ::: Term Matching",
+    "Framework ::: Term Matching",
+    "Framework ::: Term Matching"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Framework ::: Term Matching",
+      0
+    ],
+    [
+      "Framework ::: Term Matching",
+      1
+    ],
+    [
+      "Framework ::: Term Matching",
+      2
+    ],
+    [
+      "Framework ::: Term Matching",
+      3
+    ],
+    [
+      "Framework ::: Term Matching",
+      4
+    ],
+    [
+      "Framework ::: Term Matching",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Framework ::: Term Matching",
+  "section": "Framework ::: Term Matching",
+  "title_path": "Framework ::: Term Matching",
+  "block_type": "long_unit"
+}

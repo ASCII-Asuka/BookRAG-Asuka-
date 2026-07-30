@@ -1,0 +1,429 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_7",
+      "content": "[Section] Experiments\n[source_id=26] In seeking to answer the question of whether the occupancy rate of a listing could be extracted from the listing’s summary, we ran a number of experiments on our first model. Two parameterizations which we present here are (1) whether the word vectors used in the embedding layer are trained on our corpus or come pretrained from Wikipedia and Gigaword and (2) whether ensembling or the final hidden state in isolation are used to make a prediction for the sequence. Common to all experiments was our decision to use an Adam optimizer, 16 LSTM units, 50-dimensional GloVe vectors, and a 70-30 split in train and test data.\n[source_id=27] Over ten epochs, the model parameterization which performs the best uses GloVe vectors trained on a corpus consisting of all listing descriptions and ensembling to make its class prediction. As a result, our findings are well in-line with those presented by Radford et. al who underscore the importance of training word embeddings on a data-specific corpus for best results on generative tasks [9].\n[source_id=28] That said, these results, though they do show a marginal increase in dev accuracy and a decrease in CE loss, suggest that perhaps listing description is not too predictive of occupancy rate given our parameterizations. While the listing description is surely an influential metric in determining the quality of a listing, other factors such as location, amenities, and home type might play a larger role in the consumer's decision. We were hopeful that these factors would be represented in the price per bedroom of the listing – our control variable – but the relationship may not have been strong enough.\n[source_id=29] However, should a strong relationship actually exist and there be instead a problem with our method, there are a few possibilities of what went wrong. We assumed that listings with similar occupancy rates would have similar listing descriptions regardless of price, which is not necessarily a strong assumption. This is coupled with an unexpected sparseness of clean data. With over 40,000 listings, we did not expect to see such poor attention to orthography in what are essentially public advertisements of the properties. In this way, our decision to use a window size of 5, a minimum occurrence count of 2, and a dimensionality of 50 when training our GloVe vectors was ad hoc.\n[source_id=30] Seeking to create a model which could generate and discriminate a “high-occupancy listing description”, we wanted to evaluate the capabilities of a generative adversarial network trained on either the standard binary cross-entropy loss or the DMK loss proposed above. Common to both models was the decision to alternate between training the generator for 50 steps and the discriminator for 2000 steps. We leave further tuning of the models to future research as each occasionally falls into unideal local optima within 20 iterations. One potential culprit is the step imbalance between generator and discriminator – should either learn at a much faster rate than the other, one component is liable to be “defeated\" and cease to learn the training data.\n[source_id=31] Qualitatively the network trained on the DMK loss shows great promise. With respect to the two experiments presented here, we have shown that it is possible to introduce a measure of suggestion in the text produced by the generator. While this model is also subject to a rapid deadlock between generator and discriminator, it is interesting to see how the introduction of keywords is gradual and affects the proximal tokens included in the output. This behavior was made possible by paying close attention to the hyperparameter $\\gamma $ , the weight given to the dot product attention term of the DMK loss. After manual tuning, we settle on $\\gamma =0.00045$ for this weight. Below, we illustrate model outputs using different values of Gamma. As is apparent, for a hyper-parameter value less than roughly $\\gamma = 0.0004$ , the model tends to ignore the importance of the keyword weights. Conversely, with a $\\gamma $ value higher than $0.0005$ , the model tends towards overweighting the representation of the keywords in the model output.",
+      "score": 4.524572815720661,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "child_qasper_evidence_texts": [
+        "In seeking to answer the question of whether the occupancy rate of a listing could be extracted from the listing’s summary, we ran a number of experiments on our first model. Two parameterizations which we present here are (1) whether the word vectors used in the embedding layer are trained on our corpus or come pretrained from Wikipedia and Gigaword and (2) whether ensembling or the final hidden state in isolation are used to make a prediction for the sequence. Common to all experiments was our decision to use an Adam optimizer, 16 LSTM units, 50-dimensional GloVe vectors, and a 70-30 split in train and test data.",
+        "Over ten epochs, the model parameterization which performs the best uses GloVe vectors trained on a corpus consisting of all listing descriptions and ensembling to make its class prediction. As a result, our findings are well in-line with those presented by Radford et. al who underscore the importance of training word embeddings on a data-specific corpus for best results on generative tasks [9].",
+        "That said, these results, though they do show a marginal increase in dev accuracy and a decrease in CE loss, suggest that perhaps listing description is not too predictive of occupancy rate given our parameterizations. While the listing description is surely an influential metric in determining the quality of a listing, other factors such as location, amenities, and home type might play a larger role in the consumer's decision. We were hopeful that these factors would be represented in the price per bedroom of the listing – our control variable – but the relationship may not have been strong enough.",
+        "However, should a strong relationship actually exist and there be instead a problem with our method, there are a few possibilities of what went wrong. We assumed that listings with similar occupancy rates would have similar listing descriptions regardless of price, which is not necessarily a strong assumption. This is coupled with an unexpected sparseness of clean data. With over 40,000 listings, we did not expect to see such poor attention to orthography in what are essentially public advertisements of the properties. In this way, our decision to use a window size of 5, a minimum occurrence count of 2, and a dimensionality of 50 when training our GloVe vectors was ad hoc.",
+        "Seeking to create a model which could generate and discriminate a “high-occupancy listing description”, we wanted to evaluate the capabilities of a generative adversarial network trained on either the standard binary cross-entropy loss or the DMK loss proposed above. Common to both models was the decision to alternate between training the generator for 50 steps and the discriminator for 2000 steps. We leave further tuning of the models to future research as each occasionally falls into unideal local optima within 20 iterations. One potential culprit is the step imbalance between generator and discriminator – should either learn at a much faster rate than the other, one component is liable to be “defeated\" and cease to learn the training data.",
+        "Qualitatively the network trained on the DMK loss shows great promise. With respect to the two experiments presented here, we have shown that it is possible to introduce a measure of suggestion in the text produced by the generator. While this model is also subject to a rapid deadlock between generator and discriminator, it is interesting to see how the introduction of keywords is gradual and affects the proximal tokens included in the output. This behavior was made possible by paying close attention to the hyperparameter $\\gamma $ , the weight given to the dot product attention term of the DMK loss. After manual tuning, we settle on $\\gamma =0.00045$ for this weight. Below, we illustrate model outputs using different values of Gamma. As is apparent, for a hyper-parameter value less than roughly $\\gamma = 0.0004$ , the model tends to ignore the importance of the keyword weights. Conversely, with a $\\gamma $ value higher than $0.0005$ , the model tends towards overweighting the representation of the keywords in the model output."
+      ],
+      "child_pages": [
+        7,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Experiments",
+        "Experiments",
+        "Experiments",
+        "Experiments",
+        "Experiments",
+        "Experiments"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments",
+          0
+        ],
+        [
+          "Experiments",
+          1
+        ],
+        [
+          "Experiments",
+          2
+        ],
+        [
+          "Experiments",
+          3
+        ],
+        [
+          "Experiments",
+          4
+        ],
+        [
+          "Experiments",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Experiments",
+      "section": "Experiments",
+      "title_path": "Experiments",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Data\n[source_id=13] The data for the project was acquired from Airdna, a data processing service that collaborates with Airbnb to produce high-accuracy data summaries for listings in geographic regions of the United States. For the sake of simplicity, we focus our analysis on Airbnb listings from Manhattan, NY, during the time period of January 1, 2016, to January 1, 2017. The data provided to us contained information for roughly 40,000 Manhattan listings that were posted on Airbnb during this defined time period. For each listing, we were given information of the amenities of the listing (number of bathrooms, number of bedrooms …), the listing’s zip code, the host’s description of the listing, the price of the listing, and the occupancy rate of the listing. Airbnb defines a home's occupancy rate, as the percentage of time that a listing is occupied over the time period that the listing is available. This gives us a reasonable metric for defining popular versus less popular listings.",
+      "score": 2.3061806253029316,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        13
+      ],
+      "child_qasper_evidence_texts": [
+        "The data for the project was acquired from Airdna, a data processing service that collaborates with Airbnb to produce high-accuracy data summaries for listings in geographic regions of the United States. For the sake of simplicity, we focus our analysis on Airbnb listings from Manhattan, NY, during the time period of January 1, 2016, to January 1, 2017. The data provided to us contained information for roughly 40,000 Manhattan listings that were posted on Airbnb during this defined time period. For each listing, we were given information of the amenities of the listing (number of bathrooms, number of bedrooms …), the listing’s zip code, the host’s description of the listing, the price of the listing, and the occupancy rate of the listing. Airbnb defines a home's occupancy rate, as the percentage of time that a listing is occupied over the time period that the listing is available. This gives us a reasonable metric for defining popular versus less popular listings."
+      ],
+      "child_pages": [
+        3
+      ],
+      "child_sections": [
+        "Data"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Data",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Data",
+      "section": "Data",
+      "title_path": "Data",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] In this paper, we examine the use case of general adversarial networks (GANs) in the field of marketing. In particular, we analyze how GAN models can replicate text patterns from successful product listings on Airbnb, a peer-to-peer online market for short-term apartment rentals. To do so, we define the Diehl-Martinez-Kamalu (DMK) loss function as a new class of functions that forces the model's generated output to include a set of user-defined keywords. This allows the general adversarial network to recommend a way of rewording the phrasing of a listing description to increase the likelihood that it is booked. Although we tailor our analysis to Airbnb data, we believe this framework establishes a more general model for how generative algorithms can be used to produce text samples for the purposes of marketing.",
+      "score": 1.9766888707695998,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper, we examine the use case of general adversarial networks (GANs) in the field of marketing. In particular, we analyze how GAN models can replicate text patterns from successful product listings on Airbnb, a peer-to-peer online market for short-term apartment rentals. To do so, we define the Diehl-Martinez-Kamalu (DMK) loss function as a new class of functions that forces the model's generated output to include a set of user-defined keywords. This allows the general adversarial network to recommend a way of rewording the phrasing of a listing description to increase the likelihood that it is booked. Although we tailor our analysis to Airbnb data, we believe this framework establishes a more general model for how generative algorithms can be used to produce text samples for the purposes of marketing."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Recurrent Neural Network with Long Short-Term Memory Gates\n[source_id=17] Using our cleaned data set, we now built a recurrent neural network (RNN) with long short-term memory gates (LSTM). Our RNN/LSTM is trained to predict, given a description, whether a home corresponds to a high/medium/low popularity listing. The architecture of the RNN/LSTM employs Tensorflow’s Dynamic RNN package. Each sentence input is first fed into an embedding layer, where the input’s text is converted to a GloVe vector. These GloVe vectors are learned via a global word-word co-occurrence matrix using our corpus of Airbnb listing descriptions [8]. At each time step, the GloVe vectors are then fed into an LSTM layer. For each layer, the model forward propagates the output of the LSTM layer to the next time-step’s LSTM layer via a rectified linear unit (RLU) activation function. Each layer also pipes the output of the LSTM through a cross-entropy operation, to predict, for each time-step, the category of the input sequence. We finally ensemble these predictions, to create the model’s complete output prediction.",
+      "score": 1.8957732615501262,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        17
+      ],
+      "child_qasper_evidence_texts": [
+        "Using our cleaned data set, we now built a recurrent neural network (RNN) with long short-term memory gates (LSTM). Our RNN/LSTM is trained to predict, given a description, whether a home corresponds to a high/medium/low popularity listing. The architecture of the RNN/LSTM employs Tensorflow’s Dynamic RNN package. Each sentence input is first fed into an embedding layer, where the input’s text is converted to a GloVe vector. These GloVe vectors are learned via a global word-word co-occurrence matrix using our corpus of Airbnb listing descriptions [8]. At each time step, the GloVe vectors are then fed into an LSTM layer. For each layer, the model forward propagates the output of the LSTM layer to the next time-step’s LSTM layer via a rectified linear unit (RLU) activation function. Each layer also pipes the output of the LSTM through a cross-entropy operation, to predict, for each time-step, the category of the input sequence. We finally ensemble these predictions, to create the model’s complete output prediction."
+      ],
+      "child_pages": [
+        5
+      ],
+      "child_sections": [
+        "Recurrent Neural Network with Long Short-Term Memory Gates"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Recurrent Neural Network with Long Short-Term Memory Gates",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Recurrent Neural Network with Long Short-Term Memory Gates",
+      "section": "Recurrent Neural Network with Long Short-Term Memory Gates",
+      "title_path": "Recurrent Neural Network with Long Short-Term Memory Gates",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Generative Adversarial Network\n[source_id=19] Having observed an unideal performance on this task (see Experiments below), we turned our attention to building a model that can replicate the writing style of high popularity listing descriptions. To solve this task, we designed a framework for a general adversarial network. This model employs the standard set up of a generator and a discriminator, but extends the framework with the adoption of the Diehl-Martinez-Kamalu loss.\n[source_id=20] The generator is designed as a feed-forward neural network with three layers of depth. The input to the generator is simply a vector of random noise. This input is then fed directly to the first hidden layer via a linear transformation. Between the first and second layer we apply an exponential linear unit (ELU) as a non-linear activation function. Our reasoning for doing so is based on findings by Dash et al. that the experimental accuracy of ELUs over rectified linear units (RLU) tends to be somewhat higher for generative tasks [3]. Then, to scale the generator’s output to be in the range 0-1, we apply a sigmoid non-linearity between the second and the third layer of the model.\n[source_id=21] The discriminator similarly used a feed-forward structure with three layers of depth. The input to the discriminator comes from two sources: real data fed directly into the discriminator and the data generated by the generator. This input is then piped into the first hidden layer. As before, an ELU transformation is then applied between the first and second layer, as well as between the second and third hidden layers. Finally, a sigmoid activation is used on the output of the last hidden layer. This sigmoid activation is important since the output of our discriminator is a binary boolean that indicates whether the discriminator believes the input to have been real data or data produced by the generator. This discriminator is thus trained to minimize the binary cross-entropy loss of its prediction (whether the data was real or fake) and the real ground-truth of each data point.\n[source_id=22] The general framework defined above was inspired largely by the open-source code of Nag Dev, and was built using Pytorch [7]. One key extension to the basic GAN model, however, is the loss function that we apply to the generator, namely the Diehl-Martinez-Kamalu (DMK) Loss which we define below.\n[source_id=23] The Diehl-Martinez-Kamalu Loss is a weighted combination of a binary cross entropy loss with a dot-product attention metric of each user-defined keyword with the model’s generated output. Formally, the binary cross entropy (BCE) loss for one example is defined as: $ BCE(x,y) = y \\cdot logx + (1-y) \\cdot log(1-x), $\n[source_id=24] where x is defined as the predicted label for each sample and y is the true label (i.e. real versus fake data). The DMK loss then calculates an additional term, which corresponds to the dot-product attention of each word in the generated output with each keyword specified by the user. To illustrate by example, say a user desires the generated output to contain the keywords, $\\lbrace subway, manhattan\\rbrace $ . The model then converts each of these keywords to their corresponding glove vectors. Let us define the following notation $e(‘apple’)$ is the GloVe representation of the word apple, and let us suppose that $g$ is the vector of word embeddings generated by the generator. That is, $g_1$ is the first word embedding of the generator’s output. Let us also suppose $k$ is a vector of the keywords specified by the user. In our examples, $k$ is always in $R^{1}$ with $k_1$ one equaling of $‘subway’$ or $‘parking’$ . The dot-product term of the DMK loss then calculates $e(‘apple’)$0 . Weighing this term by some hyper-parameter, $e(‘apple’)$1 , then gives us the entire definition of the DMK loss: $e(‘apple’)$2 $e(‘apple’)$3",
+      "score": 1.3196302018938306,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "child_qasper_evidence_texts": [
+        "Having observed an unideal performance on this task (see Experiments below), we turned our attention to building a model that can replicate the writing style of high popularity listing descriptions. To solve this task, we designed a framework for a general adversarial network. This model employs the standard set up of a generator and a discriminator, but extends the framework with the adoption of the Diehl-Martinez-Kamalu loss.",
+        "The generator is designed as a feed-forward neural network with three layers of depth. The input to the generator is simply a vector of random noise. This input is then fed directly to the first hidden layer via a linear transformation. Between the first and second layer we apply an exponential linear unit (ELU) as a non-linear activation function. Our reasoning for doing so is based on findings by Dash et al. that the experimental accuracy of ELUs over rectified linear units (RLU) tends to be somewhat higher for generative tasks [3]. Then, to scale the generator’s output to be in the range 0-1, we apply a sigmoid non-linearity between the second and the third layer of the model.",
+        "The discriminator similarly used a feed-forward structure with three layers of depth. The input to the discriminator comes from two sources: real data fed directly into the discriminator and the data generated by the generator. This input is then piped into the first hidden layer. As before, an ELU transformation is then applied between the first and second layer, as well as between the second and third hidden layers. Finally, a sigmoid activation is used on the output of the last hidden layer. This sigmoid activation is important since the output of our discriminator is a binary boolean that indicates whether the discriminator believes the input to have been real data or data produced by the generator. This discriminator is thus trained to minimize the binary cross-entropy loss of its prediction (whether the data was real or fake) and the real ground-truth of each data point.",
+        "The general framework defined above was inspired largely by the open-source code of Nag Dev, and was built using Pytorch [7]. One key extension to the basic GAN model, however, is the loss function that we apply to the generator, namely the Diehl-Martinez-Kamalu (DMK) Loss which we define below.",
+        "The Diehl-Martinez-Kamalu Loss is a weighted combination of a binary cross entropy loss with a dot-product attention metric of each user-defined keyword with the model’s generated output. Formally, the binary cross entropy (BCE) loss for one example is defined as: $ BCE(x,y) = y \\cdot logx + (1-y) \\cdot log(1-x), $",
+        "where x is defined as the predicted label for each sample and y is the true label (i.e. real versus fake data). The DMK loss then calculates an additional term, which corresponds to the dot-product attention of each word in the generated output with each keyword specified by the user. To illustrate by example, say a user desires the generated output to contain the keywords, $\\lbrace subway, manhattan\\rbrace $ . The model then converts each of these keywords to their corresponding glove vectors. Let us define the following notation $e(‘apple’)$ is the GloVe representation of the word apple, and let us suppose that $g$ is the vector of word embeddings generated by the generator. That is, $g_1$ is the first word embedding of the generator’s output. Let us also suppose $k$ is a vector of the keywords specified by the user. In our examples, $k$ is always in $R^{1}$ with $k_1$ one equaling of $‘subway’$ or $‘parking’$ . The dot-product term of the DMK loss then calculates $e(‘apple’)$0 . Weighing this term by some hyper-parameter, $e(‘apple’)$1 , then gives us the entire definition of the DMK loss: $e(‘apple’)$2 $e(‘apple’)$3"
+      ],
+      "child_pages": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "child_sections": [
+        "Generative Adversarial Network",
+        "Generative Adversarial Network",
+        "Generative Adversarial Network",
+        "Generative Adversarial Network",
+        "Generative Adversarial Network",
+        "Generative Adversarial Network"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Generative Adversarial Network",
+          0
+        ],
+        [
+          "Generative Adversarial Network",
+          1
+        ],
+        [
+          "Generative Adversarial Network",
+          2
+        ],
+        [
+          "Generative Adversarial Network",
+          3
+        ],
+        [
+          "Generative Adversarial Network",
+          4
+        ],
+        [
+          "Generative Adversarial Network",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Generative Adversarial Network",
+      "section": "Generative Adversarial Network",
+      "title_path": "Generative Adversarial Network",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Background\n[source_id=7] Fortunately, we believe that the introduction of unsupervised generative language models presents a way in which to tackle this particular shortcoming of peer-to-peer markets. In 2014, Ian Goodfellow et. al proposed the general adversarial network (GAN) [5]. The group showcased how this generative model could learn to artificially replicate data patterns to an unprecedented realistic degree [5]. Since then, these models have shown tremendous potential in their ability to generate photo-realistic images and coherent text samples [5].\n[source_id=8] The framework that GANs use for generating new data points employs an end-to-end neural network comprised of two models: a generator and a discriminator [5]. The generator is tasked with replicating the data that is fed into the model, without ever being directly exposed to the real samples. Instead, this model learns to reproduce the general patterns of the input via its interaction with the discriminator.\n[source_id=9] The role of the discriminator, in turn, is to tell apart which data points are ‘real’ and which have been created by the generator. On each run through the model, the generator then adapts its constructed output so as to more effectively ‘trick’ the discriminator into not being able to distinguish the real from the generated data. The end-to-end nature of the model then forces both the generator and discriminator to learn in parallel [7]. While GAN models have shown great potential in their ability to generate realistic data samples, they are notoriously difficult to train. This difficulty arises from two-parts: 1) First, it is difficult to tune the hyper-parameters correctly for the adversarial model to continue learning throughout all of the training epochs [5]. Since both the discriminator and generator are updated via the same gradient, it is very common for the model to fall into a local minima before completing all of the defined training cycles. 2) GANs are computationally expensive to train, given that both models are updated on each cycle in parallel [5]. This compounds the difficulty of tuning the model’s parameters.\n[source_id=10] Nonetheless, GANs have continued to show their value particularly in the domain of text-generation. Of particular interest for our purposes, Radford et al. propose synthesizing images from text descriptions [3]. The group demonstrates how GANs can produce images that correspond to a user-defined text description. It thus seems feasible that by using a similar model, we can produce text samples that are conditioned upon a set of user-specified keywords.\n[source_id=11] We were similarly influenced by the work of Radford et. al, who argue for the importance of layer normalization and data-specific trained word embeddings for text generation [9] and sentiment analysis categorization. These findings lead us to question whether it is possible to employ recurrent neural networks with long short-term memory gates, as defined by Mikolov et al., to categorize product descriptions into categories based on the product's popularity [6].",
+      "score": 1.158174018783028,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "child_qasper_evidence_texts": [
+        "Fortunately, we believe that the introduction of unsupervised generative language models presents a way in which to tackle this particular shortcoming of peer-to-peer markets. In 2014, Ian Goodfellow et. al proposed the general adversarial network (GAN) [5]. The group showcased how this generative model could learn to artificially replicate data patterns to an unprecedented realistic degree [5]. Since then, these models have shown tremendous potential in their ability to generate photo-realistic images and coherent text samples [5].",
+        "The framework that GANs use for generating new data points employs an end-to-end neural network comprised of two models: a generator and a discriminator [5]. The generator is tasked with replicating the data that is fed into the model, without ever being directly exposed to the real samples. Instead, this model learns to reproduce the general patterns of the input via its interaction with the discriminator.",
+        "The role of the discriminator, in turn, is to tell apart which data points are ‘real’ and which have been created by the generator. On each run through the model, the generator then adapts its constructed output so as to more effectively ‘trick’ the discriminator into not being able to distinguish the real from the generated data. The end-to-end nature of the model then forces both the generator and discriminator to learn in parallel [7]. While GAN models have shown great potential in their ability to generate realistic data samples, they are notoriously difficult to train. This difficulty arises from two-parts: 1) First, it is difficult to tune the hyper-parameters correctly for the adversarial model to continue learning throughout all of the training epochs [5]. Since both the discriminator and generator are updated via the same gradient, it is very common for the model to fall into a local minima before completing all of the defined training cycles. 2) GANs are computationally expensive to train, given that both models are updated on each cycle in parallel [5]. This compounds the difficulty of tuning the model’s parameters.",
+        "Nonetheless, GANs have continued to show their value particularly in the domain of text-generation. Of particular interest for our purposes, Radford et al. propose synthesizing images from text descriptions [3]. The group demonstrates how GANs can produce images that correspond to a user-defined text description. It thus seems feasible that by using a similar model, we can produce text samples that are conditioned upon a set of user-specified keywords.",
+        "We were similarly influenced by the work of Radford et. al, who argue for the importance of layer normalization and data-specific trained word embeddings for text generation [9] and sentiment analysis categorization. These findings lead us to question whether it is possible to employ recurrent neural networks with long short-term memory gates, as defined by Mikolov et al., to categorize product descriptions into categories based on the product's popularity [6]."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Background",
+        "Background",
+        "Background",
+        "Background",
+        "Background"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Background",
+          0
+        ],
+        [
+          "Background",
+          1
+        ],
+        [
+          "Background",
+          2
+        ],
+        [
+          "Background",
+          3
+        ],
+        [
+          "Background",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Background",
+      "section": "Background",
+      "title_path": "Background",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] The development of online peer-to-peer markets in the 1990s, galvanized by the launch of sites like eBay, fundamentally shifted the way buyers and sellers could connect [4]. These new markets not only leveraged technology to allow for faster transaction speeds, but in the process also exposed a variety of unprecedented market-designs [4].\n[source_id=5] Today, many of the most well-known peer-to-peer markets like Uber and Instacart use a centralized system that matches workers with assigned tasks via a series of complex algorithms [4]. Still, a number of other websites like Airbnb and eBay rely on sellers and buyers to organically find one-another in a decentralized fashion. In the case of these decentralized systems, sellers are asked to price and market their products in order to attract potential buyers. Without a large marketing team at their disposal, however, sellers most often rely on their intuitions for how to present their articles or listings in the most appealing manner. Naturally, this leads to market inefficiencies, where willing sellers and buyers often fail to connect due to an inadequate presentation of the product or service offered.",
+      "score": 1.0812092499296382,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5
+      ],
+      "child_qasper_evidence_texts": [
+        "The development of online peer-to-peer markets in the 1990s, galvanized by the launch of sites like eBay, fundamentally shifted the way buyers and sellers could connect [4]. These new markets not only leveraged technology to allow for faster transaction speeds, but in the process also exposed a variety of unprecedented market-designs [4].",
+        "Today, many of the most well-known peer-to-peer markets like Uber and Instacart use a centralized system that matches workers with assigned tasks via a series of complex algorithms [4]. Still, a number of other websites like Airbnb and eBay rely on sellers and buyers to organically find one-another in a decentralized fashion. In the case of these decentralized systems, sellers are asked to price and market their products in order to attract potential buyers. Without a large marketing team at their disposal, however, sellers most often rely on their intuitions for how to present their articles or listings in the most appealing manner. Naturally, this leads to market inefficiencies, where willing sellers and buyers often fail to connect due to an inadequate presentation of the product or service offered."
+      ],
+      "child_pages": [
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Conclusion\n[source_id=33] We hope that this research paper establishes a first attempt at using generative machine learning models for the purposes of marketing on peer-to-peer platforms. As the use of these markets becomes more widespread, the use of self-branding and marketing tools will grow in importance. The development of tools like the DMK loss in combination with GANs demonstrates the enormous potential these frameworks can have in solving problems that inevitably arise on peer-to-peer platforms. Certainly, however, more works remains to be done in this field, and recent developments in unsupervised generative models already promise possible extensions to our analysis.\n[source_id=34] For example, since the introduction of GANs, research groups have studied how variational autoencoders can be incorporated into these models, to increase the clarity and accuracy of the models’ outputs. Wang et al. in particular demonstrate how using a variational autoencoder in the generator model can increase the accuracy of generated text samples [11]. Most promisingly, the data used by the group was a large data set of Amazon customer reviews, which in many ways parallels the tone and semantic structure of Airbnb listing descriptions. More generally, Bowman et al. demonstrate how the use of variational autoencoders presents a more accurate model for text generation, as compared to standard recurrent neural network language models [1].\n[source_id=35] For future work, we may also consider experimenting with different forms of word embeddings, such as improved word vectors (IWV) which were suggested by Rezaeinia et al [10]. These IMV word embeddings are trained in a similar fashion to GloVe vectors, but also encode additional information about each word, like the word’s part of speech. For our model, we may consider encoding similar information in order for the generator to more easily learn common semantic patterns inherent to the marketing data being analyzed.",
+      "score": 0.9710548003541546,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        33,
+        34,
+        35
+      ],
+      "child_qasper_evidence_texts": [
+        "We hope that this research paper establishes a first attempt at using generative machine learning models for the purposes of marketing on peer-to-peer platforms. As the use of these markets becomes more widespread, the use of self-branding and marketing tools will grow in importance. The development of tools like the DMK loss in combination with GANs demonstrates the enormous potential these frameworks can have in solving problems that inevitably arise on peer-to-peer platforms. Certainly, however, more works remains to be done in this field, and recent developments in unsupervised generative models already promise possible extensions to our analysis.",
+        "For example, since the introduction of GANs, research groups have studied how variational autoencoders can be incorporated into these models, to increase the clarity and accuracy of the models’ outputs. Wang et al. in particular demonstrate how using a variational autoencoder in the generator model can increase the accuracy of generated text samples [11]. Most promisingly, the data used by the group was a large data set of Amazon customer reviews, which in many ways parallels the tone and semantic structure of Airbnb listing descriptions. More generally, Bowman et al. demonstrate how the use of variational autoencoders presents a more accurate model for text generation, as compared to standard recurrent neural network language models [1].",
+        "For future work, we may also consider experimenting with different forms of word embeddings, such as improved word vectors (IWV) which were suggested by Rezaeinia et al [10]. These IMV word embeddings are trained in a similar fashion to GloVe vectors, but also encode additional information about each word, like the word’s part of speech. For our model, we may consider encoding similar information in order for the generator to more easily learn common semantic patterns inherent to the marketing data being analyzed."
+      ],
+      "child_pages": [
+        8,
+        8,
+        8
+      ],
+      "child_sections": [
+        "Conclusion",
+        "Conclusion",
+        "Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion",
+          0
+        ],
+        [
+          "Conclusion",
+          1
+        ],
+        [
+          "Conclusion",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "long_unit"
+    }
+  ]
+}

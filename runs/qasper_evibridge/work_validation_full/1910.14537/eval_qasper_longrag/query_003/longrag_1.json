@@ -1,0 +1,142 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Chinese word segmentation (CWS) is a task for Chinese natural language process to delimit word boundary. CWS is a basic and essential task for Chinese which is written without explicit word delimiters and different from alphabetical languages like English. BIBREF0 treats Chinese word segmentation (CWS) as a sequence labeling task with character position tags, which is followed by BIBREF1, BIBREF2, BIBREF3. Traditional CWS models depend on the design of features heavily which effects the performance of model. To minimize the effort in feature engineering, some CWS models BIBREF4, BIBREF5, BIBREF6, BIBREF7, BIBREF8, BIBREF9, BIBREF10, BIBREF11 are developed following neural network architecture for sequence labeling tasks BIBREF12. Neural CWS models perform strong ability of feature representation, employing unigram and bigram character embedding as input and approach good performance.\n[source_id=5] The CWS task is often modeled as one graph model based on a scoring model that means it is composed of two parts, one part is an encoder which is used to generate the representation of characters from the input sequence, the other part is a decoder which performs segmentation according to the encoder scoring. Table TABREF1 summarizes typical CWS models according to their decoding ways for both traditional and neural models. Markov models such as BIBREF13 and BIBREF4 depend on the maximum entropy model or maximum entropy Markov model both with a Viterbi decoder. Besides, conditional random field (CRF) or Semi-CRF for sequence labeling has been used for both traditional and neural models though with different representations BIBREF2, BIBREF15, BIBREF10, BIBREF17, BIBREF18. Generally speaking, the major difference between traditional and neural network models is about the way to represent input sentences.\n[source_id=6] Recent works about neural CWS which focus on benchmark dataset, namely SIGHAN Bakeoff BIBREF21, may be put into the following three categories roughly.\n[source_id=7] Encoder. Practice in various natural language processing tasks has been shown that effective representation is essential to the performance improvement. Thus for better CWS, it is crucial to encode the input character, word or sentence into effective representation. Table TABREF2 summarizes regular feature sets for typical CWS models including ours as well. The building blocks that encoders use include recurrent neural network (RNN) and convolutional neural network (CNN), and long-term memory network (LSTM).\n[source_id=8] Graph model. As CWS is a kind of structure learning task, the graph model determines which type of decoder should be adopted for segmentation, also it may limit the capability of defining feature, as shown in Table 2, not all graph models can support the word features. Thus recent work focused on finding more general or flexible graph model to make model learn the representation of segmentation more effective as BIBREF9, BIBREF11.\n[source_id=9] External data and pre-trained embedding. Whereas both encoder and graph model are about exploring a way to get better performance only by improving the model strength itself. Using external resource such as pre-trained embeddings or language representation is an alternative for the same purpose BIBREF22, BIBREF23. SIGHAN Bakeoff defines two types of evaluation settings, closed test limits all the data for learning should not be beyond the given training set, while open test does not take this limitation BIBREF21. In this work, we will focus on the closed test setting by finding a better model design for further CWS performance improvement.\n[source_id=10] Shown in Table TABREF1, different decoders have particular decoding algorithms to match the respective CWS models. Markov models and CRF-based models often use Viterbi decoders with polynomial time complexity. In general graph model, search space may be too large for model to search. Thus it forces graph models to use an approximate beam search strategy. Beam search algorithm has a kind low-order polynomial time complexity. Especially, when beam width $b$=1, the beam search algorithm will reduce to greedy algorithm with a better time complexity $O(Mn)$ against the general beam search time complexity $O(Mnb^2)$, where $n$ is the number of units in one sentences, $M$ is a constant representing the model complexity. Greedy decoding algorithm can bring the fastest speed of decoding while it is not easy to guarantee the precision of decoding when the encoder is not strong enough.\n[source_id=11] In this paper, we focus on more effective encoder design which is capable of offering fast and accurate Chinese word segmentation with only unigram feature and greedy decoding. Our proposed encoder will only consist of attention mechanisms as building blocks but nothing else. Motivated by the Transformer BIBREF24 and its strength of capturing long-range dependencies of input sentences, we use a self-attention network to generate the representation of input which makes the model encode sentences at once without feeding input iteratively. Considering the weakness of the Transformer to model relative and absolute position information directly BIBREF25 and the importance of localness information, position information and directional information for CWS, we further improve the architecture of standard multi-head self-attention of the Transformer with a directional Gaussian mask and get a variant called Gaussian-masked directional multi-head attention. Based on the newly improved attention mechanism, we expand the encoder of the Transformer to capture different directional information. With our powerful encoder, our model uses only simple unigram features to generate representation of sentences.\n[source_id=12] For decoder which directly performs the segmentation, we use the bi-affinal attention scorer, which has been used in dependency parsing BIBREF26 and semantic role labeling BIBREF27, to implement greedy decoding on finding the boundaries of words. In our proposed model, greedy decoding ensures a fast segmentation while powerful encoder design ensures a good enough segmentation performance even working with greedy decoder together. Our model will be strictly evaluated on benchmark datasets from SIGHAN Bakeoff shared task on CWS in terms of closed test setting, and the experimental results show that our proposed model achieves new state-of-the-art.\n[source_id=13] The technical contributions of this paper can be summarized as follows.\n[source_id=14] We propose a CWS model with only attention structure. The encoder and decoder are both based on attention structure.\n[source_id=15] With a powerful enough encoder, we for the first time show that unigram (character) featues can help yield strong performance instead of diverse $n$-gram (character and word) features in most of previous work.\n[source_id=16] To capture the representation of localness information and directional information, we propose a variant of directional multi-head self-attention to further enhance the state-of-the-art Transformer encoder.",
+  "score": 4.803077735469377,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "child_qasper_evidence_texts": [
+    "Chinese word segmentation (CWS) is a task for Chinese natural language process to delimit word boundary. CWS is a basic and essential task for Chinese which is written without explicit word delimiters and different from alphabetical languages like English. BIBREF0 treats Chinese word segmentation (CWS) as a sequence labeling task with character position tags, which is followed by BIBREF1, BIBREF2, BIBREF3. Traditional CWS models depend on the design of features heavily which effects the performance of model. To minimize the effort in feature engineering, some CWS models BIBREF4, BIBREF5, BIBREF6, BIBREF7, BIBREF8, BIBREF9, BIBREF10, BIBREF11 are developed following neural network architecture for sequence labeling tasks BIBREF12. Neural CWS models perform strong ability of feature representation, employing unigram and bigram character embedding as input and approach good performance.",
+    "The CWS task is often modeled as one graph model based on a scoring model that means it is composed of two parts, one part is an encoder which is used to generate the representation of characters from the input sequence, the other part is a decoder which performs segmentation according to the encoder scoring. Table TABREF1 summarizes typical CWS models according to their decoding ways for both traditional and neural models. Markov models such as BIBREF13 and BIBREF4 depend on the maximum entropy model or maximum entropy Markov model both with a Viterbi decoder. Besides, conditional random field (CRF) or Semi-CRF for sequence labeling has been used for both traditional and neural models though with different representations BIBREF2, BIBREF15, BIBREF10, BIBREF17, BIBREF18. Generally speaking, the major difference between traditional and neural network models is about the way to represent input sentences.",
+    "Recent works about neural CWS which focus on benchmark dataset, namely SIGHAN Bakeoff BIBREF21, may be put into the following three categories roughly.",
+    "Encoder. Practice in various natural language processing tasks has been shown that effective representation is essential to the performance improvement. Thus for better CWS, it is crucial to encode the input character, word or sentence into effective representation. Table TABREF2 summarizes regular feature sets for typical CWS models including ours as well. The building blocks that encoders use include recurrent neural network (RNN) and convolutional neural network (CNN), and long-term memory network (LSTM).",
+    "Graph model. As CWS is a kind of structure learning task, the graph model determines which type of decoder should be adopted for segmentation, also it may limit the capability of defining feature, as shown in Table 2, not all graph models can support the word features. Thus recent work focused on finding more general or flexible graph model to make model learn the representation of segmentation more effective as BIBREF9, BIBREF11.",
+    "External data and pre-trained embedding. Whereas both encoder and graph model are about exploring a way to get better performance only by improving the model strength itself. Using external resource such as pre-trained embeddings or language representation is an alternative for the same purpose BIBREF22, BIBREF23. SIGHAN Bakeoff defines two types of evaluation settings, closed test limits all the data for learning should not be beyond the given training set, while open test does not take this limitation BIBREF21. In this work, we will focus on the closed test setting by finding a better model design for further CWS performance improvement.",
+    "Shown in Table TABREF1, different decoders have particular decoding algorithms to match the respective CWS models. Markov models and CRF-based models often use Viterbi decoders with polynomial time complexity. In general graph model, search space may be too large for model to search. Thus it forces graph models to use an approximate beam search strategy. Beam search algorithm has a kind low-order polynomial time complexity. Especially, when beam width $b$=1, the beam search algorithm will reduce to greedy algorithm with a better time complexity $O(Mn)$ against the general beam search time complexity $O(Mnb^2)$, where $n$ is the number of units in one sentences, $M$ is a constant representing the model complexity. Greedy decoding algorithm can bring the fastest speed of decoding while it is not easy to guarantee the precision of decoding when the encoder is not strong enough.",
+    "In this paper, we focus on more effective encoder design which is capable of offering fast and accurate Chinese word segmentation with only unigram feature and greedy decoding. Our proposed encoder will only consist of attention mechanisms as building blocks but nothing else. Motivated by the Transformer BIBREF24 and its strength of capturing long-range dependencies of input sentences, we use a self-attention network to generate the representation of input which makes the model encode sentences at once without feeding input iteratively. Considering the weakness of the Transformer to model relative and absolute position information directly BIBREF25 and the importance of localness information, position information and directional information for CWS, we further improve the architecture of standard multi-head self-attention of the Transformer with a directional Gaussian mask and get a variant called Gaussian-masked directional multi-head attention. Based on the newly improved attention mechanism, we expand the encoder of the Transformer to capture different directional information. With our powerful encoder, our model uses only simple unigram features to generate representation of sentences.",
+    "For decoder which directly performs the segmentation, we use the bi-affinal attention scorer, which has been used in dependency parsing BIBREF26 and semantic role labeling BIBREF27, to implement greedy decoding on finding the boundaries of words. In our proposed model, greedy decoding ensures a fast segmentation while powerful encoder design ensures a good enough segmentation performance even working with greedy decoder together. Our model will be strictly evaluated on benchmark datasets from SIGHAN Bakeoff shared task on CWS in terms of closed test setting, and the experimental results show that our proposed model achieves new state-of-the-art.",
+    "The technical contributions of this paper can be summarized as follows.",
+    "We propose a CWS model with only attention structure. The encoder and decoder are both based on attention structure.",
+    "With a powerful enough encoder, we for the first time show that unigram (character) featues can help yield strong performance instead of diverse $n$-gram (character and word) features in most of previous work.",
+    "To capture the representation of localness information and directional information, we propose a variant of directional multi-head self-attention to further enhance the state-of-the-art Transformer encoder."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ],
+    [
+      "Introduction",
+      7
+    ],
+    [
+      "Introduction",
+      8
+    ],
+    [
+      "Introduction",
+      9
+    ],
+    [
+      "Introduction",
+      10
+    ],
+    [
+      "Introduction",
+      11
+    ],
+    [
+      "Introduction",
+      12
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

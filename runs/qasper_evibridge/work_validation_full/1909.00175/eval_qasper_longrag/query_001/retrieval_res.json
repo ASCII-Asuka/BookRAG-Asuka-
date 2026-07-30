@@ -1,0 +1,551 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] A pun is a form of wordplay for an intended humorous or rhetorical effect, where a word suggests two or more meanings by exploiting polysemy (homographic pun) or phonological similarity to another word (heterographic pun). This paper presents an approach that addresses pun detection and pun location jointly from a sequence labeling perspective. We employ a new tagging scheme such that the model is capable of performing such a joint task, where useful structural information can be properly captured. We show that our proposed model is effective in handling both homographic and heterographic puns. Empirical results on the benchmark datasets demonstrate that our approach can achieve new state-of-the-art results.",
+      "score": 4.1730543004449885,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "A pun is a form of wordplay for an intended humorous or rhetorical effect, where a word suggests two or more meanings by exploiting polysemy (homographic pun) or phonological similarity to another word (heterographic pun). This paper presents an approach that addresses pun detection and pun location jointly from a sequence labeling perspective. We employ a new tagging scheme such that the model is capable of performing such a joint task, where useful structural information can be properly captured. We show that our proposed model is effective in handling both homographic and heterographic puns. Empirical results on the benchmark datasets demonstrate that our approach can achieve new state-of-the-art results."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Results\n[source_id=33] We also implemented a baseline model based on conditional random fields (CRF), where features like POS tags produced by the Stanford POS tagger BIBREF27 , n-grams, label transitions, word suffixes and relative position to the end of the text are considered. We can see that our model with the INLINEFORM0 tagging scheme yields new state-of-the-art INLINEFORM1 scores on pun detection and competitive results on pun location, compared to baselines that do not adopt joint learning in the first block. For location on heterographic puns, our model's performance is slightly lower than the system of BIBREF25 , which is a rule-based locator. Compared to CRF, we can see that our model, either with the INLINEFORM2 or the INLINEFORM3 scheme, yields significantly higher recall on both detection and location tasks, while the precisions are relatively close. This demonstrates the effectiveness of BiLSTM, which learns the contextual features of given texts – such information appears to be helpful in recalling more puns.\n[source_id=34] Compared to the INLINEFORM0 scheme, the INLINEFORM1 tagging scheme is able to yield better performance on these two tasks. After studying outputs from these two approaches, we found that one leading source of error for the INLINEFORM2 approach is that there exist more than one words in a single instance that are assigned with the INLINEFORM3 tag. However, according to the description of pun in BIBREF9 , each context contains a maximum of one pun. Thus, such a useful structural constraint is not well captured by the simple approach based on the INLINEFORM4 tagging scheme. On the other hand, by applying the INLINEFORM5 tagging scheme, such a constraint is properly captured in the model. As a result, the results for such a approach are significantly better than the approach based on the INLINEFORM6 tagging scheme, as we can observe from the table. Under the same experimental setup, we also attempted to exclude word position features. Results are given by INLINEFORM7 - INLINEFORM8 . It is expected that the performance of pun location drops, since such position features are able to capture the interesting property that a pun tends to appear in the second half of a sentence. While such knowledge is helpful for the location task, interestingly, a model without position knowledge yields improved performance on the pun detection task. One possible reason is that detecting whether a sentence contains a pun is not concerned with such word position information.\n[source_id=35] Additionally, we conduct experiments over sentences containing a pun only, namely 1,607 and 1,271 instances from homographic and heterographic pun corpora separately. It can be regarded as a “pipeline” method where the classifier for pun detection is regarded as perfect. Following the prior work of BIBREF4 , we apply 10-fold cross validation. Since we are given that all input sentences contain a pun, we only report accumulated results on pun location, denoted as Pipeline in Table TABREF11 . Compared with our approaches, the performance of such an approach drops significantly. On the other hand, such a fact demonstrates that the two task, detection and location of puns, can reinforce each other. These figures demonstrate the effectiveness of our sequence labeling method to detect and locate English puns in a joint manner.",
+      "score": 3.94394531746605,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        33,
+        34,
+        35
+      ],
+      "child_qasper_evidence_texts": [
+        "We also implemented a baseline model based on conditional random fields (CRF), where features like POS tags produced by the Stanford POS tagger BIBREF27 , n-grams, label transitions, word suffixes and relative position to the end of the text are considered. We can see that our model with the INLINEFORM0 tagging scheme yields new state-of-the-art INLINEFORM1 scores on pun detection and competitive results on pun location, compared to baselines that do not adopt joint learning in the first block. For location on heterographic puns, our model's performance is slightly lower than the system of BIBREF25 , which is a rule-based locator. Compared to CRF, we can see that our model, either with the INLINEFORM2 or the INLINEFORM3 scheme, yields significantly higher recall on both detection and location tasks, while the precisions are relatively close. This demonstrates the effectiveness of BiLSTM, which learns the contextual features of given texts – such information appears to be helpful in recalling more puns.",
+        "Compared to the INLINEFORM0 scheme, the INLINEFORM1 tagging scheme is able to yield better performance on these two tasks. After studying outputs from these two approaches, we found that one leading source of error for the INLINEFORM2 approach is that there exist more than one words in a single instance that are assigned with the INLINEFORM3 tag. However, according to the description of pun in BIBREF9 , each context contains a maximum of one pun. Thus, such a useful structural constraint is not well captured by the simple approach based on the INLINEFORM4 tagging scheme. On the other hand, by applying the INLINEFORM5 tagging scheme, such a constraint is properly captured in the model. As a result, the results for such a approach are significantly better than the approach based on the INLINEFORM6 tagging scheme, as we can observe from the table. Under the same experimental setup, we also attempted to exclude word position features. Results are given by INLINEFORM7 - INLINEFORM8 . It is expected that the performance of pun location drops, since such position features are able to capture the interesting property that a pun tends to appear in the second half of a sentence. While such knowledge is helpful for the location task, interestingly, a model without position knowledge yields improved performance on the pun detection task. One possible reason is that detecting whether a sentence contains a pun is not concerned with such word position information.",
+        "Additionally, we conduct experiments over sentences containing a pun only, namely 1,607 and 1,271 instances from homographic and heterographic pun corpora separately. It can be regarded as a “pipeline” method where the classifier for pun detection is regarded as perfect. Following the prior work of BIBREF4 , we apply 10-fold cross validation. Since we are given that all input sentences contain a pun, we only report accumulated results on pun location, denoted as Pipeline in Table TABREF11 . Compared with our approaches, the performance of such an approach drops significantly. On the other hand, such a fact demonstrates that the two task, detection and location of puns, can reinforce each other. These figures demonstrate the effectiveness of our sequence labeling method to detect and locate English puns in a joint manner."
+      ],
+      "child_pages": [
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "Results",
+        "Results",
+        "Results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results",
+          0
+        ],
+        [
+          "Results",
+          1
+        ],
+        [
+          "Results",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Results",
+      "section": "Results",
+      "title_path": "Results",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Related Work\n[source_id=39] Most existing systems address pun detection and location separately. BIBREF22 applied word sense knowledge to conduct pun detection. BIBREF24 trained a bidirectional RNN classifier for detecting homographic puns. Next, a knowledge-based approach is adopted to find the exact pun. Such a system is not applicable to heterographic puns. BIBREF28 applied Google n-gram and word2vec to make decisions. The phonetic distance via the CMU Pronouncing Dictionary is computed to detect heterographic puns. BIBREF10 used the hidden Markov model and a cyclic dependency network with rich features to detect and locate puns. BIBREF23 used a supervised approach to pun detection and a weakly supervised approach to pun location based on the position within the context and part of speech features. BIBREF25 proposed a rule-based system for pun location that scores candidate words according to eleven simple heuristics. Two systems are developed to conduct detection and location separately in the system known as UWAV BIBREF3 . The pun detector combines predictions from three classifiers. The pun locator considers word2vec similarity between every pair of words in the context and position to pinpoint the pun. The state-of-the-art system for homographic pun location is a neural method BIBREF4 , where the word senses are incorporated into a bidirectional LSTM model. This method only supports the pun location task on homographic puns. Another line of research efforts related to this work is sequence labeling, such as POS tagging, chunking, word segmentation and NER. The neural methods have shown their effectiveness in this task, such as BiLSTM-CNN BIBREF13 , GRNN BIBREF29 , LSTM-CRF BIBREF30 , LSTM-CNN-CRF BIBREF14 , LM-LSTM-CRF BIBREF15 .\n[source_id=40] In this work, we combine pun detection and location tasks as a single sequence labeling problem. Inspired by the work of BIBREF15 , we also adopt a LSTM-CRF with character embeddings to make labeling decisions.",
+      "score": 2.1412144480876463,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        39,
+        40
+      ],
+      "child_qasper_evidence_texts": [
+        "Most existing systems address pun detection and location separately. BIBREF22 applied word sense knowledge to conduct pun detection. BIBREF24 trained a bidirectional RNN classifier for detecting homographic puns. Next, a knowledge-based approach is adopted to find the exact pun. Such a system is not applicable to heterographic puns. BIBREF28 applied Google n-gram and word2vec to make decisions. The phonetic distance via the CMU Pronouncing Dictionary is computed to detect heterographic puns. BIBREF10 used the hidden Markov model and a cyclic dependency network with rich features to detect and locate puns. BIBREF23 used a supervised approach to pun detection and a weakly supervised approach to pun location based on the position within the context and part of speech features. BIBREF25 proposed a rule-based system for pun location that scores candidate words according to eleven simple heuristics. Two systems are developed to conduct detection and location separately in the system known as UWAV BIBREF3 . The pun detector combines predictions from three classifiers. The pun locator considers word2vec similarity between every pair of words in the context and position to pinpoint the pun. The state-of-the-art system for homographic pun location is a neural method BIBREF4 , where the word senses are incorporated into a bidirectional LSTM model. This method only supports the pun location task on homographic puns. Another line of research efforts related to this work is sequence labeling, such as POS tagging, chunking, word segmentation and NER. The neural methods have shown their effectiveness in this task, such as BiLSTM-CNN BIBREF13 , GRNN BIBREF29 , LSTM-CRF BIBREF30 , LSTM-CNN-CRF BIBREF14 , LM-LSTM-CRF BIBREF15 .",
+        "In this work, we combine pun detection and location tasks as a single sequence labeling problem. Inspired by the work of BIBREF15 , we also adopt a LSTM-CRF with character embeddings to make labeling decisions."
+      ],
+      "child_pages": [
+        7,
+        7
+      ],
+      "child_sections": [
+        "Related Work",
+        "Related Work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work",
+          0
+        ],
+        [
+          "Related Work",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Related Work",
+      "section": "Related Work",
+      "title_path": "Related Work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Model\n[source_id=20] Neural models have shown their effectiveness on sequence labeling tasks BIBREF13 , BIBREF14 , BIBREF15 . In this work, we adopt the bidirectional Long Short Term Memory (BiLSTM) BIBREF16 networks on top of the Conditional Random Fields BIBREF17 (CRF) architecture to make labeling decisions, which is one of the classical models for sequence labeling. Our model architecture is illustrated in Figure FIGREF8 with a running example. Given a context/sentence INLINEFORM0 where INLINEFORM1 is the length of the context, we generate the corresponding tag sequence INLINEFORM2 based on our designed tagging schemes and the original annotations for pun detection and location provided by the corpora. Our model is then trained on pairs of INLINEFORM3 .\n[source_id=21] Input. The contexts in the pun corpus hold the property that each pun contains exactly one content word, which can be either a noun, a verb, an adjective, or an adverb. To capture this characteristic, we consider lexical features at the character level. Similar to the work of BIBREF15 , the character embeddings are trained by the character-level LSTM networks on the unannotated input sequences. Nonlinear transformations are then applied to the character embeddings by highway networks BIBREF18 , which map the character-level features into different semantic spaces.\n[source_id=22] We also observe that a pun tends to appear at the end of a sentence. Specifically, based on the statistics, we found that sentences with a pun that locate at the second half of the text account for around 88% and 92% in homographic and heterographic datasets, respectively. We thus introduce a binary feature that indicates if a word is located at the first or the second half of an input sentence to capture such positional information. A binary indicator can be mapped to a vector representation using a randomly initialized embedding table BIBREF19 , BIBREF20 . In this work, we directly adopt the value of the binary indicator as part of the input.\n[source_id=23] The concatenation of the transformed character embeddings, the pre-trained word embeddings BIBREF21 , and the position indicators are taken as input of our model.\n[source_id=24] Tagging. The input is then fed into a BiLSTM network, which will be able to capture contextual information. For a training instance INLINEFORM0 , we suppose the output by the word-level BiLSTM is INLINEFORM1 . The CRF layer is adopted to capture label dependencies and make final tagging decisions at each position, which has been included in many state-of-the-art sequence labeling models BIBREF14 , BIBREF15 . The conditional probability is defined as:\n[source_id=25] where INLINEFORM0 is a set of all possible label sequences consisting of tags from INLINEFORM1 (or INLINEFORM2 ), INLINEFORM3 and INLINEFORM4 are weight and bias parameters corresponding to the label pair INLINEFORM5 . During training, we minimize the negative log-likelihood summed over all training instances:\n[source_id=26] where INLINEFORM0 refers to the INLINEFORM1 -th instance in the training set. During testing, we aim to find the optimal label sequence for a new input INLINEFORM2 :\n[source_id=27] This search process can be done efficiently using the Viterbi algorithm.",
+      "score": 1.912667014358091,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "child_qasper_evidence_texts": [
+        "Neural models have shown their effectiveness on sequence labeling tasks BIBREF13 , BIBREF14 , BIBREF15 . In this work, we adopt the bidirectional Long Short Term Memory (BiLSTM) BIBREF16 networks on top of the Conditional Random Fields BIBREF17 (CRF) architecture to make labeling decisions, which is one of the classical models for sequence labeling. Our model architecture is illustrated in Figure FIGREF8 with a running example. Given a context/sentence INLINEFORM0 where INLINEFORM1 is the length of the context, we generate the corresponding tag sequence INLINEFORM2 based on our designed tagging schemes and the original annotations for pun detection and location provided by the corpora. Our model is then trained on pairs of INLINEFORM3 .",
+        "Input. The contexts in the pun corpus hold the property that each pun contains exactly one content word, which can be either a noun, a verb, an adjective, or an adverb. To capture this characteristic, we consider lexical features at the character level. Similar to the work of BIBREF15 , the character embeddings are trained by the character-level LSTM networks on the unannotated input sequences. Nonlinear transformations are then applied to the character embeddings by highway networks BIBREF18 , which map the character-level features into different semantic spaces.",
+        "We also observe that a pun tends to appear at the end of a sentence. Specifically, based on the statistics, we found that sentences with a pun that locate at the second half of the text account for around 88% and 92% in homographic and heterographic datasets, respectively. We thus introduce a binary feature that indicates if a word is located at the first or the second half of an input sentence to capture such positional information. A binary indicator can be mapped to a vector representation using a randomly initialized embedding table BIBREF19 , BIBREF20 . In this work, we directly adopt the value of the binary indicator as part of the input.",
+        "The concatenation of the transformed character embeddings, the pre-trained word embeddings BIBREF21 , and the position indicators are taken as input of our model.",
+        "Tagging. The input is then fed into a BiLSTM network, which will be able to capture contextual information. For a training instance INLINEFORM0 , we suppose the output by the word-level BiLSTM is INLINEFORM1 . The CRF layer is adopted to capture label dependencies and make final tagging decisions at each position, which has been included in many state-of-the-art sequence labeling models BIBREF14 , BIBREF15 . The conditional probability is defined as:",
+        "where INLINEFORM0 is a set of all possible label sequences consisting of tags from INLINEFORM1 (or INLINEFORM2 ), INLINEFORM3 and INLINEFORM4 are weight and bias parameters corresponding to the label pair INLINEFORM5 . During training, we minimize the negative log-likelihood summed over all training instances:",
+        "where INLINEFORM0 refers to the INLINEFORM1 -th instance in the training set. During testing, we aim to find the optimal label sequence for a new input INLINEFORM2 :",
+        "This search process can be done efficiently using the Viterbi algorithm."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Model",
+        "Model",
+        "Model",
+        "Model",
+        "Model",
+        "Model",
+        "Model",
+        "Model"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Model",
+          0
+        ],
+        [
+          "Model",
+          1
+        ],
+        [
+          "Model",
+          2
+        ],
+        [
+          "Model",
+          3
+        ],
+        [
+          "Model",
+          4
+        ],
+        [
+          "Model",
+          5
+        ],
+        [
+          "Model",
+          6
+        ],
+        [
+          "Model",
+          7
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Model",
+      "section": "Model",
+      "title_path": "Model",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] There exists a class of language construction known as pun in natural language texts and utterances, where a certain word or other lexical items are used to exploit two or more separate meanings. It has been shown that understanding of puns is an important research question with various real-world applications, such as human-computer interaction BIBREF0 , BIBREF1 and machine translation BIBREF2 . Recently, many researchers show their interests in studying puns, like detecting pun sentences BIBREF3 , locating puns in the text BIBREF4 , interpreting pun sentences BIBREF5 and generating sentences containing puns BIBREF6 , BIBREF7 , BIBREF8 . A pun is a wordplay in which a certain word suggests two or more meanings by exploiting polysemy, homonymy, or phonological similarity to another sign, for an intended humorous or rhetorical effect. Puns can be generally categorized into two groups, namely heterographic puns (where the pun and its latent target are phonologically similar) and homographic puns (where the two meanings of the pun reflect its two distinct senses) BIBREF9 . Consider the following two examples:\n[source_id=5] The first punning joke exploits the sound similarity between the word “propane\" and the latent target “profane\", which can be categorized into the group of heterographic puns. Another categorization of English puns is homographic pun, exemplified by the second instance leveraging distinct senses of the word “gut\".\n[source_id=6] Pun detection is the task of detecting whether there is a pun residing in the given text. The goal of pun location is to find the exact word appearing in the text that implies more than one meanings. Most previous work addresses such two tasks separately and develop separate systems BIBREF10 , BIBREF5 . Typically, a system for pun detection is built to make a binary prediction on whether a sentence contains a pun or not, where all instances (with or without puns) are taken into account during training. For the task of pun location, a separate system is used to make a single prediction as to which word in the given sentence in the text that trigger more than one semantic interpretations of the text, where the training data involves only sentences that contain a pun. Therefore, if one is interested in solving both problems at the same time, a pipeline approach that performs pun detection followed by pun location can be used.\n[source_id=7] Compared to the pipeline methods, joint learning has been shown effective BIBREF11 , BIBREF12 since it is able to reduce error propagation and allows information exchange between tasks which is potentially beneficial to all the tasks. In this work, we demonstrate that the detection and location of puns can be jointly addressed by a single model. The pun detection and location tasks can be combined as a sequence labeling problem, which allows us to jointly detect and locate a pun in a sentence by assigning each word a tag. Since each context contains a maximum of one pun BIBREF9 , we design a novel tagging scheme to capture this structural constraint. Statistics on the corpora also show that a pun tends to appear in the second half of a context. To capture such a structural property, we also incorporate word position knowledge into our structured prediction model. Experiments on the benchmark datasets show that detection and location tasks can reinforce each other, leading to new state-of-the-art performance on these two tasks. To the best of our knowledge, this is the first work that performs joint detection and location of English puns by using a sequence labeling approach.",
+      "score": 1.7357292340971802,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "child_qasper_evidence_texts": [
+        "There exists a class of language construction known as pun in natural language texts and utterances, where a certain word or other lexical items are used to exploit two or more separate meanings. It has been shown that understanding of puns is an important research question with various real-world applications, such as human-computer interaction BIBREF0 , BIBREF1 and machine translation BIBREF2 . Recently, many researchers show their interests in studying puns, like detecting pun sentences BIBREF3 , locating puns in the text BIBREF4 , interpreting pun sentences BIBREF5 and generating sentences containing puns BIBREF6 , BIBREF7 , BIBREF8 . A pun is a wordplay in which a certain word suggests two or more meanings by exploiting polysemy, homonymy, or phonological similarity to another sign, for an intended humorous or rhetorical effect. Puns can be generally categorized into two groups, namely heterographic puns (where the pun and its latent target are phonologically similar) and homographic puns (where the two meanings of the pun reflect its two distinct senses) BIBREF9 . Consider the following two examples:",
+        "The first punning joke exploits the sound similarity between the word “propane\" and the latent target “profane\", which can be categorized into the group of heterographic puns. Another categorization of English puns is homographic pun, exemplified by the second instance leveraging distinct senses of the word “gut\".",
+        "Pun detection is the task of detecting whether there is a pun residing in the given text. The goal of pun location is to find the exact word appearing in the text that implies more than one meanings. Most previous work addresses such two tasks separately and develop separate systems BIBREF10 , BIBREF5 . Typically, a system for pun detection is built to make a binary prediction on whether a sentence contains a pun or not, where all instances (with or without puns) are taken into account during training. For the task of pun location, a separate system is used to make a single prediction as to which word in the given sentence in the text that trigger more than one semantic interpretations of the text, where the training data involves only sentences that contain a pun. Therefore, if one is interested in solving both problems at the same time, a pipeline approach that performs pun detection followed by pun location can be used.",
+        "Compared to the pipeline methods, joint learning has been shown effective BIBREF11 , BIBREF12 since it is able to reduce error propagation and allows information exchange between tasks which is potentially beneficial to all the tasks. In this work, we demonstrate that the detection and location of puns can be jointly addressed by a single model. The pun detection and location tasks can be combined as a sequence labeling problem, which allows us to jointly detect and locate a pun in a sentence by assigning each word a tag. Since each context contains a maximum of one pun BIBREF9 , we design a novel tagging scheme to capture this structural constraint. Statistics on the corpora also show that a pun tends to appear in the second half of a context. To capture such a structural property, we also incorporate word position knowledge into our structured prediction model. Experiments on the benchmark datasets show that detection and location tasks can reinforce each other, leading to new state-of-the-art performance on these two tasks. To the best of our knowledge, this is the first work that performs joint detection and location of English puns by using a sequence labeling approach."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Conclusion\n[source_id=42] In this paper, we propose to perform pun detection and location tasks in a joint manner from a sequence labeling perspective. We observe that each text in our corpora contains a maximum of one pun. Hence, we design a novel tagging scheme to incorporate such a constraint. Such a scheme guarantees that there is a maximum of one word that will be tagged as a pun during the testing phase. We also found the interesting structural property such as the fact that most puns tend to appear at the second half of the sentences can be helpful for such a task, but was not explored in previous works. Furthermore, unlike many previous approaches, our approach, though simple, is generally applicable to both heterographic and homographic puns. Empirical results on the benchmark datasets prove the effectiveness of the proposed approach that the two tasks of pun detection and location can be addressed by a single model from a sequence labeling perspective.\n[source_id=43] Future research includes the investigations on how to make use of richer semantic and linguistic information for detection and location of puns. Research on puns for other languages such as Chinese is still under-explored, which could also be an interesting direction for our future studies.",
+      "score": 1.5463945766290228,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        42,
+        43
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper, we propose to perform pun detection and location tasks in a joint manner from a sequence labeling perspective. We observe that each text in our corpora contains a maximum of one pun. Hence, we design a novel tagging scheme to incorporate such a constraint. Such a scheme guarantees that there is a maximum of one word that will be tagged as a pun during the testing phase. We also found the interesting structural property such as the fact that most puns tend to appear at the second half of the sentences can be helpful for such a task, but was not explored in previous works. Furthermore, unlike many previous approaches, our approach, though simple, is generally applicable to both heterographic and homographic puns. Empirical results on the benchmark datasets prove the effectiveness of the proposed approach that the two tasks of pun detection and location can be addressed by a single model from a sequence labeling perspective.",
+        "Future research includes the investigations on how to make use of richer semantic and linguistic information for detection and location of puns. Research on puns for other languages such as Chinese is still under-explored, which could also be an interesting direction for our future studies."
+      ],
+      "child_pages": [
+        8,
+        8
+      ],
+      "child_sections": [
+        "Conclusion",
+        "Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion",
+          0
+        ],
+        [
+          "Conclusion",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Datasets and Settings\n[source_id=29] We evaluate our model on two benchmark datasets BIBREF9 . The homographic dataset contains 2,250 contexts, 1,607 of which contain a pun. The heterographic dataset consists of 1,780 contexts with 1,271 containing a pun. We notice there is no standard splitting information provided for both datasets. Thus we apply 10-fold cross validation. To make direct comparisons with prior studies, following BIBREF4 , we accumulated the predictions for all ten folds and calculate the scores in the end.\n[source_id=30] For each fold, we randomly select 10% of the instances from the training set for development. Word embeddings are initialized with the 100-dimensional Glove BIBREF21 . The dimension of character embeddings is 30 and they are randomly initialized, which can be fine tuned during training. The pre-trained word embeddings are not updated during training. The dimensions of hidden vectors for both char-level and word-level LSTM units are set to 300. We adopt stochastic gradient descent (SGD) BIBREF26 with a learning rate of 0.015.\n[source_id=31] For the pun detection task, if the predicted tag sequence contains at least one INLINEFORM0 tag, we regard the output (i.e., the prediction of our pun detection model) for this task as true, otherwise false. For the pun location task, a predicted pun is regarded as correct if and only if it is labeled as the gold pun in the dataset. As to pun location, to make fair comparisons with prior studies, we only consider the instances that are labeled as the ones containing a pun. We report precision, recall and INLINEFORM1 score in Table TABREF11 . A list of prior works that did not employ joint learning are also shown in the first block of Table TABREF11 .",
+      "score": 0.982294532749525,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        29,
+        30,
+        31
+      ],
+      "child_qasper_evidence_texts": [
+        "We evaluate our model on two benchmark datasets BIBREF9 . The homographic dataset contains 2,250 contexts, 1,607 of which contain a pun. The heterographic dataset consists of 1,780 contexts with 1,271 containing a pun. We notice there is no standard splitting information provided for both datasets. Thus we apply 10-fold cross validation. To make direct comparisons with prior studies, following BIBREF4 , we accumulated the predictions for all ten folds and calculate the scores in the end.",
+        "For each fold, we randomly select 10% of the instances from the training set for development. Word embeddings are initialized with the 100-dimensional Glove BIBREF21 . The dimension of character embeddings is 30 and they are randomly initialized, which can be fine tuned during training. The pre-trained word embeddings are not updated during training. The dimensions of hidden vectors for both char-level and word-level LSTM units are set to 300. We adopt stochastic gradient descent (SGD) BIBREF26 with a learning rate of 0.015.",
+        "For the pun detection task, if the predicted tag sequence contains at least one INLINEFORM0 tag, we regard the output (i.e., the prediction of our pun detection model) for this task as true, otherwise false. For the pun location task, a predicted pun is regarded as correct if and only if it is labeled as the gold pun in the dataset. As to pun location, to make fair comparisons with prior studies, we only consider the instances that are labeled as the ones containing a pun. We report precision, recall and INLINEFORM1 score in Table TABREF11 . A list of prior works that did not employ joint learning are also shown in the first block of Table TABREF11 ."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Datasets and Settings",
+        "Datasets and Settings",
+        "Datasets and Settings"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Datasets and Settings",
+          0
+        ],
+        [
+          "Datasets and Settings",
+          1
+        ],
+        [
+          "Datasets and Settings",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Datasets and Settings",
+      "section": "Datasets and Settings",
+      "title_path": "Datasets and Settings",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Problem Definition\n[source_id=9] We first design a simple tagging scheme consisting of two tags { INLINEFORM0 }:\n[source_id=10] INLINEFORM0 tag means the current word is not a pun.\n[source_id=11] INLINEFORM0 tag means the current word is a pun.\n[source_id=12] If the tag sequence of a sentence contains a INLINEFORM0 tag, then the text contains a pun and the word corresponding to INLINEFORM1 is the pun.\n[source_id=13] The contexts have the characteristic that each context contains a maximum of one pun BIBREF9 . In other words, there exists only one pun if the given sentence is detected as the one containing a pun. Otherwise, there is no pun residing in the text. To capture this interesting property, we propose a new tagging scheme consisting of three tags, namely { INLINEFORM0 }.\n[source_id=14] INLINEFORM0 tag indicates that the current word appears before the pun in the given context.\n[source_id=15] INLINEFORM0 tag highlights the current word is a pun.\n[source_id=16] INLINEFORM0 tag indicates that the current word appears after the pun.\n[source_id=17] We empirically show that the INLINEFORM0 scheme can guarantee the context property that there exists a maximum of one pun residing in the text.\n[source_id=18] Given a context from the training set, we will be able to generate its corresponding gold tag sequence using a deterministic procedure. Under the two schemes, if a sentence does not contain any puns, all words will be tagged with INLINEFORM0 or INLINEFORM1 , respectively. Exemplified by the second sentence “Some diets cause a gut reaction,\" the pun is given as “gut.\" Thus, under the INLINEFORM2 scheme, it should be tagged with INLINEFORM3 , while the words before it are assigned with the tag INLINEFORM4 and words after it are with INLINEFORM5 , as illustrated in Figure FIGREF8 . Likewise, the INLINEFORM6 scheme tags the word “gut\" with INLINEFORM7 , while other words are tagged with INLINEFORM8 . Therefore, we can combine the pun detection and location tasks into one problem which can be solved by the sequence labeling approach.",
+      "score": 0.8240150690921866,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "child_qasper_evidence_texts": [
+        "We first design a simple tagging scheme consisting of two tags { INLINEFORM0 }:",
+        "INLINEFORM0 tag means the current word is not a pun.",
+        "INLINEFORM0 tag means the current word is a pun.",
+        "If the tag sequence of a sentence contains a INLINEFORM0 tag, then the text contains a pun and the word corresponding to INLINEFORM1 is the pun.",
+        "The contexts have the characteristic that each context contains a maximum of one pun BIBREF9 . In other words, there exists only one pun if the given sentence is detected as the one containing a pun. Otherwise, there is no pun residing in the text. To capture this interesting property, we propose a new tagging scheme consisting of three tags, namely { INLINEFORM0 }.",
+        "INLINEFORM0 tag indicates that the current word appears before the pun in the given context.",
+        "INLINEFORM0 tag highlights the current word is a pun.",
+        "INLINEFORM0 tag indicates that the current word appears after the pun.",
+        "We empirically show that the INLINEFORM0 scheme can guarantee the context property that there exists a maximum of one pun residing in the text.",
+        "Given a context from the training set, we will be able to generate its corresponding gold tag sequence using a deterministic procedure. Under the two schemes, if a sentence does not contain any puns, all words will be tagged with INLINEFORM0 or INLINEFORM1 , respectively. Exemplified by the second sentence “Some diets cause a gut reaction,\" the pun is given as “gut.\" Thus, under the INLINEFORM2 scheme, it should be tagged with INLINEFORM3 , while the words before it are assigned with the tag INLINEFORM4 and words after it are with INLINEFORM5 , as illustrated in Figure FIGREF8 . Likewise, the INLINEFORM6 scheme tags the word “gut\" with INLINEFORM7 , while other words are tagged with INLINEFORM8 . Therefore, we can combine the pun detection and location tasks into one problem which can be solved by the sequence labeling approach."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Problem Definition",
+        "Problem Definition",
+        "Problem Definition",
+        "Problem Definition",
+        "Problem Definition",
+        "Problem Definition",
+        "Problem Definition",
+        "Problem Definition",
+        "Problem Definition",
+        "Problem Definition"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Problem Definition",
+          0
+        ],
+        [
+          "Problem Definition",
+          1
+        ],
+        [
+          "Problem Definition",
+          2
+        ],
+        [
+          "Problem Definition",
+          3
+        ],
+        [
+          "Problem Definition",
+          4
+        ],
+        [
+          "Problem Definition",
+          5
+        ],
+        [
+          "Problem Definition",
+          6
+        ],
+        [
+          "Problem Definition",
+          7
+        ],
+        [
+          "Problem Definition",
+          8
+        ],
+        [
+          "Problem Definition",
+          9
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Problem Definition",
+      "section": "Problem Definition",
+      "title_path": "Problem Definition",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 2,
+      "content": "A pun is a form of wordplay for an intended humorous or rhetorical effect, where a word suggests two or more meanings by exploiting polysemy (homographic pun) or phonological similarity to another word (heterographic pun). This paper presents an approach that addresses pun detection and pun location jointly from a sequence labeling perspective. We employ a new tagging scheme such that the model is capable of performing such a joint task, where useful structural information can be properly captured. We show that our proposed model is effective in handling both homographic and heterographic puns. Empirical results on the benchmark datasets demonstrate that our approach can achieve new state-of-the-art results.",
+      "qasper_evidence_text": "A pun is a form of wordplay for an intended humorous or rhetorical effect, where a word suggests two or more meanings by exploiting polysemy (homographic pun) or phonological similarity to another word (heterographic pun). This paper presents an approach that addresses pun detection and pun location jointly from a sequence labeling perspective. We employ a new tagging scheme such that the model is capable of performing such a joint task, where useful structural information can be properly captured. We show that our proposed model is effective in handling both homographic and heterographic puns. Empirical results on the benchmark datasets demonstrate that our approach can achieve new state-of-the-art results.",
+      "source_node_id": 2,
+      "node_id": 2,
+      "paragraph_id": 2,
+      "evidence_id": 2,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_0",
+      "rank": 1,
+      "score": 4.1730543004449885,
+      "block_type": "paragraph",
+      "page": 0,
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title": "Abstract",
+      "hotpot_title": "Abstract",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 7,
+      "content": "Compared to the pipeline methods, joint learning has been shown effective BIBREF11 , BIBREF12 since it is able to reduce error propagation and allows information exchange between tasks which is potentially beneficial to all the tasks. In this work, we demonstrate that the detection and location of puns can be jointly addressed by a single model. The pun detection and location tasks can be combined as a sequence labeling problem, which allows us to jointly detect and locate a pun in a sentence by assigning each word a tag. Since each context contains a maximum of one pun BIBREF9 , we design a novel tagging scheme to capture this structural constraint. Statistics on the corpora also show that a pun tends to appear in the second half of a context. To capture such a structural property, we also incorporate word position knowledge into our structured prediction model. Experiments on the benchmark datasets show that detection and location tasks can reinforce each other, leading to new state-of-the-art performance on these two tasks. To the best of our knowledge, this is the first work that performs joint detection and location of English puns by using a sequence labeling approach.",
+      "qasper_evidence_text": "Compared to the pipeline methods, joint learning has been shown effective BIBREF11 , BIBREF12 since it is able to reduce error propagation and allows information exchange between tasks which is potentially beneficial to all the tasks. In this work, we demonstrate that the detection and location of puns can be jointly addressed by a single model. The pun detection and location tasks can be combined as a sequence labeling problem, which allows us to jointly detect and locate a pun in a sentence by assigning each word a tag. Since each context contains a maximum of one pun BIBREF9 , we design a novel tagging scheme to capture this structural constraint. Statistics on the corpora also show that a pun tends to appear in the second half of a context. To capture such a structural property, we also incorporate word position knowledge into our structured prediction model. Experiments on the benchmark datasets show that detection and location tasks can reinforce each other, leading to new state-of-the-art performance on these two tasks. To the best of our knowledge, this is the first work that performs joint detection and location of English puns by using a sequence labeling approach.",
+      "source_node_id": 7,
+      "node_id": 7,
+      "paragraph_id": 7,
+      "evidence_id": 7,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 5,
+      "score": 1.7357292340971802,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 3,
+      "hotpot_sent_id": 3,
+      "supporting_rank": 2
+    }
+  ],
+  "supporting_block_ids": [
+    2,
+    7
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "id": "longrag_11",
+  "content": "[Section] Ablation Study\n[source_id=67] We have demonstrated strong empirical results for the quality of SBERT sentence embeddings. In this section, we perform an ablation study of different aspects of SBERT in order to get a better understanding of their relative importance.\n[source_id=68] We evaluated different pooling strategies (MEAN, MAX, and CLS). For the classification objective function, we evaluate different concatenation methods. For each possible configuration, we train SBERT with 10 different random seeds and average the performances.\n[source_id=69] The objective function (classification vs. regression) depends on the annotated dataset. For the classification objective function, we train SBERT-base on the SNLI and the Multi-NLI dataset. For the regression objective function, we train on the training set of the STS benchmark dataset. Performances are measured on the development split of the STS benchmark dataset. Results are shown in Table TABREF23.\n[source_id=70] When trained with the classification objective function on NLI data, the pooling strategy has a rather minor impact. The impact of the concatenation mode is much larger. InferSent BIBREF4 and Universal Sentence Encoder BIBREF5 both use $(u, v, |u-v|, u*v)$ as input for a softmax classifier. However, in our architecture, adding the element-wise $u*v$ decreased the performance.\n[source_id=71] The most important component is the element-wise difference $|u-v|$. Note, that the concatenation mode is only relevant for training the softmax classifier. At inference, when predicting similarities for the STS benchmark dataset, only the sentence embeddings $u$ and $v$ are used in combination with cosine-similarity. The element-wise difference measures the distance between the dimensions of the two sentence embeddings, ensuring that similar pairs are closer and dissimilar pairs are further apart.\n[source_id=72] When trained with the regression objective function, we observe that the pooling strategy has a large impact. There, the MAX strategy perform significantly worse than MEAN or CLS-token strategy. This is in contrast to BIBREF4, who found it beneficial for the BiLSTM-layer of InferSent to use MAX instead of MEAN pooling.",
+  "score": 1.7349490725461334,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_11",
+  "child_source_node_ids": [
+    67,
+    68,
+    69,
+    70,
+    71,
+    72
+  ],
+  "child_qasper_evidence_texts": [
+    "We have demonstrated strong empirical results for the quality of SBERT sentence embeddings. In this section, we perform an ablation study of different aspects of SBERT in order to get a better understanding of their relative importance.",
+    "We evaluated different pooling strategies (MEAN, MAX, and CLS). For the classification objective function, we evaluate different concatenation methods. For each possible configuration, we train SBERT with 10 different random seeds and average the performances.",
+    "The objective function (classification vs. regression) depends on the annotated dataset. For the classification objective function, we train SBERT-base on the SNLI and the Multi-NLI dataset. For the regression objective function, we train on the training set of the STS benchmark dataset. Performances are measured on the development split of the STS benchmark dataset. Results are shown in Table TABREF23.",
+    "When trained with the classification objective function on NLI data, the pooling strategy has a rather minor impact. The impact of the concatenation mode is much larger. InferSent BIBREF4 and Universal Sentence Encoder BIBREF5 both use $(u, v, |u-v|, u*v)$ as input for a softmax classifier. However, in our architecture, adding the element-wise $u*v$ decreased the performance.",
+    "The most important component is the element-wise difference $|u-v|$. Note, that the concatenation mode is only relevant for training the softmax classifier. At inference, when predicting similarities for the STS benchmark dataset, only the sentence embeddings $u$ and $v$ are used in combination with cosine-similarity. The element-wise difference measures the distance between the dimensions of the two sentence embeddings, ensuring that similar pairs are closer and dissimilar pairs are further apart.",
+    "When trained with the regression objective function, we observe that the pooling strategy has a large impact. There, the MAX strategy perform significantly worse than MEAN or CLS-token strategy. This is in contrast to BIBREF4, who found it beneficial for the BiLSTM-layer of InferSent to use MAX instead of MEAN pooling."
+  ],
+  "child_pages": [
+    11,
+    11,
+    11,
+    11,
+    11,
+    11
+  ],
+  "child_sections": [
+    "Ablation Study",
+    "Ablation Study",
+    "Ablation Study",
+    "Ablation Study",
+    "Ablation Study",
+    "Ablation Study"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Ablation Study",
+      0
+    ],
+    [
+      "Ablation Study",
+      1
+    ],
+    [
+      "Ablation Study",
+      2
+    ],
+    [
+      "Ablation Study",
+      3
+    ],
+    [
+      "Ablation Study",
+      4
+    ],
+    [
+      "Ablation Study",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_11",
+  "section_id": "Ablation Study",
+  "section": "Ablation Study",
+  "title_path": "Ablation Study",
+  "block_type": "long_unit"
+}

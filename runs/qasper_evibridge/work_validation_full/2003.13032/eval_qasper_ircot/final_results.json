@@ -1,0 +1,445 @@
+[
+  {
+    "question": "Do they experiment with other tasks?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": false,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      }
+    ],
+    "doc_uuid": "2003.13032",
+    "doc_path": "qasper://2003.13032",
+    "qasper_question_id": "8df35c24af9efc3348d3b8d746df116480dfe661",
+    "title": "Named Entities in Medical Case Reports: Corpus and Experiments",
+    "evidence_block_ids": [],
+    "evidence_paragraph_ids": [],
+    "output": "{\n  \"answer_short\": \"Yes\",\n  \"answer_rationale\": \"The evidence explicitly states that the model jointly trains NER and RE tasks, indicating experimentation with supporting tasks like RE alongside NER. This is described in Text 1, which confirms multi-task learning is used with RE as a supporting task.\",\n  \"supporting_block_ids\": [39]\n}",
+    "retrieved_node_ids": [
+      39,
+      38,
+      32,
+      41
+    ],
+    "retrieved_block_ids": [
+      39,
+      38,
+      32,
+      41
+    ],
+    "answer_short": "Yes",
+    "answer_rationale": "The evidence explicitly states that the model jointly trains NER and RE tasks, indicating experimentation with supporting tasks like RE alongside NER. This is described in Text 1, which confirms multi-task learning is used with RE as a supporting task.",
+    "supporting_block_ids": [
+      39
+    ]
+  },
+  {
+    "question": "What baselines do they introduce?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Conditional Random Fields",
+          "BiLSTM-CRF",
+          "Multi-Task Learning",
+          "BioBERT\n"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Baseline systems for Named Entity Recognition in medical case reports ::: Conditional Random Fields",
+          "Conditional Random Fields (CRF) BIBREF10 are a standard approach when dealing with sequential data in the context of sequence labeling. We use a combination of linguistic and semantic features, with a context window of size five, to describe each of the tokens and the dependencies between them. Hyper-parameter optimization is performed using randomized search and cross validation. Span-based F1 score is used as the optimization metric.",
+          "Baseline systems for Named Entity Recognition in medical case reports ::: BiLSTM-CRF",
+          "Prior to the emergence of deep neural language models, BiLSTM-CRF models BIBREF11 had achieved state-of-the-art results for the task of sequence labeling. We use a BiLSTM-CRF model with both word-level and character-level input. BioWordVec BIBREF12 pre-trained word embeddings are used in the embedding layer for the input representation. A bidirectional LSTM layer is applied to a multiplication of the two input representations. Finally, a CRF layer is applied to predict the sequence of labels. Dropout and L1/L2 regularization is used where applicable. He (uniform) initialization BIBREF13 is used to initialize the kernels of the individual layers. As the loss metric, CRF-based loss is used, while optimizing the model based on the CRF Viterbi accuracy. Additionally, span-based F1 score is used to serialize the best performing model. We train for a maximum of 100 epochs, or until an early stopping criterion is reached (no change in validation loss value grater than 0.01 for ten consecutive epochs). Furthermore, Adam BIBREF14 is used as the optimizer. The learning rate is reduced by a factor of 0.3 in case no significant increase of the optimization metric is achieved in three consecutive epochs.",
+          "Baseline systems for Named Entity Recognition in medical case reports ::: Multi-Task Learning",
+          "Multi-Task Learning (MTL) BIBREF15 has become popular with the progress in deep learning. This model family is characterized by simultaneous optimization of multiple loss functions and transfer of knowledge achieved this way. The knowledge is transferred through the use of one or multiple shared layers. Through finding supporting patterns in related tasks, MTL provides better generalization on unseen cases and the main tasks we are trying to solve.",
+          "Baseline systems for Named Entity Recognition in medical case reports ::: BioBERT",
+          "Deep neural language models have recently evolved to a successful method for representing text. In particular, Bidirectional Encoder Representations from Transformers (BERT) outperformed previous state-of-the-art methods by a large margin on various NLP tasks BIBREF17. For our experiments, we use BioBERT, an adaptation of BERT for the biomedical domain, pre-trained on PubMed abstracts and PMC full-text articles BIBREF18. The BERT architecture for deriving text representations uses 12 hidden layers, consisting of 768 units each. For NER, token level BIO-tag probabilities are computed with a single output layer based on the representations from the last layer of BERT. We fine-tune the model on the entity recognition task during four training epochs with batch size $b=32$, dropout probability $d=0.1$ and learning rate $\\eta =2^{-5}$. These hyper-parameters are proposed by Devlin2018 for BERT fine-tuning."
+        ],
+        "evidence_block_ids": [
+          34,
+          36,
+          38,
+          41
+        ],
+        "evidence_paragraph_ids": [
+          34,
+          36,
+          38,
+          41
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Conditional Random Fields",
+          "BiLSTM-CRF",
+          "Multi-Task Learning",
+          "BioBERT"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Baseline systems for Named Entity Recognition in medical case reports ::: Conditional Random Fields",
+          "Conditional Random Fields (CRF) BIBREF10 are a standard approach when dealing with sequential data in the context of sequence labeling. We use a combination of linguistic and semantic features, with a context window of size five, to describe each of the tokens and the dependencies between them. Hyper-parameter optimization is performed using randomized search and cross validation. Span-based F1 score is used as the optimization metric.",
+          "Baseline systems for Named Entity Recognition in medical case reports ::: BiLSTM-CRF",
+          "Prior to the emergence of deep neural language models, BiLSTM-CRF models BIBREF11 had achieved state-of-the-art results for the task of sequence labeling. We use a BiLSTM-CRF model with both word-level and character-level input. BioWordVec BIBREF12 pre-trained word embeddings are used in the embedding layer for the input representation. A bidirectional LSTM layer is applied to a multiplication of the two input representations. Finally, a CRF layer is applied to predict the sequence of labels. Dropout and L1/L2 regularization is used where applicable. He (uniform) initialization BIBREF13 is used to initialize the kernels of the individual layers. As the loss metric, CRF-based loss is used, while optimizing the model based on the CRF Viterbi accuracy. Additionally, span-based F1 score is used to serialize the best performing model. We train for a maximum of 100 epochs, or until an early stopping criterion is reached (no change in validation loss value grater than 0.01 for ten consecutive epochs). Furthermore, Adam BIBREF14 is used as the optimizer. The learning rate is reduced by a factor of 0.3 in case no significant increase of the optimization metric is achieved in three consecutive epochs.",
+          "Baseline systems for Named Entity Recognition in medical case reports ::: Multi-Task Learning",
+          "Multi-Task Learning (MTL) BIBREF15 has become popular with the progress in deep learning. This model family is characterized by simultaneous optimization of multiple loss functions and transfer of knowledge achieved this way. The knowledge is transferred through the use of one or multiple shared layers. Through finding supporting patterns in related tasks, MTL provides better generalization on unseen cases and the main tasks we are trying to solve.",
+          "Baseline systems for Named Entity Recognition in medical case reports ::: BioBERT",
+          "Deep neural language models have recently evolved to a successful method for representing text. In particular, Bidirectional Encoder Representations from Transformers (BERT) outperformed previous state-of-the-art methods by a large margin on various NLP tasks BIBREF17. For our experiments, we use BioBERT, an adaptation of BERT for the biomedical domain, pre-trained on PubMed abstracts and PMC full-text articles BIBREF18. The BERT architecture for deriving text representations uses 12 hidden layers, consisting of 768 units each. For NER, token level BIO-tag probabilities are computed with a single output layer based on the representations from the last layer of BERT. We fine-tune the model on the entity recognition task during four training epochs with batch size $b=32$, dropout probability $d=0.1$ and learning rate $\\eta =2^{-5}$. These hyper-parameters are proposed by Devlin2018 for BERT fine-tuning."
+        ],
+        "evidence_block_ids": [
+          34,
+          36,
+          38,
+          41
+        ],
+        "evidence_paragraph_ids": [
+          34,
+          36,
+          38,
+          41
+        ]
+      }
+    ],
+    "doc_uuid": "2003.13032",
+    "doc_path": "qasper://2003.13032",
+    "qasper_question_id": "277a7e916e65dfefd44d2d05774f95257ac946ae",
+    "title": "Named Entities in Medical Case Reports: Corpus and Experiments",
+    "evidence_block_ids": [
+      34,
+      36,
+      38,
+      41
+    ],
+    "evidence_paragraph_ids": [
+      34,
+      36,
+      38,
+      41
+    ],
+    "output": "{\n  \"answer_short\": \"Four NER systems\",\n  \"answer_rationale\": \"The evidence explicitly states that 'four distinct NER systems' were developed to serve as robust baselines for future work (Text 1, source_id=46) and that 'Four systems were developed to offer comparable robust baselines' (Text 2, source_id=31). These systems are introduced as baselines for evaluation in the context of Named Entity Recognition in medical case reports.\",\n  \"supporting_block_ids\": [46, 31]\n}",
+    "retrieved_node_ids": [
+      46,
+      31,
+      7,
+      39
+    ],
+    "retrieved_block_ids": [
+      46,
+      31,
+      7,
+      39
+    ],
+    "answer_short": "Four NER systems",
+    "answer_rationale": "The evidence explicitly states that 'four distinct NER systems' were developed to serve as robust baselines for future work (Text 1, source_id=46) and that 'Four systems were developed to offer comparable robust baselines' (Text 2, source_id=31). These systems are introduced as baselines for evaluation in the context of Named Entity Recognition in medical case reports.",
+    "supporting_block_ids": [
+      46,
+      31
+    ]
+  },
+  {
+    "question": "How large is the corpus?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "8,275 sentences and 167,739 words in total"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "The corpus consists of 53 documents, which contain an average number of 156.1 sentences per document, each with 19.55 tokens on average. The corpus comprises 8,275 sentences and 167,739 words in total. However, as mentioned above, only case presentation sections, headings and abstracts are annotated. The numbers of annotated entities are summarized in Table TABREF24."
+        ],
+        "evidence_block_ids": [
+          26
+        ],
+        "evidence_paragraph_ids": [
+          26
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "The corpus comprises 8,275 sentences and 167,739 words in total."
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "The corpus consists of 53 documents, which contain an average number of 156.1 sentences per document, each with 19.55 tokens on average. The corpus comprises 8,275 sentences and 167,739 words in total. However, as mentioned above, only case presentation sections, headings and abstracts are annotated. The numbers of annotated entities are summarized in Table TABREF24."
+        ],
+        "evidence_block_ids": [
+          26
+        ],
+        "evidence_paragraph_ids": [
+          26
+        ]
+      }
+    ],
+    "doc_uuid": "2003.13032",
+    "doc_path": "qasper://2003.13032",
+    "qasper_question_id": "2916bbdb95ef31ab26527ba67961cf5ec94d6afe",
+    "title": "Named Entities in Medical Case Reports: Corpus and Experiments",
+    "evidence_block_ids": [
+      26
+    ],
+    "evidence_paragraph_ids": [
+      26
+    ],
+    "output": "{\n  \"answer_short\": \"Not answerable\",\n  \"answer_rationale\": \"The retrieved documents describe the structure, entity types, and splits of the corpus (e.g., five folds with train/test/dev splits), but none provide numerical data on its size (e.g., number of documents, tokens, or annotated entities).\",\n  \"supporting_block_ids\": [29, 4, 5, 32]\n}",
+    "retrieved_node_ids": [
+      29,
+      4,
+      5,
+      46,
+      2,
+      32
+    ],
+    "retrieved_block_ids": [
+      29,
+      4,
+      5,
+      46,
+      2,
+      32
+    ],
+    "answer_short": "Not answerable",
+    "answer_rationale": "The retrieved documents describe the structure, entity types, and splits of the corpus (e.g., five folds with train/test/dev splits), but none provide numerical data on its size (e.g., number of documents, tokens, or annotated entities).",
+    "supporting_block_ids": [
+      29,
+      4,
+      5,
+      32
+    ]
+  },
+  {
+    "question": "How was annotation performed?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "Experienced medical doctors used a linguistic annotation tool to annotate entities.",
+        "yes_no": null,
+        "evidence": [
+          "We asked medical doctors experienced in extracting knowledge related to medical entities from texts to annotate the entities described above. Initially, we asked four annotators to test our guidelines on two texts. Subsequently, identified issues were discussed and resolved. Following this pilot annotation phase, we asked two different annotators to annotate two case reports according to our guidelines. The same annotators annotated an overall collection of 53 case reports.",
+          "The annotation was performed using WebAnno BIBREF7, a web-based tool for linguistic annotation. The annotators could choose between a pre-annotated version or a blank version of each text. The pre-annotated versions contained suggested entity spans based on string matches from lists of conditions and findings synonym lists. Their quality varied widely throughout the corpus. The blank version was preferred by the annotators. We distribute the corpus in BioC JSON format. BioC was chosen as it allows us to capture the complexities of the annotations in the biomedical domain. It represented each documents properties ranging from full text, individual passages/sentences along with captured annotations and relationships in an organized manner. BioC is based on character offsets of annotations and allows the stacking of different layers."
+        ],
+        "evidence_block_ids": [
+          21,
+          24
+        ],
+        "evidence_paragraph_ids": [
+          21,
+          24
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "WebAnno"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "The annotation was performed using WebAnno BIBREF7, a web-based tool for linguistic annotation. The annotators could choose between a pre-annotated version or a blank version of each text. The pre-annotated versions contained suggested entity spans based on string matches from lists of conditions and findings synonym lists. Their quality varied widely throughout the corpus. The blank version was preferred by the annotators. We distribute the corpus in BioC JSON format. BioC was chosen as it allows us to capture the complexities of the annotations in the biomedical domain. It represented each documents properties ranging from full text, individual passages/sentences along with captured annotations and relationships in an organized manner. BioC is based on character offsets of annotations and allows the stacking of different layers."
+        ],
+        "evidence_block_ids": [
+          24
+        ],
+        "evidence_paragraph_ids": [
+          24
+        ]
+      }
+    ],
+    "doc_uuid": "2003.13032",
+    "doc_path": "qasper://2003.13032",
+    "qasper_question_id": "f2e8497aa16327aa297a7f9f7d156e485fe33945",
+    "title": "Named Entities in Medical Case Reports: Corpus and Experiments",
+    "evidence_block_ids": [
+      21,
+      24
+    ],
+    "evidence_paragraph_ids": [
+      21,
+      24
+    ],
+    "output": "{\n  \"answer_short\": \"Manually by annotators using WebAnno, with a preference for blank versions, focusing on case entities, conditions, findings, factors, and modifiers within the patient's presentation and title.\",\n  \"answer_rationale\": \"The annotation was performed manually by annotators using WebAnno, as stated in Text 1. Annotators preferred blank versions over pre-annotated ones, and the focus was on case entities, conditions, findings, factors, and modifiers within the patient's presentation and title, as detailed in Text 3.\",\n  \"supporting_block_ids\": [24, 34, 7]\n}",
+    "retrieved_node_ids": [
+      24,
+      34,
+      7
+    ],
+    "retrieved_block_ids": [
+      24,
+      34,
+      7
+    ],
+    "answer_short": "Manually by annotators using WebAnno, with a preference for blank versions, focusing on case entities, conditions, findings, factors, and modifiers within the patient's presentation and title.",
+    "answer_rationale": "The annotation was performed manually by annotators using WebAnno, as stated in Text 1. Annotators preferred blank versions over pre-annotated ones, and the focus was on case entities, conditions, findings, factors, and modifiers within the patient's presentation and title, as detailed in Text 3.",
+    "supporting_block_ids": [
+      24,
+      34,
+      7
+    ]
+  },
+  {
+    "question": "How many documents are in the new corpus?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "53 documents"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "The corpus consists of 53 documents, which contain an average number of 156.1 sentences per document, each with 19.55 tokens on average. The corpus comprises 8,275 sentences and 167,739 words in total. However, as mentioned above, only case presentation sections, headings and abstracts are annotated. The numbers of annotated entities are summarized in Table TABREF24."
+        ],
+        "evidence_block_ids": [
+          26
+        ],
+        "evidence_paragraph_ids": [
+          26
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "53 documents"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "The corpus consists of 53 documents, which contain an average number of 156.1 sentences per document, each with 19.55 tokens on average. The corpus comprises 8,275 sentences and 167,739 words in total. However, as mentioned above, only case presentation sections, headings and abstracts are annotated. The numbers of annotated entities are summarized in Table TABREF24."
+        ],
+        "evidence_block_ids": [
+          26
+        ],
+        "evidence_paragraph_ids": [
+          26
+        ]
+      }
+    ],
+    "doc_uuid": "2003.13032",
+    "doc_path": "qasper://2003.13032",
+    "qasper_question_id": "9b76f428b7c8c9fc930aa88ee585a03478bff9b3",
+    "title": "Named Entities in Medical Case Reports: Corpus and Experiments",
+    "evidence_block_ids": [
+      26
+    ],
+    "evidence_paragraph_ids": [
+      26
+    ],
+    "output": "{\n  \"answer_short\": \"53\",\n  \"answer_rationale\": \"Text 3 [source_id=26] explicitly states that the corpus consists of 53 documents.\",\n  \"supporting_block_ids\": [26]\n}",
+    "retrieved_node_ids": [
+      4,
+      46,
+      26
+    ],
+    "retrieved_block_ids": [
+      4,
+      46,
+      26
+    ],
+    "answer_short": "53",
+    "answer_rationale": "Text 3 [source_id=26] explicitly states that the corpus consists of 53 documents.",
+    "supporting_block_ids": [
+      26
+    ]
+  },
+  {
+    "question": "What baseline systems are proposed?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Conditional Random Fields",
+          "BiLSTM-CRF",
+          "Multi-Task Learning",
+          "BioBERT"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Baseline systems for Named Entity Recognition in medical case reports ::: Conditional Random Fields",
+          "Conditional Random Fields (CRF) BIBREF10 are a standard approach when dealing with sequential data in the context of sequence labeling. We use a combination of linguistic and semantic features, with a context window of size five, to describe each of the tokens and the dependencies between them. Hyper-parameter optimization is performed using randomized search and cross validation. Span-based F1 score is used as the optimization metric.",
+          "Baseline systems for Named Entity Recognition in medical case reports ::: BiLSTM-CRF",
+          "Prior to the emergence of deep neural language models, BiLSTM-CRF models BIBREF11 had achieved state-of-the-art results for the task of sequence labeling. We use a BiLSTM-CRF model with both word-level and character-level input. BioWordVec BIBREF12 pre-trained word embeddings are used in the embedding layer for the input representation. A bidirectional LSTM layer is applied to a multiplication of the two input representations. Finally, a CRF layer is applied to predict the sequence of labels. Dropout and L1/L2 regularization is used where applicable. He (uniform) initialization BIBREF13 is used to initialize the kernels of the individual layers. As the loss metric, CRF-based loss is used, while optimizing the model based on the CRF Viterbi accuracy. Additionally, span-based F1 score is used to serialize the best performing model. We train for a maximum of 100 epochs, or until an early stopping criterion is reached (no change in validation loss value grater than 0.01 for ten consecutive epochs). Furthermore, Adam BIBREF14 is used as the optimizer. The learning rate is reduced by a factor of 0.3 in case no significant increase of the optimization metric is achieved in three consecutive epochs.",
+          "Baseline systems for Named Entity Recognition in medical case reports ::: Multi-Task Learning",
+          "Multi-Task Learning (MTL) BIBREF15 has become popular with the progress in deep learning. This model family is characterized by simultaneous optimization of multiple loss functions and transfer of knowledge achieved this way. The knowledge is transferred through the use of one or multiple shared layers. Through finding supporting patterns in related tasks, MTL provides better generalization on unseen cases and the main tasks we are trying to solve.",
+          "Baseline systems for Named Entity Recognition in medical case reports ::: BioBERT",
+          "Deep neural language models have recently evolved to a successful method for representing text. In particular, Bidirectional Encoder Representations from Transformers (BERT) outperformed previous state-of-the-art methods by a large margin on various NLP tasks BIBREF17. For our experiments, we use BioBERT, an adaptation of BERT for the biomedical domain, pre-trained on PubMed abstracts and PMC full-text articles BIBREF18. The BERT architecture for deriving text representations uses 12 hidden layers, consisting of 768 units each. For NER, token level BIO-tag probabilities are computed with a single output layer based on the representations from the last layer of BERT. We fine-tune the model on the entity recognition task during four training epochs with batch size $b=32$, dropout probability $d=0.1$ and learning rate $\\eta =2^{-5}$. These hyper-parameters are proposed by Devlin2018 for BERT fine-tuning."
+        ],
+        "evidence_block_ids": [
+          34,
+          36,
+          38,
+          41
+        ],
+        "evidence_paragraph_ids": [
+          34,
+          36,
+          38,
+          41
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Conditional Random Fields",
+          "BiLSTM-CRF",
+          "Multi-Task Learning",
+          "BioBERT"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Baseline systems for Named Entity Recognition in medical case reports ::: Conditional Random Fields",
+          "Baseline systems for Named Entity Recognition in medical case reports ::: BiLSTM-CRF",
+          "Baseline systems for Named Entity Recognition in medical case reports ::: Multi-Task Learning",
+          "Baseline systems for Named Entity Recognition in medical case reports ::: BioBERT"
+        ],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      }
+    ],
+    "doc_uuid": "2003.13032",
+    "doc_path": "qasper://2003.13032",
+    "qasper_question_id": "dd6b378d89c05058e8f49e48fd48f5c458ea2ebc",
+    "title": "Named Entities in Medical Case Reports: Corpus and Experiments",
+    "evidence_block_ids": [
+      34,
+      36,
+      38,
+      41
+    ],
+    "evidence_paragraph_ids": [
+      34,
+      36,
+      38,
+      41
+    ],
+    "output": "{\n  \"answer_short\": \"four strong baseline systems\",\n  \"answer_rationale\": \"The evidence explicitly states that 'we present four strong baseline systems for the detection of medical entities' (Text 1, source_id=2) and 'we provide an evaluation of four distinct NER systems that will serve as robust baselines for future work' (Text 2, source_id=46). Both documents confirm the existence and purpose of these four systems.\",\n  \"supporting_block_ids\": [2, 46]\n}",
+    "retrieved_node_ids": [
+      2,
+      46,
+      43
+    ],
+    "retrieved_block_ids": [
+      2,
+      46,
+      43
+    ],
+    "answer_short": "four strong baseline systems",
+    "answer_rationale": "The evidence explicitly states that 'we present four strong baseline systems for the detection of medical entities' (Text 1, source_id=2) and 'we provide an evaluation of four distinct NER systems that will serve as robust baselines for future work' (Text 2, source_id=46). Both documents confirm the existence and purpose of these four systems.",
+    "supporting_block_ids": [
+      2,
+      46
+    ]
+  }
+]

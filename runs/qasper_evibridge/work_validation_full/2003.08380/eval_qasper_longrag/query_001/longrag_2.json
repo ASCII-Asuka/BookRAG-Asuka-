@@ -1,0 +1,133 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Approach\n[source_id=9] The natural language template approach enables various options to formulate the WinoGrande commonsense reasoning task as a text-to-text problem with T5. Here we adopt a formulation similar to the MNLI template. Consider a concrete example:\n[source_id=10] He never comes to my home, but I always go to his house because the _ is smaller.\n[source_id=11] Option1: home; Option2: house\n[source_id=12] In this case, the correct replacement for _ is Option1. We decompose the above problem into two source–target training examples, where _ is replaced with each option and annotated with the correct answer as the target token, as shown in Table TABREF2. In addition, we reformulate each example into a commonsense reasoning “template” with two statements: hypothesis (from _ to the end of the original problem statement) and premise (the remaining part of the original problem statement). Note that the bold and colored fonts are for clarity only; those tokens are not marked in any way in the model input.\n[source_id=13] At inference (test) time, we also decompose the problem into two inputs, where each input is formulated in exactly the same manner as in Table TABREF2, with either one of the answer options. We then feed each into T5 to predict a target token. In this scenario, there are four possible outcomes:\n[source_id=14] one produces “entailment” and the other “contradiction”,\n[source_id=15] one produces “entailment” or “contradiction” and the other some other token,\n[source_id=16] both produce some other tokens, and\n[source_id=17] both produce the same token, either “entailment” or “contradiction”.\n[source_id=18] Ideally, T5 would produce contrastive tokens for each input pair, as in case (1), which allows us to unambiguously select the final answer. However, the model might produce the same tokens for each input, or even tokens not in the predefined set, as in cases (2) to (4). To deal with these cases, we apply a softmax over the logits of the pair of predefined target tokens, similar to Nogueira et al. BIBREF7. From this, we can compute the probabilities of the predefined target tokens (in the case of Table TABREF2, “entailment” and “contradiction”). Then, we compare the probabilities across both input instances, and in cases (2) to (4), we select the instance that has a higher probability as the correct answer.\n[source_id=19] This general problem setup allows us to choose the target tokens, which may have an impact on the prediction accuracy BIBREF7. In addition to selecting “entailment” vs. “contradiction” as the target, we also tried the contrastive pair “true” vs. ”false”.\n[source_id=20] In our experiment, we fine-tune T5-3B on Google Colab's TPU v2 with a batch size of 16, a learning rate of $2 \\cdot 10^{-4}$, and save model checkpoints every 5000 steps. It takes 130k steps to converge for the XL data size (see below). At inference time, we use greedy decoding and select for evaluation the model checkpoint that achieves the highest score on the development set. We did not experiment with T5-11B due to limited computational resources.",
+  "score": 0.8466730086505931,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "child_qasper_evidence_texts": [
+    "The natural language template approach enables various options to formulate the WinoGrande commonsense reasoning task as a text-to-text problem with T5. Here we adopt a formulation similar to the MNLI template. Consider a concrete example:",
+    "He never comes to my home, but I always go to his house because the _ is smaller.",
+    "Option1: home; Option2: house",
+    "In this case, the correct replacement for _ is Option1. We decompose the above problem into two source–target training examples, where _ is replaced with each option and annotated with the correct answer as the target token, as shown in Table TABREF2. In addition, we reformulate each example into a commonsense reasoning “template” with two statements: hypothesis (from _ to the end of the original problem statement) and premise (the remaining part of the original problem statement). Note that the bold and colored fonts are for clarity only; those tokens are not marked in any way in the model input.",
+    "At inference (test) time, we also decompose the problem into two inputs, where each input is formulated in exactly the same manner as in Table TABREF2, with either one of the answer options. We then feed each into T5 to predict a target token. In this scenario, there are four possible outcomes:",
+    "one produces “entailment” and the other “contradiction”,",
+    "one produces “entailment” or “contradiction” and the other some other token,",
+    "both produce some other tokens, and",
+    "both produce the same token, either “entailment” or “contradiction”.",
+    "Ideally, T5 would produce contrastive tokens for each input pair, as in case (1), which allows us to unambiguously select the final answer. However, the model might produce the same tokens for each input, or even tokens not in the predefined set, as in cases (2) to (4). To deal with these cases, we apply a softmax over the logits of the pair of predefined target tokens, similar to Nogueira et al. BIBREF7. From this, we can compute the probabilities of the predefined target tokens (in the case of Table TABREF2, “entailment” and “contradiction”). Then, we compare the probabilities across both input instances, and in cases (2) to (4), we select the instance that has a higher probability as the correct answer.",
+    "This general problem setup allows us to choose the target tokens, which may have an impact on the prediction accuracy BIBREF7. In addition to selecting “entailment” vs. “contradiction” as the target, we also tried the contrastive pair “true” vs. ”false”.",
+    "In our experiment, we fine-tune T5-3B on Google Colab's TPU v2 with a batch size of 16, a learning rate of $2 \\cdot 10^{-4}$, and save model checkpoints every 5000 steps. It takes 130k steps to converge for the XL data size (see below). At inference time, we use greedy decoding and select for evaluation the model checkpoint that achieves the highest score on the development set. We did not experiment with T5-11B due to limited computational resources."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Approach",
+      0
+    ],
+    [
+      "Approach",
+      1
+    ],
+    [
+      "Approach",
+      2
+    ],
+    [
+      "Approach",
+      3
+    ],
+    [
+      "Approach",
+      4
+    ],
+    [
+      "Approach",
+      5
+    ],
+    [
+      "Approach",
+      6
+    ],
+    [
+      "Approach",
+      7
+    ],
+    [
+      "Approach",
+      8
+    ],
+    [
+      "Approach",
+      9
+    ],
+    [
+      "Approach",
+      10
+    ],
+    [
+      "Approach",
+      11
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Approach",
+  "section": "Approach",
+  "title_path": "Approach",
+  "block_type": "long_unit"
+}

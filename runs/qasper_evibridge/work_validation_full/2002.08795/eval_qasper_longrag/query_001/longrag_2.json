@@ -1,0 +1,70 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Exploration Methods\n[source_id=11] In this section, we describe methods to explore combinatorially sized action spaces such as text-games—focusing especially on methods that can deal with their inherent bottleneck structure. We first describe our method that explicitly attempts to detect bottlenecks and then describe how an exploration algorithm such as Go Explore BIBREF9 can leverage knowledge graphs.\n[source_id=12] KG-A2C-chained An example of a bottleneck can be seen in Figure FIGREF1. We extend the KG-A2C algorithm as follows. First, we detect bottlenecks as states where the agent is unable to progress any further. We set a patience parameter and if the agent has not seen a higher score in patience steps, the agent assumes it has been limited by a bottleneck. Second, when a bottleneck is found, we freeze the policy that gets the agent to the state with the highest score. The agent then begins training a new policy from that particular state.\n[source_id=13] Simply freezing the policy that led to the bottleneck, however, can potentially result in a policy one that is globally sub-optimal. We therefore employ a backtracking strategy that restarts exploration from each of the $n$ previous steps—searching for a more optimal policy that reaches that bottleneck. At each step, we keep track of a buffer of $n$ states and admissible actions that led up to that locally optimal state. We force the agent to explore from this state to attempt to drive it out of the local optima. If it is further unable to find itself out of this local optima, we refresh the training process again, but starting at the state immediately before the agent reaches the local optima. If this continues to fail, we continue to iterate through this buffer of seen states states up to that local optima until we either find a more optimal state or we run out of states to refresh from, in which we terminate the training algorithm.\n[source_id=14] KG-A2C-Explore Go-Explore BIBREF9 is an algorithm that is designed to keep track of sub-optimal and under-explored states in order to allow the agent to explore upon more optimal states that may be a result of sparse rewards. The Go-Explore algorithm consists of two phases, the first to continuously explore until a set of promising states and corresponding trajectories are found on the basis of total score, and the second to robustify this found policy against potential stochasticity in the game. Promising states are defined as those states when explored from will likely result in higher reward trajectories. Since the text games we are dealing with are mostly deterministic, with the exception of Zork in later stages, we only focus on using Phase 1 of the Go-Explore algorithm to find an optimal policy. BIBREF10 look at applying Go-Explore to text-games on a set of simpler games generated using the game generation framework TextWorld BIBREF1. Instead of training a policy network in parallel to generate actions used for exploration, they use a small set of “admissible actions”—actions guaranteed to change the world state at any given step during Phase 1—to explore and find high reward trajectories. This space of actions is relatively small (of the order of $10^2$ per step) and so finding high reward trajectories in larger action-spaces such as in Zork would be infeasible\n[source_id=15] Go-Explore maintains an archive of cells—defined as a set of states that map to a single representation—to keep track of promising states. BIBREF9 simply encodes each cell by keeping track of the agent's position and BIBREF10 use the textual observations encoded by recurrent neural network as a cell representation. We improve on this implementation by training the KG-A2C network in parallel, using the snapshot of the knowledge graph in conjunction with the game state to further encode the current state and use this as a cell representation. At each step, Go-Explore chooses a cell to explore at random (weighted by score to prefer more advanced cells). The KG-A2C will run for a number of steps, starting with the knowledge graph state and the last seen state of the game from the cell. This will generate a trajectory for the agent while further training the KG-A2C at each iteration, creating a new representation for the knowledge graph as well as a new game state for the cell. After expanding a cell, Go-Explore will continue to sample cells by weight to continue expanding its known states. At the same time, KG-A2C will benefit from the heuristics of selecting preferred cells and be trained on promising states more often.",
+  "score": 0.9299737873496134,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "child_qasper_evidence_texts": [
+    "In this section, we describe methods to explore combinatorially sized action spaces such as text-games—focusing especially on methods that can deal with their inherent bottleneck structure. We first describe our method that explicitly attempts to detect bottlenecks and then describe how an exploration algorithm such as Go Explore BIBREF9 can leverage knowledge graphs.",
+    "KG-A2C-chained An example of a bottleneck can be seen in Figure FIGREF1. We extend the KG-A2C algorithm as follows. First, we detect bottlenecks as states where the agent is unable to progress any further. We set a patience parameter and if the agent has not seen a higher score in patience steps, the agent assumes it has been limited by a bottleneck. Second, when a bottleneck is found, we freeze the policy that gets the agent to the state with the highest score. The agent then begins training a new policy from that particular state.",
+    "Simply freezing the policy that led to the bottleneck, however, can potentially result in a policy one that is globally sub-optimal. We therefore employ a backtracking strategy that restarts exploration from each of the $n$ previous steps—searching for a more optimal policy that reaches that bottleneck. At each step, we keep track of a buffer of $n$ states and admissible actions that led up to that locally optimal state. We force the agent to explore from this state to attempt to drive it out of the local optima. If it is further unable to find itself out of this local optima, we refresh the training process again, but starting at the state immediately before the agent reaches the local optima. If this continues to fail, we continue to iterate through this buffer of seen states states up to that local optima until we either find a more optimal state or we run out of states to refresh from, in which we terminate the training algorithm.",
+    "KG-A2C-Explore Go-Explore BIBREF9 is an algorithm that is designed to keep track of sub-optimal and under-explored states in order to allow the agent to explore upon more optimal states that may be a result of sparse rewards. The Go-Explore algorithm consists of two phases, the first to continuously explore until a set of promising states and corresponding trajectories are found on the basis of total score, and the second to robustify this found policy against potential stochasticity in the game. Promising states are defined as those states when explored from will likely result in higher reward trajectories. Since the text games we are dealing with are mostly deterministic, with the exception of Zork in later stages, we only focus on using Phase 1 of the Go-Explore algorithm to find an optimal policy. BIBREF10 look at applying Go-Explore to text-games on a set of simpler games generated using the game generation framework TextWorld BIBREF1. Instead of training a policy network in parallel to generate actions used for exploration, they use a small set of “admissible actions”—actions guaranteed to change the world state at any given step during Phase 1—to explore and find high reward trajectories. This space of actions is relatively small (of the order of $10^2$ per step) and so finding high reward trajectories in larger action-spaces such as in Zork would be infeasible",
+    "Go-Explore maintains an archive of cells—defined as a set of states that map to a single representation—to keep track of promising states. BIBREF9 simply encodes each cell by keeping track of the agent's position and BIBREF10 use the textual observations encoded by recurrent neural network as a cell representation. We improve on this implementation by training the KG-A2C network in parallel, using the snapshot of the knowledge graph in conjunction with the game state to further encode the current state and use this as a cell representation. At each step, Go-Explore chooses a cell to explore at random (weighted by score to prefer more advanced cells). The KG-A2C will run for a number of steps, starting with the knowledge graph state and the last seen state of the game from the cell. This will generate a trajectory for the agent while further training the KG-A2C at each iteration, creating a new representation for the knowledge graph as well as a new game state for the cell. After expanding a cell, Go-Explore will continue to sample cells by weight to continue expanding its known states. At the same time, KG-A2C will benefit from the heuristics of selecting preferred cells and be trained on promising states more often."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Exploration Methods",
+    "Exploration Methods",
+    "Exploration Methods",
+    "Exploration Methods",
+    "Exploration Methods"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Exploration Methods",
+      0
+    ],
+    [
+      "Exploration Methods",
+      1
+    ],
+    [
+      "Exploration Methods",
+      2
+    ],
+    [
+      "Exploration Methods",
+      3
+    ],
+    [
+      "Exploration Methods",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Exploration Methods",
+  "section": "Exploration Methods",
+  "title_path": "Exploration Methods",
+  "block_type": "long_unit"
+}

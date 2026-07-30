@@ -1,0 +1,43 @@
+{
+  "id": "longrag_18",
+  "content": "[Section] Experimental Setup ::: Implementation Details\n[source_id=53] As mentioned in Section SECREF3, our model is a Seq2Seq Transformer model BIBREF9. The encoder is initialized with the $\\text{RoBERTa}_{\\text{LARGE}}$ model BIBREF4, and therefore they share the same architecture. Specifically, the encoder is a 24-layer Transformer. Each layer has 16 attention heads and its hidden size and feed-forward filter size are 1,024 and 4,096, respectively. The decoder is shallower with 6 layers. The hidden size and number of attention head of the decoder are identical to these of the encoder, but the feed-forward filter size is 2,048. We use a smaller filter size in the decoder to reduce the computational and memory cost. The dropout rates of all layers in the encoder are set to 0.1 and all dropout rates in the decoder are set to 0.3. Our models are optimized using Adam BIBREF40 with $\\beta _1=0.9$, $\\beta _2=0.98$. The other optimization hyper-parameters for pre-training and fine-tuning are different. In the pre-training stage, the encoder is initialized with a pre-trained model while the decoder is randomly initialized. Therefore, we used two separate optimizers for the encoder and decoder with a smaller learning rate for the encoder optimizer. Learning rates of the encoder and decoder are set to $2e-5$ and $1e-4$ with 10,000 warmup steps, respectively. We also adopted the same learning rate schedule strategies as BIBREF9. We used smaller batch sizes for datasets with less examples (i.e., 1,024 for GIGA-CM, 256 for CNNDM and 128 for NYT) to ensure each epoch has sufficient number of model updates. We trained our models until their convergence of validation perplexities (around 30 epochs on GIGA-CM, 60 epochs on CNNDM and 40 epochs on NYT). One epoch on GIGA-CM takes around 24 hours with 8 Nvidia Tesla V100 GPUs. The time costs for different pre-training tasks are close.\n[source_id=54] Most of the hyper-parameters in the fine-tuning stage are the same as these in the pre-training stage. The differences are as follows. The learning rates for both the encoder and decoder are set to $2e-5$ with 4,000 warmup steps, since both the encoder and decoder are already pre-trained. We trained our models for 50 epochs (saved per epoch) and selected the best model w.r.t. ROUGE score on the validation set . During decoding, we applied beam search with beam size of 5. Following BIBREF26, we also blocked repeating trigrams during beam search and tuned the minimum summary length on the validation set. Similar to the pre-training process, the datasets with less instances were fine-tuned with smaller batch size (i.e., 768 for CNNDM and 64 for NYT).",
+  "score": 2.8364321927645144,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_18",
+  "child_source_node_ids": [
+    53,
+    54
+  ],
+  "child_qasper_evidence_texts": [
+    "As mentioned in Section SECREF3, our model is a Seq2Seq Transformer model BIBREF9. The encoder is initialized with the $\\text{RoBERTa}_{\\text{LARGE}}$ model BIBREF4, and therefore they share the same architecture. Specifically, the encoder is a 24-layer Transformer. Each layer has 16 attention heads and its hidden size and feed-forward filter size are 1,024 and 4,096, respectively. The decoder is shallower with 6 layers. The hidden size and number of attention head of the decoder are identical to these of the encoder, but the feed-forward filter size is 2,048. We use a smaller filter size in the decoder to reduce the computational and memory cost. The dropout rates of all layers in the encoder are set to 0.1 and all dropout rates in the decoder are set to 0.3. Our models are optimized using Adam BIBREF40 with $\\beta _1=0.9$, $\\beta _2=0.98$. The other optimization hyper-parameters for pre-training and fine-tuning are different. In the pre-training stage, the encoder is initialized with a pre-trained model while the decoder is randomly initialized. Therefore, we used two separate optimizers for the encoder and decoder with a smaller learning rate for the encoder optimizer. Learning rates of the encoder and decoder are set to $2e-5$ and $1e-4$ with 10,000 warmup steps, respectively. We also adopted the same learning rate schedule strategies as BIBREF9. We used smaller batch sizes for datasets with less examples (i.e., 1,024 for GIGA-CM, 256 for CNNDM and 128 for NYT) to ensure each epoch has sufficient number of model updates. We trained our models until their convergence of validation perplexities (around 30 epochs on GIGA-CM, 60 epochs on CNNDM and 40 epochs on NYT). One epoch on GIGA-CM takes around 24 hours with 8 Nvidia Tesla V100 GPUs. The time costs for different pre-training tasks are close.",
+    "Most of the hyper-parameters in the fine-tuning stage are the same as these in the pre-training stage. The differences are as follows. The learning rates for both the encoder and decoder are set to $2e-5$ with 4,000 warmup steps, since both the encoder and decoder are already pre-trained. We trained our models for 50 epochs (saved per epoch) and selected the best model w.r.t. ROUGE score on the validation set . During decoding, we applied beam search with beam size of 5. Following BIBREF26, we also blocked repeating trigrams during beam search and tuned the minimum summary length on the validation set. Similar to the pre-training process, the datasets with less instances were fine-tuned with smaller batch size (i.e., 768 for CNNDM and 64 for NYT)."
+  ],
+  "child_pages": [
+    18,
+    18
+  ],
+  "child_sections": [
+    "Experimental Setup ::: Implementation Details",
+    "Experimental Setup ::: Implementation Details"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Experimental Setup ::: Implementation Details",
+      0
+    ],
+    [
+      "Experimental Setup ::: Implementation Details",
+      1
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_18",
+  "section_id": "Experimental Setup ::: Implementation Details",
+  "section": "Experimental Setup ::: Implementation Details",
+  "title_path": "Experimental Setup ::: Implementation Details",
+  "block_type": "long_unit"
+}

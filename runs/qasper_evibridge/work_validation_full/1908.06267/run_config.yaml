@@ -1,0 +1,105 @@
+graph:
+  embedding_config:
+    api_base: http://localhost:11434
+    api_key: '***REDACTED***'
+    backend: local
+    device: cuda:2
+    max_length: 8192
+    model_name: Qwen/Qwen3-Embedding-0.6B
+    type: text
+  extractor_type: llm
+  g: 0.6
+  image_description_force: true
+  local_model_name: en_core_web_sm
+  max_gleaning: 0
+  refine_type: advanced
+  reranker_config:
+    api_base: http://localhost:8011/v1
+    api_key: '***REDACTED***'
+    backend: local
+    device: cuda:2
+    max_length: 8192
+    max_retries: 3
+    model_name: Qwen/Qwen3-Reranker-0.6B
+    request_timeout: 60.0
+    retry_backoff: 0.5
+index_type: raptor
+llm:
+  api_base: https://api.siliconflow.cn/v1
+  api_key: '***REDACTED***'
+  backend: openai
+  frequency_penalty: 0.0
+  max_tokens: 5000
+  max_workers: 1
+  model_name: Qwen/Qwen3-VL-8B-Instruct
+  presence_penalty: 0.0
+  temperature: 0.1
+mineru:
+  backend: pipeline
+  lang: en
+  method: auto
+  server_url: http://127.0.0.1:30000
+pdf_path: qasper:\1908.06267
+rag:
+  strategy_config:
+    answer_style: short
+    bm25_corpus: chunk
+    bm25_vdb_dir_name: bm25_vdb
+    corpus_unit: paragraph
+    hybrid_bm25_topk: 50
+    hybrid_dense_topk: 50
+    rerank_batch_size: 50
+    rerank_topk: 50
+    reranker_config:
+      api_base: http://localhost:8011/v1
+      api_key: '***REDACTED***'
+      backend: local
+      device: cuda:2
+      max_length: 8192
+      max_retries: 3
+      model_name: Qwen/Qwen3-Reranker-0.6B
+      request_timeout: 60.0
+      retry_backoff: 0.5
+    retrieval_method: raptor
+    rrf_k: 60
+    strategy: vanilla
+    topk: 10
+    vdb_config:
+      collection_name: RaptorVDB
+      embedding_config:
+        api_base: https://api.siliconflow.cn/v1
+        api_key: '***REDACTED***'
+        backend: openai
+        device: cpu
+        max_length: 32768
+        model_name: Qwen/Qwen3-Embedding-0.6B
+        type: text
+      force_rebuild: true
+      mm_embedding: false
+      vdb_dir_name: raptor_vdb
+rag_force_reprocess: true
+save_path: runs\qasper_evibridge\work_validation_full\1908.06267
+tree:
+  node_keywords: true
+  node_summary: false
+  use_vlm: false
+vdb:
+  collection_name: RaptorVDB
+  embedding_config:
+    api_base: https://api.siliconflow.cn/v1
+    api_key: '***REDACTED***'
+    backend: openai
+    device: cpu
+    max_length: 32768
+    model_name: Qwen/Qwen3-Embedding-0.6B
+    type: text
+  force_rebuild: true
+  mm_embedding: false
+  vdb_dir_name: raptor_vdb
+vlm:
+  api_base: TODO
+  api_key: '***REDACTED***'
+  backend: ollama
+  max_tokens: 6000
+  model_name: TODO
+  temperature: 0.1

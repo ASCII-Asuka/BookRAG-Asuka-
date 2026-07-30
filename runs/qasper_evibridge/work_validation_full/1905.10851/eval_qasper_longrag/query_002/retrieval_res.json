@@ -1,0 +1,561 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Due to time constraints, course instructors often need to selectively participate in student discussion threads, due to their limited bandwidth and lopsided student--instructor ratio on online forums. We propose the first deep learning models for this binary prediction problem. We propose novel attention based models to infer the amount of latent context necessary to predict instructor intervention. Such models also allow themselves to be tuned to instructor's preference to intervene early or late. Our three proposed attentive model variants to infer the latent context improve over the state-of-the-art by a significant, large margin of 11% in F1 and 10% in recall, on average. Further, introspection of attention help us better understand what aspects of a discussion post propagate through the discussion thread that prompts instructor intervention.",
+      "score": 8.823492123054226,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Due to time constraints, course instructors often need to selectively participate in student discussion threads, due to their limited bandwidth and lopsided student--instructor ratio on online forums. We propose the first deep learning models for this binary prediction problem. We propose novel attention based models to infer the amount of latent context necessary to predict instructor intervention. Such models also allow themselves to be tuned to instructor's preference to intervene early or late. Our three proposed attentive model variants to infer the latent context improve over the state-of-the-art by a significant, large margin of 11% in F1 and 10% in recall, on average. Further, introspection of attention help us better understand what aspects of a discussion post propagate through the discussion thread that prompts instructor intervention."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Model\n[source_id=20] The key innovation of our work is to decompose the intervention prediction problem into a two-stage model that first explicitly tries to discover the proper context to which a potential intervention could be replying to, and then, predict the intervention status. This model implicitly assesses the importance (or urgency) of the existing thread's context to decide whether an intervention is necessary. For example in Figure SECREF1 , prior to the instructor's intervention, the ultimate post (Post #6) by Student 2 already acknowledged the OP's gratitude for his answer. In this regard, the instructor may have decided to use this point to summarize the entire thread to consolidate all the pertinent positions. Here, we might assume that the instructor's reply takes the entire thread (Posts #1–6) as the context for her reply.\n[source_id=21] This subproblem of inferring the context scope is where our innovation centers on. To be clear, in order to make the prediction that a instruction intervention is now necessary on a thread, the instructor's reply is not yet available — the model predicts whether a reply is necessary — so in the example, only Posts #1–6 are available in the problem setting. To infer the context, we have to decide which subsequence of posts are the most plausible motivation for an intervention.\n[source_id=22] Recent work in deep neural modeling has used an attention mechanism as a focusing query to highlight specific items within the input history that significantly influence the current decision point. Our work employs this mechanism – but with a twist: due to the fact that the actual instructor intervention is not (yet) available at the decision timing, we cannot use any actual intervention to decide the context. To employ attention, we must then employ a surrogate text as the query to train our prediction model. Our model variants model assess the suitability of such surrogate texts for the attention mechanism basis.\n[source_id=23] Congruent with the representation of the input forums, in all our proposed models, we encode the discussion thread hierarchically. We first build representations for each post by passing pre-trained word vector representations from GloVe BIBREF9 for each word through an LSTM BIBREF10 , INLINEFORM0 . We use the last layer output of the LSTM as a representation of the post. We refer this as the post vector INLINEFORM1 .\n[source_id=24] Then each post INLINEFORM0 is passed through another LSTM, INLINEFORM1 , whose last layer output forms the encoding of the entire thread. Hidden unit outputs of INLINEFORM2 represent the contexts INLINEFORM3 ; that is, snapshots of the threads after each post, as shown in Figure FIGREF1 .\n[source_id=25] The INLINEFORM0 and INLINEFORM1 together constitute the hierarchical LSTM (hLSTM) model. This general hLSTM model serves as the basis for our model exploration in the rest of this section.",
+      "score": 5.2543801187452,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "child_qasper_evidence_texts": [
+        "The key innovation of our work is to decompose the intervention prediction problem into a two-stage model that first explicitly tries to discover the proper context to which a potential intervention could be replying to, and then, predict the intervention status. This model implicitly assesses the importance (or urgency) of the existing thread's context to decide whether an intervention is necessary. For example in Figure SECREF1 , prior to the instructor's intervention, the ultimate post (Post #6) by Student 2 already acknowledged the OP's gratitude for his answer. In this regard, the instructor may have decided to use this point to summarize the entire thread to consolidate all the pertinent positions. Here, we might assume that the instructor's reply takes the entire thread (Posts #1–6) as the context for her reply.",
+        "This subproblem of inferring the context scope is where our innovation centers on. To be clear, in order to make the prediction that a instruction intervention is now necessary on a thread, the instructor's reply is not yet available — the model predicts whether a reply is necessary — so in the example, only Posts #1–6 are available in the problem setting. To infer the context, we have to decide which subsequence of posts are the most plausible motivation for an intervention.",
+        "Recent work in deep neural modeling has used an attention mechanism as a focusing query to highlight specific items within the input history that significantly influence the current decision point. Our work employs this mechanism – but with a twist: due to the fact that the actual instructor intervention is not (yet) available at the decision timing, we cannot use any actual intervention to decide the context. To employ attention, we must then employ a surrogate text as the query to train our prediction model. Our model variants model assess the suitability of such surrogate texts for the attention mechanism basis.",
+        "Congruent with the representation of the input forums, in all our proposed models, we encode the discussion thread hierarchically. We first build representations for each post by passing pre-trained word vector representations from GloVe BIBREF9 for each word through an LSTM BIBREF10 , INLINEFORM0 . We use the last layer output of the LSTM as a representation of the post. We refer this as the post vector INLINEFORM1 .",
+        "Then each post INLINEFORM0 is passed through another LSTM, INLINEFORM1 , whose last layer output forms the encoding of the entire thread. Hidden unit outputs of INLINEFORM2 represent the contexts INLINEFORM3 ; that is, snapshots of the threads after each post, as shown in Figure FIGREF1 .",
+        "The INLINEFORM0 and INLINEFORM1 together constitute the hierarchical LSTM (hLSTM) model. This general hLSTM model serves as the basis for our model exploration in the rest of this section."
+      ],
+      "child_pages": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "child_sections": [
+        "Model",
+        "Model",
+        "Model",
+        "Model",
+        "Model",
+        "Model"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Model",
+          0
+        ],
+        [
+          "Model",
+          1
+        ],
+        [
+          "Model",
+          2
+        ],
+        [
+          "Model",
+          3
+        ],
+        [
+          "Model",
+          4
+        ],
+        [
+          "Model",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Model",
+      "section": "Model",
+      "title_path": "Model",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Modelling Context in Forums\n[source_id=11] Context has been used and modelled in various ways for different problems in discussion forums. In a work on a closely related problem of forum thread retrieval BIBREF2 models context using inter-post discourse e.g., Question-Answer. BIBREF3 models the structural dependencies and relationships between forum posts using a conditional random field in their problem to infer the reply structure. Unlike BIBREF2 , BIBREF3 can be used to model any structural dependency and is, therefore, more general. In this paper, we seek to infer general dependencies between a reply and its previous context whereas BIBREF3 inference is limited to pairs of posts. More recently BIBREF4 proposed a context based model which factorises attention over threads of different lengths. Differently, we do not model length but the context before a post. However, our attention models cater to threads of all lengths.\n[source_id=12] BIBREF5 proposed graph structured LSTM to model the explicit reply structure in Reddit forums. Our work does not assume access to such a reply structure because 1) Coursera forums do not provide one and 2) forum participants often err by posting their reply to a different post than that they intended. At the other end of the spectrum are document classification models that do not assume structure in the document layout but try to infer inherent structure in the natural language, viz, words, sentences, paragraphs and documents. Hierarchical attention BIBREF6 is a well know recent work that classifies documents using a multi-level LSTMs with attention mechanism to select important units at each hierarchical level. Differently, we propose a hierarchical model that encodes layout hierarchy between a post and a thread but also infers reply structure using a attention mechanism since the layout does not reliably encode it.",
+      "score": 4.3832518441684964,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        11,
+        12
+      ],
+      "child_qasper_evidence_texts": [
+        "Context has been used and modelled in various ways for different problems in discussion forums. In a work on a closely related problem of forum thread retrieval BIBREF2 models context using inter-post discourse e.g., Question-Answer. BIBREF3 models the structural dependencies and relationships between forum posts using a conditional random field in their problem to infer the reply structure. Unlike BIBREF2 , BIBREF3 can be used to model any structural dependency and is, therefore, more general. In this paper, we seek to infer general dependencies between a reply and its previous context whereas BIBREF3 inference is limited to pairs of posts. More recently BIBREF4 proposed a context based model which factorises attention over threads of different lengths. Differently, we do not model length but the context before a post. However, our attention models cater to threads of all lengths.",
+        "BIBREF5 proposed graph structured LSTM to model the explicit reply structure in Reddit forums. Our work does not assume access to such a reply structure because 1) Coursera forums do not provide one and 2) forum participants often err by posting their reply to a different post than that they intended. At the other end of the spectrum are document classification models that do not assume structure in the document layout but try to infer inherent structure in the natural language, viz, words, sentences, paragraphs and documents. Hierarchical attention BIBREF6 is a well know recent work that classifies documents using a multi-level LSTMs with attention mechanism to select important units at each hierarchical level. Differently, we propose a hierarchical model that encodes layout hierarchy between a post and a thread but also infers reply structure using a attention mechanism since the layout does not reliably encode it."
+      ],
+      "child_pages": [
+        3,
+        3
+      ],
+      "child_sections": [
+        "Modelling Context in Forums",
+        "Modelling Context in Forums"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Modelling Context in Forums",
+          0
+        ],
+        [
+          "Modelling Context in Forums",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Modelling Context in Forums",
+      "section": "Modelling Context in Forums",
+      "title_path": "Modelling Context in Forums",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Massive Open Online Courses (MOOCs) have strived to bridge the social gap in higher education by bringing quality education from reputed universities to students at large. Such massive scaling through online classrooms, however, disrupt co-located, synchronous two-way communication between the students and the instructor.\n[source_id=5] MOOC platforms provide discussion forums for students to talk to their classmates about the lectures, homeworks, quizzes and provide a venue to socialise. Instructors (defined here as the course instructors, their teaching assistants and the MOOC platform's technical staff) monitor the discussion forum to post (reply to their message) in discussion threads among students. We refer to this posting as intervention, following prior work BIBREF0 . However, due to large student enrolment, the student–instructor ratio in MOOCs is very high Therefore, instructors are not able to monitor and participate in all student discussions. To address this problem, a number of works have proposed systems e.g., BIBREF0 , BIBREF1 to aid instructors to selectively intervene on student discussions where they are needed the most.\n[source_id=6] In this paper, we improve the state-of-the-art for instructor intervention in MOOC forums. We propose the first neural models for this prediction problem. We show that modelling the thread structure and the sequence of posts explicitly improves performance. Instructors in different MOOCs from different subject areas intervene differently. For example, on a Science, Technology, Engineering and Mathematics (STEM) MOOC, instructors may often intervene early as possible to resolve misunderstanding of the subject material and prevent confusion. However, in a Humanities MOOC, instructors allow for the students to explore open-ended discussions and debate among themselves. Such instructors may prefer to intervene later in the discussion to encourage further discussion or resolve conflicts among students. We therefore propose attention models to infer the latent context, i.e., the series of posts that trigger an intervention. Earlier studies on MOOC forum intervention either model the entire context or require the context size to be specified explicitly.",
+      "score": 2.9591765112053565,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6
+      ],
+      "child_qasper_evidence_texts": [
+        "Massive Open Online Courses (MOOCs) have strived to bridge the social gap in higher education by bringing quality education from reputed universities to students at large. Such massive scaling through online classrooms, however, disrupt co-located, synchronous two-way communication between the students and the instructor.",
+        "MOOC platforms provide discussion forums for students to talk to their classmates about the lectures, homeworks, quizzes and provide a venue to socialise. Instructors (defined here as the course instructors, their teaching assistants and the MOOC platform's technical staff) monitor the discussion forum to post (reply to their message) in discussion threads among students. We refer to this posting as intervention, following prior work BIBREF0 . However, due to large student enrolment, the student–instructor ratio in MOOCs is very high Therefore, instructors are not able to monitor and participate in all student discussions. To address this problem, a number of works have proposed systems e.g., BIBREF0 , BIBREF1 to aid instructors to selectively intervene on student discussions where they are needed the most.",
+        "In this paper, we improve the state-of-the-art for instructor intervention in MOOC forums. We propose the first neural models for this prediction problem. We show that modelling the thread structure and the sequence of posts explicitly improves performance. Instructors in different MOOCs from different subject areas intervene differently. For example, on a Science, Technology, Engineering and Mathematics (STEM) MOOC, instructors may often intervene early as possible to resolve misunderstanding of the subject material and prevent confusion. However, in a Humanities MOOC, instructors allow for the students to explore open-ended discussions and debate among themselves. Such instructors may prefer to intervene later in the discussion to encourage further discussion or resolve conflicts among students. We therefore propose attention models to infer the latent context, i.e., the series of posts that trigger an intervention. Earlier studies on MOOC forum intervention either model the entire context or require the context size to be specified explicitly."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Contextual Attention Models\n[source_id=27] When they intervene, instructors either pay attention to a specific post or a series of posts, which trigger their reply. However, instructors rarely explicitly indicate to which post(s) their intervention is in relation to. This is the case in our corpus, party due to Coursera's user interface which only allows for single level comments (see Figure FIGREF2 ). Based solely on the binary, thread-level intervention signal, our secondary objective seeks to infer the appropriate context – represented by a sequence of posts – as the basis for the intervention.\n[source_id=28] We only consider linear contiguous series of posts starting with the thread's original post to constitute to a context; e.g., INLINEFORM0 . This is a reasonable as MOOC forum posts always reply to the original post or to a subsequent post, which in turn replies to the original post. This is in contrast to forums such as Reddit that have a tree or graph-like structure that require forum structure to be modelled explicitly, such as in BIBREF5 .\n[source_id=29] We propose three neural attention BIBREF11 variants based on how an instructor might attend and reply to a context in a thread: the ultimate, penultimate and any post attention models. We review each of these in turn.\n[source_id=30] Ultimate Post Attention (UPA) Model. In this model we attend to the context represented by hidden state of the INLINEFORM0 . We use the post prior to the instructor's reply as a query over the contexts INLINEFORM1 to compute attention weights INLINEFORM2 , which are then used to compute the attended context representation INLINEFORM3 (recall again that the intervention text itself is not available for this purpose). This attention formulation makes an equivalence between the final INLINEFORM4 post and the prospective intervention, using Post INLINEFORM5 as the query for finding the appropriate context INLINEFORM6 , inclusive of itself INLINEFORM7 . Said in another way, UPA uses the most recent content in the thread as the attentional query for context.\n[source_id=31] For example, if post INLINEFORM0 is the instructor's reply, post INLINEFORM1 will query over the contexts INLINEFORM2 and INLINEFORM3 . The model schematic is shown in Figure FIGREF12 .\n[source_id=32] The attended context representations are computed as: DISPLAYFORM0\n[source_id=33] The INLINEFORM0 representation is then passed through a fully connected softmax layer to yield the binary prediction.\n[source_id=34] Penultimate Post Attention (PPA) Model. While the UPA model uses the most recent text and makes the ultimate post itself available as potential context, our the ultimate post may be better modeled as having any of its prior posts as potential context. Penultimate Post Attention (PPA) variant does this. The schematic and the equations for the PPA model are obtained by summing over contexts INLINEFORM0 in Equation EQREF10 and Figure FIGREF12 . While we could properly model such a context inference decision with any post INLINEFORM1 and prospective contexts INLINEFORM2 (where INLINEFORM3 is a random post), it makes sense to use the penultimate post, as we can make the most information available to the model for the context inference.\n[source_id=35] The attended context representations are computed as: DISPLAYFORM0\n[source_id=36] Any Post Attention (APA) Model. APA further relaxes both UPA and PPA, allowing APA to generalize and hypothesize that the prospective instructor intervention is based on the context that any previous post INLINEFORM0 replied to. In this model, each post INLINEFORM1 is set as a query to attend to its previous context INLINEFORM2 . For example, INLINEFORM3 will attend to INLINEFORM4 . Different from standard attention mechanisms, APA attention weights INLINEFORM5 are obtained by normalising interaction matrix over the different queries.\n[source_id=37] In APA, the attention context INLINEFORM0 is computed via: DISPLAYFORM0",
+      "score": 2.6454674496607535,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37
+      ],
+      "child_qasper_evidence_texts": [
+        "When they intervene, instructors either pay attention to a specific post or a series of posts, which trigger their reply. However, instructors rarely explicitly indicate to which post(s) their intervention is in relation to. This is the case in our corpus, party due to Coursera's user interface which only allows for single level comments (see Figure FIGREF2 ). Based solely on the binary, thread-level intervention signal, our secondary objective seeks to infer the appropriate context – represented by a sequence of posts – as the basis for the intervention.",
+        "We only consider linear contiguous series of posts starting with the thread's original post to constitute to a context; e.g., INLINEFORM0 . This is a reasonable as MOOC forum posts always reply to the original post or to a subsequent post, which in turn replies to the original post. This is in contrast to forums such as Reddit that have a tree or graph-like structure that require forum structure to be modelled explicitly, such as in BIBREF5 .",
+        "We propose three neural attention BIBREF11 variants based on how an instructor might attend and reply to a context in a thread: the ultimate, penultimate and any post attention models. We review each of these in turn.",
+        "Ultimate Post Attention (UPA) Model. In this model we attend to the context represented by hidden state of the INLINEFORM0 . We use the post prior to the instructor's reply as a query over the contexts INLINEFORM1 to compute attention weights INLINEFORM2 , which are then used to compute the attended context representation INLINEFORM3 (recall again that the intervention text itself is not available for this purpose). This attention formulation makes an equivalence between the final INLINEFORM4 post and the prospective intervention, using Post INLINEFORM5 as the query for finding the appropriate context INLINEFORM6 , inclusive of itself INLINEFORM7 . Said in another way, UPA uses the most recent content in the thread as the attentional query for context.",
+        "For example, if post INLINEFORM0 is the instructor's reply, post INLINEFORM1 will query over the contexts INLINEFORM2 and INLINEFORM3 . The model schematic is shown in Figure FIGREF12 .",
+        "The attended context representations are computed as: DISPLAYFORM0",
+        "The INLINEFORM0 representation is then passed through a fully connected softmax layer to yield the binary prediction.",
+        "Penultimate Post Attention (PPA) Model. While the UPA model uses the most recent text and makes the ultimate post itself available as potential context, our the ultimate post may be better modeled as having any of its prior posts as potential context. Penultimate Post Attention (PPA) variant does this. The schematic and the equations for the PPA model are obtained by summing over contexts INLINEFORM0 in Equation EQREF10 and Figure FIGREF12 . While we could properly model such a context inference decision with any post INLINEFORM1 and prospective contexts INLINEFORM2 (where INLINEFORM3 is a random post), it makes sense to use the penultimate post, as we can make the most information available to the model for the context inference.",
+        "The attended context representations are computed as: DISPLAYFORM0",
+        "Any Post Attention (APA) Model. APA further relaxes both UPA and PPA, allowing APA to generalize and hypothesize that the prospective instructor intervention is based on the context that any previous post INLINEFORM0 replied to. In this model, each post INLINEFORM1 is set as a query to attend to its previous context INLINEFORM2 . For example, INLINEFORM3 will attend to INLINEFORM4 . Different from standard attention mechanisms, APA attention weights INLINEFORM5 are obtained by normalising interaction matrix over the different queries.",
+        "In APA, the attention context INLINEFORM0 is computed via: DISPLAYFORM0"
+      ],
+      "child_pages": [
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Contextual Attention Models",
+        "Contextual Attention Models",
+        "Contextual Attention Models",
+        "Contextual Attention Models",
+        "Contextual Attention Models",
+        "Contextual Attention Models",
+        "Contextual Attention Models",
+        "Contextual Attention Models",
+        "Contextual Attention Models",
+        "Contextual Attention Models",
+        "Contextual Attention Models"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Contextual Attention Models",
+          0
+        ],
+        [
+          "Contextual Attention Models",
+          1
+        ],
+        [
+          "Contextual Attention Models",
+          2
+        ],
+        [
+          "Contextual Attention Models",
+          3
+        ],
+        [
+          "Contextual Attention Models",
+          4
+        ],
+        [
+          "Contextual Attention Models",
+          5
+        ],
+        [
+          "Contextual Attention Models",
+          6
+        ],
+        [
+          "Contextual Attention Models",
+          7
+        ],
+        [
+          "Contextual Attention Models",
+          8
+        ],
+        [
+          "Contextual Attention Models",
+          9
+        ],
+        [
+          "Contextual Attention Models",
+          10
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Contextual Attention Models",
+      "section": "Contextual Attention Models",
+      "title_path": "Contextual Attention Models",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Instructor Intervention in MOOC forums\n[source_id=14] The problem of predicting instructor intervention in MOOCs was proposed by BIBREF0 . Later BIBREF7 evaluated baseline models by BIBREF0 over a larger corpus and found the results to vary widely across MOOCs. Since then subsequent works have used similar diverse evaluations on the same prediction problem BIBREF1 , BIBREF8 . BIBREF1 proposed models with discourse features to enable better prediction over unseen MOOCs. BIBREF8 recently showed interventions on Coursera forums to be biased by the position at which a thread appears to an instructor viewing the forum interface and proposed methods for debiased prediction.\n[source_id=15] While all works since BIBREF0 address key limitations in this line of research, they have not investigated the role of structure and sequence in the threaded discussion in predicting instructor interventions. BIBREF0 proposed probabilistic graphical models to model structure and sequence. They inferred vocabulary dependent latent post categories to model the thread sequence and infer states that triggered intervention. Their model, however, requires a hyperparameter for the number of latent states. It is likely that their empirically reported setting will not generalise due to their weak evaluation BIBREF7 . In this paper, we propose models to infer the context that triggers instructor intervention that does not require context lengths to be set apriori. All our proposed models generalise over modelling assumptions made by BIBREF0 .\n[source_id=16] For the purpose of comparison against a state-of-the-art and competing baselines we choose BIBREF7 since BIBREF0 's system and data are not available for replication.",
+      "score": 2.192712005818686,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        14,
+        15,
+        16
+      ],
+      "child_qasper_evidence_texts": [
+        "The problem of predicting instructor intervention in MOOCs was proposed by BIBREF0 . Later BIBREF7 evaluated baseline models by BIBREF0 over a larger corpus and found the results to vary widely across MOOCs. Since then subsequent works have used similar diverse evaluations on the same prediction problem BIBREF1 , BIBREF8 . BIBREF1 proposed models with discourse features to enable better prediction over unseen MOOCs. BIBREF8 recently showed interventions on Coursera forums to be biased by the position at which a thread appears to an instructor viewing the forum interface and proposed methods for debiased prediction.",
+        "While all works since BIBREF0 address key limitations in this line of research, they have not investigated the role of structure and sequence in the threaded discussion in predicting instructor interventions. BIBREF0 proposed probabilistic graphical models to model structure and sequence. They inferred vocabulary dependent latent post categories to model the thread sequence and infer states that triggered intervention. Their model, however, requires a hyperparameter for the number of latent states. It is likely that their empirically reported setting will not generalise due to their weak evaluation BIBREF7 . In this paper, we propose models to infer the context that triggers instructor intervention that does not require context lengths to be set apriori. All our proposed models generalise over modelling assumptions made by BIBREF0 .",
+        "For the purpose of comparison against a state-of-the-art and competing baselines we choose BIBREF7 since BIBREF0 's system and data are not available for replication."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Instructor Intervention in MOOC forums",
+        "Instructor Intervention in MOOC forums",
+        "Instructor Intervention in MOOC forums"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Instructor Intervention in MOOC forums",
+          0
+        ],
+        [
+          "Instructor Intervention in MOOC forums",
+          1
+        ],
+        [
+          "Instructor Intervention in MOOC forums",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Instructor Intervention in MOOC forums",
+      "section": "Instructor Intervention in MOOC forums",
+      "title_path": "Instructor Intervention in MOOC forums",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Conclusion\n[source_id=53] We predict instructor intervention on student discussions by first inferring the optimal size of the context needed to decide on the intervention decision for the intervened post. We first show that a structured representation of the complete thread as the context is better than a bag-of-words, feature-rich representation. We then propose attention-based models to infer and select a context – defined as a contiguous subsequence of student posts – to improve over a model that always takes the complete thread as a context to prediction intervention. Our Any Post Attention (APA) model enables instructors to tune the model to predict intervention early or late. We posit our APA model will enable MOOC instructors employing varying pedagogical styles to use the model equally well. We introspect the attention models' performance across threads of varying lengths and show that APA predicts intervention on longer threads, which possesses more candidate contexts, better.\n[source_id=54] We note that the recall of the predictive models for longer threads (that is, threads of length greater 2) can still be improved. Models perform differently between shorter and longer length. An ensemble model or a multi-objective loss function is thus planned in our future work to better prediction on such longer threads.",
+      "score": 2.0258165021006986,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        53,
+        54
+      ],
+      "child_qasper_evidence_texts": [
+        "We predict instructor intervention on student discussions by first inferring the optimal size of the context needed to decide on the intervention decision for the intervened post. We first show that a structured representation of the complete thread as the context is better than a bag-of-words, feature-rich representation. We then propose attention-based models to infer and select a context – defined as a contiguous subsequence of student posts – to improve over a model that always takes the complete thread as a context to prediction intervention. Our Any Post Attention (APA) model enables instructors to tune the model to predict intervention early or late. We posit our APA model will enable MOOC instructors employing varying pedagogical styles to use the model equally well. We introspect the attention models' performance across threads of varying lengths and show that APA predicts intervention on longer threads, which possesses more candidate contexts, better.",
+        "We note that the recall of the predictive models for longer threads (that is, threads of length greater 2) can still be improved. Models perform differently between shorter and longer length. An ensemble model or a multi-objective loss function is thus planned in our future work to better prediction on such longer threads."
+      ],
+      "child_pages": [
+        11,
+        11
+      ],
+      "child_sections": [
+        "Conclusion",
+        "Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion",
+          0
+        ],
+        [
+          "Conclusion",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Data and Preprocessing\n[source_id=18] We evaluate our proposed models over a corpus of 12 MOOC iterations (offerings) on Coursera.org In partnership with Coursera and in line with its Terms of Service, we obtained the data for use in our academic research. Following prior work BIBREF7 we evaluate over a diverse dataset to represent MOOCs of varying sizes, instructor styles, instructor team sizes and number of threads intervened. We only include threads from sub-forums on Lecture, Homework, Quiz and Exam. We also normalise and label sub-forums with other non-standard names (e.g., Assignments instead of Homework) into of the four said sub-forums. Threads on general discussion, meet and greet and other custom sub-forums for social chitchat are omitted as our focus is to aid instructors on intervening on discussion on the subject matter. We also exclude announcement threads and other threads started by instructors since they are not interventions. We preprocess each thread by replacing URLs, equations and other mathematical formulae and references to timestamps in lecture videos by tokens INLINEFORM0 URL INLINEFORM1 , INLINEFORM2 MATH INLINEFORM3 , INLINEFORM4 TIMEREF INLINEFORM5 respectively. We also truncate intervened threads to only include posts before the first instructor post since the instructor's and subsequent posts will bias the prediction due to the instructor's post.",
+      "score": 1.9522039089052823,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        18
+      ],
+      "child_qasper_evidence_texts": [
+        "We evaluate our proposed models over a corpus of 12 MOOC iterations (offerings) on Coursera.org In partnership with Coursera and in line with its Terms of Service, we obtained the data for use in our academic research. Following prior work BIBREF7 we evaluate over a diverse dataset to represent MOOCs of varying sizes, instructor styles, instructor team sizes and number of threads intervened. We only include threads from sub-forums on Lecture, Homework, Quiz and Exam. We also normalise and label sub-forums with other non-standard names (e.g., Assignments instead of Homework) into of the four said sub-forums. Threads on general discussion, meet and greet and other custom sub-forums for social chitchat are omitted as our focus is to aid instructors on intervening on discussion on the subject matter. We also exclude announcement threads and other threads started by instructors since they are not interventions. We preprocess each thread by replacing URLs, equations and other mathematical formulae and references to timestamps in lecture videos by tokens INLINEFORM0 URL INLINEFORM1 , INLINEFORM2 MATH INLINEFORM3 , INLINEFORM4 TIMEREF INLINEFORM5 respectively. We also truncate intervened threads to only include posts before the first instructor post since the instructor's and subsequent posts will bias the prediction due to the instructor's post."
+      ],
+      "child_pages": [
+        5
+      ],
+      "child_sections": [
+        "Data and Preprocessing"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Data and Preprocessing",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Data and Preprocessing",
+      "section": "Data and Preprocessing",
+      "title_path": "Data and Preprocessing",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 2,
+      "content": "Due to time constraints, course instructors often need to selectively participate in student discussion threads, due to their limited bandwidth and lopsided student--instructor ratio on online forums. We propose the first deep learning models for this binary prediction problem. We propose novel attention based models to infer the amount of latent context necessary to predict instructor intervention. Such models also allow themselves to be tuned to instructor's preference to intervene early or late. Our three proposed attentive model variants to infer the latent context improve over the state-of-the-art by a significant, large margin of 11% in F1 and 10% in recall, on average. Further, introspection of attention help us better understand what aspects of a discussion post propagate through the discussion thread that prompts instructor intervention.",
+      "qasper_evidence_text": "Due to time constraints, course instructors often need to selectively participate in student discussion threads, due to their limited bandwidth and lopsided student--instructor ratio on online forums. We propose the first deep learning models for this binary prediction problem. We propose novel attention based models to infer the amount of latent context necessary to predict instructor intervention. Such models also allow themselves to be tuned to instructor's preference to intervene early or late. Our three proposed attentive model variants to infer the latent context improve over the state-of-the-art by a significant, large margin of 11% in F1 and 10% in recall, on average. Further, introspection of attention help us better understand what aspects of a discussion post propagate through the discussion thread that prompts instructor intervention.",
+      "source_node_id": 2,
+      "node_id": 2,
+      "paragraph_id": 2,
+      "evidence_id": 2,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_0",
+      "rank": 1,
+      "score": 8.823492123054226,
+      "block_type": "paragraph",
+      "page": 0,
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title": "Abstract",
+      "hotpot_title": "Abstract",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 20,
+      "content": "The key innovation of our work is to decompose the intervention prediction problem into a two-stage model that first explicitly tries to discover the proper context to which a potential intervention could be replying to, and then, predict the intervention status. This model implicitly assesses the importance (or urgency) of the existing thread's context to decide whether an intervention is necessary. For example in Figure SECREF1 , prior to the instructor's intervention, the ultimate post (Post #6) by Student 2 already acknowledged the OP's gratitude for his answer. In this regard, the instructor may have decided to use this point to summarize the entire thread to consolidate all the pertinent positions. Here, we might assume that the instructor's reply takes the entire thread (Posts #1–6) as the context for her reply.",
+      "qasper_evidence_text": "The key innovation of our work is to decompose the intervention prediction problem into a two-stage model that first explicitly tries to discover the proper context to which a potential intervention could be replying to, and then, predict the intervention status. This model implicitly assesses the importance (or urgency) of the existing thread's context to decide whether an intervention is necessary. For example in Figure SECREF1 , prior to the instructor's intervention, the ultimate post (Post #6) by Student 2 already acknowledged the OP's gratitude for his answer. In this regard, the instructor may have decided to use this point to summarize the entire thread to consolidate all the pertinent positions. Here, we might assume that the instructor's reply takes the entire thread (Posts #1–6) as the context for her reply.",
+      "source_node_id": 20,
+      "node_id": 20,
+      "paragraph_id": 20,
+      "evidence_id": 20,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_6",
+      "rank": 2,
+      "score": 5.2543801187452,
+      "block_type": "paragraph",
+      "page": 6,
+      "section_id": "Model",
+      "section": "Model",
+      "title": "Model",
+      "hotpot_title": "Model",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 2
+    },
+    {
+      "id": 27,
+      "content": "When they intervene, instructors either pay attention to a specific post or a series of posts, which trigger their reply. However, instructors rarely explicitly indicate to which post(s) their intervention is in relation to. This is the case in our corpus, party due to Coursera's user interface which only allows for single level comments (see Figure FIGREF2 ). Based solely on the binary, thread-level intervention signal, our secondary objective seeks to infer the appropriate context – represented by a sequence of posts – as the basis for the intervention.",
+      "qasper_evidence_text": "When they intervene, instructors either pay attention to a specific post or a series of posts, which trigger their reply. However, instructors rarely explicitly indicate to which post(s) their intervention is in relation to. This is the case in our corpus, party due to Coursera's user interface which only allows for single level comments (see Figure FIGREF2 ). Based solely on the binary, thread-level intervention signal, our secondary objective seeks to infer the appropriate context – represented by a sequence of posts – as the basis for the intervention.",
+      "source_node_id": 27,
+      "node_id": 27,
+      "paragraph_id": 27,
+      "evidence_id": 27,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_7",
+      "rank": 5,
+      "score": 2.6454674496607535,
+      "block_type": "paragraph",
+      "page": 7,
+      "section_id": "Contextual Attention Models",
+      "section": "Contextual Attention Models",
+      "title": "Contextual Attention Models",
+      "hotpot_title": "Contextual Attention Models",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 3
+    },
+    {
+      "id": 30,
+      "content": "Ultimate Post Attention (UPA) Model. In this model we attend to the context represented by hidden state of the INLINEFORM0 . We use the post prior to the instructor's reply as a query over the contexts INLINEFORM1 to compute attention weights INLINEFORM2 , which are then used to compute the attended context representation INLINEFORM3 (recall again that the intervention text itself is not available for this purpose). This attention formulation makes an equivalence between the final INLINEFORM4 post and the prospective intervention, using Post INLINEFORM5 as the query for finding the appropriate context INLINEFORM6 , inclusive of itself INLINEFORM7 . Said in another way, UPA uses the most recent content in the thread as the attentional query for context.",
+      "qasper_evidence_text": "Ultimate Post Attention (UPA) Model. In this model we attend to the context represented by hidden state of the INLINEFORM0 . We use the post prior to the instructor's reply as a query over the contexts INLINEFORM1 to compute attention weights INLINEFORM2 , which are then used to compute the attended context representation INLINEFORM3 (recall again that the intervention text itself is not available for this purpose). This attention formulation makes an equivalence between the final INLINEFORM4 post and the prospective intervention, using Post INLINEFORM5 as the query for finding the appropriate context INLINEFORM6 , inclusive of itself INLINEFORM7 . Said in another way, UPA uses the most recent content in the thread as the attentional query for context.",
+      "source_node_id": 30,
+      "node_id": 30,
+      "paragraph_id": 30,
+      "evidence_id": 30,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_7",
+      "rank": 5,
+      "score": 2.6454674496607535,
+      "block_type": "paragraph",
+      "page": 7,
+      "section_id": "Contextual Attention Models",
+      "section": "Contextual Attention Models",
+      "title": "Contextual Attention Models",
+      "hotpot_title": "Contextual Attention Models",
+      "sent_id": 3,
+      "hotpot_sent_id": 3,
+      "supporting_rank": 4
+    }
+  ],
+  "supporting_block_ids": [
+    2,
+    20,
+    27,
+    30
+  ]
+}

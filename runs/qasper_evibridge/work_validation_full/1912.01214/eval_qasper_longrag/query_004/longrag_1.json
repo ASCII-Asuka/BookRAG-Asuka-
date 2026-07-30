@@ -1,0 +1,88 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Although Neural Machine Translation (NMT) has dominated recent research on translation tasks BIBREF0, BIBREF1, BIBREF2, NMT heavily relies on large-scale parallel data, resulting in poor performance on low-resource or zero-resource language pairs BIBREF3. Translation between these low-resource languages (e.g., Arabic$\\rightarrow $Spanish) is usually accomplished with pivoting through a rich-resource language (such as English), i.e., Arabic (source) sentence is translated to English (pivot) first which is later translated to Spanish (target) BIBREF4, BIBREF5. However, the pivot-based method requires doubled decoding time and suffers from the propagation of translation errors.\n[source_id=5] One common alternative to avoid pivoting in NMT is transfer learning BIBREF6, BIBREF7, BIBREF8, BIBREF9 which leverages a high-resource pivot$\\rightarrow $target model (parent) to initialize a low-resource source$\\rightarrow $target model (child) that is further optimized with a small amount of available parallel data. Although this approach has achieved success in some low-resource language pairs, it still performs very poorly in extremely low-resource or zero-resource translation scenario. Specifically, BIBREF8 reports that without any child model training data, the performance of the parent model on the child test set is miserable.\n[source_id=6] In this work, we argue that the language space mismatch problem, also named domain shift problem BIBREF10, brings about the zero-shot translation failure in transfer learning. It is because transfer learning has no explicit training process to guarantee that the source and pivot languages share the same feature distributions, causing that the child model inherited from the parent model fails in such a situation. For instance, as illustrated in the left of Figure FIGREF1, the points of the sentence pair with the same semantics are not overlapping in source space, resulting in that the shared decoder will generate different translations denoted by different points in target space. Actually, transfer learning for NMT can be viewed as a multi-domain problem where each source language forms a new domain. Minimizing the discrepancy between the feature distributions of different source languages, i.e., different domains, will ensure the smooth transition between the parent and child models, as shown in the right of Figure FIGREF1. One way to achieve this goal is the fine-tuning technique, which forces the model to forget the specific knowledge from parent data and learn new features from child data. However, the domain shift problem still exists, and the demand of parallel child data for fine-tuning heavily hinders transfer learning for NMT towards the zero-resource setting.\n[source_id=7] In this paper, we explore the transfer learning in a common zero-shot scenario where there are a lot of source$\\leftrightarrow $pivot and pivot$\\leftrightarrow $target parallel data but no source$\\leftrightarrow $target parallel data. In this scenario, we propose a simple but effective transfer approach, the key idea of which is to relieve the burden of the domain shift problem by means of cross-lingual pre-training. To this end, we firstly investigate the performance of two existing cross-lingual pre-training methods proposed by BIBREF11 in zero-shot translation scenario. Besides, a novel pre-training method called BRidge Language Modeling (BRLM) is designed to make full use of the source$\\leftrightarrow $pivot bilingual data to obtain a universal encoder for different languages. Once the universal encoder is constructed, we only need to train the pivot$\\rightarrow $target model and then test this model in source$\\rightarrow $target direction directly. The main contributions of this paper are as follows:\n[source_id=8] We propose a new transfer learning approach for NMT which uses the cross-lingual language model pre-training to enable a high performance on zero-shot translation.\n[source_id=9] We propose a novel pre-training method called BRLM, which can effectively alleviates the distance between different source language spaces.\n[source_id=10] Our proposed approach significantly improves zero-shot translation performance, consistently surpassing pivoting and multilingual approaches. Meanwhile, the performance on supervised translation direction remains the same level or even better when using our method.",
+  "score": 2.6821791421872914,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "child_qasper_evidence_texts": [
+    "Although Neural Machine Translation (NMT) has dominated recent research on translation tasks BIBREF0, BIBREF1, BIBREF2, NMT heavily relies on large-scale parallel data, resulting in poor performance on low-resource or zero-resource language pairs BIBREF3. Translation between these low-resource languages (e.g., Arabic$\\rightarrow $Spanish) is usually accomplished with pivoting through a rich-resource language (such as English), i.e., Arabic (source) sentence is translated to English (pivot) first which is later translated to Spanish (target) BIBREF4, BIBREF5. However, the pivot-based method requires doubled decoding time and suffers from the propagation of translation errors.",
+    "One common alternative to avoid pivoting in NMT is transfer learning BIBREF6, BIBREF7, BIBREF8, BIBREF9 which leverages a high-resource pivot$\\rightarrow $target model (parent) to initialize a low-resource source$\\rightarrow $target model (child) that is further optimized with a small amount of available parallel data. Although this approach has achieved success in some low-resource language pairs, it still performs very poorly in extremely low-resource or zero-resource translation scenario. Specifically, BIBREF8 reports that without any child model training data, the performance of the parent model on the child test set is miserable.",
+    "In this work, we argue that the language space mismatch problem, also named domain shift problem BIBREF10, brings about the zero-shot translation failure in transfer learning. It is because transfer learning has no explicit training process to guarantee that the source and pivot languages share the same feature distributions, causing that the child model inherited from the parent model fails in such a situation. For instance, as illustrated in the left of Figure FIGREF1, the points of the sentence pair with the same semantics are not overlapping in source space, resulting in that the shared decoder will generate different translations denoted by different points in target space. Actually, transfer learning for NMT can be viewed as a multi-domain problem where each source language forms a new domain. Minimizing the discrepancy between the feature distributions of different source languages, i.e., different domains, will ensure the smooth transition between the parent and child models, as shown in the right of Figure FIGREF1. One way to achieve this goal is the fine-tuning technique, which forces the model to forget the specific knowledge from parent data and learn new features from child data. However, the domain shift problem still exists, and the demand of parallel child data for fine-tuning heavily hinders transfer learning for NMT towards the zero-resource setting.",
+    "In this paper, we explore the transfer learning in a common zero-shot scenario where there are a lot of source$\\leftrightarrow $pivot and pivot$\\leftrightarrow $target parallel data but no source$\\leftrightarrow $target parallel data. In this scenario, we propose a simple but effective transfer approach, the key idea of which is to relieve the burden of the domain shift problem by means of cross-lingual pre-training. To this end, we firstly investigate the performance of two existing cross-lingual pre-training methods proposed by BIBREF11 in zero-shot translation scenario. Besides, a novel pre-training method called BRidge Language Modeling (BRLM) is designed to make full use of the source$\\leftrightarrow $pivot bilingual data to obtain a universal encoder for different languages. Once the universal encoder is constructed, we only need to train the pivot$\\rightarrow $target model and then test this model in source$\\rightarrow $target direction directly. The main contributions of this paper are as follows:",
+    "We propose a new transfer learning approach for NMT which uses the cross-lingual language model pre-training to enable a high performance on zero-shot translation.",
+    "We propose a novel pre-training method called BRLM, which can effectively alleviates the distance between different source language spaces.",
+    "Our proposed approach significantly improves zero-shot translation performance, consistently surpassing pivoting and multilingual approaches. Meanwhile, the performance on supervised translation direction remains the same level or even better when using our method."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

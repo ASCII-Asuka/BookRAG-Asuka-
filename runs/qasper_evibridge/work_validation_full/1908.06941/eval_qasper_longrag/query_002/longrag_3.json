@@ -1,0 +1,124 @@
+{
+  "id": "longrag_3",
+  "content": "[Section] PMI & Matrix Factorization\n[source_id=13] PMI: A cooccurrence matrix $M$ is constructed by sliding a symmetric window over the subsampled BIBREF9 training corpus and for each center word $w$ and context word $c$ within the window, incrementing $M_{wc}$. $\\mathit {PMI}$ is then equal to:\n[source_id=14] where * denotes summation over the corresponding index. To deal with negative values, we propose clipped $\\mathit {PMI}$,\n[source_id=15] which is equivalent to $\\mathit {PPMI}$ when $z = 0$.\n[source_id=16] Matrix factorization: LexVec BIBREF15 performs the factorization $M^{\\prime } = WC^\\top $, where $M^{\\prime }$ is any transformation of $M$ (such as $\\mathit {PPMI}$), and $W, C$ are the word and context embeddings respectively. By sliding a symmetric window over the training corpus (window sampling), LexVec performs one Stochastic Gradient Descent (SGD) step every time a $(w,c)$ pair is observed, minimizing\n[source_id=17] Additionally, for every center word $w$, $k$ negative words BIBREF9 are drawn from the unigram context distribution $P_n$ (negative sampling) and SGD steps taken to minimize:\n[source_id=18] Thus the loss function prioritizes the correct approximation of frequently cooccurring pairs and of pairs where either word occurs with high frequency; these are pairs for which we have more reliable statistics.\n[source_id=19] In our experiments, we use LexVec over Singular Value Decomposition (SVD) because a) Empirical results shows it outperforms SVD BIBREF15. b) The weighting of reconstruction errors by statistical confidence is particularly important for $\\mathit {\\texttt {-}PMI}$, where negative cooccurrence between a pair of frequent words is more significant and should be better approximated than that between a pair of rare words. GloVe's matrix factorization is even more unsuitable for our experiments as its loss weighting — a monotonically increasing function of $M_{wc}$ — ignores reconstruction errors of non-cooccurring pairs.\n[source_id=20] Spectrum of PMI: To better understand the distribution of $\\mathit {CPMI}$ values, we plot a histogram of $10^5$ pairs randomly sampled by window sampling and negative sampling in fig:hist, setting $z=-5$. We can clearly see the spectrum of $\\mathit {\\texttt {-}PMI}$ that is collapsed when we use $\\mathit {PPMI}$ ($z=0$). In practice we find that $z=-2$ captures most of the negative spectrum and consistently gives better results than smaller values so we use this value for the rest of this paper. We suspect this is due to the large number of non-cooccurring pairs ($41.7\\%$ in this sample) which end up dominating the loss function when $z$ is too small.\n[source_id=21] Normalization: We also experiment with normalized $\\mathit {PMI}$ ($\\mathit {NPMI}$) BIBREF7:\n[source_id=22] such that $NPMI(w,c) = -1$ when $(w,c)$ never cooccur, $NPMI(w,c) = 0$ when they are independent, and $NPMI(w,c) = 1$ when they always cooccur together. This effectively captures the entire negative spectrum, but has the downside of normalization which discards scale information. In practice we find this works poorly if done symmetrically, so we introduce a variant called $\\mathit {NNEGPMI}$ which only normalizes $\\mathit {\\texttt {-}PMI}$:\n[source_id=23] We also experimented with Laplace smoothing as in BIBREF18 for various pseudocounts but found it to work consistently worse than both $\\mathit {CPMI_z}$ and $\\mathit {NNEGPMI}$ so we omit further discussion in this paper.",
+  "score": 1.6375630982210014,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_3",
+  "child_source_node_ids": [
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "child_qasper_evidence_texts": [
+    "PMI: A cooccurrence matrix $M$ is constructed by sliding a symmetric window over the subsampled BIBREF9 training corpus and for each center word $w$ and context word $c$ within the window, incrementing $M_{wc}$. $\\mathit {PMI}$ is then equal to:",
+    "where * denotes summation over the corresponding index. To deal with negative values, we propose clipped $\\mathit {PMI}$,",
+    "which is equivalent to $\\mathit {PPMI}$ when $z = 0$.",
+    "Matrix factorization: LexVec BIBREF15 performs the factorization $M^{\\prime } = WC^\\top $, where $M^{\\prime }$ is any transformation of $M$ (such as $\\mathit {PPMI}$), and $W, C$ are the word and context embeddings respectively. By sliding a symmetric window over the training corpus (window sampling), LexVec performs one Stochastic Gradient Descent (SGD) step every time a $(w,c)$ pair is observed, minimizing",
+    "Additionally, for every center word $w$, $k$ negative words BIBREF9 are drawn from the unigram context distribution $P_n$ (negative sampling) and SGD steps taken to minimize:",
+    "Thus the loss function prioritizes the correct approximation of frequently cooccurring pairs and of pairs where either word occurs with high frequency; these are pairs for which we have more reliable statistics.",
+    "In our experiments, we use LexVec over Singular Value Decomposition (SVD) because a) Empirical results shows it outperforms SVD BIBREF15. b) The weighting of reconstruction errors by statistical confidence is particularly important for $\\mathit {\\texttt {-}PMI}$, where negative cooccurrence between a pair of frequent words is more significant and should be better approximated than that between a pair of rare words. GloVe's matrix factorization is even more unsuitable for our experiments as its loss weighting — a monotonically increasing function of $M_{wc}$ — ignores reconstruction errors of non-cooccurring pairs.",
+    "Spectrum of PMI: To better understand the distribution of $\\mathit {CPMI}$ values, we plot a histogram of $10^5$ pairs randomly sampled by window sampling and negative sampling in fig:hist, setting $z=-5$. We can clearly see the spectrum of $\\mathit {\\texttt {-}PMI}$ that is collapsed when we use $\\mathit {PPMI}$ ($z=0$). In practice we find that $z=-2$ captures most of the negative spectrum and consistently gives better results than smaller values so we use this value for the rest of this paper. We suspect this is due to the large number of non-cooccurring pairs ($41.7\\%$ in this sample) which end up dominating the loss function when $z$ is too small.",
+    "Normalization: We also experiment with normalized $\\mathit {PMI}$ ($\\mathit {NPMI}$) BIBREF7:",
+    "such that $NPMI(w,c) = -1$ when $(w,c)$ never cooccur, $NPMI(w,c) = 0$ when they are independent, and $NPMI(w,c) = 1$ when they always cooccur together. This effectively captures the entire negative spectrum, but has the downside of normalization which discards scale information. In practice we find this works poorly if done symmetrically, so we introduce a variant called $\\mathit {NNEGPMI}$ which only normalizes $\\mathit {\\texttt {-}PMI}$:",
+    "We also experimented with Laplace smoothing as in BIBREF18 for various pseudocounts but found it to work consistently worse than both $\\mathit {CPMI_z}$ and $\\mathit {NNEGPMI}$ so we omit further discussion in this paper."
+  ],
+  "child_pages": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "child_sections": [
+    "PMI & Matrix Factorization",
+    "PMI & Matrix Factorization",
+    "PMI & Matrix Factorization",
+    "PMI & Matrix Factorization",
+    "PMI & Matrix Factorization",
+    "PMI & Matrix Factorization",
+    "PMI & Matrix Factorization",
+    "PMI & Matrix Factorization",
+    "PMI & Matrix Factorization",
+    "PMI & Matrix Factorization",
+    "PMI & Matrix Factorization"
+  ],
+  "child_hotpot_facts": [
+    [
+      "PMI & Matrix Factorization",
+      0
+    ],
+    [
+      "PMI & Matrix Factorization",
+      1
+    ],
+    [
+      "PMI & Matrix Factorization",
+      2
+    ],
+    [
+      "PMI & Matrix Factorization",
+      3
+    ],
+    [
+      "PMI & Matrix Factorization",
+      4
+    ],
+    [
+      "PMI & Matrix Factorization",
+      5
+    ],
+    [
+      "PMI & Matrix Factorization",
+      6
+    ],
+    [
+      "PMI & Matrix Factorization",
+      7
+    ],
+    [
+      "PMI & Matrix Factorization",
+      8
+    ],
+    [
+      "PMI & Matrix Factorization",
+      9
+    ],
+    [
+      "PMI & Matrix Factorization",
+      10
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_3",
+  "section_id": "PMI & Matrix Factorization",
+  "section": "PMI & Matrix Factorization",
+  "title_path": "PMI & Matrix Factorization",
+  "block_type": "long_unit"
+}

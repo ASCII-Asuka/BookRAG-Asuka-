@@ -1,0 +1,115 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Hierarchical seq2seq Generation Model\n[source_id=39] Our question generation model takes the path between an “anchor” and the candidate answer, and outputs a question. We adopt the sequence to sequence architecture as our basic question generation model due to its effectiveness in natural language generation tasks. The hierarchical encoder and the hierarchical attention mechanism are introduced to take into account the structure of the input facts. Facts from external KBs are conventionally integrated into the model using the same way as described in the matching model.\n[source_id=40] As illustrated in Figure 3 , the question generation model contains an encoder and a decoder. We use a hierarchical encoder consisting of two layers to model the meaning of each element (subject, predicate or object) and the relationship between them. Since each element might contain multiple words, we use RNN as the word layer encoder to get the representation of each element. We define the fact level sequence as a path starting from the anchor and ending at the candidate answer. Another RNN is used as the fact level encoder. The last hidden state at the fact layer is fed to the decoder.\n[source_id=41] We develop a hierarchical attention mechanism in the decoder, which first makes soft alignment over the hidden states at the fact layer, the output of which is further used to attend to hidden states at the word level. Specifically, given the decoder hidden state $h^{dec}_{t-1}$ , we use a fact-level attention model $Att_{fct}$ to calculate the contextual vector, which is further combined with the current hidden state $h^{dec}_{t}$ , resulting in $c_{fct}$ . The contextual vector is calculated through weighted averaging over hidden vectors at the fact level, which is given as follows, where $\\odot $ is dot product, $h^{fld}_j$ is the $j$ -th hidden state at the fact layer from the encoder, and $l_f$ is the number of hidden states at the fact level.\n[source_id=42] $$c_{fct} &= GRU(h^{dec}_{t}, \\sum _{j=1}^{{l_f}} \\alpha _{tj}h^{fct}_j) \\\\\n\\alpha _{tj} &= \\frac{ exp(h^{dec}_{t-1} \\odot h^{fct}_j)}{\\sum _{k=1}^{{l_f}}exp(h^{dec}_{t-1} \\odot h^{fct}_k)}$$   (Eq. 19)\n[source_id=43] Similarly, we feed $c_{fct}$ to the word-level attention function $Att_{wrd}$ and calculate over hidden vectors at the word-level. The output $c_{wrd}$ will be concatenated with $h^{dec}_{t}$ to predict the next word.\n[source_id=44] Since many entity names of great importance are rare words from the input, we use the copying mechanism BIBREF20 that learns when to replicate words from the input or to predict words from the target vocabulary. The probability distribution of generating the word $y$ is calculated as follows, in which the $softmax$ function is calculated over a combined logits from both sides.\n[source_id=45] $$\\begin{split}\n&p(y)=\\frac{exp({e_y \\odot W_g[h_t^{dec};c_{wrd}]})+exp(s_c(y))}{Z}\\\\\n&s_c(y) = c_{wrd} \\odot {tanh(W_ch_t^{wrd})}\n\\end{split}$$   (Eq. 20)\n[source_id=46] We train our question generation model with maximum likelihood estimation. The loss function is given as follows, where $D$ is the training corpus. We use beam search in the inference process.\n[source_id=47] $$l = -\\sum _{(x,y)\\in D} \\sum _t log p(y_t |y_{<t}, x)$$   (Eq. 21)\n[source_id=48] An advantage of the model is that external knowledge could be easily incorporated with the same mechanism as we have described in section Incorporating External Knowledge. We enhance the representation of an argument or a predicate by concatenating open KB vectors into encoder hidden states.",
+  "score": 4.845015512315577,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48
+  ],
+  "child_qasper_evidence_texts": [
+    "Our question generation model takes the path between an “anchor” and the candidate answer, and outputs a question. We adopt the sequence to sequence architecture as our basic question generation model due to its effectiveness in natural language generation tasks. The hierarchical encoder and the hierarchical attention mechanism are introduced to take into account the structure of the input facts. Facts from external KBs are conventionally integrated into the model using the same way as described in the matching model.",
+    "As illustrated in Figure 3 , the question generation model contains an encoder and a decoder. We use a hierarchical encoder consisting of two layers to model the meaning of each element (subject, predicate or object) and the relationship between them. Since each element might contain multiple words, we use RNN as the word layer encoder to get the representation of each element. We define the fact level sequence as a path starting from the anchor and ending at the candidate answer. Another RNN is used as the fact level encoder. The last hidden state at the fact layer is fed to the decoder.",
+    "We develop a hierarchical attention mechanism in the decoder, which first makes soft alignment over the hidden states at the fact layer, the output of which is further used to attend to hidden states at the word level. Specifically, given the decoder hidden state $h^{dec}_{t-1}$ , we use a fact-level attention model $Att_{fct}$ to calculate the contextual vector, which is further combined with the current hidden state $h^{dec}_{t}$ , resulting in $c_{fct}$ . The contextual vector is calculated through weighted averaging over hidden vectors at the fact level, which is given as follows, where $\\odot $ is dot product, $h^{fld}_j$ is the $j$ -th hidden state at the fact layer from the encoder, and $l_f$ is the number of hidden states at the fact level.",
+    "$$c_{fct} &= GRU(h^{dec}_{t}, \\sum _{j=1}^{{l_f}} \\alpha _{tj}h^{fct}_j) \\\\\n\\alpha _{tj} &= \\frac{ exp(h^{dec}_{t-1} \\odot h^{fct}_j)}{\\sum _{k=1}^{{l_f}}exp(h^{dec}_{t-1} \\odot h^{fct}_k)}$$   (Eq. 19)",
+    "Similarly, we feed $c_{fct}$ to the word-level attention function $Att_{wrd}$ and calculate over hidden vectors at the word-level. The output $c_{wrd}$ will be concatenated with $h^{dec}_{t}$ to predict the next word.",
+    "Since many entity names of great importance are rare words from the input, we use the copying mechanism BIBREF20 that learns when to replicate words from the input or to predict words from the target vocabulary. The probability distribution of generating the word $y$ is calculated as follows, in which the $softmax$ function is calculated over a combined logits from both sides.",
+    "$$\\begin{split}\n&p(y)=\\frac{exp({e_y \\odot W_g[h_t^{dec};c_{wrd}]})+exp(s_c(y))}{Z}\\\\\n&s_c(y) = c_{wrd} \\odot {tanh(W_ch_t^{wrd})}\n\\end{split}$$   (Eq. 20)",
+    "We train our question generation model with maximum likelihood estimation. The loss function is given as follows, where $D$ is the training corpus. We use beam search in the inference process.",
+    "$$l = -\\sum _{(x,y)\\in D} \\sum _t log p(y_t |y_{<t}, x)$$   (Eq. 21)",
+    "An advantage of the model is that external knowledge could be easily incorporated with the same mechanism as we have described in section Incorporating External Knowledge. We enhance the representation of an argument or a predicate by concatenating open KB vectors into encoder hidden states."
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Hierarchical seq2seq Generation Model",
+    "Hierarchical seq2seq Generation Model",
+    "Hierarchical seq2seq Generation Model",
+    "Hierarchical seq2seq Generation Model",
+    "Hierarchical seq2seq Generation Model",
+    "Hierarchical seq2seq Generation Model",
+    "Hierarchical seq2seq Generation Model",
+    "Hierarchical seq2seq Generation Model",
+    "Hierarchical seq2seq Generation Model",
+    "Hierarchical seq2seq Generation Model"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Hierarchical seq2seq Generation Model",
+      0
+    ],
+    [
+      "Hierarchical seq2seq Generation Model",
+      1
+    ],
+    [
+      "Hierarchical seq2seq Generation Model",
+      2
+    ],
+    [
+      "Hierarchical seq2seq Generation Model",
+      3
+    ],
+    [
+      "Hierarchical seq2seq Generation Model",
+      4
+    ],
+    [
+      "Hierarchical seq2seq Generation Model",
+      5
+    ],
+    [
+      "Hierarchical seq2seq Generation Model",
+      6
+    ],
+    [
+      "Hierarchical seq2seq Generation Model",
+      7
+    ],
+    [
+      "Hierarchical seq2seq Generation Model",
+      8
+    ],
+    [
+      "Hierarchical seq2seq Generation Model",
+      9
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Hierarchical seq2seq Generation Model",
+  "section": "Hierarchical seq2seq Generation Model",
+  "title_path": "Hierarchical seq2seq Generation Model",
+  "block_type": "long_unit"
+}

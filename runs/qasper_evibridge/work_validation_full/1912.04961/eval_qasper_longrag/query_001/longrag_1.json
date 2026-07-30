@@ -1,0 +1,115 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] To appear in Proceedings of International Workshop on Health Intelligence (W3PHIAI) of the 34th AAAI Conference on Artificial Intelligence, 2020.\n[source_id=5] Physician burnout is a growing concern, estimated to be experienced by at least 35% of physicians in the developing world and 50% in the United States BIBREF0. BIBREF1 found that for every hour physicians provide direct clinical facetime to patients, nearly two additional hours are spent on EHR (Electronic Health Records) and administrative or desk work. As per the study conducted by Massachusetts General Physicians Organization (MPGO) BIBREF2 and as reported by BIBREF3, the average time spent on administrative tasks increased from 23.7% in 2014 to 27.9% in 2017. Both the surveys found that time spent on administrative tasks was positively associated with higher likelihood of burnout. Top reasons under administrative burden include working on the ambulatory EHR, handling medication reconciliation (sometimes done by aids), medication renewals, and medical billing and coding. The majority of these reasons revolve around documentation of information exchanged between doctors and patients during the clinical encounters. Automatically extracting such clinical information BIBREF4, BIBREF5 can not only help alleviate the documentation burden on the physician, but also allow them to dedicate more time directly with patients.\n[source_id=6] Among all the clinical information extraction tasks, Medication Regimen (Medication, dosage, and frequency) extraction is particularly interesting due to its ability to help doctors with medication orders cum renewals, medication reconciliation, potentially verifying the reconciliations for errors, and, other medication-centered EHR documentation tasks. In addition, the same information when provided to patients can help them with better recall of doctor instructions which might aid in compliance with the care plan. This is particularly important given that patients forget or wrongly recollect 40-80% BIBREF6 of what is discussed in the clinic, and accessing EHR data has its own challenges.\n[source_id=7] Spontaneous clinical conversations happening between a doctor and a patient, have several distinguishing characteristics from a normal monologue or prepared speech: it involves multiple speakers with overlapping dialogues, covers a variety of speech patterns, and the vocabulary can range from colloquial to complex domain-specific language. With recent advancements in Conversational Speech Recognition BIBREF7 rendering the systems less prone to errors, the subsequent challenge of understanding and extracting relevant information from the conversations is receiving increasing research focus BIBREF4, BIBREF8.\n[source_id=8] In this paper, we focus on local information extraction in transcribed clinical conversations. Specifically, we extract dosage (e.g. 5mg) and frequency (e.g. once a day) for the medications (e.g. aspirin) from these transcripts, collectively referred to as Medication Regimen (MR) extraction. The information extraction is local as we extract the information from a segment of the transcript and not the entire transcript since doing the latter is difficult owing to the long meandering nature of the conversations often with multiple medication regimens and care plans being discussed.\n[source_id=9] The challenges associated with the Medication Regimen (MR) extraction task include understanding the spontaneous dialog with clinical vocabulary and understanding the relationship between different entities as the discussion can contain multiple medications and dosages (e.g. doctor revising a dosage or reviewing all the current medications).\n[source_id=10] We frame this problem as a Question Answering (QA) task by generating questions using templates. We base the QA model on pointer-generator networks BIBREF9 augmented with Co-Attentions BIBREF10. In addition, we develop models combining QA and Information Extraction frameworks using multi-decoder (one each for dosage and frequency) architecture.\n[source_id=11] Lack of availability of a large volume of data is a typical challenge in healthcare. A conversation corpus by itself is a rare commodity in the healthcare data space because of the cost and difficulty in handing (because of data privacy concerns). Moreover, transcribing and labeling the conversations is a costly process as it requires domain-specific medical annotation expertise. To address data shortage and improve the model performance, we investigate different high-performance contextual embeddings (ELMO BIBREF11, BERT BIBREF12 and ClinicalBERT BIBREF13), and pretrain the models on a clinical summarization task. We further investigate the effects of training data size on our models.\n[source_id=12] On the MR extraction task, ELMo with encoder multi-decoder architecture and BERT with encoder-decoder with encoders pretrained on the summarization task perform the best. The best-performing models improve our baseline's dosage and frequency extractions ROUGE-1 F1 scores from 54.28 and 37.13 to 89.57 and 45.94, respectively.\n[source_id=13] Using our models, we present the first fully automated system to extract MR tags from spontaneous doctor-patient conversations. We evaluate the system (using our best performing models) on the transcripts generated from Automatic Speech Recognition (ASR) APIs offered by Google and IBM. In Google ASR's transcripts, our best model obtained ROUGE-1 F1 of 71.75 for Dosage extraction (which in this specific case equals to the percentage of times dosage is correct, refer Metrics Section for more details) and 40.13 for Frequency extraction tasks. On qualitative evaluation, we find that for 73.58% of the medications the model can find the correct frequency. These results demonstrate that the research on NLP can be used effectively in a real clinical setting to benefit both doctors and patients",
+  "score": 2.8329033292705024,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "child_qasper_evidence_texts": [
+    "To appear in Proceedings of International Workshop on Health Intelligence (W3PHIAI) of the 34th AAAI Conference on Artificial Intelligence, 2020.",
+    "Physician burnout is a growing concern, estimated to be experienced by at least 35% of physicians in the developing world and 50% in the United States BIBREF0. BIBREF1 found that for every hour physicians provide direct clinical facetime to patients, nearly two additional hours are spent on EHR (Electronic Health Records) and administrative or desk work. As per the study conducted by Massachusetts General Physicians Organization (MPGO) BIBREF2 and as reported by BIBREF3, the average time spent on administrative tasks increased from 23.7% in 2014 to 27.9% in 2017. Both the surveys found that time spent on administrative tasks was positively associated with higher likelihood of burnout. Top reasons under administrative burden include working on the ambulatory EHR, handling medication reconciliation (sometimes done by aids), medication renewals, and medical billing and coding. The majority of these reasons revolve around documentation of information exchanged between doctors and patients during the clinical encounters. Automatically extracting such clinical information BIBREF4, BIBREF5 can not only help alleviate the documentation burden on the physician, but also allow them to dedicate more time directly with patients.",
+    "Among all the clinical information extraction tasks, Medication Regimen (Medication, dosage, and frequency) extraction is particularly interesting due to its ability to help doctors with medication orders cum renewals, medication reconciliation, potentially verifying the reconciliations for errors, and, other medication-centered EHR documentation tasks. In addition, the same information when provided to patients can help them with better recall of doctor instructions which might aid in compliance with the care plan. This is particularly important given that patients forget or wrongly recollect 40-80% BIBREF6 of what is discussed in the clinic, and accessing EHR data has its own challenges.",
+    "Spontaneous clinical conversations happening between a doctor and a patient, have several distinguishing characteristics from a normal monologue or prepared speech: it involves multiple speakers with overlapping dialogues, covers a variety of speech patterns, and the vocabulary can range from colloquial to complex domain-specific language. With recent advancements in Conversational Speech Recognition BIBREF7 rendering the systems less prone to errors, the subsequent challenge of understanding and extracting relevant information from the conversations is receiving increasing research focus BIBREF4, BIBREF8.",
+    "In this paper, we focus on local information extraction in transcribed clinical conversations. Specifically, we extract dosage (e.g. 5mg) and frequency (e.g. once a day) for the medications (e.g. aspirin) from these transcripts, collectively referred to as Medication Regimen (MR) extraction. The information extraction is local as we extract the information from a segment of the transcript and not the entire transcript since doing the latter is difficult owing to the long meandering nature of the conversations often with multiple medication regimens and care plans being discussed.",
+    "The challenges associated with the Medication Regimen (MR) extraction task include understanding the spontaneous dialog with clinical vocabulary and understanding the relationship between different entities as the discussion can contain multiple medications and dosages (e.g. doctor revising a dosage or reviewing all the current medications).",
+    "We frame this problem as a Question Answering (QA) task by generating questions using templates. We base the QA model on pointer-generator networks BIBREF9 augmented with Co-Attentions BIBREF10. In addition, we develop models combining QA and Information Extraction frameworks using multi-decoder (one each for dosage and frequency) architecture.",
+    "Lack of availability of a large volume of data is a typical challenge in healthcare. A conversation corpus by itself is a rare commodity in the healthcare data space because of the cost and difficulty in handing (because of data privacy concerns). Moreover, transcribing and labeling the conversations is a costly process as it requires domain-specific medical annotation expertise. To address data shortage and improve the model performance, we investigate different high-performance contextual embeddings (ELMO BIBREF11, BERT BIBREF12 and ClinicalBERT BIBREF13), and pretrain the models on a clinical summarization task. We further investigate the effects of training data size on our models.",
+    "On the MR extraction task, ELMo with encoder multi-decoder architecture and BERT with encoder-decoder with encoders pretrained on the summarization task perform the best. The best-performing models improve our baseline's dosage and frequency extractions ROUGE-1 F1 scores from 54.28 and 37.13 to 89.57 and 45.94, respectively.",
+    "Using our models, we present the first fully automated system to extract MR tags from spontaneous doctor-patient conversations. We evaluate the system (using our best performing models) on the transcripts generated from Automatic Speech Recognition (ASR) APIs offered by Google and IBM. In Google ASR's transcripts, our best model obtained ROUGE-1 F1 of 71.75 for Dosage extraction (which in this specific case equals to the percentage of times dosage is correct, refer Metrics Section for more details) and 40.13 for Frequency extraction tasks. On qualitative evaluation, we find that for 73.58% of the medications the model can find the correct frequency. These results demonstrate that the research on NLP can be used effectively in a real clinical setting to benefit both doctors and patients"
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ],
+    [
+      "Introduction",
+      7
+    ],
+    [
+      "Introduction",
+      8
+    ],
+    [
+      "Introduction",
+      9
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

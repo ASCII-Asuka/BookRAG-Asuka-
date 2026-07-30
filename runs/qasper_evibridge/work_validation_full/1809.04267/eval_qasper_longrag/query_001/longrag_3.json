@@ -1,0 +1,79 @@
+{
+  "id": "longrag_3",
+  "content": "[Section] Approach Overview\n[source_id=11] Our framework consists of a question answering model and a question generation model.\n[source_id=12] We implement two question answering models, which directly measure the semantic similarity between questions and candidate answers in the semantic space. First, to make the model's prediction more explainable, we implement a path based QA model PCNet. In this model, to get candidate answers from the triplets based document for a given question. We first retrieve the an “anchor” point $arg1_i$ or $arg2_i$ in the document fact $f_i$ . These anchors are selected based on edit distance between the words in the questions and the arguments. Then we regard all arguments in the 1-hops and 2-hops fact of the anchors as answers. However, the coverage of the candidate answers can be 100% in the model. We then implement a second end-to-end neural model KVMenNet which covers all the answers but with less interpretability. Both models generate a score $f_{qa}(q, a)$ of each candidate answer.\n[source_id=13] We then implement a generation-based model. The motivation to design this model is that we want to associate natural language phrases with knowledge based representation. It takes semantics of a candidate answer as the input and generates a question $\\hat{q}$ . Then a paraphrasing model gives a score $f_{qg}(q,\\hat{q})$ , which is computed between the generated question $\\hat{q}$ and the original question $q$ , as the ranking score.\n[source_id=14] We get the final scores $S(q,a)$ used for ranking as follows.\n[source_id=15] $$S(q,a) = \\lambda f_{qa}(q, a) + (1-\\lambda ) f_{qg}(q,\\hat{q})$$   (Eq. 7)\n[source_id=16] Moreover, we incorporate side information from external KBs into the three models. The details of how we use external KBs to enhance the representation of elements in the document KB will be described in section Incorporating External Knowledge.",
+  "score": 3.709016406392332,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_3",
+  "child_source_node_ids": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "child_qasper_evidence_texts": [
+    "Our framework consists of a question answering model and a question generation model.",
+    "We implement two question answering models, which directly measure the semantic similarity between questions and candidate answers in the semantic space. First, to make the model's prediction more explainable, we implement a path based QA model PCNet. In this model, to get candidate answers from the triplets based document for a given question. We first retrieve the an “anchor” point $arg1_i$ or $arg2_i$ in the document fact $f_i$ . These anchors are selected based on edit distance between the words in the questions and the arguments. Then we regard all arguments in the 1-hops and 2-hops fact of the anchors as answers. However, the coverage of the candidate answers can be 100% in the model. We then implement a second end-to-end neural model KVMenNet which covers all the answers but with less interpretability. Both models generate a score $f_{qa}(q, a)$ of each candidate answer.",
+    "We then implement a generation-based model. The motivation to design this model is that we want to associate natural language phrases with knowledge based representation. It takes semantics of a candidate answer as the input and generates a question $\\hat{q}$ . Then a paraphrasing model gives a score $f_{qg}(q,\\hat{q})$ , which is computed between the generated question $\\hat{q}$ and the original question $q$ , as the ranking score.",
+    "We get the final scores $S(q,a)$ used for ranking as follows.",
+    "$$S(q,a) = \\lambda f_{qa}(q, a) + (1-\\lambda ) f_{qg}(q,\\hat{q})$$   (Eq. 7)",
+    "Moreover, we incorporate side information from external KBs into the three models. The details of how we use external KBs to enhance the representation of elements in the document KB will be described in section Incorporating External Knowledge."
+  ],
+  "child_pages": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "child_sections": [
+    "Approach Overview",
+    "Approach Overview",
+    "Approach Overview",
+    "Approach Overview",
+    "Approach Overview",
+    "Approach Overview"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Approach Overview",
+      0
+    ],
+    [
+      "Approach Overview",
+      1
+    ],
+    [
+      "Approach Overview",
+      2
+    ],
+    [
+      "Approach Overview",
+      3
+    ],
+    [
+      "Approach Overview",
+      4
+    ],
+    [
+      "Approach Overview",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_3",
+  "section_id": "Approach Overview",
+  "section": "Approach Overview",
+  "title_path": "Approach Overview",
+  "block_type": "long_unit"
+}

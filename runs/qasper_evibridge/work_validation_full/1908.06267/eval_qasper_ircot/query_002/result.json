@@ -1,0 +1,74 @@
+{
+  "question": "Which component has the greatest impact on performance?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [],
+      "free_form_answer": "Increasing number of message passing iterations showed consistent improvement in performance - around 1 point improvement compared between 1 and 4 iterations",
+      "yes_no": null,
+      "evidence": [
+        "Results and ablations ::: Ablation studies",
+        "To understand the impact of some hyperparameters on performance, we conducted additional experiments on the Reuters, Polarity, and IMDB datasets, with the non-hierarchical version of MPAD. Results are shown in Table TABREF29.",
+        "Number of MP iterations. First, we varied the number of message passing iterations from 1 to 4. We can clearly see in Table TABREF29 that having more iterations improves performance. We attribute this to the fact that we are reading out at each iteration from 1 to $T$ (see Eq. DISPLAY_FORM18), which enables the final graph representation to encode a mixture of low-level and high-level features. Indeed, in initial experiments involving readout at $t$=$T$ only, setting $T\\ge 2$ was always decreasing performance, despite the GRU-based updates (Eq. DISPLAY_FORM14). These results were consistent with that of BIBREF53 and BIBREF9, who both are reading out only at $t$=$T$ too. We hypothesize that node features at $T\\ge 2$ are too diffuse to be entirely relied upon during readout. More precisely, initially at $t$=0, node representations capture information about words, at $t$=1, about their 1-hop neighborhood (bigrams), at $t$=2, about compositions of bigrams, etc. Thus, pretty quickly, node features become general and diffuse. In such cases, considering also the lower-level, more precise features of the earlier iterations when reading out may be necessary."
+      ],
+      "evidence_block_ids": [
+        77,
+        78
+      ],
+      "evidence_paragraph_ids": [
+        77,
+        78
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "Removing the master node deteriorates performance across all datasets"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "No master node. Removing the master node deteriorates performance across all datasets, clearly showing the value of having such a node. We hypothesize that since the special document node is connected to all other nodes, it is able to encode during message passing a summary of the document."
+      ],
+      "evidence_block_ids": [
+        80
+      ],
+      "evidence_paragraph_ids": [
+        80
+      ]
+    }
+  ],
+  "doc_uuid": "1908.06267",
+  "doc_path": "qasper://1908.06267",
+  "qasper_question_id": "545e92833b0ad4ba32eac5997edecf97a366a244",
+  "title": "Message Passing Attention Networks for Document Understanding",
+  "evidence_block_ids": [
+    77,
+    78,
+    80
+  ],
+  "evidence_paragraph_ids": [
+    77,
+    78,
+    80
+  ],
+  "output": "{\n  \"answer_short\": \"The graph structure (directed vs. undirected edges)\",\n  \"answer_rationale\": \"The graph structure (directed vs. undirected edges) has varying performance impacts across datasets: undirected edges improve performance on Reuters (a topic classification task), while directed edges are better for Polarity and IMDB (sentiment analysis tasks requiring word order modeling). This indicates it is a critical component influencing performance based on task type.\",\n  \"supporting_block_ids\": [73, 79]\n}",
+  "retrieved_node_ids": [
+    77,
+    73,
+    79,
+    88
+  ],
+  "retrieved_block_ids": [
+    77,
+    73,
+    79,
+    88
+  ],
+  "answer_short": "The graph structure (directed vs. undirected edges)",
+  "answer_rationale": "The graph structure (directed vs. undirected edges) has varying performance impacts across datasets: undirected edges improve performance on Reuters (a topic classification task), while directed edges are better for Polarity and IMDB (sentiment analysis tasks requiring word order modeling). This indicates it is a critical component influencing performance based on task type.",
+  "supporting_block_ids": [
+    73,
+    79
+  ]
+}

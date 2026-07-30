@@ -1,0 +1,241 @@
+{
+  "id": "longrag_8",
+  "content": "[Section] Quantitative Analysis\n[source_id=62] One of the most basic approaches to evaluate a sentence encoder is to measure the classification performance with the sentence representations made by the encoder. Thus, we conduct experiments on the following five datasets. (Summary statistics for the datasets are reported in the supplemental materials.)\n[source_id=63] MR: A group of movie reviews with binary (positive / negative) classes. BIBREF22\n[source_id=64] SST-2: Stanford Sentiment Treebank BIBREF6 . Similar to MR, but each review is provided in the form of a binary parse tree whose nodes are annotated with numeric sentiment values. For SST-2, we only consider binary (positive / negative) classes.\n[source_id=65] SST-5: Identical to SST-2, but the reviews are grouped into fine-grained (very negative, negative, neutral, positive, very positive) classes.\n[source_id=66] SUBJ: Sentences grouped as being either subjective or objective (binary classes). BIBREF23\n[source_id=67] TREC: A dataset which groups questions into six different question types (classes). BIBREF24\n[source_id=68] As a preprocessing step, we construct parse trees for the sentences in the datasets using the Stanford PCFG parser BIBREF25 . Because syntactic tags are by-products of constituency parsing, we do not need further preprocessing.\n[source_id=69] To classify the sentence given our sentence representation ( $\\check{\\mathbf {h}}_\\text{root}$ ), we use one fully-connected layer with a ReLU activation, followed by a softmax classifier. The final predicted probability distribution of the class $y$ given the sentence $w_{1:n}$ is defined as follows,\n[source_id=70] $$\\mathbf {s} = \\text{ReLU}(\\mathbf {W}_\\text{s} \\check{\\mathbf {h}}_\\text{root}+ \\mathbf {b}_\\text{s})$$   (Eq. 37)\n[source_id=71] $$p(y|w_{1:n}) = \\text{softmax}(\\mathbf {W}_\\text{c}\\mathbf {s} + \\mathbf {b}_\\text{c})$$   (Eq. 38)\n[source_id=72] where $\\textbf {s} \\in \\mathbb {R}^{d_\\text{s}}$ is the computed task-specific sentence representation for the classifier, and $\\textbf {W}_\\text{s} \\in \\mathbb {R}^{d_\\text{s} \\times d_h}$ , $\\textbf {W}_\\text{c} \\in \\mathbb {R}^{d_\\text{c} \\times d_s}$ , $\\textbf {b}_\\text{s} \\in \\mathbb {R}^{d_s}$ , $\\textbf {b}_\\text{c} \\in \\mathbb {R}^{d_c}$ are trainable parameters. As an objective function, we use the cross entropy of the predicted and true class distributions.\n[source_id=73] The results of the experiments on the five datasets are shown in table 1 . In this table, we report the test accuracy of our model and various other models on each dataset in terms of percentage. To consider the effects of random initialization, we report the best numbers obtained from each several runs with hyper-parameters fixed.\n[source_id=74] Compared with the previous syntactic tree-based models as well as other neural models, our SATA Tree-LSTM shows superior or competitive performance on all tasks. Specifically, our model achieves new state-of-the-art results within the tree-structured model class on 4 out of 5 sentence classification tasks—SST-2, SST-5, MR, and TREC. The model shows its strength, in particular, when the datasets provide phrase-level supervision to facilitate tree structure learning (i.e. SST-2, SST-5). Moreover, the numbers we report for SST-5 and TREC are competitive to the existing state-of-the-art results including ones from structurally pre-trained models such as ELMo BIBREF26 , proving our model's superiority. Note that the SATA Tree-LSTM also outperforms the recent latent tree-based model, indicating that modeling a neural model with explicit linguistic knowledge can be an attractive option.\n[source_id=75] On the other hand, a remaining concern is that our SATA Tree-LSTM is not robust to random seeds when the size of a dataset is relatively small, as tag embeddings are randomly initialized rather than relying on pre-trained ones in contrast with the case of words. From this observation, we could find out there needs a direction of research towards pre-trained tag embeddings.\n[source_id=76] To estimate the performance of our model beyond the tasks requiring only one sentence at a time, we conduct an experiment on the Stanford Natural Language Inference BIBREF34 dataset, each example of which consists of two sentences, the premise and the hypothesis. Our objective given the data is to predict the correct relationship between the two sentences among three options— contradiction, neutral, or entailment.\n[source_id=77] We use the siamese architecture to encode both the premise ( $p_{1:m}$ ) and hypothesis ( $h_{1:n}$ ) following the standard of sentence-encoding models in the literature. (Specifically, $p_{1:m}$ is encoded as $\\check{\\mathbf {h}}_\\text{root}^p \\in \\mathbb {R}^{d_h}$ and $h_{1:n}$ is encoded as $\\check{\\mathbf {h}}_\\text{root}^h \\in \\mathbb {R}^{d_h}$ with the same encoder.) Then, we leverage some heuristics BIBREF35 , followed by one fully-connected layer with a ReLU activation and a softmax classifier. Specifically,\n[source_id=78] $$\\mathbf {z} = \\left[ \\check{\\mathbf {h}}_\\text{root}^p; \\check{\\mathbf {h}}_\\text{root}^h; | \\check{\\mathbf {h}}_\\text{root}^p - \\check{\\mathbf {h}}_\\text{root}^h |; \\check{\\mathbf {h}}_\\text{root}^p \\odot \\check{\\mathbf {h}}_\\text{root}^h \\right]$$   (Eq. 41)\n[source_id=79] $$\\mathbf {s} = \\text{ReLU}(\\mathbf {W}_\\text{s} \\mathbf {z} + \\mathbf {b}_\\text{s})$$   (Eq. 42)\n[source_id=80] where $\\textbf {z} \\in \\mathbb {R}^{4d_h}$ , $\\textbf {s} \\in \\mathbb {R}^{d_s}$ are intermediate features for the classifier and $\\textbf {W}_\\text{s} \\in \\mathbb {R}^{d_\\text{s} \\times 4d_h}$ , $\\textbf {W}_\\text{c} \\in \\mathbb {R}^{d_\\text{c} \\times d_s}$ , $\\textbf {b}_\\text{s} \\in \\mathbb {R}^{d_s}$ , $\\textbf {b}_\\text{c} \\in \\mathbb {R}^{d_c}$ are again trainable parameters.\n[source_id=81] Our experimental results on the SNLI dataset are shown in table 2 . In this table, we report the test accuracy and number of trainable parameters for each model. Our SATA-LSTM again demonstrates its decent performance compared against the neural models built on both syntactic trees and latent trees, as well as the non-tree models. (Latent Syntax Tree-LSTM: BIBREF10 ( BIBREF10 ), Tree-based CNN: BIBREF35 ( BIBREF35 ), Gumbel Tree-LSTM: BIBREF11 ( BIBREF11 ), NSE: BIBREF36 ( BIBREF36 ), Reinforced Self-Attention Network: BIBREF4 ( BIBREF4 ), Residual stacked encoders: BIBREF37 ( BIBREF37 ), BiLSTM with generalized pooling: BIBREF38 ( BIBREF38 ).) Note that the number of learned parameters in our model is also comparable to other sophisticated models, showing the efficiency of our model.\n[source_id=82] Even though our model has proven its mettle, the effect of tag information seems relatively weak in the case of SNLI, which contains a large amount of data compared to the others. One possible explanation is that neural models may learn some syntactic rules from large amounts of text when the text size is large enough, reducing the necessity of external linguistic knowledge. We leave the exploration of the effectiveness of tags relative to data size for future work.\n[source_id=83] Here we go over the settings common across our models during experimentation. For more task-specific details, refer to the supplemental materials.\n[source_id=84] For our input embeddings, we used 300 dimensional 840B GloVe BIBREF39 as pre-trained word embeddings, and tag representations were randomly sampled from the uniform distribution [-0.005, 0.005]. Tag vectors are revised during training while the fine-tuning of the word embedding depends on the task. Our models were trained using the Adam BIBREF40 or Adadelta BIBREF41 optimizer, depending on task. For regularization, weight decay is added to the loss function except for SNLI following BIBREF42 ( BIBREF42 ) and Dropout BIBREF43 is also applied for the word embeddings and task-specific classifiers. Moreover, batch normalization BIBREF44 is adopted for the classifiers. As a default, all the weights in the model are initialized following BIBREF45 ( BIBREF45 ) and the biases are set to 0. The total norm of the gradients of the parameters is clipped not to be over 5 during training.\n[source_id=85] Our best models for each dataset were chosen by validation accuracy in cases where a validation set was provided as a part of the dataset. Otherwise, we perform a grid search on probable hyper-parameter settings, or run 10-fold cross-validation in cases where even a test set does not exist.",
+  "score": 1.166984811167819,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_8",
+  "child_source_node_ids": [
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85
+  ],
+  "child_qasper_evidence_texts": [
+    "One of the most basic approaches to evaluate a sentence encoder is to measure the classification performance with the sentence representations made by the encoder. Thus, we conduct experiments on the following five datasets. (Summary statistics for the datasets are reported in the supplemental materials.)",
+    "MR: A group of movie reviews with binary (positive / negative) classes. BIBREF22",
+    "SST-2: Stanford Sentiment Treebank BIBREF6 . Similar to MR, but each review is provided in the form of a binary parse tree whose nodes are annotated with numeric sentiment values. For SST-2, we only consider binary (positive / negative) classes.",
+    "SST-5: Identical to SST-2, but the reviews are grouped into fine-grained (very negative, negative, neutral, positive, very positive) classes.",
+    "SUBJ: Sentences grouped as being either subjective or objective (binary classes). BIBREF23",
+    "TREC: A dataset which groups questions into six different question types (classes). BIBREF24",
+    "As a preprocessing step, we construct parse trees for the sentences in the datasets using the Stanford PCFG parser BIBREF25 . Because syntactic tags are by-products of constituency parsing, we do not need further preprocessing.",
+    "To classify the sentence given our sentence representation ( $\\check{\\mathbf {h}}_\\text{root}$ ), we use one fully-connected layer with a ReLU activation, followed by a softmax classifier. The final predicted probability distribution of the class $y$ given the sentence $w_{1:n}$ is defined as follows,",
+    "$$\\mathbf {s} = \\text{ReLU}(\\mathbf {W}_\\text{s} \\check{\\mathbf {h}}_\\text{root}+ \\mathbf {b}_\\text{s})$$   (Eq. 37)",
+    "$$p(y|w_{1:n}) = \\text{softmax}(\\mathbf {W}_\\text{c}\\mathbf {s} + \\mathbf {b}_\\text{c})$$   (Eq. 38)",
+    "where $\\textbf {s} \\in \\mathbb {R}^{d_\\text{s}}$ is the computed task-specific sentence representation for the classifier, and $\\textbf {W}_\\text{s} \\in \\mathbb {R}^{d_\\text{s} \\times d_h}$ , $\\textbf {W}_\\text{c} \\in \\mathbb {R}^{d_\\text{c} \\times d_s}$ , $\\textbf {b}_\\text{s} \\in \\mathbb {R}^{d_s}$ , $\\textbf {b}_\\text{c} \\in \\mathbb {R}^{d_c}$ are trainable parameters. As an objective function, we use the cross entropy of the predicted and true class distributions.",
+    "The results of the experiments on the five datasets are shown in table 1 . In this table, we report the test accuracy of our model and various other models on each dataset in terms of percentage. To consider the effects of random initialization, we report the best numbers obtained from each several runs with hyper-parameters fixed.",
+    "Compared with the previous syntactic tree-based models as well as other neural models, our SATA Tree-LSTM shows superior or competitive performance on all tasks. Specifically, our model achieves new state-of-the-art results within the tree-structured model class on 4 out of 5 sentence classification tasks—SST-2, SST-5, MR, and TREC. The model shows its strength, in particular, when the datasets provide phrase-level supervision to facilitate tree structure learning (i.e. SST-2, SST-5). Moreover, the numbers we report for SST-5 and TREC are competitive to the existing state-of-the-art results including ones from structurally pre-trained models such as ELMo BIBREF26 , proving our model's superiority. Note that the SATA Tree-LSTM also outperforms the recent latent tree-based model, indicating that modeling a neural model with explicit linguistic knowledge can be an attractive option.",
+    "On the other hand, a remaining concern is that our SATA Tree-LSTM is not robust to random seeds when the size of a dataset is relatively small, as tag embeddings are randomly initialized rather than relying on pre-trained ones in contrast with the case of words. From this observation, we could find out there needs a direction of research towards pre-trained tag embeddings.",
+    "To estimate the performance of our model beyond the tasks requiring only one sentence at a time, we conduct an experiment on the Stanford Natural Language Inference BIBREF34 dataset, each example of which consists of two sentences, the premise and the hypothesis. Our objective given the data is to predict the correct relationship between the two sentences among three options— contradiction, neutral, or entailment.",
+    "We use the siamese architecture to encode both the premise ( $p_{1:m}$ ) and hypothesis ( $h_{1:n}$ ) following the standard of sentence-encoding models in the literature. (Specifically, $p_{1:m}$ is encoded as $\\check{\\mathbf {h}}_\\text{root}^p \\in \\mathbb {R}^{d_h}$ and $h_{1:n}$ is encoded as $\\check{\\mathbf {h}}_\\text{root}^h \\in \\mathbb {R}^{d_h}$ with the same encoder.) Then, we leverage some heuristics BIBREF35 , followed by one fully-connected layer with a ReLU activation and a softmax classifier. Specifically,",
+    "$$\\mathbf {z} = \\left[ \\check{\\mathbf {h}}_\\text{root}^p; \\check{\\mathbf {h}}_\\text{root}^h; | \\check{\\mathbf {h}}_\\text{root}^p - \\check{\\mathbf {h}}_\\text{root}^h |; \\check{\\mathbf {h}}_\\text{root}^p \\odot \\check{\\mathbf {h}}_\\text{root}^h \\right]$$   (Eq. 41)",
+    "$$\\mathbf {s} = \\text{ReLU}(\\mathbf {W}_\\text{s} \\mathbf {z} + \\mathbf {b}_\\text{s})$$   (Eq. 42)",
+    "where $\\textbf {z} \\in \\mathbb {R}^{4d_h}$ , $\\textbf {s} \\in \\mathbb {R}^{d_s}$ are intermediate features for the classifier and $\\textbf {W}_\\text{s} \\in \\mathbb {R}^{d_\\text{s} \\times 4d_h}$ , $\\textbf {W}_\\text{c} \\in \\mathbb {R}^{d_\\text{c} \\times d_s}$ , $\\textbf {b}_\\text{s} \\in \\mathbb {R}^{d_s}$ , $\\textbf {b}_\\text{c} \\in \\mathbb {R}^{d_c}$ are again trainable parameters.",
+    "Our experimental results on the SNLI dataset are shown in table 2 . In this table, we report the test accuracy and number of trainable parameters for each model. Our SATA-LSTM again demonstrates its decent performance compared against the neural models built on both syntactic trees and latent trees, as well as the non-tree models. (Latent Syntax Tree-LSTM: BIBREF10 ( BIBREF10 ), Tree-based CNN: BIBREF35 ( BIBREF35 ), Gumbel Tree-LSTM: BIBREF11 ( BIBREF11 ), NSE: BIBREF36 ( BIBREF36 ), Reinforced Self-Attention Network: BIBREF4 ( BIBREF4 ), Residual stacked encoders: BIBREF37 ( BIBREF37 ), BiLSTM with generalized pooling: BIBREF38 ( BIBREF38 ).) Note that the number of learned parameters in our model is also comparable to other sophisticated models, showing the efficiency of our model.",
+    "Even though our model has proven its mettle, the effect of tag information seems relatively weak in the case of SNLI, which contains a large amount of data compared to the others. One possible explanation is that neural models may learn some syntactic rules from large amounts of text when the text size is large enough, reducing the necessity of external linguistic knowledge. We leave the exploration of the effectiveness of tags relative to data size for future work.",
+    "Here we go over the settings common across our models during experimentation. For more task-specific details, refer to the supplemental materials.",
+    "For our input embeddings, we used 300 dimensional 840B GloVe BIBREF39 as pre-trained word embeddings, and tag representations were randomly sampled from the uniform distribution [-0.005, 0.005]. Tag vectors are revised during training while the fine-tuning of the word embedding depends on the task. Our models were trained using the Adam BIBREF40 or Adadelta BIBREF41 optimizer, depending on task. For regularization, weight decay is added to the loss function except for SNLI following BIBREF42 ( BIBREF42 ) and Dropout BIBREF43 is also applied for the word embeddings and task-specific classifiers. Moreover, batch normalization BIBREF44 is adopted for the classifiers. As a default, all the weights in the model are initialized following BIBREF45 ( BIBREF45 ) and the biases are set to 0. The total norm of the gradients of the parameters is clipped not to be over 5 during training.",
+    "Our best models for each dataset were chosen by validation accuracy in cases where a validation set was provided as a part of the dataset. Otherwise, we perform a grid search on probable hyper-parameter settings, or run 10-fold cross-validation in cases where even a test set does not exist."
+  ],
+  "child_pages": [
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8
+  ],
+  "child_sections": [
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis",
+    "Quantitative Analysis"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Quantitative Analysis",
+      0
+    ],
+    [
+      "Quantitative Analysis",
+      1
+    ],
+    [
+      "Quantitative Analysis",
+      2
+    ],
+    [
+      "Quantitative Analysis",
+      3
+    ],
+    [
+      "Quantitative Analysis",
+      4
+    ],
+    [
+      "Quantitative Analysis",
+      5
+    ],
+    [
+      "Quantitative Analysis",
+      6
+    ],
+    [
+      "Quantitative Analysis",
+      7
+    ],
+    [
+      "Quantitative Analysis",
+      8
+    ],
+    [
+      "Quantitative Analysis",
+      9
+    ],
+    [
+      "Quantitative Analysis",
+      10
+    ],
+    [
+      "Quantitative Analysis",
+      11
+    ],
+    [
+      "Quantitative Analysis",
+      12
+    ],
+    [
+      "Quantitative Analysis",
+      13
+    ],
+    [
+      "Quantitative Analysis",
+      14
+    ],
+    [
+      "Quantitative Analysis",
+      15
+    ],
+    [
+      "Quantitative Analysis",
+      16
+    ],
+    [
+      "Quantitative Analysis",
+      17
+    ],
+    [
+      "Quantitative Analysis",
+      18
+    ],
+    [
+      "Quantitative Analysis",
+      19
+    ],
+    [
+      "Quantitative Analysis",
+      20
+    ],
+    [
+      "Quantitative Analysis",
+      21
+    ],
+    [
+      "Quantitative Analysis",
+      22
+    ],
+    [
+      "Quantitative Analysis",
+      23
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_8",
+  "section_id": "Quantitative Analysis",
+  "section": "Quantitative Analysis",
+  "title_path": "Quantitative Analysis",
+  "block_type": "long_unit"
+}

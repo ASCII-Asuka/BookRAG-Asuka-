@@ -1,0 +1,88 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Sequence-To-Sequence Model\n[source_id=32] The sequence-to-sequence model (Figure FIGREF7 ) consists of an RNN encoder, followed by a fully-connect layer and an RNN decoder. An RNN can be defined as: DISPLAYFORM0\n[source_id=33] At time-step INLINEFORM0 , an RNN uses an input INLINEFORM1 and an internal state INLINEFORM2 to produce its output INLINEFORM3 and its new internal state INLINEFORM4 . A specific RNN-design is usually defined using matrix multiplications, element-wise additions and multiplications as well as element-wise non-linear functions. There are a plethora of different RNN architectures that could be used and explored. Given that such exploration is not the focus of this work a single layer LSTM BIBREF35 is used for both the RNN encoder and decoder. The exact LSTM version used in this work uses a forget gate without bias and does not use peep-holes.\n[source_id=34] The first RNN (shown as white blocks in Fig. FIGREF7 ) takes one feature vector INLINEFORM0 at a time as its input ( INLINEFORM1 ). If the current dialogue turn is turn INLINEFORM2 then the final output of the RNN encoder is given by INLINEFORM3 , which is passed through a fully-connected layer (shown as the light-grey block) with linear activation function: DISPLAYFORM0\n[source_id=35] For a certain encoding INLINEFORM0 the sequence-to-sequence model should define a probability distribution over different sequences. By sampling from this distribution the NUS can generate a diverse set of sentences corresponding to the same dialogue context. The conditional probability distribution of a length INLINEFORM1 sequence is defined as: DISPLAYFORM0\n[source_id=36] The decoder RNN (shown as dark blocks) will be used to model INLINEFORM0 . It's input at each time-step is the concatenation of an embedding INLINEFORM1 (we used 1-hot) of the previous word INLINEFORM2 ( INLINEFORM3 ). For INLINEFORM4 a start-of-sentence (<SOS>) token is used as INLINEFORM5 . The end of the utterance is modelled using an end-of-sentence (<EOS>) token. When the decoder RNN generates the end-of-sentence token, the decoding process is terminated. The output of the decoder RNN, INLINEFORM6 , is passed through an affine transform followed by the softmax function, SM, to form INLINEFORM7 . A word INLINEFORM8 can be obtained by either taking the word with the highest probability or sampling from the distribution: DISPLAYFORM0\n[source_id=37] During training the words are not sampled from the output distribution, but instead the true words from the dataset are used. This a common technique that is often referred to as teacher-forcing, though it also directly follows from equation EQREF10 .\n[source_id=38] To generate a sequence using an RNN, beam-search is often used. Using beam-search with INLINEFORM0 beams, the words corresponding to the top INLINEFORM1 probabilities of INLINEFORM2 are the first INLINEFORM3 beams. For each succeeding INLINEFORM4 , the INLINEFORM5 words corresponding to the top INLINEFORM6 probabilities of INLINEFORM7 are taken for each of the INLINEFORM8 beams. This is followed by reducing the number of beams from now INLINEFORM9 down to INLINEFORM10 , by taking the INLINEFORM11 beams with the highest probability INLINEFORM12 . This is a deterministic process. However, for the NUS to always give the same response in the same context is not realistic. Thus, the NUS cannot cover the full breadth of user behaviour if beam-search is used. To solve this issue while keeping the benefit of rejecting sequences with low probability, a type of beam-search with sampling is used. The process is identical to the above, but INLINEFORM13 words per beam are sampled from the probability distribution. The NUS is now non-deterministic resulting in a diverse US. Using 2 beams gave a good trade-off between reasonable responses and diversity.",
+  "score": 1.366712772906559,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38
+  ],
+  "child_qasper_evidence_texts": [
+    "The sequence-to-sequence model (Figure FIGREF7 ) consists of an RNN encoder, followed by a fully-connect layer and an RNN decoder. An RNN can be defined as: DISPLAYFORM0",
+    "At time-step INLINEFORM0 , an RNN uses an input INLINEFORM1 and an internal state INLINEFORM2 to produce its output INLINEFORM3 and its new internal state INLINEFORM4 . A specific RNN-design is usually defined using matrix multiplications, element-wise additions and multiplications as well as element-wise non-linear functions. There are a plethora of different RNN architectures that could be used and explored. Given that such exploration is not the focus of this work a single layer LSTM BIBREF35 is used for both the RNN encoder and decoder. The exact LSTM version used in this work uses a forget gate without bias and does not use peep-holes.",
+    "The first RNN (shown as white blocks in Fig. FIGREF7 ) takes one feature vector INLINEFORM0 at a time as its input ( INLINEFORM1 ). If the current dialogue turn is turn INLINEFORM2 then the final output of the RNN encoder is given by INLINEFORM3 , which is passed through a fully-connected layer (shown as the light-grey block) with linear activation function: DISPLAYFORM0",
+    "For a certain encoding INLINEFORM0 the sequence-to-sequence model should define a probability distribution over different sequences. By sampling from this distribution the NUS can generate a diverse set of sentences corresponding to the same dialogue context. The conditional probability distribution of a length INLINEFORM1 sequence is defined as: DISPLAYFORM0",
+    "The decoder RNN (shown as dark blocks) will be used to model INLINEFORM0 . It's input at each time-step is the concatenation of an embedding INLINEFORM1 (we used 1-hot) of the previous word INLINEFORM2 ( INLINEFORM3 ). For INLINEFORM4 a start-of-sentence (<SOS>) token is used as INLINEFORM5 . The end of the utterance is modelled using an end-of-sentence (<EOS>) token. When the decoder RNN generates the end-of-sentence token, the decoding process is terminated. The output of the decoder RNN, INLINEFORM6 , is passed through an affine transform followed by the softmax function, SM, to form INLINEFORM7 . A word INLINEFORM8 can be obtained by either taking the word with the highest probability or sampling from the distribution: DISPLAYFORM0",
+    "During training the words are not sampled from the output distribution, but instead the true words from the dataset are used. This a common technique that is often referred to as teacher-forcing, though it also directly follows from equation EQREF10 .",
+    "To generate a sequence using an RNN, beam-search is often used. Using beam-search with INLINEFORM0 beams, the words corresponding to the top INLINEFORM1 probabilities of INLINEFORM2 are the first INLINEFORM3 beams. For each succeeding INLINEFORM4 , the INLINEFORM5 words corresponding to the top INLINEFORM6 probabilities of INLINEFORM7 are taken for each of the INLINEFORM8 beams. This is followed by reducing the number of beams from now INLINEFORM9 down to INLINEFORM10 , by taking the INLINEFORM11 beams with the highest probability INLINEFORM12 . This is a deterministic process. However, for the NUS to always give the same response in the same context is not realistic. Thus, the NUS cannot cover the full breadth of user behaviour if beam-search is used. To solve this issue while keeping the benefit of rejecting sequences with low probability, a type of beam-search with sampling is used. The process is identical to the above, but INLINEFORM13 words per beam are sampled from the probability distribution. The NUS is now non-deterministic resulting in a diverse US. Using 2 beams gave a good trade-off between reasonable responses and diversity."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Sequence-To-Sequence Model",
+    "Sequence-To-Sequence Model",
+    "Sequence-To-Sequence Model",
+    "Sequence-To-Sequence Model",
+    "Sequence-To-Sequence Model",
+    "Sequence-To-Sequence Model",
+    "Sequence-To-Sequence Model"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Sequence-To-Sequence Model",
+      0
+    ],
+    [
+      "Sequence-To-Sequence Model",
+      1
+    ],
+    [
+      "Sequence-To-Sequence Model",
+      2
+    ],
+    [
+      "Sequence-To-Sequence Model",
+      3
+    ],
+    [
+      "Sequence-To-Sequence Model",
+      4
+    ],
+    [
+      "Sequence-To-Sequence Model",
+      5
+    ],
+    [
+      "Sequence-To-Sequence Model",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Sequence-To-Sequence Model",
+  "section": "Sequence-To-Sequence Model",
+  "title_path": "Sequence-To-Sequence Model",
+  "block_type": "long_unit"
+}

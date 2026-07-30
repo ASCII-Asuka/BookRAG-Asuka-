@@ -1,0 +1,546 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_16",
+      "content": "[Section] Acknowledgements\n[source_id=73] We thank: University of Pittsburgh Medical Center (UPMC), and Abridge AI Inc. for providing access to the de-identified data corpus; Dr. Shivdev Rao, a faculty member and practicing cardiologist in UPMC's Heart and Vascular Institute and Prof. Florian Metze, Associate Research Professor, Carnegie Mellon University for helpful discussions; Ben Schloss, Steven Coleman, and Deborah Osakue for data business development and annotation management.",
+      "score": 7.003151134173226,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_16",
+      "child_source_node_ids": [
+        73
+      ],
+      "child_qasper_evidence_texts": [
+        "We thank: University of Pittsburgh Medical Center (UPMC), and Abridge AI Inc. for providing access to the de-identified data corpus; Dr. Shivdev Rao, a faculty member and practicing cardiologist in UPMC's Heart and Vascular Institute and Prof. Florian Metze, Associate Research Professor, Carnegie Mellon University for helpful discussions; Ben Schloss, Steven Coleman, and Deborah Osakue for data business development and annotation management."
+      ],
+      "child_pages": [
+        16
+      ],
+      "child_sections": [
+        "Acknowledgements"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Acknowledgements",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_16",
+      "section_id": "Acknowledgements",
+      "section": "Acknowledgements",
+      "title_path": "Acknowledgements",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Data\n[source_id=15] Our dataset consists of a total of 6,693 real doctor-patient conversations recorded in a clinical setting using distant microphones of varying quality. The recordings have an average duration of 9min 28s and have a verbatim transcript of 1,500 words on average (written by the experts). Both the audio and the transcript are de-identified (by removing the identifying information) with digital zeros and [de-identified] tags, respectively. The sentences in the transcript are grounded to the audio with the timestamps of its first and last word.\n[source_id=16] The transcript of the conversations are annotated with summaries and Medication Regimen tags (MR tags), both grounded using the timestamps of the sentences from the transcript deemed relevant by the expert annotators, refer to Table TABREF1. The transcript for a typical conversation can be quite long, and not easy for many of the high performing deep learning models to act on. Moreover, the medical information about a concept/condition/entity can change during the conversation after a significant time gap. For example, dosage of a medication can be different when discussing current medication the patient is on vs when they are prescribed a different dosage. Hence, we have annotations, that are grounded to a short segment of the transcript.\n[source_id=17] The summaries (#words - $\\mu = 9.7; \\sigma = 10.1$) are medically relevant and local. The MR tags are also local and are of the form {Medication Name, Dosage, Frequency}. If dosage ($\\mu = 2.0; \\sigma = 0$) or frequency ($\\mu = 2.1; \\sigma = 1.07$) information for a medication is not present in a grounded sentence, the corresponding field in the MR tag will be marked as `none'.\n[source_id=18] In the MR tags, Medication Name and Dosage (usually a quantity followed by its units) can be relatively easily extracted from the transcript except for the units of the dosage which is sometimes inferred. In contrast, due to high degree of linguistic variation with which Frequency is often expressed, extracting Frequency requires an additional inference step. For example, `take one in the morning and at noon' from the transcript is tagged as `twice a day' in the frequency tag, likewise `take it before sleeping' is tagged as `at night time'.\n[source_id=19] Out of overall 6,693 files, we set aside a random sample of 423 files (denoted as $\\mathcal {D}_{test}$) for final evaluation. The remaining 6,270 files are used for training with 80% train (5016), 10% validation (627), and 10% test (627) split. Overall, the 6,270 files contains 156,186 summaries and 32,000 MR tags out of which 8,654 MR tags contain values for at least one of the Dosage or Frequency, which we used for training to avoid overfitting (the remaining MR tags have both Dosage and Frequency as `none'). Note that we have two test datasets: `10% test' - used to evaluate all the models, and $\\mathcal {D}_{test}$ - used to measure the performance of best performing models on ASR transcripts.",
+      "score": 5.690392227253145,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "child_qasper_evidence_texts": [
+        "Our dataset consists of a total of 6,693 real doctor-patient conversations recorded in a clinical setting using distant microphones of varying quality. The recordings have an average duration of 9min 28s and have a verbatim transcript of 1,500 words on average (written by the experts). Both the audio and the transcript are de-identified (by removing the identifying information) with digital zeros and [de-identified] tags, respectively. The sentences in the transcript are grounded to the audio with the timestamps of its first and last word.",
+        "The transcript of the conversations are annotated with summaries and Medication Regimen tags (MR tags), both grounded using the timestamps of the sentences from the transcript deemed relevant by the expert annotators, refer to Table TABREF1. The transcript for a typical conversation can be quite long, and not easy for many of the high performing deep learning models to act on. Moreover, the medical information about a concept/condition/entity can change during the conversation after a significant time gap. For example, dosage of a medication can be different when discussing current medication the patient is on vs when they are prescribed a different dosage. Hence, we have annotations, that are grounded to a short segment of the transcript.",
+        "The summaries (#words - $\\mu = 9.7; \\sigma = 10.1$) are medically relevant and local. The MR tags are also local and are of the form {Medication Name, Dosage, Frequency}. If dosage ($\\mu = 2.0; \\sigma = 0$) or frequency ($\\mu = 2.1; \\sigma = 1.07$) information for a medication is not present in a grounded sentence, the corresponding field in the MR tag will be marked as `none'.",
+        "In the MR tags, Medication Name and Dosage (usually a quantity followed by its units) can be relatively easily extracted from the transcript except for the units of the dosage which is sometimes inferred. In contrast, due to high degree of linguistic variation with which Frequency is often expressed, extracting Frequency requires an additional inference step. For example, `take one in the morning and at noon' from the transcript is tagged as `twice a day' in the frequency tag, likewise `take it before sleeping' is tagged as `at night time'.",
+        "Out of overall 6,693 files, we set aside a random sample of 423 files (denoted as $\\mathcal {D}_{test}$) for final evaluation. The remaining 6,270 files are used for training with 80% train (5016), 10% validation (627), and 10% test (627) split. Overall, the 6,270 files contains 156,186 summaries and 32,000 MR tags out of which 8,654 MR tags contain values for at least one of the Dosage or Frequency, which we used for training to avoid overfitting (the remaining MR tags have both Dosage and Frequency as `none'). Note that we have two test datasets: `10% test' - used to evaluate all the models, and $\\mathcal {D}_{test}$ - used to measure the performance of best performing models on ASR transcripts."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Data",
+        "Data",
+        "Data",
+        "Data",
+        "Data"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Data",
+          0
+        ],
+        [
+          "Data",
+          1
+        ],
+        [
+          "Data",
+          2
+        ],
+        [
+          "Data",
+          3
+        ],
+        [
+          "Data",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Data",
+      "section": "Data",
+      "title_path": "Data",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] To appear in Proceedings of International Workshop on Health Intelligence (W3PHIAI) of the 34th AAAI Conference on Artificial Intelligence, 2020.\n[source_id=5] Physician burnout is a growing concern, estimated to be experienced by at least 35% of physicians in the developing world and 50% in the United States BIBREF0. BIBREF1 found that for every hour physicians provide direct clinical facetime to patients, nearly two additional hours are spent on EHR (Electronic Health Records) and administrative or desk work. As per the study conducted by Massachusetts General Physicians Organization (MPGO) BIBREF2 and as reported by BIBREF3, the average time spent on administrative tasks increased from 23.7% in 2014 to 27.9% in 2017. Both the surveys found that time spent on administrative tasks was positively associated with higher likelihood of burnout. Top reasons under administrative burden include working on the ambulatory EHR, handling medication reconciliation (sometimes done by aids), medication renewals, and medical billing and coding. The majority of these reasons revolve around documentation of information exchanged between doctors and patients during the clinical encounters. Automatically extracting such clinical information BIBREF4, BIBREF5 can not only help alleviate the documentation burden on the physician, but also allow them to dedicate more time directly with patients.\n[source_id=6] Among all the clinical information extraction tasks, Medication Regimen (Medication, dosage, and frequency) extraction is particularly interesting due to its ability to help doctors with medication orders cum renewals, medication reconciliation, potentially verifying the reconciliations for errors, and, other medication-centered EHR documentation tasks. In addition, the same information when provided to patients can help them with better recall of doctor instructions which might aid in compliance with the care plan. This is particularly important given that patients forget or wrongly recollect 40-80% BIBREF6 of what is discussed in the clinic, and accessing EHR data has its own challenges.\n[source_id=7] Spontaneous clinical conversations happening between a doctor and a patient, have several distinguishing characteristics from a normal monologue or prepared speech: it involves multiple speakers with overlapping dialogues, covers a variety of speech patterns, and the vocabulary can range from colloquial to complex domain-specific language. With recent advancements in Conversational Speech Recognition BIBREF7 rendering the systems less prone to errors, the subsequent challenge of understanding and extracting relevant information from the conversations is receiving increasing research focus BIBREF4, BIBREF8.\n[source_id=8] In this paper, we focus on local information extraction in transcribed clinical conversations. Specifically, we extract dosage (e.g. 5mg) and frequency (e.g. once a day) for the medications (e.g. aspirin) from these transcripts, collectively referred to as Medication Regimen (MR) extraction. The information extraction is local as we extract the information from a segment of the transcript and not the entire transcript since doing the latter is difficult owing to the long meandering nature of the conversations often with multiple medication regimens and care plans being discussed.\n[source_id=9] The challenges associated with the Medication Regimen (MR) extraction task include understanding the spontaneous dialog with clinical vocabulary and understanding the relationship between different entities as the discussion can contain multiple medications and dosages (e.g. doctor revising a dosage or reviewing all the current medications).\n[source_id=10] We frame this problem as a Question Answering (QA) task by generating questions using templates. We base the QA model on pointer-generator networks BIBREF9 augmented with Co-Attentions BIBREF10. In addition, we develop models combining QA and Information Extraction frameworks using multi-decoder (one each for dosage and frequency) architecture.\n[source_id=11] Lack of availability of a large volume of data is a typical challenge in healthcare. A conversation corpus by itself is a rare commodity in the healthcare data space because of the cost and difficulty in handing (because of data privacy concerns). Moreover, transcribing and labeling the conversations is a costly process as it requires domain-specific medical annotation expertise. To address data shortage and improve the model performance, we investigate different high-performance contextual embeddings (ELMO BIBREF11, BERT BIBREF12 and ClinicalBERT BIBREF13), and pretrain the models on a clinical summarization task. We further investigate the effects of training data size on our models.\n[source_id=12] On the MR extraction task, ELMo with encoder multi-decoder architecture and BERT with encoder-decoder with encoders pretrained on the summarization task perform the best. The best-performing models improve our baseline's dosage and frequency extractions ROUGE-1 F1 scores from 54.28 and 37.13 to 89.57 and 45.94, respectively.\n[source_id=13] Using our models, we present the first fully automated system to extract MR tags from spontaneous doctor-patient conversations. We evaluate the system (using our best performing models) on the transcripts generated from Automatic Speech Recognition (ASR) APIs offered by Google and IBM. In Google ASR's transcripts, our best model obtained ROUGE-1 F1 of 71.75 for Dosage extraction (which in this specific case equals to the percentage of times dosage is correct, refer Metrics Section for more details) and 40.13 for Frequency extraction tasks. On qualitative evaluation, we find that for 73.58% of the medications the model can find the correct frequency. These results demonstrate that the research on NLP can be used effectively in a real clinical setting to benefit both doctors and patients",
+      "score": 2.0672113430378607,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "child_qasper_evidence_texts": [
+        "To appear in Proceedings of International Workshop on Health Intelligence (W3PHIAI) of the 34th AAAI Conference on Artificial Intelligence, 2020.",
+        "Physician burnout is a growing concern, estimated to be experienced by at least 35% of physicians in the developing world and 50% in the United States BIBREF0. BIBREF1 found that for every hour physicians provide direct clinical facetime to patients, nearly two additional hours are spent on EHR (Electronic Health Records) and administrative or desk work. As per the study conducted by Massachusetts General Physicians Organization (MPGO) BIBREF2 and as reported by BIBREF3, the average time spent on administrative tasks increased from 23.7% in 2014 to 27.9% in 2017. Both the surveys found that time spent on administrative tasks was positively associated with higher likelihood of burnout. Top reasons under administrative burden include working on the ambulatory EHR, handling medication reconciliation (sometimes done by aids), medication renewals, and medical billing and coding. The majority of these reasons revolve around documentation of information exchanged between doctors and patients during the clinical encounters. Automatically extracting such clinical information BIBREF4, BIBREF5 can not only help alleviate the documentation burden on the physician, but also allow them to dedicate more time directly with patients.",
+        "Among all the clinical information extraction tasks, Medication Regimen (Medication, dosage, and frequency) extraction is particularly interesting due to its ability to help doctors with medication orders cum renewals, medication reconciliation, potentially verifying the reconciliations for errors, and, other medication-centered EHR documentation tasks. In addition, the same information when provided to patients can help them with better recall of doctor instructions which might aid in compliance with the care plan. This is particularly important given that patients forget or wrongly recollect 40-80% BIBREF6 of what is discussed in the clinic, and accessing EHR data has its own challenges.",
+        "Spontaneous clinical conversations happening between a doctor and a patient, have several distinguishing characteristics from a normal monologue or prepared speech: it involves multiple speakers with overlapping dialogues, covers a variety of speech patterns, and the vocabulary can range from colloquial to complex domain-specific language. With recent advancements in Conversational Speech Recognition BIBREF7 rendering the systems less prone to errors, the subsequent challenge of understanding and extracting relevant information from the conversations is receiving increasing research focus BIBREF4, BIBREF8.",
+        "In this paper, we focus on local information extraction in transcribed clinical conversations. Specifically, we extract dosage (e.g. 5mg) and frequency (e.g. once a day) for the medications (e.g. aspirin) from these transcripts, collectively referred to as Medication Regimen (MR) extraction. The information extraction is local as we extract the information from a segment of the transcript and not the entire transcript since doing the latter is difficult owing to the long meandering nature of the conversations often with multiple medication regimens and care plans being discussed.",
+        "The challenges associated with the Medication Regimen (MR) extraction task include understanding the spontaneous dialog with clinical vocabulary and understanding the relationship between different entities as the discussion can contain multiple medications and dosages (e.g. doctor revising a dosage or reviewing all the current medications).",
+        "We frame this problem as a Question Answering (QA) task by generating questions using templates. We base the QA model on pointer-generator networks BIBREF9 augmented with Co-Attentions BIBREF10. In addition, we develop models combining QA and Information Extraction frameworks using multi-decoder (one each for dosage and frequency) architecture.",
+        "Lack of availability of a large volume of data is a typical challenge in healthcare. A conversation corpus by itself is a rare commodity in the healthcare data space because of the cost and difficulty in handing (because of data privacy concerns). Moreover, transcribing and labeling the conversations is a costly process as it requires domain-specific medical annotation expertise. To address data shortage and improve the model performance, we investigate different high-performance contextual embeddings (ELMO BIBREF11, BERT BIBREF12 and ClinicalBERT BIBREF13), and pretrain the models on a clinical summarization task. We further investigate the effects of training data size on our models.",
+        "On the MR extraction task, ELMo with encoder multi-decoder architecture and BERT with encoder-decoder with encoders pretrained on the summarization task perform the best. The best-performing models improve our baseline's dosage and frequency extractions ROUGE-1 F1 scores from 54.28 and 37.13 to 89.57 and 45.94, respectively.",
+        "Using our models, we present the first fully automated system to extract MR tags from spontaneous doctor-patient conversations. We evaluate the system (using our best performing models) on the transcripts generated from Automatic Speech Recognition (ASR) APIs offered by Google and IBM. In Google ASR's transcripts, our best model obtained ROUGE-1 F1 of 71.75 for Dosage extraction (which in this specific case equals to the percentage of times dosage is correct, refer Metrics Section for more details) and 40.13 for Frequency extraction tasks. On qualitative evaluation, we find that for 73.58% of the medications the model can find the correct frequency. These results demonstrate that the research on NLP can be used effectively in a real clinical setting to benefit both doctors and patients"
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ],
+        [
+          "Introduction",
+          6
+        ],
+        [
+          "Introduction",
+          7
+        ],
+        [
+          "Introduction",
+          8
+        ],
+        [
+          "Introduction",
+          9
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_14",
+      "content": "[Section] Results and Discussion ::: Evaluating on ASR transcripts\n[source_id=62] To test the performance of our models on real-world conditions, we use commercially available ASR services (Google and IBM) to transcribe the $\\mathcal {D}_{test}$ files and measure the performance of our models without assuming any annotations (except when calculating the metrics). It should be noted that this is not the case in our previous evaluations using `10% test' dataset where we use the segmentation information. For ground truth annotations on ASR transcripts, we aligned the MR tags from human written transcripts to the ASR transcript using their grounded timing information. Additionally, since ASR is prone to errors, during the alignment, if a medication from an MR tag is not recognized correctly in the ASR transcript, we remove the corresponding MR tag.\n[source_id=63] In our evaluations, we use Google Cloud Speech-to-Text (G-STT) and IBM Watson Speech to Text (IBM-STT) as these were among the top-performing ASR APIs on medical speech BIBREF19 and were readily available to us. We used G-STT, with the `video model' with punctuation settings. Unlike our human written transcripts, the transcript provided by G-STT is not verbatim and does not have disfluencies. IBM-STT, on the other hand, does not give punctuation so we used the speaker changes to add end-of-sentence punctuation.\n[source_id=64] In our $\\mathcal {D}_{test}$ dataset, on initial study we see a Word Error Rate of $\\sim $50% for the ASR APIs and this number is not accurate because, 1) of the de-identification, 2) disfluencies (verbatim) difference between the human written and ASR transcript, and 3) minor alignment differences between the audio and the ground truth transcript.\n[source_id=65] During this evaluation, we followed the same preprocessing methods we used during training. Then, we auto segment the transcript into small contiguous segments similar to the grounded sentences in the annotations for tags extraction. To segment the transcript, we follow a simple procedure. First, we detected all the medications in a transcript using RxNorm BIBREF20 via string matching. For all the detected medications, we selected $2 \\le x \\le 5$ nearby sentences as the input to our model. We increased $x$ iteratively until we encountered a quantity entity – detected using spaCy's entity recognizer, and we set $x$ as 2 if we did not detect any entities in the range.\n[source_id=66] We show the model's performance on ASR transcripts and human written transcripts with automatic segmentation, and human written transcripts with human (defined) segmentation, in Table TABREF18. The number of recognized medications in IBM-STT is only 95 compared to 725 (human written), we mainly consider the models' performance on G-STT's transcripts (343).\n[source_id=67] On the Medications that were recognized correctly, the models can perform decently on ASR transcripts in comparison to human transcripts (within 5 points ROUGE-1 F1 for both tasks, refer to Table TABREF18). This shows that the models are robust to ASR variations discussed above. The lower performance compared to human transcripts is mainly due to incorrect recognition of Dosage and other medications in the same segments (changing the meaning of the text). By comparing the performance of the model on the human written transcripts with human (defined) segmentation and the same with auto segmentation, we see a 10 point drop in Dosage and 6 point drop in Frequency extraction tasks. This points out the need for more sophisticated segmentation algorithms.\n[source_id=68] With G-STT, our best model obtained ROUGE-1 F1 of 71.75 (which equals to percentage of times dosage is correct in this case) for Dosage extraction and 40.13 for Frequency extraction tasks. To measure the percentage of times the correct frequency was extracted by the model, we qualitatively compared the extracted and predicted frequency. We find that for 73.58% of the medications the model can find the correct frequency from the transcripts.",
+      "score": 1.959786743365209,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_14",
+      "child_source_node_ids": [
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68
+      ],
+      "child_qasper_evidence_texts": [
+        "To test the performance of our models on real-world conditions, we use commercially available ASR services (Google and IBM) to transcribe the $\\mathcal {D}_{test}$ files and measure the performance of our models without assuming any annotations (except when calculating the metrics). It should be noted that this is not the case in our previous evaluations using `10% test' dataset where we use the segmentation information. For ground truth annotations on ASR transcripts, we aligned the MR tags from human written transcripts to the ASR transcript using their grounded timing information. Additionally, since ASR is prone to errors, during the alignment, if a medication from an MR tag is not recognized correctly in the ASR transcript, we remove the corresponding MR tag.",
+        "In our evaluations, we use Google Cloud Speech-to-Text (G-STT) and IBM Watson Speech to Text (IBM-STT) as these were among the top-performing ASR APIs on medical speech BIBREF19 and were readily available to us. We used G-STT, with the `video model' with punctuation settings. Unlike our human written transcripts, the transcript provided by G-STT is not verbatim and does not have disfluencies. IBM-STT, on the other hand, does not give punctuation so we used the speaker changes to add end-of-sentence punctuation.",
+        "In our $\\mathcal {D}_{test}$ dataset, on initial study we see a Word Error Rate of $\\sim $50% for the ASR APIs and this number is not accurate because, 1) of the de-identification, 2) disfluencies (verbatim) difference between the human written and ASR transcript, and 3) minor alignment differences between the audio and the ground truth transcript.",
+        "During this evaluation, we followed the same preprocessing methods we used during training. Then, we auto segment the transcript into small contiguous segments similar to the grounded sentences in the annotations for tags extraction. To segment the transcript, we follow a simple procedure. First, we detected all the medications in a transcript using RxNorm BIBREF20 via string matching. For all the detected medications, we selected $2 \\le x \\le 5$ nearby sentences as the input to our model. We increased $x$ iteratively until we encountered a quantity entity – detected using spaCy's entity recognizer, and we set $x$ as 2 if we did not detect any entities in the range.",
+        "We show the model's performance on ASR transcripts and human written transcripts with automatic segmentation, and human written transcripts with human (defined) segmentation, in Table TABREF18. The number of recognized medications in IBM-STT is only 95 compared to 725 (human written), we mainly consider the models' performance on G-STT's transcripts (343).",
+        "On the Medications that were recognized correctly, the models can perform decently on ASR transcripts in comparison to human transcripts (within 5 points ROUGE-1 F1 for both tasks, refer to Table TABREF18). This shows that the models are robust to ASR variations discussed above. The lower performance compared to human transcripts is mainly due to incorrect recognition of Dosage and other medications in the same segments (changing the meaning of the text). By comparing the performance of the model on the human written transcripts with human (defined) segmentation and the same with auto segmentation, we see a 10 point drop in Dosage and 6 point drop in Frequency extraction tasks. This points out the need for more sophisticated segmentation algorithms.",
+        "With G-STT, our best model obtained ROUGE-1 F1 of 71.75 (which equals to percentage of times dosage is correct in this case) for Dosage extraction and 40.13 for Frequency extraction tasks. To measure the percentage of times the correct frequency was extracted by the model, we qualitatively compared the extracted and predicted frequency. We find that for 73.58% of the medications the model can find the correct frequency from the transcripts."
+      ],
+      "child_pages": [
+        14,
+        14,
+        14,
+        14,
+        14,
+        14,
+        14
+      ],
+      "child_sections": [
+        "Results and Discussion ::: Evaluating on ASR transcripts",
+        "Results and Discussion ::: Evaluating on ASR transcripts",
+        "Results and Discussion ::: Evaluating on ASR transcripts",
+        "Results and Discussion ::: Evaluating on ASR transcripts",
+        "Results and Discussion ::: Evaluating on ASR transcripts",
+        "Results and Discussion ::: Evaluating on ASR transcripts",
+        "Results and Discussion ::: Evaluating on ASR transcripts"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results and Discussion ::: Evaluating on ASR transcripts",
+          0
+        ],
+        [
+          "Results and Discussion ::: Evaluating on ASR transcripts",
+          1
+        ],
+        [
+          "Results and Discussion ::: Evaluating on ASR transcripts",
+          2
+        ],
+        [
+          "Results and Discussion ::: Evaluating on ASR transcripts",
+          3
+        ],
+        [
+          "Results and Discussion ::: Evaluating on ASR transcripts",
+          4
+        ],
+        [
+          "Results and Discussion ::: Evaluating on ASR transcripts",
+          5
+        ],
+        [
+          "Results and Discussion ::: Evaluating on ASR transcripts",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_14",
+      "section_id": "Results and Discussion ::: Evaluating on ASR transcripts",
+      "section": "Results and Discussion ::: Evaluating on ASR transcripts",
+      "title_path": "Results and Discussion ::: Evaluating on ASR transcripts",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Results and Discussion ::: Breakdown of Performance\n[source_id=56] We categorize the 10% test dataset into different categories based on the complexity and type of the data and analyze the breakdown of the system's performance in Table TABREF11. We breakdown the Frequency extraction into two categories, 1) None: ground truth Frequency tag is `none', and 2) NN (Not None): ground truth Frequency tag is not `none'. Similarly, the Dosage extraction into 5 categories, 1) None: ground truth dosage tag is `none', 2) MM (Multiple Medicine): input segment has more than one Medication mentioned, 3) MN (Multiple Numbers): input segment has more than one number present, and 4) NBM (Number between correct Dosage and Medicine) : between the Medication Name and the correct Dosage in the input segment there are other numbers present. Note that the categories of the Dosage extraction task are not exhaustive, and one tag can belong to multiple categories.\n[source_id=57] From the performance breakdown of Dosage extraction task, we see that 1) the models predict `none' better than other categories, i.e., the models are correctly able to identify when a medication's dosage is absent, 2) there is performance dip in hard cases (MM, MN, and NBM), 3) the models are able to figure out the correct dosage (decently) for a medication even when there are multiple numbers/dosage present, and 4) the model struggles the most in the NBM category. The models' low performance in NBM could be because we have a comparatively lower number of examples to train in this category. The Frequency extraction task performs equally well when the tag is `none` or not. In most categories, we see an increase in performance when using pretrained encoders.",
+      "score": 1.7375028450666363,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        56,
+        57
+      ],
+      "child_qasper_evidence_texts": [
+        "We categorize the 10% test dataset into different categories based on the complexity and type of the data and analyze the breakdown of the system's performance in Table TABREF11. We breakdown the Frequency extraction into two categories, 1) None: ground truth Frequency tag is `none', and 2) NN (Not None): ground truth Frequency tag is not `none'. Similarly, the Dosage extraction into 5 categories, 1) None: ground truth dosage tag is `none', 2) MM (Multiple Medicine): input segment has more than one Medication mentioned, 3) MN (Multiple Numbers): input segment has more than one number present, and 4) NBM (Number between correct Dosage and Medicine) : between the Medication Name and the correct Dosage in the input segment there are other numbers present. Note that the categories of the Dosage extraction task are not exhaustive, and one tag can belong to multiple categories.",
+        "From the performance breakdown of Dosage extraction task, we see that 1) the models predict `none' better than other categories, i.e., the models are correctly able to identify when a medication's dosage is absent, 2) there is performance dip in hard cases (MM, MN, and NBM), 3) the models are able to figure out the correct dosage (decently) for a medication even when there are multiple numbers/dosage present, and 4) the model struggles the most in the NBM category. The models' low performance in NBM could be because we have a comparatively lower number of examples to train in this category. The Frequency extraction task performs equally well when the tag is `none` or not. In most categories, we see an increase in performance when using pretrained encoders."
+      ],
+      "child_pages": [
+        12,
+        12
+      ],
+      "child_sections": [
+        "Results and Discussion ::: Breakdown of Performance",
+        "Results and Discussion ::: Breakdown of Performance"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results and Discussion ::: Breakdown of Performance",
+          0
+        ],
+        [
+          "Results and Discussion ::: Breakdown of Performance",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Results and Discussion ::: Breakdown of Performance",
+      "section": "Results and Discussion ::: Breakdown of Performance",
+      "title_path": "Results and Discussion ::: Breakdown of Performance",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Experiments ::: Data Processing\n[source_id=37] We did the following basic preprocessing to our data, 1) added `none' to the beginning of the input utterance, so the network could point to it when there was no relevant information in the input, 2) filtered outliers with a large number of grounded transcript sentences ($>$150 words), and 3) converted all text to lower case.\n[source_id=38] To improve performance, we 1) standardized all numbers (both digits and words) to words concatenated with a hyphen (e.g. 110 -$>$ one-hundred-ten), in both input and output, 2) removed units from Dosage as sometimes the units were not explicitly mentioned in the transcript segment but were written by the annotators using domain knowledge, 3) prepended all medication mentions with `rx-' tag, as this helps model's performance when multiple medications are discussed in a segment (in both input and output), and 4) when a transcript segment has multiple medications or dosages being discussed we randomly shuffle them (in both input and output) and create a new data point, to increases the number of training data points. Randomly shuffling the entities increases the number of training MR tags from 8,654 to 11,521. Based on the data statistics after data processing, we fixed the maximum encoder steps to 100, dosage decoder steps to 1, and frequency decoder steps to 3 (for both the QA and Multi-decoder QA models).",
+      "score": 1.6157068842695084,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        37,
+        38
+      ],
+      "child_qasper_evidence_texts": [
+        "We did the following basic preprocessing to our data, 1) added `none' to the beginning of the input utterance, so the network could point to it when there was no relevant information in the input, 2) filtered outliers with a large number of grounded transcript sentences ($>$150 words), and 3) converted all text to lower case.",
+        "To improve performance, we 1) standardized all numbers (both digits and words) to words concatenated with a hyphen (e.g. 110 -$>$ one-hundred-ten), in both input and output, 2) removed units from Dosage as sometimes the units were not explicitly mentioned in the transcript segment but were written by the annotators using domain knowledge, 3) prepended all medication mentions with `rx-' tag, as this helps model's performance when multiple medications are discussed in a segment (in both input and output), and 4) when a transcript segment has multiple medications or dosages being discussed we randomly shuffle them (in both input and output) and create a new data point, to increases the number of training data points. Randomly shuffling the entities increases the number of training MR tags from 8,654 to 11,521. Based on the data statistics after data processing, we fixed the maximum encoder steps to 100, dosage decoder steps to 1, and frequency decoder steps to 3 (for both the QA and Multi-decoder QA models)."
+      ],
+      "child_pages": [
+        8,
+        8
+      ],
+      "child_sections": [
+        "Experiments ::: Data Processing",
+        "Experiments ::: Data Processing"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments ::: Data Processing",
+          0
+        ],
+        [
+          "Experiments ::: Data Processing",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Experiments ::: Data Processing",
+      "section": "Experiments ::: Data Processing",
+      "title_path": "Experiments ::: Data Processing",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_13",
+      "content": "[Section] Results and Discussion ::: Training Dataset Size\n[source_id=59] We vary the number of MR tags used to train the model and analyze the model's performance when training the networks, using publicly available contextual embeddings, compared to using pretrained embeddings and encoder (pretrained on the summarization task). Out of the 5,016 files in the 80% train dataset only 2,476 have atleast one MR tag. Therefore, out of the 2476 files, we randomly choose 100, 500, and 1000 files and trained the best performing model variations to observe the performance differences, refer to Figure FIGREF12. For all these experiments we used the same vocabulary size (456), the same hyper/training parameters, and the same 10% test split of 627 files.\n[source_id=60] As expected, we see that the encoder pretrained models have higher performance on all the different training data sizes, i.e., they achieve higher performance on a lower number of data points, refer to Figure FIGREF12. The difference, as expected, shrinks as the training data size increases.",
+      "score": 1.4669420684541414,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_13",
+      "child_source_node_ids": [
+        59,
+        60
+      ],
+      "child_qasper_evidence_texts": [
+        "We vary the number of MR tags used to train the model and analyze the model's performance when training the networks, using publicly available contextual embeddings, compared to using pretrained embeddings and encoder (pretrained on the summarization task). Out of the 5,016 files in the 80% train dataset only 2,476 have atleast one MR tag. Therefore, out of the 2476 files, we randomly choose 100, 500, and 1000 files and trained the best performing model variations to observe the performance differences, refer to Figure FIGREF12. For all these experiments we used the same vocabulary size (456), the same hyper/training parameters, and the same 10% test split of 627 files.",
+        "As expected, we see that the encoder pretrained models have higher performance on all the different training data sizes, i.e., they achieve higher performance on a lower number of data points, refer to Figure FIGREF12. The difference, as expected, shrinks as the training data size increases."
+      ],
+      "child_pages": [
+        13,
+        13
+      ],
+      "child_sections": [
+        "Results and Discussion ::: Training Dataset Size",
+        "Results and Discussion ::: Training Dataset Size"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results and Discussion ::: Training Dataset Size",
+          0
+        ],
+        [
+          "Results and Discussion ::: Training Dataset Size",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_13",
+      "section_id": "Results and Discussion ::: Training Dataset Size",
+      "section": "Results and Discussion ::: Training Dataset Size",
+      "title_path": "Results and Discussion ::: Training Dataset Size",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Results and Discussion ::: Difference in networks and approaches\n[source_id=49] Embeddings: On Dosage extraction, in general, ELMo obtains better performance than BERT, refer to Table TABREF5. This could be because we concatenated the numbers with a hyphen, and as ELMo uses character-level tokens it can learn the tagging better than BERT, a similar observation is also noted in BIBREF17. On the other hand, on Frequency extraction, without pretraining, ELMo's performance is lagging by a big margin of $\\sim $8.5 ROUGE-1 F1 compared to BERT-based embeddings.\n[source_id=50] Although in cases without encoder pretraining, ClinicalBERT performed the best in the Frequency extraction task (by a small margin), in general, it does not perform as well as BERT. This could also be a reflection of the fact that the language and style of writing used in clinical notes is very different from the way doctors converse with patients and the embedding dimension difference. Lookup table embedding performed decently in the frequency extraction task but lags behind in the Dosage extraction task.\n[source_id=51] From the metrics and qualitative inspection, we find that the Frequency extraction is an easier task than the Dosage extraction. This is because, in the conversations, frequency information usually occurs in isolation and near the medications, but a medication's dosage can occur 1) near other medication's dosages, 2) with previous dosages (when a dosage for a medication is revised), and 3) after a large number of words from the medication.\n[source_id=52] Other Variations: Considering various models' performance (without pretraining) and the resource constraint, we choose ELMo and BERT embeddings to analyze the effects of pretraining the encoder. When the network's encoder (and embedding) is pretrained with the summarization task, we 1) see a small decrease in the average number of iterations required for training, 2) improvement in individual performances of all models for both the sub-tasks, and 3) get best performance metrics across all variations, refer to Table TABREF5. Both in terms of performance and the training speed, there is no clear winner between shared and multi-decoder approaches. Medication tagging and data augmentation increase the best-performing model's ROUGE-1 F1 score by $\\sim $1.5 for the Dosage extraction task.\n[source_id=53] We also measure the performance of Multitask Question Answering Network (MQAN) BIBREF18 a QA model trained by the authors on the Decathlon multitask challenge. Since MQAN was not trained to produce the output sequence in our MR tags, it would not be fair to compute ROUGE scores. Instead, we randomly sample the MQAN's predictions from the 10% test dataset and qualitatively evaluate it. From the evaluations, we find that MQAN can not distinguish between frequency and dosage, and mixed the answers. MQAN correctly predicted the dosage for 29.73% and frequency for 24.24% percent of the medications compared to 84.12% and 76.34% for the encoder pretrained BERT QA PGNet model trained on our dataset. This could be because of the difference in the training dataset, domain and the tasks in the Decathlon challenge compared to ours.\n[source_id=54] Almost all our models perform better than the naive baselines and the ones using lookup table embeddings, and our best performing models outperform them significantly. Among all the variations, the best performing models are ELMo with Multi-decoder (Dosage extraction) and BERT with shared-decoder QA PGNet architecture with pretrained encoder (Frequency extraction). We choose these two models for our subsequent analysis.",
+      "score": 1.4428363714490806,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        49,
+        50,
+        51,
+        52,
+        53,
+        54
+      ],
+      "child_qasper_evidence_texts": [
+        "Embeddings: On Dosage extraction, in general, ELMo obtains better performance than BERT, refer to Table TABREF5. This could be because we concatenated the numbers with a hyphen, and as ELMo uses character-level tokens it can learn the tagging better than BERT, a similar observation is also noted in BIBREF17. On the other hand, on Frequency extraction, without pretraining, ELMo's performance is lagging by a big margin of $\\sim $8.5 ROUGE-1 F1 compared to BERT-based embeddings.",
+        "Although in cases without encoder pretraining, ClinicalBERT performed the best in the Frequency extraction task (by a small margin), in general, it does not perform as well as BERT. This could also be a reflection of the fact that the language and style of writing used in clinical notes is very different from the way doctors converse with patients and the embedding dimension difference. Lookup table embedding performed decently in the frequency extraction task but lags behind in the Dosage extraction task.",
+        "From the metrics and qualitative inspection, we find that the Frequency extraction is an easier task than the Dosage extraction. This is because, in the conversations, frequency information usually occurs in isolation and near the medications, but a medication's dosage can occur 1) near other medication's dosages, 2) with previous dosages (when a dosage for a medication is revised), and 3) after a large number of words from the medication.",
+        "Other Variations: Considering various models' performance (without pretraining) and the resource constraint, we choose ELMo and BERT embeddings to analyze the effects of pretraining the encoder. When the network's encoder (and embedding) is pretrained with the summarization task, we 1) see a small decrease in the average number of iterations required for training, 2) improvement in individual performances of all models for both the sub-tasks, and 3) get best performance metrics across all variations, refer to Table TABREF5. Both in terms of performance and the training speed, there is no clear winner between shared and multi-decoder approaches. Medication tagging and data augmentation increase the best-performing model's ROUGE-1 F1 score by $\\sim $1.5 for the Dosage extraction task.",
+        "We also measure the performance of Multitask Question Answering Network (MQAN) BIBREF18 a QA model trained by the authors on the Decathlon multitask challenge. Since MQAN was not trained to produce the output sequence in our MR tags, it would not be fair to compute ROUGE scores. Instead, we randomly sample the MQAN's predictions from the 10% test dataset and qualitatively evaluate it. From the evaluations, we find that MQAN can not distinguish between frequency and dosage, and mixed the answers. MQAN correctly predicted the dosage for 29.73% and frequency for 24.24% percent of the medications compared to 84.12% and 76.34% for the encoder pretrained BERT QA PGNet model trained on our dataset. This could be because of the difference in the training dataset, domain and the tasks in the Decathlon challenge compared to ours.",
+        "Almost all our models perform better than the naive baselines and the ones using lookup table embeddings, and our best performing models outperform them significantly. Among all the variations, the best performing models are ELMo with Multi-decoder (Dosage extraction) and BERT with shared-decoder QA PGNet architecture with pretrained encoder (Frequency extraction). We choose these two models for our subsequent analysis."
+      ],
+      "child_pages": [
+        11,
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "child_sections": [
+        "Results and Discussion ::: Difference in networks and approaches",
+        "Results and Discussion ::: Difference in networks and approaches",
+        "Results and Discussion ::: Difference in networks and approaches",
+        "Results and Discussion ::: Difference in networks and approaches",
+        "Results and Discussion ::: Difference in networks and approaches",
+        "Results and Discussion ::: Difference in networks and approaches"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results and Discussion ::: Difference in networks and approaches",
+          0
+        ],
+        [
+          "Results and Discussion ::: Difference in networks and approaches",
+          1
+        ],
+        [
+          "Results and Discussion ::: Difference in networks and approaches",
+          2
+        ],
+        [
+          "Results and Discussion ::: Difference in networks and approaches",
+          3
+        ],
+        [
+          "Results and Discussion ::: Difference in networks and approaches",
+          4
+        ],
+        [
+          "Results and Discussion ::: Difference in networks and approaches",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Results and Discussion ::: Difference in networks and approaches",
+      "section": "Results and Discussion ::: Difference in networks and approaches",
+      "title_path": "Results and Discussion ::: Difference in networks and approaches",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 15,
+      "content": "Our dataset consists of a total of 6,693 real doctor-patient conversations recorded in a clinical setting using distant microphones of varying quality. The recordings have an average duration of 9min 28s and have a verbatim transcript of 1,500 words on average (written by the experts). Both the audio and the transcript are de-identified (by removing the identifying information) with digital zeros and [de-identified] tags, respectively. The sentences in the transcript are grounded to the audio with the timestamps of its first and last word.",
+      "qasper_evidence_text": "Our dataset consists of a total of 6,693 real doctor-patient conversations recorded in a clinical setting using distant microphones of varying quality. The recordings have an average duration of 9min 28s and have a verbatim transcript of 1,500 words on average (written by the experts). Both the audio and the transcript are de-identified (by removing the identifying information) with digital zeros and [de-identified] tags, respectively. The sentences in the transcript are grounded to the audio with the timestamps of its first and last word.",
+      "source_node_id": 15,
+      "node_id": 15,
+      "paragraph_id": 15,
+      "evidence_id": 15,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_2",
+      "rank": 2,
+      "score": 5.690392227253145,
+      "block_type": "paragraph",
+      "page": 2,
+      "section_id": "Data",
+      "section": "Data",
+      "title": "Data",
+      "hotpot_title": "Data",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    }
+  ],
+  "supporting_block_ids": [
+    15
+  ]
+}

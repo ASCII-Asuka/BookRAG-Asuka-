@@ -1,0 +1,420 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_17",
+      "content": "[Section] Learning Dynamics\n[source_id=67] Let us now look into how the process of DocRepair training progresses. Figure FIGREF38 shows how the BLEU scores with the reference translation and with the baseline context-agnostic translation (i.e. the input for the DocRepair model) are changing during training. First, the model quickly learns to copy baseline translations: the BLEU score with the baseline is very high. Then it gradually learns to change them, which leads to an improvement in BLEU with the reference translation and a drop in BLEU with the baseline. Importantly, the model is reluctant to make changes: the BLEU score between translations of the converged model and the baseline is 82.5. We count the number of changed sentences in every 4-sentence fragment in the test set and plot the histogram in Figure FIGREF38. In over than 20$\\%$ of the cases the model has not changed base translations at all. In almost $40\\%$, it modified only one sentence and left the remaining 3 sentences unchanged. The model changed more than half sentences in a group in only $14\\%$ of the cases. Several examples of the DocRepair translations are shown in Figure FIGREF43.\n[source_id=68] Figure FIGREF42 shows how consistency scores are changing in training. For deixis, the model achieves the final quality quite quickly; for the rest, it needs a large number of training steps to converge.",
+      "score": 7.5460144401307705,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_17",
+      "child_source_node_ids": [
+        67,
+        68
+      ],
+      "child_qasper_evidence_texts": [
+        "Let us now look into how the process of DocRepair training progresses. Figure FIGREF38 shows how the BLEU scores with the reference translation and with the baseline context-agnostic translation (i.e. the input for the DocRepair model) are changing during training. First, the model quickly learns to copy baseline translations: the BLEU score with the baseline is very high. Then it gradually learns to change them, which leads to an improvement in BLEU with the reference translation and a drop in BLEU with the baseline. Importantly, the model is reluctant to make changes: the BLEU score between translations of the converged model and the baseline is 82.5. We count the number of changed sentences in every 4-sentence fragment in the test set and plot the histogram in Figure FIGREF38. In over than 20$\\%$ of the cases the model has not changed base translations at all. In almost $40\\%$, it modified only one sentence and left the remaining 3 sentences unchanged. The model changed more than half sentences in a group in only $14\\%$ of the cases. Several examples of the DocRepair translations are shown in Figure FIGREF43.",
+        "Figure FIGREF42 shows how consistency scores are changing in training. For deixis, the model achieves the final quality quite quickly; for the rest, it needs a large number of training steps to converge."
+      ],
+      "child_pages": [
+        17,
+        17
+      ],
+      "child_sections": [
+        "Learning Dynamics",
+        "Learning Dynamics"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Learning Dynamics",
+          0
+        ],
+        [
+          "Learning Dynamics",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_17",
+      "section_id": "Learning Dynamics",
+      "section": "Learning Dynamics",
+      "title_path": "Learning Dynamics",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Experimental Setup ::: Data preprocessing\n[source_id=34] We use the publicly available OpenSubtitles2018 corpus BIBREF12 for English and Russian. For a fair comparison with previous work, we train the baseline MT system on the data released by BIBREF11. Namely, our MT system is trained on 6m instances. These are sentence pairs with a relative time overlap of subtitle frames between source and target language subtitles of at least $0.9$.\n[source_id=35] We gathered 30m groups of 4 consecutive sentences as our monolingual data. We used only documents not containing groups of sentences from general development and test sets as well as from contrastive test sets. The main results we report are for the model trained on all 30m fragments.\n[source_id=36] We use the tokenization provided by the corpus and use multi-bleu.perl on lowercased data to compute BLEU score. We use beam search with a beam of 4.\n[source_id=37] Sentences were encoded using byte-pair encoding BIBREF13, with source and target vocabularies of about 32000 tokens. Translation pairs were batched together by approximate sequence length. Each training batch contained a set of translation pairs containing approximately 15000 source tokens. It has been shown that Transformer's performance depends heavily on batch size BIBREF14, and we chose a large batch size to ensure the best performance. In training context-aware models, for early stopping we use both convergence in BLEU score on the general development set and scores on the consistency development sets. After training, we average the 5 latest checkpoints.",
+      "score": 4.9794637327664635,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        34,
+        35,
+        36,
+        37
+      ],
+      "child_qasper_evidence_texts": [
+        "We use the publicly available OpenSubtitles2018 corpus BIBREF12 for English and Russian. For a fair comparison with previous work, we train the baseline MT system on the data released by BIBREF11. Namely, our MT system is trained on 6m instances. These are sentence pairs with a relative time overlap of subtitle frames between source and target language subtitles of at least $0.9$.",
+        "We gathered 30m groups of 4 consecutive sentences as our monolingual data. We used only documents not containing groups of sentences from general development and test sets as well as from contrastive test sets. The main results we report are for the model trained on all 30m fragments.",
+        "We use the tokenization provided by the corpus and use multi-bleu.perl on lowercased data to compute BLEU score. We use beam search with a beam of 4.",
+        "Sentences were encoded using byte-pair encoding BIBREF13, with source and target vocabularies of about 32000 tokens. Translation pairs were batched together by approximate sequence length. Each training batch contained a set of translation pairs containing approximately 15000 source tokens. It has been shown that Transformer's performance depends heavily on batch size BIBREF14, and we chose a large batch size to ensure the best performance. In training context-aware models, for early stopping we use both convergence in BLEU score on the general development set and scores on the consistency development sets. After training, we average the 5 latest checkpoints."
+      ],
+      "child_pages": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "child_sections": [
+        "Experimental Setup ::: Data preprocessing",
+        "Experimental Setup ::: Data preprocessing",
+        "Experimental Setup ::: Data preprocessing",
+        "Experimental Setup ::: Data preprocessing"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experimental Setup ::: Data preprocessing",
+          0
+        ],
+        [
+          "Experimental Setup ::: Data preprocessing",
+          1
+        ],
+        [
+          "Experimental Setup ::: Data preprocessing",
+          2
+        ],
+        [
+          "Experimental Setup ::: Data preprocessing",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Experimental Setup ::: Data preprocessing",
+      "section": "Experimental Setup ::: Data preprocessing",
+      "title_path": "Experimental Setup ::: Data preprocessing",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Results ::: Consistency results\n[source_id=49] Scores on the phenomena test sets are provided in Table TABREF26. For deixis, lexical cohesion and ellipsis (infl.) we see substantial improvements over both the baseline and CADec. The largest improvement over CADec (22.5 percentage points) is for lexical cohesion. However, there is a drop of almost 5 percentage points for VP ellipsis. We hypothesize that this is because it is hard to learn to correct inconsistencies in translations caused by VP ellipsis relying on monolingual data alone. Figure FIGREF27(a) shows an example of inconsistency caused by VP ellipsis in English. There is no VP ellipsis in Russian, and when translating auxiliary “did” the model has to guess the main verb. Figure FIGREF27(b) shows steps of generating round-trip translations for the target side of the previous example. When translating from Russian, main verbs are unlikely to be translated as the auxiliary “do” in English, and hence the VP ellipsis is rarely present on the English side. This implies the model trained using the round-trip translations will not be exposed to many VP ellipsis examples in training. We discuss this further in Section SECREF34.\n[source_id=50] Table TABREF28 provides scores for deixis and lexical cohesion separately for different distances between sentences requiring consistency. It can be seen, that the performance of DocRepair degrades less than that of CADec when the distance between sentences requiring consistency gets larger.",
+      "score": 3.7976641910599183,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        49,
+        50
+      ],
+      "child_qasper_evidence_texts": [
+        "Scores on the phenomena test sets are provided in Table TABREF26. For deixis, lexical cohesion and ellipsis (infl.) we see substantial improvements over both the baseline and CADec. The largest improvement over CADec (22.5 percentage points) is for lexical cohesion. However, there is a drop of almost 5 percentage points for VP ellipsis. We hypothesize that this is because it is hard to learn to correct inconsistencies in translations caused by VP ellipsis relying on monolingual data alone. Figure FIGREF27(a) shows an example of inconsistency caused by VP ellipsis in English. There is no VP ellipsis in Russian, and when translating auxiliary “did” the model has to guess the main verb. Figure FIGREF27(b) shows steps of generating round-trip translations for the target side of the previous example. When translating from Russian, main verbs are unlikely to be translated as the auxiliary “do” in English, and hence the VP ellipsis is rarely present on the English side. This implies the model trained using the round-trip translations will not be exposed to many VP ellipsis examples in training. We discuss this further in Section SECREF34.",
+        "Table TABREF28 provides scores for deixis and lexical cohesion separately for different distances between sentences requiring consistency. It can be seen, that the performance of DocRepair degrades less than that of CADec when the distance between sentences requiring consistency gets larger."
+      ],
+      "child_pages": [
+        11,
+        11
+      ],
+      "child_sections": [
+        "Results ::: Consistency results",
+        "Results ::: Consistency results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results ::: Consistency results",
+          0
+        ],
+        [
+          "Results ::: Consistency results",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Results ::: Consistency results",
+      "section": "Results ::: Consistency results",
+      "title_path": "Results ::: Consistency results",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Results ::: General results\n[source_id=47] The BLEU scores are provided in Table TABREF24 (we evaluate translations of 4-sentence fragments). To see which part of the improvement is due to fixing agreement between sentences rather than simply sentence-level post-editing, we train the same repair model at the sentence level. Each sentence in a group is now corrected separately, then they are put back together in a group. One can see that most of the improvement comes from accounting for extra-sentential dependencies. DocRepair outperforms the baseline and CADec by 0.7 BLEU, and its sentence-level repair version by 0.5 BLEU.",
+      "score": 3.6069295193655315,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        47
+      ],
+      "child_qasper_evidence_texts": [
+        "The BLEU scores are provided in Table TABREF24 (we evaluate translations of 4-sentence fragments). To see which part of the improvement is due to fixing agreement between sentences rather than simply sentence-level post-editing, we train the same repair model at the sentence level. Each sentence in a group is now corrected separately, then they are put back together in a group. One can see that most of the improvement comes from accounting for extra-sentential dependencies. DocRepair outperforms the baseline and CADec by 0.7 BLEU, and its sentence-level repair version by 0.5 BLEU."
+      ],
+      "child_pages": [
+        10
+      ],
+      "child_sections": [
+        "Results ::: General results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results ::: General results",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Results ::: General results",
+      "section": "Results ::: General results",
+      "title_path": "Results ::: General results",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Modern sentence-level NMT systems often produce plausible translations of isolated sentences. However, when put in context, these translations may end up being inconsistent with each other. We propose a monolingual DocRepair model to correct inconsistencies between sentence-level translations. DocRepair performs automatic post-editing on a sequence of sentence-level translations, refining translations of sentences in context of each other. For training, the DocRepair model requires only monolingual document-level data in the target language. It is trained as a monolingual sequence-to-sequence model that maps inconsistent groups of sentences into consistent ones. The consistent groups come from the original training data; the inconsistent groups are obtained by sampling round-trip translations for each isolated sentence. We show that this approach successfully imitates inconsistencies we aim to fix: using contrastive evaluation, we show large improvements in the translation of several contextual phenomena in an English-Russian translation task, as well as improvements in the BLEU score. We also conduct a human evaluation and show a strong preference of the annotators to corrected translations over the baseline ones. Moreover, we analyze which discourse phenomena are hard to capture using monolingual data only.",
+      "score": 3.4643838702720484,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Modern sentence-level NMT systems often produce plausible translations of isolated sentences. However, when put in context, these translations may end up being inconsistent with each other. We propose a monolingual DocRepair model to correct inconsistencies between sentence-level translations. DocRepair performs automatic post-editing on a sequence of sentence-level translations, refining translations of sentences in context of each other. For training, the DocRepair model requires only monolingual document-level data in the target language. It is trained as a monolingual sequence-to-sequence model that maps inconsistent groups of sentences into consistent ones. The consistent groups come from the original training data; the inconsistent groups are obtained by sampling round-trip translations for each isolated sentence. We show that this approach successfully imitates inconsistencies we aim to fix: using contrastive evaluation, we show large improvements in the translation of several contextual phenomena in an English-Russian translation task, as well as improvements in the BLEU score. We also conduct a human evaluation and show a strong preference of the annotators to corrected translations over the baseline ones. Moreover, we analyze which discourse phenomena are hard to capture using monolingual data only."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Evaluation of Contextual Phenomena ::: Test sets\n[source_id=27] There are four test sets in the suite. Each test set contains contrastive examples. It is specifically designed to test the ability of a system to adapt to contextual information and handle the phenomenon under consideration. Each test instance consists of a true example (a sequence of sentences and their reference translation from the data) and several contrastive translations which differ from the true one only in one specific aspect. All contrastive translations are correct and plausible translations at the sentence level, and only context reveals the inconsistencies between them. The system is asked to score each candidate translation, and we compute the system accuracy as the proportion of times the true translation is preferred to the contrastive ones. Test set statistics are shown in Table TABREF15. The suites for deixis and lexical cohesion are split into development and test sets, with 500 examples from each used for validation purposes and the rest for testing. Convergence of both consistency scores on these development sets and BLEU score on a general development set are used as early stopping criteria in models training. For ellipsis, there is no dedicated development set, so we evaluate on all the ellipsis data and do not use it for development.",
+      "score": 3.114269033158728,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        27
+      ],
+      "child_qasper_evidence_texts": [
+        "There are four test sets in the suite. Each test set contains contrastive examples. It is specifically designed to test the ability of a system to adapt to contextual information and handle the phenomenon under consideration. Each test instance consists of a true example (a sequence of sentences and their reference translation from the data) and several contrastive translations which differ from the true one only in one specific aspect. All contrastive translations are correct and plausible translations at the sentence level, and only context reveals the inconsistencies between them. The system is asked to score each candidate translation, and we compute the system accuracy as the proportion of times the true translation is preferred to the contrastive ones. Test set statistics are shown in Table TABREF15. The suites for deixis and lexical cohesion are split into development and test sets, with 500 examples from each used for validation purposes and the rest for testing. Convergence of both consistency scores on these development sets and BLEU score on a general development set are used as early stopping criteria in models training. For ellipsis, there is no dedicated development set, so we evaluate on all the ellipsis data and do not use it for development."
+      ],
+      "child_pages": [
+        4
+      ],
+      "child_sections": [
+        "Evaluation of Contextual Phenomena ::: Test sets"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Evaluation of Contextual Phenomena ::: Test sets",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Evaluation of Contextual Phenomena ::: Test sets",
+      "section": "Evaluation of Contextual Phenomena ::: Test sets",
+      "title_path": "Evaluation of Contextual Phenomena ::: Test sets",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Machine translation has made remarkable progress, and studies claiming it to reach a human parity are starting to appear BIBREF0. However, when evaluating translations of the whole documents rather than isolated sentences, human raters show a stronger preference for human over machine translation BIBREF1. These findings emphasize the need to shift towards context-aware machine translation both from modeling and evaluation perspective.\n[source_id=5] Most previous work on context-aware NMT assumed that either all the bilingual data is available at the document level BIBREF2, BIBREF3, BIBREF4, BIBREF5, BIBREF6, BIBREF7, BIBREF8, BIBREF9, BIBREF10 or at least its fraction BIBREF11. But in practical scenarios, document-level parallel data is often scarce, which is one of the challenges when building a context-aware system.\n[source_id=6] We introduce an approach to context-aware machine translation using only monolingual document-level data. In our setting, a separate monolingual sequence-to-sequence model (DocRepair) is used to correct sentence-level translations of adjacent sentences. The key idea is to use monolingual data to imitate typical inconsistencies between context-agnostic translations of isolated sentences. The DocRepair model is trained to map inconsistent groups of sentences into consistent ones. The consistent groups come from the original training data; the inconsistent groups are obtained by sampling round-trip translations for each isolated sentence.\n[source_id=7] To validate the performance of our model, we use three kinds of evaluation: the BLEU score, contrastive evaluation of translation of several discourse phenomena BIBREF11, and human evaluation. We show strong improvements for all metrics.\n[source_id=8] We analyze which discourse phenomena are hard to capture using monolingual data only. Using contrastive test sets for targeted evaluation of several contextual phenomena, we compare the performance of the models trained on round-trip translations and genuine document-level parallel data. Among the four phenomena in the test sets we use (deixis, lexical cohesion, VP ellipsis and ellipsis which affects NP inflection) we find VP ellipsis to be the hardest phenomenon to be captured using round-trip translations.\n[source_id=9] Our key contributions are as follows:\n[source_id=10] we introduce the first approach to context-aware machine translation using only monolingual document-level data;\n[source_id=11] our approach shows substantial improvements in translation quality as measured by BLEU, targeted contrastive evaluation of several discourse phenomena and human evaluation;\n[source_id=12] we show which discourse phenomena are hard to capture using monolingual data only.",
+      "score": 3.095309443442992,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "child_qasper_evidence_texts": [
+        "Machine translation has made remarkable progress, and studies claiming it to reach a human parity are starting to appear BIBREF0. However, when evaluating translations of the whole documents rather than isolated sentences, human raters show a stronger preference for human over machine translation BIBREF1. These findings emphasize the need to shift towards context-aware machine translation both from modeling and evaluation perspective.",
+        "Most previous work on context-aware NMT assumed that either all the bilingual data is available at the document level BIBREF2, BIBREF3, BIBREF4, BIBREF5, BIBREF6, BIBREF7, BIBREF8, BIBREF9, BIBREF10 or at least its fraction BIBREF11. But in practical scenarios, document-level parallel data is often scarce, which is one of the challenges when building a context-aware system.",
+        "We introduce an approach to context-aware machine translation using only monolingual document-level data. In our setting, a separate monolingual sequence-to-sequence model (DocRepair) is used to correct sentence-level translations of adjacent sentences. The key idea is to use monolingual data to imitate typical inconsistencies between context-agnostic translations of isolated sentences. The DocRepair model is trained to map inconsistent groups of sentences into consistent ones. The consistent groups come from the original training data; the inconsistent groups are obtained by sampling round-trip translations for each isolated sentence.",
+        "To validate the performance of our model, we use three kinds of evaluation: the BLEU score, contrastive evaluation of translation of several discourse phenomena BIBREF11, and human evaluation. We show strong improvements for all metrics.",
+        "We analyze which discourse phenomena are hard to capture using monolingual data only. Using contrastive test sets for targeted evaluation of several contextual phenomena, we compare the performance of the models trained on round-trip translations and genuine document-level parallel data. Among the four phenomena in the test sets we use (deixis, lexical cohesion, VP ellipsis and ellipsis which affects NP inflection) we find VP ellipsis to be the hardest phenomenon to be captured using round-trip translations.",
+        "Our key contributions are as follows:",
+        "we introduce the first approach to context-aware machine translation using only monolingual document-level data;",
+        "our approach shows substantial improvements in translation quality as measured by BLEU, targeted contrastive evaluation of several discourse phenomena and human evaluation;",
+        "we show which discourse phenomena are hard to capture using monolingual data only."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ],
+        [
+          "Introduction",
+          6
+        ],
+        [
+          "Introduction",
+          7
+        ],
+        [
+          "Introduction",
+          8
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_21",
+      "content": "[Section] Conclusions\n[source_id=81] We introduce the first approach to context-aware machine translation using only monolingual document-level data. We propose a monolingual DocRepair model to correct inconsistencies between sentence-level translations. The model performs automatic post-editing on a sequence of sentence-level translations, refining translations of sentences in context of each other. Our approach results in substantial improvements in translation quality as measured by BLEU, targeted contrastive evaluation of several discourse phenomena and human evaluation. Moreover, we perform error analysis and detect which discourse phenomena are hard to capture using only monolingual document-level data. While in the current work we used text fragments of 4 sentences, in future work we would like to consider longer contexts.",
+      "score": 2.4418153763445467,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_21",
+      "child_source_node_ids": [
+        81
+      ],
+      "child_qasper_evidence_texts": [
+        "We introduce the first approach to context-aware machine translation using only monolingual document-level data. We propose a monolingual DocRepair model to correct inconsistencies between sentence-level translations. The model performs automatic post-editing on a sequence of sentence-level translations, refining translations of sentences in context of each other. Our approach results in substantial improvements in translation quality as measured by BLEU, targeted contrastive evaluation of several discourse phenomena and human evaluation. Moreover, we perform error analysis and detect which discourse phenomena are hard to capture using only monolingual document-level data. While in the current work we used text fragments of 4 sentences, in future work we would like to consider longer contexts."
+      ],
+      "child_pages": [
+        21
+      ],
+      "child_sections": [
+        "Conclusions"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusions",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_21",
+      "section_id": "Conclusions",
+      "section": "Conclusions",
+      "title_path": "Conclusions",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 47,
+      "content": "The BLEU scores are provided in Table TABREF24 (we evaluate translations of 4-sentence fragments). To see which part of the improvement is due to fixing agreement between sentences rather than simply sentence-level post-editing, we train the same repair model at the sentence level. Each sentence in a group is now corrected separately, then they are put back together in a group. One can see that most of the improvement comes from accounting for extra-sentential dependencies. DocRepair outperforms the baseline and CADec by 0.7 BLEU, and its sentence-level repair version by 0.5 BLEU.",
+      "qasper_evidence_text": "The BLEU scores are provided in Table TABREF24 (we evaluate translations of 4-sentence fragments). To see which part of the improvement is due to fixing agreement between sentences rather than simply sentence-level post-editing, we train the same repair model at the sentence level. Each sentence in a group is now corrected separately, then they are put back together in a group. One can see that most of the improvement comes from accounting for extra-sentential dependencies. DocRepair outperforms the baseline and CADec by 0.7 BLEU, and its sentence-level repair version by 0.5 BLEU.",
+      "source_node_id": 47,
+      "node_id": 47,
+      "paragraph_id": 47,
+      "evidence_id": 47,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_10",
+      "rank": 4,
+      "score": 3.6069295193655315,
+      "block_type": "paragraph",
+      "page": 10,
+      "section_id": "Results ::: General results",
+      "section": "Results ::: General results",
+      "title": "Results ::: General results",
+      "hotpot_title": "Results ::: General results",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    }
+  ],
+  "supporting_block_ids": [
+    47
+  ]
+}

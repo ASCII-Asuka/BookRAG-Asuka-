@@ -1,0 +1,428 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] As social media, specially Twitter, takes on an influential role in presidential elections in the U.S., natural language processing of political tweets BIBREF0 has the potential to help with nowcasting and forecasting of election results as well as identifying the main issues with a candidate – tasks of much interest to journalists, political scientists, and campaign organizers BIBREF1. As a methodology to obtain training data for a machine learning system that analyzes political tweets, BIBREF2 devised a crowdsourcing scheme with variable crowdworker numbers based on the difficulty of the annotation task. They provided a dataset of tweets where the sentiments towards political candidates were labeled both by experts in political communication and by crowdworkers who were likely not domain experts. BIBREF2 revealed that crowdworkers can match expert performance relatively accurately and in a budget-efficient manner. Given this result, the authors envisioned future work in which groundtruth labels would be crowdsourced for a large number of tweets and then used to design an automated NLP tool for political tweet analysis.\n[source_id=5] The question we address here is: How accurate are existing NLP tools for political tweet analysis? These tools would provide a baseline performance that any new machine learning system for political tweet analysis would compete against. We here explore whether existing NLP systems can answer the questions \"What sentiment?\" and \"Towards whom?\" accurately for the dataset of political tweets provided by BIBREF2. In our analysis, we include NLP tools with publicly-available APIs, even if the tools were not specifically designed for short texts like tweets, and, in particular, political tweets.\n[source_id=6] Our experiments reveal that the task of entity-level sentiment analysis is difficult for existing tools to answer accurately while the recognition of the entity, here, which politician, was easier.",
+      "score": 2.722647236824375,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6
+      ],
+      "child_qasper_evidence_texts": [
+        "As social media, specially Twitter, takes on an influential role in presidential elections in the U.S., natural language processing of political tweets BIBREF0 has the potential to help with nowcasting and forecasting of election results as well as identifying the main issues with a candidate – tasks of much interest to journalists, political scientists, and campaign organizers BIBREF1. As a methodology to obtain training data for a machine learning system that analyzes political tweets, BIBREF2 devised a crowdsourcing scheme with variable crowdworker numbers based on the difficulty of the annotation task. They provided a dataset of tweets where the sentiments towards political candidates were labeled both by experts in political communication and by crowdworkers who were likely not domain experts. BIBREF2 revealed that crowdworkers can match expert performance relatively accurately and in a budget-efficient manner. Given this result, the authors envisioned future work in which groundtruth labels would be crowdsourced for a large number of tweets and then used to design an automated NLP tool for political tweet analysis.",
+        "The question we address here is: How accurate are existing NLP tools for political tweet analysis? These tools would provide a baseline performance that any new machine learning system for political tweet analysis would compete against. We here explore whether existing NLP systems can answer the questions \"What sentiment?\" and \"Towards whom?\" accurately for the dataset of political tweets provided by BIBREF2. In our analysis, we include NLP tools with publicly-available APIs, even if the tools were not specifically designed for short texts like tweets, and, in particular, political tweets.",
+        "Our experiments reveal that the task of entity-level sentiment analysis is difficult for existing tools to answer accurately while the recognition of the entity, here, which politician, was easier."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Dataset and Analysis Methodology\n[source_id=12] We used the 1,000-tweet dataset by BIBREF2 that contains the named-entities labels and entity-level sentiments for each of the four 2016 presidential primary candidates Bernie Sanders, Donald Trump, Hillary Clinton, and Ted Cruz, provided by crowdworkers, and by experts in political communication, whose labels are considered groundtruth. The crowdworkers were located in the US and hired on the BIBREF22 platform. For the task of entity-level sentiment analysis, a 3-scale rating of \"negative,\" \"neutral,\" and \"positive\" was used by the annotators.\n[source_id=13] BIBREF2 proposed a decision tree approach for computing the number of crowdworkers who should analyze a tweet based on the difficulty of the task. Tweets are labeled by 2, 3, 5, or 7 workers based on the difficulty of the task and the level of disagreement between the crowdworkers. The model computes the number of workers based on how long a tweet is, the presence of a link in a tweet, and the number of present sarcasm signals. Sarcasm is often used in political tweets and causes disagreement between the crowdworkers. The tweets that are deemed to be sarcastic by the decision tree model, are expected to be more difficult to annotate, and hence are allocated more crowdworkers to work on.\n[source_id=14] We conducted two sets of experiments. In the first set, we used BIBREF23, BIBREF17, and BIBREF18, for entity-level sentiment analysis; in the second set, BIBREF17, BIBREF19, BIBREF24, BIBREF25, and BIBREF26, BIBREF18 for named-entity recognition.\n[source_id=15] In the experiments that we conducted with TwitterNLP for named-entity recognition, we worked with the default values of the model. Furthermore, we selected the 3-class Stanford NER model, which uses the classes “person,” “organization,” and “location” because it resulted in higher accuracy compared to the 7-class model. For CogComp-NLP NER we used Ontonotes 5.0 NER model BIBREF27. For spaCy NER we used the `en_core_web_lg' model.\n[source_id=16] We report the experimental results for our two tasks in terms of the correct classification rate (CCR). For sentiment analysis, we have a three-class problem (positive, negative, and neutral), where the classes are mutually exclusive. The CCR, averaged for a set of tweets, is defined to be the number of correctly-predicted sentiments over the number of groundtruth sentiments in these tweets. For NER, we consider that each tweet may reference up to four candidates, i.e., targeted entities. The CCR, averaged for a set of tweets, is the number of correctly predicted entities (candidates) over the number of groundtruth entities (candidates) in this set.",
+      "score": 2.2752621741543724,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "child_qasper_evidence_texts": [
+        "We used the 1,000-tweet dataset by BIBREF2 that contains the named-entities labels and entity-level sentiments for each of the four 2016 presidential primary candidates Bernie Sanders, Donald Trump, Hillary Clinton, and Ted Cruz, provided by crowdworkers, and by experts in political communication, whose labels are considered groundtruth. The crowdworkers were located in the US and hired on the BIBREF22 platform. For the task of entity-level sentiment analysis, a 3-scale rating of \"negative,\" \"neutral,\" and \"positive\" was used by the annotators.",
+        "BIBREF2 proposed a decision tree approach for computing the number of crowdworkers who should analyze a tweet based on the difficulty of the task. Tweets are labeled by 2, 3, 5, or 7 workers based on the difficulty of the task and the level of disagreement between the crowdworkers. The model computes the number of workers based on how long a tweet is, the presence of a link in a tweet, and the number of present sarcasm signals. Sarcasm is often used in political tweets and causes disagreement between the crowdworkers. The tweets that are deemed to be sarcastic by the decision tree model, are expected to be more difficult to annotate, and hence are allocated more crowdworkers to work on.",
+        "We conducted two sets of experiments. In the first set, we used BIBREF23, BIBREF17, and BIBREF18, for entity-level sentiment analysis; in the second set, BIBREF17, BIBREF19, BIBREF24, BIBREF25, and BIBREF26, BIBREF18 for named-entity recognition.",
+        "In the experiments that we conducted with TwitterNLP for named-entity recognition, we worked with the default values of the model. Furthermore, we selected the 3-class Stanford NER model, which uses the classes “person,” “organization,” and “location” because it resulted in higher accuracy compared to the 7-class model. For CogComp-NLP NER we used Ontonotes 5.0 NER model BIBREF27. For spaCy NER we used the `en_core_web_lg' model.",
+        "We report the experimental results for our two tasks in terms of the correct classification rate (CCR). For sentiment analysis, we have a three-class problem (positive, negative, and neutral), where the classes are mutually exclusive. The CCR, averaged for a set of tweets, is defined to be the number of correctly-predicted sentiments over the number of groundtruth sentiments in these tweets. For NER, we consider that each tweet may reference up to four candidates, i.e., targeted entities. The CCR, averaged for a set of tweets, is the number of correctly predicted entities (candidates) over the number of groundtruth entities (candidates) in this set."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Dataset and Analysis Methodology",
+        "Dataset and Analysis Methodology",
+        "Dataset and Analysis Methodology",
+        "Dataset and Analysis Methodology",
+        "Dataset and Analysis Methodology"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Dataset and Analysis Methodology",
+          0
+        ],
+        [
+          "Dataset and Analysis Methodology",
+          1
+        ],
+        [
+          "Dataset and Analysis Methodology",
+          2
+        ],
+        [
+          "Dataset and Analysis Methodology",
+          3
+        ],
+        [
+          "Dataset and Analysis Methodology",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Dataset and Analysis Methodology",
+      "section": "Dataset and Analysis Methodology",
+      "title_path": "Dataset and Analysis Methodology",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] NLP Toolkits\n[source_id=8] NLP toolkits typically have the following capabilities: tokenization, part-of-speech (PoS) tagging, chunking, named entity recognition and sentiment analysis. In a study by BIBREF3, it is shown that the well-known NLP toolkits NLTK BIBREF4, Stanford CoreNLP BIBREF5, and TwitterNLP BIBREF6 have tokenization, PoS tagging and NER modules in their pipelines. There are two main approaches for NER: (1) rule-based and (2) statistical or machine learning based. The most ubiquitous algorithms for sequence tagging use Hidden Markov Models BIBREF7, Maximum Entropy Markov Models BIBREF7, BIBREF8, or Conditional Random Fields BIBREF9. Recent works BIBREF10, BIBREF11 have used recurrent neural networks with attention modules for NER.\n[source_id=9] Sentiment detection tools like SentiStrength BIBREF12 and TensiStrength BIBREF13 are rule-based tools, relying on various dictionaries of emoticons, slangs, idioms, and ironic phrases, and set of rules that can detect the sentiment of a sentence overall or a targeted sentiment. Given a list of keywords, TensiStrength (similar to SentiStrength) reports the sentiment towards selected entities in a sentence, based on five levels of relaxation and five levels of stress.\n[source_id=10] Among commercial NLP toolkits (e.g., BIBREF14, BIBREF15, BIBREF16), we selected BIBREF17 and BIBREF18 for our experiments, which, to the best of our knowledge, are the only publicly accessible commercial APIs for the task of entity-level sentiment analysis that is agnostic to the text domain. We also report results of TensiStrength BIBREF13, TwitterNLP BIBREF6, BIBREF19, CogComp-NLP BIBREF20, and Stanford NLP NER BIBREF21.",
+      "score": 1.5545562446477053,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        8,
+        9,
+        10
+      ],
+      "child_qasper_evidence_texts": [
+        "NLP toolkits typically have the following capabilities: tokenization, part-of-speech (PoS) tagging, chunking, named entity recognition and sentiment analysis. In a study by BIBREF3, it is shown that the well-known NLP toolkits NLTK BIBREF4, Stanford CoreNLP BIBREF5, and TwitterNLP BIBREF6 have tokenization, PoS tagging and NER modules in their pipelines. There are two main approaches for NER: (1) rule-based and (2) statistical or machine learning based. The most ubiquitous algorithms for sequence tagging use Hidden Markov Models BIBREF7, Maximum Entropy Markov Models BIBREF7, BIBREF8, or Conditional Random Fields BIBREF9. Recent works BIBREF10, BIBREF11 have used recurrent neural networks with attention modules for NER.",
+        "Sentiment detection tools like SentiStrength BIBREF12 and TensiStrength BIBREF13 are rule-based tools, relying on various dictionaries of emoticons, slangs, idioms, and ironic phrases, and set of rules that can detect the sentiment of a sentence overall or a targeted sentiment. Given a list of keywords, TensiStrength (similar to SentiStrength) reports the sentiment towards selected entities in a sentence, based on five levels of relaxation and five levels of stress.",
+        "Among commercial NLP toolkits (e.g., BIBREF14, BIBREF15, BIBREF16), we selected BIBREF17 and BIBREF18 for our experiments, which, to the best of our knowledge, are the only publicly accessible commercial APIs for the task of entity-level sentiment analysis that is agnostic to the text domain. We also report results of TensiStrength BIBREF13, TwitterNLP BIBREF6, BIBREF19, CogComp-NLP BIBREF20, and Stanford NLP NER BIBREF21."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "NLP Toolkits",
+        "NLP Toolkits",
+        "NLP Toolkits"
+      ],
+      "child_hotpot_facts": [
+        [
+          "NLP Toolkits",
+          0
+        ],
+        [
+          "NLP Toolkits",
+          1
+        ],
+        [
+          "NLP Toolkits",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "NLP Toolkits",
+      "section": "NLP Toolkits",
+      "title_path": "NLP Toolkits",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Acknowledgments\n[source_id=24] Partial support of this work by the Hariri Institute for Computing and Computational Science & Engineering at Boston University (to L.G.) and a Google Faculty Research Award (to M.B. and L.G.) is gratefully acknowledged. Additionally, we would like to thank Daniel Khashabi for his help in running the CogComp-NLP Python API and Mike Thelwal for his help with TensiStrength. We are also grateful to the Stanford NLP group for clarifying some of the questions we had with regards to the Stanford NER tool.",
+      "score": 0.6558818065106256,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        24
+      ],
+      "child_qasper_evidence_texts": [
+        "Partial support of this work by the Hariri Institute for Computing and Computational Science & Engineering at Boston University (to L.G.) and a Google Faculty Research Award (to M.B. and L.G.) is gratefully acknowledged. Additionally, we would like to thank Daniel Khashabi for his help in running the CogComp-NLP Python API and Mike Thelwal for his help with TensiStrength. We are also grateful to the Stanford NLP group for clarifying some of the questions we had with regards to the Stanford NER tool."
+      ],
+      "child_pages": [
+        6
+      ],
+      "child_sections": [
+        "Acknowledgments"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Acknowledgments",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Acknowledgments",
+      "section": "Acknowledgments",
+      "title_path": "Acknowledgments",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Conclusions and Future Work\n[source_id=22] Our results show that existing NLP systems cannot accurately perform sentiment analysis of political tweets in the dataset we experimented with. Labeling by humans, even non-expert crowdworkers, yields accuracy results that are well above the results of existing automated NLP systems. In future work we will therefore use a crowdworker-labeled dataset to train a new machine-learning based NLP system for tweet analysis. We will ensure that the training data is balanced among classes. Our plan is to use state-of-the-art deep neural networks and compare their performance for entity-level sentiment analysis of political tweets.",
+      "score": 0.611652420991556,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        22
+      ],
+      "child_qasper_evidence_texts": [
+        "Our results show that existing NLP systems cannot accurately perform sentiment analysis of political tweets in the dataset we experimented with. Labeling by humans, even non-expert crowdworkers, yields accuracy results that are well above the results of existing automated NLP systems. In future work we will therefore use a crowdworker-labeled dataset to train a new machine-learning based NLP system for tweet analysis. We will ensure that the training data is balanced among classes. Our plan is to use state-of-the-art deep neural networks and compare their performance for entity-level sentiment analysis of political tweets."
+      ],
+      "child_pages": [
+        5
+      ],
+      "child_sections": [
+        "Conclusions and Future Work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusions and Future Work",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Conclusions and Future Work",
+      "section": "Conclusions and Future Work",
+      "title_path": "Conclusions and Future Work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Results and Discussion\n[source_id=18] The dataset of 1,000 randomly selected tweets contains more than twice as many tweets about Trump than about the other candidates. In the named-entity recognition experiment, the average CCR of crowdworkers was 98.6%, while the CCR of the automated systems ranged from 77.2% to 96.7%. For four of the automated systems, detecting the entity Trump was more difficult than the other entities (e.g., spaCy 72.7% for the entity Trump vs. above 91% for the other entities). An example of incorrect NER is shown in Figure FIGREF1 top. The difficulties the automated tools had in NER may be explained by the fact that the tools were not trained on tweets, except for TwitterNLP, which was not in active development when the data was created BIBREF1.\n[source_id=19] In the sentiment analysis experiments, we found that a tweet may contain multiple sentiments. The groundtruth labels contain 210 positive sentiments, 521 neutral sentiments, and 305 negative sentiments to the candidates. We measured the CCR, across all tweets, to be 31.7% for Rosette Text Analytics, 43.2% for Google Cloud, 44.2% for TensiStrength, and 74.7% for the crowdworkers. This means the difference between the performance of the tools and the crowdworkers is significant – more than 30 percent points.\n[source_id=20] Crowdworkers correctly identified 62% of the neutral, 85% of the positive, and 92% of the negative sentiments. Google Cloud correctly identified 88% of the neutral sentiments, but only 3% of the positive, and 19% of the negative sentiments. TensiStrength correctly identified 87.2% of the neutral sentiments, but 10.5% of the positive, and 8.1% of the negative sentiments. Rosette Text Analytics correctly identified 22.7% of neutral sentiments, 38.1% of negative sentiments and 40.9% of positive sentiments. The lowest and highest CCR pertains to tweets about Trump and Sanders for both Google Cloud and TensiStrength, Trump and Clinton for Rosette Text Analytics, and Clinton and Cruz for crowdworkers. An example of incorrect ELS analysis is shown in Figure FIGREF1 bottom.",
+      "score": 0.13660110325715955,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        18,
+        19,
+        20
+      ],
+      "child_qasper_evidence_texts": [
+        "The dataset of 1,000 randomly selected tweets contains more than twice as many tweets about Trump than about the other candidates. In the named-entity recognition experiment, the average CCR of crowdworkers was 98.6%, while the CCR of the automated systems ranged from 77.2% to 96.7%. For four of the automated systems, detecting the entity Trump was more difficult than the other entities (e.g., spaCy 72.7% for the entity Trump vs. above 91% for the other entities). An example of incorrect NER is shown in Figure FIGREF1 top. The difficulties the automated tools had in NER may be explained by the fact that the tools were not trained on tweets, except for TwitterNLP, which was not in active development when the data was created BIBREF1.",
+        "In the sentiment analysis experiments, we found that a tweet may contain multiple sentiments. The groundtruth labels contain 210 positive sentiments, 521 neutral sentiments, and 305 negative sentiments to the candidates. We measured the CCR, across all tweets, to be 31.7% for Rosette Text Analytics, 43.2% for Google Cloud, 44.2% for TensiStrength, and 74.7% for the crowdworkers. This means the difference between the performance of the tools and the crowdworkers is significant – more than 30 percent points.",
+        "Crowdworkers correctly identified 62% of the neutral, 85% of the positive, and 92% of the negative sentiments. Google Cloud correctly identified 88% of the neutral sentiments, but only 3% of the positive, and 19% of the negative sentiments. TensiStrength correctly identified 87.2% of the neutral sentiments, but 10.5% of the positive, and 8.1% of the negative sentiments. Rosette Text Analytics correctly identified 22.7% of neutral sentiments, 38.1% of negative sentiments and 40.9% of positive sentiments. The lowest and highest CCR pertains to tweets about Trump and Sanders for both Google Cloud and TensiStrength, Trump and Clinton for Rosette Text Analytics, and Clinton and Cruz for crowdworkers. An example of incorrect ELS analysis is shown in Figure FIGREF1 bottom."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Results and Discussion",
+        "Results and Discussion",
+        "Results and Discussion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results and Discussion",
+          0
+        ],
+        [
+          "Results and Discussion",
+          1
+        ],
+        [
+          "Results and Discussion",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Results and Discussion",
+      "section": "Results and Discussion",
+      "title_path": "Results and Discussion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] We report results of a comparison of the accuracy of crowdworkers and seven NaturalLanguage Processing (NLP) toolkits in solving two important NLP tasks, named-entity recognition (NER) and entity-level sentiment(ELS) analysis. We here focus on a challenging dataset, 1,000 political tweets that were collected during the U.S. presidential primary election in February 2016. Each tweet refers to at least one of four presidential candidates,i.e., four named entities. The groundtruth, established by experts in political communication, has entity-level sentiment information for each candidate mentioned in the tweet. We tested several commercial and open-source tools. Our experiments show that, for our dataset of political tweets, the most accurate NER system, Google Cloud NL, performed almost on par with crowdworkers, but the most accurate ELS analysis system, TensiStrength, did not match the accuracy of crowdworkers by a large margin of more than 30 percent points.",
+      "score": 0.10431522371948192,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "We report results of a comparison of the accuracy of crowdworkers and seven NaturalLanguage Processing (NLP) toolkits in solving two important NLP tasks, named-entity recognition (NER) and entity-level sentiment(ELS) analysis. We here focus on a challenging dataset, 1,000 political tweets that were collected during the U.S. presidential primary election in February 2016. Each tweet refers to at least one of four presidential candidates,i.e., four named entities. The groundtruth, established by experts in political communication, has entity-level sentiment information for each candidate mentioned in the tweet. We tested several commercial and open-source tools. Our experiments show that, for our dataset of political tweets, the most accurate NER system, Google Cloud NL, performed almost on par with crowdworkers, but the most accurate ELS analysis system, TensiStrength, did not match the accuracy of crowdworkers by a large margin of more than 30 percent points."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 16,
+      "content": "We report the experimental results for our two tasks in terms of the correct classification rate (CCR). For sentiment analysis, we have a three-class problem (positive, negative, and neutral), where the classes are mutually exclusive. The CCR, averaged for a set of tweets, is defined to be the number of correctly-predicted sentiments over the number of groundtruth sentiments in these tweets. For NER, we consider that each tweet may reference up to four candidates, i.e., targeted entities. The CCR, averaged for a set of tweets, is the number of correctly predicted entities (candidates) over the number of groundtruth entities (candidates) in this set.",
+      "qasper_evidence_text": "We report the experimental results for our two tasks in terms of the correct classification rate (CCR). For sentiment analysis, we have a three-class problem (positive, negative, and neutral), where the classes are mutually exclusive. The CCR, averaged for a set of tweets, is defined to be the number of correctly-predicted sentiments over the number of groundtruth sentiments in these tweets. For NER, we consider that each tweet may reference up to four candidates, i.e., targeted entities. The CCR, averaged for a set of tweets, is the number of correctly predicted entities (candidates) over the number of groundtruth entities (candidates) in this set.",
+      "source_node_id": 16,
+      "node_id": 16,
+      "paragraph_id": 16,
+      "evidence_id": 16,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_3",
+      "rank": 2,
+      "score": 2.2752621741543724,
+      "block_type": "paragraph",
+      "page": 3,
+      "section_id": "Dataset and Analysis Methodology",
+      "section": "Dataset and Analysis Methodology",
+      "title": "Dataset and Analysis Methodology",
+      "hotpot_title": "Dataset and Analysis Methodology",
+      "sent_id": 4,
+      "hotpot_sent_id": 4,
+      "supporting_rank": 1
+    },
+    {
+      "id": 18,
+      "content": "The dataset of 1,000 randomly selected tweets contains more than twice as many tweets about Trump than about the other candidates. In the named-entity recognition experiment, the average CCR of crowdworkers was 98.6%, while the CCR of the automated systems ranged from 77.2% to 96.7%. For four of the automated systems, detecting the entity Trump was more difficult than the other entities (e.g., spaCy 72.7% for the entity Trump vs. above 91% for the other entities). An example of incorrect NER is shown in Figure FIGREF1 top. The difficulties the automated tools had in NER may be explained by the fact that the tools were not trained on tweets, except for TwitterNLP, which was not in active development when the data was created BIBREF1.",
+      "qasper_evidence_text": "The dataset of 1,000 randomly selected tweets contains more than twice as many tweets about Trump than about the other candidates. In the named-entity recognition experiment, the average CCR of crowdworkers was 98.6%, while the CCR of the automated systems ranged from 77.2% to 96.7%. For four of the automated systems, detecting the entity Trump was more difficult than the other entities (e.g., spaCy 72.7% for the entity Trump vs. above 91% for the other entities). An example of incorrect NER is shown in Figure FIGREF1 top. The difficulties the automated tools had in NER may be explained by the fact that the tools were not trained on tweets, except for TwitterNLP, which was not in active development when the data was created BIBREF1.",
+      "source_node_id": 18,
+      "node_id": 18,
+      "paragraph_id": 18,
+      "evidence_id": 18,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 6,
+      "score": 0.13660110325715955,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Results and Discussion",
+      "section": "Results and Discussion",
+      "title": "Results and Discussion",
+      "hotpot_title": "Results and Discussion",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 2
+    },
+    {
+      "id": 19,
+      "content": "In the sentiment analysis experiments, we found that a tweet may contain multiple sentiments. The groundtruth labels contain 210 positive sentiments, 521 neutral sentiments, and 305 negative sentiments to the candidates. We measured the CCR, across all tweets, to be 31.7% for Rosette Text Analytics, 43.2% for Google Cloud, 44.2% for TensiStrength, and 74.7% for the crowdworkers. This means the difference between the performance of the tools and the crowdworkers is significant – more than 30 percent points.",
+      "qasper_evidence_text": "In the sentiment analysis experiments, we found that a tweet may contain multiple sentiments. The groundtruth labels contain 210 positive sentiments, 521 neutral sentiments, and 305 negative sentiments to the candidates. We measured the CCR, across all tweets, to be 31.7% for Rosette Text Analytics, 43.2% for Google Cloud, 44.2% for TensiStrength, and 74.7% for the crowdworkers. This means the difference between the performance of the tools and the crowdworkers is significant – more than 30 percent points.",
+      "source_node_id": 19,
+      "node_id": 19,
+      "paragraph_id": 19,
+      "evidence_id": 19,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 6,
+      "score": 0.13660110325715955,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Results and Discussion",
+      "section": "Results and Discussion",
+      "title": "Results and Discussion",
+      "hotpot_title": "Results and Discussion",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 3
+    },
+    {
+      "id": 20,
+      "content": "Crowdworkers correctly identified 62% of the neutral, 85% of the positive, and 92% of the negative sentiments. Google Cloud correctly identified 88% of the neutral sentiments, but only 3% of the positive, and 19% of the negative sentiments. TensiStrength correctly identified 87.2% of the neutral sentiments, but 10.5% of the positive, and 8.1% of the negative sentiments. Rosette Text Analytics correctly identified 22.7% of neutral sentiments, 38.1% of negative sentiments and 40.9% of positive sentiments. The lowest and highest CCR pertains to tweets about Trump and Sanders for both Google Cloud and TensiStrength, Trump and Clinton for Rosette Text Analytics, and Clinton and Cruz for crowdworkers. An example of incorrect ELS analysis is shown in Figure FIGREF1 bottom.",
+      "qasper_evidence_text": "Crowdworkers correctly identified 62% of the neutral, 85% of the positive, and 92% of the negative sentiments. Google Cloud correctly identified 88% of the neutral sentiments, but only 3% of the positive, and 19% of the negative sentiments. TensiStrength correctly identified 87.2% of the neutral sentiments, but 10.5% of the positive, and 8.1% of the negative sentiments. Rosette Text Analytics correctly identified 22.7% of neutral sentiments, 38.1% of negative sentiments and 40.9% of positive sentiments. The lowest and highest CCR pertains to tweets about Trump and Sanders for both Google Cloud and TensiStrength, Trump and Clinton for Rosette Text Analytics, and Clinton and Cruz for crowdworkers. An example of incorrect ELS analysis is shown in Figure FIGREF1 bottom.",
+      "source_node_id": 20,
+      "node_id": 20,
+      "paragraph_id": 20,
+      "evidence_id": 20,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 6,
+      "score": 0.13660110325715955,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Results and Discussion",
+      "section": "Results and Discussion",
+      "title": "Results and Discussion",
+      "hotpot_title": "Results and Discussion",
+      "sent_id": 2,
+      "hotpot_sent_id": 2,
+      "supporting_rank": 4
+    }
+  ],
+  "supporting_block_ids": [
+    16,
+    18,
+    19,
+    20
+  ]
+}

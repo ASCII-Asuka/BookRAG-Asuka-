@@ -1,0 +1,61 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Grammar induction is the task of inducing hierarchical syntactic structure from data. Statistical approaches to grammar induction require specifying a probabilistic grammar (e.g. formalism, number and shape of rules), and fitting its parameters through optimization. Early work found that it was difficult to induce probabilistic context-free grammars (PCFG) from natural language data through direct methods, such as optimizing the log likelihood with the EM algorithm BIBREF0 , BIBREF1 . While the reasons for the failure are manifold and not completely understood, two major potential causes are the ill-behaved optimization landscape and the overly strict independence assumptions of PCFGs. More successful approaches to grammar induction have thus resorted to carefully-crafted auxiliary objectives BIBREF2 , priors or non-parametric models BIBREF3 , BIBREF4 , BIBREF5 , BIBREF6 , and manually-engineered features BIBREF7 , BIBREF8 to encourage the desired structures to emerge.\n[source_id=5] We revisit these aforementioned issues in light of advances in model parameterization and inference. First, contrary to common wisdom, we find that parameterizing a PCFG's rule probabilities with neural networks over distributed representations makes it possible to induce linguistically meaningful grammars by simply optimizing log likelihood. While the optimization problem remains non-convex, recent work suggests that there are optimization benefits afforded by over-parameterized models BIBREF9 , BIBREF10 , BIBREF11 , and we indeed find that this neural PCFG is significantly easier to optimize than the traditional PCFG. Second, this factored parameterization makes it straightforward to incorporate side information into rule probabilities through a sentence-level continuous latent vector, which effectively allows different contexts in a derivation to coordinate. In this compound PCFG—continuous mixture of PCFGs—the context-free assumptions hold conditioned on the latent vector but not unconditionally, thereby obtaining longer-range dependencies within a tree-based generative process.\n[source_id=6] To utilize this approach, we need to efficiently optimize the log marginal likelihood of observed sentences. While compound PCFGs break efficient inference, if the latent vector is known the distribution over trees reduces to a standard PCFG. This property allows us to perform grammar induction using a collapsed approach where the latent trees are marginalized out exactly with dynamic programming. To handle the latent vector, we employ standard amortized inference using reparameterized samples from a variational posterior approximated from an inference network BIBREF12 , BIBREF13 .\n[source_id=7] On standard benchmarks for English and Chinese, the proposed approach is found to perform favorably against recent neural network-based approaches to grammar induction BIBREF14 , BIBREF15 , BIBREF16 , BIBREF17 .",
+  "score": 1.368623039511041,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7
+  ],
+  "child_qasper_evidence_texts": [
+    "Grammar induction is the task of inducing hierarchical syntactic structure from data. Statistical approaches to grammar induction require specifying a probabilistic grammar (e.g. formalism, number and shape of rules), and fitting its parameters through optimization. Early work found that it was difficult to induce probabilistic context-free grammars (PCFG) from natural language data through direct methods, such as optimizing the log likelihood with the EM algorithm BIBREF0 , BIBREF1 . While the reasons for the failure are manifold and not completely understood, two major potential causes are the ill-behaved optimization landscape and the overly strict independence assumptions of PCFGs. More successful approaches to grammar induction have thus resorted to carefully-crafted auxiliary objectives BIBREF2 , priors or non-parametric models BIBREF3 , BIBREF4 , BIBREF5 , BIBREF6 , and manually-engineered features BIBREF7 , BIBREF8 to encourage the desired structures to emerge.",
+    "We revisit these aforementioned issues in light of advances in model parameterization and inference. First, contrary to common wisdom, we find that parameterizing a PCFG's rule probabilities with neural networks over distributed representations makes it possible to induce linguistically meaningful grammars by simply optimizing log likelihood. While the optimization problem remains non-convex, recent work suggests that there are optimization benefits afforded by over-parameterized models BIBREF9 , BIBREF10 , BIBREF11 , and we indeed find that this neural PCFG is significantly easier to optimize than the traditional PCFG. Second, this factored parameterization makes it straightforward to incorporate side information into rule probabilities through a sentence-level continuous latent vector, which effectively allows different contexts in a derivation to coordinate. In this compound PCFG—continuous mixture of PCFGs—the context-free assumptions hold conditioned on the latent vector but not unconditionally, thereby obtaining longer-range dependencies within a tree-based generative process.",
+    "To utilize this approach, we need to efficiently optimize the log marginal likelihood of observed sentences. While compound PCFGs break efficient inference, if the latent vector is known the distribution over trees reduces to a standard PCFG. This property allows us to perform grammar induction using a collapsed approach where the latent trees are marginalized out exactly with dynamic programming. To handle the latent vector, we employ standard amortized inference using reparameterized samples from a variational posterior approximated from an inference network BIBREF12 , BIBREF13 .",
+    "On standard benchmarks for English and Chinese, the proposed approach is found to perform favorably against recent neural network-based approaches to grammar induction BIBREF14 , BIBREF15 , BIBREF16 , BIBREF17 ."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

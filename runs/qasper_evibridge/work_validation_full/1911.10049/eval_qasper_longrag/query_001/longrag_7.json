@@ -1,0 +1,79 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Evaluation ::: Word Analogy Task\n[source_id=30] The word analogy task was popularized by mikolov2013distributed. The goal is to find a term $y$ for a given term $x$ so that the relationship between $x$ and $y$ best resembles the given relationship $a : b$. There are two main groups of categories: 5 semantic and 10 syntactic. To illustrate a semantic relationship, consider for example that the word pair $a : b$ is given as “Finland : Helsinki”. The task is to find the term $y$ corresponding to the relationship “Sweden : $y$”, with the expected answer being $y=$ Stockholm. In syntactic categories, the two words in a pair have a common stem (in some cases even same lemma), with all the pairs in a given category having the same morphological relationship. For example, given the word pair “long : longer”, we see that we have an adjective in its base form and the same adjective in a comparative form. That task is then to find the term $y$ corresponding to the relationship “dark : $y$”, with the expected answer being $y=$ darker, that is a comparative form of the adjective dark.\n[source_id=31] In the vector space, the analogy task is transformed into vector arithmetic and search for nearest neighbours, i.e. we compute the distance between vectors: d(vec(Finland), vec(Helsinki)) and search for word $y$ which would give the closest result in distance d(vec(Sweden), vec($y$)). In the analogy dataset the analogies are already pre-specified, so we are measuring how close are the given pairs. In the evaluation below, we use analogy datasets for all tested languages based on the English dataset by BIBREF14 . Due to English-centered bias of this dataset, we used a modified dataset which was first written in Slovene language and then translated into other languages BIBREF15.\n[source_id=32] As each instance of analogy contains only four words, without any context, the contextual models (such as ELMo) do not have enough context to generate sensible embeddings. We therefore used some additional text to form simple sentences using the four analogy words, while taking care that their noun case stays the same. For example, for the words \"Rome\", \"Italy\", \"Paris\" and \"France\" (forming the analogy Rome is to Italy as Paris is to $x$, where the correct answer is $x=$France), we formed the sentence \"If the word Rome corresponds to the word Italy, then the word Paris corresponds to the word France\". We generated embeddings for those four words in the constructed sentence, substituted the last word with each word in our vocabulary and generated the embeddings again. As typical for non-contextual analogy task, we measure the cosine distance ($d$) between the last word ($w_4$) and the combination of the first three words ($w_2-w_1+w_3$). We use the CSLS metric BIBREF16 to find the closest candidate word ($w_4$). If we find the correct word among the five closest words, we consider that entry as successfully identified. The proportion of correctly identified words forms a statistic called accuracy@5, which we report as the result.\n[source_id=33] We first compare existing Latvian ELMo embeddings from ELMoForManyLangs project with our Latvian embeddings, followed by the detailed analysis of our ELMo embeddings. We trained Latvian ELMo using only CoNLL 2017 corpora. Since this is the only language, where we trained the embedding model on exactly the same corpora as ELMoForManyLangs models, we chose it for comparison between our ELMo model with ELMoForManyLangs. In other languages, additional or other corpora were used, so a direct comparison would also reflect the quality of the corpora used for training. In Latvian, however, only the size of the training dataset is different. ELMoForManyLangs uses only 20 million tokens and we use the whole corpus of 270 million tokens.\n[source_id=34] The Latvian ELMo model from ELMoForManyLangs project performs significantly worse than EMBEDDIA ELMo Latvian model on all categories of word analogy task (Figure FIGREF16). We also include the comparison with our Estonian ELMo embeddings in the same figure. This comparison shows that while differences between our Latvian and Estonian embeddings can be significant for certain categories, the accuracy score of ELMoForManyLangs is always worse than either of our models. The comparison of Estonian and Latvian models leads us to believe that a few hundred million tokens is a sufficiently large corpus to train ELMo models (at least for word analogy task), but 20-million token corpora used in ELMoForManyLangs are too small.\n[source_id=35] The results for all languages and all ELMo layers, averaged over semantic and syntactic categories, are shown in Table TABREF17. The embeddings after the first LSTM layer perform best in semantic categories. In syntactic categories, the non-contextual CNN layer performs the best. Syntactic categories are less context dependent and much more morphology and syntax based, so it is not surprising that the non-contextual layer performs well. The second LSTM layer embeddings perform the worst in syntactic categories, though still outperforming CNN layer embeddings in semantic categories. Latvian ELMo performs worse compared to other languages we trained, especially in semantic categories, presumably due to smaller training data size. Surprisingly, the original English ELMo performs very poorly in syntactic categories and only outperforms Latvian in semantic categories. The low score can be partially explained by English model scoring $0.00$ in one syntactic category “opposite adjective”, which we have not been able to explain.",
+  "score": 4.718754740643366,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    30,
+    31,
+    32,
+    33,
+    34,
+    35
+  ],
+  "child_qasper_evidence_texts": [
+    "The word analogy task was popularized by mikolov2013distributed. The goal is to find a term $y$ for a given term $x$ so that the relationship between $x$ and $y$ best resembles the given relationship $a : b$. There are two main groups of categories: 5 semantic and 10 syntactic. To illustrate a semantic relationship, consider for example that the word pair $a : b$ is given as “Finland : Helsinki”. The task is to find the term $y$ corresponding to the relationship “Sweden : $y$”, with the expected answer being $y=$ Stockholm. In syntactic categories, the two words in a pair have a common stem (in some cases even same lemma), with all the pairs in a given category having the same morphological relationship. For example, given the word pair “long : longer”, we see that we have an adjective in its base form and the same adjective in a comparative form. That task is then to find the term $y$ corresponding to the relationship “dark : $y$”, with the expected answer being $y=$ darker, that is a comparative form of the adjective dark.",
+    "In the vector space, the analogy task is transformed into vector arithmetic and search for nearest neighbours, i.e. we compute the distance between vectors: d(vec(Finland), vec(Helsinki)) and search for word $y$ which would give the closest result in distance d(vec(Sweden), vec($y$)). In the analogy dataset the analogies are already pre-specified, so we are measuring how close are the given pairs. In the evaluation below, we use analogy datasets for all tested languages based on the English dataset by BIBREF14 . Due to English-centered bias of this dataset, we used a modified dataset which was first written in Slovene language and then translated into other languages BIBREF15.",
+    "As each instance of analogy contains only four words, without any context, the contextual models (such as ELMo) do not have enough context to generate sensible embeddings. We therefore used some additional text to form simple sentences using the four analogy words, while taking care that their noun case stays the same. For example, for the words \"Rome\", \"Italy\", \"Paris\" and \"France\" (forming the analogy Rome is to Italy as Paris is to $x$, where the correct answer is $x=$France), we formed the sentence \"If the word Rome corresponds to the word Italy, then the word Paris corresponds to the word France\". We generated embeddings for those four words in the constructed sentence, substituted the last word with each word in our vocabulary and generated the embeddings again. As typical for non-contextual analogy task, we measure the cosine distance ($d$) between the last word ($w_4$) and the combination of the first three words ($w_2-w_1+w_3$). We use the CSLS metric BIBREF16 to find the closest candidate word ($w_4$). If we find the correct word among the five closest words, we consider that entry as successfully identified. The proportion of correctly identified words forms a statistic called accuracy@5, which we report as the result.",
+    "We first compare existing Latvian ELMo embeddings from ELMoForManyLangs project with our Latvian embeddings, followed by the detailed analysis of our ELMo embeddings. We trained Latvian ELMo using only CoNLL 2017 corpora. Since this is the only language, where we trained the embedding model on exactly the same corpora as ELMoForManyLangs models, we chose it for comparison between our ELMo model with ELMoForManyLangs. In other languages, additional or other corpora were used, so a direct comparison would also reflect the quality of the corpora used for training. In Latvian, however, only the size of the training dataset is different. ELMoForManyLangs uses only 20 million tokens and we use the whole corpus of 270 million tokens.",
+    "The Latvian ELMo model from ELMoForManyLangs project performs significantly worse than EMBEDDIA ELMo Latvian model on all categories of word analogy task (Figure FIGREF16). We also include the comparison with our Estonian ELMo embeddings in the same figure. This comparison shows that while differences between our Latvian and Estonian embeddings can be significant for certain categories, the accuracy score of ELMoForManyLangs is always worse than either of our models. The comparison of Estonian and Latvian models leads us to believe that a few hundred million tokens is a sufficiently large corpus to train ELMo models (at least for word analogy task), but 20-million token corpora used in ELMoForManyLangs are too small.",
+    "The results for all languages and all ELMo layers, averaged over semantic and syntactic categories, are shown in Table TABREF17. The embeddings after the first LSTM layer perform best in semantic categories. In syntactic categories, the non-contextual CNN layer performs the best. Syntactic categories are less context dependent and much more morphology and syntax based, so it is not surprising that the non-contextual layer performs well. The second LSTM layer embeddings perform the worst in syntactic categories, though still outperforming CNN layer embeddings in semantic categories. Latvian ELMo performs worse compared to other languages we trained, especially in semantic categories, presumably due to smaller training data size. Surprisingly, the original English ELMo performs very poorly in syntactic categories and only outperforms Latvian in semantic categories. The low score can be partially explained by English model scoring $0.00$ in one syntactic category “opposite adjective”, which we have not been able to explain."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Evaluation ::: Word Analogy Task",
+    "Evaluation ::: Word Analogy Task",
+    "Evaluation ::: Word Analogy Task",
+    "Evaluation ::: Word Analogy Task",
+    "Evaluation ::: Word Analogy Task",
+    "Evaluation ::: Word Analogy Task"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Evaluation ::: Word Analogy Task",
+      0
+    ],
+    [
+      "Evaluation ::: Word Analogy Task",
+      1
+    ],
+    [
+      "Evaluation ::: Word Analogy Task",
+      2
+    ],
+    [
+      "Evaluation ::: Word Analogy Task",
+      3
+    ],
+    [
+      "Evaluation ::: Word Analogy Task",
+      4
+    ],
+    [
+      "Evaluation ::: Word Analogy Task",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Evaluation ::: Word Analogy Task",
+  "section": "Evaluation ::: Word Analogy Task",
+  "title_path": "Evaluation ::: Word Analogy Task",
+  "block_type": "long_unit"
+}

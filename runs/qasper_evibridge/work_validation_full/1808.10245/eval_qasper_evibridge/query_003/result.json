@@ -1,0 +1,167 @@
+{
+  "question": "What learning models are used on the dataset?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "Naïve Bayes (NB)",
+        "Logistic Regression (LR)",
+        "Support Vector Machine (SVM)",
+        "Random Forests (RF)",
+        "Gradient Boosted Trees (GBT)",
+        " Convolutional Neural Networks (CNN)",
+        "Recurrent Neural Networks (RNN)"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "We implement five feature engineering based machine learning classifiers that are most often used for abusive language detection. In data preprocessing, text sequences are converted into Bag Of Words (BOW) representations, and normalized with Term Frequency-Inverse Document Frequency (TF-IDF) values. We experiment with word-level features using n-grams ranging from 1 to 3, and character-level features from 3 to 8-grams. Each classifier is implemented with the following specifications:",
+        "Naïve Bayes (NB): Multinomial NB with additive smoothing constant 1",
+        "Logistic Regression (LR): Linear LR with L2 regularization constant 1 and limited-memory BFGS optimization",
+        "Support Vector Machine (SVM): Linear SVM with L2 regularization constant 1 and logistic loss function",
+        "Random Forests (RF): Averaging probabilistic predictions of 10 randomized decision trees",
+        "Gradient Boosted Trees (GBT): Tree boosting with learning rate 1 and logistic loss function",
+        "Along with traditional machine learning approaches, we investigate neural network based models to evaluate their efficacy within a larger dataset. In particular, we explore Convolutional Neural Networks (CNN), Recurrent Neural Networks (RNN), and their variant models. A pre-trained GloVe BIBREF17 representation is used for word-level features."
+      ],
+      "evidence_block_ids": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        23
+      ],
+      "evidence_paragraph_ids": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        23
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "Naïve Bayes (NB)",
+        "Logistic Regression (LR)",
+        "Support Vector Machine (SVM)",
+        "Random Forests (RF)",
+        "Gradient Boosted Trees (GBT)",
+        "CNN",
+        "RNN"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "We implement five feature engineering based machine learning classifiers that are most often used for abusive language detection. In data preprocessing, text sequences are converted into Bag Of Words (BOW) representations, and normalized with Term Frequency-Inverse Document Frequency (TF-IDF) values. We experiment with word-level features using n-grams ranging from 1 to 3, and character-level features from 3 to 8-grams. Each classifier is implemented with the following specifications:",
+        "Naïve Bayes (NB): Multinomial NB with additive smoothing constant 1",
+        "Logistic Regression (LR): Linear LR with L2 regularization constant 1 and limited-memory BFGS optimization",
+        "Support Vector Machine (SVM): Linear SVM with L2 regularization constant 1 and logistic loss function",
+        "Random Forests (RF): Averaging probabilistic predictions of 10 randomized decision trees",
+        "Gradient Boosted Trees (GBT): Tree boosting with learning rate 1 and logistic loss function",
+        "Along with traditional machine learning approaches, we investigate neural network based models to evaluate their efficacy within a larger dataset. In particular, we explore Convolutional Neural Networks (CNN), Recurrent Neural Networks (RNN), and their variant models. A pre-trained GloVe BIBREF17 representation is used for word-level features.",
+        "CNN: We adopt Kim's kim2014convolutional implementation as the baseline. The word-level CNN models have 3 convolutional filters of different sizes [1,2,3] with ReLU activation, and a max-pooling layer. For the character-level CNN, we use 6 convolutional filters of various sizes [3,4,5,6,7,8], then add max-pooling layers followed by 1 fully-connected layer with a dimension of 1024.",
+        "Park and Fung park2017one proposed a HybridCNN model which outperformed both word-level and character-level CNNs in abusive language detection. In order to evaluate the HybridCNN for this dataset, we concatenate the output of max-pooled layers from word-level and character-level CNN, and feed this vector to a fully-connected layer in order to predict the output.",
+        "All three CNN models (word-level, character-level, and hybrid) use cross entropy with softmax as their loss function and Adam BIBREF18 as the optimizer.",
+        "RNN: We use bidirectional RNN BIBREF19 as the baseline, implementing a GRU BIBREF20 cell for each recurrent unit. From extensive parameter-search experiments, we chose 1 encoding layer with 50 dimensional hidden states and an input dropout probability of 0.3. The RNN models use cross entropy with sigmoid as their loss function and Adam as the optimizer.",
+        "For a possible improvement, we apply a self-matching attention mechanism on RNN baseline models BIBREF21 so that they may better understand the data by retrieving text sequences twice. We also investigate a recently introduced method, Latent Topic Clustering (LTC) BIBREF22 . The LTC method extracts latent topic information from the hidden states of RNN, and uses it for additional information in classifying the text data."
+      ],
+      "evidence_block_ids": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "evidence_paragraph_ids": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ]
+    }
+  ],
+  "doc_uuid": "1808.10245",
+  "doc_path": "qasper://1808.10245",
+  "qasper_question_id": "48088a842f7a433d3290eb45eb0d4c6ab1d8f13c",
+  "title": "Comparative Studies of Detecting Abusive Language on Twitter",
+  "evidence_block_ids": [
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+  ],
+  "evidence_paragraph_ids": [
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+  ],
+  "output": "{\n  \"answer_short\": \"bidirectional GRU networks, Latent Topic Clustering, Convolutional Neural Networks, Recurrent Neural Networks, Gradient Boosted Decision Trees, Logistic Regression, SVM, ensemble models\",\n  \"answer_rationale\": \"The document explicitly lists multiple learning models tested on the Hate and Abusive Speech on Twitter dataset, including bidirectional GRU networks with Latent Topic Clustering (block 1), Convolutional Neural Networks (CNN) and Recurrent Neural Networks (RNN) (block 7), Gradient Boosted Decision Trees (block 4), Logistic Regression (block 8), SVM (block 8), and ensemble models (block 3, 8, 10).\",\n  \"supporting_block_ids\": [1, 3, 7, 8, 10]\n}",
+  "retrieved_node_ids": [
+    23,
+    55,
+    2,
+    8,
+    7,
+    12,
+    14,
+    49,
+    11,
+    53
+  ],
+  "retrieved_block_ids": [
+    23,
+    55,
+    2,
+    8,
+    7,
+    12,
+    14,
+    49,
+    11,
+    53
+  ],
+  "answer_short": "bidirectional GRU networks, Latent Topic Clustering, Convolutional Neural Networks, Recurrent Neural Networks, Gradient Boosted Decision Trees, Logistic Regression, SVM, ensemble models",
+  "answer_rationale": "The document explicitly lists multiple learning models tested on the Hate and Abusive Speech on Twitter dataset, including bidirectional GRU networks with Latent Topic Clustering (block 1), Convolutional Neural Networks (CNN) and Recurrent Neural Networks (RNN) (block 7), Gradient Boosted Decision Trees (block 4), Logistic Regression (block 8), SVM (block 8), and ensemble models (block 3, 8, 10).",
+  "supporting_block_ids": [
+    55,
+    8,
+    23,
+    2
+  ]
+}

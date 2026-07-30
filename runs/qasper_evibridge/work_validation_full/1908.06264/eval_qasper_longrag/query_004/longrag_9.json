@@ -1,0 +1,70 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Methodology ::: Fine-tuning\n[source_id=39] Since our emotion recognition task is treated as a sequence-level classification task, the model would be fine-tuned on the processed training data. Following the BERT construction, we take the first embedding vector which corresponds to the special token [CLS] from the final hidden state of the Transformer encoder. This vector represents the embedding vector of the corresponding conversation utterances which is denoted as $\\mathbf {C} \\in \\mathbb {R}^{H}$, where $H$ is the embedding size. A dense neural layer is treated as a classification layer which consists of parameters $\\mathbf {W} \\in \\mathbb {R}^{K\\times H}$ and $\\mathbf {b} \\in \\mathbb {R}^{K}$, where $K$ is the number of emotion class. The emotion prediction probabilities $\\mathbf {P} \\in \\mathbb {R}^{K}$ are computed by a softmax activation function as\n[source_id=40] All the parameters in BERT and the classification layer would be fine-turned together to minimize the Negative Log Likelihood (NLL) loss function, as Equation (DISPLAY_FORM22), based on the ground truth emotion label $c$.\n[source_id=41] In order to tackle the problem of highly unbalanced emotion labels, we apply weighted balanced warming on NLL loss function, as Equation (DISPLAY_FORM23), in the first epoch of fine-tuning procedure.\n[source_id=42] where $\\mathbf {w}$ are the weights of corresponding emotion label $c$ which are computed and normalize by the frequency as\n[source_id=43] By adding the weighted balanced warming on NLL loss, the model could learn to predict the minor emotions (e.g. anger and sadness) earlier and make the training process more stable. Since the major evaluation metrics micro F1-score is effect by the number of each label, we only apply the weighted balanced warming in first epoch to optimize the performance.",
+  "score": 1.010034707476169,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    39,
+    40,
+    41,
+    42,
+    43
+  ],
+  "child_qasper_evidence_texts": [
+    "Since our emotion recognition task is treated as a sequence-level classification task, the model would be fine-tuned on the processed training data. Following the BERT construction, we take the first embedding vector which corresponds to the special token [CLS] from the final hidden state of the Transformer encoder. This vector represents the embedding vector of the corresponding conversation utterances which is denoted as $\\mathbf {C} \\in \\mathbb {R}^{H}$, where $H$ is the embedding size. A dense neural layer is treated as a classification layer which consists of parameters $\\mathbf {W} \\in \\mathbb {R}^{K\\times H}$ and $\\mathbf {b} \\in \\mathbb {R}^{K}$, where $K$ is the number of emotion class. The emotion prediction probabilities $\\mathbf {P} \\in \\mathbb {R}^{K}$ are computed by a softmax activation function as",
+    "All the parameters in BERT and the classification layer would be fine-turned together to minimize the Negative Log Likelihood (NLL) loss function, as Equation (DISPLAY_FORM22), based on the ground truth emotion label $c$.",
+    "In order to tackle the problem of highly unbalanced emotion labels, we apply weighted balanced warming on NLL loss function, as Equation (DISPLAY_FORM23), in the first epoch of fine-tuning procedure.",
+    "where $\\mathbf {w}$ are the weights of corresponding emotion label $c$ which are computed and normalize by the frequency as",
+    "By adding the weighted balanced warming on NLL loss, the model could learn to predict the minor emotions (e.g. anger and sadness) earlier and make the training process more stable. Since the major evaluation metrics micro F1-score is effect by the number of each label, we only apply the weighted balanced warming in first epoch to optimize the performance."
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Methodology ::: Fine-tuning",
+    "Methodology ::: Fine-tuning",
+    "Methodology ::: Fine-tuning",
+    "Methodology ::: Fine-tuning",
+    "Methodology ::: Fine-tuning"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Methodology ::: Fine-tuning",
+      0
+    ],
+    [
+      "Methodology ::: Fine-tuning",
+      1
+    ],
+    [
+      "Methodology ::: Fine-tuning",
+      2
+    ],
+    [
+      "Methodology ::: Fine-tuning",
+      3
+    ],
+    [
+      "Methodology ::: Fine-tuning",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Methodology ::: Fine-tuning",
+  "section": "Methodology ::: Fine-tuning",
+  "title_path": "Methodology ::: Fine-tuning",
+  "block_type": "long_unit"
+}

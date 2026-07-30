@@ -1,0 +1,88 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Our method ::: TCEN Architecture\n[source_id=23] Figure FIGREF5 sketches the overall architecture of TCEN, including a speech encoder $enc_s$, a text encoder $enc_t$ and a decoder $dec$ with an attention module $att$. During training, the $enc_s$ acts like an acoustic model which reads the input $\\mathbf {x}$ to word or subword representations $\\mathbf {h^s}$, then $enc_t$ learns high-level linguistic knowledge into hidden representations $\\mathbf {h^t}$. Finally, the $dec$ defines a distribution probability over target words. The advantage of our architecture is that two encoders disentangle acoustic feature extraction and linguistic feature extraction, making sure that valuable knowledge learned from ASR and MT tasks can be effectively leveraged for ST training. Besides, every module in pre-training can be utilized in fine-tuning, alleviating the subnet waste problem.\n[source_id=24] Follow BIBREF9 inaguma2018speech, we use CNN-BiLSTM architecture to build our model. Specifically, the input features $\\mathbf {x}$ are organized as a sequence of feature vectors in length $T_x$. Then, $\\mathbf {x}$ is passed into a stack of two convolutional layers followed by max-pooling:\n[source_id=25] where $\\mathbf {v}^{(l-1)}$ is feature maps in last layer and $\\mathbf {W}^{(l)}$ is the filter. The max-pooling layers downsample the sequence in length by a total factor of four. The down-sampled feature sequence is further fed into a stack of five bidirectional $d$-dimensional LSTM layers:\n[source_id=26] where $[;]$ denotes the vector concatenation. The final output representation from the speech encoder is denoted as $\\mathbf {h^s}=(h^s_1, \\cdots , h^s_{\\frac{T_x}{4}})$, where $h_i^s \\in \\mathbb {R}^d$.\n[source_id=27] The text encoder $enc_t$ consists of two bidirectional LSTM layers. In ST task, $enc_t$ accepts speech encoder output $\\mathbf {h}^s$ as input. While in MT, $enc_t$ consumes the word embedding representation $\\mathbf {e^s}$ derived from $\\mathbf {y^s}$, where each element $e^s_i$ is computed by choosing the $y_i^s$-th vector from the source embedding matrix $W_{E^s}$. The goal of $enc_t$ is to extract high-level linguistic features like syntactic features or semantic features from lower level subword representations $\\mathbf {h}^s$ or $\\mathbf {e}^s$. Since $\\mathbf {h}^s$ and $\\mathbf {e}^s$ belong to different latent space and have different lengths, there remain semantic and length inconsistency problems. We will provide our solutions in Section SECREF21. The output sequence of $enc_t$ is denoted as $\\mathbf {h}^t$.\n[source_id=28] The decoder is defined as two unidirectional LSTM layers with an additive attention $att$. It predicts target sequence $\\mathbf {y^{t}}$ by estimating conditional probability $P(\\mathbf {y^{t}}|\\mathbf {x})$:\n[source_id=29] Here, $z_k$ is the the hidden state of the deocder RNN at $k$ step and $c_k$ is a time-dependent context vector computed by the attention $att$.",
+  "score": 3.609851736754072,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "child_qasper_evidence_texts": [
+    "Figure FIGREF5 sketches the overall architecture of TCEN, including a speech encoder $enc_s$, a text encoder $enc_t$ and a decoder $dec$ with an attention module $att$. During training, the $enc_s$ acts like an acoustic model which reads the input $\\mathbf {x}$ to word or subword representations $\\mathbf {h^s}$, then $enc_t$ learns high-level linguistic knowledge into hidden representations $\\mathbf {h^t}$. Finally, the $dec$ defines a distribution probability over target words. The advantage of our architecture is that two encoders disentangle acoustic feature extraction and linguistic feature extraction, making sure that valuable knowledge learned from ASR and MT tasks can be effectively leveraged for ST training. Besides, every module in pre-training can be utilized in fine-tuning, alleviating the subnet waste problem.",
+    "Follow BIBREF9 inaguma2018speech, we use CNN-BiLSTM architecture to build our model. Specifically, the input features $\\mathbf {x}$ are organized as a sequence of feature vectors in length $T_x$. Then, $\\mathbf {x}$ is passed into a stack of two convolutional layers followed by max-pooling:",
+    "where $\\mathbf {v}^{(l-1)}$ is feature maps in last layer and $\\mathbf {W}^{(l)}$ is the filter. The max-pooling layers downsample the sequence in length by a total factor of four. The down-sampled feature sequence is further fed into a stack of five bidirectional $d$-dimensional LSTM layers:",
+    "where $[;]$ denotes the vector concatenation. The final output representation from the speech encoder is denoted as $\\mathbf {h^s}=(h^s_1, \\cdots , h^s_{\\frac{T_x}{4}})$, where $h_i^s \\in \\mathbb {R}^d$.",
+    "The text encoder $enc_t$ consists of two bidirectional LSTM layers. In ST task, $enc_t$ accepts speech encoder output $\\mathbf {h}^s$ as input. While in MT, $enc_t$ consumes the word embedding representation $\\mathbf {e^s}$ derived from $\\mathbf {y^s}$, where each element $e^s_i$ is computed by choosing the $y_i^s$-th vector from the source embedding matrix $W_{E^s}$. The goal of $enc_t$ is to extract high-level linguistic features like syntactic features or semantic features from lower level subword representations $\\mathbf {h}^s$ or $\\mathbf {e}^s$. Since $\\mathbf {h}^s$ and $\\mathbf {e}^s$ belong to different latent space and have different lengths, there remain semantic and length inconsistency problems. We will provide our solutions in Section SECREF21. The output sequence of $enc_t$ is denoted as $\\mathbf {h}^t$.",
+    "The decoder is defined as two unidirectional LSTM layers with an additive attention $att$. It predicts target sequence $\\mathbf {y^{t}}$ by estimating conditional probability $P(\\mathbf {y^{t}}|\\mathbf {x})$:",
+    "Here, $z_k$ is the the hidden state of the deocder RNN at $k$ step and $c_k$ is a time-dependent context vector computed by the attention $att$."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Our method ::: TCEN Architecture",
+    "Our method ::: TCEN Architecture",
+    "Our method ::: TCEN Architecture",
+    "Our method ::: TCEN Architecture",
+    "Our method ::: TCEN Architecture",
+    "Our method ::: TCEN Architecture",
+    "Our method ::: TCEN Architecture"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Our method ::: TCEN Architecture",
+      0
+    ],
+    [
+      "Our method ::: TCEN Architecture",
+      1
+    ],
+    [
+      "Our method ::: TCEN Architecture",
+      2
+    ],
+    [
+      "Our method ::: TCEN Architecture",
+      3
+    ],
+    [
+      "Our method ::: TCEN Architecture",
+      4
+    ],
+    [
+      "Our method ::: TCEN Architecture",
+      5
+    ],
+    [
+      "Our method ::: TCEN Architecture",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Our method ::: TCEN Architecture",
+  "section": "Our method ::: TCEN Architecture",
+  "title_path": "Our method ::: TCEN Architecture",
+  "block_type": "long_unit"
+}

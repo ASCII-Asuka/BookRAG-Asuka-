@@ -1,0 +1,79 @@
+{
+  "id": "longrag_8",
+  "content": "[Section] Machine translation\n[source_id=24] We first present a comparison of the various strategies in different simulated parallel corpus size settings. For each experiment, we tune the dropout applied to the language model representations, and we reduce the number of optimizer steps for smaller bitext setups as models converge faster; all other hyper-parameters are equal between setups. Our baseline is a Big Transformer model and we also consider a variant where we share token embeddings between the encoder and decoder (; Inan et al., 2016; Press & Wolf, 2016).\n[source_id=25] Figure FIGREF10 shows results averaged over six test sets relative to the baseline which does not share source and target embeddings (Appendix SECREF6 shows a detailed breakdown). performs very well with little labeled data but the gains erode to practically zero in large bitext settings. Pre-trained language model representations are most effective in low bitext setups. The best performing strategy is ELMo embeddings input to the encoder (). This improves the baseline by 3.8 BLEU in the 160K bitext setting and it still improves the 5.2M setting by over 1 BLEU.\n[source_id=26] We further improve by sharing learned word representations in the decoder by tying input and output embeddings (). This configuration performs even better than with a gain of 5.3 BLEU in the 160K setup. Sharing decoder embeddings is equally applicable to . Language model representations are much less effective in the decoder: improves the 160K bitext setup but yields no improvements thereafter and performs even worse. We conjecture that pre-trained representations give much easier wins in the encoder. Table TABREF14 shows additional results on newstest2018.\n[source_id=27] Pre-trained representations mostly impacts the training time of the sequence to sequence model (see Appendix SECREF7 ): slows throughput during training by about 5.3x and is even slower because of the need to backpropagate through the LM for fine-tuning (9.2x). However, inference is only 12-14% slower than the baseline when adding pre-trained embeddings to the encoder (, ). This is because the LM computation can be paralelized for all input tokens. Inference is much slower when adding representations to the decoder because the LM needs to be invoked repeatedly. Our current implementation does not cache LM operations for the previous state and can be made much faster.\n[source_id=28] The baseline uses a BPE vocabulary estimated on the language model corpora (§ SECREF3 ). Appendix SECREF6 shows that this vocabulary actually leads to sligtly better performance than a joint BPE code learned on the bitext as is usual.\n[source_id=29] Next, we validate our findings on the WMT'18 English-Turkish task for which the bitext is truly limited (208K sentence-pairs). We use the language model vocab for the the English side of the bitext and a BPE vocabulary learned on the Turkish side. Table TABREF15 shows that ELMo embeddings for the encoder improve English-Turkish translation.",
+  "score": 4.257907945321705,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_8",
+  "child_source_node_ids": [
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "child_qasper_evidence_texts": [
+    "We first present a comparison of the various strategies in different simulated parallel corpus size settings. For each experiment, we tune the dropout applied to the language model representations, and we reduce the number of optimizer steps for smaller bitext setups as models converge faster; all other hyper-parameters are equal between setups. Our baseline is a Big Transformer model and we also consider a variant where we share token embeddings between the encoder and decoder (; Inan et al., 2016; Press & Wolf, 2016).",
+    "Figure FIGREF10 shows results averaged over six test sets relative to the baseline which does not share source and target embeddings (Appendix SECREF6 shows a detailed breakdown). performs very well with little labeled data but the gains erode to practically zero in large bitext settings. Pre-trained language model representations are most effective in low bitext setups. The best performing strategy is ELMo embeddings input to the encoder (). This improves the baseline by 3.8 BLEU in the 160K bitext setting and it still improves the 5.2M setting by over 1 BLEU.",
+    "We further improve by sharing learned word representations in the decoder by tying input and output embeddings (). This configuration performs even better than with a gain of 5.3 BLEU in the 160K setup. Sharing decoder embeddings is equally applicable to . Language model representations are much less effective in the decoder: improves the 160K bitext setup but yields no improvements thereafter and performs even worse. We conjecture that pre-trained representations give much easier wins in the encoder. Table TABREF14 shows additional results on newstest2018.",
+    "Pre-trained representations mostly impacts the training time of the sequence to sequence model (see Appendix SECREF7 ): slows throughput during training by about 5.3x and is even slower because of the need to backpropagate through the LM for fine-tuning (9.2x). However, inference is only 12-14% slower than the baseline when adding pre-trained embeddings to the encoder (, ). This is because the LM computation can be paralelized for all input tokens. Inference is much slower when adding representations to the decoder because the LM needs to be invoked repeatedly. Our current implementation does not cache LM operations for the previous state and can be made much faster.",
+    "The baseline uses a BPE vocabulary estimated on the language model corpora (§ SECREF3 ). Appendix SECREF6 shows that this vocabulary actually leads to sligtly better performance than a joint BPE code learned on the bitext as is usual.",
+    "Next, we validate our findings on the WMT'18 English-Turkish task for which the bitext is truly limited (208K sentence-pairs). We use the language model vocab for the the English side of the bitext and a BPE vocabulary learned on the Turkish side. Table TABREF15 shows that ELMo embeddings for the encoder improve English-Turkish translation."
+  ],
+  "child_pages": [
+    8,
+    8,
+    8,
+    8,
+    8,
+    8
+  ],
+  "child_sections": [
+    "Machine translation",
+    "Machine translation",
+    "Machine translation",
+    "Machine translation",
+    "Machine translation",
+    "Machine translation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Machine translation",
+      0
+    ],
+    [
+      "Machine translation",
+      1
+    ],
+    [
+      "Machine translation",
+      2
+    ],
+    [
+      "Machine translation",
+      3
+    ],
+    [
+      "Machine translation",
+      4
+    ],
+    [
+      "Machine translation",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_8",
+  "section_id": "Machine translation",
+  "section": "Machine translation",
+  "title_path": "Machine translation",
+  "block_type": "long_unit"
+}

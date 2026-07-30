@@ -1,0 +1,70 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Adaptive Multi-task Learning\n[source_id=27] Both models in § SECREF15 and § SECREF17 treat all the hashtags uniformly. However, different features address different types of hashtags. By design, the linguistic features capture named entities and multi-word hashtags that exhibit word shape patterns, such as camel case. The ngram probabilities with Good-Turing smoothing gravitate towards multi-word segmentations with known words, as its estimate for unseen ngrams depends on the fraction of ngrams seen once which can be very low BIBREF28 . The modified Kneser-Ney smoothing is more likely to favor segmentations that contain rare words, and single-word segmentations in particular. Please refer to § SECREF46 for a more detailed quantitative and qualitative analysis.\n[source_id=28] To leverage this intuition, we introduce a binary classification task to help the model differentiate single-word from multi-word hashtags. The binary classifier takes hashtag features INLINEFORM0 as the input and outputs INLINEFORM1 , which represents the probability of INLINEFORM2 being a multi-word hashtag. INLINEFORM3 is used as an adaptive gating value in our multi-task learning setup. The gold labels for this task are obtained at no extra cost by simply verifying whether the ground-truth segmentation has multiple words. We train the pairwise segmentation ranker and the binary single- vs. multi-token hashtag classifier jointly, by minimizing INLINEFORM4 for the pairwise ranker and the Binary Cross Entropy Error ( INLINEFORM5 ) for the classifier: DISPLAYFORM0\n[source_id=29] where INLINEFORM0 is the adaptive gating value, INLINEFORM1 indicates if INLINEFORM2 is actually a multi-word hashtag and INLINEFORM3 is the number of training examples. INLINEFORM4 and INLINEFORM5 are the weights for each loss. For our experiments, we apply equal weights.\n[source_id=30] More specifically, we divide the segmentation feature vector INLINEFORM0 into two subsets: (a) INLINEFORM1 with modified Kneser-Ney smoothing features, and (b) INLINEFORM2 with Good-Turing smoothing and linguistic features. For an input candidate segmentation pair INLINEFORM3 , we construct two pairwise vectors INLINEFORM4 and INLINEFORM5 by concatenation, then combine them based on the adaptive gating value INLINEFORM6 before feeding them into the feedforward network INLINEFORM7 for pairwise ranking: DISPLAYFORM0\n[source_id=31] We use summation with padding, as we find this simple ensemble method achieves similar performance in our experiments as the more complex multi-column networks BIBREF29 . Figure FIGREF11 (c) shows the architecture of this model. An analogue multi-task formulation can also be used for the Margin Ranking loss as: DISPLAYFORM0",
+  "score": 3.515028774109048,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    27,
+    28,
+    29,
+    30,
+    31
+  ],
+  "child_qasper_evidence_texts": [
+    "Both models in § SECREF15 and § SECREF17 treat all the hashtags uniformly. However, different features address different types of hashtags. By design, the linguistic features capture named entities and multi-word hashtags that exhibit word shape patterns, such as camel case. The ngram probabilities with Good-Turing smoothing gravitate towards multi-word segmentations with known words, as its estimate for unseen ngrams depends on the fraction of ngrams seen once which can be very low BIBREF28 . The modified Kneser-Ney smoothing is more likely to favor segmentations that contain rare words, and single-word segmentations in particular. Please refer to § SECREF46 for a more detailed quantitative and qualitative analysis.",
+    "To leverage this intuition, we introduce a binary classification task to help the model differentiate single-word from multi-word hashtags. The binary classifier takes hashtag features INLINEFORM0 as the input and outputs INLINEFORM1 , which represents the probability of INLINEFORM2 being a multi-word hashtag. INLINEFORM3 is used as an adaptive gating value in our multi-task learning setup. The gold labels for this task are obtained at no extra cost by simply verifying whether the ground-truth segmentation has multiple words. We train the pairwise segmentation ranker and the binary single- vs. multi-token hashtag classifier jointly, by minimizing INLINEFORM4 for the pairwise ranker and the Binary Cross Entropy Error ( INLINEFORM5 ) for the classifier: DISPLAYFORM0",
+    "where INLINEFORM0 is the adaptive gating value, INLINEFORM1 indicates if INLINEFORM2 is actually a multi-word hashtag and INLINEFORM3 is the number of training examples. INLINEFORM4 and INLINEFORM5 are the weights for each loss. For our experiments, we apply equal weights.",
+    "More specifically, we divide the segmentation feature vector INLINEFORM0 into two subsets: (a) INLINEFORM1 with modified Kneser-Ney smoothing features, and (b) INLINEFORM2 with Good-Turing smoothing and linguistic features. For an input candidate segmentation pair INLINEFORM3 , we construct two pairwise vectors INLINEFORM4 and INLINEFORM5 by concatenation, then combine them based on the adaptive gating value INLINEFORM6 before feeding them into the feedforward network INLINEFORM7 for pairwise ranking: DISPLAYFORM0",
+    "We use summation with padding, as we find this simple ensemble method achieves similar performance in our experiments as the more complex multi-column networks BIBREF29 . Figure FIGREF11 (c) shows the architecture of this model. An analogue multi-task formulation can also be used for the Margin Ranking loss as: DISPLAYFORM0"
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Adaptive Multi-task Learning",
+    "Adaptive Multi-task Learning",
+    "Adaptive Multi-task Learning",
+    "Adaptive Multi-task Learning",
+    "Adaptive Multi-task Learning"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Adaptive Multi-task Learning",
+      0
+    ],
+    [
+      "Adaptive Multi-task Learning",
+      1
+    ],
+    [
+      "Adaptive Multi-task Learning",
+      2
+    ],
+    [
+      "Adaptive Multi-task Learning",
+      3
+    ],
+    [
+      "Adaptive Multi-task Learning",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Adaptive Multi-task Learning",
+  "section": "Adaptive Multi-task Learning",
+  "title_path": "Adaptive Multi-task Learning",
+  "block_type": "long_unit"
+}

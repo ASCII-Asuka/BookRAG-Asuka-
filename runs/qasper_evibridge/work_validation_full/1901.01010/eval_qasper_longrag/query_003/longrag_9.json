@@ -1,0 +1,61 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Experimental Setting\n[source_id=32] As discussed above, our model has two main components — biLSTM and Inception— which generate textual and visual representations, respectively. For the biLSTM component, the documents are preprocessed as described in BIBREF12 , where an article is divided into sentences and tokenized using NLTK BIBREF38 . Words appearing more than 20 times are retained when building the vocabulary. All other words are replaced by the special UNK token. We use the pre-trained GloVe BIBREF39 50-dimensional word embeddings to represent words. For words not in GloVe, word embeddings are randomly initialized based on sampling from a uniform distribution $U(-1, 1)$ . All word embeddings are updated in the training process. We set the LSTM hidden layer size to 256. The concatenation of the forward and backward LSTMs thus gives us 512 dimensions for the document embedding. A dropout layer is applied at the sentence and document level, respectively, with a probability of 0.5.\n[source_id=33] For Inception, we adopt data augmentation techniques in the training with a “nearest” filling mode, a zoom range of 0.1, a width shift range of 0.1, and a height shift range of 0.1. As the original screenshots have the size of 1,000 $\\times 2$ ,000 pixels, they are resized to 500 $\\times $ 500 to feed into Inception, where the input shape is (500, 500, 3). A dropout layer is applied with a probability of 0.5. Then, a GlobalAveragePooling2D layer is applied, which produces a 2,048 dimensional representation.\n[source_id=34] For the Joint model, we get a representation of 2,560 dimensions by concatenating the 512 dimensional representation from the biLSTM with the 2,048 dimensional representation from Inception. The dropout layer is applied to the two components with a probability of 0.5. For biLSTM, we use a mini-batch size of 128 and a learning rate of 0.001. For both Inception and joint model, we use a mini-batch size of 16 and a learning rate of 0.0001. All hyper-parameters were set empirically over the development data, and the models were optimized using the Adam optimizer BIBREF40 .\n[source_id=35] In the training phase, the weights in Inception are initialized by parameters pretrained on ImageNet, and the weights in biLSTM are randomly initialized (except for the word embeddings). We train each model for 50 epochs. However, to prevent overfitting, we adopt early stopping, where we stop training the model if the performance on the development set does not improve for 20 epochs. For evaluation, we use (micro-)accuracy, following previous studies BIBREF5 , BIBREF2 .",
+  "score": 4.745871631175627,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    32,
+    33,
+    34,
+    35
+  ],
+  "child_qasper_evidence_texts": [
+    "As discussed above, our model has two main components — biLSTM and Inception— which generate textual and visual representations, respectively. For the biLSTM component, the documents are preprocessed as described in BIBREF12 , where an article is divided into sentences and tokenized using NLTK BIBREF38 . Words appearing more than 20 times are retained when building the vocabulary. All other words are replaced by the special UNK token. We use the pre-trained GloVe BIBREF39 50-dimensional word embeddings to represent words. For words not in GloVe, word embeddings are randomly initialized based on sampling from a uniform distribution $U(-1, 1)$ . All word embeddings are updated in the training process. We set the LSTM hidden layer size to 256. The concatenation of the forward and backward LSTMs thus gives us 512 dimensions for the document embedding. A dropout layer is applied at the sentence and document level, respectively, with a probability of 0.5.",
+    "For Inception, we adopt data augmentation techniques in the training with a “nearest” filling mode, a zoom range of 0.1, a width shift range of 0.1, and a height shift range of 0.1. As the original screenshots have the size of 1,000 $\\times 2$ ,000 pixels, they are resized to 500 $\\times $ 500 to feed into Inception, where the input shape is (500, 500, 3). A dropout layer is applied with a probability of 0.5. Then, a GlobalAveragePooling2D layer is applied, which produces a 2,048 dimensional representation.",
+    "For the Joint model, we get a representation of 2,560 dimensions by concatenating the 512 dimensional representation from the biLSTM with the 2,048 dimensional representation from Inception. The dropout layer is applied to the two components with a probability of 0.5. For biLSTM, we use a mini-batch size of 128 and a learning rate of 0.001. For both Inception and joint model, we use a mini-batch size of 16 and a learning rate of 0.0001. All hyper-parameters were set empirically over the development data, and the models were optimized using the Adam optimizer BIBREF40 .",
+    "In the training phase, the weights in Inception are initialized by parameters pretrained on ImageNet, and the weights in biLSTM are randomly initialized (except for the word embeddings). We train each model for 50 epochs. However, to prevent overfitting, we adopt early stopping, where we stop training the model if the performance on the development set does not improve for 20 epochs. For evaluation, we use (micro-)accuracy, following previous studies BIBREF5 , BIBREF2 ."
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Experimental Setting",
+    "Experimental Setting",
+    "Experimental Setting",
+    "Experimental Setting"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Experimental Setting",
+      0
+    ],
+    [
+      "Experimental Setting",
+      1
+    ],
+    [
+      "Experimental Setting",
+      2
+    ],
+    [
+      "Experimental Setting",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Experimental Setting",
+  "section": "Experimental Setting",
+  "title_path": "Experimental Setting",
+  "block_type": "long_unit"
+}

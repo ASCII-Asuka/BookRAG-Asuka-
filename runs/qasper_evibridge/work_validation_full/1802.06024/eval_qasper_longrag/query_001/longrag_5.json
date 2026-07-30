@@ -1,0 +1,151 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Working of LiLi\n[source_id=27] Given an OKBC query ( INLINEFORM0 , INLINEFORM1 , INLINEFORM2 ), we represent it as a data instance INLINEFORM3 . INLINEFORM4 consists of INLINEFORM5 (the query triple), INLINEFORM6 (interaction limit set for INLINEFORM7 ), INLINEFORM8 (experience list storing the transition history of MDP for INLINEFORM9 in RL) and INLINEFORM10 (mode of INLINEFORM11 ) denoting if INLINEFORM12 is ` INLINEFORM13 ' (training), ` INLINEFORM14 ' (validation), ` INLINEFORM15 ' (evaluation) or ` INLINEFORM16 ' (clue) instance and INLINEFORM17 (feature set). We denote INLINEFORM18 ( INLINEFORM19 ) as the set of all complete (incomplete) path features in INLINEFORM20 . Given a data instance INLINEFORM21 , LiLi starts its initialization as follows: it sets the state as INLINEFORM22 (based on INLINEFORM23 , explained later), pushes the query tuple ( INLINEFORM24 , INLINEFORM25 ) into INLINEFORM26 and feeds INLINEFORM27 [top] to the RL-model for strategy formulation from INLINEFORM28 .\n[source_id=28] Inference Strategy Formulation. We view solving the strategy formulation problem as learning to play an inference game, where the goal is to formulate a strategy that \"makes the inference task possible\". Considering PR methods, inference is possible, iff (1) INLINEFORM0 becomes known to its KB (by acquiring clues when INLINEFORM1 is unknown) and (2) path features are extracted between INLINEFORM2 and INLINEFORM3 (which inturn requires INLINEFORM4 and INLINEFORM5 to be known to KB). If these conditions are met at the end of an episode (when strategy formulation finishes for a given query) of the game, LiLi wins and thus, it trains the prediction model for INLINEFORM6 and uses it for inference.\n[source_id=29] LiLi's strategy formulation is modeled as a Markov Decision Process (MDP) with finite state ( INLINEFORM0 ) and action ( INLINEFORM1 ) spaces. A state INLINEFORM2 consists of 10 binary state variables (Table 2), each of which keeps track of results of an action INLINEFORM3 taken by LiLi and thus, records the progress in inference process made so far. INLINEFORM4 is the initial state with all state bits set as 0. If the data instance (query) is a clue [ INLINEFORM5 ], INLINEFORM6 [CLUE] is set as 1. INLINEFORM7 consists of 6 actions (Table 3). INLINEFORM8 , INLINEFORM9 , INLINEFORM10 are processing actions and INLINEFORM11 , INLINEFORM12 , INLINEFORM13 are interactive actions. Whenever INLINEFORM14 is executed, the MDP reaches the terminal state. Given an action INLINEFORM15 in state INLINEFORM16 , if INLINEFORM17 is invalid in INLINEFORM21 or the objective of INLINEFORM22 is unsatisfied (* marked the condition in INLINEFORM23 ), RL receives a negative reward (empirically set); else receives a positive reward.. We use Q-learning BIBREF38 with INLINEFORM24 -greedy strategy to learn the optimal policy for training the RL model. Note that, the inference strategy is independent of KB type and correctness of prediction. Thus, the RL-model is trained only once from scratch (reused thereafter for other KBs) and also, independently of the prediction model.\n[source_id=30] Sometimes the training dataset may not be enough to learn optimal policy for all INLINEFORM0 . Thus, encountering an unseen state during test can make RL-model clueless about the action. Given a state INLINEFORM1 , whenever an invalid INLINEFORM2 is chosen, LiLi remains in INLINEFORM3 . For INLINEFORM4 , LiLi remains in INLINEFORM5 untill INLINEFORM6 (see Table 1 for INLINEFORM7 ). So, if the state remains the same for ( INLINEFORM8 +1) times, it implies LiLi has encountered a fault (an unseen state). RL-model instantly switches to the training mode and randomly explores INLINEFORM9 to learn the optimal action (fault-tolerant learning). While exploring INLINEFORM10 , the model chooses INLINEFORM11 only when it has tried all other INLINEFORM12 to avoid abrupt end of episode.\n[source_id=31] Execution of Actions. At any given point in time, let ( INLINEFORM0 , INLINEFORM1 ) be the current INLINEFORM2 [top], INLINEFORM3 is the chosen action and the current version of KS components are INLINEFORM4 , INLINEFORM5 , INLINEFORM6 and INLINEFORM7 . Then, if INLINEFORM8 is invalid in INLINEFORM9 , LiLi only updates INLINEFORM10 [top] with ( INLINEFORM11 , INLINEFORM12 ) and returns INLINEFORM13 [top] to RL-model. In this process, LiLi adds experience ( INLINEFORM14 , INLINEFORM15 , INLINEFORM16 , INLINEFORM17 ) in INLINEFORM18 and then, replaces INLINEFORM19 [top] with ( INLINEFORM20 , INLINEFORM21 ). If INLINEFORM22 is valid in INLINEFORM23 , LiLi first sets the next state INLINEFORM24 and performs a sequence of operations INLINEFORM25 based on INLINEFORM26 (discussed below). Unless specified, in INLINEFORM27 , LiLi always monitors INLINEFORM28 and if INLINEFORM29 becomes 0, LiLi sets INLINEFORM30 . Also, whenever LiLi asks the user a query, INLINEFORM31 is decremented by 1. Once INLINEFORM32 ends, LiLi updates INLINEFORM33 [top] with ( INLINEFORM34 , INLINEFORM35 ) and returns INLINEFORM36 [top] to RL-model for choosing the next action.\n[source_id=32] In INLINEFORM0 , LiLi searches INLINEFORM1 , INLINEFORM2 , INLINEFORM3 in INLINEFORM4 and sets appropriate bits in INLINEFORM5 (see Table 2). If INLINEFORM6 was unknown before and is just added to INLINEFORM7 or is in the bottom INLINEFORM8 % (see Table 1 for INLINEFORM9 ) of INLINEFORM10 , LiLi randomly sets INLINEFORM14 with probability INLINEFORM15 . If INLINEFORM16 is a clue and INLINEFORM17 , LiLi updates KS with triple INLINEFORM18 , where ( INLINEFORM19 , INLINEFORM20 , INLINEFORM21 ) and ( INLINEFORM22 , INLINEFORM23 , INLINEFORM24 ) gets added to INLINEFORM25 and INLINEFORM26 , INLINEFORM27 are set as 1.\n[source_id=33] In INLINEFORM0 , LiLi asks the user to provide a clue (+ve instance) for INLINEFORM1 and corrupts INLINEFORM2 and INLINEFORM3 of the clue once at a time, to generate -ve instances by sampling nodes from INLINEFORM4 . These instances help in training prediction model for INLINEFORM5 while executing INLINEFORM6 .\n[source_id=34] In INLINEFORM0 , LiLi selects an incomplete path INLINEFORM1 from INLINEFORM2 to formulate MLQ, such that INLINEFORM3 is most frequently observed for INLINEFORM4 and INLINEFORM5 is high, given by INLINEFORM6 . Here, INLINEFORM7 denotes the contextual similarity BIBREF16 of entity-pair INLINEFORM8 . If INLINEFORM9 is high, INLINEFORM10 is more likely to possess a relation between them and so, is a good candidate for formulating MLQ. When the user does not respond to MLQ (or CLQ in INLINEFORM11 ), the guessing mechanism is used, which works as follows: Since contextual similarity of entity-pairs is highly correlated with their class labels BIBREF16 , LiLi divides the similarity range [-1, 1] into three segments, using a low ( INLINEFORM12 ) and high ( INLINEFORM13 ) similarity threshold and replaces the missing link with INLINEFORM14 in INLINEFORM15 to make it complete as follows: If INLINEFORM16 , INLINEFORM17 = “@-LooselyRelatedTo-@\"; else if INLINEFORM18 , INLINEFORM19 =“@-NotRelatedTo-@\"; Otherwise, INLINEFORM20 =“@-RelatedTo-@\".\n[source_id=35] In INLINEFORM0 , LiLi asks CLQs for connecting unknown entities INLINEFORM1 and/or INLINEFORM2 with INLINEFORM3 by selecting the most contextually relevant node (wrt INLINEFORM4 , INLINEFORM5 ) from INLINEFORM6 , given by link INLINEFORM7 . We adopt the contextual relevance idea in BIBREF16 which is computed using word embedding BIBREF39\n[source_id=36] In INLINEFORM0 , LiLi extracts path features INLINEFORM1 between ( INLINEFORM2 , INLINEFORM3 ) and updates INLINEFORM4 with incomplete features from INLINEFORM5 . LiLi always trains the prediction model with complete features INLINEFORM6 and once INLINEFORM7 or INLINEFORM8 , LiLi stops asking MLQs. Thus, in both INLINEFORM9 and INLINEFORM10 , LiLi always monitors INLINEFORM11 to check for the said requirements and sets INLINEFORM12 to control interactions.\n[source_id=37] In INLINEFORM0 , if LiLi wins the episode, it adds INLINEFORM1 in one of data buffers INLINEFORM2 based on its mode INLINEFORM3 . E.g., if INLINEFORM4 or INLINEFORM5 , INLINEFORM6 is used for training and added to INLINEFORM7 . Similarly validation buffer INLINEFORM8 and evaluation buffer INLINEFORM9 are populated. If INLINEFORM10 , LiLi invokes the prediction model for INLINEFORM11 .\n[source_id=38] Lifelong Relation Prediction. Given a relation INLINEFORM0 , LiLi uses INLINEFORM1 and INLINEFORM2 (see INLINEFORM3 ) to train a prediction model (say, INLINEFORM4 ) with parameters INLINEFORM5 . For a unknown INLINEFORM6 , the clue instances get stored in INLINEFORM7 and INLINEFORM8 . Thus, LiLi populates INLINEFORM9 by taking 10% (see §4) of the instances from INLINEFORM10 and starts the training. For INLINEFORM11 , LiLi uses a LSTM BIBREF40 to compose the vector representation of each feature INLINEFORM12 as INLINEFORM13 and vector representation of INLINEFORM14 as INLINEFORM15 . Next, LiLi computes the prediction value, INLINEFORM16 as sigmoid of the mean cosine similarity of all features and INLINEFORM17 , given by INLINEFORM18 ) and maximize the log-likelihood of INLINEFORM19 for training. Once INLINEFORM20 is trained, LiLi updates INLINEFORM21 [ INLINEFORM22 ] using INLINEFORM23 . We also train an inverse model for INLINEFORM24 , INLINEFORM25 by reversing the path features in INLINEFORM26 and INLINEFORM27 which help in lifelong learning (discussed below). Unlike BIBREF20 , BIBREF21 , while predicting the label for INLINEFORM28 , we compute a relation-specific prediction threshold INLINEFORM29 corresponding to INLINEFORM30 using INLINEFORM31 as: INLINEFORM32 and infer INLINEFORM33 as +ve if INLINEFORM34 and -ve otherwise. Here, INLINEFORM35 ( INLINEFORM36 ) is the mean prediction value for all +ve (-ve) examples in INLINEFORM37 .\n[source_id=39] Models trained on a few examples (e.g., clues acquired for unknown INLINEFORM0 ) with randomly initialized weights often perform poorly due to underfitting. Thus, we transfer knowledge (weights) from the past most similar (wrt INLINEFORM1 ) task in a lifelong learning manner BIBREF31 . LiLi uses INLINEFORM2 to find the past most similar task for INLINEFORM3 as follows: LiLi computes trancated SVD of INLINEFORM4 as INLINEFORM5 and then, the similarity matrix INLINEFORM6 . INLINEFORM7 provides the similarity between relations INLINEFORM8 and INLINEFORM9 in INLINEFORM10 . Thus, LiLi chooses a source relation INLINEFORM11 to transfer weights. Here, INLINEFORM12 is the set of all INLINEFORM13 and INLINEFORM14 for which LiLi has already learned a prediction model. Now, if INLINEFORM15 or INLINEFORM16 , LiLi randomly initializes the weights INLINEFORM17 for INLINEFORM18 and proceeds with the training. Otherwise, LiLi uses INLINEFORM19 as initial weights and fine-tunes INLINEFORM20 with a low learning rate.\n[source_id=40] A Running Example. Considering the example shown in Figure 1, LiLi works as follows: first, LiLi executes INLINEFORM0 and detects that the source entity “Obama\" and query relation “CitizenOf\" are unknown. Thus, LiLi executes INLINEFORM1 to acquire clue (SF1) for “CitizenOf\" and pushes the clue (+ve example) and two generated -ve examples into INLINEFORM2 . Once the clues are processed and a prediction model is trained for “CitizenOf\" by formulating separate strategies for them, LiLi becomes aware of “CitizenOf\". Now, as the clues have already been popped from INLINEFORM3 , the query becomes INLINEFORM4 and the strategy formulation process for the query resumes. Next, LiLi asks user to provide a connecting link for “Obama\" by performing INLINEFORM5 . Now, the query entities and relation being known, LiLi enumerates paths between “Obama\" and “USA\" by performing INLINEFORM6 . Let an extracted path be “ INLINEFORM7 \" with missing link between ( INLINEFORM8 , INLINEFORM9 ). LiLi asks the user to fill the link by performing INLINEFORM10 and then, extracts the complete feature “ INLINEFORM11 \". The feature set is then fed to the prediction model and inference is made as a result of INLINEFORM12 . Thus, the formulated inference strategy is: “ INLINEFORM13 \".",
+  "score": 3.532373420900999,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40
+  ],
+  "child_qasper_evidence_texts": [
+    "Given an OKBC query ( INLINEFORM0 , INLINEFORM1 , INLINEFORM2 ), we represent it as a data instance INLINEFORM3 . INLINEFORM4 consists of INLINEFORM5 (the query triple), INLINEFORM6 (interaction limit set for INLINEFORM7 ), INLINEFORM8 (experience list storing the transition history of MDP for INLINEFORM9 in RL) and INLINEFORM10 (mode of INLINEFORM11 ) denoting if INLINEFORM12 is ` INLINEFORM13 ' (training), ` INLINEFORM14 ' (validation), ` INLINEFORM15 ' (evaluation) or ` INLINEFORM16 ' (clue) instance and INLINEFORM17 (feature set). We denote INLINEFORM18 ( INLINEFORM19 ) as the set of all complete (incomplete) path features in INLINEFORM20 . Given a data instance INLINEFORM21 , LiLi starts its initialization as follows: it sets the state as INLINEFORM22 (based on INLINEFORM23 , explained later), pushes the query tuple ( INLINEFORM24 , INLINEFORM25 ) into INLINEFORM26 and feeds INLINEFORM27 [top] to the RL-model for strategy formulation from INLINEFORM28 .",
+    "Inference Strategy Formulation. We view solving the strategy formulation problem as learning to play an inference game, where the goal is to formulate a strategy that \"makes the inference task possible\". Considering PR methods, inference is possible, iff (1) INLINEFORM0 becomes known to its KB (by acquiring clues when INLINEFORM1 is unknown) and (2) path features are extracted between INLINEFORM2 and INLINEFORM3 (which inturn requires INLINEFORM4 and INLINEFORM5 to be known to KB). If these conditions are met at the end of an episode (when strategy formulation finishes for a given query) of the game, LiLi wins and thus, it trains the prediction model for INLINEFORM6 and uses it for inference.",
+    "LiLi's strategy formulation is modeled as a Markov Decision Process (MDP) with finite state ( INLINEFORM0 ) and action ( INLINEFORM1 ) spaces. A state INLINEFORM2 consists of 10 binary state variables (Table 2), each of which keeps track of results of an action INLINEFORM3 taken by LiLi and thus, records the progress in inference process made so far. INLINEFORM4 is the initial state with all state bits set as 0. If the data instance (query) is a clue [ INLINEFORM5 ], INLINEFORM6 [CLUE] is set as 1. INLINEFORM7 consists of 6 actions (Table 3). INLINEFORM8 , INLINEFORM9 , INLINEFORM10 are processing actions and INLINEFORM11 , INLINEFORM12 , INLINEFORM13 are interactive actions. Whenever INLINEFORM14 is executed, the MDP reaches the terminal state. Given an action INLINEFORM15 in state INLINEFORM16 , if INLINEFORM17 is invalid in INLINEFORM21 or the objective of INLINEFORM22 is unsatisfied (* marked the condition in INLINEFORM23 ), RL receives a negative reward (empirically set); else receives a positive reward.. We use Q-learning BIBREF38 with INLINEFORM24 -greedy strategy to learn the optimal policy for training the RL model. Note that, the inference strategy is independent of KB type and correctness of prediction. Thus, the RL-model is trained only once from scratch (reused thereafter for other KBs) and also, independently of the prediction model.",
+    "Sometimes the training dataset may not be enough to learn optimal policy for all INLINEFORM0 . Thus, encountering an unseen state during test can make RL-model clueless about the action. Given a state INLINEFORM1 , whenever an invalid INLINEFORM2 is chosen, LiLi remains in INLINEFORM3 . For INLINEFORM4 , LiLi remains in INLINEFORM5 untill INLINEFORM6 (see Table 1 for INLINEFORM7 ). So, if the state remains the same for ( INLINEFORM8 +1) times, it implies LiLi has encountered a fault (an unseen state). RL-model instantly switches to the training mode and randomly explores INLINEFORM9 to learn the optimal action (fault-tolerant learning). While exploring INLINEFORM10 , the model chooses INLINEFORM11 only when it has tried all other INLINEFORM12 to avoid abrupt end of episode.",
+    "Execution of Actions. At any given point in time, let ( INLINEFORM0 , INLINEFORM1 ) be the current INLINEFORM2 [top], INLINEFORM3 is the chosen action and the current version of KS components are INLINEFORM4 , INLINEFORM5 , INLINEFORM6 and INLINEFORM7 . Then, if INLINEFORM8 is invalid in INLINEFORM9 , LiLi only updates INLINEFORM10 [top] with ( INLINEFORM11 , INLINEFORM12 ) and returns INLINEFORM13 [top] to RL-model. In this process, LiLi adds experience ( INLINEFORM14 , INLINEFORM15 , INLINEFORM16 , INLINEFORM17 ) in INLINEFORM18 and then, replaces INLINEFORM19 [top] with ( INLINEFORM20 , INLINEFORM21 ). If INLINEFORM22 is valid in INLINEFORM23 , LiLi first sets the next state INLINEFORM24 and performs a sequence of operations INLINEFORM25 based on INLINEFORM26 (discussed below). Unless specified, in INLINEFORM27 , LiLi always monitors INLINEFORM28 and if INLINEFORM29 becomes 0, LiLi sets INLINEFORM30 . Also, whenever LiLi asks the user a query, INLINEFORM31 is decremented by 1. Once INLINEFORM32 ends, LiLi updates INLINEFORM33 [top] with ( INLINEFORM34 , INLINEFORM35 ) and returns INLINEFORM36 [top] to RL-model for choosing the next action.",
+    "In INLINEFORM0 , LiLi searches INLINEFORM1 , INLINEFORM2 , INLINEFORM3 in INLINEFORM4 and sets appropriate bits in INLINEFORM5 (see Table 2). If INLINEFORM6 was unknown before and is just added to INLINEFORM7 or is in the bottom INLINEFORM8 % (see Table 1 for INLINEFORM9 ) of INLINEFORM10 , LiLi randomly sets INLINEFORM14 with probability INLINEFORM15 . If INLINEFORM16 is a clue and INLINEFORM17 , LiLi updates KS with triple INLINEFORM18 , where ( INLINEFORM19 , INLINEFORM20 , INLINEFORM21 ) and ( INLINEFORM22 , INLINEFORM23 , INLINEFORM24 ) gets added to INLINEFORM25 and INLINEFORM26 , INLINEFORM27 are set as 1.",
+    "In INLINEFORM0 , LiLi asks the user to provide a clue (+ve instance) for INLINEFORM1 and corrupts INLINEFORM2 and INLINEFORM3 of the clue once at a time, to generate -ve instances by sampling nodes from INLINEFORM4 . These instances help in training prediction model for INLINEFORM5 while executing INLINEFORM6 .",
+    "In INLINEFORM0 , LiLi selects an incomplete path INLINEFORM1 from INLINEFORM2 to formulate MLQ, such that INLINEFORM3 is most frequently observed for INLINEFORM4 and INLINEFORM5 is high, given by INLINEFORM6 . Here, INLINEFORM7 denotes the contextual similarity BIBREF16 of entity-pair INLINEFORM8 . If INLINEFORM9 is high, INLINEFORM10 is more likely to possess a relation between them and so, is a good candidate for formulating MLQ. When the user does not respond to MLQ (or CLQ in INLINEFORM11 ), the guessing mechanism is used, which works as follows: Since contextual similarity of entity-pairs is highly correlated with their class labels BIBREF16 , LiLi divides the similarity range [-1, 1] into three segments, using a low ( INLINEFORM12 ) and high ( INLINEFORM13 ) similarity threshold and replaces the missing link with INLINEFORM14 in INLINEFORM15 to make it complete as follows: If INLINEFORM16 , INLINEFORM17 = “@-LooselyRelatedTo-@\"; else if INLINEFORM18 , INLINEFORM19 =“@-NotRelatedTo-@\"; Otherwise, INLINEFORM20 =“@-RelatedTo-@\".",
+    "In INLINEFORM0 , LiLi asks CLQs for connecting unknown entities INLINEFORM1 and/or INLINEFORM2 with INLINEFORM3 by selecting the most contextually relevant node (wrt INLINEFORM4 , INLINEFORM5 ) from INLINEFORM6 , given by link INLINEFORM7 . We adopt the contextual relevance idea in BIBREF16 which is computed using word embedding BIBREF39",
+    "In INLINEFORM0 , LiLi extracts path features INLINEFORM1 between ( INLINEFORM2 , INLINEFORM3 ) and updates INLINEFORM4 with incomplete features from INLINEFORM5 . LiLi always trains the prediction model with complete features INLINEFORM6 and once INLINEFORM7 or INLINEFORM8 , LiLi stops asking MLQs. Thus, in both INLINEFORM9 and INLINEFORM10 , LiLi always monitors INLINEFORM11 to check for the said requirements and sets INLINEFORM12 to control interactions.",
+    "In INLINEFORM0 , if LiLi wins the episode, it adds INLINEFORM1 in one of data buffers INLINEFORM2 based on its mode INLINEFORM3 . E.g., if INLINEFORM4 or INLINEFORM5 , INLINEFORM6 is used for training and added to INLINEFORM7 . Similarly validation buffer INLINEFORM8 and evaluation buffer INLINEFORM9 are populated. If INLINEFORM10 , LiLi invokes the prediction model for INLINEFORM11 .",
+    "Lifelong Relation Prediction. Given a relation INLINEFORM0 , LiLi uses INLINEFORM1 and INLINEFORM2 (see INLINEFORM3 ) to train a prediction model (say, INLINEFORM4 ) with parameters INLINEFORM5 . For a unknown INLINEFORM6 , the clue instances get stored in INLINEFORM7 and INLINEFORM8 . Thus, LiLi populates INLINEFORM9 by taking 10% (see §4) of the instances from INLINEFORM10 and starts the training. For INLINEFORM11 , LiLi uses a LSTM BIBREF40 to compose the vector representation of each feature INLINEFORM12 as INLINEFORM13 and vector representation of INLINEFORM14 as INLINEFORM15 . Next, LiLi computes the prediction value, INLINEFORM16 as sigmoid of the mean cosine similarity of all features and INLINEFORM17 , given by INLINEFORM18 ) and maximize the log-likelihood of INLINEFORM19 for training. Once INLINEFORM20 is trained, LiLi updates INLINEFORM21 [ INLINEFORM22 ] using INLINEFORM23 . We also train an inverse model for INLINEFORM24 , INLINEFORM25 by reversing the path features in INLINEFORM26 and INLINEFORM27 which help in lifelong learning (discussed below). Unlike BIBREF20 , BIBREF21 , while predicting the label for INLINEFORM28 , we compute a relation-specific prediction threshold INLINEFORM29 corresponding to INLINEFORM30 using INLINEFORM31 as: INLINEFORM32 and infer INLINEFORM33 as +ve if INLINEFORM34 and -ve otherwise. Here, INLINEFORM35 ( INLINEFORM36 ) is the mean prediction value for all +ve (-ve) examples in INLINEFORM37 .",
+    "Models trained on a few examples (e.g., clues acquired for unknown INLINEFORM0 ) with randomly initialized weights often perform poorly due to underfitting. Thus, we transfer knowledge (weights) from the past most similar (wrt INLINEFORM1 ) task in a lifelong learning manner BIBREF31 . LiLi uses INLINEFORM2 to find the past most similar task for INLINEFORM3 as follows: LiLi computes trancated SVD of INLINEFORM4 as INLINEFORM5 and then, the similarity matrix INLINEFORM6 . INLINEFORM7 provides the similarity between relations INLINEFORM8 and INLINEFORM9 in INLINEFORM10 . Thus, LiLi chooses a source relation INLINEFORM11 to transfer weights. Here, INLINEFORM12 is the set of all INLINEFORM13 and INLINEFORM14 for which LiLi has already learned a prediction model. Now, if INLINEFORM15 or INLINEFORM16 , LiLi randomly initializes the weights INLINEFORM17 for INLINEFORM18 and proceeds with the training. Otherwise, LiLi uses INLINEFORM19 as initial weights and fine-tunes INLINEFORM20 with a low learning rate.",
+    "A Running Example. Considering the example shown in Figure 1, LiLi works as follows: first, LiLi executes INLINEFORM0 and detects that the source entity “Obama\" and query relation “CitizenOf\" are unknown. Thus, LiLi executes INLINEFORM1 to acquire clue (SF1) for “CitizenOf\" and pushes the clue (+ve example) and two generated -ve examples into INLINEFORM2 . Once the clues are processed and a prediction model is trained for “CitizenOf\" by formulating separate strategies for them, LiLi becomes aware of “CitizenOf\". Now, as the clues have already been popped from INLINEFORM3 , the query becomes INLINEFORM4 and the strategy formulation process for the query resumes. Next, LiLi asks user to provide a connecting link for “Obama\" by performing INLINEFORM5 . Now, the query entities and relation being known, LiLi enumerates paths between “Obama\" and “USA\" by performing INLINEFORM6 . Let an extracted path be “ INLINEFORM7 \" with missing link between ( INLINEFORM8 , INLINEFORM9 ). LiLi asks the user to fill the link by performing INLINEFORM10 and then, extracts the complete feature “ INLINEFORM11 \". The feature set is then fed to the prediction model and inference is made as a result of INLINEFORM12 . Thus, the formulated inference strategy is: “ INLINEFORM13 \"."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Working of LiLi",
+    "Working of LiLi",
+    "Working of LiLi",
+    "Working of LiLi",
+    "Working of LiLi",
+    "Working of LiLi",
+    "Working of LiLi",
+    "Working of LiLi",
+    "Working of LiLi",
+    "Working of LiLi",
+    "Working of LiLi",
+    "Working of LiLi",
+    "Working of LiLi",
+    "Working of LiLi"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Working of LiLi",
+      0
+    ],
+    [
+      "Working of LiLi",
+      1
+    ],
+    [
+      "Working of LiLi",
+      2
+    ],
+    [
+      "Working of LiLi",
+      3
+    ],
+    [
+      "Working of LiLi",
+      4
+    ],
+    [
+      "Working of LiLi",
+      5
+    ],
+    [
+      "Working of LiLi",
+      6
+    ],
+    [
+      "Working of LiLi",
+      7
+    ],
+    [
+      "Working of LiLi",
+      8
+    ],
+    [
+      "Working of LiLi",
+      9
+    ],
+    [
+      "Working of LiLi",
+      10
+    ],
+    [
+      "Working of LiLi",
+      11
+    ],
+    [
+      "Working of LiLi",
+      12
+    ],
+    [
+      "Working of LiLi",
+      13
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Working of LiLi",
+  "section": "Working of LiLi",
+  "title_path": "Working of LiLi",
+  "block_type": "long_unit"
+}

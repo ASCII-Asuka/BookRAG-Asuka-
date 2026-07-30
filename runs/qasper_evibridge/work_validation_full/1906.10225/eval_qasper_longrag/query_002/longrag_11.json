@@ -1,0 +1,88 @@
+{
+  "id": "longrag_11",
+  "content": "[Section] Experiments with RNNGs\n[source_id=54] For experiments on supervising RNNGs with induced trees, we use the parameterization and hyperparameters from BIBREF17 , which uses a 2-layer 650-dimensional stack LSTM (with dropout of 0.5) and a 650-dimensional tree LSTM BIBREF88 , BIBREF90 as the composition function.\n[source_id=55] Concretely, the generative story is as follows: first, the stack representation is used to predict the next action (shift or reduce) via an affine transformation followed by a sigmoid. If shift is chosen, we obtain a distribution over the vocabulary via another affine transformation over the stack representation followed by a softmax. Then we sample the next word from this distribution and shift the generated word onto the stack using the stack LSTM. If reduce is chosen, we pop the last two elements off the stack and use the tree LSTM to obtain a new representation. This new representation is shifted onto the stack via the stack LSTM. Note that this RNNG parameterization is slightly different than the original from BIBREF53 , which does not ignore constituent labels and utilizes a bidirectional LSTM as the composition function instead of a tree LSTM. As our RNNG parameterization only works with binary trees, we binarize the gold trees with right binarization for the RNNG trained on gold trees (trees from the unsupervised methods explored in this paper are already binary). The RNNG also trains a discriminative parser alongside the generative model for evaluation with importance sampling. We use a CRF parser whose span score parameterization is similar similar to recent works BIBREF89 , BIBREF87 , BIBREF85 : position embeddings are added to word embeddings, and a bidirectional LSTM with 256 hidden dimensions is run over the input representations to obtain the forward and backward hidden states. The score INLINEFORM0 for a constituent spanning the INLINEFORM1 -th and INLINEFORM2 -th word is given by,\n[source_id=56] INLINEFORM0\n[source_id=57] where the MLP has a single hidden layer with INLINEFORM0 nonlinearity followed by layer normalization BIBREF84 .\n[source_id=58] For experiments on fine-tuning the RNNG with the unsupervised RNNG, we take the discriminative parser (which is also pretrained alongside the RNNG on induced trees) to be the structured inference network for optimizing the evidence lower bound. We refer the reader to BIBREF17 and their open source implementation for additional details. We also observe that as noted by BIBREF17 , a URNNG trained from scratch on this version of PTB without punctuation failed to outperform a right-branching baseline.\n[source_id=59] The LSTM language model baseline is the same size as the stack LSTM (i.e. 2 layers, 650 hidden units, dropout of 0.5), and is therefore equivalent to an RNNG with completely right branching trees. The PRPN/ON baselines for perplexity/syntactic evaluation in Table TABREF30 also have 2 layers with 650 hidden units and 0.5 dropout. Therefore all models considered in Table TABREF30 have roughly the same capacity. For all models we share input/output word embeddings BIBREF86 . Perplexity estimation for the RNNGs and the compound PCFG uses 1000 importance-weighted samples.\n[source_id=60] For grammaticality judgment, we modify the publicly available dataset from BIBREF56 to only keep sentence pairs that did not have any unknown words with respect to our PTB vocabulary of 10K words. This results in 33K sentence pairs for evaluation.",
+  "score": 2.0538690197170437,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_11",
+  "child_source_node_ids": [
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60
+  ],
+  "child_qasper_evidence_texts": [
+    "For experiments on supervising RNNGs with induced trees, we use the parameterization and hyperparameters from BIBREF17 , which uses a 2-layer 650-dimensional stack LSTM (with dropout of 0.5) and a 650-dimensional tree LSTM BIBREF88 , BIBREF90 as the composition function.",
+    "Concretely, the generative story is as follows: first, the stack representation is used to predict the next action (shift or reduce) via an affine transformation followed by a sigmoid. If shift is chosen, we obtain a distribution over the vocabulary via another affine transformation over the stack representation followed by a softmax. Then we sample the next word from this distribution and shift the generated word onto the stack using the stack LSTM. If reduce is chosen, we pop the last two elements off the stack and use the tree LSTM to obtain a new representation. This new representation is shifted onto the stack via the stack LSTM. Note that this RNNG parameterization is slightly different than the original from BIBREF53 , which does not ignore constituent labels and utilizes a bidirectional LSTM as the composition function instead of a tree LSTM. As our RNNG parameterization only works with binary trees, we binarize the gold trees with right binarization for the RNNG trained on gold trees (trees from the unsupervised methods explored in this paper are already binary). The RNNG also trains a discriminative parser alongside the generative model for evaluation with importance sampling. We use a CRF parser whose span score parameterization is similar similar to recent works BIBREF89 , BIBREF87 , BIBREF85 : position embeddings are added to word embeddings, and a bidirectional LSTM with 256 hidden dimensions is run over the input representations to obtain the forward and backward hidden states. The score INLINEFORM0 for a constituent spanning the INLINEFORM1 -th and INLINEFORM2 -th word is given by,",
+    "INLINEFORM0",
+    "where the MLP has a single hidden layer with INLINEFORM0 nonlinearity followed by layer normalization BIBREF84 .",
+    "For experiments on fine-tuning the RNNG with the unsupervised RNNG, we take the discriminative parser (which is also pretrained alongside the RNNG on induced trees) to be the structured inference network for optimizing the evidence lower bound. We refer the reader to BIBREF17 and their open source implementation for additional details. We also observe that as noted by BIBREF17 , a URNNG trained from scratch on this version of PTB without punctuation failed to outperform a right-branching baseline.",
+    "The LSTM language model baseline is the same size as the stack LSTM (i.e. 2 layers, 650 hidden units, dropout of 0.5), and is therefore equivalent to an RNNG with completely right branching trees. The PRPN/ON baselines for perplexity/syntactic evaluation in Table TABREF30 also have 2 layers with 650 hidden units and 0.5 dropout. Therefore all models considered in Table TABREF30 have roughly the same capacity. For all models we share input/output word embeddings BIBREF86 . Perplexity estimation for the RNNGs and the compound PCFG uses 1000 importance-weighted samples.",
+    "For grammaticality judgment, we modify the publicly available dataset from BIBREF56 to only keep sentence pairs that did not have any unknown words with respect to our PTB vocabulary of 10K words. This results in 33K sentence pairs for evaluation."
+  ],
+  "child_pages": [
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11
+  ],
+  "child_sections": [
+    "Experiments with RNNGs",
+    "Experiments with RNNGs",
+    "Experiments with RNNGs",
+    "Experiments with RNNGs",
+    "Experiments with RNNGs",
+    "Experiments with RNNGs",
+    "Experiments with RNNGs"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Experiments with RNNGs",
+      0
+    ],
+    [
+      "Experiments with RNNGs",
+      1
+    ],
+    [
+      "Experiments with RNNGs",
+      2
+    ],
+    [
+      "Experiments with RNNGs",
+      3
+    ],
+    [
+      "Experiments with RNNGs",
+      4
+    ],
+    [
+      "Experiments with RNNGs",
+      5
+    ],
+    [
+      "Experiments with RNNGs",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_11",
+  "section_id": "Experiments with RNNGs",
+  "section": "Experiments with RNNGs",
+  "title_path": "Experiments with RNNGs",
+  "block_type": "long_unit"
+}

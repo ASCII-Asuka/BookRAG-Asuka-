@@ -1,0 +1,79 @@
+{
+  "id": "longrag_11",
+  "content": "[Section] Results and Discussion ::: Difference in networks and approaches\n[source_id=49] Embeddings: On Dosage extraction, in general, ELMo obtains better performance than BERT, refer to Table TABREF5. This could be because we concatenated the numbers with a hyphen, and as ELMo uses character-level tokens it can learn the tagging better than BERT, a similar observation is also noted in BIBREF17. On the other hand, on Frequency extraction, without pretraining, ELMo's performance is lagging by a big margin of $\\sim $8.5 ROUGE-1 F1 compared to BERT-based embeddings.\n[source_id=50] Although in cases without encoder pretraining, ClinicalBERT performed the best in the Frequency extraction task (by a small margin), in general, it does not perform as well as BERT. This could also be a reflection of the fact that the language and style of writing used in clinical notes is very different from the way doctors converse with patients and the embedding dimension difference. Lookup table embedding performed decently in the frequency extraction task but lags behind in the Dosage extraction task.\n[source_id=51] From the metrics and qualitative inspection, we find that the Frequency extraction is an easier task than the Dosage extraction. This is because, in the conversations, frequency information usually occurs in isolation and near the medications, but a medication's dosage can occur 1) near other medication's dosages, 2) with previous dosages (when a dosage for a medication is revised), and 3) after a large number of words from the medication.\n[source_id=52] Other Variations: Considering various models' performance (without pretraining) and the resource constraint, we choose ELMo and BERT embeddings to analyze the effects of pretraining the encoder. When the network's encoder (and embedding) is pretrained with the summarization task, we 1) see a small decrease in the average number of iterations required for training, 2) improvement in individual performances of all models for both the sub-tasks, and 3) get best performance metrics across all variations, refer to Table TABREF5. Both in terms of performance and the training speed, there is no clear winner between shared and multi-decoder approaches. Medication tagging and data augmentation increase the best-performing model's ROUGE-1 F1 score by $\\sim $1.5 for the Dosage extraction task.\n[source_id=53] We also measure the performance of Multitask Question Answering Network (MQAN) BIBREF18 a QA model trained by the authors on the Decathlon multitask challenge. Since MQAN was not trained to produce the output sequence in our MR tags, it would not be fair to compute ROUGE scores. Instead, we randomly sample the MQAN's predictions from the 10% test dataset and qualitatively evaluate it. From the evaluations, we find that MQAN can not distinguish between frequency and dosage, and mixed the answers. MQAN correctly predicted the dosage for 29.73% and frequency for 24.24% percent of the medications compared to 84.12% and 76.34% for the encoder pretrained BERT QA PGNet model trained on our dataset. This could be because of the difference in the training dataset, domain and the tasks in the Decathlon challenge compared to ours.\n[source_id=54] Almost all our models perform better than the naive baselines and the ones using lookup table embeddings, and our best performing models outperform them significantly. Among all the variations, the best performing models are ELMo with Multi-decoder (Dosage extraction) and BERT with shared-decoder QA PGNet architecture with pretrained encoder (Frequency extraction). We choose these two models for our subsequent analysis.",
+  "score": 2.5255858986849136,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_11",
+  "child_source_node_ids": [
+    49,
+    50,
+    51,
+    52,
+    53,
+    54
+  ],
+  "child_qasper_evidence_texts": [
+    "Embeddings: On Dosage extraction, in general, ELMo obtains better performance than BERT, refer to Table TABREF5. This could be because we concatenated the numbers with a hyphen, and as ELMo uses character-level tokens it can learn the tagging better than BERT, a similar observation is also noted in BIBREF17. On the other hand, on Frequency extraction, without pretraining, ELMo's performance is lagging by a big margin of $\\sim $8.5 ROUGE-1 F1 compared to BERT-based embeddings.",
+    "Although in cases without encoder pretraining, ClinicalBERT performed the best in the Frequency extraction task (by a small margin), in general, it does not perform as well as BERT. This could also be a reflection of the fact that the language and style of writing used in clinical notes is very different from the way doctors converse with patients and the embedding dimension difference. Lookup table embedding performed decently in the frequency extraction task but lags behind in the Dosage extraction task.",
+    "From the metrics and qualitative inspection, we find that the Frequency extraction is an easier task than the Dosage extraction. This is because, in the conversations, frequency information usually occurs in isolation and near the medications, but a medication's dosage can occur 1) near other medication's dosages, 2) with previous dosages (when a dosage for a medication is revised), and 3) after a large number of words from the medication.",
+    "Other Variations: Considering various models' performance (without pretraining) and the resource constraint, we choose ELMo and BERT embeddings to analyze the effects of pretraining the encoder. When the network's encoder (and embedding) is pretrained with the summarization task, we 1) see a small decrease in the average number of iterations required for training, 2) improvement in individual performances of all models for both the sub-tasks, and 3) get best performance metrics across all variations, refer to Table TABREF5. Both in terms of performance and the training speed, there is no clear winner between shared and multi-decoder approaches. Medication tagging and data augmentation increase the best-performing model's ROUGE-1 F1 score by $\\sim $1.5 for the Dosage extraction task.",
+    "We also measure the performance of Multitask Question Answering Network (MQAN) BIBREF18 a QA model trained by the authors on the Decathlon multitask challenge. Since MQAN was not trained to produce the output sequence in our MR tags, it would not be fair to compute ROUGE scores. Instead, we randomly sample the MQAN's predictions from the 10% test dataset and qualitatively evaluate it. From the evaluations, we find that MQAN can not distinguish between frequency and dosage, and mixed the answers. MQAN correctly predicted the dosage for 29.73% and frequency for 24.24% percent of the medications compared to 84.12% and 76.34% for the encoder pretrained BERT QA PGNet model trained on our dataset. This could be because of the difference in the training dataset, domain and the tasks in the Decathlon challenge compared to ours.",
+    "Almost all our models perform better than the naive baselines and the ones using lookup table embeddings, and our best performing models outperform them significantly. Among all the variations, the best performing models are ELMo with Multi-decoder (Dosage extraction) and BERT with shared-decoder QA PGNet architecture with pretrained encoder (Frequency extraction). We choose these two models for our subsequent analysis."
+  ],
+  "child_pages": [
+    11,
+    11,
+    11,
+    11,
+    11,
+    11
+  ],
+  "child_sections": [
+    "Results and Discussion ::: Difference in networks and approaches",
+    "Results and Discussion ::: Difference in networks and approaches",
+    "Results and Discussion ::: Difference in networks and approaches",
+    "Results and Discussion ::: Difference in networks and approaches",
+    "Results and Discussion ::: Difference in networks and approaches",
+    "Results and Discussion ::: Difference in networks and approaches"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Results and Discussion ::: Difference in networks and approaches",
+      0
+    ],
+    [
+      "Results and Discussion ::: Difference in networks and approaches",
+      1
+    ],
+    [
+      "Results and Discussion ::: Difference in networks and approaches",
+      2
+    ],
+    [
+      "Results and Discussion ::: Difference in networks and approaches",
+      3
+    ],
+    [
+      "Results and Discussion ::: Difference in networks and approaches",
+      4
+    ],
+    [
+      "Results and Discussion ::: Difference in networks and approaches",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_11",
+  "section_id": "Results and Discussion ::: Difference in networks and approaches",
+  "section": "Results and Discussion ::: Difference in networks and approaches",
+  "title_path": "Results and Discussion ::: Difference in networks and approaches",
+  "block_type": "long_unit"
+}

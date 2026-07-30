@@ -1,0 +1,106 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Text classification based on word subspace\n[source_id=78] We formulate our problem as a single label classification problem. Given a set of training documents, which we will refer as corpus, $D = \\lbrace d_i\\rbrace _{i=1}^{|D|}$ , with known classes $C = \\lbrace c_j\\rbrace _{j=1}^{|C|}$ , we wish to classify a query document $d_q$ into one of the classes in $C$ .\n[source_id=79] Text classification based on word subspace can be performed under the framework of mutual subspace method (MSM). This task involves two different stages: A learning stage, where the word subspace for each class is modeled, and a classification stage, where the word subspace for a query is modeled and compared to the word subspaces of the classes.\n[source_id=80] In the learning stage, it is assumed that all documents of the same class belong to the same context, resulting in a set of words $W_c = \\lbrace w_c^k\\rbrace _{k=1}^{N_c}$ . This set assumes that each word appears only once in each class. Each set $\\lbrace W_c\\rbrace _{c=1}^{|C|}$ is then modeled into a word subspace ${Y}_c$ , as explained in Section \"Word subspace\" . As the number of words in each class may vary largely, the dimension $m_c$ of each class word subspace is not set to the same value.\n[source_id=81] In the classification stage, for a query document $d_q$ , it is also assumed that each word occurs only once, generating a subspace ${Y}_q$ .\n[source_id=82] To measure the similarity between a class word subspace ${Y}_c$ and a query word subspace ${Y}_q$ , the canonical angles between the two word subspaces are used BIBREF21 . There are several methods for calculating canonical angles BIBREF22 , BIBREF23 , and BIBREF24 , among which the simplest and most practical is the singular value decomposition (SVD). Consider, for example, two subspaces, one from the training data and another from the query, represented as matrices of bases, ${Y}_{c} = [{\\Phi }_{1} \\ldots {\\Phi }_{m_c}] \\in \\mathbb {R}^{p \\times m_c}$ and ${Y}_{q} = [{\\Psi }_{1} \\ldots {\\Psi }_{m_q}] \\in \\mathbb {R}^{p \\times m_q}$ , where ${\\Phi }_{i}$ are the bases for ${Y}_c$ and ${\\Psi }_{i}$ are the bases for ${Y}_q$ . Let the SVD of ${Y}_c^{\\top }{Y}_q \\in \\mathbb {R}^{m_c \\times m_q}$ be ${Y}_c^{\\top }{Y}_q = {U \\Sigma V}^{\\top }$ , where ${Y}_q$0 , ${Y}_q$1 represents the set of singular values. The canonical angles ${Y}_q$2 can be obtained as ${Y}_q$3 ${Y}_q$4 . The similarity between the two subspaces is measured by ${Y}_q$5 angles as follows:\n[source_id=83] $$S_{({Y}_c,{Y}_q)}[t] = \\frac{1}{t}\\sum _{i = 1}^{t} \\cos ^{2} \\theta _{i},\\; 1 \\le t \\le m_q, \\; m_q \\le m_c.$$   (Eq. 30)\n[source_id=84] Fig. 1 shows the modeling and comparison of sets of words by MSM. This method can compare sets of different sizes, and naturally encodes proximity between sets with related words.\n[source_id=85] Finally, the class with the highest similarity with $d_q$ is assigned as the class of $d_q$ :\n[source_id=86] $$prediction(d_q) = argmax_c(S_{({Y}_c,{Y}_q)}).$$   (Eq. 32)",
+  "score": 1.577738349999329,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86
+  ],
+  "child_qasper_evidence_texts": [
+    "We formulate our problem as a single label classification problem. Given a set of training documents, which we will refer as corpus, $D = \\lbrace d_i\\rbrace _{i=1}^{|D|}$ , with known classes $C = \\lbrace c_j\\rbrace _{j=1}^{|C|}$ , we wish to classify a query document $d_q$ into one of the classes in $C$ .",
+    "Text classification based on word subspace can be performed under the framework of mutual subspace method (MSM). This task involves two different stages: A learning stage, where the word subspace for each class is modeled, and a classification stage, where the word subspace for a query is modeled and compared to the word subspaces of the classes.",
+    "In the learning stage, it is assumed that all documents of the same class belong to the same context, resulting in a set of words $W_c = \\lbrace w_c^k\\rbrace _{k=1}^{N_c}$ . This set assumes that each word appears only once in each class. Each set $\\lbrace W_c\\rbrace _{c=1}^{|C|}$ is then modeled into a word subspace ${Y}_c$ , as explained in Section \"Word subspace\" . As the number of words in each class may vary largely, the dimension $m_c$ of each class word subspace is not set to the same value.",
+    "In the classification stage, for a query document $d_q$ , it is also assumed that each word occurs only once, generating a subspace ${Y}_q$ .",
+    "To measure the similarity between a class word subspace ${Y}_c$ and a query word subspace ${Y}_q$ , the canonical angles between the two word subspaces are used BIBREF21 . There are several methods for calculating canonical angles BIBREF22 , BIBREF23 , and BIBREF24 , among which the simplest and most practical is the singular value decomposition (SVD). Consider, for example, two subspaces, one from the training data and another from the query, represented as matrices of bases, ${Y}_{c} = [{\\Phi }_{1} \\ldots {\\Phi }_{m_c}] \\in \\mathbb {R}^{p \\times m_c}$ and ${Y}_{q} = [{\\Psi }_{1} \\ldots {\\Psi }_{m_q}] \\in \\mathbb {R}^{p \\times m_q}$ , where ${\\Phi }_{i}$ are the bases for ${Y}_c$ and ${\\Psi }_{i}$ are the bases for ${Y}_q$ . Let the SVD of ${Y}_c^{\\top }{Y}_q \\in \\mathbb {R}^{m_c \\times m_q}$ be ${Y}_c^{\\top }{Y}_q = {U \\Sigma V}^{\\top }$ , where ${Y}_q$0 , ${Y}_q$1 represents the set of singular values. The canonical angles ${Y}_q$2 can be obtained as ${Y}_q$3 ${Y}_q$4 . The similarity between the two subspaces is measured by ${Y}_q$5 angles as follows:",
+    "$$S_{({Y}_c,{Y}_q)}[t] = \\frac{1}{t}\\sum _{i = 1}^{t} \\cos ^{2} \\theta _{i},\\; 1 \\le t \\le m_q, \\; m_q \\le m_c.$$   (Eq. 30)",
+    "Fig. 1 shows the modeling and comparison of sets of words by MSM. This method can compare sets of different sizes, and naturally encodes proximity between sets with related words.",
+    "Finally, the class with the highest similarity with $d_q$ is assigned as the class of $d_q$ :",
+    "$$prediction(d_q) = argmax_c(S_{({Y}_c,{Y}_q)}).$$   (Eq. 32)"
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Text classification based on word subspace",
+    "Text classification based on word subspace",
+    "Text classification based on word subspace",
+    "Text classification based on word subspace",
+    "Text classification based on word subspace",
+    "Text classification based on word subspace",
+    "Text classification based on word subspace",
+    "Text classification based on word subspace",
+    "Text classification based on word subspace"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Text classification based on word subspace",
+      0
+    ],
+    [
+      "Text classification based on word subspace",
+      1
+    ],
+    [
+      "Text classification based on word subspace",
+      2
+    ],
+    [
+      "Text classification based on word subspace",
+      3
+    ],
+    [
+      "Text classification based on word subspace",
+      4
+    ],
+    [
+      "Text classification based on word subspace",
+      5
+    ],
+    [
+      "Text classification based on word subspace",
+      6
+    ],
+    [
+      "Text classification based on word subspace",
+      7
+    ],
+    [
+      "Text classification based on word subspace",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Text classification based on word subspace",
+  "section": "Text classification based on word subspace",
+  "title_path": "Text classification based on word subspace",
+  "block_type": "long_unit"
+}

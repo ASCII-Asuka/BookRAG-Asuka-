@@ -1,0 +1,106 @@
+{
+  "id": "longrag_8",
+  "content": "[Section] Augmentation with Back-translation\n[source_id=52] Given that the M2M Transformer NMT model (b3) achieved best results for most of the translation directions and competitive results for the rest, we further explored it through back-translation.\n[source_id=53] We examined the utility of pseudo-parallel data for all the six translation directions, unlike the work of lakew2017improving and lakew2018comparison, which concentrate only on the zero-shot language pair, and the work of W18-2710, which compares only uni- or bi-directional models. We investigated whether each translation direction in M2M models will benefit from pseudo-parallel data and if so, what kind of improvement takes place.\n[source_id=54] First, we selected sentences to be back-translated from in-domain monolingual data (Table TABREF13 ), relying on the score proposed by moore:intelligent via the following procedure.\n[source_id=55] For each language, train two 4-gram language models, using KenLM: an in-domain one on all the Global Voices data, i.e., both parallel and monolingual data, and a general-domain one on the concatenation of Global Voices, IWSLT, and Tatoeba data.\n[source_id=56] For each language, discard sentences containing OOVs according to the in-domain language model.\n[source_id=57] For each translation direction, select the INLINEFORM0 -best monolingual sentences in the news domain, according to the difference between cross-entropy scores given by the in-domain and general-domain language models.\n[source_id=58] Whereas W18-2710 exploited monolingual data much larger than parallel data, we maintained a 1:1 ratio between them BIBREF8 , setting INLINEFORM0 to the number of lines of parallel data of given language pair.\n[source_id=59] Selected monolingual sentences were then translated using the M2M Transformer NMT model (b3) to compose pseudo-parallel data. Then, the pseudo-parallel data were enlarged by over-sampling as summarized in Table TABREF32 . Finally, new NMT models were trained on the concatenation of the original parallel and pseudo-parallel data from scratch in the same manner as the previous NMT models with the same hyper-parameters.\n[source_id=60] Table TABREF33 shows the BLEU scores achieved by several reasonable combinations of six-way pseudo-parallel data. We observed that the use of all six-way pseudo-parallel data (#10) significantly improved the base model for all the translation directions, except En INLINEFORM0 Ru. A translation direction often benefited when the pseudo-parallel data for that specific direction was used.",
+  "score": 3.4119083162869352,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_8",
+  "child_source_node_ids": [
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60
+  ],
+  "child_qasper_evidence_texts": [
+    "Given that the M2M Transformer NMT model (b3) achieved best results for most of the translation directions and competitive results for the rest, we further explored it through back-translation.",
+    "We examined the utility of pseudo-parallel data for all the six translation directions, unlike the work of lakew2017improving and lakew2018comparison, which concentrate only on the zero-shot language pair, and the work of W18-2710, which compares only uni- or bi-directional models. We investigated whether each translation direction in M2M models will benefit from pseudo-parallel data and if so, what kind of improvement takes place.",
+    "First, we selected sentences to be back-translated from in-domain monolingual data (Table TABREF13 ), relying on the score proposed by moore:intelligent via the following procedure.",
+    "For each language, train two 4-gram language models, using KenLM: an in-domain one on all the Global Voices data, i.e., both parallel and monolingual data, and a general-domain one on the concatenation of Global Voices, IWSLT, and Tatoeba data.",
+    "For each language, discard sentences containing OOVs according to the in-domain language model.",
+    "For each translation direction, select the INLINEFORM0 -best monolingual sentences in the news domain, according to the difference between cross-entropy scores given by the in-domain and general-domain language models.",
+    "Whereas W18-2710 exploited monolingual data much larger than parallel data, we maintained a 1:1 ratio between them BIBREF8 , setting INLINEFORM0 to the number of lines of parallel data of given language pair.",
+    "Selected monolingual sentences were then translated using the M2M Transformer NMT model (b3) to compose pseudo-parallel data. Then, the pseudo-parallel data were enlarged by over-sampling as summarized in Table TABREF32 . Finally, new NMT models were trained on the concatenation of the original parallel and pseudo-parallel data from scratch in the same manner as the previous NMT models with the same hyper-parameters.",
+    "Table TABREF33 shows the BLEU scores achieved by several reasonable combinations of six-way pseudo-parallel data. We observed that the use of all six-way pseudo-parallel data (#10) significantly improved the base model for all the translation directions, except En INLINEFORM0 Ru. A translation direction often benefited when the pseudo-parallel data for that specific direction was used."
+  ],
+  "child_pages": [
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8
+  ],
+  "child_sections": [
+    "Augmentation with Back-translation",
+    "Augmentation with Back-translation",
+    "Augmentation with Back-translation",
+    "Augmentation with Back-translation",
+    "Augmentation with Back-translation",
+    "Augmentation with Back-translation",
+    "Augmentation with Back-translation",
+    "Augmentation with Back-translation",
+    "Augmentation with Back-translation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Augmentation with Back-translation",
+      0
+    ],
+    [
+      "Augmentation with Back-translation",
+      1
+    ],
+    [
+      "Augmentation with Back-translation",
+      2
+    ],
+    [
+      "Augmentation with Back-translation",
+      3
+    ],
+    [
+      "Augmentation with Back-translation",
+      4
+    ],
+    [
+      "Augmentation with Back-translation",
+      5
+    ],
+    [
+      "Augmentation with Back-translation",
+      6
+    ],
+    [
+      "Augmentation with Back-translation",
+      7
+    ],
+    [
+      "Augmentation with Back-translation",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_8",
+  "section_id": "Augmentation with Back-translation",
+  "section": "Augmentation with Back-translation",
+  "title_path": "Augmentation with Back-translation",
+  "block_type": "long_unit"
+}

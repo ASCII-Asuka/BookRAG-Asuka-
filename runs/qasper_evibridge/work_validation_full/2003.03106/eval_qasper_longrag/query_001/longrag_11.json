@@ -1,0 +1,70 @@
+{
+  "id": "longrag_11",
+  "content": "[Section] Materials and Methods ::: Systems ::: BERT\n[source_id=49] As introduced earlier, BERT has shown an outstanding performance in NERC-like tasks, improving the start-of-the-art results for almost every dataset and language. We take the same approach here, by using the model BERT-Base Multilingual Cased with a Fully Connected (FC) layer on top to perform a fine-tuning of the whole model for an anonymisation task in Spanish clinical data. Our implementation is built on PyTorch and the PyTorch-Transformers library BIBREF1. The training phase consists in the following steps (roughly depicted in Figure ):\n[source_id=50] Pre-processing: since we are relying on a pre-trained BERT model, we must match the same configuration by using a specific tokenisation and vocabulary. BERT also needs that the inputs contains special tokens to signal the beginning and the end of each sequence.\n[source_id=51] Fine-tuning: the pre-processed sequence is fed into the model. BERT outputs the contextual embeddings that encode each of the inputted tokens. This embedding representation for each token is fed into the FC linear layer after a dropout layer (with a 0.1 dropout probability), which in turn outputs the logits for each possible class. The cross-entropy loss function is calculated comparing the logits and the gold labels, and the error is back-propagated to adjust the model parameters.\n[source_id=52] We have trained the model using an AdamW optimiser BIBREF17 with the learning rate set to 3e-5, as recommended by devlin2018bert, and with a gradient clipping of 1.0. We also applied a learning-rate scheduler that warms up the learning rate from zero to its maximum value as the training progresses, which is also a common practice. For each experiment set proposed below, the training was run with an early-stopping patience of 15 epochs. Then, the model that performed best against the development set was used to produce the reported results.\n[source_id=53] The experiments were run on a 64-core server with operating system Ubuntu 16.04, 250GB of RAM memory, and 4 GeForce RTX 2080 GPUs with 11GB of memory. The maximum sequence length was set at 500 and the batch size at 12. In this setting, each epoch –a full pass through all the training data– required about 10 minutes to complete.",
+  "score": 4.857870240904622,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_11",
+  "child_source_node_ids": [
+    49,
+    50,
+    51,
+    52,
+    53
+  ],
+  "child_qasper_evidence_texts": [
+    "As introduced earlier, BERT has shown an outstanding performance in NERC-like tasks, improving the start-of-the-art results for almost every dataset and language. We take the same approach here, by using the model BERT-Base Multilingual Cased with a Fully Connected (FC) layer on top to perform a fine-tuning of the whole model for an anonymisation task in Spanish clinical data. Our implementation is built on PyTorch and the PyTorch-Transformers library BIBREF1. The training phase consists in the following steps (roughly depicted in Figure ):",
+    "Pre-processing: since we are relying on a pre-trained BERT model, we must match the same configuration by using a specific tokenisation and vocabulary. BERT also needs that the inputs contains special tokens to signal the beginning and the end of each sequence.",
+    "Fine-tuning: the pre-processed sequence is fed into the model. BERT outputs the contextual embeddings that encode each of the inputted tokens. This embedding representation for each token is fed into the FC linear layer after a dropout layer (with a 0.1 dropout probability), which in turn outputs the logits for each possible class. The cross-entropy loss function is calculated comparing the logits and the gold labels, and the error is back-propagated to adjust the model parameters.",
+    "We have trained the model using an AdamW optimiser BIBREF17 with the learning rate set to 3e-5, as recommended by devlin2018bert, and with a gradient clipping of 1.0. We also applied a learning-rate scheduler that warms up the learning rate from zero to its maximum value as the training progresses, which is also a common practice. For each experiment set proposed below, the training was run with an early-stopping patience of 15 epochs. Then, the model that performed best against the development set was used to produce the reported results.",
+    "The experiments were run on a 64-core server with operating system Ubuntu 16.04, 250GB of RAM memory, and 4 GeForce RTX 2080 GPUs with 11GB of memory. The maximum sequence length was set at 500 and the batch size at 12. In this setting, each epoch –a full pass through all the training data– required about 10 minutes to complete."
+  ],
+  "child_pages": [
+    11,
+    11,
+    11,
+    11,
+    11
+  ],
+  "child_sections": [
+    "Materials and Methods ::: Systems ::: BERT",
+    "Materials and Methods ::: Systems ::: BERT",
+    "Materials and Methods ::: Systems ::: BERT",
+    "Materials and Methods ::: Systems ::: BERT",
+    "Materials and Methods ::: Systems ::: BERT"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Materials and Methods ::: Systems ::: BERT",
+      0
+    ],
+    [
+      "Materials and Methods ::: Systems ::: BERT",
+      1
+    ],
+    [
+      "Materials and Methods ::: Systems ::: BERT",
+      2
+    ],
+    [
+      "Materials and Methods ::: Systems ::: BERT",
+      3
+    ],
+    [
+      "Materials and Methods ::: Systems ::: BERT",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_11",
+  "section_id": "Materials and Methods ::: Systems ::: BERT",
+  "section": "Materials and Methods ::: Systems ::: BERT",
+  "title_path": "Materials and Methods ::: Systems ::: BERT",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,97 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] The application of deep learning methods to NLP is made possible by representing words as vectors in a low-dimensional continuous space. Traditionally, these word embeddings were static: each word had a single vector, regardless of context BIBREF0, BIBREF1. This posed several problems, most notably that all senses of a polysemous word had to share the same representation. More recent work, namely deep neural language models such as ELMo BIBREF2 and BERT BIBREF3, have successfully created contextualized word representations, word vectors that are sensitive to the context in which they appear. Replacing static embeddings with contextualized representations has yielded significant improvements on a diverse array of NLP tasks, ranging from question-answering to coreference resolution.\n[source_id=5] The success of contextualized word representations suggests that despite being trained with only a language modelling task, they learn highly transferable and task-agnostic properties of language. In fact, linear probing models trained on frozen contextualized representations can predict linguistic properties of words (e.g., part-of-speech tags) almost as well as state-of-the-art models BIBREF4, BIBREF5. Still, these representations remain poorly understood. For one, just how contextual are these contextualized word representations? Are there infinitely many context-specific representations that BERT and ELMo can assign to each word, or are words essentially assigned one of a finite number of word-sense representations?\n[source_id=6] We answer this question by studying the geometry of the representation space for each layer of ELMo, BERT, and GPT-2. Our analysis yields some surprising findings:\n[source_id=7] In all layers of all three models, the contextualized word representations of all words are not isotropic: they are not uniformly distributed with respect to direction. Instead, they are anisotropic, occupying a narrow cone in the vector space. The anisotropy in GPT-2's last layer is so extreme that two random words will on average have almost perfect cosine similarity! Given that isotropy has both theoretical and empirical benefits for static embeddings BIBREF6, the extent of anisotropy in contextualized representations is surprising.\n[source_id=8] Occurrences of the same word in different contexts have non-identical vector representations. Where vector similarity is defined as cosine similarity, these representations are more dissimilar to each other in upper layers. This suggests that, much like how upper layers of LSTMs produce more task-specific representations BIBREF4, upper layers of contextualizing models produce more context-specific representations.\n[source_id=9] Context-specificity manifests very differently in ELMo, BERT, and GPT-2. In ELMo, representations of words in the same sentence grow more similar to each other as context-specificity increases in upper layers; in BERT, they become more dissimilar to each other in upper layers but are still more similar than randomly sampled words are on average; in GPT-2, however, words in the same sentence are no more similar to each other than two randomly chosen words.\n[source_id=10] After adjusting for the effect of anisotropy, on average, less than 5% of the variance in a word's contextualized representations can be explained by their first principal component. This holds across all layers of all models. This suggests that contextualized representations do not correspond to a finite number of word-sense representations, and even in the best possible scenario, static embeddings would be a poor replacement for contextualized ones. Still, static embeddings created by taking the first principal component of a word's contextualized representations outperform GloVe and FastText embeddings on many word vector benchmarks.\n[source_id=11] These insights help justify why the use of contextualized representations has led to such significant improvements on many NLP tasks.",
+  "score": 5.647797813439376,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "child_qasper_evidence_texts": [
+    "The application of deep learning methods to NLP is made possible by representing words as vectors in a low-dimensional continuous space. Traditionally, these word embeddings were static: each word had a single vector, regardless of context BIBREF0, BIBREF1. This posed several problems, most notably that all senses of a polysemous word had to share the same representation. More recent work, namely deep neural language models such as ELMo BIBREF2 and BERT BIBREF3, have successfully created contextualized word representations, word vectors that are sensitive to the context in which they appear. Replacing static embeddings with contextualized representations has yielded significant improvements on a diverse array of NLP tasks, ranging from question-answering to coreference resolution.",
+    "The success of contextualized word representations suggests that despite being trained with only a language modelling task, they learn highly transferable and task-agnostic properties of language. In fact, linear probing models trained on frozen contextualized representations can predict linguistic properties of words (e.g., part-of-speech tags) almost as well as state-of-the-art models BIBREF4, BIBREF5. Still, these representations remain poorly understood. For one, just how contextual are these contextualized word representations? Are there infinitely many context-specific representations that BERT and ELMo can assign to each word, or are words essentially assigned one of a finite number of word-sense representations?",
+    "We answer this question by studying the geometry of the representation space for each layer of ELMo, BERT, and GPT-2. Our analysis yields some surprising findings:",
+    "In all layers of all three models, the contextualized word representations of all words are not isotropic: they are not uniformly distributed with respect to direction. Instead, they are anisotropic, occupying a narrow cone in the vector space. The anisotropy in GPT-2's last layer is so extreme that two random words will on average have almost perfect cosine similarity! Given that isotropy has both theoretical and empirical benefits for static embeddings BIBREF6, the extent of anisotropy in contextualized representations is surprising.",
+    "Occurrences of the same word in different contexts have non-identical vector representations. Where vector similarity is defined as cosine similarity, these representations are more dissimilar to each other in upper layers. This suggests that, much like how upper layers of LSTMs produce more task-specific representations BIBREF4, upper layers of contextualizing models produce more context-specific representations.",
+    "Context-specificity manifests very differently in ELMo, BERT, and GPT-2. In ELMo, representations of words in the same sentence grow more similar to each other as context-specificity increases in upper layers; in BERT, they become more dissimilar to each other in upper layers but are still more similar than randomly sampled words are on average; in GPT-2, however, words in the same sentence are no more similar to each other than two randomly chosen words.",
+    "After adjusting for the effect of anisotropy, on average, less than 5% of the variance in a word's contextualized representations can be explained by their first principal component. This holds across all layers of all models. This suggests that contextualized representations do not correspond to a finite number of word-sense representations, and even in the best possible scenario, static embeddings would be a poor replacement for contextualized ones. Still, static embeddings created by taking the first principal component of a word's contextualized representations outperform GloVe and FastText embeddings on many word vector benchmarks.",
+    "These insights help justify why the use of contextualized representations has led to such significant improvements on many NLP tasks."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ],
+    [
+      "Introduction",
+      7
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

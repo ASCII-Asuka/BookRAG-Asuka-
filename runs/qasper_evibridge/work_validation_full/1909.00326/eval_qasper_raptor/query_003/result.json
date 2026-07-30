@@ -1,0 +1,81 @@
+{
+  "question": "How do their models decide how much improtance to give to the output words?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "Given the contribution matrix, we can obtain the word importance of each input word to the entire output sentence. "
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "Following the formula, we can calculate the contribution of every input word makes to every output word, forming a contribution matrix of size $M \\times N$, where $N$ is the output sentence length. Given the contribution matrix, we can obtain the word importance of each input word to the entire output sentence. To this end, for each input word, we first aggregate its contribution values to all output words by the sum operation, and then normalize all sums through the Softmax function. Figure FIGREF13 illustrates an example of the calculated word importance and the contribution matrix, where an English sentence is translated into a French sentence using the Transformer model. A negative contribution value indicates that the input word has negative effects on the output word."
+      ],
+      "evidence_block_ids": [
+        32
+      ],
+      "evidence_paragraph_ids": [
+        32
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [],
+      "free_form_answer": "They compute the gradient of the output at each time step with respect to the input words to decide the importance.",
+      "yes_no": null,
+      "evidence": [
+        "Formally, let $\\textbf {x} = (x_1, ..., x_M)$ be the input sentence and $\\textbf {x}^{\\prime }$ be a baseline input. $F$ is a well-trained NMT model, and $F(\\textbf {x})_n$ is the model output (i.e., $P(y_n|\\textbf {y}_{<n},\\textbf {x})$) at time step $n$. Integrated gradients is then defined as the integral of gradients along the straightline path from the baseline $\\textbf {x}^{\\prime }$ to the input $\\textbf {x}$. In detail, the contribution of the $m^{th}$ word in $\\textbf {x}$ to the prediction of $F(\\textbf {x})_n$ is defined as follows.",
+        "where $\\frac{\\partial {F(\\textbf {x})_n}}{\\partial {\\textbf {x}_m}}$ is the gradient of $F(\\textbf {x})_n$ w.r.t. the embedding of the $m^{th}$ word. In this paper, as suggested, the baseline input $\\textbf {x}^{\\prime }$ is set as a sequence of zero embeddings that has the same sequence length $M$. In this way, we can compute the contribution of a specific input word to a designated output word. Since the above formula is intractable for deep neural models, we approximate it by summing the gradients along a multi-step path from baseline $\\textbf {x}^{\\prime }$ to the input x."
+      ],
+      "evidence_block_ids": [
+        29,
+        30
+      ],
+      "evidence_paragraph_ids": [
+        29,
+        30
+      ]
+    }
+  ],
+  "doc_uuid": "1909.00326",
+  "doc_path": "qasper://1909.00326",
+  "qasper_question_id": "93beae291b455e5d3ecea6ac73b83632a3ae7ec7",
+  "title": "Towards Understanding Neural Machine Translation with Word Importance",
+  "evidence_block_ids": [
+    32,
+    29,
+    30
+  ],
+  "evidence_paragraph_ids": [
+    32,
+    29,
+    30
+  ],
+  "output": "{\n  \"answer_short\": \"by summing contributions to all output words and normalizing via Softmax\",\n  \"answer_rationale\": \"Text 7 states that for each input word, its contribution values to all output words are aggregated by summing, and then normalized through the Softmax function to obtain word importance. This process determines how much importance is assigned to each output word based on the aggregated contributions.\"\n}",
+  "retrieved_node_ids": [
+    10,
+    59,
+    40,
+    79,
+    22,
+    15,
+    32,
+    24,
+    6,
+    49
+  ],
+  "answer_short": "by summing contributions to all output words and normalizing via Softmax",
+  "answer_rationale": "Text 7 states that for each input word, its contribution values to all output words are aggregated by summing, and then normalized through the Softmax function to obtain word importance. This process determines how much importance is assigned to each output word based on the aggregated contributions.",
+  "supporting_block_ids": [
+    10,
+    59,
+    40,
+    79,
+    22,
+    15,
+    32,
+    24,
+    6,
+    49
+  ]
+}

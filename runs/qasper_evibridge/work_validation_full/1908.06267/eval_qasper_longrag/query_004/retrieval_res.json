@@ -1,0 +1,759 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_12",
+      "content": "[Section] Related work\n[source_id=84] In what follows, we offer a brief review of relevant studies, ranked by increasing order of similarity with our work.\n[source_id=85] BIBREF9, BIBREF54, BIBREF11, BIBREF10 conduct some node classification experiments on citation networks, where nodes are scientific papers, i.e., textual data. However, text is only used to derive node feature vectors. The external graph structure, which plays a central role in determining node labels, is completely unrelated to text.\n[source_id=86] On the other hand, BIBREF55, BIBREF7 experiment on traditional document classification tasks. They both build $k$-nearest neighbor similarity graphs based on the Gaussian diffusion kernel. More precisely, BIBREF55 build one single graph where nodes are documents and distance is computed in the BoW space. Node features are then used for classification. Closer to our work, BIBREF7 represent each document as a graph. All document graphs are derived from the same underlying structure. Only node features, corresponding to the entries of the documents' BoW vectors, vary. The underlying, shared structure is that of a $k$-NN graph where nodes are vocabulary terms and similarity is the cosine of the word embedding vectors. BIBREF7 then perform graph classification. However they found performance to be lower than that of a naive Bayes classifier.\n[source_id=87] BIBREF56 use a GNN for hierarchical classification into a large taxonomy of topics. This task differs from traditional document classification. The authors represent documents as unweighted, undirected word co-occurrence networks with word embeddings as node features. They then use the spatial GNN of BIBREF15 to perform graph classification.\n[source_id=88] The work closest to ours is probably that of BIBREF53. The authors adopt the semi-supervised node classification approach of BIBREF9. They build one single undirected graph from the entire dataset, with both word and document nodes. Document-word edges are weighted by TF-IDF and word-word edges are weighted by pointwise mutual information derived from co-occurrence within a sliding window. There are no document-document edges. The GNN is trained based on the cross-entropy loss computed only for the labeled nodes, that is, the documents in the training set. When the final node representations are obtained, one can use that of the test documents to classify them and evaluate prediction performance.\n[source_id=89] There are significant differences between BIBREF53 and our work. First, our approach is inductive, not transductive. Indeed, while the node classification approach of BIBREF53 requires all test documents at training time, our graph classification model is able to perform inference on new, never-seen documents. The downside of representing documents as separate graphs, however, is that we lose the ability to capture corpus-level dependencies. Also, our directed graphs capture word ordering, which is ignored by BIBREF53. Finally, the approach of BIBREF53 requires computing the PMI for every word pair in the vocabulary, which may be prohibitive on datasets with very large vocabularies. On the other hand, the complexity of MPAD does not depend on vocabulary size.",
+      "score": 3.226755026994492,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        84,
+        85,
+        86,
+        87,
+        88,
+        89
+      ],
+      "child_qasper_evidence_texts": [
+        "In what follows, we offer a brief review of relevant studies, ranked by increasing order of similarity with our work.",
+        "BIBREF9, BIBREF54, BIBREF11, BIBREF10 conduct some node classification experiments on citation networks, where nodes are scientific papers, i.e., textual data. However, text is only used to derive node feature vectors. The external graph structure, which plays a central role in determining node labels, is completely unrelated to text.",
+        "On the other hand, BIBREF55, BIBREF7 experiment on traditional document classification tasks. They both build $k$-nearest neighbor similarity graphs based on the Gaussian diffusion kernel. More precisely, BIBREF55 build one single graph where nodes are documents and distance is computed in the BoW space. Node features are then used for classification. Closer to our work, BIBREF7 represent each document as a graph. All document graphs are derived from the same underlying structure. Only node features, corresponding to the entries of the documents' BoW vectors, vary. The underlying, shared structure is that of a $k$-NN graph where nodes are vocabulary terms and similarity is the cosine of the word embedding vectors. BIBREF7 then perform graph classification. However they found performance to be lower than that of a naive Bayes classifier.",
+        "BIBREF56 use a GNN for hierarchical classification into a large taxonomy of topics. This task differs from traditional document classification. The authors represent documents as unweighted, undirected word co-occurrence networks with word embeddings as node features. They then use the spatial GNN of BIBREF15 to perform graph classification.",
+        "The work closest to ours is probably that of BIBREF53. The authors adopt the semi-supervised node classification approach of BIBREF9. They build one single undirected graph from the entire dataset, with both word and document nodes. Document-word edges are weighted by TF-IDF and word-word edges are weighted by pointwise mutual information derived from co-occurrence within a sliding window. There are no document-document edges. The GNN is trained based on the cross-entropy loss computed only for the labeled nodes, that is, the documents in the training set. When the final node representations are obtained, one can use that of the test documents to classify them and evaluate prediction performance.",
+        "There are significant differences between BIBREF53 and our work. First, our approach is inductive, not transductive. Indeed, while the node classification approach of BIBREF53 requires all test documents at training time, our graph classification model is able to perform inference on new, never-seen documents. The downside of representing documents as separate graphs, however, is that we lose the ability to capture corpus-level dependencies. Also, our directed graphs capture word ordering, which is ignored by BIBREF53. Finally, the approach of BIBREF53 requires computing the PMI for every word pair in the vocabulary, which may be prohibitive on datasets with very large vocabularies. On the other hand, the complexity of MPAD does not depend on vocabulary size."
+      ],
+      "child_pages": [
+        12,
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "child_sections": [
+        "Related work",
+        "Related work",
+        "Related work",
+        "Related work",
+        "Related work",
+        "Related work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related work",
+          0
+        ],
+        [
+          "Related work",
+          1
+        ],
+        [
+          "Related work",
+          2
+        ],
+        [
+          "Related work",
+          3
+        ],
+        [
+          "Related work",
+          4
+        ],
+        [
+          "Related work",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Related work",
+      "section": "Related work",
+      "title_path": "Related work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Experiments ::: Datasets\n[source_id=40] We evaluate the quality of the document embeddings learned by MPAD on 10 document classification datasets, covering the topic identification, coarse and fine sentiment analysis and opinion mining, and subjectivity detection tasks. We briefly introduce the datasets next. Their statistics are reported in Table TABREF21.\n[source_id=41] (1) Reuters. This dataset contains stories collected from the Reuters news agency in 1987. Following common practice, we used the ModApte split and considered only the 10 classes with the highest number of positive training examples. We also removed documents belonging to more than one class and then classes left with no document (2 classes).\n[source_id=42] (2) BBCSport BIBREF30 contains documents from the BBC Sport website corresponding to 2004-2005 sports news articles.\n[source_id=43] (3) Polarity BIBREF31 features positive and negative labeled snippets from Rotten Tomatoes.\n[source_id=44] (4) Subjectivity BIBREF32 contains movie review snippets from Rotten Tomatoes (subjective sentences), and Internet Movie Database plot summaries (objective sentences).\n[source_id=45] (5) MPQA BIBREF33 is made of positive and negative phrases, annotated as part of the summer 2002 NRRC Workshop on Multi-Perspective Question Answering.\n[source_id=46] (6) IMDB BIBREF34 is a collection of highly polarized movie reviews from IMDB (positive and negative). There are at most 30 reviews for each movie.\n[source_id=47] (7) TREC BIBREF35 consists of questions that are classified into 6 different categories.\n[source_id=48] (8) SST-1 BIBREF36 contains the same snippets as Polarity. The authors used the Stanford Parser to parse the snippets and split them into multiple sentences. They then used Amazon Mechanical Turk to annotate the resulting phrases according to their polarity (very negative, negative, neutral, positive, very positive).\n[source_id=49] (9) SST-2 BIBREF36 is the same as SST-1 but with neutral reviews removed and snippets classified as positive or negative.\n[source_id=50] (10) Yelp2013 BIBREF26 features reviews obtained from the 2013 Yelp Dataset Challenge.",
+      "score": 3.0815001983560117,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
+      ],
+      "child_qasper_evidence_texts": [
+        "We evaluate the quality of the document embeddings learned by MPAD on 10 document classification datasets, covering the topic identification, coarse and fine sentiment analysis and opinion mining, and subjectivity detection tasks. We briefly introduce the datasets next. Their statistics are reported in Table TABREF21.",
+        "(1) Reuters. This dataset contains stories collected from the Reuters news agency in 1987. Following common practice, we used the ModApte split and considered only the 10 classes with the highest number of positive training examples. We also removed documents belonging to more than one class and then classes left with no document (2 classes).",
+        "(2) BBCSport BIBREF30 contains documents from the BBC Sport website corresponding to 2004-2005 sports news articles.",
+        "(3) Polarity BIBREF31 features positive and negative labeled snippets from Rotten Tomatoes.",
+        "(4) Subjectivity BIBREF32 contains movie review snippets from Rotten Tomatoes (subjective sentences), and Internet Movie Database plot summaries (objective sentences).",
+        "(5) MPQA BIBREF33 is made of positive and negative phrases, annotated as part of the summer 2002 NRRC Workshop on Multi-Perspective Question Answering.",
+        "(6) IMDB BIBREF34 is a collection of highly polarized movie reviews from IMDB (positive and negative). There are at most 30 reviews for each movie.",
+        "(7) TREC BIBREF35 consists of questions that are classified into 6 different categories.",
+        "(8) SST-1 BIBREF36 contains the same snippets as Polarity. The authors used the Stanford Parser to parse the snippets and split them into multiple sentences. They then used Amazon Mechanical Turk to annotate the resulting phrases according to their polarity (very negative, negative, neutral, positive, very positive).",
+        "(9) SST-2 BIBREF36 is the same as SST-1 but with neutral reviews removed and snippets classified as positive or negative.",
+        "(10) Yelp2013 BIBREF26 features reviews obtained from the 2013 Yelp Dataset Challenge."
+      ],
+      "child_pages": [
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Experiments ::: Datasets",
+        "Experiments ::: Datasets",
+        "Experiments ::: Datasets",
+        "Experiments ::: Datasets",
+        "Experiments ::: Datasets",
+        "Experiments ::: Datasets",
+        "Experiments ::: Datasets",
+        "Experiments ::: Datasets",
+        "Experiments ::: Datasets",
+        "Experiments ::: Datasets",
+        "Experiments ::: Datasets"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments ::: Datasets",
+          0
+        ],
+        [
+          "Experiments ::: Datasets",
+          1
+        ],
+        [
+          "Experiments ::: Datasets",
+          2
+        ],
+        [
+          "Experiments ::: Datasets",
+          3
+        ],
+        [
+          "Experiments ::: Datasets",
+          4
+        ],
+        [
+          "Experiments ::: Datasets",
+          5
+        ],
+        [
+          "Experiments ::: Datasets",
+          6
+        ],
+        [
+          "Experiments ::: Datasets",
+          7
+        ],
+        [
+          "Experiments ::: Datasets",
+          8
+        ],
+        [
+          "Experiments ::: Datasets",
+          9
+        ],
+        [
+          "Experiments ::: Datasets",
+          10
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Experiments ::: Datasets",
+      "section": "Experiments ::: Datasets",
+      "title_path": "Experiments ::: Datasets",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Experiments ::: Model configuration and training\n[source_id=67] We preprocess all datasets using the code of BIBREF38. On Yelp2013, we also replace all tokens appearing strictly less than 6 times with a special UNK token, like in BIBREF27. We then build a directed word co-occurrence network from each document, with a window of size 2.\n[source_id=68] We use two MP iterations ($T$=2) for the basic MPAD, and two MP iterations at each level, for the hierarchical variants. We set $d$ to 64, except on IMDB and Yelp on which $d=128$, and use a two-layer MLP. The final graph representations are passed through a softmax for classification. We train MPAD in an end-to-end fashion by minimizing the cross-entropy loss function with the Adam optimizer BIBREF48 and an initial learning rate of 0.001.\n[source_id=69] To regulate potential differences in magnitude, we apply batch normalization after concatenating the feature vector of the master node with the self-attentional vector, that is, after the skip connection (see subsection SECREF16). To prevent overfitting, we use dropout BIBREF49 with a rate of 0.5. We select the best epoch, capped at 200, based on the validation accuracy. When cross-validation is used (see 3rd column of Table TABREF21), we construct a validation set by randomly sampling 10% of the training set of each fold.\n[source_id=70] On all datasets except Yelp2013, we use the publicly available 300-dimensional pre-trained Google News vectors ($D$=300) BIBREF50 to initialize the node representations $\\mathbf {H}^0$. On Yelp2013, we follow BIBREF27 and learn our own word vectors from the training and validation sets with the gensim implementation of word2vec BIBREF51.\n[source_id=71] MPAD was implemented in Python 3.6 using the PyTorch library BIBREF52. All experiments were run on a single machine consisting of a 3.4 GHz Intel Core i7 CPU with 16 GB of RAM and an NVidia GeForce Titan Xp GPU.",
+      "score": 2.837893621316574,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        67,
+        68,
+        69,
+        70,
+        71
+      ],
+      "child_qasper_evidence_texts": [
+        "We preprocess all datasets using the code of BIBREF38. On Yelp2013, we also replace all tokens appearing strictly less than 6 times with a special UNK token, like in BIBREF27. We then build a directed word co-occurrence network from each document, with a window of size 2.",
+        "We use two MP iterations ($T$=2) for the basic MPAD, and two MP iterations at each level, for the hierarchical variants. We set $d$ to 64, except on IMDB and Yelp on which $d=128$, and use a two-layer MLP. The final graph representations are passed through a softmax for classification. We train MPAD in an end-to-end fashion by minimizing the cross-entropy loss function with the Adam optimizer BIBREF48 and an initial learning rate of 0.001.",
+        "To regulate potential differences in magnitude, we apply batch normalization after concatenating the feature vector of the master node with the self-attentional vector, that is, after the skip connection (see subsection SECREF16). To prevent overfitting, we use dropout BIBREF49 with a rate of 0.5. We select the best epoch, capped at 200, based on the validation accuracy. When cross-validation is used (see 3rd column of Table TABREF21), we construct a validation set by randomly sampling 10% of the training set of each fold.",
+        "On all datasets except Yelp2013, we use the publicly available 300-dimensional pre-trained Google News vectors ($D$=300) BIBREF50 to initialize the node representations $\\mathbf {H}^0$. On Yelp2013, we follow BIBREF27 and learn our own word vectors from the training and validation sets with the gensim implementation of word2vec BIBREF51.",
+        "MPAD was implemented in Python 3.6 using the PyTorch library BIBREF52. All experiments were run on a single machine consisting of a 3.4 GHz Intel Core i7 CPU with 16 GB of RAM and an NVidia GeForce Titan Xp GPU."
+      ],
+      "child_pages": [
+        9,
+        9,
+        9,
+        9,
+        9
+      ],
+      "child_sections": [
+        "Experiments ::: Model configuration and training",
+        "Experiments ::: Model configuration and training",
+        "Experiments ::: Model configuration and training",
+        "Experiments ::: Model configuration and training",
+        "Experiments ::: Model configuration and training"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments ::: Model configuration and training",
+          0
+        ],
+        [
+          "Experiments ::: Model configuration and training",
+          1
+        ],
+        [
+          "Experiments ::: Model configuration and training",
+          2
+        ],
+        [
+          "Experiments ::: Model configuration and training",
+          3
+        ],
+        [
+          "Experiments ::: Model configuration and training",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Experiments ::: Model configuration and training",
+      "section": "Experiments ::: Model configuration and training",
+      "title_path": "Experiments ::: Model configuration and training",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Experiments ::: Baselines\n[source_id=52] We evaluate MPAD against multiple state-of-the-art baseline models, including hierarchical ones, to enable fair comparison with the hierarchical MPAD variants.\n[source_id=53] doc2vec BIBREF37. Doc2vec (or paragraph vector) is an extension of word2vec that learns vectors for documents in a fully unsupervised manner. Document embeddings are then fed to a logistic regression classifier.\n[source_id=54] CNN BIBREF38. The convolutional neural network architecture, well-known in computer vision, is applied to text. There is one spatial dimension and the word embeddings are used as channels (depth dimensions).\n[source_id=55] DAN BIBREF39. The Deep Averaging Network passes the unweighted average of the embeddings of the input words through multiple dense layers and a final softmax.\n[source_id=56] Tree-LSTM BIBREF40 is a generalization of the standard LSTM architecture to constituency and dependency parse trees.\n[source_id=57] DRNN BIBREF41. Recursive neural networks are stacked and applied to parse trees.\n[source_id=58] LSTMN BIBREF42 is an extension of the LSTM model where the memory cell is replaced by a memory network which stores word representations.\n[source_id=59] C-LSTM BIBREF43 combines convolutional and recurrent neural networks. The region embeddings provided by a CNN are fed to a LSTM.\n[source_id=60] SPGK BIBREF44 also models documents as word co-occurrence networks. It computes a graph kernel that compares shortest paths extracted from the word co-occurrence networks and then uses a SVM to categorize documents.\n[source_id=61] WMD BIBREF45 is an application of the well-known Earth Mover's Distance to text. A k-nearest neighbor classifier is used.\n[source_id=62] S-WMD BIBREF46 is a supervised extension of the Word Mover's Distance.\n[source_id=63] Semantic-CNN BIBREF47. Here, a CNN is applied to semantic units obtained by clustering words in the embedding space.\n[source_id=64] LSTM-GRNN BIBREF26 is a hierarchical model where sentence embeddings are obtained with a CNN and a GRU-RNN is fed the sentence representations to obtain a document vector.\n[source_id=65] HN-ATT BIBREF27 is another hierarchical model, where the same encoder architecture (a bidirectional GRU-RNN) is used for both sentences and documents, with different parameters. A self-attention mechanism is applied to the RNN annotations at each level.",
+      "score": 2.69030957124928,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "child_qasper_evidence_texts": [
+        "We evaluate MPAD against multiple state-of-the-art baseline models, including hierarchical ones, to enable fair comparison with the hierarchical MPAD variants.",
+        "doc2vec BIBREF37. Doc2vec (or paragraph vector) is an extension of word2vec that learns vectors for documents in a fully unsupervised manner. Document embeddings are then fed to a logistic regression classifier.",
+        "CNN BIBREF38. The convolutional neural network architecture, well-known in computer vision, is applied to text. There is one spatial dimension and the word embeddings are used as channels (depth dimensions).",
+        "DAN BIBREF39. The Deep Averaging Network passes the unweighted average of the embeddings of the input words through multiple dense layers and a final softmax.",
+        "Tree-LSTM BIBREF40 is a generalization of the standard LSTM architecture to constituency and dependency parse trees.",
+        "DRNN BIBREF41. Recursive neural networks are stacked and applied to parse trees.",
+        "LSTMN BIBREF42 is an extension of the LSTM model where the memory cell is replaced by a memory network which stores word representations.",
+        "C-LSTM BIBREF43 combines convolutional and recurrent neural networks. The region embeddings provided by a CNN are fed to a LSTM.",
+        "SPGK BIBREF44 also models documents as word co-occurrence networks. It computes a graph kernel that compares shortest paths extracted from the word co-occurrence networks and then uses a SVM to categorize documents.",
+        "WMD BIBREF45 is an application of the well-known Earth Mover's Distance to text. A k-nearest neighbor classifier is used.",
+        "S-WMD BIBREF46 is a supervised extension of the Word Mover's Distance.",
+        "Semantic-CNN BIBREF47. Here, a CNN is applied to semantic units obtained by clustering words in the embedding space.",
+        "LSTM-GRNN BIBREF26 is a hierarchical model where sentence embeddings are obtained with a CNN and a GRU-RNN is fed the sentence representations to obtain a document vector.",
+        "HN-ATT BIBREF27 is another hierarchical model, where the same encoder architecture (a bidirectional GRU-RNN) is used for both sentences and documents, with different parameters. A self-attention mechanism is applied to the RNN annotations at each level."
+      ],
+      "child_pages": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "child_sections": [
+        "Experiments ::: Baselines",
+        "Experiments ::: Baselines",
+        "Experiments ::: Baselines",
+        "Experiments ::: Baselines",
+        "Experiments ::: Baselines",
+        "Experiments ::: Baselines",
+        "Experiments ::: Baselines",
+        "Experiments ::: Baselines",
+        "Experiments ::: Baselines",
+        "Experiments ::: Baselines",
+        "Experiments ::: Baselines",
+        "Experiments ::: Baselines",
+        "Experiments ::: Baselines",
+        "Experiments ::: Baselines"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments ::: Baselines",
+          0
+        ],
+        [
+          "Experiments ::: Baselines",
+          1
+        ],
+        [
+          "Experiments ::: Baselines",
+          2
+        ],
+        [
+          "Experiments ::: Baselines",
+          3
+        ],
+        [
+          "Experiments ::: Baselines",
+          4
+        ],
+        [
+          "Experiments ::: Baselines",
+          5
+        ],
+        [
+          "Experiments ::: Baselines",
+          6
+        ],
+        [
+          "Experiments ::: Baselines",
+          7
+        ],
+        [
+          "Experiments ::: Baselines",
+          8
+        ],
+        [
+          "Experiments ::: Baselines",
+          9
+        ],
+        [
+          "Experiments ::: Baselines",
+          10
+        ],
+        [
+          "Experiments ::: Baselines",
+          11
+        ],
+        [
+          "Experiments ::: Baselines",
+          12
+        ],
+        [
+          "Experiments ::: Baselines",
+          13
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Experiments ::: Baselines",
+      "section": "Experiments ::: Baselines",
+      "title_path": "Experiments ::: Baselines",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Results and ablations ::: Results\n[source_id=73] Experimental results are shown in Table TABREF28. For the baselines, the best scores reported in each original paper are shown. MPAD reaches best performance on 7 out of 10 datasets, and is close second elsewhere. Moreover, the 7 datasets on which MPAD ranks first widely differ in training set size, number of categories, and prediction task (topic, sentiment, subjectivity), which indicates that MPAD can perform well in different settings.\n[source_id=74] MPAD vs. hierarchical variants. On 9 datasets out of 10, one or more of the hierarchical variants outperform the vanilla MPAD architecture, highlighting the benefit of explicitly modeling the hierarchical nature of documents.\n[source_id=75] However, on Subjectivity, standard MPAD outperforms all hierarchical variants. On TREC, it reaches the same accuracy. We hypothesize that in some cases, using a different graph to separately encode each sentence might be worse than using one single graph to directly encode the document. Indeed, in the single document graph, some words that never appear in the same sentence can be connected through common neighbors, as was explained in subsection SECREF7. So, this way, some notion of cross-sentence context is captured while learning representations of words, bigrams, etc. at each MP iteration. This creates better informed representations, resulting in a better document embedding. With the hierarchical variants, on the other hand, each sentence vector is produced in isolation, without any contextual information about the other sentences in the document. Therefore, the final sentence embeddings might be of lower quality, and as a group might also contain redundant/repeated information. When the sentence vectors are finally combined into a document representation, it is too late to take context into account.",
+      "score": 2.4831827246289264,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        73,
+        74,
+        75
+      ],
+      "child_qasper_evidence_texts": [
+        "Experimental results are shown in Table TABREF28. For the baselines, the best scores reported in each original paper are shown. MPAD reaches best performance on 7 out of 10 datasets, and is close second elsewhere. Moreover, the 7 datasets on which MPAD ranks first widely differ in training set size, number of categories, and prediction task (topic, sentiment, subjectivity), which indicates that MPAD can perform well in different settings.",
+        "MPAD vs. hierarchical variants. On 9 datasets out of 10, one or more of the hierarchical variants outperform the vanilla MPAD architecture, highlighting the benefit of explicitly modeling the hierarchical nature of documents.",
+        "However, on Subjectivity, standard MPAD outperforms all hierarchical variants. On TREC, it reaches the same accuracy. We hypothesize that in some cases, using a different graph to separately encode each sentence might be worse than using one single graph to directly encode the document. Indeed, in the single document graph, some words that never appear in the same sentence can be connected through common neighbors, as was explained in subsection SECREF7. So, this way, some notion of cross-sentence context is captured while learning representations of words, bigrams, etc. at each MP iteration. This creates better informed representations, resulting in a better document embedding. With the hierarchical variants, on the other hand, each sentence vector is produced in isolation, without any contextual information about the other sentences in the document. Therefore, the final sentence embeddings might be of lower quality, and as a group might also contain redundant/repeated information. When the sentence vectors are finally combined into a document representation, it is too late to take context into account."
+      ],
+      "child_pages": [
+        10,
+        10,
+        10
+      ],
+      "child_sections": [
+        "Results and ablations ::: Results",
+        "Results and ablations ::: Results",
+        "Results and ablations ::: Results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results and ablations ::: Results",
+          0
+        ],
+        [
+          "Results and ablations ::: Results",
+          1
+        ],
+        [
+          "Results and ablations ::: Results",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Results and ablations ::: Results",
+      "section": "Results and ablations ::: Results",
+      "title_path": "Results and ablations ::: Results",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Results and ablations ::: Ablation studies\n[source_id=77] To understand the impact of some hyperparameters on performance, we conducted additional experiments on the Reuters, Polarity, and IMDB datasets, with the non-hierarchical version of MPAD. Results are shown in Table TABREF29.\n[source_id=78] Number of MP iterations. First, we varied the number of message passing iterations from 1 to 4. We can clearly see in Table TABREF29 that having more iterations improves performance. We attribute this to the fact that we are reading out at each iteration from 1 to $T$ (see Eq. DISPLAY_FORM18), which enables the final graph representation to encode a mixture of low-level and high-level features. Indeed, in initial experiments involving readout at $t$=$T$ only, setting $T\\ge 2$ was always decreasing performance, despite the GRU-based updates (Eq. DISPLAY_FORM14). These results were consistent with that of BIBREF53 and BIBREF9, who both are reading out only at $t$=$T$ too. We hypothesize that node features at $T\\ge 2$ are too diffuse to be entirely relied upon during readout. More precisely, initially at $t$=0, node representations capture information about words, at $t$=1, about their 1-hop neighborhood (bigrams), at $t$=2, about compositions of bigrams, etc. Thus, pretty quickly, node features become general and diffuse. In such cases, considering also the lower-level, more precise features of the earlier iterations when reading out may be necessary.\n[source_id=79] Undirected edges. On Reuters, using an undirected graph leads to better performance, while on Polarity and IMDB, it is the opposite. This can be explained by the fact that Reuters is a topic classification task, for which the presence or absence of some patterns is important, but not necessarily the order in which they appear, while Polarity and IMDB are sentiment analysis tasks. To capture sentiment, modeling word order is crucial, e.g., in detecting negation.\n[source_id=80] No master node. Removing the master node deteriorates performance across all datasets, clearly showing the value of having such a node. We hypothesize that since the special document node is connected to all other nodes, it is able to encode during message passing a summary of the document.\n[source_id=81] No renormalization. Here, we do not use the renormalization trick of BIBREF9 during MP (see subsection SECREF10). That is, Eq. DISPLAY_FORM11 becomes $\\mathbf {M}^{t+1} = \\textsc {MLP}^{t+1}\\big (\\mathbf {A}\\mathbf {H}^{t}\\big )$. In other words, instead of computing a weighted average of the incoming neighbors' feature vectors, we compute a weighted sum of them. Unlike the mean, which captures distributions, the sum captures structural information BIBREF14. As shown in Table TABREF29, using sum instead of mean decreases performance everywhere, suggesting that in our application, capturing the distribution of neighbor representations is more important that capturing their structure. We hypothesize that this is the case because statistical word co-occurrence networks tend to have similar structural properties, regardless of the topic, polarity, sentiment, etc. of the corresponding documents.\n[source_id=82] Neighbors-only. In this experiment, we replaced the GRU combine function (see Eq. DISPLAY_FORM14) with the identity function. That is, we simply have $\\mathbf {H}^{t+1}$=$\\mathbf {M}^{t+1}$. Since $\\mathbf {A}$ has zero diagonal, by doing so, we completely ignore the previous feature of the node itself when updating its representation. That is, the update is based entirely on its neighbors. Except on Reuters (almost no change), performance always suffers, stressing the need to take into account the root node during updates, not only its neighborhood.",
+      "score": 2.1476300222714375,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        77,
+        78,
+        79,
+        80,
+        81,
+        82
+      ],
+      "child_qasper_evidence_texts": [
+        "To understand the impact of some hyperparameters on performance, we conducted additional experiments on the Reuters, Polarity, and IMDB datasets, with the non-hierarchical version of MPAD. Results are shown in Table TABREF29.",
+        "Number of MP iterations. First, we varied the number of message passing iterations from 1 to 4. We can clearly see in Table TABREF29 that having more iterations improves performance. We attribute this to the fact that we are reading out at each iteration from 1 to $T$ (see Eq. DISPLAY_FORM18), which enables the final graph representation to encode a mixture of low-level and high-level features. Indeed, in initial experiments involving readout at $t$=$T$ only, setting $T\\ge 2$ was always decreasing performance, despite the GRU-based updates (Eq. DISPLAY_FORM14). These results were consistent with that of BIBREF53 and BIBREF9, who both are reading out only at $t$=$T$ too. We hypothesize that node features at $T\\ge 2$ are too diffuse to be entirely relied upon during readout. More precisely, initially at $t$=0, node representations capture information about words, at $t$=1, about their 1-hop neighborhood (bigrams), at $t$=2, about compositions of bigrams, etc. Thus, pretty quickly, node features become general and diffuse. In such cases, considering also the lower-level, more precise features of the earlier iterations when reading out may be necessary.",
+        "Undirected edges. On Reuters, using an undirected graph leads to better performance, while on Polarity and IMDB, it is the opposite. This can be explained by the fact that Reuters is a topic classification task, for which the presence or absence of some patterns is important, but not necessarily the order in which they appear, while Polarity and IMDB are sentiment analysis tasks. To capture sentiment, modeling word order is crucial, e.g., in detecting negation.",
+        "No master node. Removing the master node deteriorates performance across all datasets, clearly showing the value of having such a node. We hypothesize that since the special document node is connected to all other nodes, it is able to encode during message passing a summary of the document.",
+        "No renormalization. Here, we do not use the renormalization trick of BIBREF9 during MP (see subsection SECREF10). That is, Eq. DISPLAY_FORM11 becomes $\\mathbf {M}^{t+1} = \\textsc {MLP}^{t+1}\\big (\\mathbf {A}\\mathbf {H}^{t}\\big )$. In other words, instead of computing a weighted average of the incoming neighbors' feature vectors, we compute a weighted sum of them. Unlike the mean, which captures distributions, the sum captures structural information BIBREF14. As shown in Table TABREF29, using sum instead of mean decreases performance everywhere, suggesting that in our application, capturing the distribution of neighbor representations is more important that capturing their structure. We hypothesize that this is the case because statistical word co-occurrence networks tend to have similar structural properties, regardless of the topic, polarity, sentiment, etc. of the corresponding documents.",
+        "Neighbors-only. In this experiment, we replaced the GRU combine function (see Eq. DISPLAY_FORM14) with the identity function. That is, we simply have $\\mathbf {H}^{t+1}$=$\\mathbf {M}^{t+1}$. Since $\\mathbf {A}$ has zero diagonal, by doing so, we completely ignore the previous feature of the node itself when updating its representation. That is, the update is based entirely on its neighbors. Except on Reuters (almost no change), performance always suffers, stressing the need to take into account the root node during updates, not only its neighborhood."
+      ],
+      "child_pages": [
+        11,
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "child_sections": [
+        "Results and ablations ::: Ablation studies",
+        "Results and ablations ::: Ablation studies",
+        "Results and ablations ::: Ablation studies",
+        "Results and ablations ::: Ablation studies",
+        "Results and ablations ::: Ablation studies",
+        "Results and ablations ::: Ablation studies"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results and ablations ::: Ablation studies",
+          0
+        ],
+        [
+          "Results and ablations ::: Ablation studies",
+          1
+        ],
+        [
+          "Results and ablations ::: Ablation studies",
+          2
+        ],
+        [
+          "Results and ablations ::: Ablation studies",
+          3
+        ],
+        [
+          "Results and ablations ::: Ablation studies",
+          4
+        ],
+        [
+          "Results and ablations ::: Ablation studies",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Results and ablations ::: Ablation studies",
+      "section": "Results and ablations ::: Ablation studies",
+      "title_path": "Results and ablations ::: Ablation studies",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Graph neural networks have recently emerged as a very effective framework for processing graph-structured data. These models have achieved state-of-the-art performance in many tasks. Most graph neural networks can be described in terms of message passing, vertex update, and readout functions. In this paper, we represent documents as word co-occurrence networks and propose an application of the message passing framework to NLP, the Message Passing Attention network for Document understanding (MPAD). We also propose several hierarchical variants of MPAD. Experiments conducted on 10 standard text classification datasets show that our architectures are competitive with the state-of-the-art. Ablation studies reveal further insights about the impact of the different components on performance. Code is publicly available at: https://github.com/giannisnik/mpad .",
+      "score": 1.083881522910864,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Graph neural networks have recently emerged as a very effective framework for processing graph-structured data. These models have achieved state-of-the-art performance in many tasks. Most graph neural networks can be described in terms of message passing, vertex update, and readout functions. In this paper, we represent documents as word co-occurrence networks and propose an application of the message passing framework to NLP, the Message Passing Attention network for Document understanding (MPAD). We also propose several hierarchical variants of MPAD. Experiments conducted on 10 standard text classification datasets show that our architectures are competitive with the state-of-the-art. Ablation studies reveal further insights about the impact of the different components on performance. Code is publicly available at: https://github.com/giannisnik/mpad ."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Message Passing Neural Networks\n[source_id=9] BIBREF13 proposed a MP framework under which many of the recently introduced GNNs can be reformulated. MP consists in an aggregation phase followed by a combination phase BIBREF14. More precisely, let $G(V,E)$ be a graph, and let us consider $v \\in V$. At time $t+1$, a message vector $\\mathbf {m}_v^{t+1}$ is computed from the representations of the neighbors $\\mathcal {N}(v)$ of $v$:\n[source_id=10] The new representation $\\mathbf {h}^{t+1}_v$ of $v$ is then computed by combining its current feature vector $\\mathbf {h}^{t}_v$ with the message vector $\\mathbf {m}_v^{t+1}$:\n[source_id=11] Messages are passed for $T$ time steps. Each step is implemented by a different layer of the MP network. Hence, iterations correspond to network depth. The final feature vector $\\mathbf {h}_v^T$ of $v$ is based on messages propagated from all the nodes in the subtree of height $T$ rooted at $v$. It captures both the topology of the neighborhood of $v$ and the distribution of the vertex representations in it.\n[source_id=12] If a graph-level feature vector is needed, e.g., for classification or regression, a READOUT pooling function, that must be invariant to permutations, is applied:\n[source_id=13] Next, we present the MP network we developed for document understanding.",
+      "score": 1.0551182732606856,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "child_qasper_evidence_texts": [
+        "BIBREF13 proposed a MP framework under which many of the recently introduced GNNs can be reformulated. MP consists in an aggregation phase followed by a combination phase BIBREF14. More precisely, let $G(V,E)$ be a graph, and let us consider $v \\in V$. At time $t+1$, a message vector $\\mathbf {m}_v^{t+1}$ is computed from the representations of the neighbors $\\mathcal {N}(v)$ of $v$:",
+        "The new representation $\\mathbf {h}^{t+1}_v$ of $v$ is then computed by combining its current feature vector $\\mathbf {h}^{t}_v$ with the message vector $\\mathbf {m}_v^{t+1}$:",
+        "Messages are passed for $T$ time steps. Each step is implemented by a different layer of the MP network. Hence, iterations correspond to network depth. The final feature vector $\\mathbf {h}_v^T$ of $v$ is based on messages propagated from all the nodes in the subtree of height $T$ rooted at $v$. It captures both the topology of the neighborhood of $v$ and the distribution of the vertex representations in it.",
+        "If a graph-level feature vector is needed, e.g., for classification or regression, a READOUT pooling function, that must be invariant to permutations, is applied:",
+        "Next, we present the MP network we developed for document understanding."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Message Passing Neural Networks",
+        "Message Passing Neural Networks",
+        "Message Passing Neural Networks",
+        "Message Passing Neural Networks",
+        "Message Passing Neural Networks"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Message Passing Neural Networks",
+          0
+        ],
+        [
+          "Message Passing Neural Networks",
+          1
+        ],
+        [
+          "Message Passing Neural Networks",
+          2
+        ],
+        [
+          "Message Passing Neural Networks",
+          3
+        ],
+        [
+          "Message Passing Neural Networks",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Message Passing Neural Networks",
+      "section": "Message Passing Neural Networks",
+      "title_path": "Message Passing Neural Networks",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 41,
+      "content": "(1) Reuters. This dataset contains stories collected from the Reuters news agency in 1987. Following common practice, we used the ModApte split and considered only the 10 classes with the highest number of positive training examples. We also removed documents belonging to more than one class and then classes left with no document (2 classes).",
+      "qasper_evidence_text": "(1) Reuters. This dataset contains stories collected from the Reuters news agency in 1987. Following common practice, we used the ModApte split and considered only the 10 classes with the highest number of positive training examples. We also removed documents belonging to more than one class and then classes left with no document (2 classes).",
+      "source_node_id": 41,
+      "node_id": 41,
+      "paragraph_id": 41,
+      "evidence_id": 41,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_7",
+      "rank": 2,
+      "score": 3.0815001983560117,
+      "block_type": "paragraph",
+      "page": 7,
+      "section_id": "Experiments ::: Datasets",
+      "section": "Experiments ::: Datasets",
+      "title": "Experiments ::: Datasets",
+      "hotpot_title": "Experiments ::: Datasets",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 1
+    },
+    {
+      "id": 42,
+      "content": "(2) BBCSport BIBREF30 contains documents from the BBC Sport website corresponding to 2004-2005 sports news articles.",
+      "qasper_evidence_text": "(2) BBCSport BIBREF30 contains documents from the BBC Sport website corresponding to 2004-2005 sports news articles.",
+      "source_node_id": 42,
+      "node_id": 42,
+      "paragraph_id": 42,
+      "evidence_id": 42,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_7",
+      "rank": 2,
+      "score": 3.0815001983560117,
+      "block_type": "paragraph",
+      "page": 7,
+      "section_id": "Experiments ::: Datasets",
+      "section": "Experiments ::: Datasets",
+      "title": "Experiments ::: Datasets",
+      "hotpot_title": "Experiments ::: Datasets",
+      "sent_id": 2,
+      "hotpot_sent_id": 2,
+      "supporting_rank": 2
+    },
+    {
+      "id": 43,
+      "content": "(3) Polarity BIBREF31 features positive and negative labeled snippets from Rotten Tomatoes.",
+      "qasper_evidence_text": "(3) Polarity BIBREF31 features positive and negative labeled snippets from Rotten Tomatoes.",
+      "source_node_id": 43,
+      "node_id": 43,
+      "paragraph_id": 43,
+      "evidence_id": 43,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_7",
+      "rank": 2,
+      "score": 3.0815001983560117,
+      "block_type": "paragraph",
+      "page": 7,
+      "section_id": "Experiments ::: Datasets",
+      "section": "Experiments ::: Datasets",
+      "title": "Experiments ::: Datasets",
+      "hotpot_title": "Experiments ::: Datasets",
+      "sent_id": 3,
+      "hotpot_sent_id": 3,
+      "supporting_rank": 3
+    },
+    {
+      "id": 44,
+      "content": "(4) Subjectivity BIBREF32 contains movie review snippets from Rotten Tomatoes (subjective sentences), and Internet Movie Database plot summaries (objective sentences).",
+      "qasper_evidence_text": "(4) Subjectivity BIBREF32 contains movie review snippets from Rotten Tomatoes (subjective sentences), and Internet Movie Database plot summaries (objective sentences).",
+      "source_node_id": 44,
+      "node_id": 44,
+      "paragraph_id": 44,
+      "evidence_id": 44,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_7",
+      "rank": 2,
+      "score": 3.0815001983560117,
+      "block_type": "paragraph",
+      "page": 7,
+      "section_id": "Experiments ::: Datasets",
+      "section": "Experiments ::: Datasets",
+      "title": "Experiments ::: Datasets",
+      "hotpot_title": "Experiments ::: Datasets",
+      "sent_id": 4,
+      "hotpot_sent_id": 4,
+      "supporting_rank": 4
+    }
+  ],
+  "supporting_block_ids": [
+    41,
+    42,
+    43,
+    44
+  ]
+}

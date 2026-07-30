@@ -1,0 +1,52 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Table-to-text generation is an important and challenging task in natural language processing, which aims to produce the summarization of numerical table BIBREF0, BIBREF1. The related methods can be empirically divided into two categories, pipeline model and end-to-end model. The former consists of content selection, document planning and realisation, mainly for early industrial applications, such as weather forecasting and medical monitoring, etc. The latter generates text directly from the table through a standard neural encoder-decoder framework to avoid error propagation and has achieved remarkable progress. In this paper, we particularly focus on exploring how to improve the performance of neural methods on table-to-text generation.\n[source_id=5] Recently, ROTOWIRE, which provides tables of NBA players' and teams' statistics with a descriptive summary, has drawn increasing attention from academic community. Figure FIGREF1 shows an example of parts of a game's statistics and its corresponding computer generated summary. We can see that the tables has a formal structure including table row header, table column header and table cells. “Al Jefferson” is a table row header that represents a player, “PTS” is a table column header indicating the column contains player's score and “18” is the value of the table cell, that is, Al Jefferson scored 18 points. Several related models have been proposed . They typically encode the table's records separately or as a long sequence and generate a long descriptive summary by a standard Seq2Seq decoder with some modifications. Wiseman explored two types of copy mechanism and found conditional copy model BIBREF3 perform better . Puduppully enhanced content selection ability by explicitly selecting and planning relevant records. Li improved the precision of describing data records in the generated texts by generating a template at first and filling in slots via copy mechanism. Nie utilized results from pre-executed operations to improve the fidelity of generated texts. However, we claim that their encoding of tables as sets of records or a long sequence is not suitable. Because (1) the table consists of multiple players and different types of information as shown in Figure FIGREF1. The earlier encoding approaches only considered the table as sets of records or one dimensional sequence, which would lose the information of other (column) dimension. (2) the table cell consists of time-series data which change over time. That is to say, sometimes historical data can help the model select content. Moreover, when a human writes a basketball report, he will not only focus on the players' outstanding performance in the current match, but also summarize players' performance in recent matches. Lets take Figure FIGREF1 again. Not only do the gold texts mention Al Jefferson's great performance in this match, it also states that “It was the second time in the last three games he's posted a double-double”. Also gold texts summarize John Wall's “double-double” performance in the similar way. Summarizing a player's performance in recent matches requires the modeling of table cell with respect to its historical data (time dimension) which is absent in baseline model. Although baseline model Conditional Copy (CC) tries to summarize it for Gerald Henderson, it clearly produce wrong statements since he didn't get “double-double” in this match.\n[source_id=6] To address the aforementioned problems, we present a hierarchical encoder to simultaneously model row, column and time dimension information. In detail, our model is divided into three layers. The first layer is used to learn the representation of the table cell. Specifically, we employ three self-attention models to obtain three representations of the table cell in its row, column and time dimension. Then, in the second layer, we design a record fusion gate to identify the more important representation from those three dimension and combine them into a dense vector. In the third layer, we use mean pooling method to merge the previously obtained table cell representations in the same row into the representation of the table's row. Then, we use self-attention with content selection gate BIBREF4 to filter unimportant rows' information. To the best of our knowledge, this is the first work on neural table-to-text generation via modeling column and time dimension information so far. We conducted experiments on ROTOWIRE. Results show that our model outperforms existing systems, improving baseline BLEU from 14.19 to 16.85 ($+18.75\\%$), P% of relation generation (RG) from 74.80 to 91.46 ($+22.27\\%$), F1% of content selection (CS) from 32.49 to 41.21 ($+26.84\\%$) and content ordering (CO) from 15.42 to 20.86 ($+35.28\\%$) on test set. It also exceeds the state-of-the-art model in terms of those metrics.",
+  "score": 4.738580053405724,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6
+  ],
+  "child_qasper_evidence_texts": [
+    "Table-to-text generation is an important and challenging task in natural language processing, which aims to produce the summarization of numerical table BIBREF0, BIBREF1. The related methods can be empirically divided into two categories, pipeline model and end-to-end model. The former consists of content selection, document planning and realisation, mainly for early industrial applications, such as weather forecasting and medical monitoring, etc. The latter generates text directly from the table through a standard neural encoder-decoder framework to avoid error propagation and has achieved remarkable progress. In this paper, we particularly focus on exploring how to improve the performance of neural methods on table-to-text generation.",
+    "Recently, ROTOWIRE, which provides tables of NBA players' and teams' statistics with a descriptive summary, has drawn increasing attention from academic community. Figure FIGREF1 shows an example of parts of a game's statistics and its corresponding computer generated summary. We can see that the tables has a formal structure including table row header, table column header and table cells. “Al Jefferson” is a table row header that represents a player, “PTS” is a table column header indicating the column contains player's score and “18” is the value of the table cell, that is, Al Jefferson scored 18 points. Several related models have been proposed . They typically encode the table's records separately or as a long sequence and generate a long descriptive summary by a standard Seq2Seq decoder with some modifications. Wiseman explored two types of copy mechanism and found conditional copy model BIBREF3 perform better . Puduppully enhanced content selection ability by explicitly selecting and planning relevant records. Li improved the precision of describing data records in the generated texts by generating a template at first and filling in slots via copy mechanism. Nie utilized results from pre-executed operations to improve the fidelity of generated texts. However, we claim that their encoding of tables as sets of records or a long sequence is not suitable. Because (1) the table consists of multiple players and different types of information as shown in Figure FIGREF1. The earlier encoding approaches only considered the table as sets of records or one dimensional sequence, which would lose the information of other (column) dimension. (2) the table cell consists of time-series data which change over time. That is to say, sometimes historical data can help the model select content. Moreover, when a human writes a basketball report, he will not only focus on the players' outstanding performance in the current match, but also summarize players' performance in recent matches. Lets take Figure FIGREF1 again. Not only do the gold texts mention Al Jefferson's great performance in this match, it also states that “It was the second time in the last three games he's posted a double-double”. Also gold texts summarize John Wall's “double-double” performance in the similar way. Summarizing a player's performance in recent matches requires the modeling of table cell with respect to its historical data (time dimension) which is absent in baseline model. Although baseline model Conditional Copy (CC) tries to summarize it for Gerald Henderson, it clearly produce wrong statements since he didn't get “double-double” in this match.",
+    "To address the aforementioned problems, we present a hierarchical encoder to simultaneously model row, column and time dimension information. In detail, our model is divided into three layers. The first layer is used to learn the representation of the table cell. Specifically, we employ three self-attention models to obtain three representations of the table cell in its row, column and time dimension. Then, in the second layer, we design a record fusion gate to identify the more important representation from those three dimension and combine them into a dense vector. In the third layer, we use mean pooling method to merge the previously obtained table cell representations in the same row into the representation of the table's row. Then, we use self-attention with content selection gate BIBREF4 to filter unimportant rows' information. To the best of our knowledge, this is the first work on neural table-to-text generation via modeling column and time dimension information so far. We conducted experiments on ROTOWIRE. Results show that our model outperforms existing systems, improving baseline BLEU from 14.19 to 16.85 ($+18.75\\%$), P% of relation generation (RG) from 74.80 to 91.46 ($+22.27\\%$), F1% of content selection (CS) from 32.49 to 41.21 ($+26.84\\%$) and content ordering (CO) from 15.42 to 20.86 ($+35.28\\%$) on test set. It also exceeds the state-of-the-art model in terms of those metrics."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,34 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Preliminaries ::: Baseline Model\n[source_id=12] We use Seq2Seq model with attention BIBREF5 and conditional copy BIBREF3 as the base model. During training, given tables $S$ and their corresponding reference texts $y$, the model maximized the conditional probability $P(y|S) = \\prod _{t=1}^{T}P(y_{t}|y_{<t},S)$ . $t$ is the timestep of decoder. First, for each record of the $i^{th}$ row and $j^{th}$ column in the table, we utilize 1-layer MLP to encode the embeddings of each record's four types of information into a dense vector ${r}_{i, j}$, $r_{i, j}=ReLU(W_{a}[r_{i, j}.e;r_{i, j}.c;r_{i, j}.v;r_{i, j}.f]+b_{a})$. $W_{a}$ and $b_{a}$ are trainable parameters. The word embeddings for each type of information are trainable and randomly initialized before training following Wiseman. $[;]$ denotes the vector concatenation. Then, we use a LSTM decoder with attention and conditional copy to model the conditional probability $P(y_{t}|y_{<t},S)$. The base model first use attention mechanism BIBREF5 to find relevant records from the input tables and represent them as context vector. Please note that the base model doesn't utilize the structure of three tables and normalize the attention weight $\\alpha _{t, i^{\\prime }, j^{\\prime }}$ across every records in every tables. Then it combines the context vector with decoder's hidden state $d_{t}$ and form a new attentional hidden state $\\tilde{d}_{t}$ which is used to generate words from vocabulary $P_{gen}(y_{t}|y_{<t},S)=softmax(W_{d}\\tilde{d}_{t}+b_{d})$ Also the conditional copy mechanism is adopted in base model. It introduces a variable $z_{t}$ to decide whether to copy from tables or generate from vocabulary. The probability to copy from table is $P(z_{t}=1|y_{<t}, S)=sigmoid(w_{e} \\cdot d_{t}+b_{e})$. Then it decomposes the conditional probability of generating $t^{th}$ word $P(y_{t}|y_{<t},S)$, given the tables $S$ and previously generated words $y_{<t}$, as follows.",
+  "score": 3.691733741225578,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    12
+  ],
+  "child_qasper_evidence_texts": [
+    "We use Seq2Seq model with attention BIBREF5 and conditional copy BIBREF3 as the base model. During training, given tables $S$ and their corresponding reference texts $y$, the model maximized the conditional probability $P(y|S) = \\prod _{t=1}^{T}P(y_{t}|y_{<t},S)$ . $t$ is the timestep of decoder. First, for each record of the $i^{th}$ row and $j^{th}$ column in the table, we utilize 1-layer MLP to encode the embeddings of each record's four types of information into a dense vector ${r}_{i, j}$, $r_{i, j}=ReLU(W_{a}[r_{i, j}.e;r_{i, j}.c;r_{i, j}.v;r_{i, j}.f]+b_{a})$. $W_{a}$ and $b_{a}$ are trainable parameters. The word embeddings for each type of information are trainable and randomly initialized before training following Wiseman. $[;]$ denotes the vector concatenation. Then, we use a LSTM decoder with attention and conditional copy to model the conditional probability $P(y_{t}|y_{<t},S)$. The base model first use attention mechanism BIBREF5 to find relevant records from the input tables and represent them as context vector. Please note that the base model doesn't utilize the structure of three tables and normalize the attention weight $\\alpha _{t, i^{\\prime }, j^{\\prime }}$ across every records in every tables. Then it combines the context vector with decoder's hidden state $d_{t}$ and form a new attentional hidden state $\\tilde{d}_{t}$ which is used to generate words from vocabulary $P_{gen}(y_{t}|y_{<t},S)=softmax(W_{d}\\tilde{d}_{t}+b_{d})$ Also the conditional copy mechanism is adopted in base model. It introduces a variable $z_{t}$ to decide whether to copy from tables or generate from vocabulary. The probability to copy from table is $P(z_{t}=1|y_{<t}, S)=sigmoid(w_{e} \\cdot d_{t}+b_{e})$. Then it decomposes the conditional probability of generating $t^{th}$ word $P(y_{t}|y_{<t},S)$, given the tables $S$ and previously generated words $y_{<t}$, as follows."
+  ],
+  "child_pages": [
+    4
+  ],
+  "child_sections": [
+    "Preliminaries ::: Baseline Model"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Preliminaries ::: Baseline Model",
+      0
+    ]
+  ],
+  "child_block_types": [
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Preliminaries ::: Baseline Model",
+  "section": "Preliminaries ::: Baseline Model",
+  "title_path": "Preliminaries ::: Baseline Model",
+  "block_type": "long_unit"
+}

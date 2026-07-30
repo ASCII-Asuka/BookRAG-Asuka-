@@ -1,0 +1,776 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_2",
+      "content": "[Section] Related Work\n[source_id=11] Recursive neural networks (RvNN) are a kind of neural architecture which model sentences by exploiting syntactic structure. While earlier RvNN models proposed utilizing diverse composition functions, including feed-forward neural networks BIBREF12 , matrix-vector multiplication BIBREF5 , and tensor computation BIBREF6 , tree-LSTMs BIBREF13 remain the standard for several sentence-level tasks.\n[source_id=12] Even though classic RvNNs have demonstrated superior performance on a variety of tasks, their inflexibility, i.e. their inability to handle dynamic compositionality for different syntactic configurations, is a considerable weakness. For instance, it would be desirable if our model could distinguish e.g. adjective-noun composition from that of verb-noun or preposition-noun composition, as models failing to make such a distinction ignore real-world syntactic considerations such as `-arity' of function words (i.e. types), and the adjunct/argument distinction.\n[source_id=13] To enable dynamic compositionality in recursive neural networks, many previous works BIBREF14 , BIBREF15 , BIBREF16 , BIBREF9 , BIBREF17 , BIBREF18 , BIBREF19 have proposed various methods.\n[source_id=14] One main direction of research leverages tag information, which is produced as a by-product of parsing. In detail, BIBREF16 ( BIBREF16 ) suggested TG-RNN, a model employing different composition functions according to POS tags, and TE-RNN/TE-RNTN, models which leverage tag embeddings as additional inputs for the existing tree-structured models. Despite the novelty of utilizing tag information, the explosion of the number of parameters (in case of the TG-RNN) and the limited performance of the original models (in case of the TE-RNN/TE-RNTN) have prevented these models from being widely adopted. Meanwhile, BIBREF9 ( BIBREF9 ) and BIBREF18 ( BIBREF18 ) proposed models based on a tree-LSTM which also uses the tag vectors to control the gate functions of the tree-LSTM. In spite of their impressive results, there is a limitation that the trained tag embeddings are too simple to reflect the rich information which tags provide in different syntactic structures. To alleviate this problem, we introduce structure-aware tag representations in the next section.\n[source_id=15] Another way of building dynamic compositionality into RvNNs is to take advantage of a meta-network (or hyper-network). Inspired by recent works on dynamic parameter prediction, DC-TreeLSTMs BIBREF17 dynamically create the parameters for compositional functions in a tree-LSTM. Specifically, the model has two separate tree-LSTM networks whose architectures are similar, but the smaller of the two is utilized to calculate the weights of the bigger one. A possible problem for this model is that it may be easy to be trained such that the role of each tree-LSTM is ambiguous, as they share the same input, i.e. word information. Therefore, we design two disentangled tree-LSTMs in our model so that one focuses on extracting useful features from only syntactic information while the other composes semantic units with the aid of the features. Furthermore, our model reduces the complexity of computation by utilizing typical tree-LSTM frameworks instead of computing the weights for each example.\n[source_id=16] Finally, some recent works BIBREF10 , BIBREF11 have proposed latent tree-structured models that learn how to formulate tree structures from only sequences of tokens, without the aid of syntactic trees or linguistic information. The latent tree models have the advantage of being able to find the optimized task-specific order of composition rather than a sequential or syntactic one. In experiments, we compare our model with not only syntactic tree-based models but also latent tree models, demonstrating that modeling with explicit linguistic knowledge can be an attractive option.",
+      "score": 3.879445557962506,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "child_qasper_evidence_texts": [
+        "Recursive neural networks (RvNN) are a kind of neural architecture which model sentences by exploiting syntactic structure. While earlier RvNN models proposed utilizing diverse composition functions, including feed-forward neural networks BIBREF12 , matrix-vector multiplication BIBREF5 , and tensor computation BIBREF6 , tree-LSTMs BIBREF13 remain the standard for several sentence-level tasks.",
+        "Even though classic RvNNs have demonstrated superior performance on a variety of tasks, their inflexibility, i.e. their inability to handle dynamic compositionality for different syntactic configurations, is a considerable weakness. For instance, it would be desirable if our model could distinguish e.g. adjective-noun composition from that of verb-noun or preposition-noun composition, as models failing to make such a distinction ignore real-world syntactic considerations such as `-arity' of function words (i.e. types), and the adjunct/argument distinction.",
+        "To enable dynamic compositionality in recursive neural networks, many previous works BIBREF14 , BIBREF15 , BIBREF16 , BIBREF9 , BIBREF17 , BIBREF18 , BIBREF19 have proposed various methods.",
+        "One main direction of research leverages tag information, which is produced as a by-product of parsing. In detail, BIBREF16 ( BIBREF16 ) suggested TG-RNN, a model employing different composition functions according to POS tags, and TE-RNN/TE-RNTN, models which leverage tag embeddings as additional inputs for the existing tree-structured models. Despite the novelty of utilizing tag information, the explosion of the number of parameters (in case of the TG-RNN) and the limited performance of the original models (in case of the TE-RNN/TE-RNTN) have prevented these models from being widely adopted. Meanwhile, BIBREF9 ( BIBREF9 ) and BIBREF18 ( BIBREF18 ) proposed models based on a tree-LSTM which also uses the tag vectors to control the gate functions of the tree-LSTM. In spite of their impressive results, there is a limitation that the trained tag embeddings are too simple to reflect the rich information which tags provide in different syntactic structures. To alleviate this problem, we introduce structure-aware tag representations in the next section.",
+        "Another way of building dynamic compositionality into RvNNs is to take advantage of a meta-network (or hyper-network). Inspired by recent works on dynamic parameter prediction, DC-TreeLSTMs BIBREF17 dynamically create the parameters for compositional functions in a tree-LSTM. Specifically, the model has two separate tree-LSTM networks whose architectures are similar, but the smaller of the two is utilized to calculate the weights of the bigger one. A possible problem for this model is that it may be easy to be trained such that the role of each tree-LSTM is ambiguous, as they share the same input, i.e. word information. Therefore, we design two disentangled tree-LSTMs in our model so that one focuses on extracting useful features from only syntactic information while the other composes semantic units with the aid of the features. Furthermore, our model reduces the complexity of computation by utilizing typical tree-LSTM frameworks instead of computing the weights for each example.",
+        "Finally, some recent works BIBREF10 , BIBREF11 have proposed latent tree-structured models that learn how to formulate tree structures from only sequences of tokens, without the aid of syntactic trees or linguistic information. The latent tree models have the advantage of being able to find the optimized task-specific order of composition rather than a sequential or syntactic one. In experiments, we compare our model with not only syntactic tree-based models but also latent tree models, demonstrating that modeling with explicit linguistic knowledge can be an attractive option."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Related Work",
+        "Related Work",
+        "Related Work",
+        "Related Work",
+        "Related Work",
+        "Related Work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work",
+          0
+        ],
+        [
+          "Related Work",
+          1
+        ],
+        [
+          "Related Work",
+          2
+        ],
+        [
+          "Related Work",
+          3
+        ],
+        [
+          "Related Work",
+          4
+        ],
+        [
+          "Related Work",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Related Work",
+      "section": "Related Work",
+      "title_path": "Related Work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Most existing recursive neural network (RvNN) architectures utilize only the structure of parse trees, ignoring syntactic tags which are provided as by-products of parsing. We present a novel RvNN architecture that can provide dynamic compositionality by considering comprehensive syntactic information derived from both the structure and linguistic tags. Specifically, we introduce a structure-aware tag representation constructed by a separate tag-level tree-LSTM. With this, we can control the composition function of the existing word-level tree-LSTM by augmenting the representation as a supplementary input to the gate functions of the tree-LSTM. In extensive experiments, we show that models built upon the proposed architecture obtain superior or competitive performance on several sentence-level tasks such as sentiment analysis and natural language inference when compared against previous tree-structured models and other sophisticated neural models.",
+      "score": 2.8702998780371827,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Most existing recursive neural network (RvNN) architectures utilize only the structure of parse trees, ignoring syntactic tags which are provided as by-products of parsing. We present a novel RvNN architecture that can provide dynamic compositionality by considering comprehensive syntactic information derived from both the structure and linguistic tags. Specifically, we introduce a structure-aware tag representation constructed by a separate tag-level tree-LSTM. With this, we can control the composition function of the existing word-level tree-LSTM by augmenting the representation as a supplementary input to the gate functions of the tree-LSTM. In extensive experiments, we show that models built upon the proposed architecture obtain superior or competitive performance on several sentence-level tasks such as sentiment analysis and natural language inference when compared against previous tree-structured models and other sophisticated neural models."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Tree-LSTM\n[source_id=21] The LSTM BIBREF1 architecture was first introduced as an extension of the RNN architecture to mitigate the vanishing and exploding gradient problems. In addition, several works have discovered that applying the LSTM cell into tree structures can be an effective means of modeling sentence representations.\n[source_id=22] To be formal, the composition function of the cell in a tree-LSTM can be formulated as follows:\n[source_id=23] $$ \n\\begin{bmatrix}\n\\mathbf {i} \\\\\n\\mathbf {f}_l \\\\\n\\mathbf {f}_r \\\\\n\\mathbf {o} \\\\\n\\mathbf {g}\n\\end{bmatrix}\n=\n\\begin{bmatrix}\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\tanh \\end{bmatrix}\n\\Bigg ( \\mathbf {W}\n\\begin{bmatrix}\n\\mathbf {h}_l \\\\\n\\mathbf {h}_r \\\\\n\\end{bmatrix}\n+ \\mathbf {b} \\Bigg )$$   (Eq. 8)\n[source_id=24] $$ \n\\mathbf {c} = \\mathbf {f}_l \\odot \\mathbf {c}_l + \\mathbf {f}_r \\odot \\mathbf {c}_r + \\mathbf {i} \\odot \\mathbf {g}\\\\$$   (Eq. 9)\n[source_id=25] where $\\mathbf {h}, \\mathbf {c} \\in \\mathbb {R}^{d}$ indicate the hidden state and cell state of the LSTM cell, and $\\mathbf {h}_l, \\mathbf {h}_r, \\mathbf {c}_l, \\mathbf {c}_r \\in \\mathbb {R}^{d}$ the hidden states and cell states of a left and right child. $\\mathbf {g} \\in \\mathbb {R}^{d}$ is the newly composed input for the cell and $\\mathbf {i}, \\mathbf {f}_{l}, \\mathbf {f}_{r}, \\mathbf {o} \\in \\mathbb {R}^{d}$ represent an input gate, two forget gates (left, right), and an output gate respectively. $\\mathbf {W} \\in \\mathbb {R}^{5d\\times 2d}$ and $\\mathbf {b} \\in \\mathbb {R}^{5d}$ are trainable parameters. $\\sigma $ corresponds to the sigmoid function, $\\tanh $ to the hyperbolic tangent, and $\\odot $ to element-wise multiplication.\n[source_id=26] Note the equations assume that there are only two children for each node, i.e. binary or binarized trees, following the standard in the literature. While RvNN models can be constructed on any tree structure, in this work we only consider constituency trees as inputs.\n[source_id=27] In spite of the obvious upside that recursive models have in being so flexible, they are known for being difficult to fully utilize with batch computations as compared to other neural architectures because of the diversity of structure found across sentences. To alleviate this problem, BIBREF8 ( BIBREF8 ) proposed the SPINN model, which brings a shift-reduce algorithm to the tree-LSTM. As SPINN simplifies the process of constructing a tree into only two operations, i.e. shift and reduce, it can support more effective parallel computations while enjoying the advantages of tree structures. For efficiency, our model also starts from our own SPINN re-implementation, whose function is exactly the same as that of the tree-LSTM.",
+      "score": 1.980795509579241,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "child_qasper_evidence_texts": [
+        "The LSTM BIBREF1 architecture was first introduced as an extension of the RNN architecture to mitigate the vanishing and exploding gradient problems. In addition, several works have discovered that applying the LSTM cell into tree structures can be an effective means of modeling sentence representations.",
+        "To be formal, the composition function of the cell in a tree-LSTM can be formulated as follows:",
+        "$$ \n\\begin{bmatrix}\n\\mathbf {i} \\\\\n\\mathbf {f}_l \\\\\n\\mathbf {f}_r \\\\\n\\mathbf {o} \\\\\n\\mathbf {g}\n\\end{bmatrix}\n=\n\\begin{bmatrix}\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\tanh \\end{bmatrix}\n\\Bigg ( \\mathbf {W}\n\\begin{bmatrix}\n\\mathbf {h}_l \\\\\n\\mathbf {h}_r \\\\\n\\end{bmatrix}\n+ \\mathbf {b} \\Bigg )$$   (Eq. 8)",
+        "$$ \n\\mathbf {c} = \\mathbf {f}_l \\odot \\mathbf {c}_l + \\mathbf {f}_r \\odot \\mathbf {c}_r + \\mathbf {i} \\odot \\mathbf {g}\\\\$$   (Eq. 9)",
+        "where $\\mathbf {h}, \\mathbf {c} \\in \\mathbb {R}^{d}$ indicate the hidden state and cell state of the LSTM cell, and $\\mathbf {h}_l, \\mathbf {h}_r, \\mathbf {c}_l, \\mathbf {c}_r \\in \\mathbb {R}^{d}$ the hidden states and cell states of a left and right child. $\\mathbf {g} \\in \\mathbb {R}^{d}$ is the newly composed input for the cell and $\\mathbf {i}, \\mathbf {f}_{l}, \\mathbf {f}_{r}, \\mathbf {o} \\in \\mathbb {R}^{d}$ represent an input gate, two forget gates (left, right), and an output gate respectively. $\\mathbf {W} \\in \\mathbb {R}^{5d\\times 2d}$ and $\\mathbf {b} \\in \\mathbb {R}^{5d}$ are trainable parameters. $\\sigma $ corresponds to the sigmoid function, $\\tanh $ to the hyperbolic tangent, and $\\odot $ to element-wise multiplication.",
+        "Note the equations assume that there are only two children for each node, i.e. binary or binarized trees, following the standard in the literature. While RvNN models can be constructed on any tree structure, in this work we only consider constituency trees as inputs.",
+        "In spite of the obvious upside that recursive models have in being so flexible, they are known for being difficult to fully utilize with batch computations as compared to other neural architectures because of the diversity of structure found across sentences. To alleviate this problem, BIBREF8 ( BIBREF8 ) proposed the SPINN model, which brings a shift-reduce algorithm to the tree-LSTM. As SPINN simplifies the process of constructing a tree into only two operations, i.e. shift and reduce, it can support more effective parallel computations while enjoying the advantages of tree structures. For efficiency, our model also starts from our own SPINN re-implementation, whose function is exactly the same as that of the tree-LSTM."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Tree-LSTM",
+        "Tree-LSTM",
+        "Tree-LSTM",
+        "Tree-LSTM",
+        "Tree-LSTM",
+        "Tree-LSTM",
+        "Tree-LSTM"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Tree-LSTM",
+          0
+        ],
+        [
+          "Tree-LSTM",
+          1
+        ],
+        [
+          "Tree-LSTM",
+          2
+        ],
+        [
+          "Tree-LSTM",
+          3
+        ],
+        [
+          "Tree-LSTM",
+          4
+        ],
+        [
+          "Tree-LSTM",
+          5
+        ],
+        [
+          "Tree-LSTM",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Tree-LSTM",
+      "section": "Tree-LSTM",
+      "title_path": "Tree-LSTM",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Quantitative Analysis\n[source_id=62] One of the most basic approaches to evaluate a sentence encoder is to measure the classification performance with the sentence representations made by the encoder. Thus, we conduct experiments on the following five datasets. (Summary statistics for the datasets are reported in the supplemental materials.)\n[source_id=63] MR: A group of movie reviews with binary (positive / negative) classes. BIBREF22\n[source_id=64] SST-2: Stanford Sentiment Treebank BIBREF6 . Similar to MR, but each review is provided in the form of a binary parse tree whose nodes are annotated with numeric sentiment values. For SST-2, we only consider binary (positive / negative) classes.\n[source_id=65] SST-5: Identical to SST-2, but the reviews are grouped into fine-grained (very negative, negative, neutral, positive, very positive) classes.\n[source_id=66] SUBJ: Sentences grouped as being either subjective or objective (binary classes). BIBREF23\n[source_id=67] TREC: A dataset which groups questions into six different question types (classes). BIBREF24\n[source_id=68] As a preprocessing step, we construct parse trees for the sentences in the datasets using the Stanford PCFG parser BIBREF25 . Because syntactic tags are by-products of constituency parsing, we do not need further preprocessing.\n[source_id=69] To classify the sentence given our sentence representation ( $\\check{\\mathbf {h}}_\\text{root}$ ), we use one fully-connected layer with a ReLU activation, followed by a softmax classifier. The final predicted probability distribution of the class $y$ given the sentence $w_{1:n}$ is defined as follows,\n[source_id=70] $$\\mathbf {s} = \\text{ReLU}(\\mathbf {W}_\\text{s} \\check{\\mathbf {h}}_\\text{root}+ \\mathbf {b}_\\text{s})$$   (Eq. 37)\n[source_id=71] $$p(y|w_{1:n}) = \\text{softmax}(\\mathbf {W}_\\text{c}\\mathbf {s} + \\mathbf {b}_\\text{c})$$   (Eq. 38)\n[source_id=72] where $\\textbf {s} \\in \\mathbb {R}^{d_\\text{s}}$ is the computed task-specific sentence representation for the classifier, and $\\textbf {W}_\\text{s} \\in \\mathbb {R}^{d_\\text{s} \\times d_h}$ , $\\textbf {W}_\\text{c} \\in \\mathbb {R}^{d_\\text{c} \\times d_s}$ , $\\textbf {b}_\\text{s} \\in \\mathbb {R}^{d_s}$ , $\\textbf {b}_\\text{c} \\in \\mathbb {R}^{d_c}$ are trainable parameters. As an objective function, we use the cross entropy of the predicted and true class distributions.\n[source_id=73] The results of the experiments on the five datasets are shown in table 1 . In this table, we report the test accuracy of our model and various other models on each dataset in terms of percentage. To consider the effects of random initialization, we report the best numbers obtained from each several runs with hyper-parameters fixed.\n[source_id=74] Compared with the previous syntactic tree-based models as well as other neural models, our SATA Tree-LSTM shows superior or competitive performance on all tasks. Specifically, our model achieves new state-of-the-art results within the tree-structured model class on 4 out of 5 sentence classification tasks—SST-2, SST-5, MR, and TREC. The model shows its strength, in particular, when the datasets provide phrase-level supervision to facilitate tree structure learning (i.e. SST-2, SST-5). Moreover, the numbers we report for SST-5 and TREC are competitive to the existing state-of-the-art results including ones from structurally pre-trained models such as ELMo BIBREF26 , proving our model's superiority. Note that the SATA Tree-LSTM also outperforms the recent latent tree-based model, indicating that modeling a neural model with explicit linguistic knowledge can be an attractive option.\n[source_id=75] On the other hand, a remaining concern is that our SATA Tree-LSTM is not robust to random seeds when the size of a dataset is relatively small, as tag embeddings are randomly initialized rather than relying on pre-trained ones in contrast with the case of words. From this observation, we could find out there needs a direction of research towards pre-trained tag embeddings.\n[source_id=76] To estimate the performance of our model beyond the tasks requiring only one sentence at a time, we conduct an experiment on the Stanford Natural Language Inference BIBREF34 dataset, each example of which consists of two sentences, the premise and the hypothesis. Our objective given the data is to predict the correct relationship between the two sentences among three options— contradiction, neutral, or entailment.\n[source_id=77] We use the siamese architecture to encode both the premise ( $p_{1:m}$ ) and hypothesis ( $h_{1:n}$ ) following the standard of sentence-encoding models in the literature. (Specifically, $p_{1:m}$ is encoded as $\\check{\\mathbf {h}}_\\text{root}^p \\in \\mathbb {R}^{d_h}$ and $h_{1:n}$ is encoded as $\\check{\\mathbf {h}}_\\text{root}^h \\in \\mathbb {R}^{d_h}$ with the same encoder.) Then, we leverage some heuristics BIBREF35 , followed by one fully-connected layer with a ReLU activation and a softmax classifier. Specifically,\n[source_id=78] $$\\mathbf {z} = \\left[ \\check{\\mathbf {h}}_\\text{root}^p; \\check{\\mathbf {h}}_\\text{root}^h; | \\check{\\mathbf {h}}_\\text{root}^p - \\check{\\mathbf {h}}_\\text{root}^h |; \\check{\\mathbf {h}}_\\text{root}^p \\odot \\check{\\mathbf {h}}_\\text{root}^h \\right]$$   (Eq. 41)\n[source_id=79] $$\\mathbf {s} = \\text{ReLU}(\\mathbf {W}_\\text{s} \\mathbf {z} + \\mathbf {b}_\\text{s})$$   (Eq. 42)\n[source_id=80] where $\\textbf {z} \\in \\mathbb {R}^{4d_h}$ , $\\textbf {s} \\in \\mathbb {R}^{d_s}$ are intermediate features for the classifier and $\\textbf {W}_\\text{s} \\in \\mathbb {R}^{d_\\text{s} \\times 4d_h}$ , $\\textbf {W}_\\text{c} \\in \\mathbb {R}^{d_\\text{c} \\times d_s}$ , $\\textbf {b}_\\text{s} \\in \\mathbb {R}^{d_s}$ , $\\textbf {b}_\\text{c} \\in \\mathbb {R}^{d_c}$ are again trainable parameters.\n[source_id=81] Our experimental results on the SNLI dataset are shown in table 2 . In this table, we report the test accuracy and number of trainable parameters for each model. Our SATA-LSTM again demonstrates its decent performance compared against the neural models built on both syntactic trees and latent trees, as well as the non-tree models. (Latent Syntax Tree-LSTM: BIBREF10 ( BIBREF10 ), Tree-based CNN: BIBREF35 ( BIBREF35 ), Gumbel Tree-LSTM: BIBREF11 ( BIBREF11 ), NSE: BIBREF36 ( BIBREF36 ), Reinforced Self-Attention Network: BIBREF4 ( BIBREF4 ), Residual stacked encoders: BIBREF37 ( BIBREF37 ), BiLSTM with generalized pooling: BIBREF38 ( BIBREF38 ).) Note that the number of learned parameters in our model is also comparable to other sophisticated models, showing the efficiency of our model.\n[source_id=82] Even though our model has proven its mettle, the effect of tag information seems relatively weak in the case of SNLI, which contains a large amount of data compared to the others. One possible explanation is that neural models may learn some syntactic rules from large amounts of text when the text size is large enough, reducing the necessity of external linguistic knowledge. We leave the exploration of the effectiveness of tags relative to data size for future work.\n[source_id=83] Here we go over the settings common across our models during experimentation. For more task-specific details, refer to the supplemental materials.\n[source_id=84] For our input embeddings, we used 300 dimensional 840B GloVe BIBREF39 as pre-trained word embeddings, and tag representations were randomly sampled from the uniform distribution [-0.005, 0.005]. Tag vectors are revised during training while the fine-tuning of the word embedding depends on the task. Our models were trained using the Adam BIBREF40 or Adadelta BIBREF41 optimizer, depending on task. For regularization, weight decay is added to the loss function except for SNLI following BIBREF42 ( BIBREF42 ) and Dropout BIBREF43 is also applied for the word embeddings and task-specific classifiers. Moreover, batch normalization BIBREF44 is adopted for the classifiers. As a default, all the weights in the model are initialized following BIBREF45 ( BIBREF45 ) and the biases are set to 0. The total norm of the gradients of the parameters is clipped not to be over 5 during training.\n[source_id=85] Our best models for each dataset were chosen by validation accuracy in cases where a validation set was provided as a part of the dataset. Otherwise, we perform a grid search on probable hyper-parameter settings, or run 10-fold cross-validation in cases where even a test set does not exist.",
+      "score": 1.166984811167819,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85
+      ],
+      "child_qasper_evidence_texts": [
+        "One of the most basic approaches to evaluate a sentence encoder is to measure the classification performance with the sentence representations made by the encoder. Thus, we conduct experiments on the following five datasets. (Summary statistics for the datasets are reported in the supplemental materials.)",
+        "MR: A group of movie reviews with binary (positive / negative) classes. BIBREF22",
+        "SST-2: Stanford Sentiment Treebank BIBREF6 . Similar to MR, but each review is provided in the form of a binary parse tree whose nodes are annotated with numeric sentiment values. For SST-2, we only consider binary (positive / negative) classes.",
+        "SST-5: Identical to SST-2, but the reviews are grouped into fine-grained (very negative, negative, neutral, positive, very positive) classes.",
+        "SUBJ: Sentences grouped as being either subjective or objective (binary classes). BIBREF23",
+        "TREC: A dataset which groups questions into six different question types (classes). BIBREF24",
+        "As a preprocessing step, we construct parse trees for the sentences in the datasets using the Stanford PCFG parser BIBREF25 . Because syntactic tags are by-products of constituency parsing, we do not need further preprocessing.",
+        "To classify the sentence given our sentence representation ( $\\check{\\mathbf {h}}_\\text{root}$ ), we use one fully-connected layer with a ReLU activation, followed by a softmax classifier. The final predicted probability distribution of the class $y$ given the sentence $w_{1:n}$ is defined as follows,",
+        "$$\\mathbf {s} = \\text{ReLU}(\\mathbf {W}_\\text{s} \\check{\\mathbf {h}}_\\text{root}+ \\mathbf {b}_\\text{s})$$   (Eq. 37)",
+        "$$p(y|w_{1:n}) = \\text{softmax}(\\mathbf {W}_\\text{c}\\mathbf {s} + \\mathbf {b}_\\text{c})$$   (Eq. 38)",
+        "where $\\textbf {s} \\in \\mathbb {R}^{d_\\text{s}}$ is the computed task-specific sentence representation for the classifier, and $\\textbf {W}_\\text{s} \\in \\mathbb {R}^{d_\\text{s} \\times d_h}$ , $\\textbf {W}_\\text{c} \\in \\mathbb {R}^{d_\\text{c} \\times d_s}$ , $\\textbf {b}_\\text{s} \\in \\mathbb {R}^{d_s}$ , $\\textbf {b}_\\text{c} \\in \\mathbb {R}^{d_c}$ are trainable parameters. As an objective function, we use the cross entropy of the predicted and true class distributions.",
+        "The results of the experiments on the five datasets are shown in table 1 . In this table, we report the test accuracy of our model and various other models on each dataset in terms of percentage. To consider the effects of random initialization, we report the best numbers obtained from each several runs with hyper-parameters fixed.",
+        "Compared with the previous syntactic tree-based models as well as other neural models, our SATA Tree-LSTM shows superior or competitive performance on all tasks. Specifically, our model achieves new state-of-the-art results within the tree-structured model class on 4 out of 5 sentence classification tasks—SST-2, SST-5, MR, and TREC. The model shows its strength, in particular, when the datasets provide phrase-level supervision to facilitate tree structure learning (i.e. SST-2, SST-5). Moreover, the numbers we report for SST-5 and TREC are competitive to the existing state-of-the-art results including ones from structurally pre-trained models such as ELMo BIBREF26 , proving our model's superiority. Note that the SATA Tree-LSTM also outperforms the recent latent tree-based model, indicating that modeling a neural model with explicit linguistic knowledge can be an attractive option.",
+        "On the other hand, a remaining concern is that our SATA Tree-LSTM is not robust to random seeds when the size of a dataset is relatively small, as tag embeddings are randomly initialized rather than relying on pre-trained ones in contrast with the case of words. From this observation, we could find out there needs a direction of research towards pre-trained tag embeddings.",
+        "To estimate the performance of our model beyond the tasks requiring only one sentence at a time, we conduct an experiment on the Stanford Natural Language Inference BIBREF34 dataset, each example of which consists of two sentences, the premise and the hypothesis. Our objective given the data is to predict the correct relationship between the two sentences among three options— contradiction, neutral, or entailment.",
+        "We use the siamese architecture to encode both the premise ( $p_{1:m}$ ) and hypothesis ( $h_{1:n}$ ) following the standard of sentence-encoding models in the literature. (Specifically, $p_{1:m}$ is encoded as $\\check{\\mathbf {h}}_\\text{root}^p \\in \\mathbb {R}^{d_h}$ and $h_{1:n}$ is encoded as $\\check{\\mathbf {h}}_\\text{root}^h \\in \\mathbb {R}^{d_h}$ with the same encoder.) Then, we leverage some heuristics BIBREF35 , followed by one fully-connected layer with a ReLU activation and a softmax classifier. Specifically,",
+        "$$\\mathbf {z} = \\left[ \\check{\\mathbf {h}}_\\text{root}^p; \\check{\\mathbf {h}}_\\text{root}^h; | \\check{\\mathbf {h}}_\\text{root}^p - \\check{\\mathbf {h}}_\\text{root}^h |; \\check{\\mathbf {h}}_\\text{root}^p \\odot \\check{\\mathbf {h}}_\\text{root}^h \\right]$$   (Eq. 41)",
+        "$$\\mathbf {s} = \\text{ReLU}(\\mathbf {W}_\\text{s} \\mathbf {z} + \\mathbf {b}_\\text{s})$$   (Eq. 42)",
+        "where $\\textbf {z} \\in \\mathbb {R}^{4d_h}$ , $\\textbf {s} \\in \\mathbb {R}^{d_s}$ are intermediate features for the classifier and $\\textbf {W}_\\text{s} \\in \\mathbb {R}^{d_\\text{s} \\times 4d_h}$ , $\\textbf {W}_\\text{c} \\in \\mathbb {R}^{d_\\text{c} \\times d_s}$ , $\\textbf {b}_\\text{s} \\in \\mathbb {R}^{d_s}$ , $\\textbf {b}_\\text{c} \\in \\mathbb {R}^{d_c}$ are again trainable parameters.",
+        "Our experimental results on the SNLI dataset are shown in table 2 . In this table, we report the test accuracy and number of trainable parameters for each model. Our SATA-LSTM again demonstrates its decent performance compared against the neural models built on both syntactic trees and latent trees, as well as the non-tree models. (Latent Syntax Tree-LSTM: BIBREF10 ( BIBREF10 ), Tree-based CNN: BIBREF35 ( BIBREF35 ), Gumbel Tree-LSTM: BIBREF11 ( BIBREF11 ), NSE: BIBREF36 ( BIBREF36 ), Reinforced Self-Attention Network: BIBREF4 ( BIBREF4 ), Residual stacked encoders: BIBREF37 ( BIBREF37 ), BiLSTM with generalized pooling: BIBREF38 ( BIBREF38 ).) Note that the number of learned parameters in our model is also comparable to other sophisticated models, showing the efficiency of our model.",
+        "Even though our model has proven its mettle, the effect of tag information seems relatively weak in the case of SNLI, which contains a large amount of data compared to the others. One possible explanation is that neural models may learn some syntactic rules from large amounts of text when the text size is large enough, reducing the necessity of external linguistic knowledge. We leave the exploration of the effectiveness of tags relative to data size for future work.",
+        "Here we go over the settings common across our models during experimentation. For more task-specific details, refer to the supplemental materials.",
+        "For our input embeddings, we used 300 dimensional 840B GloVe BIBREF39 as pre-trained word embeddings, and tag representations were randomly sampled from the uniform distribution [-0.005, 0.005]. Tag vectors are revised during training while the fine-tuning of the word embedding depends on the task. Our models were trained using the Adam BIBREF40 or Adadelta BIBREF41 optimizer, depending on task. For regularization, weight decay is added to the loss function except for SNLI following BIBREF42 ( BIBREF42 ) and Dropout BIBREF43 is also applied for the word embeddings and task-specific classifiers. Moreover, batch normalization BIBREF44 is adopted for the classifiers. As a default, all the weights in the model are initialized following BIBREF45 ( BIBREF45 ) and the biases are set to 0. The total norm of the gradients of the parameters is clipped not to be over 5 during training.",
+        "Our best models for each dataset were chosen by validation accuracy in cases where a validation set was provided as a part of the dataset. Otherwise, we perform a grid search on probable hyper-parameter settings, or run 10-fold cross-validation in cases where even a test set does not exist."
+      ],
+      "child_pages": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "child_sections": [
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis",
+        "Quantitative Analysis"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Quantitative Analysis",
+          0
+        ],
+        [
+          "Quantitative Analysis",
+          1
+        ],
+        [
+          "Quantitative Analysis",
+          2
+        ],
+        [
+          "Quantitative Analysis",
+          3
+        ],
+        [
+          "Quantitative Analysis",
+          4
+        ],
+        [
+          "Quantitative Analysis",
+          5
+        ],
+        [
+          "Quantitative Analysis",
+          6
+        ],
+        [
+          "Quantitative Analysis",
+          7
+        ],
+        [
+          "Quantitative Analysis",
+          8
+        ],
+        [
+          "Quantitative Analysis",
+          9
+        ],
+        [
+          "Quantitative Analysis",
+          10
+        ],
+        [
+          "Quantitative Analysis",
+          11
+        ],
+        [
+          "Quantitative Analysis",
+          12
+        ],
+        [
+          "Quantitative Analysis",
+          13
+        ],
+        [
+          "Quantitative Analysis",
+          14
+        ],
+        [
+          "Quantitative Analysis",
+          15
+        ],
+        [
+          "Quantitative Analysis",
+          16
+        ],
+        [
+          "Quantitative Analysis",
+          17
+        ],
+        [
+          "Quantitative Analysis",
+          18
+        ],
+        [
+          "Quantitative Analysis",
+          19
+        ],
+        [
+          "Quantitative Analysis",
+          20
+        ],
+        [
+          "Quantitative Analysis",
+          21
+        ],
+        [
+          "Quantitative Analysis",
+          22
+        ],
+        [
+          "Quantitative Analysis",
+          23
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Quantitative Analysis",
+      "section": "Quantitative Analysis",
+      "title_path": "Quantitative Analysis",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Model\n[source_id=18] In this section, we introduce a novel RvNN architecture, called SATA Tree-LSTM (Structure-Aware Tag Augmented Tree-LSTM). This model is similar to typical Tree-LSTMs, but provides dynamic compositionality by augmenting a separate tag-level tree-LSTM which produces structure-aware tag representations for each node in a tree. In other words, our model has two independent tree-structured modules based on the same constituency tree, one of which (word-level tree-LSTM) is responsible for constructing sentence representations given a sequence of words as usual, while the other (tag-level tree-LSTM) provides supplementary syntactic information to the former.\n[source_id=19] In section 3.1, we first review tree-LSTM architectures. Then in section 3.2, we introduce a tag-level tree-LSTM and structure-aware tag representations. In section 3.3, we discuss an additional technique to boost the performance of tree-structured models, and in section 3.4, we describe the entire architecture of our model in detail.",
+      "score": 0.5101728442197695,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        18,
+        19
+      ],
+      "child_qasper_evidence_texts": [
+        "In this section, we introduce a novel RvNN architecture, called SATA Tree-LSTM (Structure-Aware Tag Augmented Tree-LSTM). This model is similar to typical Tree-LSTMs, but provides dynamic compositionality by augmenting a separate tag-level tree-LSTM which produces structure-aware tag representations for each node in a tree. In other words, our model has two independent tree-structured modules based on the same constituency tree, one of which (word-level tree-LSTM) is responsible for constructing sentence representations given a sequence of words as usual, while the other (tag-level tree-LSTM) provides supplementary syntactic information to the former.",
+        "In section 3.1, we first review tree-LSTM architectures. Then in section 3.2, we introduce a tag-level tree-LSTM and structure-aware tag representations. In section 3.3, we discuss an additional technique to boost the performance of tree-structured models, and in section 3.4, we describe the entire architecture of our model in detail."
+      ],
+      "child_pages": [
+        3,
+        3
+      ],
+      "child_sections": [
+        "Model",
+        "Model"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Model",
+          0
+        ],
+        [
+          "Model",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Model",
+      "section": "Model",
+      "title_path": "Model",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Qualitative Analysis\n[source_id=91] In previous sections, we have numerically demonstrated that our model is effective in encouraging useful composition of semantic units. Here, we directly investigate the computed representations for each node of a tree, showing that the remarkable performance of our model is mainly due to the gradual and recursive composition of the intermediate representations on the syntactic structure.\n[source_id=92] To observe the phrase-level embeddings at a glance, we draw a scatter plot in which a point represents the corresponding intermediate representation. We utilize PCA (Principal Component Analysis) to project the representations into a two-dimensional vector space. As a target parse tree, we reuse the one seen in Figure 1 . The result is shown in Figure 4 .\n[source_id=93] From this figure, we confirm that the intermediate representations have a hierarchy in the semantic space, which is very similar to that of the parse tree. In other words, as many tree-structured models pursue, we can see the tendency of constructing the representations from the low-level (the bottom of the figure) to the high-level (the top-left and top-right of the figure), integrating the meaning of the constituents recursively. An interesting thing to note is that the final sentence representation is near that of the phrase `, the stories are quietly moving.' rather than that of `Despite the film's shortcomings', catching the main meaning of the sentence.",
+      "score": 0.4789031760950601,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        91,
+        92,
+        93
+      ],
+      "child_qasper_evidence_texts": [
+        "In previous sections, we have numerically demonstrated that our model is effective in encouraging useful composition of semantic units. Here, we directly investigate the computed representations for each node of a tree, showing that the remarkable performance of our model is mainly due to the gradual and recursive composition of the intermediate representations on the syntactic structure.",
+        "To observe the phrase-level embeddings at a glance, we draw a scatter plot in which a point represents the corresponding intermediate representation. We utilize PCA (Principal Component Analysis) to project the representations into a two-dimensional vector space. As a target parse tree, we reuse the one seen in Figure 1 . The result is shown in Figure 4 .",
+        "From this figure, we confirm that the intermediate representations have a hierarchy in the semantic space, which is very similar to that of the parse tree. In other words, as many tree-structured models pursue, we can see the tendency of constructing the representations from the low-level (the bottom of the figure) to the high-level (the top-left and top-right of the figure), integrating the meaning of the constituents recursively. An interesting thing to note is that the final sentence representation is near that of the phrase `, the stories are quietly moving.' rather than that of `Despite the film's shortcomings', catching the main meaning of the sentence."
+      ],
+      "child_pages": [
+        10,
+        10,
+        10
+      ],
+      "child_sections": [
+        "Qualitative Analysis",
+        "Qualitative Analysis",
+        "Qualitative Analysis"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Qualitative Analysis",
+          0
+        ],
+        [
+          "Qualitative Analysis",
+          1
+        ],
+        [
+          "Qualitative Analysis",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Qualitative Analysis",
+      "section": "Qualitative Analysis",
+      "title_path": "Qualitative Analysis",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] One of the most fundamental topics in natural language processing is how best to derive high-level representations from constituent parts, as natural language meanings are a function of their constituent parts. How best to construct a sentence representation from distributed word embeddings is an example domain of this larger issue. Even though sequential neural models such as recurrent neural networks (RNN) BIBREF0 and their variants including Long Short-Term Memory (LSTM) BIBREF1 and Gated Recurrent Unit (GRU) BIBREF2 have become the de-facto standard for condensing sentence-level information from a sequence of words into a fixed vector, there have been many lines of research towards better sentence representation using other neural architectures, e.g. convolutional neural networks (CNN) BIBREF3 or self-attention based models BIBREF4 .\n[source_id=5] From a linguistic point of view, the underlying tree structure—as expressed by its constituency and dependency trees—of a sentence is an integral part of its meaning. Inspired by this fact, some recursive neural network (RvNN) models are designed to reflect the syntactic tree structure, achieving impressive results on several sentence-level tasks such as sentiment analysis BIBREF5 , BIBREF6 , machine translation BIBREF7 , natural language inference BIBREF8 , and discourse relation classification BIBREF9 .\n[source_id=6] However, some recent works have BIBREF10 , BIBREF11 proposed latent tree models, which learn to construct task-specific tree structures without explicit supervision, bringing into question the value of linguistically-motivated recursive neural models. Witnessing the surprising performance of the latent tree models on some sentence-level tasks, there arises a natural question: Are linguistic tree structures the optimal way of composing sentence representations for NLP tasks?\n[source_id=7] In this paper, we demonstrate that linguistic priors are in fact useful for devising effective neural models for sentence representations, showing that our novel architecture based on constituency trees and their tag information obtains superior performance on several sentence-level tasks, including sentiment analysis and natural language inference.\n[source_id=8] A chief novelty of our approach is that we introduce a small separate tag-level tree-LSTM to control the composition function of the existing word-level tree-LSTM, which is in charge of extracting helpful syntactic signals for meaningful semantic composition of constituents by considering both the structures and linguistic tags of constituency trees simultaneously. In addition, we demonstrate that applying a typical LSTM to preprocess the leaf nodes of a tree-LSTM greatly improves the performance of the tree models. Moreover, we propose a clustered tag set to replace the existing tags on the assumption that the original syntactic tags are too fined-grained to be useful in neural models.\n[source_id=9] In short, our contributions in this work are as follows:",
+      "score": 0.40273389930503434,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "child_qasper_evidence_texts": [
+        "One of the most fundamental topics in natural language processing is how best to derive high-level representations from constituent parts, as natural language meanings are a function of their constituent parts. How best to construct a sentence representation from distributed word embeddings is an example domain of this larger issue. Even though sequential neural models such as recurrent neural networks (RNN) BIBREF0 and their variants including Long Short-Term Memory (LSTM) BIBREF1 and Gated Recurrent Unit (GRU) BIBREF2 have become the de-facto standard for condensing sentence-level information from a sequence of words into a fixed vector, there have been many lines of research towards better sentence representation using other neural architectures, e.g. convolutional neural networks (CNN) BIBREF3 or self-attention based models BIBREF4 .",
+        "From a linguistic point of view, the underlying tree structure—as expressed by its constituency and dependency trees—of a sentence is an integral part of its meaning. Inspired by this fact, some recursive neural network (RvNN) models are designed to reflect the syntactic tree structure, achieving impressive results on several sentence-level tasks such as sentiment analysis BIBREF5 , BIBREF6 , machine translation BIBREF7 , natural language inference BIBREF8 , and discourse relation classification BIBREF9 .",
+        "However, some recent works have BIBREF10 , BIBREF11 proposed latent tree models, which learn to construct task-specific tree structures without explicit supervision, bringing into question the value of linguistically-motivated recursive neural models. Witnessing the surprising performance of the latent tree models on some sentence-level tasks, there arises a natural question: Are linguistic tree structures the optimal way of composing sentence representations for NLP tasks?",
+        "In this paper, we demonstrate that linguistic priors are in fact useful for devising effective neural models for sentence representations, showing that our novel architecture based on constituency trees and their tag information obtains superior performance on several sentence-level tasks, including sentiment analysis and natural language inference.",
+        "A chief novelty of our approach is that we introduce a small separate tag-level tree-LSTM to control the composition function of the existing word-level tree-LSTM, which is in charge of extracting helpful syntactic signals for meaningful semantic composition of constituents by considering both the structures and linguistic tags of constituency trees simultaneously. In addition, we demonstrate that applying a typical LSTM to preprocess the leaf nodes of a tree-LSTM greatly improves the performance of the tree models. Moreover, we propose a clustered tag set to replace the existing tags on the assumption that the original syntactic tags are too fined-grained to be useful in neural models.",
+        "In short, our contributions in this work are as follows:"
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Structure-aware Tag Representation\n[source_id=29] In most previous works using linguistic tag information BIBREF16 , BIBREF9 , BIBREF18 , tags are usually represented as simple low-dimensional dense vectors, similar to word embeddings. This approach seems reasonable in the case of POS tags that are attached to the corresponding words, but phrase-level constituent tags (e.g. NP, VP, ADJP) vary greatly in size and shape, making them less amenable to uniform treatment. For instance, even the same phrase tags within different syntactic contexts can vary greatly in size and internal structure, as the case of NP tags in Figure 1 shows. Here, the NP consisting of DT[the]-NN[stories] has a different internal structure than the NP consisting of NP[the film 's]-NNS[shortcomings].\n[source_id=30] One way of deriving structure-aware tag representations from the original tag embeddings is to introduce a separate tag-level tree-LSTM which accepts the typical tag embeddings at each node of a tree and outputs the computed structure-aware tag representations for the nodes. Note that the module concentrates on extracting useful syntactic features by considering only the tags and structures of the trees, excluding word information.\n[source_id=31] Formally, we denote a tag embedding for the tag attached to each node in a tree as $\\textbf {e} \\in \\mathbb {R}^{d_\\text{T}}$ . Then, the function of each cell in the tag tree-LSTM is defined in the following way. Leaf nodes are defined by the following:\n[source_id=32] $$ \n\\begin{bmatrix}\n\\hat{\\mathbf {c}} \\\\\n\\hat{\\mathbf {h}} \\\\\n\\end{bmatrix}\n= \\tanh {\\left(\\mathbf {U}_\\text{T} \\mathbf {e} + \\mathbf {a}_\\text{T}\\right)}$$   (Eq. 13)\n[source_id=33] while non-leaf nodes are defined by the following:\n[source_id=34] $$ \n\\begin{bmatrix}\n\\hat{\\mathbf {i}} \\\\\n\\hat{\\mathbf {f}}_l \\\\\n\\hat{\\mathbf {f}}_r \\\\\n\\hat{\\mathbf {o}} \\\\\n\\hat{\\mathbf {g}}\n\\end{bmatrix}\n=\n\\begin{bmatrix}\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\tanh \\end{bmatrix}\n\\Bigg ( \\mathbf {W_\\text{T}}\n\\begin{bmatrix}\n\\hat{\\mathbf {h}}_l \\\\\n\\hat{\\mathbf {h}}_r \\\\\n\\mathbf {e} \\\\\n\\end{bmatrix}\n+ \\mathbf {b}_\\text{T} \\Bigg )$$   (Eq. 14)\n[source_id=35] $$ \n\\hat{\\mathbf {c}} = \\hat{\\mathbf {f}}_l \\odot \\hat{\\mathbf {c}}_l + \\hat{\\mathbf {f}}_r \\odot \\hat{\\mathbf {c}}_r + \\hat{\\mathbf {i}} \\odot \\hat{\\mathbf {g}}\\\\$$   (Eq. 15)\n[source_id=36] where $\\hat{\\mathbf {h}}, \\hat{\\mathbf {c}} \\in \\mathbb {R}^{d_\\text{T}}$ represent the hidden state and cell state of each node in the tag tree-LSTM. We regard the hidden state ( $\\hat{\\mathbf {h}}$ ) as a structure-aware tag representation for the node. $ \\mathbf {U}_\\text{T} \\in \\mathbb {R}^{2d_\\text{T} \\times d_\\text{T}}, \\textbf {a}_\\text{T} \\in \\mathbb {R}^{2d_\\text{T}}, \\mathbf {W}_\\text{T} \\in \\mathbb {R}^{5d_\\text{T} \\times 3d_\\text{T}}$ , and $\\mathbf {b}_\\text{T} \\in \\mathbb {R}^{5d_\\text{T}}$ are trainable parameters. The rest of the notation follows equations 8 , 9 , and 10 . In case of leaf nodes, the states are computed by a simple non-linear transformation. Meanwhile, the composition function in a non-leaf node absorbs the tag embedding ( $\\mathbf {e}$ ) as an additional input as well as the hidden states of the two children nodes. The benefit of revising tag representations according to the internal structure is that the derived embedding is a function of the corresponding makeup of the node, rather than a monolithic, categorical tag.\n[source_id=37] With regard to the tags themselves, we conjecture that the taxonomy of the tags currently in use in many NLP systems is too complex to be utilized effectively in deep neural models, considering the specificity of many tag sets and the limited amount of data with which to train. Thus, we cluster POS (word-level) tags into 12 groups following the universal POS tagset BIBREF20 and phrase-level tags into 11 groups according to criteria analogous to the case of words, resulting in 23 tag categories in total. In this work, we use the revised coarse-grained tags instead of the original ones. For more details, we refer readers to the supplemental materials.",
+      "score": 0.34418919969327905,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37
+      ],
+      "child_qasper_evidence_texts": [
+        "In most previous works using linguistic tag information BIBREF16 , BIBREF9 , BIBREF18 , tags are usually represented as simple low-dimensional dense vectors, similar to word embeddings. This approach seems reasonable in the case of POS tags that are attached to the corresponding words, but phrase-level constituent tags (e.g. NP, VP, ADJP) vary greatly in size and shape, making them less amenable to uniform treatment. For instance, even the same phrase tags within different syntactic contexts can vary greatly in size and internal structure, as the case of NP tags in Figure 1 shows. Here, the NP consisting of DT[the]-NN[stories] has a different internal structure than the NP consisting of NP[the film 's]-NNS[shortcomings].",
+        "One way of deriving structure-aware tag representations from the original tag embeddings is to introduce a separate tag-level tree-LSTM which accepts the typical tag embeddings at each node of a tree and outputs the computed structure-aware tag representations for the nodes. Note that the module concentrates on extracting useful syntactic features by considering only the tags and structures of the trees, excluding word information.",
+        "Formally, we denote a tag embedding for the tag attached to each node in a tree as $\\textbf {e} \\in \\mathbb {R}^{d_\\text{T}}$ . Then, the function of each cell in the tag tree-LSTM is defined in the following way. Leaf nodes are defined by the following:",
+        "$$ \n\\begin{bmatrix}\n\\hat{\\mathbf {c}} \\\\\n\\hat{\\mathbf {h}} \\\\\n\\end{bmatrix}\n= \\tanh {\\left(\\mathbf {U}_\\text{T} \\mathbf {e} + \\mathbf {a}_\\text{T}\\right)}$$   (Eq. 13)",
+        "while non-leaf nodes are defined by the following:",
+        "$$ \n\\begin{bmatrix}\n\\hat{\\mathbf {i}} \\\\\n\\hat{\\mathbf {f}}_l \\\\\n\\hat{\\mathbf {f}}_r \\\\\n\\hat{\\mathbf {o}} \\\\\n\\hat{\\mathbf {g}}\n\\end{bmatrix}\n=\n\\begin{bmatrix}\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\tanh \\end{bmatrix}\n\\Bigg ( \\mathbf {W_\\text{T}}\n\\begin{bmatrix}\n\\hat{\\mathbf {h}}_l \\\\\n\\hat{\\mathbf {h}}_r \\\\\n\\mathbf {e} \\\\\n\\end{bmatrix}\n+ \\mathbf {b}_\\text{T} \\Bigg )$$   (Eq. 14)",
+        "$$ \n\\hat{\\mathbf {c}} = \\hat{\\mathbf {f}}_l \\odot \\hat{\\mathbf {c}}_l + \\hat{\\mathbf {f}}_r \\odot \\hat{\\mathbf {c}}_r + \\hat{\\mathbf {i}} \\odot \\hat{\\mathbf {g}}\\\\$$   (Eq. 15)",
+        "where $\\hat{\\mathbf {h}}, \\hat{\\mathbf {c}} \\in \\mathbb {R}^{d_\\text{T}}$ represent the hidden state and cell state of each node in the tag tree-LSTM. We regard the hidden state ( $\\hat{\\mathbf {h}}$ ) as a structure-aware tag representation for the node. $ \\mathbf {U}_\\text{T} \\in \\mathbb {R}^{2d_\\text{T} \\times d_\\text{T}}, \\textbf {a}_\\text{T} \\in \\mathbb {R}^{2d_\\text{T}}, \\mathbf {W}_\\text{T} \\in \\mathbb {R}^{5d_\\text{T} \\times 3d_\\text{T}}$ , and $\\mathbf {b}_\\text{T} \\in \\mathbb {R}^{5d_\\text{T}}$ are trainable parameters. The rest of the notation follows equations 8 , 9 , and 10 . In case of leaf nodes, the states are computed by a simple non-linear transformation. Meanwhile, the composition function in a non-leaf node absorbs the tag embedding ( $\\mathbf {e}$ ) as an additional input as well as the hidden states of the two children nodes. The benefit of revising tag representations according to the internal structure is that the derived embedding is a function of the corresponding makeup of the node, rather than a monolithic, categorical tag.",
+        "With regard to the tags themselves, we conjecture that the taxonomy of the tags currently in use in many NLP systems is too complex to be utilized effectively in deep neural models, considering the specificity of many tag sets and the limited amount of data with which to train. Thus, we cluster POS (word-level) tags into 12 groups following the universal POS tagset BIBREF20 and phrase-level tags into 11 groups according to criteria analogous to the case of words, resulting in 23 tag categories in total. In this work, we use the revised coarse-grained tags instead of the original ones. For more details, we refer readers to the supplemental materials."
+      ],
+      "child_pages": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "Structure-aware Tag Representation",
+        "Structure-aware Tag Representation",
+        "Structure-aware Tag Representation",
+        "Structure-aware Tag Representation",
+        "Structure-aware Tag Representation",
+        "Structure-aware Tag Representation",
+        "Structure-aware Tag Representation",
+        "Structure-aware Tag Representation",
+        "Structure-aware Tag Representation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Structure-aware Tag Representation",
+          0
+        ],
+        [
+          "Structure-aware Tag Representation",
+          1
+        ],
+        [
+          "Structure-aware Tag Representation",
+          2
+        ],
+        [
+          "Structure-aware Tag Representation",
+          3
+        ],
+        [
+          "Structure-aware Tag Representation",
+          4
+        ],
+        [
+          "Structure-aware Tag Representation",
+          5
+        ],
+        [
+          "Structure-aware Tag Representation",
+          6
+        ],
+        [
+          "Structure-aware Tag Representation",
+          7
+        ],
+        [
+          "Structure-aware Tag Representation",
+          8
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Structure-aware Tag Representation",
+      "section": "Structure-aware Tag Representation",
+      "title_path": "Structure-aware Tag Representation",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 16,
+      "content": "Finally, some recent works BIBREF10 , BIBREF11 have proposed latent tree-structured models that learn how to formulate tree structures from only sequences of tokens, without the aid of syntactic trees or linguistic information. The latent tree models have the advantage of being able to find the optimized task-specific order of composition rather than a sequential or syntactic one. In experiments, we compare our model with not only syntactic tree-based models but also latent tree models, demonstrating that modeling with explicit linguistic knowledge can be an attractive option.",
+      "qasper_evidence_text": "Finally, some recent works BIBREF10 , BIBREF11 have proposed latent tree-structured models that learn how to formulate tree structures from only sequences of tokens, without the aid of syntactic trees or linguistic information. The latent tree models have the advantage of being able to find the optimized task-specific order of composition rather than a sequential or syntactic one. In experiments, we compare our model with not only syntactic tree-based models but also latent tree models, demonstrating that modeling with explicit linguistic knowledge can be an attractive option.",
+      "source_node_id": 16,
+      "node_id": 16,
+      "paragraph_id": 16,
+      "evidence_id": 16,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_2",
+      "rank": 1,
+      "score": 3.879445557962506,
+      "block_type": "paragraph",
+      "page": 2,
+      "section_id": "Related Work",
+      "section": "Related Work",
+      "title": "Related Work",
+      "hotpot_title": "Related Work",
+      "sent_id": 5,
+      "hotpot_sent_id": 5,
+      "supporting_rank": 1
+    },
+    {
+      "id": 81,
+      "content": "Our experimental results on the SNLI dataset are shown in table 2 . In this table, we report the test accuracy and number of trainable parameters for each model. Our SATA-LSTM again demonstrates its decent performance compared against the neural models built on both syntactic trees and latent trees, as well as the non-tree models. (Latent Syntax Tree-LSTM: BIBREF10 ( BIBREF10 ), Tree-based CNN: BIBREF35 ( BIBREF35 ), Gumbel Tree-LSTM: BIBREF11 ( BIBREF11 ), NSE: BIBREF36 ( BIBREF36 ), Reinforced Self-Attention Network: BIBREF4 ( BIBREF4 ), Residual stacked encoders: BIBREF37 ( BIBREF37 ), BiLSTM with generalized pooling: BIBREF38 ( BIBREF38 ).) Note that the number of learned parameters in our model is also comparable to other sophisticated models, showing the efficiency of our model.",
+      "qasper_evidence_text": "Our experimental results on the SNLI dataset are shown in table 2 . In this table, we report the test accuracy and number of trainable parameters for each model. Our SATA-LSTM again demonstrates its decent performance compared against the neural models built on both syntactic trees and latent trees, as well as the non-tree models. (Latent Syntax Tree-LSTM: BIBREF10 ( BIBREF10 ), Tree-based CNN: BIBREF35 ( BIBREF35 ), Gumbel Tree-LSTM: BIBREF11 ( BIBREF11 ), NSE: BIBREF36 ( BIBREF36 ), Reinforced Self-Attention Network: BIBREF4 ( BIBREF4 ), Residual stacked encoders: BIBREF37 ( BIBREF37 ), BiLSTM with generalized pooling: BIBREF38 ( BIBREF38 ).) Note that the number of learned parameters in our model is also comparable to other sophisticated models, showing the efficiency of our model.",
+      "source_node_id": 81,
+      "node_id": 81,
+      "paragraph_id": 81,
+      "evidence_id": 81,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_8",
+      "rank": 4,
+      "score": 1.166984811167819,
+      "block_type": "paragraph",
+      "page": 8,
+      "section_id": "Quantitative Analysis",
+      "section": "Quantitative Analysis",
+      "title": "Quantitative Analysis",
+      "hotpot_title": "Quantitative Analysis",
+      "sent_id": 19,
+      "hotpot_sent_id": 19,
+      "supporting_rank": 2
+    }
+  ],
+  "supporting_block_ids": [
+    16,
+    81
+  ]
+}

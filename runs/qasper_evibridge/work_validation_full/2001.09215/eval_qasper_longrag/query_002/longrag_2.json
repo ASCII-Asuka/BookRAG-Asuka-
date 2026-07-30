@@ -1,0 +1,97 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Proposed Methodology\n[source_id=7] We aimed to mimic the presence of sparse/noisy content distribution, mandating the need to curate a novel dataset via specific lexicons. We scraped 500 random posts from recognized transport forum. A pool of 50 uni/bi-grams was created based on tf-idf representations, extracted from the posts, which was further pruned by annotators. Querying posts on Twitter with extracted lexicons led to a collection of $19,300$ tweets. In order to have lexical diversity, we added 2500 randomly sampled tweets to our dataset. In spite of the sparse nature of these posts, the lexical characteristics act as information cues.\n[source_id=8] Figure FIGREF4 pictorially represents our methodology. Our approach required an initial set of informative tweets for which we employed two human annotators annotating a random sub-sample of the original dataset. From the 1500 samples, 326 were marked as informative and 1174 as non informative ($\\kappa =0.81$), discriminated on this criteria: Is the tweet addressing any complaint or raising grievances about modes of transport or services/ events associated with transportation such as traffic; public or private transport?. An example tweet marked as informative: No, metro fares will be reduced ???, but proper fare structure needs to presented right, it's bad !!!.\n[source_id=9] We utilized tf-idf for the identification of initial seed phrases from the curated set of informative tweets. 50 terms having the highest tf-idf scores were passed through the complete dataset and based on sub-string match, the transport relevant tweets were identified. The redundant tweets were filtered based on the cosine similarity score. Implicit information indicators were identified based on domain relevance score, a metric used to gauge the coverage of n-gram (1,2,3) when evaluated against a randomly created pool of posts.\n[source_id=10] We collected a pool of 5000 randomly sampled tweets different from the data collection period. The rationale behind having such a metric was to discard commonly occurring n-grams normalized by random noise and include ones which are of lexical importance. We used terms associated with high domain relevance score (threshold determined experimentally) as seed phrases for the next set of iterations. The growing dictionary augments the collection process. The process ran for 4 iterations providing us 7200 transport relevant tweets as no new lexicons were identified. In order to identify linguistic signals associated with the complaint posts, we randomly sampled a set of 2000 tweets which was used as training set, manually annotated into distinct labels: complaint relevant (702) and complaint non-relevant (1298) ($\\kappa =0.79$). We employed these features on our dataset.\n[source_id=11] Linguistic markers. To capture linguistic aspects of complaints, we utilized Bag of Words, count of POS tags and Word2vec clusters.\n[source_id=12] Sentiment markers. We used quantified score based on the ratio of tokens mentioned in the following lexicons: MPQA, NRC, VADER and Stanford.\n[source_id=13] Information specific markers. These account for a set of handcrafted features associated with complaint, we used the stated markers (a) Text-Meta Data, this includes the count of URL's, hashtags, user mentions, special symbols and user mentions, used to enhance retweet impact; (b) Request Identification, we employed the model presented in BIBREF3 to identify if a specific tweet assertion is a request; (c) Intensifiers, we make use of feature set derived from the number of words starting with capital letters and the repetition of special symbols (exclamation, questions marks) within the same post; (d) Politeness Markers, we utilize the politeness score of the tweet extracted from the model presented in BIBREF3; (e) Pronoun Variation, these have the ability to reveal the personal involvement or intensify involvement. We utilize the frequency of pronoun types $\\lbrace \\textit {first, second, third, demonstrative and indefinite}$} using pre-defined dictionaries.\n[source_id=14] From the pool of 7200 transport relevant tweets, we sampled 3500 tweets which were used as the testing set. The results are reported in TableTABREF5 with 10 fold cross-validation. With increasing the number of iterations, the pool of seed phrases gets refined and augments the selection of transport relevant tweets. The proposed pipeline is tailored to identify complaint relevant tweets in a noisy scenario.",
+  "score": 1.203829028490931,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "child_qasper_evidence_texts": [
+    "We aimed to mimic the presence of sparse/noisy content distribution, mandating the need to curate a novel dataset via specific lexicons. We scraped 500 random posts from recognized transport forum. A pool of 50 uni/bi-grams was created based on tf-idf representations, extracted from the posts, which was further pruned by annotators. Querying posts on Twitter with extracted lexicons led to a collection of $19,300$ tweets. In order to have lexical diversity, we added 2500 randomly sampled tweets to our dataset. In spite of the sparse nature of these posts, the lexical characteristics act as information cues.",
+    "Figure FIGREF4 pictorially represents our methodology. Our approach required an initial set of informative tweets for which we employed two human annotators annotating a random sub-sample of the original dataset. From the 1500 samples, 326 were marked as informative and 1174 as non informative ($\\kappa =0.81$), discriminated on this criteria: Is the tweet addressing any complaint or raising grievances about modes of transport or services/ events associated with transportation such as traffic; public or private transport?. An example tweet marked as informative: No, metro fares will be reduced ???, but proper fare structure needs to presented right, it's bad !!!.",
+    "We utilized tf-idf for the identification of initial seed phrases from the curated set of informative tweets. 50 terms having the highest tf-idf scores were passed through the complete dataset and based on sub-string match, the transport relevant tweets were identified. The redundant tweets were filtered based on the cosine similarity score. Implicit information indicators were identified based on domain relevance score, a metric used to gauge the coverage of n-gram (1,2,3) when evaluated against a randomly created pool of posts.",
+    "We collected a pool of 5000 randomly sampled tweets different from the data collection period. The rationale behind having such a metric was to discard commonly occurring n-grams normalized by random noise and include ones which are of lexical importance. We used terms associated with high domain relevance score (threshold determined experimentally) as seed phrases for the next set of iterations. The growing dictionary augments the collection process. The process ran for 4 iterations providing us 7200 transport relevant tweets as no new lexicons were identified. In order to identify linguistic signals associated with the complaint posts, we randomly sampled a set of 2000 tweets which was used as training set, manually annotated into distinct labels: complaint relevant (702) and complaint non-relevant (1298) ($\\kappa =0.79$). We employed these features on our dataset.",
+    "Linguistic markers. To capture linguistic aspects of complaints, we utilized Bag of Words, count of POS tags and Word2vec clusters.",
+    "Sentiment markers. We used quantified score based on the ratio of tokens mentioned in the following lexicons: MPQA, NRC, VADER and Stanford.",
+    "Information specific markers. These account for a set of handcrafted features associated with complaint, we used the stated markers (a) Text-Meta Data, this includes the count of URL's, hashtags, user mentions, special symbols and user mentions, used to enhance retweet impact; (b) Request Identification, we employed the model presented in BIBREF3 to identify if a specific tweet assertion is a request; (c) Intensifiers, we make use of feature set derived from the number of words starting with capital letters and the repetition of special symbols (exclamation, questions marks) within the same post; (d) Politeness Markers, we utilize the politeness score of the tweet extracted from the model presented in BIBREF3; (e) Pronoun Variation, these have the ability to reveal the personal involvement or intensify involvement. We utilize the frequency of pronoun types $\\lbrace \\textit {first, second, third, demonstrative and indefinite}$} using pre-defined dictionaries.",
+    "From the pool of 7200 transport relevant tweets, we sampled 3500 tweets which were used as the testing set. The results are reported in TableTABREF5 with 10 fold cross-validation. With increasing the number of iterations, the pool of seed phrases gets refined and augments the selection of transport relevant tweets. The proposed pipeline is tailored to identify complaint relevant tweets in a noisy scenario."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Proposed Methodology",
+    "Proposed Methodology",
+    "Proposed Methodology",
+    "Proposed Methodology",
+    "Proposed Methodology",
+    "Proposed Methodology",
+    "Proposed Methodology",
+    "Proposed Methodology"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Proposed Methodology",
+      0
+    ],
+    [
+      "Proposed Methodology",
+      1
+    ],
+    [
+      "Proposed Methodology",
+      2
+    ],
+    [
+      "Proposed Methodology",
+      3
+    ],
+    [
+      "Proposed Methodology",
+      4
+    ],
+    [
+      "Proposed Methodology",
+      5
+    ],
+    [
+      "Proposed Methodology",
+      6
+    ],
+    [
+      "Proposed Methodology",
+      7
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Proposed Methodology",
+  "section": "Proposed Methodology",
+  "title_path": "Proposed Methodology",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,889 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_2",
+      "content": "[Section] Related work\n[source_id=13] ELMo contextual word representations are learned in an unsupervised way through language modelling BIBREF0. The general architecture consists of a two-layer BiLSTM on top of a convolutional layer which takes character sequences as its input. Since the model uses fully character-based token representations, it avoids the problem of out-of-vocabulary words. Because of this, the authors explicitly recommend not to use any normalisation except tokenization for the input text. However, as we show below, while this is true for English, for other languages feeding ELMo with lemmas instead of raw tokens can improve WSD performance.\n[source_id=14] Word sense disambiguation or WSD BIBREF4 is the NLP task consisting of choosing a word sense from a pre-defined sense inventory, given the context in which the word is used. WSD fits well into our aim to intrinsically evaluate ELMo models, since solving the problem of polysemy and homonymy was one of the original promises of contextualised embeddings: their primary difference from the previous generation of word embedding models is that contextualised approaches generate different representations for homographs depending on the context. We use two lexical sample WSD test sets, further described in Section SECREF4.",
+      "score": 3.302378895060955,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        13,
+        14
+      ],
+      "child_qasper_evidence_texts": [
+        "ELMo contextual word representations are learned in an unsupervised way through language modelling BIBREF0. The general architecture consists of a two-layer BiLSTM on top of a convolutional layer which takes character sequences as its input. Since the model uses fully character-based token representations, it avoids the problem of out-of-vocabulary words. Because of this, the authors explicitly recommend not to use any normalisation except tokenization for the input text. However, as we show below, while this is true for English, for other languages feeding ELMo with lemmas instead of raw tokens can improve WSD performance.",
+        "Word sense disambiguation or WSD BIBREF4 is the NLP task consisting of choosing a word sense from a pre-defined sense inventory, given the context in which the word is used. WSD fits well into our aim to intrinsically evaluate ELMo models, since solving the problem of polysemy and homonymy was one of the original promises of contextualised embeddings: their primary difference from the previous generation of word embedding models is that contextualised approaches generate different representations for homographs depending on the context. We use two lexical sample WSD test sets, further described in Section SECREF4."
+      ],
+      "child_pages": [
+        2,
+        2
+      ],
+      "child_sections": [
+        "Related work",
+        "Related work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related work",
+          0
+        ],
+        [
+          "Related work",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Related work",
+      "section": "Related work",
+      "title_path": "Related work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] We critically evaluate the widespread assumption that deep learning NLP models do not require lemmatized input. To test this, we trained versions of contextualised word embedding ELMo models on raw tokenized corpora and on the corpora with word tokens replaced by their lemmas. Then, these models were evaluated on the word sense disambiguation task. This was done for the English and Russian languages.  ::: The experiments showed that while lemmatization is indeed not necessary for English, the situation is different for Russian. It seems that for rich-morphology languages, using lemmatized training and testing data yields small but consistent improvements: at least for word sense disambiguation. This means that the decisions about text pre-processing before training ELMo should consider the linguistic nature of the language in question.",
+      "score": 3.1876630005324347,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "We critically evaluate the widespread assumption that deep learning NLP models do not require lemmatized input. To test this, we trained versions of contextualised word embedding ELMo models on raw tokenized corpora and on the corpora with word tokens replaced by their lemmas. Then, these models were evaluated on the word sense disambiguation task. This was done for the English and Russian languages.  ::: The experiments showed that while lemmatization is indeed not necessary for English, the situation is different for Russian. It seems that for rich-morphology languages, using lemmatized training and testing data yields small but consistent improvements: at least for word sense disambiguation. This means that the decisions about text pre-processing before training ELMo should consider the linguistic nature of the language in question."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Conclusion\n[source_id=72] We evaluated how the ability of ELMo contextualised word embedding models to disambiguate word senses depends on the nature of the training data. In particular, we compared the models trained on raw tokenized corpora and those trained on the corpora with word tokens replaced by their normal forms (lemmas). The models we trained are publicly available via the NLPL word embeddings repository BIBREF3.\n[source_id=73] In the majority of research papers on deep learning approaches to NLP, it is assumed that lemmatization is not necessary, especially when using powerful contextualised embeddings. Our experiments show that this is indeed true for languages with simple morphology (like English). However, for rich-morphology languages (like Russian), using lemmatized training data yields small but consistent improvements in the word sense disambiguation task. These improvements are not observed for rare words which lack inflected forms; this further supports our hypothesis that better WSD scores of lemma-based models are related to them better handling multiple word forms in morphology-rich languages.\n[source_id=74] Of course, lemmatization is by all means not a silver bullet. In other tasks, where inflectional properties of words are important, it can even hurt the performance. But this is true for any NLP systems, not only deep learning based ones.\n[source_id=75] The take-home message here is twofold: first, text pre-processing still matters for contemporary deep learning algorithms. Their impressive learning abilities do not always allow them to infer normalisation rules themselves, from simply optimising the language modelling task. Second, the nature of language at hand matters as well, and differences in this nature can result in different decisions being optimal or sub-optimal at the stage of deep learning models training. The simple truth `English is not representative of all languages on Earth' still holds here.\n[source_id=76] In the future, we plan to extend our work by including more languages into the analysis. Using Russian and English allowed us to hypothesise about the importance of morphological character of a language. But we only scratched the surface of the linguistic diversity. To verify this claim, it is necessary to analyse more strongly inflected languages like Russian as well as more weakly inflected (analytical) languages similar to English. This will help to find out if the inflection differences are important for training deep learning models across human languages in general.",
+      "score": 3.183351940224536,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        72,
+        73,
+        74,
+        75,
+        76
+      ],
+      "child_qasper_evidence_texts": [
+        "We evaluated how the ability of ELMo contextualised word embedding models to disambiguate word senses depends on the nature of the training data. In particular, we compared the models trained on raw tokenized corpora and those trained on the corpora with word tokens replaced by their normal forms (lemmas). The models we trained are publicly available via the NLPL word embeddings repository BIBREF3.",
+        "In the majority of research papers on deep learning approaches to NLP, it is assumed that lemmatization is not necessary, especially when using powerful contextualised embeddings. Our experiments show that this is indeed true for languages with simple morphology (like English). However, for rich-morphology languages (like Russian), using lemmatized training data yields small but consistent improvements in the word sense disambiguation task. These improvements are not observed for rare words which lack inflected forms; this further supports our hypothesis that better WSD scores of lemma-based models are related to them better handling multiple word forms in morphology-rich languages.",
+        "Of course, lemmatization is by all means not a silver bullet. In other tasks, where inflectional properties of words are important, it can even hurt the performance. But this is true for any NLP systems, not only deep learning based ones.",
+        "The take-home message here is twofold: first, text pre-processing still matters for contemporary deep learning algorithms. Their impressive learning abilities do not always allow them to infer normalisation rules themselves, from simply optimising the language modelling task. Second, the nature of language at hand matters as well, and differences in this nature can result in different decisions being optimal or sub-optimal at the stage of deep learning models training. The simple truth `English is not representative of all languages on Earth' still holds here.",
+        "In the future, we plan to extend our work by including more languages into the analysis. Using Russian and English allowed us to hypothesise about the importance of morphological character of a language. But we only scratched the surface of the linguistic diversity. To verify this claim, it is necessary to analyse more strongly inflected languages like Russian as well as more weakly inflected (analytical) languages similar to English. This will help to find out if the inflection differences are important for training deep learning models across human languages in general."
+      ],
+      "child_pages": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Conclusion",
+        "Conclusion",
+        "Conclusion",
+        "Conclusion",
+        "Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion",
+          0
+        ],
+        [
+          "Conclusion",
+          1
+        ],
+        [
+          "Conclusion",
+          2
+        ],
+        [
+          "Conclusion",
+          3
+        ],
+        [
+          "Conclusion",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Word sense disambiguation test sets\n[source_id=20] We used two WSD datasets for evaluation:\n[source_id=21] Senseval-3 for English BIBREF6\n[source_id=22] RUSSE'18 for Russian BIBREF7\n[source_id=23] The Senseval-3 dataset consists of lexical samples for nouns, verbs and adjectives; we used only noun target words:\n[source_id=24] argument\n[source_id=25] arm\n[source_id=26] atmosphere\n[source_id=27] audience\n[source_id=28] bank\n[source_id=29] degree\n[source_id=30] difference\n[source_id=31] difficulty\n[source_id=32] disc\n[source_id=33] image\n[source_id=34] interest\n[source_id=35] judgement\n[source_id=36] organization\n[source_id=37] paper\n[source_id=38] party\n[source_id=39] performance\n[source_id=40] plan\n[source_id=41] shelter\n[source_id=42] sort\n[source_id=43] source\n[source_id=44] An example for the ambiguous word argument is given below:\n[source_id=45] In some situations Postscript can be faster than the escape sequence type of printer control file. It uses post fix notation, where arguments come first and operators follow. This is basically the same as Reverse Polish Notation as used on certain calculators, and follows directly from the stack based approach.\n[source_id=46] It this sentence, the word `argument' is used in the sense of a mathematical operator.\n[source_id=47] The RUSSE'18 dataset was created in 2018 for the shared task in Russian word sense induction. This dataset contains only nouns; the list of words with their English translations is given in Table TABREF30.\n[source_id=48] Originally, it includes also the words russianбайка `tale/fleece' and russianгвоздика 'clove/small nail', but their senses are ambiguous only in some inflectional forms (not in lemmas), therefore we decided to exclude these words from evaluation.\n[source_id=49] The Russian dataset is more homogeneous compared to the English one, as for all the target words there is approximately the same number of context words in the examples. This is achieved by applying the lexical window (25 words before and after the target word) and cropping everything that falls outside of that window. In the English dataset, on the contrary, the whole paragraph with the target word is taken into account. We have tried cropping the examples for English as well, but it did not result in any change in the quality of classification. In the end, we decided not to apply the lexical window to the English dataset so as not to alter it and rather use it in the original form.\n[source_id=50] Here is an example from the RUSSE'18 for the ambiguous word russianмандарин `mandarin' in the sense `Chinese official title':\n[source_id=51] russian“...дипломатического корпуса останкам богдыхана и императрицы обставлено было с необычайной торжественностью. Тысячи мандаринов и других высокопоставленных лиц разместились шпалерами на трех мраморных террасах ведущих к...”\n[source_id=52] `...the diplomatic bodies of the Bogdikhan and the Empress was furnished with extraordinary solemnity. Thousands of mandarins and other dignitaries were placed on three marble terraces leading to...'.\n[source_id=53] Table TABREF31 compares both datasets. Before usage, they were pre-processed in the same way as the training corpora for ELMo (see Section SECREF3), thus producing a lemmatized and a non-lemmatized versions of each.\n[source_id=54] As we can see from Table TABREF31, for 20 target words in English there are 24 lemmas, and for 18 target words in Russian there are 36 different lemmas. These numbers are explained by occasional errors in the UDPipe lemmatization. Another interesting thing to observe is the number of distinct word forms for every language. For English, there are 39 distinct forms for 20 target nouns: singular and plural for every noun, except `atmosphere' which is used only in the singular form. Thus, inflectional variability of English nouns is covered by the dataset almost completely. For Russian, we observe 132 distinct forms for 18 target nouns, giving more than 7 inflectional forms per each word. Note that this still covers only half of all the inflectional variability of Russian: this language features 12 distinct forms for each noun (6 cases and 2 numbers).\n[source_id=55] To sum up, the RUSSE'18 dataset is morphologically far more complex than the Senseval3, reflecting the properties of the respective languages. In the next section we will see that this leads to substantial differences regarding comparisons between token-based and lemma-based ELMo models.",
+      "score": 3.1282135122352765,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "child_qasper_evidence_texts": [
+        "We used two WSD datasets for evaluation:",
+        "Senseval-3 for English BIBREF6",
+        "RUSSE'18 for Russian BIBREF7",
+        "The Senseval-3 dataset consists of lexical samples for nouns, verbs and adjectives; we used only noun target words:",
+        "argument",
+        "arm",
+        "atmosphere",
+        "audience",
+        "bank",
+        "degree",
+        "difference",
+        "difficulty",
+        "disc",
+        "image",
+        "interest",
+        "judgement",
+        "organization",
+        "paper",
+        "party",
+        "performance",
+        "plan",
+        "shelter",
+        "sort",
+        "source",
+        "An example for the ambiguous word argument is given below:",
+        "In some situations Postscript can be faster than the escape sequence type of printer control file. It uses post fix notation, where arguments come first and operators follow. This is basically the same as Reverse Polish Notation as used on certain calculators, and follows directly from the stack based approach.",
+        "It this sentence, the word `argument' is used in the sense of a mathematical operator.",
+        "The RUSSE'18 dataset was created in 2018 for the shared task in Russian word sense induction. This dataset contains only nouns; the list of words with their English translations is given in Table TABREF30.",
+        "Originally, it includes also the words russianбайка `tale/fleece' and russianгвоздика 'clove/small nail', but their senses are ambiguous only in some inflectional forms (not in lemmas), therefore we decided to exclude these words from evaluation.",
+        "The Russian dataset is more homogeneous compared to the English one, as for all the target words there is approximately the same number of context words in the examples. This is achieved by applying the lexical window (25 words before and after the target word) and cropping everything that falls outside of that window. In the English dataset, on the contrary, the whole paragraph with the target word is taken into account. We have tried cropping the examples for English as well, but it did not result in any change in the quality of classification. In the end, we decided not to apply the lexical window to the English dataset so as not to alter it and rather use it in the original form.",
+        "Here is an example from the RUSSE'18 for the ambiguous word russianмандарин `mandarin' in the sense `Chinese official title':",
+        "russian“...дипломатического корпуса останкам богдыхана и императрицы обставлено было с необычайной торжественностью. Тысячи мандаринов и других высокопоставленных лиц разместились шпалерами на трех мраморных террасах ведущих к...”",
+        "`...the diplomatic bodies of the Bogdikhan and the Empress was furnished with extraordinary solemnity. Thousands of mandarins and other dignitaries were placed on three marble terraces leading to...'.",
+        "Table TABREF31 compares both datasets. Before usage, they were pre-processed in the same way as the training corpora for ELMo (see Section SECREF3), thus producing a lemmatized and a non-lemmatized versions of each.",
+        "As we can see from Table TABREF31, for 20 target words in English there are 24 lemmas, and for 18 target words in Russian there are 36 different lemmas. These numbers are explained by occasional errors in the UDPipe lemmatization. Another interesting thing to observe is the number of distinct word forms for every language. For English, there are 39 distinct forms for 20 target nouns: singular and plural for every noun, except `atmosphere' which is used only in the singular form. Thus, inflectional variability of English nouns is covered by the dataset almost completely. For Russian, we observe 132 distinct forms for 18 target nouns, giving more than 7 inflectional forms per each word. Note that this still covers only half of all the inflectional variability of Russian: this language features 12 distinct forms for each noun (6 cases and 2 numbers).",
+        "To sum up, the RUSSE'18 dataset is morphologically far more complex than the Senseval3, reflecting the properties of the respective languages. In the next section we will see that this leads to substantial differences regarding comparisons between token-based and lemma-based ELMo models."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets",
+        "Word sense disambiguation test sets"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Word sense disambiguation test sets",
+          0
+        ],
+        [
+          "Word sense disambiguation test sets",
+          1
+        ],
+        [
+          "Word sense disambiguation test sets",
+          2
+        ],
+        [
+          "Word sense disambiguation test sets",
+          3
+        ],
+        [
+          "Word sense disambiguation test sets",
+          4
+        ],
+        [
+          "Word sense disambiguation test sets",
+          5
+        ],
+        [
+          "Word sense disambiguation test sets",
+          6
+        ],
+        [
+          "Word sense disambiguation test sets",
+          7
+        ],
+        [
+          "Word sense disambiguation test sets",
+          8
+        ],
+        [
+          "Word sense disambiguation test sets",
+          9
+        ],
+        [
+          "Word sense disambiguation test sets",
+          10
+        ],
+        [
+          "Word sense disambiguation test sets",
+          11
+        ],
+        [
+          "Word sense disambiguation test sets",
+          12
+        ],
+        [
+          "Word sense disambiguation test sets",
+          13
+        ],
+        [
+          "Word sense disambiguation test sets",
+          14
+        ],
+        [
+          "Word sense disambiguation test sets",
+          15
+        ],
+        [
+          "Word sense disambiguation test sets",
+          16
+        ],
+        [
+          "Word sense disambiguation test sets",
+          17
+        ],
+        [
+          "Word sense disambiguation test sets",
+          18
+        ],
+        [
+          "Word sense disambiguation test sets",
+          19
+        ],
+        [
+          "Word sense disambiguation test sets",
+          20
+        ],
+        [
+          "Word sense disambiguation test sets",
+          21
+        ],
+        [
+          "Word sense disambiguation test sets",
+          22
+        ],
+        [
+          "Word sense disambiguation test sets",
+          23
+        ],
+        [
+          "Word sense disambiguation test sets",
+          24
+        ],
+        [
+          "Word sense disambiguation test sets",
+          25
+        ],
+        [
+          "Word sense disambiguation test sets",
+          26
+        ],
+        [
+          "Word sense disambiguation test sets",
+          27
+        ],
+        [
+          "Word sense disambiguation test sets",
+          28
+        ],
+        [
+          "Word sense disambiguation test sets",
+          29
+        ],
+        [
+          "Word sense disambiguation test sets",
+          30
+        ],
+        [
+          "Word sense disambiguation test sets",
+          31
+        ],
+        [
+          "Word sense disambiguation test sets",
+          32
+        ],
+        [
+          "Word sense disambiguation test sets",
+          33
+        ],
+        [
+          "Word sense disambiguation test sets",
+          34
+        ],
+        [
+          "Word sense disambiguation test sets",
+          35
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Word sense disambiguation test sets",
+      "section": "Word sense disambiguation test sets",
+      "title_path": "Word sense disambiguation test sets",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Deep contextualised representations of linguistic entities (words and/or sentences) are used in many current state-of-the-art NLP systems. The most well-known examples of such models are arguably ELMo BIBREF0 and BERT BIBREF1.\n[source_id=5] A long-standing tradition if the field of applying deep learning to NLP tasks can be summarised as follows: as minimal pre-processing as possible. It is widely believed that lemmatization or other text input normalisation is not necessary. Advanced neural architectures based on character input (CNNs, BPE, etc) are supposed to be able to learn how to handle spelling and morphology variations themselves, even for languages with rich morphology: `just add more layers!'. Contextualised embedding models follow this tradition: as a rule, they are trained on raw text collections, with minimal linguistic pre-processing. Below, we show that this is not entirely true.\n[source_id=6] It is known that for the previous generation of word embedding models (`static' ones like word2vec BIBREF2, where a word always has the same representation regardless of the context in which it occurs), lemmatization of the training and testing data improves their performance. BIBREF3 showed that this is true at least for semantic similarity and analogy tasks.\n[source_id=7] In this paper, we describe our experiments in finding out whether lemmatization helps modern contextualised embeddings (on the example of ELMo). We compare the performance of ELMo models trained on the same corpus before and after lemmatization. It is impossible to evaluate contextualised models on `static' tasks like lexical semantic similarity or word analogies. Because of this, we turned to word sense disambiguation in context (WSD) as an evaluation task.\n[source_id=8] In brief, we use contextualised representations of ambiguous words from the top layer of an ELMo model to train word sense classifiers and find out whether using lemmas instead of tokens helps in this task (see Section SECREF5). We experiment with the English and Russian languages and show that they differ significantly in the influence of lemmatization on the WSD performance of ELMo models.\n[source_id=9] Our findings and the contributions of this paper are:\n[source_id=10] Linguistic text pre-processing still matters in some tasks, even for contemporary deep representation learning algorithms.\n[source_id=11] For the Russian language, with its rich morphology, lemmatizing the training and testing data for ELMo representations yields small but consistent improvements in the WSD task. This is unlike English, where the differences are negligible.",
+      "score": 3.0996449363038243,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "child_qasper_evidence_texts": [
+        "Deep contextualised representations of linguistic entities (words and/or sentences) are used in many current state-of-the-art NLP systems. The most well-known examples of such models are arguably ELMo BIBREF0 and BERT BIBREF1.",
+        "A long-standing tradition if the field of applying deep learning to NLP tasks can be summarised as follows: as minimal pre-processing as possible. It is widely believed that lemmatization or other text input normalisation is not necessary. Advanced neural architectures based on character input (CNNs, BPE, etc) are supposed to be able to learn how to handle spelling and morphology variations themselves, even for languages with rich morphology: `just add more layers!'. Contextualised embedding models follow this tradition: as a rule, they are trained on raw text collections, with minimal linguistic pre-processing. Below, we show that this is not entirely true.",
+        "It is known that for the previous generation of word embedding models (`static' ones like word2vec BIBREF2, where a word always has the same representation regardless of the context in which it occurs), lemmatization of the training and testing data improves their performance. BIBREF3 showed that this is true at least for semantic similarity and analogy tasks.",
+        "In this paper, we describe our experiments in finding out whether lemmatization helps modern contextualised embeddings (on the example of ELMo). We compare the performance of ELMo models trained on the same corpus before and after lemmatization. It is impossible to evaluate contextualised models on `static' tasks like lexical semantic similarity or word analogies. Because of this, we turned to word sense disambiguation in context (WSD) as an evaluation task.",
+        "In brief, we use contextualised representations of ambiguous words from the top layer of an ELMo model to train word sense classifiers and find out whether using lemmas instead of tokens helps in this task (see Section SECREF5). We experiment with the English and Russian languages and show that they differ significantly in the influence of lemmatization on the WSD performance of ELMo models.",
+        "Our findings and the contributions of this paper are:",
+        "Linguistic text pre-processing still matters in some tasks, even for contemporary deep representation learning algorithms.",
+        "For the Russian language, with its rich morphology, lemmatizing the training and testing data for ELMo representations yields small but consistent improvements in the WSD task. This is unlike English, where the differences are negligible."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ],
+        [
+          "Introduction",
+          6
+        ],
+        [
+          "Introduction",
+          7
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Qualitative analysis\n[source_id=65] In this section we focus on the comparison of scores for the Russian dataset. The classifier for Russian had to choose between fewer classes (two or three), which made the scores higher and more consistent than for the English dataset. Overall, we see improvements in the scores for the majority of words, which proves that lemmatization for morphologically rich languages is beneficial.\n[source_id=66] We decided to analyse more closely those words for which the difference in the scores between lemma-based and token-based models was statistically significant. By `significant' we mean that the scores differ by more that one standard deviation (the largest standard deviation value in the two sets was taken). The resulting list of targets words with significant difference in scores is given in Table TABREF36.\n[source_id=67] We can see that among 18 words in the dataset only 3 exhibit significant improvement in their scores when moving from tokens to lemmas in the input data. It shows that even though the overall F1 scores for the Russian data have shown the plausibility of lemmatization, this improvement is mostly driven by a few words. It should be noted that these words' scores feature very low standard deviation values (for other words, standard deviation values were above 0.1, making F1 differences insignificant). Such a behaviour can be caused by more consistent differentiation of context for various senses of these 3 words. For example, with the word russianкабачок `squash / small restaurant', the contexts for both senses can be similar, since they are all related to food. This makes the WSD scores unstable. On the other hand, for russianакция `stock, share / event', russianкрона `crown (tree / coin)' or russianкруп `croup (horse body part / illness)', their senses are not related, which resulted in more stable results and significant difference in the scores (see Table TABREF36).\n[source_id=68] There is only one word in the RUSSE'18 dataset for which the score has strongly decreased when moving to lemma-based models: russianдомино `domino (game / costume)'. In fact, the score difference here lies on the border of one standard deviation, so strictly speaking it is not really significant. However, the word still presents an interesting phenomenon.\n[source_id=69] russianДомино is the only target noun in the RUSSE'18 that has no inflected forms, since it is a borrowed word. This leaves no room for improvement when using lemma-based ELMo models: all tokens of this word are already identical. At the same time, some information about inflected word forms in the context can be useful, but it is lost during lemmatization, and this leads to the decreased score. Arguably, this means that lemmatization brings along both advantages and disadvantages for WSD with ELMo. For inflected words (which constitute the majority of Russian vocabulary) profits outweigh the losses, but for atypical non-changeable words it can be the opposite.\n[source_id=70] The scores for the excluded target words russianбайка `tale / fleece' and russianгвоздика 'clove / small nail' are given in Table TABREF37 (recall that they were excluded because of being ambiguous only in some inflectional forms). For these words we can see a great improvement with lemma-based models. This, of course stems from the fact that these words in different senses have different lemmas. Therefore, the results are heavily dependent on the quality of lemmatization.",
+      "score": 2.6382228697783487,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        65,
+        66,
+        67,
+        68,
+        69,
+        70
+      ],
+      "child_qasper_evidence_texts": [
+        "In this section we focus on the comparison of scores for the Russian dataset. The classifier for Russian had to choose between fewer classes (two or three), which made the scores higher and more consistent than for the English dataset. Overall, we see improvements in the scores for the majority of words, which proves that lemmatization for morphologically rich languages is beneficial.",
+        "We decided to analyse more closely those words for which the difference in the scores between lemma-based and token-based models was statistically significant. By `significant' we mean that the scores differ by more that one standard deviation (the largest standard deviation value in the two sets was taken). The resulting list of targets words with significant difference in scores is given in Table TABREF36.",
+        "We can see that among 18 words in the dataset only 3 exhibit significant improvement in their scores when moving from tokens to lemmas in the input data. It shows that even though the overall F1 scores for the Russian data have shown the plausibility of lemmatization, this improvement is mostly driven by a few words. It should be noted that these words' scores feature very low standard deviation values (for other words, standard deviation values were above 0.1, making F1 differences insignificant). Such a behaviour can be caused by more consistent differentiation of context for various senses of these 3 words. For example, with the word russianкабачок `squash / small restaurant', the contexts for both senses can be similar, since they are all related to food. This makes the WSD scores unstable. On the other hand, for russianакция `stock, share / event', russianкрона `crown (tree / coin)' or russianкруп `croup (horse body part / illness)', their senses are not related, which resulted in more stable results and significant difference in the scores (see Table TABREF36).",
+        "There is only one word in the RUSSE'18 dataset for which the score has strongly decreased when moving to lemma-based models: russianдомино `domino (game / costume)'. In fact, the score difference here lies on the border of one standard deviation, so strictly speaking it is not really significant. However, the word still presents an interesting phenomenon.",
+        "russianДомино is the only target noun in the RUSSE'18 that has no inflected forms, since it is a borrowed word. This leaves no room for improvement when using lemma-based ELMo models: all tokens of this word are already identical. At the same time, some information about inflected word forms in the context can be useful, but it is lost during lemmatization, and this leads to the decreased score. Arguably, this means that lemmatization brings along both advantages and disadvantages for WSD with ELMo. For inflected words (which constitute the majority of Russian vocabulary) profits outweigh the losses, but for atypical non-changeable words it can be the opposite.",
+        "The scores for the excluded target words russianбайка `tale / fleece' and russianгвоздика 'clove / small nail' are given in Table TABREF37 (recall that they were excluded because of being ambiguous only in some inflectional forms). For these words we can see a great improvement with lemma-based models. This, of course stems from the fact that these words in different senses have different lemmas. Therefore, the results are heavily dependent on the quality of lemmatization."
+      ],
+      "child_pages": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "child_sections": [
+        "Qualitative analysis",
+        "Qualitative analysis",
+        "Qualitative analysis",
+        "Qualitative analysis",
+        "Qualitative analysis",
+        "Qualitative analysis"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Qualitative analysis",
+          0
+        ],
+        [
+          "Qualitative analysis",
+          1
+        ],
+        [
+          "Qualitative analysis",
+          2
+        ],
+        [
+          "Qualitative analysis",
+          3
+        ],
+        [
+          "Qualitative analysis",
+          4
+        ],
+        [
+          "Qualitative analysis",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Qualitative analysis",
+      "section": "Qualitative analysis",
+      "title_path": "Qualitative analysis",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Experiments\n[source_id=57] Following BIBREF8, we decided to avoid using any standard train-test splits for our WSD datasets. Instead, we rely on per-word random splits and 5-fold cross-validation. This means that for each target word we randomly generate 5 different divisions of its context sentences list into train and test sets, and then train and test 5 different classifier models on this data. The resulting performance score for each target word is the average of 5 macro-F1 scores produced by these classifiers.\n[source_id=58] ELMo models can be employed for the WSD task in two different ways: either by fine-tuning the model or by extracting word representations from it and then using them as features in a downstream classifier. We decided to stick to the second (feature extraction) approach, since it is conceptually and computationally simpler. Additionally, BIBREF9 showed that for most NLP tasks (except those focused on sentence pairs) the performance of feature extraction and fine-tuning is nearly the same. Thus we extracted the single vector of the target word from the ELMo top layer (`target' rows in Table TABREF32) or the averaged ELMo top layer vectors of all words in the context sentence (`averaged' rows in Table TABREF32).\n[source_id=59] For comparison, we also report the scores of the `averaged vectors' representations with Continuous Skipgram BIBREF2 embedding models trained on the English or Russian Wikipedia dumps (`SGNS' rows): before the advent of contextualised models, this was one of the most widely used ways to `squeeze' the meaning of a sentence into a fixed-size vector. Of course it does not mean that the meaning of a sentence always determines the senses all its words are used in. However, averaging representations of words in contexts as a proxy to the sense of one particular word is a long established tradition in WSD, starting at least from BIBREF10. Also, since SGNS is a `static' embedding model, it is of course not possible to use only target word vectors as features: they would be identical whatever the context is.\n[source_id=60] Simple logistic regression was used as a classification algorithm. We also tested a multi-layer perceptron (MLP) classifier with 200-neurons hidden layer, which yielded essentially the same results. This leads us to believe that our findings are not classifier-dependent.\n[source_id=61] Table TABREF32 shows the results, together with the random and most frequent sense (MFS) baselines for each dataset.\n[source_id=62] First, ELMo outperforms SGNS for both languages, which comes as no surprise. Second, the approach with averaging representations from all words in the sentence is not beneficial for WSD with ELMo: for English data, it clearly loses to a single target word representation, and for Russian there are no significant differences (and using a single target word is preferable from the computational point of view, since it does not require the averaging operation). Thus, below we discuss only the single target word usage mode of ELMo.\n[source_id=63] But the most important part is the comparison between using tokens or lemmas in the train and test data. For the `static' SGNS embeddings, it does not significantly change the WSD scores for both languages. The same is true for English ELMo models, where differences are negligible and seem to be simple fluctuations. However, for Russian, ELMo (target) on lemmas outperforms ELMo on tokens, with small but significant improvement. The most plausible explanation for this is that (despite of purely character-based input of ELMo) the model does not have to learn idiosyncrasies of a particular language morphology. Instead, it can use its (limited) capacity to better learn lexical semantic structures, leading to better WSD performance. The box plots FIGREF33 and FIGREF35 illustrate the scores dispersion across words in the test sets for English and Russian correspondingly (orange lines are medians). In the next section SECREF6 we analyse the results qualitatively.",
+      "score": 0.33304849593824587,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63
+      ],
+      "child_qasper_evidence_texts": [
+        "Following BIBREF8, we decided to avoid using any standard train-test splits for our WSD datasets. Instead, we rely on per-word random splits and 5-fold cross-validation. This means that for each target word we randomly generate 5 different divisions of its context sentences list into train and test sets, and then train and test 5 different classifier models on this data. The resulting performance score for each target word is the average of 5 macro-F1 scores produced by these classifiers.",
+        "ELMo models can be employed for the WSD task in two different ways: either by fine-tuning the model or by extracting word representations from it and then using them as features in a downstream classifier. We decided to stick to the second (feature extraction) approach, since it is conceptually and computationally simpler. Additionally, BIBREF9 showed that for most NLP tasks (except those focused on sentence pairs) the performance of feature extraction and fine-tuning is nearly the same. Thus we extracted the single vector of the target word from the ELMo top layer (`target' rows in Table TABREF32) or the averaged ELMo top layer vectors of all words in the context sentence (`averaged' rows in Table TABREF32).",
+        "For comparison, we also report the scores of the `averaged vectors' representations with Continuous Skipgram BIBREF2 embedding models trained on the English or Russian Wikipedia dumps (`SGNS' rows): before the advent of contextualised models, this was one of the most widely used ways to `squeeze' the meaning of a sentence into a fixed-size vector. Of course it does not mean that the meaning of a sentence always determines the senses all its words are used in. However, averaging representations of words in contexts as a proxy to the sense of one particular word is a long established tradition in WSD, starting at least from BIBREF10. Also, since SGNS is a `static' embedding model, it is of course not possible to use only target word vectors as features: they would be identical whatever the context is.",
+        "Simple logistic regression was used as a classification algorithm. We also tested a multi-layer perceptron (MLP) classifier with 200-neurons hidden layer, which yielded essentially the same results. This leads us to believe that our findings are not classifier-dependent.",
+        "Table TABREF32 shows the results, together with the random and most frequent sense (MFS) baselines for each dataset.",
+        "First, ELMo outperforms SGNS for both languages, which comes as no surprise. Second, the approach with averaging representations from all words in the sentence is not beneficial for WSD with ELMo: for English data, it clearly loses to a single target word representation, and for Russian there are no significant differences (and using a single target word is preferable from the computational point of view, since it does not require the averaging operation). Thus, below we discuss only the single target word usage mode of ELMo.",
+        "But the most important part is the comparison between using tokens or lemmas in the train and test data. For the `static' SGNS embeddings, it does not significantly change the WSD scores for both languages. The same is true for English ELMo models, where differences are negligible and seem to be simple fluctuations. However, for Russian, ELMo (target) on lemmas outperforms ELMo on tokens, with small but significant improvement. The most plausible explanation for this is that (despite of purely character-based input of ELMo) the model does not have to learn idiosyncrasies of a particular language morphology. Instead, it can use its (limited) capacity to better learn lexical semantic structures, leading to better WSD performance. The box plots FIGREF33 and FIGREF35 illustrate the scores dispersion across words in the test sets for English and Russian correspondingly (orange lines are medians). In the next section SECREF6 we analyse the results qualitatively."
+      ],
+      "child_pages": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "Experiments",
+        "Experiments",
+        "Experiments",
+        "Experiments",
+        "Experiments",
+        "Experiments",
+        "Experiments"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments",
+          0
+        ],
+        [
+          "Experiments",
+          1
+        ],
+        [
+          "Experiments",
+          2
+        ],
+        [
+          "Experiments",
+          3
+        ],
+        [
+          "Experiments",
+          4
+        ],
+        [
+          "Experiments",
+          5
+        ],
+        [
+          "Experiments",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Experiments",
+      "section": "Experiments",
+      "title_path": "Experiments",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Training ELMo\n[source_id=16] For the experiments described below, we trained our own ELMo models from scratch. For English, the training corpus consisted of the English Wikipedia dump from February 2017. For Russian, it was a concatenation of the Russian Wikipedia dump from December 2018 and the full Russian National Corpus (RNC). The RNC texts were added to the Russian Wikipedia dump so as to make the Russian training corpus more comparable in size to the English one (Wikipedia texts would comprise only half of the size). As Table TABREF3 shows, the English Wikipedia is still two times larger, but at least the order is the same.\n[source_id=17] The texts were tokenized and lemmatized with the UDPipe models for the respective languages trained on the Universal Dependencies 2.3 treebanks BIBREF5. UDPipe yields lemmatization accuracy about 96% for English and 97% for Russian; thus for the task at hand, we considered it to be gold and did not try to further improve the quality of normalisation itself (although it is not entirely error-free, see Section SECREF4).\n[source_id=18] ELMo models were trained on these corpora using the original TensorFlow implementation, for 3 epochs with batch size 192, on two GPUs. To train faster, we decreased the dimensionality of the LSTM layers from the default 4096 to 2048 for all the models.",
+      "score": 0.328195980702231,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        16,
+        17,
+        18
+      ],
+      "child_qasper_evidence_texts": [
+        "For the experiments described below, we trained our own ELMo models from scratch. For English, the training corpus consisted of the English Wikipedia dump from February 2017. For Russian, it was a concatenation of the Russian Wikipedia dump from December 2018 and the full Russian National Corpus (RNC). The RNC texts were added to the Russian Wikipedia dump so as to make the Russian training corpus more comparable in size to the English one (Wikipedia texts would comprise only half of the size). As Table TABREF3 shows, the English Wikipedia is still two times larger, but at least the order is the same.",
+        "The texts were tokenized and lemmatized with the UDPipe models for the respective languages trained on the Universal Dependencies 2.3 treebanks BIBREF5. UDPipe yields lemmatization accuracy about 96% for English and 97% for Russian; thus for the task at hand, we considered it to be gold and did not try to further improve the quality of normalisation itself (although it is not entirely error-free, see Section SECREF4).",
+        "ELMo models were trained on these corpora using the original TensorFlow implementation, for 3 epochs with batch size 192, on two GPUs. To train faster, we decreased the dimensionality of the LSTM layers from the default 4096 to 2048 for all the models."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Training ELMo",
+        "Training ELMo",
+        "Training ELMo"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Training ELMo",
+          0
+        ],
+        [
+          "Training ELMo",
+          1
+        ],
+        [
+          "Training ELMo",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Training ELMo",
+      "section": "Training ELMo",
+      "title_path": "Training ELMo",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 11,
+      "content": "For the Russian language, with its rich morphology, lemmatizing the training and testing data for ELMo representations yields small but consistent improvements in the WSD task. This is unlike English, where the differences are negligible.",
+      "qasper_evidence_text": "For the Russian language, with its rich morphology, lemmatizing the training and testing data for ELMo representations yields small but consistent improvements in the WSD task. This is unlike English, where the differences are negligible.",
+      "source_node_id": 11,
+      "node_id": 11,
+      "paragraph_id": 11,
+      "evidence_id": 11,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 5,
+      "score": 3.0996449363038243,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 7,
+      "hotpot_sent_id": 7,
+      "supporting_rank": 1
+    },
+    {
+      "id": 73,
+      "content": "In the majority of research papers on deep learning approaches to NLP, it is assumed that lemmatization is not necessary, especially when using powerful contextualised embeddings. Our experiments show that this is indeed true for languages with simple morphology (like English). However, for rich-morphology languages (like Russian), using lemmatized training data yields small but consistent improvements in the word sense disambiguation task. These improvements are not observed for rare words which lack inflected forms; this further supports our hypothesis that better WSD scores of lemma-based models are related to them better handling multiple word forms in morphology-rich languages.",
+      "qasper_evidence_text": "In the majority of research papers on deep learning approaches to NLP, it is assumed that lemmatization is not necessary, especially when using powerful contextualised embeddings. Our experiments show that this is indeed true for languages with simple morphology (like English). However, for rich-morphology languages (like Russian), using lemmatized training data yields small but consistent improvements in the word sense disambiguation task. These improvements are not observed for rare words which lack inflected forms; this further supports our hypothesis that better WSD scores of lemma-based models are related to them better handling multiple word forms in morphology-rich languages.",
+      "source_node_id": 73,
+      "node_id": 73,
+      "paragraph_id": 73,
+      "evidence_id": 73,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_7",
+      "rank": 3,
+      "score": 3.183351940224536,
+      "block_type": "paragraph",
+      "page": 7,
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title": "Conclusion",
+      "hotpot_title": "Conclusion",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 2
+    },
+    {
+      "id": 55,
+      "content": "To sum up, the RUSSE'18 dataset is morphologically far more complex than the Senseval3, reflecting the properties of the respective languages. In the next section we will see that this leads to substantial differences regarding comparisons between token-based and lemma-based ELMo models.",
+      "qasper_evidence_text": "To sum up, the RUSSE'18 dataset is morphologically far more complex than the Senseval3, reflecting the properties of the respective languages. In the next section we will see that this leads to substantial differences regarding comparisons between token-based and lemma-based ELMo models.",
+      "source_node_id": 55,
+      "node_id": 55,
+      "paragraph_id": 55,
+      "evidence_id": 55,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 4,
+      "score": 3.1282135122352765,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Word sense disambiguation test sets",
+      "section": "Word sense disambiguation test sets",
+      "title": "Word sense disambiguation test sets",
+      "hotpot_title": "Word sense disambiguation test sets",
+      "sent_id": 35,
+      "hotpot_sent_id": 35,
+      "supporting_rank": 3
+    }
+  ],
+  "supporting_block_ids": [
+    11,
+    73,
+    55
+  ]
+}

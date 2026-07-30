@@ -1,0 +1,88 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Despite the rapid progress of deep learning techniques on diverse supervised learning tasks, these models remain brittle to subtle shifts in the data distribution. Even when the permissible changes are confined to barely-perceptible perturbations, training robust models remains an open challenge. Following the discovery that imperceptible attacks could cause image recognition models to misclassify examples BIBREF0 , a veritable sub-field has emerged in which authors iteratively propose attacks and countermeasures.\n[source_id=5] For all the interest in adversarial computer vision, these attacks are rarely encountered outside of academic research. However, adversarial misspellings constitute a longstanding real-world problem. Spammers continually bombard email servers, subtly misspelling words in efforts to evade spam detection while preserving the emails' intended meaning BIBREF1 , BIBREF2 . As another example, programmatic censorship on the Internet has spurred communities to adopt similar methods to communicate surreptitiously BIBREF3 .\n[source_id=6] In this paper, we focus on adversarially-chosen spelling mistakes in the context of text classification, addressing the following attack types: dropping, adding, and swapping internal characters within words. These perturbations are inspired by psycholinguistic studies BIBREF4 , BIBREF5 which demonstrated that humans can comprehend text altered by jumbling internal characters, provided that the first and last characters of each word remain unperturbed.\n[source_id=7] First, in experiments addressing both BiLSTM and fine-tuned BERT models, comprising four different input formats: word-only, char-only, word+char, and word-piece BIBREF6 , we demonstrate that an adversary can degrade a classifier's performance to that achieved by random guessing. This requires altering just two characters per sentence. Such modifications might flip words either to a different word in the vocabulary or, more often, to the out-of-vocabulary token UNK. Consequently, adversarial edits can degrade a word-level model by transforming the informative words to UNK. Intuitively, one might suspect that word-piece and character-level models would be less susceptible to spelling attacks as they can make use of the residual word context. However, our experiments demonstrate that character and word-piece models are in fact more vulnerable. We show that this is due to the adversary's effective capacity for finer grained manipulations on these models. While against a word-level model, the adversary is mostly limited to UNK-ing words, against a word-piece or character-level model, each character-level add, drop, or swap produces a distinct input, providing the adversary with a greater set of options.\n[source_id=8] Second, we evaluate first-line techniques including data augmentation and adversarial training, demonstrating that they offer only marginal benefits here, e.g., a BERT model achieving $90.3$ accuracy on a sentiment classification task, is degraded to $64.1$ by an adversarially-chosen 1-character swap in the sentence, which can only be restored to $69.2$ by adversarial training.\n[source_id=9] Third (our primary contribution), we propose a task-agnostic defense, attaching a word recognition model that predicts each word in a sentence given a full sequence of (possibly misspelled) inputs. The word recognition model's outputs form the input to a downstream classification model. Our word recognition models build upon the RNN-based semi-character word recognition model due to BIBREF7 . While our word recognizers are trained on domain-specific text from the task at hand, they often predict UNK at test time, owing to the small domain-specific vocabulary. To handle unobserved and rare words, we propose several backoff strategies including falling back on a generic word recognizer trained on a larger corpus. Incorporating our defenses, BERT models subject to 1-character attacks are restored to $88.3$ , $81.1$ , $78.0$ accuracy for swap, drop, add attacks respectively, as compared to $69.2$ , $63.6$ , and $50.0$ for adversarial training\n[source_id=10] Fourth, we offer a detailed qualitative analysis, demonstrating that a low word error rate alone is insufficient for a word recognizer to confer robustness on the downstream task. Additionally, we find that it is important that the recognition model supply few degrees of freedom to an attacker. We provide a metric to quantify this notion of sensitivity in word recognition models and study its relation to robustness empirically. Models with low sensitivity and word error rate are most robust.",
+  "score": 1.7899746874212115,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "child_qasper_evidence_texts": [
+    "Despite the rapid progress of deep learning techniques on diverse supervised learning tasks, these models remain brittle to subtle shifts in the data distribution. Even when the permissible changes are confined to barely-perceptible perturbations, training robust models remains an open challenge. Following the discovery that imperceptible attacks could cause image recognition models to misclassify examples BIBREF0 , a veritable sub-field has emerged in which authors iteratively propose attacks and countermeasures.",
+    "For all the interest in adversarial computer vision, these attacks are rarely encountered outside of academic research. However, adversarial misspellings constitute a longstanding real-world problem. Spammers continually bombard email servers, subtly misspelling words in efforts to evade spam detection while preserving the emails' intended meaning BIBREF1 , BIBREF2 . As another example, programmatic censorship on the Internet has spurred communities to adopt similar methods to communicate surreptitiously BIBREF3 .",
+    "In this paper, we focus on adversarially-chosen spelling mistakes in the context of text classification, addressing the following attack types: dropping, adding, and swapping internal characters within words. These perturbations are inspired by psycholinguistic studies BIBREF4 , BIBREF5 which demonstrated that humans can comprehend text altered by jumbling internal characters, provided that the first and last characters of each word remain unperturbed.",
+    "First, in experiments addressing both BiLSTM and fine-tuned BERT models, comprising four different input formats: word-only, char-only, word+char, and word-piece BIBREF6 , we demonstrate that an adversary can degrade a classifier's performance to that achieved by random guessing. This requires altering just two characters per sentence. Such modifications might flip words either to a different word in the vocabulary or, more often, to the out-of-vocabulary token UNK. Consequently, adversarial edits can degrade a word-level model by transforming the informative words to UNK. Intuitively, one might suspect that word-piece and character-level models would be less susceptible to spelling attacks as they can make use of the residual word context. However, our experiments demonstrate that character and word-piece models are in fact more vulnerable. We show that this is due to the adversary's effective capacity for finer grained manipulations on these models. While against a word-level model, the adversary is mostly limited to UNK-ing words, against a word-piece or character-level model, each character-level add, drop, or swap produces a distinct input, providing the adversary with a greater set of options.",
+    "Second, we evaluate first-line techniques including data augmentation and adversarial training, demonstrating that they offer only marginal benefits here, e.g., a BERT model achieving $90.3$ accuracy on a sentiment classification task, is degraded to $64.1$ by an adversarially-chosen 1-character swap in the sentence, which can only be restored to $69.2$ by adversarial training.",
+    "Third (our primary contribution), we propose a task-agnostic defense, attaching a word recognition model that predicts each word in a sentence given a full sequence of (possibly misspelled) inputs. The word recognition model's outputs form the input to a downstream classification model. Our word recognition models build upon the RNN-based semi-character word recognition model due to BIBREF7 . While our word recognizers are trained on domain-specific text from the task at hand, they often predict UNK at test time, owing to the small domain-specific vocabulary. To handle unobserved and rare words, we propose several backoff strategies including falling back on a generic word recognizer trained on a larger corpus. Incorporating our defenses, BERT models subject to 1-character attacks are restored to $88.3$ , $81.1$ , $78.0$ accuracy for swap, drop, add attacks respectively, as compared to $69.2$ , $63.6$ , and $50.0$ for adversarial training",
+    "Fourth, we offer a detailed qualitative analysis, demonstrating that a low word error rate alone is insufficient for a word recognizer to confer robustness on the downstream task. Additionally, we find that it is important that the recognition model supply few degrees of freedom to an attacker. We provide a metric to quantify this notion of sensitivity in word recognition models and study its relation to robustness empirically. Models with low sensitivity and word error rate are most robust."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

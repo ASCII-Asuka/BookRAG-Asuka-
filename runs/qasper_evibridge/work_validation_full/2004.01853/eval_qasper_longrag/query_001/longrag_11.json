@@ -1,0 +1,61 @@
+{
+  "id": "longrag_11",
+  "content": "[Section] Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation\n[source_id=34] The third task we consider is Masked Document Generation (MDG) that learns to recover a document with a masked span of tokens (see Figure FIGREF5). For simplicity, a document consisting of a sequence of tokens is denoted as $X=(x_1, x_2, \\cdots , x_{|X|})$. We randomly sample the length of the span $l$ from a discrete uniform distribution $\\mathcal {U}(a, b)$ and the span start position $k$ from another discrete uniform distribution $\\mathcal {U}(1, |X|-l+1)$ (see Section SECREF4 for more details). Thus, $\\mathcal {M}=(x_k, x_{k+1}, \\cdots , x_{k+l-1})$ is the text span to be masked.\n[source_id=35] One straightforward masking strategy is to replace each token residing in $\\mathcal {M}$ with a special [MASK] token. However, we refrain from doing so because of the following three reasons. Usually, [MASK] tokens will not appear in downstream tasks. Second, entirely masking a continuous sub-sequence of $X$ may make the whole document incomprehensible, which might be too challenging for our model to learn. Third, similar to SR, avoiding replacing every token with [MASK] also helps our model learn the ability of copying tokens from the input while preserving the ability of generating novel tokens.\n[source_id=36] In the sub-sequence $\\mathcal {M}$, each token is processed with one of the three strategies: 1) replaced with the [MASK] token; 2) replaced with a random token; 3) remain unchanged. Inspired by BERT BIBREF2, for 80% tokens, we follow strategy 1). In 10% of cases, we employ strategy 2) and we use strategy 3) for the remaining 10% of cases. Let $\\hat{X}_M$ denote the document after the application of our masking strategy. We could create infinite amount of $\\langle \\hat{X}_M,X\\rangle $ pairs to train Step.\n[source_id=37] During pre-training, we could also employ all the three tasks (i.e., SR, NSG, MDG) together. For each training batch, we randomly choose one task and each task is used for $1/3$ of the time.",
+  "score": 3.80406753555199,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_11",
+  "child_source_node_ids": [
+    34,
+    35,
+    36,
+    37
+  ],
+  "child_qasper_evidence_texts": [
+    "The third task we consider is Masked Document Generation (MDG) that learns to recover a document with a masked span of tokens (see Figure FIGREF5). For simplicity, a document consisting of a sequence of tokens is denoted as $X=(x_1, x_2, \\cdots , x_{|X|})$. We randomly sample the length of the span $l$ from a discrete uniform distribution $\\mathcal {U}(a, b)$ and the span start position $k$ from another discrete uniform distribution $\\mathcal {U}(1, |X|-l+1)$ (see Section SECREF4 for more details). Thus, $\\mathcal {M}=(x_k, x_{k+1}, \\cdots , x_{k+l-1})$ is the text span to be masked.",
+    "One straightforward masking strategy is to replace each token residing in $\\mathcal {M}$ with a special [MASK] token. However, we refrain from doing so because of the following three reasons. Usually, [MASK] tokens will not appear in downstream tasks. Second, entirely masking a continuous sub-sequence of $X$ may make the whole document incomprehensible, which might be too challenging for our model to learn. Third, similar to SR, avoiding replacing every token with [MASK] also helps our model learn the ability of copying tokens from the input while preserving the ability of generating novel tokens.",
+    "In the sub-sequence $\\mathcal {M}$, each token is processed with one of the three strategies: 1) replaced with the [MASK] token; 2) replaced with a random token; 3) remain unchanged. Inspired by BERT BIBREF2, for 80% tokens, we follow strategy 1). In 10% of cases, we employ strategy 2) and we use strategy 3) for the remaining 10% of cases. Let $\\hat{X}_M$ denote the document after the application of our masking strategy. We could create infinite amount of $\\langle \\hat{X}_M,X\\rangle $ pairs to train Step.",
+    "During pre-training, we could also employ all the three tasks (i.e., SR, NSG, MDG) together. For each training batch, we randomly choose one task and each task is used for $1/3$ of the time."
+  ],
+  "child_pages": [
+    11,
+    11,
+    11,
+    11
+  ],
+  "child_sections": [
+    "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+    "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+    "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+    "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      0
+    ],
+    [
+      "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      1
+    ],
+    [
+      "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      2
+    ],
+    [
+      "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_11",
+  "section_id": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+  "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+  "title_path": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+  "block_type": "long_unit"
+}

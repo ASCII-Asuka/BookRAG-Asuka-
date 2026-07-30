@@ -1,0 +1,79 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Experiments\n[source_id=26] In seeking to answer the question of whether the occupancy rate of a listing could be extracted from the listing’s summary, we ran a number of experiments on our first model. Two parameterizations which we present here are (1) whether the word vectors used in the embedding layer are trained on our corpus or come pretrained from Wikipedia and Gigaword and (2) whether ensembling or the final hidden state in isolation are used to make a prediction for the sequence. Common to all experiments was our decision to use an Adam optimizer, 16 LSTM units, 50-dimensional GloVe vectors, and a 70-30 split in train and test data.\n[source_id=27] Over ten epochs, the model parameterization which performs the best uses GloVe vectors trained on a corpus consisting of all listing descriptions and ensembling to make its class prediction. As a result, our findings are well in-line with those presented by Radford et. al who underscore the importance of training word embeddings on a data-specific corpus for best results on generative tasks [9].\n[source_id=28] That said, these results, though they do show a marginal increase in dev accuracy and a decrease in CE loss, suggest that perhaps listing description is not too predictive of occupancy rate given our parameterizations. While the listing description is surely an influential metric in determining the quality of a listing, other factors such as location, amenities, and home type might play a larger role in the consumer's decision. We were hopeful that these factors would be represented in the price per bedroom of the listing – our control variable – but the relationship may not have been strong enough.\n[source_id=29] However, should a strong relationship actually exist and there be instead a problem with our method, there are a few possibilities of what went wrong. We assumed that listings with similar occupancy rates would have similar listing descriptions regardless of price, which is not necessarily a strong assumption. This is coupled with an unexpected sparseness of clean data. With over 40,000 listings, we did not expect to see such poor attention to orthography in what are essentially public advertisements of the properties. In this way, our decision to use a window size of 5, a minimum occurrence count of 2, and a dimensionality of 50 when training our GloVe vectors was ad hoc.\n[source_id=30] Seeking to create a model which could generate and discriminate a “high-occupancy listing description”, we wanted to evaluate the capabilities of a generative adversarial network trained on either the standard binary cross-entropy loss or the DMK loss proposed above. Common to both models was the decision to alternate between training the generator for 50 steps and the discriminator for 2000 steps. We leave further tuning of the models to future research as each occasionally falls into unideal local optima within 20 iterations. One potential culprit is the step imbalance between generator and discriminator – should either learn at a much faster rate than the other, one component is liable to be “defeated\" and cease to learn the training data.\n[source_id=31] Qualitatively the network trained on the DMK loss shows great promise. With respect to the two experiments presented here, we have shown that it is possible to introduce a measure of suggestion in the text produced by the generator. While this model is also subject to a rapid deadlock between generator and discriminator, it is interesting to see how the introduction of keywords is gradual and affects the proximal tokens included in the output. This behavior was made possible by paying close attention to the hyperparameter $\\gamma $ , the weight given to the dot product attention term of the DMK loss. After manual tuning, we settle on $\\gamma =0.00045$ for this weight. Below, we illustrate model outputs using different values of Gamma. As is apparent, for a hyper-parameter value less than roughly $\\gamma = 0.0004$ , the model tends to ignore the importance of the keyword weights. Conversely, with a $\\gamma $ value higher than $0.0005$ , the model tends towards overweighting the representation of the keywords in the model output.",
+  "score": 4.4874976641807995,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+  ],
+  "child_qasper_evidence_texts": [
+    "In seeking to answer the question of whether the occupancy rate of a listing could be extracted from the listing’s summary, we ran a number of experiments on our first model. Two parameterizations which we present here are (1) whether the word vectors used in the embedding layer are trained on our corpus or come pretrained from Wikipedia and Gigaword and (2) whether ensembling or the final hidden state in isolation are used to make a prediction for the sequence. Common to all experiments was our decision to use an Adam optimizer, 16 LSTM units, 50-dimensional GloVe vectors, and a 70-30 split in train and test data.",
+    "Over ten epochs, the model parameterization which performs the best uses GloVe vectors trained on a corpus consisting of all listing descriptions and ensembling to make its class prediction. As a result, our findings are well in-line with those presented by Radford et. al who underscore the importance of training word embeddings on a data-specific corpus for best results on generative tasks [9].",
+    "That said, these results, though they do show a marginal increase in dev accuracy and a decrease in CE loss, suggest that perhaps listing description is not too predictive of occupancy rate given our parameterizations. While the listing description is surely an influential metric in determining the quality of a listing, other factors such as location, amenities, and home type might play a larger role in the consumer's decision. We were hopeful that these factors would be represented in the price per bedroom of the listing – our control variable – but the relationship may not have been strong enough.",
+    "However, should a strong relationship actually exist and there be instead a problem with our method, there are a few possibilities of what went wrong. We assumed that listings with similar occupancy rates would have similar listing descriptions regardless of price, which is not necessarily a strong assumption. This is coupled with an unexpected sparseness of clean data. With over 40,000 listings, we did not expect to see such poor attention to orthography in what are essentially public advertisements of the properties. In this way, our decision to use a window size of 5, a minimum occurrence count of 2, and a dimensionality of 50 when training our GloVe vectors was ad hoc.",
+    "Seeking to create a model which could generate and discriminate a “high-occupancy listing description”, we wanted to evaluate the capabilities of a generative adversarial network trained on either the standard binary cross-entropy loss or the DMK loss proposed above. Common to both models was the decision to alternate between training the generator for 50 steps and the discriminator for 2000 steps. We leave further tuning of the models to future research as each occasionally falls into unideal local optima within 20 iterations. One potential culprit is the step imbalance between generator and discriminator – should either learn at a much faster rate than the other, one component is liable to be “defeated\" and cease to learn the training data.",
+    "Qualitatively the network trained on the DMK loss shows great promise. With respect to the two experiments presented here, we have shown that it is possible to introduce a measure of suggestion in the text produced by the generator. While this model is also subject to a rapid deadlock between generator and discriminator, it is interesting to see how the introduction of keywords is gradual and affects the proximal tokens included in the output. This behavior was made possible by paying close attention to the hyperparameter $\\gamma $ , the weight given to the dot product attention term of the DMK loss. After manual tuning, we settle on $\\gamma =0.00045$ for this weight. Below, we illustrate model outputs using different values of Gamma. As is apparent, for a hyper-parameter value less than roughly $\\gamma = 0.0004$ , the model tends to ignore the importance of the keyword weights. Conversely, with a $\\gamma $ value higher than $0.0005$ , the model tends towards overweighting the representation of the keywords in the model output."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Experiments",
+      0
+    ],
+    [
+      "Experiments",
+      1
+    ],
+    [
+      "Experiments",
+      2
+    ],
+    [
+      "Experiments",
+      3
+    ],
+    [
+      "Experiments",
+      4
+    ],
+    [
+      "Experiments",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Experiments",
+  "section": "Experiments",
+  "title_path": "Experiments",
+  "block_type": "long_unit"
+}

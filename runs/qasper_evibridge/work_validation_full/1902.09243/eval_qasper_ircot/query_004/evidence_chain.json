@@ -1,0 +1,128 @@
+{
+  "strategy": "ircot",
+  "thoughts": [
+    "The retrieved evidence discusses model design and performance but does not mention publication date.",
+    "The paper discusses model training and dataset splits but does not explicitly state its own publication date.",
+    "The newly retrieved evidence discusses dataset splits and experimental settings but still does not mention the publication date of the paper."
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "retrieval_query": "When is this paper published?",
+      "thought": "The retrieved evidence discusses model design and performance but does not mention publication date.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 41,
+          "score": 4.853466868197744,
+          "content": "This issue exists when using any other contextualized word representations, so we design a refine process to mitigate it in our approach which will be described in the next sub-section.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "This issue exists when using any other contextualized word representations, so we design a refine process to mitigate it in our approach which will be described in the next sub-section.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 76,
+          "score": 4.33977545336321,
+          "content": "As the below sub-figure of Figure 2 shows, compared to extractive baseline: Lead-3 BIBREF0 , the advantage of our model will fall when golden summary length is greater than 80. This probably because that we truncate the long documents and golden summaries and cannot get full information, it could also because that the training data in these intervals is too few to train an abstractive model, so simple extractive method will not fall too far behind.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "As the below sub-figure of Figure 2 shows, compared to extractive baseline: Lead-3 BIBREF0 , the advantage of our model will fall when golden summary length is greater than 80. This probably because that we truncate the long documents and golden summaries and cannot get full information, it could also because that the training data in these intervals is too few to train an abstractive model, so simple extractive method will not fall too far behind.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 15,
+          "score": 4.082684239519011,
+          "content": "However, with this objective, traditional sequence generation models consider only one direction context in the decoding process, which could cause performance degradation since complete context of one token contains preceding and following tokens, thus feeding only preceded decoded words to the decoder so that the model may generate unnatural sequences. For example, attentive sequence-to-sequence models often generate sequences with repeated phrases which harm the naturalness. Some previous works mitigate this problem by improving the attention calculation process, but in this paper we show that feeding bi-directional context instead of left-only-context can better alleviate this problem.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "However, with this objective, traditional sequence generation models consider only one direction context in the decoding process, which could cause performance degradation since complete context of one token contains preceding and following tokens, thus feeding only preceded decoded words to the decoder so that the model may generate unnatural sequences. For example, attentive sequence-to-sequence models often generate sequences with repeated phrases which harm the naturalness. Some previous works mitigate this problem by improving the attention calculation process, but in this paper we show that feeding bi-directional context instead of left-only-context can better alleviate this problem.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "retrieval_query": "When is this paper published?\nThought 1: The retrieved evidence discusses model design and performance but does not mention publication date.",
+      "thought": "The paper discusses model training and dataset splits but does not explicitly state its own publication date.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 68,
+          "score": 10.56468974858763,
+          "content": "We also conduct experiments on the New York Times(NYT) dataset which also consists of many news articles. The original dataset can be applied here. In our experiment, we follow the dataset splits and other pre-process settings of BIBREF15 . We first filter all samples without a full article text or abstract and then remove all samples with summaries shorter than 50 words. Then we choose the test set based on the date of publication(all examples published after January 1, 2007). The final dataset contains 22,000 training samples and 3,452 test samples and is called NYT50 since all summaries are longer than 50 words.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "We also conduct experiments on the New York Times(NYT) dataset which also consists of many news articles. The original dataset can be applied here. In our experiment, we follow the dataset splits and other pre-process settings of BIBREF15 . We first filter all samples without a full article text or abstract and then remove all samples with summaries shorter than 50 words. Then we choose the test set based on the date of publication(all examples published after January 1, 2007). The final dataset contains 22,000 training samples and 3,452 test samples and is called NYT50 since all summaries are longer than 50 words.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 15,
+          "score": 9.314538447075016,
+          "content": "However, with this objective, traditional sequence generation models consider only one direction context in the decoding process, which could cause performance degradation since complete context of one token contains preceding and following tokens, thus feeding only preceded decoded words to the decoder so that the model may generate unnatural sequences. For example, attentive sequence-to-sequence models often generate sequences with repeated phrases which harm the naturalness. Some previous works mitigate this problem by improving the attention calculation process, but in this paper we show that feeding bi-directional context instead of left-only-context can better alleviate this problem.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "However, with this objective, traditional sequence generation models consider only one direction context in the decoding process, which could cause performance degradation since complete context of one token contains preceding and following tokens, thus feeding only preceded decoded words to the decoder so that the model may generate unnatural sequences. For example, attentive sequence-to-sequence models often generate sequences with repeated phrases which harm the naturalness. Some previous works mitigate this problem by improving the attention calculation process, but in this paper we show that feeding bi-directional context instead of left-only-context can better alleviate this problem.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 64,
+          "score": 8.83360714940437,
+          "content": "In this work, all of our models are built on $BERT_{BASE}$ , although another larger pre-trained model with better performance ( $BERT_{LARGE}$ ) has published but it costs too much time and GPU memory. We use WordPiece embeddings with a 30,000 vocabulary which is the same as BERT. We set the layer of transformer decoders to 12(8 on NYT50), and set the attention heads number to 12(8 on NYT50), set fully-connected sub-layer hidden size to 3072. We train the model using an Adam optimizer with learning rate of $3e-4$ , $\\beta _1=0.9$ , $\\beta _2=0.999$ and $\\epsilon =10^{-9}$ and use a dynamic learning rate during the training process. For regularization, we use dropout BIBREF13 and label smoothing BIBREF14 in our models and set the dropout rate to 0.15, and the label smoothing value to 0.1. We set the RL objective factor $\\gamma $ to 0.99.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "In this work, all of our models are built on $BERT_{BASE}$ , although another larger pre-trained model with better performance ( $BERT_{LARGE}$ ) has published but it costs too much time and GPU memory. We use WordPiece embeddings with a 30,000 vocabulary which is the same as BERT. We set the layer of transformer decoders to 12(8 on NYT50), and set the attention heads number to 12(8 on NYT50), set fully-connected sub-layer hidden size to 3072. We train the model using an Adam optimizer with learning rate of $3e-4$ , $\\beta _1=0.9$ , $\\beta _2=0.999$ and $\\epsilon =10^{-9}$ and use a dynamic learning rate during the training process. For regularization, we use dropout BIBREF13 and label smoothing BIBREF14 in our models and set the dropout rate to 0.15, and the label smoothing value to 0.1. We set the RL objective factor $\\gamma $ to 0.99.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "retrieval_query": "When is this paper published?\nThought 1: The retrieved evidence discusses model design and performance but does not mention publication date.\nThought 2: The paper discusses model training and dataset splits but does not explicitly state its own publication date.",
+      "thought": "The newly retrieved evidence discusses dataset splits and experimental settings but still does not mention the publication date of the paper.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 68,
+          "score": 25.313119165103565,
+          "content": "We also conduct experiments on the New York Times(NYT) dataset which also consists of many news articles. The original dataset can be applied here. In our experiment, we follow the dataset splits and other pre-process settings of BIBREF15 . We first filter all samples without a full article text or abstract and then remove all samples with summaries shorter than 50 words. Then we choose the test set based on the date of publication(all examples published after January 1, 2007). The final dataset contains 22,000 training samples and 3,452 test samples and is called NYT50 since all summaries are longer than 50 words.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "We also conduct experiments on the New York Times(NYT) dataset which also consists of many news articles. The original dataset can be applied here. In our experiment, we follow the dataset splits and other pre-process settings of BIBREF15 . We first filter all samples without a full article text or abstract and then remove all samples with summaries shorter than 50 words. Then we choose the test set based on the date of publication(all examples published after January 1, 2007). The final dataset contains 22,000 training samples and 3,452 test samples and is called NYT50 since all summaries are longer than 50 words.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 76,
+          "score": 15.772185092531654,
+          "content": "As the below sub-figure of Figure 2 shows, compared to extractive baseline: Lead-3 BIBREF0 , the advantage of our model will fall when golden summary length is greater than 80. This probably because that we truncate the long documents and golden summaries and cannot get full information, it could also because that the training data in these intervals is too few to train an abstractive model, so simple extractive method will not fall too far behind.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "As the below sub-figure of Figure 2 shows, compared to extractive baseline: Lead-3 BIBREF0 , the advantage of our model will fall when golden summary length is greater than 80. This probably because that we truncate the long documents and golden summaries and cannot get full information, it could also because that the training data in these intervals is too few to train an abstractive model, so simple extractive method will not fall too far behind.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 15,
+          "score": 15.328169382104083,
+          "content": "However, with this objective, traditional sequence generation models consider only one direction context in the decoding process, which could cause performance degradation since complete context of one token contains preceding and following tokens, thus feeding only preceded decoded words to the decoder so that the model may generate unnatural sequences. For example, attentive sequence-to-sequence models often generate sequences with repeated phrases which harm the naturalness. Some previous works mitigate this problem by improving the attention calculation process, but in this paper we show that feeding bi-directional context instead of left-only-context can better alleviate this problem.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "However, with this objective, traditional sequence generation models consider only one direction context in the decoding process, which could cause performance degradation since complete context of one token contains preceding and following tokens, thus feeding only preceded decoded words to the decoder so that the model may generate unnatural sequences. For example, attentive sequence-to-sequence models often generate sequences with repeated phrases which harm the naturalness. Some previous works mitigate this problem by improving the attention calculation process, but in this paper we show that feeding bi-directional context instead of left-only-context can better alleviate this problem.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    }
+  ],
+  "retrieved_block_ids": [
+    41,
+    76,
+    15,
+    68,
+    64
+  ],
+  "supporting_block_ids": [
+    41,
+    76,
+    15,
+    68
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "id": "longrag_15",
+  "content": "[Section] Machine Translation\n[source_id=52] While any truly successful model of semantics must match human intuitions, understanding the applications of our models is likewise important. To this end, we consider the problem of machine translation, operating under the hypothesis that sentences which express their meaning non-compositionally should also translate non-compositionally.\n[source_id=53] Modern phrase-based translation systems are faced with a large number of possible segmentations of a source-language sentence during decoding, and all segmentations are considered equally likely BIBREF13 . Thus, it would be helpful to provide guidance on more likely segmentations, as dictated by the compositionality scores of the phrases extracted from a sentence, to the decoder. A low compositionality score would ideally force the decoder to consider the entire phrase as a translation unit, due to its unique semantic characteristics. Correspondingly, a high score informs the decoder that it is safe to rely on word-level translations of the phrasal constituents. Thus, if we reveal to the translation system that a phrase is non-compositional, it should be able to learn that translation decisions which translate it as a unit are to be favored, leading to better translations.\n[source_id=54] To test this hypothesis, we built an English-Spanish MT system using the cdec decoder BIBREF27 for the entire training pipeline (word alignments, phrase extraction, feature weight tuning, and decoding). Corpora from the WMT 2011 evaluation was used to build the translation and language models, and for tuning (on news-test2010) and evaluation (on news-test2011), with scoring done using BLEU BIBREF28 . The baseline is a hierarchical phrase-based system BIBREF29 with a 4-gram language model, with feature weights tuned using MIRA BIBREF30 . For features, each translation rule is decorated with two lexical and phrasal features corresponding to the forward INLINEFORM0 and backward INLINEFORM1 conditional log frequencies, along with the log joint frequency INLINEFORM2 , the log frequency of the source phrase INLINEFORM3 , and whether the phrase pair or the source phrase is a singleton. Weights for the language model, glue rule, and word penalty are also tuned. This setup (Baseline) achieves scores en par with the published WMT results.\n[source_id=55] We added the compositionality score as an additional feature, and also added two binary-valued features: the first indicates if the given translation rule has not been decorated with a compositionality score (either because it consists of non-terminals only or the lexical items in the translation rule are unigrams), and correspondingly the second feature indicates if the translation rule has been scored. Therefore, an appropriate additional baseline would be to mark translation rules with these indicator functions but without the scores, akin to identifying rules with phrases in them (Baseline + SegOn).\n[source_id=56] Table TABREF40 presents the results of the MT evaluation, comparing the baselines to the best-performing context-independent and dependent scoring models from § SECREF36 . The scores have been averaged over three tuning runs with standard deviation in parentheses; bold results on the test set are statistically significant ( INLINEFORM0 ) with respect to the baseline. While knowledge of relative compositionality consistently helps, the improvements using the context-dependent scoring models, especially with the INLINEFORM1 concatenation model, are noticeably better.",
+  "score": 3.703574759887756,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_15",
+  "child_source_node_ids": [
+    52,
+    53,
+    54,
+    55,
+    56
+  ],
+  "child_qasper_evidence_texts": [
+    "While any truly successful model of semantics must match human intuitions, understanding the applications of our models is likewise important. To this end, we consider the problem of machine translation, operating under the hypothesis that sentences which express their meaning non-compositionally should also translate non-compositionally.",
+    "Modern phrase-based translation systems are faced with a large number of possible segmentations of a source-language sentence during decoding, and all segmentations are considered equally likely BIBREF13 . Thus, it would be helpful to provide guidance on more likely segmentations, as dictated by the compositionality scores of the phrases extracted from a sentence, to the decoder. A low compositionality score would ideally force the decoder to consider the entire phrase as a translation unit, due to its unique semantic characteristics. Correspondingly, a high score informs the decoder that it is safe to rely on word-level translations of the phrasal constituents. Thus, if we reveal to the translation system that a phrase is non-compositional, it should be able to learn that translation decisions which translate it as a unit are to be favored, leading to better translations.",
+    "To test this hypothesis, we built an English-Spanish MT system using the cdec decoder BIBREF27 for the entire training pipeline (word alignments, phrase extraction, feature weight tuning, and decoding). Corpora from the WMT 2011 evaluation was used to build the translation and language models, and for tuning (on news-test2010) and evaluation (on news-test2011), with scoring done using BLEU BIBREF28 . The baseline is a hierarchical phrase-based system BIBREF29 with a 4-gram language model, with feature weights tuned using MIRA BIBREF30 . For features, each translation rule is decorated with two lexical and phrasal features corresponding to the forward INLINEFORM0 and backward INLINEFORM1 conditional log frequencies, along with the log joint frequency INLINEFORM2 , the log frequency of the source phrase INLINEFORM3 , and whether the phrase pair or the source phrase is a singleton. Weights for the language model, glue rule, and word penalty are also tuned. This setup (Baseline) achieves scores en par with the published WMT results.",
+    "We added the compositionality score as an additional feature, and also added two binary-valued features: the first indicates if the given translation rule has not been decorated with a compositionality score (either because it consists of non-terminals only or the lexical items in the translation rule are unigrams), and correspondingly the second feature indicates if the translation rule has been scored. Therefore, an appropriate additional baseline would be to mark translation rules with these indicator functions but without the scores, akin to identifying rules with phrases in them (Baseline + SegOn).",
+    "Table TABREF40 presents the results of the MT evaluation, comparing the baselines to the best-performing context-independent and dependent scoring models from § SECREF36 . The scores have been averaged over three tuning runs with standard deviation in parentheses; bold results on the test set are statistically significant ( INLINEFORM0 ) with respect to the baseline. While knowledge of relative compositionality consistently helps, the improvements using the context-dependent scoring models, especially with the INLINEFORM1 concatenation model, are noticeably better."
+  ],
+  "child_pages": [
+    15,
+    15,
+    15,
+    15,
+    15
+  ],
+  "child_sections": [
+    "Machine Translation",
+    "Machine Translation",
+    "Machine Translation",
+    "Machine Translation",
+    "Machine Translation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Machine Translation",
+      0
+    ],
+    [
+      "Machine Translation",
+      1
+    ],
+    [
+      "Machine Translation",
+      2
+    ],
+    [
+      "Machine Translation",
+      3
+    ],
+    [
+      "Machine Translation",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_15",
+  "section_id": "Machine Translation",
+  "section": "Machine Translation",
+  "title_path": "Machine Translation",
+  "block_type": "long_unit"
+}

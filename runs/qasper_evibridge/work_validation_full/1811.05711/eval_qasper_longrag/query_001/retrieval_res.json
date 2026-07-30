@@ -1,0 +1,605 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Electronic Healthcare records contain large volumes of unstructured data in different forms. Free text constitutes a large portion of such data, yet this source of richly detailed information often remains under-used in practice because of a lack of suitable methodologies to extract interpretable content in a timely manner. Here we apply network-theoretical tools to the analysis of free text in Hospital Patient Incident reports in the English National Health Service, to find clusters of reports in an unsupervised manner and at different levels of resolution based directly on the free text descriptions contained within them. To do so, we combine recently developed deep neural network text-embedding methodologies based on paragraph vectors with multi-scale Markov Stability community detection applied to a similarity graph of documents obtained from sparsified text vector similarities. We showcase the approach with the analysis of incident reports submitted in Imperial College Healthcare NHS Trust, London. The multiscale community structure reveals levels of meaning with different resolution in the topics of the dataset, as shown by relevant descriptive terms extracted from the groups of records, as well as by comparing a posteriori against hand-coded categories assigned by healthcare personnel. Our content communities exhibit good correspondence with well-defined hand-coded categories, yet our results also provide further medical detail in certain areas as well as revealing complementary descriptors of incidents beyond the external classification. We also discuss how the method can be used to monitor reports over time and across different healthcare providers, and to detect emerging trends that fall outside of pre-existing categories.",
+      "score": 6.828717915329054,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Electronic Healthcare records contain large volumes of unstructured data in different forms. Free text constitutes a large portion of such data, yet this source of richly detailed information often remains under-used in practice because of a lack of suitable methodologies to extract interpretable content in a timely manner. Here we apply network-theoretical tools to the analysis of free text in Hospital Patient Incident reports in the English National Health Service, to find clusters of reports in an unsupervised manner and at different levels of resolution based directly on the free text descriptions contained within them. To do so, we combine recently developed deep neural network text-embedding methodologies based on paragraph vectors with multi-scale Markov Stability community detection applied to a similarity graph of documents obtained from sparsified text vector similarities. We showcase the approach with the analysis of incident reports submitted in Imperial College Healthcare NHS Trust, London. The multiscale community structure reveals levels of meaning with different resolution in the topics of the dataset, as shown by relevant descriptive terms extracted from the groups of records, as well as by comparing a posteriori against hand-coded categories assigned by healthcare personnel. Our content communities exhibit good correspondence with well-defined hand-coded categories, yet our results also provide further medical detail in certain areas as well as revealing complementary descriptors of incidents beyond the external classification. We also discuss how the method can be used to monitor reports over time and across different healthcare providers, and to detect emerging trends that fall outside of pre-existing categories."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] The vast amounts of data collected by healthcare providers in conjunction with modern data analytics techniques present a unique opportunity to improve health service provision and the quality and safety of medical care for patient benefit BIBREF0 . Much of the recent research in this area has been on personalised medicine and its aim to deliver better diagnostics aided by the integration of diverse datasets providing complementary information. Another large source of healthcare data is organisational. In the United Kingdom, the National Health Service (NHS) has a long history of documenting extensively the different aspects of healthcare provision. The NHS is currently in the process of increasing the availability of several databases, properly anonymised, with the aim of leveraging advanced analytics to identify areas of improvement in NHS services.\n[source_id=5] One such database is the National Reporting and Learning System (NRLS), a central repository of patient safety incident reports from the NHS in England and Wales. Set up in 2003, the NRLS now contains more than 13 million detailed records. The incidents are reported using a set of standardised categories and contain a wealth of organisational and spatio-temporal information (structured data), as well as, crucially, a substantial component of free text (unstructured data) where incidents are described in the `voice' of the person reporting. The incidents are wide ranging: from patient accidents to lost forms or referrals; from delays in admission and discharge to serious untoward incidents, such as retained foreign objects after operations. The review and analysis of such data provides critical insight into the complex functioning of different processes and procedures in healthcare towards service improvement for safer carer.\n[source_id=6] Although statistical analyses are routinely performed on the structured component of the data (dates, locations, assigned categories, etc), the free text remains largely unused in systematic processes. Free text is usually read manually but this is time-consuming, meaning that it is often ignored in practice, unless a detailed review of a case is undertaken because of the severity of harm that resulted. There is a lack of methodologies that can summarise content and provide content-based groupings across the large volume of reports submitted nationally for organisational learning. Methods that could provide automatic categorisation of incidents from the free text would sidestep problems such as difficulties in assigning an incident category by virtue of a priori pre-defined lists in the reporting system or human error, as well as offering a unique insight into the root cause analysis of incidents that could improve the safety and quality of care and efficiency of healthcare services.\n[source_id=7] Our goal in this work is to showcase an algorithmic methodology that detects content-based groups of records in a given dataset in an unsupervised manner, based only on the free and unstructured textual description of the incidents. To do so, we combine recently developed deep neural-network high-dimensional text-embedding algorithms with network-theoretical methods. In particular, we apply multiscale Markov Stability (MS) community detection to a sparsified geometric similarity graph of documents obtained from text vector similarities. Our method departs from traditional natural language processing tools, which have generally used bag-of-words (BoW) representation of documents and statistical methods based on Latent Dirichlet Allocation (LDA) to cluster documents BIBREF1 . More recent approaches have used deep neural network based language models clustered with k-means, without a full multiscale graph analysis BIBREF2 . There have been some previous applications of network theory to text analysis. For example, Lanchichinetti and co-workers BIBREF3 used a probabilistic graph construction analysed with the InfoMap algorithm BIBREF4 ; however, their community detection was carried out at a single-scale and the representation of text as BoW arrays lacks the power of neural network text embeddings. The application of multiscale community detection allows us to find groups of records with consistent content at different levels of resolution; hence the content categories emerge from the textual data, rather than fitting with pre-designed classifications. The obtained results could thus help mitigate possible human error or effort in finding the right category in complex category classification trees.\n[source_id=8] We showcase the methodology through the analysis of a dataset of patient incidents reported to the NRLS. First, we use the 13 million records collected by the NRLS since 2004 to train our text embedding (although a much smaller corpus can be used). We then analyse a subset of 3229 records reported from St Mary's Hospital, London (Imperial College Healthcare NHS Trust) over three months in 2014 to extract clusters of incidents at different levels of resolution in terms of content. Our method reveals multiple levels of intrinsic structure in the topics of the dataset, as shown by the extraction of relevant word descriptors from the grouped records and a high level of topic coherence. Originally, the records had been manually coded by the operator upon reporting with up to 170 features per case, including a two-level manual classification of the incidents. Therefore, we also carried out an a posteriori comparison against the hand-coded categories assigned by the reporter (healthcare personnel) at the time of the report submission. Our results show good overall correspondence with the hand-coded categories across resolutions and, specifically, at the medium level of granularity. Several of our clusters of content correspond strongly to well-defined categories, yet our results also reveal complementary categories of incidents not defined in the external classification. In addition, the tuning of the granularity afforded by the method can be used to provide a distinct level of resolution in certain areas corresponding to specialise or particular sub-themes.",
+      "score": 5.794405775163175,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "child_qasper_evidence_texts": [
+        "The vast amounts of data collected by healthcare providers in conjunction with modern data analytics techniques present a unique opportunity to improve health service provision and the quality and safety of medical care for patient benefit BIBREF0 . Much of the recent research in this area has been on personalised medicine and its aim to deliver better diagnostics aided by the integration of diverse datasets providing complementary information. Another large source of healthcare data is organisational. In the United Kingdom, the National Health Service (NHS) has a long history of documenting extensively the different aspects of healthcare provision. The NHS is currently in the process of increasing the availability of several databases, properly anonymised, with the aim of leveraging advanced analytics to identify areas of improvement in NHS services.",
+        "One such database is the National Reporting and Learning System (NRLS), a central repository of patient safety incident reports from the NHS in England and Wales. Set up in 2003, the NRLS now contains more than 13 million detailed records. The incidents are reported using a set of standardised categories and contain a wealth of organisational and spatio-temporal information (structured data), as well as, crucially, a substantial component of free text (unstructured data) where incidents are described in the `voice' of the person reporting. The incidents are wide ranging: from patient accidents to lost forms or referrals; from delays in admission and discharge to serious untoward incidents, such as retained foreign objects after operations. The review and analysis of such data provides critical insight into the complex functioning of different processes and procedures in healthcare towards service improvement for safer carer.",
+        "Although statistical analyses are routinely performed on the structured component of the data (dates, locations, assigned categories, etc), the free text remains largely unused in systematic processes. Free text is usually read manually but this is time-consuming, meaning that it is often ignored in practice, unless a detailed review of a case is undertaken because of the severity of harm that resulted. There is a lack of methodologies that can summarise content and provide content-based groupings across the large volume of reports submitted nationally for organisational learning. Methods that could provide automatic categorisation of incidents from the free text would sidestep problems such as difficulties in assigning an incident category by virtue of a priori pre-defined lists in the reporting system or human error, as well as offering a unique insight into the root cause analysis of incidents that could improve the safety and quality of care and efficiency of healthcare services.",
+        "Our goal in this work is to showcase an algorithmic methodology that detects content-based groups of records in a given dataset in an unsupervised manner, based only on the free and unstructured textual description of the incidents. To do so, we combine recently developed deep neural-network high-dimensional text-embedding algorithms with network-theoretical methods. In particular, we apply multiscale Markov Stability (MS) community detection to a sparsified geometric similarity graph of documents obtained from text vector similarities. Our method departs from traditional natural language processing tools, which have generally used bag-of-words (BoW) representation of documents and statistical methods based on Latent Dirichlet Allocation (LDA) to cluster documents BIBREF1 . More recent approaches have used deep neural network based language models clustered with k-means, without a full multiscale graph analysis BIBREF2 . There have been some previous applications of network theory to text analysis. For example, Lanchichinetti and co-workers BIBREF3 used a probabilistic graph construction analysed with the InfoMap algorithm BIBREF4 ; however, their community detection was carried out at a single-scale and the representation of text as BoW arrays lacks the power of neural network text embeddings. The application of multiscale community detection allows us to find groups of records with consistent content at different levels of resolution; hence the content categories emerge from the textual data, rather than fitting with pre-designed classifications. The obtained results could thus help mitigate possible human error or effort in finding the right category in complex category classification trees.",
+        "We showcase the methodology through the analysis of a dataset of patient incidents reported to the NRLS. First, we use the 13 million records collected by the NRLS since 2004 to train our text embedding (although a much smaller corpus can be used). We then analyse a subset of 3229 records reported from St Mary's Hospital, London (Imperial College Healthcare NHS Trust) over three months in 2014 to extract clusters of incidents at different levels of resolution in terms of content. Our method reveals multiple levels of intrinsic structure in the topics of the dataset, as shown by the extraction of relevant word descriptors from the grouped records and a high level of topic coherence. Originally, the records had been manually coded by the operator upon reporting with up to 170 features per case, including a two-level manual classification of the incidents. Therefore, we also carried out an a posteriori comparison against the hand-coded categories assigned by the reporter (healthcare personnel) at the time of the report submission. Our results show good overall correspondence with the hand-coded categories across resolutions and, specifically, at the medium level of granularity. Several of our clusters of content correspond strongly to well-defined categories, yet our results also reveal complementary categories of incidents not defined in the external classification. In addition, the tuning of the granularity afforded by the method can be used to provide a distinct level of resolution in certain areas corresponding to specialise or particular sub-themes."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_13",
+      "content": "[Section] Discussion\n[source_id=80] This work has applied a multiscale graph partitioning algorithm (Markov Stability) to extract content-based clusters of documents from a textual dataset of healthcare safety incident reports in an unsupervised manner at different levels of resolution. The method uses paragraph vectors to represent the records and obtains an ensuing similarity graph of documents constructed from their content. The framework brings the advantage of multi-resolution algorithms capable of capturing clusters without imposing a priori their number or structure. Since different levels of resolution of the clustering can be found to be relevant, the practitioner can choose the level of description and detail to suit the requirements of a specific task.\n[source_id=81] Our a posteriori analysis evaluating the similarity against the hand-coded categories and the intrinsic topic coherence of the clusters showed that the method performed well in recovering meaningful categories. The clusters of content capture topics of medical practice, thus providing complementary information to the externally imposed classification categories. Our analysis shows that some of the most relevant and persistent communities emerge because of their highly homogeneous medical content, although they are not easily mapped to the standardised external categories. This is apparent in the medically-based content clusters associated with Labour ward, Pressure ulcer, Chemotherapy, Radiotherapy, among others, which exemplify the alternative groupings that emerge from free text content.\n[source_id=82] The categories in the top level (Level 1) of the pre-defined classification hierarchy are highly diverse in size (as shown by their number of assigned records), with large groups such as `Patient accident', `Medication', `Clinical assessment', `Documentation', `Admissions/Transfer' or `Infrastructure' alongside small, specific groups such as `Aggressive behaviour', `Patient abuse', `Self-harm' or `Infection control'. Our multi-scale partitioning finds corresponding groups in content across different levels of resolution, providing additional subcategories with medical detail within some of the large categories (as shown in Fig. 4 and S1 ). An area of future research will be to confirm if the categories found by our analysis are consistent with a second level in the hierarchy of external categories (Level 2, around 100 categories) that is used less consistently in hospital settings. The use of content-driven classification of reports could also be important within current efforts by the World Health Organisation (WHO) under the framework for the International Classification for Patient Safety (ICPS) BIBREF48 to establish a set of conceptual categories to monitor, analyse and interpret information to improve patient care.\n[source_id=83] One of the advantages of a free text analytical approach is the provision, in a timely manner, of an intelligible description of incident report categories derived directly from the rich description in the 'words' of the reporter themselves. The insight from analysing the free text entry of the person reporting could play a valuable role and add rich information than would have otherwise been obtained from the existing approach of pre-defined classes. Not only could this improve the current state of play where much of the free text of these reports goes unused, but it avoids the fallacy of assigning incidents to a pre-defined category that, through a lack of granularity, can miss an important opportunity for feedback and learning. The nuanced information and classifications extracted from free text analysis thus suggest a complementary axis to existing approaches to characterise patient safety incident reports.\n[source_id=84] Currently, local incident reporting system are used by hospitals to submit reports to the NRLS and require risk managers to improve data quality of reports, due to errors or uncertainty in categorisation from reporters, before submission. The application of free text analytical approaches, like the one we have presented here, has the potential to free up risk managers time from labour-intensive tasks of classification and correction by human operators, instead for quality improvement activities derived from the intelligence of the data itself. Additionally, the method allows for the discovery of emerging topics or classes of incidents directly from the data when such events do not fit the pre-assigned categories by using projection techniques alongside methods for anomaly and innovation detection.\n[source_id=85] In ongoing work, we are currently examining the use of our characterisation of incident reports to enable comparisons across healthcare organisations and also to monitor their change over time. This part of ongoing research requires the quantification of in-class text similarities and to dynamically manage the embedding of the reports through updates and recalculation of the vector embedding. Improvements in the process of robust graph construction are also part of our future work. Detecting anomalies in the data to decide whether newer topic clusters should be created, or providing online classification suggestions to users based on the text they input are some of the improvements we aim to add in the future to aid with decision support and data collection, and to potentially help fine-tune some of the predefined categories of the external classification.",
+      "score": 4.3771154055288015,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_13",
+      "child_source_node_ids": [
+        80,
+        81,
+        82,
+        83,
+        84,
+        85
+      ],
+      "child_qasper_evidence_texts": [
+        "This work has applied a multiscale graph partitioning algorithm (Markov Stability) to extract content-based clusters of documents from a textual dataset of healthcare safety incident reports in an unsupervised manner at different levels of resolution. The method uses paragraph vectors to represent the records and obtains an ensuing similarity graph of documents constructed from their content. The framework brings the advantage of multi-resolution algorithms capable of capturing clusters without imposing a priori their number or structure. Since different levels of resolution of the clustering can be found to be relevant, the practitioner can choose the level of description and detail to suit the requirements of a specific task.",
+        "Our a posteriori analysis evaluating the similarity against the hand-coded categories and the intrinsic topic coherence of the clusters showed that the method performed well in recovering meaningful categories. The clusters of content capture topics of medical practice, thus providing complementary information to the externally imposed classification categories. Our analysis shows that some of the most relevant and persistent communities emerge because of their highly homogeneous medical content, although they are not easily mapped to the standardised external categories. This is apparent in the medically-based content clusters associated with Labour ward, Pressure ulcer, Chemotherapy, Radiotherapy, among others, which exemplify the alternative groupings that emerge from free text content.",
+        "The categories in the top level (Level 1) of the pre-defined classification hierarchy are highly diverse in size (as shown by their number of assigned records), with large groups such as `Patient accident', `Medication', `Clinical assessment', `Documentation', `Admissions/Transfer' or `Infrastructure' alongside small, specific groups such as `Aggressive behaviour', `Patient abuse', `Self-harm' or `Infection control'. Our multi-scale partitioning finds corresponding groups in content across different levels of resolution, providing additional subcategories with medical detail within some of the large categories (as shown in Fig. 4 and S1 ). An area of future research will be to confirm if the categories found by our analysis are consistent with a second level in the hierarchy of external categories (Level 2, around 100 categories) that is used less consistently in hospital settings. The use of content-driven classification of reports could also be important within current efforts by the World Health Organisation (WHO) under the framework for the International Classification for Patient Safety (ICPS) BIBREF48 to establish a set of conceptual categories to monitor, analyse and interpret information to improve patient care.",
+        "One of the advantages of a free text analytical approach is the provision, in a timely manner, of an intelligible description of incident report categories derived directly from the rich description in the 'words' of the reporter themselves. The insight from analysing the free text entry of the person reporting could play a valuable role and add rich information than would have otherwise been obtained from the existing approach of pre-defined classes. Not only could this improve the current state of play where much of the free text of these reports goes unused, but it avoids the fallacy of assigning incidents to a pre-defined category that, through a lack of granularity, can miss an important opportunity for feedback and learning. The nuanced information and classifications extracted from free text analysis thus suggest a complementary axis to existing approaches to characterise patient safety incident reports.",
+        "Currently, local incident reporting system are used by hospitals to submit reports to the NRLS and require risk managers to improve data quality of reports, due to errors or uncertainty in categorisation from reporters, before submission. The application of free text analytical approaches, like the one we have presented here, has the potential to free up risk managers time from labour-intensive tasks of classification and correction by human operators, instead for quality improvement activities derived from the intelligence of the data itself. Additionally, the method allows for the discovery of emerging topics or classes of incidents directly from the data when such events do not fit the pre-assigned categories by using projection techniques alongside methods for anomaly and innovation detection.",
+        "In ongoing work, we are currently examining the use of our characterisation of incident reports to enable comparisons across healthcare organisations and also to monitor their change over time. This part of ongoing research requires the quantification of in-class text similarities and to dynamically manage the embedding of the reports through updates and recalculation of the vector embedding. Improvements in the process of robust graph construction are also part of our future work. Detecting anomalies in the data to decide whether newer topic clusters should be created, or providing online classification suggestions to users based on the text they input are some of the improvements we aim to add in the future to aid with decision support and data collection, and to potentially help fine-tune some of the predefined categories of the external classification."
+      ],
+      "child_pages": [
+        13,
+        13,
+        13,
+        13,
+        13,
+        13
+      ],
+      "child_sections": [
+        "Discussion",
+        "Discussion",
+        "Discussion",
+        "Discussion",
+        "Discussion",
+        "Discussion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Discussion",
+          0
+        ],
+        [
+          "Discussion",
+          1
+        ],
+        [
+          "Discussion",
+          2
+        ],
+        [
+          "Discussion",
+          3
+        ],
+        [
+          "Discussion",
+          4
+        ],
+        [
+          "Discussion",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_13",
+      "section_id": "Discussion",
+      "section": "Discussion",
+      "title_path": "Discussion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Multiscale graph partitioning for text analysis: description of the framework\n[source_id=10] Our framework combines text-embedding, geometric graph construction and multi-resolution community detection to identify, rather than impose, content-based clusters from free, unstructured text in an unsupervised manner.\n[source_id=11] Figure 1 shows a summary of our pipeline. First, we pre-process each document to transform text into consecutive word tokens, where words are in their most normalised forms, and some words are removed if they have no distinctive meaning when used out of context BIBREF5 , BIBREF6 . We then train a paragraph vector model using the Document to Vector (Doc2Vec) framework BIBREF7 on the whole set (13 million) of preprocessed text records, although training on smaller sets (1 million) also produces good results. This training step is only done once. This Doc2Vec model is subsequently used to infer high-dimensional vector descriptions for the text of each of the 3229 documents in our target analysis set. We then compute a matrix containing pairwise similarities between any pair of document vectors, as inferred with Doc2Vec. This matrix can be thought of as a full, weighted graph with documents as nodes and edges weighted by their similarity. We sparsify this graph to the union of a minimum spanning tree and a k-Nearest Neighbors (MST-kNN) graph BIBREF8 , a geometric construction that removes less important similarities but preserves global connectivity for the graph and, hence, for the dataset. The derived MST-kNN graph is analysed with Markov Stability BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 , a multi-resolution dynamics-based graph partitioning method that identifies relevant subgraphs (i.e., clusters of documents) at different levels of granularity. MS uses a diffusive process on the graph to reveal the multiscale organisation at different resolutions without the need for choosing a priori the number of clusters, scale or organisation. To analyse a posteriori the different partitions across levels of resolution, we use both visualisations and quantitative scores. The visualisations include word clouds to summarise the main content, graph layouts, as well as Sankey diagrams and contingency tables that capture the correspondences across levels of resolution and relationships to the hand-coded classifications. The partitions are also evaluated quantitatively to score: (i) their intrinsic topic coherence (using pairwise mutual information BIBREF13 , BIBREF14 ), and (ii) their similarity to the operator hand-coded categories (using normalised mutual information BIBREF15 ). We now expand on the steps of the computational framework.",
+      "score": 3.8951594606807083,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        10,
+        11
+      ],
+      "child_qasper_evidence_texts": [
+        "Our framework combines text-embedding, geometric graph construction and multi-resolution community detection to identify, rather than impose, content-based clusters from free, unstructured text in an unsupervised manner.",
+        "Figure 1 shows a summary of our pipeline. First, we pre-process each document to transform text into consecutive word tokens, where words are in their most normalised forms, and some words are removed if they have no distinctive meaning when used out of context BIBREF5 , BIBREF6 . We then train a paragraph vector model using the Document to Vector (Doc2Vec) framework BIBREF7 on the whole set (13 million) of preprocessed text records, although training on smaller sets (1 million) also produces good results. This training step is only done once. This Doc2Vec model is subsequently used to infer high-dimensional vector descriptions for the text of each of the 3229 documents in our target analysis set. We then compute a matrix containing pairwise similarities between any pair of document vectors, as inferred with Doc2Vec. This matrix can be thought of as a full, weighted graph with documents as nodes and edges weighted by their similarity. We sparsify this graph to the union of a minimum spanning tree and a k-Nearest Neighbors (MST-kNN) graph BIBREF8 , a geometric construction that removes less important similarities but preserves global connectivity for the graph and, hence, for the dataset. The derived MST-kNN graph is analysed with Markov Stability BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 , a multi-resolution dynamics-based graph partitioning method that identifies relevant subgraphs (i.e., clusters of documents) at different levels of granularity. MS uses a diffusive process on the graph to reveal the multiscale organisation at different resolutions without the need for choosing a priori the number of clusters, scale or organisation. To analyse a posteriori the different partitions across levels of resolution, we use both visualisations and quantitative scores. The visualisations include word clouds to summarise the main content, graph layouts, as well as Sankey diagrams and contingency tables that capture the correspondences across levels of resolution and relationships to the hand-coded classifications. The partitions are also evaluated quantitatively to score: (i) their intrinsic topic coherence (using pairwise mutual information BIBREF13 , BIBREF14 ), and (ii) their similarity to the operator hand-coded categories (using normalised mutual information BIBREF15 ). We now expand on the steps of the computational framework."
+      ],
+      "child_pages": [
+        2,
+        2
+      ],
+      "child_sections": [
+        "Multiscale graph partitioning for text analysis: description of the framework",
+        "Multiscale graph partitioning for text analysis: description of the framework"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Multiscale graph partitioning for text analysis: description of the framework",
+          0
+        ],
+        [
+          "Multiscale graph partitioning for text analysis: description of the framework",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Multiscale graph partitioning for text analysis: description of the framework",
+      "section": "Multiscale graph partitioning for text analysis: description of the framework",
+      "title_path": "Multiscale graph partitioning for text analysis: description of the framework",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Text Preprocessing\n[source_id=15] Text preprocessing is important to enhance the performance of text embedding. We applied standard preprocessing techniques in natural language processing to the raw text of all 13 million records in our corpus. We normalise words into a single form and remove words that do not carry significant meaning. Specifically, we divide our documents into iterative word tokens using the NLTK library BIBREF5 and remove punctuation and digit-only tokens. We then apply word stemming using the Porter algorithm BIBREF6 , BIBREF16 . If the Porter method cannot find a stemmed version for a token, we apply the Snowball algorithm BIBREF17 . Finally, we remove any stop-words (repeat words with low content) using NLTK's stop-word list. Although some of the syntactic information is reduced due to text preprocessing, this process preserves and consolidates the semantic information of the vocabulary, which is of relevance to our study.",
+      "score": 3.761234487503112,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        15
+      ],
+      "child_qasper_evidence_texts": [
+        "Text preprocessing is important to enhance the performance of text embedding. We applied standard preprocessing techniques in natural language processing to the raw text of all 13 million records in our corpus. We normalise words into a single form and remove words that do not carry significant meaning. Specifically, we divide our documents into iterative word tokens using the NLTK library BIBREF5 and remove punctuation and digit-only tokens. We then apply word stemming using the Porter algorithm BIBREF6 , BIBREF16 . If the Porter method cannot find a stemmed version for a token, we apply the Snowball algorithm BIBREF17 . Finally, we remove any stop-words (repeat words with low content) using NLTK's stop-word list. Although some of the syntactic information is reduced due to text preprocessing, this process preserves and consolidates the semantic information of the vocabulary, which is of relevance to our study."
+      ],
+      "child_pages": [
+        4
+      ],
+      "child_sections": [
+        "Text Preprocessing"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Text Preprocessing",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Text Preprocessing",
+      "section": "Text Preprocessing",
+      "title_path": "Text Preprocessing",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Robustness of the results and comparison with other methods\n[source_id=70] Our framework consists of a series of steps for which there are choices and alternatives. Although it is not possible to provide comparisons to the myriad of methods and possibilities available, we have examined quantitatively the robustness of the results to parametric and methodological choices in different steps of the framework: (i) the importance of using Doc2Vec embeddings instead of BoW vectors, (ii) the size of training corpus for Doc2Vec; (iii) the sparsity of the MST-kNN similarity graph construction. We have also carried out quantitative comparisons to other methods, including: (i) LDA-BoW, and (ii) clustering with other community detection methods. We provide a brief summary here and additional material in the SI.\n[source_id=71] The use of fixed-sized vector embeddings (Doc2Vec) instead of standard bag of words (BoW) is an integral part of our pipeline. Doc2Vec produces lower dimensional vector representations (as compared to BoW) with higher semantic and syntactic content. It has been reported that Doc2Vec outperforms BoW representations in practical benchmarks of semantic similarity, as well as being less sensitive to hyper-parameters BIBREF22 .\n[source_id=72] To quantify the improvement provided by Doc2Vec in our framework, we constructed a MST-kNN graph following the same steps but starting with TF-iDF vectors for each document. We then ran MS on this TF-iDF similarity graph, and compared the results to those obtained from the Doc2Vec similarity graph. Figure 7 shows that the Doc2Vec version outperforms the BoW version across all resolutions in terms of both $NMI$ and $\\widehat{PMI}$ scores.\n[source_id=73] As shown in Table 1 , we have tested the effect of the size of the training corpus on the Doc2Vec model. We trained Doc2Vec on two additional training sets of 1 million and 2 million records (randomly chosen from the full set of $\\sim $ 13 million records). We then followed the same procedure to construct the MST-kNN similarity graph and carried out the MS analysis. The results, presented in Figure S3 in the SI, show that the performance is affected only mildly by the size of the Doc2Vec training set.\n[source_id=74] To examine the effect of sparsification in the graph construction, we have studied the dependence of quality of the partitions against the number of neighbours, $k$ , in the MST-kNN graph. Our numerics, shown in Figure S4 in the SI, indicate that both the $NMI$ and $\\widehat{PMI}$ scores of the MS clusterings reach a similar level of quality for values of $k$ above 13-16, with minor improvement after that. Hence our results are robust to the choice of $k$ , provided it is not too small. Due to computational efficiency, we thus favour a relatively small $k$ , but not too small.\n[source_id=75] We carried out a comparison with LDA, a widely used methodology for text analysis. A key difference between standard LDA and our MS method is the fact that a different LDA model needs to be trained separately for each number of topics pre-determined by the user. To offer a comparison across the methods, We obtained five LDA models corresponding to the five MS levels we considered in detail. The results in Table 2 show that MS and LDA give partitions that are comparably similar to the hand-coded categories (as measured with $NMI$ ), with some differences depending on the scale, whereas the MS clusterings have higher topic coherence (as given by $\\widehat{PMI}$ ) across all scales.\n[source_id=76] To give an indication of the computational cost, we ran both methods on the same servers. Our method takes approximately 13 hours in total to compute both the Doc2Vec model on 13 million records (11 hours) and the full MS scan with 400 partitions across all resolutions (2 hours). The time required to train just the 5 LDA models on the same corpus amounts to 30 hours (with timings ranging from $\\sim $ 2 hours for the 3 topic LDA model to 12.5 hours for the 44 topic LDA model).\n[source_id=77] This comparison also highlights the conceptual difference between our multi-scale methodology and LDA topic modelling. While LDA computes topics at a pre-determined level of resolution, our method obtains partitions at all resolutions in one sweep of the Markov time, from which relevant partitions are chosen based on their robustness. However, the MS partitions at all resolutions are available for further investigation if so needed.\n[source_id=78] We have used several algorithms readily available in code libraries (i.e., the iGraph module for Python) to cluster/partition the same kNN-MST graph. Figure S5 in the SI shows the comparison against several well-known partitioning methods (Modularity Optimisation BIBREF44 , InfoMap BIBREF4 , Walktrap BIBREF45 , Label Propagation BIBREF46 , and Multi-resolution Louvain BIBREF35 ) which give just one partition (or two in the case of the Louvain implementation in iGraph) into a particular number of clusters, in contrast with our multiscale MS analysis. Our results show that MS provides improved or equal results to other graph partitioning methods for both $NMI$ and $\\widehat{PMI}$ across all scales. Only for very fine resolution with more than 50 clusters, Infomap, which partitions graphs into small clique-like subgraphs BIBREF32 , BIBREF47 , provides a slightly improved $NMI$ for that particular scale. Therefore, MS allows us to find relevant, yet high quality clusterings across all scales by sweeping the Markov time parameter.",
+      "score": 2.9835296978718175,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78
+      ],
+      "child_qasper_evidence_texts": [
+        "Our framework consists of a series of steps for which there are choices and alternatives. Although it is not possible to provide comparisons to the myriad of methods and possibilities available, we have examined quantitatively the robustness of the results to parametric and methodological choices in different steps of the framework: (i) the importance of using Doc2Vec embeddings instead of BoW vectors, (ii) the size of training corpus for Doc2Vec; (iii) the sparsity of the MST-kNN similarity graph construction. We have also carried out quantitative comparisons to other methods, including: (i) LDA-BoW, and (ii) clustering with other community detection methods. We provide a brief summary here and additional material in the SI.",
+        "The use of fixed-sized vector embeddings (Doc2Vec) instead of standard bag of words (BoW) is an integral part of our pipeline. Doc2Vec produces lower dimensional vector representations (as compared to BoW) with higher semantic and syntactic content. It has been reported that Doc2Vec outperforms BoW representations in practical benchmarks of semantic similarity, as well as being less sensitive to hyper-parameters BIBREF22 .",
+        "To quantify the improvement provided by Doc2Vec in our framework, we constructed a MST-kNN graph following the same steps but starting with TF-iDF vectors for each document. We then ran MS on this TF-iDF similarity graph, and compared the results to those obtained from the Doc2Vec similarity graph. Figure 7 shows that the Doc2Vec version outperforms the BoW version across all resolutions in terms of both $NMI$ and $\\widehat{PMI}$ scores.",
+        "As shown in Table 1 , we have tested the effect of the size of the training corpus on the Doc2Vec model. We trained Doc2Vec on two additional training sets of 1 million and 2 million records (randomly chosen from the full set of $\\sim $ 13 million records). We then followed the same procedure to construct the MST-kNN similarity graph and carried out the MS analysis. The results, presented in Figure S3 in the SI, show that the performance is affected only mildly by the size of the Doc2Vec training set.",
+        "To examine the effect of sparsification in the graph construction, we have studied the dependence of quality of the partitions against the number of neighbours, $k$ , in the MST-kNN graph. Our numerics, shown in Figure S4 in the SI, indicate that both the $NMI$ and $\\widehat{PMI}$ scores of the MS clusterings reach a similar level of quality for values of $k$ above 13-16, with minor improvement after that. Hence our results are robust to the choice of $k$ , provided it is not too small. Due to computational efficiency, we thus favour a relatively small $k$ , but not too small.",
+        "We carried out a comparison with LDA, a widely used methodology for text analysis. A key difference between standard LDA and our MS method is the fact that a different LDA model needs to be trained separately for each number of topics pre-determined by the user. To offer a comparison across the methods, We obtained five LDA models corresponding to the five MS levels we considered in detail. The results in Table 2 show that MS and LDA give partitions that are comparably similar to the hand-coded categories (as measured with $NMI$ ), with some differences depending on the scale, whereas the MS clusterings have higher topic coherence (as given by $\\widehat{PMI}$ ) across all scales.",
+        "To give an indication of the computational cost, we ran both methods on the same servers. Our method takes approximately 13 hours in total to compute both the Doc2Vec model on 13 million records (11 hours) and the full MS scan with 400 partitions across all resolutions (2 hours). The time required to train just the 5 LDA models on the same corpus amounts to 30 hours (with timings ranging from $\\sim $ 2 hours for the 3 topic LDA model to 12.5 hours for the 44 topic LDA model).",
+        "This comparison also highlights the conceptual difference between our multi-scale methodology and LDA topic modelling. While LDA computes topics at a pre-determined level of resolution, our method obtains partitions at all resolutions in one sweep of the Markov time, from which relevant partitions are chosen based on their robustness. However, the MS partitions at all resolutions are available for further investigation if so needed.",
+        "We have used several algorithms readily available in code libraries (i.e., the iGraph module for Python) to cluster/partition the same kNN-MST graph. Figure S5 in the SI shows the comparison against several well-known partitioning methods (Modularity Optimisation BIBREF44 , InfoMap BIBREF4 , Walktrap BIBREF45 , Label Propagation BIBREF46 , and Multi-resolution Louvain BIBREF35 ) which give just one partition (or two in the case of the Louvain implementation in iGraph) into a particular number of clusters, in contrast with our multiscale MS analysis. Our results show that MS provides improved or equal results to other graph partitioning methods for both $NMI$ and $\\widehat{PMI}$ across all scales. Only for very fine resolution with more than 50 clusters, Infomap, which partitions graphs into small clique-like subgraphs BIBREF32 , BIBREF47 , provides a slightly improved $NMI$ for that particular scale. Therefore, MS allows us to find relevant, yet high quality clusterings across all scales by sweeping the Markov time parameter."
+      ],
+      "child_pages": [
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12,
+        12
+      ],
+      "child_sections": [
+        "Robustness of the results and comparison with other methods",
+        "Robustness of the results and comparison with other methods",
+        "Robustness of the results and comparison with other methods",
+        "Robustness of the results and comparison with other methods",
+        "Robustness of the results and comparison with other methods",
+        "Robustness of the results and comparison with other methods",
+        "Robustness of the results and comparison with other methods",
+        "Robustness of the results and comparison with other methods",
+        "Robustness of the results and comparison with other methods"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Robustness of the results and comparison with other methods",
+          0
+        ],
+        [
+          "Robustness of the results and comparison with other methods",
+          1
+        ],
+        [
+          "Robustness of the results and comparison with other methods",
+          2
+        ],
+        [
+          "Robustness of the results and comparison with other methods",
+          3
+        ],
+        [
+          "Robustness of the results and comparison with other methods",
+          4
+        ],
+        [
+          "Robustness of the results and comparison with other methods",
+          5
+        ],
+        [
+          "Robustness of the results and comparison with other methods",
+          6
+        ],
+        [
+          "Robustness of the results and comparison with other methods",
+          7
+        ],
+        [
+          "Robustness of the results and comparison with other methods",
+          8
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Robustness of the results and comparison with other methods",
+      "section": "Robustness of the results and comparison with other methods",
+      "title_path": "Robustness of the results and comparison with other methods",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Multiscale Graph Partitioning\n[source_id=31] The area of community detection encompasses a variety of graph partitioning approaches which aim to find `good' partitions into subgraphs (or communities) according to different cost functions, without imposing the number of communities a priori BIBREF31 . The notion of community thus depends on the choice of cost function. Commonly, communities are taken to be subgraphs whose nodes are connected strongly within the community with relatively weak inter-community edges. Such structural notion is related to balanced cuts. Other cost functions are posed in terms of transitions inside and outside of the communities, usually as one-step processes BIBREF4 . When transition paths of random walks of all lengths are considered, the concept of community becomes intrinsically multi-scale, i.e., different partitions can be found to be relevant at different time scales leading to a multi-level description dictated by the transition dynamics BIBREF9 , BIBREF32 , BIBREF10 . This leads to the framework of Markov Stability, a dynamics-based, multi-scale community detection methodology, which can be shown to recover seamlessly several well-known heuristics as particular cases BIBREF9 , BIBREF11 , BIBREF12 .\n[source_id=32] Here, we apply MS to find partitions of the similarity graph $A$ at different levels of resolution. The subgraphs detected correspond to clusters of documents with similar content. MS is an unsupervised community detection method that finds robust and stable partitions under the evolution of a continuous-time diffusion process without a priori choice of the number or type of communities or their organisation BIBREF9 , BIBREF32 , BIBREF10 , BIBREF33 The code for Markov Stability is open and accessible at https://github.com/michaelschaub/PartitionStability and http://wwwf.imperial.ac.uk/~mpbara/Partition_Stability/, last accessed on March 24, 2018. In simple terms, MS can be understood by analogy to a drop of ink diffusing on the graph under a diffusive Markov process. The ink diffuses homogeneously unless the graph has some intrinsic structural organisation, in which case the ink gets transiently contained, over particular time scales, within groups of nodes (i.e., subgraphs or communities). The existence of this transient containment signals the presence of a natural partition of the graph. As the process evolves, the ink diffuses out of those initial communities but might get transiently contained in other, larger subgraphs. By analysing this Markov dynamics over time, MS detects the structure of the graph across scales. The Markov time $t$ thus acts as a resolution parameter that allows us to extract robust partitions that persist over particular time scales, in an unsupervised manner.\n[source_id=33] Given the adjacency matrix $A_{N \\times N}$ of the graph obtained as described previously, let us define the diagonal matrix $D=\\text{diag}(\\mathbf {d})$ , where $\\mathbf {d}=A \\mathbf {1}$ is the degree vector. The random walk Laplacian matrix is defined as $L_\\text{RW}=I_N-D^{-1}A$ where $I_N$ is the identity matrix of size $N$ , and the transition matrix (or kernel) of the associated continuous-time Markov process is $P(t)=e^{-t L_\\text{RW}}, \\, t>0$ BIBREF10 . For each partition, a binary membership matrix $H_{N \\times C}$ maps the $N$ nodes into $C$ clusters. We can then define the $D=\\text{diag}(\\mathbf {d})$0 clustered autocovariance matrix:\n[source_id=34] $$R(t,H) = H^T[\\Pi P(t)-\\pi \\pi ^T]H $$   (Eq. 4)\n[source_id=35] where $\\pi $ is the steady-state distribution of the process and $\\Pi =\\text{diag}(\\pi )$ . The element $[R(t,H)]_{\\alpha \\beta }$ quantifies the probability that a random walker starting from community $\\alpha $ will end in community $\\beta $ at time $t$ , subtracting the probability that the same event occurs by chance at stationarity.\n[source_id=36] We then define our cost function measuring the goodness of a partition over time $t$ , termed the Markov Stability of partition $H$ :\n[source_id=37] $$r(t,H) = \\text{trace} \\left[R(t,H)\\right]. $$   (Eq. 5)\n[source_id=38] A partition $H$ that maximises $r(t,H)$ is comprised of communities that preserve the flow within themselves over time $t$ , since in that case the diagonal elements of $R(t,H)$ will be large and the off-diagonal elements will be small. For details, see BIBREF9 , BIBREF32 , BIBREF10 , BIBREF34 .\n[source_id=39] MS searches for partitions at each Markov time that maximise $r(t,H)$ . Although the maximisation of ( 5 ) is an NP-hard problem (hence with no guarantees for global optimality), there are efficient optimisation methods that work well in practice. Our implementation here uses the Louvain Algorithm BIBREF35 , BIBREF12 which is efficient and known to give good results when applied to benchmarks BIBREF36 . To obtain robust partitions, we run the Louvain algorithm 500 times with different initialisations at each Markov time and pick the best 50 with the highest Markov Stability value $r(t,H)$ . We then compute the variation of information BIBREF37 of this ensemble of solutions $VI(t)$ . as a measure of the reproducibility of the result under the optimisation. In addition, the relevant partitions are required to be persistent across time, as given by low values of the variation of information between optimised partitions across time $VI(t,t^{\\prime })$ . Robust partitions are thus indicated by Markov times where $VI(t)$ shows a dip and $VI(t,t^{\\prime })$ has an extended plateau, indicating consistent results from different Louvain runs and validity over extended scales BIBREF34 , BIBREF10 .",
+      "score": 2.9030010955770282,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "child_qasper_evidence_texts": [
+        "The area of community detection encompasses a variety of graph partitioning approaches which aim to find `good' partitions into subgraphs (or communities) according to different cost functions, without imposing the number of communities a priori BIBREF31 . The notion of community thus depends on the choice of cost function. Commonly, communities are taken to be subgraphs whose nodes are connected strongly within the community with relatively weak inter-community edges. Such structural notion is related to balanced cuts. Other cost functions are posed in terms of transitions inside and outside of the communities, usually as one-step processes BIBREF4 . When transition paths of random walks of all lengths are considered, the concept of community becomes intrinsically multi-scale, i.e., different partitions can be found to be relevant at different time scales leading to a multi-level description dictated by the transition dynamics BIBREF9 , BIBREF32 , BIBREF10 . This leads to the framework of Markov Stability, a dynamics-based, multi-scale community detection methodology, which can be shown to recover seamlessly several well-known heuristics as particular cases BIBREF9 , BIBREF11 , BIBREF12 .",
+        "Here, we apply MS to find partitions of the similarity graph $A$ at different levels of resolution. The subgraphs detected correspond to clusters of documents with similar content. MS is an unsupervised community detection method that finds robust and stable partitions under the evolution of a continuous-time diffusion process without a priori choice of the number or type of communities or their organisation BIBREF9 , BIBREF32 , BIBREF10 , BIBREF33 The code for Markov Stability is open and accessible at https://github.com/michaelschaub/PartitionStability and http://wwwf.imperial.ac.uk/~mpbara/Partition_Stability/, last accessed on March 24, 2018. In simple terms, MS can be understood by analogy to a drop of ink diffusing on the graph under a diffusive Markov process. The ink diffuses homogeneously unless the graph has some intrinsic structural organisation, in which case the ink gets transiently contained, over particular time scales, within groups of nodes (i.e., subgraphs or communities). The existence of this transient containment signals the presence of a natural partition of the graph. As the process evolves, the ink diffuses out of those initial communities but might get transiently contained in other, larger subgraphs. By analysing this Markov dynamics over time, MS detects the structure of the graph across scales. The Markov time $t$ thus acts as a resolution parameter that allows us to extract robust partitions that persist over particular time scales, in an unsupervised manner.",
+        "Given the adjacency matrix $A_{N \\times N}$ of the graph obtained as described previously, let us define the diagonal matrix $D=\\text{diag}(\\mathbf {d})$ , where $\\mathbf {d}=A \\mathbf {1}$ is the degree vector. The random walk Laplacian matrix is defined as $L_\\text{RW}=I_N-D^{-1}A$ where $I_N$ is the identity matrix of size $N$ , and the transition matrix (or kernel) of the associated continuous-time Markov process is $P(t)=e^{-t L_\\text{RW}}, \\, t>0$ BIBREF10 . For each partition, a binary membership matrix $H_{N \\times C}$ maps the $N$ nodes into $C$ clusters. We can then define the $D=\\text{diag}(\\mathbf {d})$0 clustered autocovariance matrix:",
+        "$$R(t,H) = H^T[\\Pi P(t)-\\pi \\pi ^T]H $$   (Eq. 4)",
+        "where $\\pi $ is the steady-state distribution of the process and $\\Pi =\\text{diag}(\\pi )$ . The element $[R(t,H)]_{\\alpha \\beta }$ quantifies the probability that a random walker starting from community $\\alpha $ will end in community $\\beta $ at time $t$ , subtracting the probability that the same event occurs by chance at stationarity.",
+        "We then define our cost function measuring the goodness of a partition over time $t$ , termed the Markov Stability of partition $H$ :",
+        "$$r(t,H) = \\text{trace} \\left[R(t,H)\\right]. $$   (Eq. 5)",
+        "A partition $H$ that maximises $r(t,H)$ is comprised of communities that preserve the flow within themselves over time $t$ , since in that case the diagonal elements of $R(t,H)$ will be large and the off-diagonal elements will be small. For details, see BIBREF9 , BIBREF32 , BIBREF10 , BIBREF34 .",
+        "MS searches for partitions at each Markov time that maximise $r(t,H)$ . Although the maximisation of ( 5 ) is an NP-hard problem (hence with no guarantees for global optimality), there are efficient optimisation methods that work well in practice. Our implementation here uses the Louvain Algorithm BIBREF35 , BIBREF12 which is efficient and known to give good results when applied to benchmarks BIBREF36 . To obtain robust partitions, we run the Louvain algorithm 500 times with different initialisations at each Markov time and pick the best 50 with the highest Markov Stability value $r(t,H)$ . We then compute the variation of information BIBREF37 of this ensemble of solutions $VI(t)$ . as a measure of the reproducibility of the result under the optimisation. In addition, the relevant partitions are required to be persistent across time, as given by low values of the variation of information between optimised partitions across time $VI(t,t^{\\prime })$ . Robust partitions are thus indicated by Markov times where $VI(t)$ shows a dip and $VI(t,t^{\\prime })$ has an extended plateau, indicating consistent results from different Louvain runs and validity over extended scales BIBREF34 , BIBREF10 ."
+      ],
+      "child_pages": [
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Multiscale Graph Partitioning",
+        "Multiscale Graph Partitioning",
+        "Multiscale Graph Partitioning",
+        "Multiscale Graph Partitioning",
+        "Multiscale Graph Partitioning",
+        "Multiscale Graph Partitioning",
+        "Multiscale Graph Partitioning",
+        "Multiscale Graph Partitioning",
+        "Multiscale Graph Partitioning"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Multiscale Graph Partitioning",
+          0
+        ],
+        [
+          "Multiscale Graph Partitioning",
+          1
+        ],
+        [
+          "Multiscale Graph Partitioning",
+          2
+        ],
+        [
+          "Multiscale Graph Partitioning",
+          3
+        ],
+        [
+          "Multiscale Graph Partitioning",
+          4
+        ],
+        [
+          "Multiscale Graph Partitioning",
+          5
+        ],
+        [
+          "Multiscale Graph Partitioning",
+          6
+        ],
+        [
+          "Multiscale Graph Partitioning",
+          7
+        ],
+        [
+          "Multiscale Graph Partitioning",
+          8
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Multiscale Graph Partitioning",
+      "section": "Multiscale Graph Partitioning",
+      "title_path": "Multiscale Graph Partitioning",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Interpretation of MS communities: content and a posteriori comparison with hand-coded categories\n[source_id=63] To ascertain the relevance of the different layers of content clusters found in the MS analysis, we examined in detail the five levels of resolution presented in Figure 3 . For each level, we prepared word clouds (lemmatised for increased intelligibility), as well as a Sankey diagram and a contingency table linking content clusters (i.e., graph communities) with the hand-coded categories externally assigned by an operator. We note again that this comparison was only done a posteriori, i.e., the external categories were not used in our text analysis. The results are shown in Figures 4 – 6 (and Supplementary Figures S1 – S2 ) for all levels.\n[source_id=64] The partition into 44 communities presents content clusters with well-defined characterisations, as shown by the Sankey diagram and the highly clustered structure of the contingency table (Figure 4 ). The content labels for the communities were derived by us from the word clouds presented in detail in the Supplementary Information (Fig. S1 in the SI). Compared to the 15 hand-coded categories, this 44-community partition provides finer groupings of records with several clusters corresponding to sub-themes or more specific sub-classes within large, generic hand-coded categories. This is apparent in the external classes `Accidents', `Medication', `Clinical assessment', `Documentation' and `Infrastructure', where a variety of subtopics are identified corresponding to meaningful subclasses (see Fig. S1 for details). In other cases, however, the content clusters cut across the external categories, or correspond to highly specific content. Examples of the former are the content communities of records from labour ward, chemotherapy, radiotherapy and infection control, whose reports are grouped coherently based on content by our algorithm, yet belong to highly diverse external classes. At this level of resolution, our algorithm also identified highly specific topics as separate content clusters. These include blood transfusions, pressure ulcer, consent, mental health, and child protection.\n[source_id=65] We have studied two levels of resolution where the number of communities (12 and 17) is close to that of hand-coded categories (15). The results of the 12-community partition are presented in Figure 5 (see Figure S2 in the SI for the slightly finer 17-community partition). As expected from the quasi-hierarchical nature of our multi-resolution analysis, we find that some of the communities in the 12-way partition emerge from consistent aggregation of smaller communities in the 44-way partition. In terms of topics, this means that some of the sub-themes observed in Figure 4 are merged into a more general topic. This is apparent in the case of Accidents: seven of the communities in the 44-way partition become one larger community (community 2 in Fig. 5 ), which has a specific and complete identification with the external category `Patient accidents'. A similar phenomenon is seen for the Nursing community (community 1) which falls completely under the external category `Infrastructure'. The clusters related to `Medication' similarly aggregate into a larger community (community 3), yet there still remains a smaller, specific community related to Homecare medication (community 12) with distinct content.\n[source_id=66] Other communities strand across a few external categories. This is clearly observable in communities 10 and 11 (Samples/ lab tests/forms and Referrals/appointments), which fall naturally across the external categories `Documentation' and `Clinical Assessment'. Similarly, community 9 (Patient transfers) sits across the `Admission/Transfer' and `Infrastructure' external categories, due to its relation to nursing and other physical constraints. The rest of the communities contain a substantial proportion of records that have been hand-classified under the generic `Treatment/Procedure' class; yet here they are separated into groups that retain medical coherence, i.e., they refer to medical procedures or processes, such as Radiotherapy (Comm. 4), Blood transfusions (Comm. 7), IV/cannula (Comm. 5), Pressure ulcer (Comm. 8), and the large community Labour ward (Comm. 6).\n[source_id=67] The high specificity of the Radiotherapy, Pressure ulcer and Labour ward communities means that they are still preserved as separate groups on the next level of coarseness given by the 7-way partition (Figure 6 A). The mergers in this case lead to a larger communities referring to Medication, Referrals/Forms and Staffing/Patient transfers. Figure 6 B shows the final level of agglomeration into 3 communities: a community of records referring to accidents; another community broadly referring to procedural matters (referrals, forms, staffing, medical procedures) cutting across many of the external categories; and the labour ward community still on its own as a subgroup of incidents with distinctive content.\n[source_id=68] This process of agglomeration of content, from sub-themes into larger themes, as a result of the multi-scale hierarchy of graph partitions obtained with MS is shown explicitly with word clouds in Figure 8 for the 17, 12 and 7-way partitions.",
+      "score": 2.8564553076495036,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        63,
+        64,
+        65,
+        66,
+        67,
+        68
+      ],
+      "child_qasper_evidence_texts": [
+        "To ascertain the relevance of the different layers of content clusters found in the MS analysis, we examined in detail the five levels of resolution presented in Figure 3 . For each level, we prepared word clouds (lemmatised for increased intelligibility), as well as a Sankey diagram and a contingency table linking content clusters (i.e., graph communities) with the hand-coded categories externally assigned by an operator. We note again that this comparison was only done a posteriori, i.e., the external categories were not used in our text analysis. The results are shown in Figures 4 – 6 (and Supplementary Figures S1 – S2 ) for all levels.",
+        "The partition into 44 communities presents content clusters with well-defined characterisations, as shown by the Sankey diagram and the highly clustered structure of the contingency table (Figure 4 ). The content labels for the communities were derived by us from the word clouds presented in detail in the Supplementary Information (Fig. S1 in the SI). Compared to the 15 hand-coded categories, this 44-community partition provides finer groupings of records with several clusters corresponding to sub-themes or more specific sub-classes within large, generic hand-coded categories. This is apparent in the external classes `Accidents', `Medication', `Clinical assessment', `Documentation' and `Infrastructure', where a variety of subtopics are identified corresponding to meaningful subclasses (see Fig. S1 for details). In other cases, however, the content clusters cut across the external categories, or correspond to highly specific content. Examples of the former are the content communities of records from labour ward, chemotherapy, radiotherapy and infection control, whose reports are grouped coherently based on content by our algorithm, yet belong to highly diverse external classes. At this level of resolution, our algorithm also identified highly specific topics as separate content clusters. These include blood transfusions, pressure ulcer, consent, mental health, and child protection.",
+        "We have studied two levels of resolution where the number of communities (12 and 17) is close to that of hand-coded categories (15). The results of the 12-community partition are presented in Figure 5 (see Figure S2 in the SI for the slightly finer 17-community partition). As expected from the quasi-hierarchical nature of our multi-resolution analysis, we find that some of the communities in the 12-way partition emerge from consistent aggregation of smaller communities in the 44-way partition. In terms of topics, this means that some of the sub-themes observed in Figure 4 are merged into a more general topic. This is apparent in the case of Accidents: seven of the communities in the 44-way partition become one larger community (community 2 in Fig. 5 ), which has a specific and complete identification with the external category `Patient accidents'. A similar phenomenon is seen for the Nursing community (community 1) which falls completely under the external category `Infrastructure'. The clusters related to `Medication' similarly aggregate into a larger community (community 3), yet there still remains a smaller, specific community related to Homecare medication (community 12) with distinct content.",
+        "Other communities strand across a few external categories. This is clearly observable in communities 10 and 11 (Samples/ lab tests/forms and Referrals/appointments), which fall naturally across the external categories `Documentation' and `Clinical Assessment'. Similarly, community 9 (Patient transfers) sits across the `Admission/Transfer' and `Infrastructure' external categories, due to its relation to nursing and other physical constraints. The rest of the communities contain a substantial proportion of records that have been hand-classified under the generic `Treatment/Procedure' class; yet here they are separated into groups that retain medical coherence, i.e., they refer to medical procedures or processes, such as Radiotherapy (Comm. 4), Blood transfusions (Comm. 7), IV/cannula (Comm. 5), Pressure ulcer (Comm. 8), and the large community Labour ward (Comm. 6).",
+        "The high specificity of the Radiotherapy, Pressure ulcer and Labour ward communities means that they are still preserved as separate groups on the next level of coarseness given by the 7-way partition (Figure 6 A). The mergers in this case lead to a larger communities referring to Medication, Referrals/Forms and Staffing/Patient transfers. Figure 6 B shows the final level of agglomeration into 3 communities: a community of records referring to accidents; another community broadly referring to procedural matters (referrals, forms, staffing, medical procedures) cutting across many of the external categories; and the labour ward community still on its own as a subgroup of incidents with distinctive content.",
+        "This process of agglomeration of content, from sub-themes into larger themes, as a result of the multi-scale hierarchy of graph partitions obtained with MS is shown explicitly with word clouds in Figure 8 for the 17, 12 and 7-way partitions."
+      ],
+      "child_pages": [
+        11,
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "child_sections": [
+        "Interpretation of MS communities: content and a posteriori comparison with hand-coded categories",
+        "Interpretation of MS communities: content and a posteriori comparison with hand-coded categories",
+        "Interpretation of MS communities: content and a posteriori comparison with hand-coded categories",
+        "Interpretation of MS communities: content and a posteriori comparison with hand-coded categories",
+        "Interpretation of MS communities: content and a posteriori comparison with hand-coded categories",
+        "Interpretation of MS communities: content and a posteriori comparison with hand-coded categories"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Interpretation of MS communities: content and a posteriori comparison with hand-coded categories",
+          0
+        ],
+        [
+          "Interpretation of MS communities: content and a posteriori comparison with hand-coded categories",
+          1
+        ],
+        [
+          "Interpretation of MS communities: content and a posteriori comparison with hand-coded categories",
+          2
+        ],
+        [
+          "Interpretation of MS communities: content and a posteriori comparison with hand-coded categories",
+          3
+        ],
+        [
+          "Interpretation of MS communities: content and a posteriori comparison with hand-coded categories",
+          4
+        ],
+        [
+          "Interpretation of MS communities: content and a posteriori comparison with hand-coded categories",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Interpretation of MS communities: content and a posteriori comparison with hand-coded categories",
+      "section": "Interpretation of MS communities: content and a posteriori comparison with hand-coded categories",
+      "title_path": "Interpretation of MS communities: content and a posteriori comparison with hand-coded categories",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 4,
+      "content": "The vast amounts of data collected by healthcare providers in conjunction with modern data analytics techniques present a unique opportunity to improve health service provision and the quality and safety of medical care for patient benefit BIBREF0 . Much of the recent research in this area has been on personalised medicine and its aim to deliver better diagnostics aided by the integration of diverse datasets providing complementary information. Another large source of healthcare data is organisational. In the United Kingdom, the National Health Service (NHS) has a long history of documenting extensively the different aspects of healthcare provision. The NHS is currently in the process of increasing the availability of several databases, properly anonymised, with the aim of leveraging advanced analytics to identify areas of improvement in NHS services.",
+      "qasper_evidence_text": "The vast amounts of data collected by healthcare providers in conjunction with modern data analytics techniques present a unique opportunity to improve health service provision and the quality and safety of medical care for patient benefit BIBREF0 . Much of the recent research in this area has been on personalised medicine and its aim to deliver better diagnostics aided by the integration of diverse datasets providing complementary information. Another large source of healthcare data is organisational. In the United Kingdom, the National Health Service (NHS) has a long history of documenting extensively the different aspects of healthcare provision. The NHS is currently in the process of increasing the availability of several databases, properly anonymised, with the aim of leveraging advanced analytics to identify areas of improvement in NHS services.",
+      "source_node_id": 4,
+      "node_id": 4,
+      "paragraph_id": 4,
+      "evidence_id": 4,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 2,
+      "score": 5.794405775163175,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 2
+    },
+    {
+      "id": 80,
+      "content": "This work has applied a multiscale graph partitioning algorithm (Markov Stability) to extract content-based clusters of documents from a textual dataset of healthcare safety incident reports in an unsupervised manner at different levels of resolution. The method uses paragraph vectors to represent the records and obtains an ensuing similarity graph of documents constructed from their content. The framework brings the advantage of multi-resolution algorithms capable of capturing clusters without imposing a priori their number or structure. Since different levels of resolution of the clustering can be found to be relevant, the practitioner can choose the level of description and detail to suit the requirements of a specific task.",
+      "qasper_evidence_text": "This work has applied a multiscale graph partitioning algorithm (Markov Stability) to extract content-based clusters of documents from a textual dataset of healthcare safety incident reports in an unsupervised manner at different levels of resolution. The method uses paragraph vectors to represent the records and obtains an ensuing similarity graph of documents constructed from their content. The framework brings the advantage of multi-resolution algorithms capable of capturing clusters without imposing a priori their number or structure. Since different levels of resolution of the clustering can be found to be relevant, the practitioner can choose the level of description and detail to suit the requirements of a specific task.",
+      "source_node_id": 80,
+      "node_id": 80,
+      "paragraph_id": 80,
+      "evidence_id": 80,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_13",
+      "rank": 3,
+      "score": 4.3771154055288015,
+      "block_type": "paragraph",
+      "page": 13,
+      "section_id": "Discussion",
+      "section": "Discussion",
+      "title": "Discussion",
+      "hotpot_title": "Discussion",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 3
+    }
+  ],
+  "supporting_block_ids": [
+    4,
+    80
+  ]
+}

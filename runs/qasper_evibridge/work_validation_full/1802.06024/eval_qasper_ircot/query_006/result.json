@@ -1,0 +1,83 @@
+{
+  "question": "What are the components of the general knowledge learning engine?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [],
+      "free_form_answer": "Answer with content missing: (list)\nLiLi should have the following capabilities:\n1. to formulate an inference strategy for a given query that embeds processing and interactive actions.\n2. to learn interaction behaviors (deciding what to ask and when to ask the user).\n3. to leverage the acquired knowledge in the current and future inference process.\n4. to perform 1, 2 and 3 in a lifelong manner for continuous knowledge learning.",
+      "yes_no": null,
+      "evidence": [
+        "We solve the OKBC problem by mimicking how humans acquire knowledge and perform reasoning in an interactive conversation. Whenever we encounter an unknown concept or relation while answering a query, we perform inference using our existing knowledge. If our knowledge does not allow us to draw a conclusion, we typically ask questions to others to acquire related knowledge and use it in inference. The process typically involves an inference strategy (a sequence of actions), which interleaves a sequence of processing and interactive actions. A processing action can be the selection of related facts, deriving inference chain, etc., that advances the inference process. An interactive action can be deciding what to ask, formulating a suitable question, etc., that enable us to interact. The process helps grow the knowledge over time and the gained knowledge enables us to communicate better in the future. We call this lifelong interactive learning and inference (LiLi). Lifelong learning is reflected by the facts that the newly acquired facts are retained in the KB and used in inference for future queries, and that the accumulated knowledge in addition to the updated KB including past inference performances are leveraged to guide future interaction and learning. LiLi should have the following capabilities:"
+      ],
+      "evidence_block_ids": [
+        9
+      ],
+      "evidence_paragraph_ids": [
+        9
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "Knowledge Store (KS) ",
+        "Knowledge Graph ( INLINEFORM0 )",
+        " Relation-Entity Matrix ( INLINEFORM2 )",
+        "Task Experience Store ( INLINEFORM15 )",
+        "Incomplete Feature DB ( INLINEFORM29 )"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "As lifelong learning needs to retain knowledge learned from past tasks and use it to help future learning BIBREF31 , LiLi uses a Knowledge Store (KS) for knowledge retention. KS has four components: (i) Knowledge Graph ( INLINEFORM0 ): INLINEFORM1 (the KB) is initialized with base KB triples (see §4) and gets updated over time with the acquired knowledge. (ii) Relation-Entity Matrix ( INLINEFORM2 ): INLINEFORM3 is a sparse matrix, with rows as relations and columns as entity-pairs and is used by the prediction model. Given a triple ( INLINEFORM4 , INLINEFORM5 , INLINEFORM6 ) INLINEFORM7 , we set INLINEFORM8 [ INLINEFORM9 , ( INLINEFORM10 , INLINEFORM11 )] = 1 indicating INLINEFORM12 occurs for pair ( INLINEFORM13 , INLINEFORM14 ). (iii) Task Experience Store ( INLINEFORM15 ): INLINEFORM16 stores the predictive performance of LiLi on past learned tasks in terms of Matthews correlation coefficient (MCC) that measures the quality of binary classification. So, for two tasks INLINEFORM17 and INLINEFORM18 (each relation is a task), if INLINEFORM19 [ INLINEFORM20 ] INLINEFORM21 INLINEFORM22 [ INLINEFORM23 ] [where INLINEFORM24 [ INLINEFORM25 ]=MCC( INLINEFORM26 )], we say C-PR has learned INLINEFORM27 well compared to INLINEFORM28 . (iv) Incomplete Feature DB ( INLINEFORM29 ): INLINEFORM30 stores the frequency of an incomplete path INLINEFORM31 in the form of a tuple ( INLINEFORM32 , INLINEFORM33 , INLINEFORM34 ) and is used in formulating MLQs. INLINEFORM35 [( INLINEFORM36 , INLINEFORM37 , INLINEFORM38 )] = INLINEFORM39 implies LiLi has extracted incomplete path INLINEFORM40 INLINEFORM41 times involving entity-pair INLINEFORM42 [( INLINEFORM43 , INLINEFORM44 )] for query relation INLINEFORM45 .",
+        "The RL model learns even after training whenever it encounters an unseen state (in testing) and thus, gets updated over time. KS is updated continuously over time as a result of the execution of LiLi and takes part in future learning. The prediction model uses lifelong learning (LL), where we transfer knowledge (parameter values) from the model for a past most similar task to help learn for the current task. Similar tasks are identified by factorizing INLINEFORM0 and computing a task similarity matrix INLINEFORM1 . Besides LL, LiLi uses INLINEFORM2 to identify poorly learned past tasks and acquire more clues for them to improve its skillset over time.",
+        "LiLi also uses a stack, called Inference Stack ( INLINEFORM0 ) to hold query and its state information for RL. LiLi always processes stack top ( INLINEFORM1 [top]). The clues from the user get stored in INLINEFORM2 on top of the query during strategy execution and processed first. Thus, the prediction model for INLINEFORM3 is learned before performing inference on query, transforming OKBC to a KBC problem. Table 1 shows the parameters of LiLi used in the following sections."
+      ],
+      "evidence_block_ids": [
+        23,
+        24,
+        25
+      ],
+      "evidence_paragraph_ids": [
+        23,
+        24,
+        25
+      ]
+    }
+  ],
+  "doc_uuid": "1802.06024",
+  "doc_path": "qasper://1802.06024",
+  "qasper_question_id": "bfc2dc913e7b78f3bd45e5449d71383d0aa4a890",
+  "title": "Towards a Continuous Knowledge Learning Engine for Chatbots",
+  "evidence_block_ids": [
+    9,
+    23,
+    24,
+    25
+  ],
+  "evidence_paragraph_ids": [
+    9,
+    23,
+    24,
+    25
+  ],
+  "output": "{\n  \"answer_short\": \"open-world knowledge base completion (OKBC) problem and the LiLi approach\",\n  \"answer_rationale\": \"The general knowledge learning engine is centered around solving the open-world knowledge base completion (OKBC) problem using the LiLi approach, as stated in the retrieved documents. Text 1 and Text 2 explicitly mention that the engine is built around OKBC and the LiLi approach for lifelong interactive learning and inference. Text 3 reinforces that OKBC is the core of the knowledge learning engine for conversation.\",\n  \"supporting_block_ids\": [59, 2, 8]\n}",
+  "retrieved_node_ids": [
+    59,
+    2,
+    8,
+    6
+  ],
+  "retrieved_block_ids": [
+    59,
+    2,
+    8,
+    6
+  ],
+  "answer_short": "open-world knowledge base completion (OKBC) problem and the LiLi approach",
+  "answer_rationale": "The general knowledge learning engine is centered around solving the open-world knowledge base completion (OKBC) problem using the LiLi approach, as stated in the retrieved documents. Text 1 and Text 2 explicitly mention that the engine is built around OKBC and the LiLi approach for lifelong interactive learning and inference. Text 3 reinforces that OKBC is the core of the knowledge learning engine for conversation.",
+  "supporting_block_ids": [
+    59,
+    2,
+    8
+  ]
+}

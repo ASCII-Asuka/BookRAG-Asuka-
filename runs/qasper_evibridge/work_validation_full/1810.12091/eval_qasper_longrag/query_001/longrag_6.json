@@ -1,0 +1,124 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Tag Based Location Embedding\n[source_id=25] Many of the tags associated with Flickr photos describe characteristics of the places where these photos were taken BIBREF45 , BIBREF46 , BIBREF47 . For example, tags may correspond to place names (e.g. Brussels, England, Scandinavia), landmarks (e.g. Eiffel Tower, Empire State Building) or land cover types (e.g. mountain, forest, beach). To allow us to build location models using such tags, we collected the tags and meta-data of 70 million Flickr photos with coordinates in Europe (which is the region our experiments will focus on), all of which were uploaded to Flickr before the end of September 2015. In this section we first explain how tags can be weighted to obtain bag-of-words representations of locations from Flickr. Subsequently we describe a tag selection method, which will allow us to specialize the embedding depending on which aspects of the considered locations are of interest, after which we discuss the actual embedding model.\n[source_id=26] Tag weighting. Let INLINEFORM0 be a set of geographic locations, each characterized by latitude and longitude coordinates. To generate a bag-of-words representation of a given location, we have to weight the relevance of each tag to that location. To this end, we have followed the weighting scheme from BIBREF7 , which combines a Gaussian kernel (to model spatial proximity) with Positive Pointwise Mutual Information (PPMI) BIBREF48 , BIBREF49 .\n[source_id=27] Let us write INLINEFORM0 for the set of users who have assigned tag INLINEFORM1 to a photo with coordinates near INLINEFORM2 . To assess how relevant INLINEFORM3 is to the location INLINEFORM4 , the number of times INLINEFORM5 occurs in photos near INLINEFORM6 is clearly an important criterion. However, rather than simply counting the number of occurrences within some fixed radius, we use a Gaussian kernel to weight the tag occurrences according to their distance from that location: INLINEFORM7\n[source_id=28] where the threshold INLINEFORM0 is assumed to be fixed, INLINEFORM1 is the location of a Flickr photo, INLINEFORM2 is the Haversine distance, and we will assume that the bandwidth parameter INLINEFORM3 is set to INLINEFORM4 . A tag occurrence is counted only once for all photos by the same user at the same location, which is important to reduce the impact of bulk uploading. The value INLINEFORM5 reflects how frequent tag INLINEFORM6 is near location INLINEFORM7 , but it does not yet take into account the total number of tag occurrences near INLINEFORM8 , nor how popular the tag INLINEFORM9 is overall. To measure how strongly tag INLINEFORM10 is associated with location INLINEFORM11 , we use PPMI, which is a commonly used measure of association in natural language processing. However, rather than estimating PPMI scores from term frequencies, we will use the INLINEFORM12 values instead: INLINEFORM13\n[source_id=29] where: INLINEFORM0\n[source_id=30] with INLINEFORM0 the set of all tags, and INLINEFORM1 the set of locations.\n[source_id=31] Tag selection. Inspired by BIBREF50 , we use a term selection method in order to focus on the tags that are most important for the tasks that we want to consider and reduce the impact of tags that might relate only to a given individual or a group of users. In particular, we obtained good results with a method based on Kullback-Leibler (KL) divergence, which is based on BIBREF51 . Let INLINEFORM0 be a set of (mutually exclusive) properties of locations in which we are interested (e.g. land cover categories). For the ease of presentation, we will identify INLINEFORM1 with the set of locations that have the corresponding property. Then, we select tags from INLINEFORM2 that maximize the following score: INLINEFORM3\n[source_id=32] where INLINEFORM0 is the probability that a photo with tag INLINEFORM1 has a location near INLINEFORM2 and INLINEFORM3 is the probability that an arbitrary tag occurrence is assigned to a photo near a location in INLINEFORM4 . Since INLINEFORM5 often has to be estimated from a small number of tag occurrences, it is estimated using Bayesian smoothing: INLINEFORM6\n[source_id=33] where INLINEFORM0 is a parameter controlling the amount of smoothing, which will be tuned in the experiments. On the other hand, for INLINEFORM1 we can simply use a maximum likelihood estimation: INLINEFORM2\n[source_id=34] Location embedding. We now want to find a vector INLINEFORM0 for each location INLINEFORM1 such that similar locations are represented using similar vectors. To achieve this, we use a close variant of the GloVe model, where tag occurrences are treated as context words of geographic locations. In particular, with each location INLINEFORM2 we associate a vector INLINEFORM3 and with each tag INLINEFORM4 we associate a vector INLINEFORM5 and a bias term INLINEFORM6 , and consider the following objective (which in our full model ( EQREF7 ) will be combined with components that are derived from the structured information): INLINEFORM7\n[source_id=35] Note how tags play the role of the context words in the GloVe model, while instead of learning target word vectors we now learn location vectors. In contrast to GloVe, our objective does not directly refer to co-occurrence statistics, but instead uses the INLINEFORM0 scores. One important consequence of this is that we can also consider pairs INLINEFORM1 for which INLINEFORM2 does not occur in INLINEFORM3 at all; such pairs are usually called negative examples. While they cannot be used in the standard GloVe model, some authors have already reported that introducing negative examples in variants of GloVe can lead to an improvement BIBREF52 . In practice, evaluating the full objective above would not be computationally feasible, as we may need to consider millions of locations and millions of tags. Therefore, rather than considering all tags in INLINEFORM4 for the inner summation, we only consider those tags that appear at least once near location INLINEFORM5 together with a sample of negative examples.",
+  "score": 1.0120658997393026,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35
+  ],
+  "child_qasper_evidence_texts": [
+    "Many of the tags associated with Flickr photos describe characteristics of the places where these photos were taken BIBREF45 , BIBREF46 , BIBREF47 . For example, tags may correspond to place names (e.g. Brussels, England, Scandinavia), landmarks (e.g. Eiffel Tower, Empire State Building) or land cover types (e.g. mountain, forest, beach). To allow us to build location models using such tags, we collected the tags and meta-data of 70 million Flickr photos with coordinates in Europe (which is the region our experiments will focus on), all of which were uploaded to Flickr before the end of September 2015. In this section we first explain how tags can be weighted to obtain bag-of-words representations of locations from Flickr. Subsequently we describe a tag selection method, which will allow us to specialize the embedding depending on which aspects of the considered locations are of interest, after which we discuss the actual embedding model.",
+    "Tag weighting. Let INLINEFORM0 be a set of geographic locations, each characterized by latitude and longitude coordinates. To generate a bag-of-words representation of a given location, we have to weight the relevance of each tag to that location. To this end, we have followed the weighting scheme from BIBREF7 , which combines a Gaussian kernel (to model spatial proximity) with Positive Pointwise Mutual Information (PPMI) BIBREF48 , BIBREF49 .",
+    "Let us write INLINEFORM0 for the set of users who have assigned tag INLINEFORM1 to a photo with coordinates near INLINEFORM2 . To assess how relevant INLINEFORM3 is to the location INLINEFORM4 , the number of times INLINEFORM5 occurs in photos near INLINEFORM6 is clearly an important criterion. However, rather than simply counting the number of occurrences within some fixed radius, we use a Gaussian kernel to weight the tag occurrences according to their distance from that location: INLINEFORM7",
+    "where the threshold INLINEFORM0 is assumed to be fixed, INLINEFORM1 is the location of a Flickr photo, INLINEFORM2 is the Haversine distance, and we will assume that the bandwidth parameter INLINEFORM3 is set to INLINEFORM4 . A tag occurrence is counted only once for all photos by the same user at the same location, which is important to reduce the impact of bulk uploading. The value INLINEFORM5 reflects how frequent tag INLINEFORM6 is near location INLINEFORM7 , but it does not yet take into account the total number of tag occurrences near INLINEFORM8 , nor how popular the tag INLINEFORM9 is overall. To measure how strongly tag INLINEFORM10 is associated with location INLINEFORM11 , we use PPMI, which is a commonly used measure of association in natural language processing. However, rather than estimating PPMI scores from term frequencies, we will use the INLINEFORM12 values instead: INLINEFORM13",
+    "where: INLINEFORM0",
+    "with INLINEFORM0 the set of all tags, and INLINEFORM1 the set of locations.",
+    "Tag selection. Inspired by BIBREF50 , we use a term selection method in order to focus on the tags that are most important for the tasks that we want to consider and reduce the impact of tags that might relate only to a given individual or a group of users. In particular, we obtained good results with a method based on Kullback-Leibler (KL) divergence, which is based on BIBREF51 . Let INLINEFORM0 be a set of (mutually exclusive) properties of locations in which we are interested (e.g. land cover categories). For the ease of presentation, we will identify INLINEFORM1 with the set of locations that have the corresponding property. Then, we select tags from INLINEFORM2 that maximize the following score: INLINEFORM3",
+    "where INLINEFORM0 is the probability that a photo with tag INLINEFORM1 has a location near INLINEFORM2 and INLINEFORM3 is the probability that an arbitrary tag occurrence is assigned to a photo near a location in INLINEFORM4 . Since INLINEFORM5 often has to be estimated from a small number of tag occurrences, it is estimated using Bayesian smoothing: INLINEFORM6",
+    "where INLINEFORM0 is a parameter controlling the amount of smoothing, which will be tuned in the experiments. On the other hand, for INLINEFORM1 we can simply use a maximum likelihood estimation: INLINEFORM2",
+    "Location embedding. We now want to find a vector INLINEFORM0 for each location INLINEFORM1 such that similar locations are represented using similar vectors. To achieve this, we use a close variant of the GloVe model, where tag occurrences are treated as context words of geographic locations. In particular, with each location INLINEFORM2 we associate a vector INLINEFORM3 and with each tag INLINEFORM4 we associate a vector INLINEFORM5 and a bias term INLINEFORM6 , and consider the following objective (which in our full model ( EQREF7 ) will be combined with components that are derived from the structured information): INLINEFORM7",
+    "Note how tags play the role of the context words in the GloVe model, while instead of learning target word vectors we now learn location vectors. In contrast to GloVe, our objective does not directly refer to co-occurrence statistics, but instead uses the INLINEFORM0 scores. One important consequence of this is that we can also consider pairs INLINEFORM1 for which INLINEFORM2 does not occur in INLINEFORM3 at all; such pairs are usually called negative examples. While they cannot be used in the standard GloVe model, some authors have already reported that introducing negative examples in variants of GloVe can lead to an improvement BIBREF52 . In practice, evaluating the full objective above would not be computationally feasible, as we may need to consider millions of locations and millions of tags. Therefore, rather than considering all tags in INLINEFORM4 for the inner summation, we only consider those tags that appear at least once near location INLINEFORM5 together with a sample of negative examples."
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Tag Based Location Embedding",
+    "Tag Based Location Embedding",
+    "Tag Based Location Embedding",
+    "Tag Based Location Embedding",
+    "Tag Based Location Embedding",
+    "Tag Based Location Embedding",
+    "Tag Based Location Embedding",
+    "Tag Based Location Embedding",
+    "Tag Based Location Embedding",
+    "Tag Based Location Embedding",
+    "Tag Based Location Embedding"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Tag Based Location Embedding",
+      0
+    ],
+    [
+      "Tag Based Location Embedding",
+      1
+    ],
+    [
+      "Tag Based Location Embedding",
+      2
+    ],
+    [
+      "Tag Based Location Embedding",
+      3
+    ],
+    [
+      "Tag Based Location Embedding",
+      4
+    ],
+    [
+      "Tag Based Location Embedding",
+      5
+    ],
+    [
+      "Tag Based Location Embedding",
+      6
+    ],
+    [
+      "Tag Based Location Embedding",
+      7
+    ],
+    [
+      "Tag Based Location Embedding",
+      8
+    ],
+    [
+      "Tag Based Location Embedding",
+      9
+    ],
+    [
+      "Tag Based Location Embedding",
+      10
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Tag Based Location Embedding",
+  "section": "Tag Based Location Embedding",
+  "title_path": "Tag Based Location Embedding",
+  "block_type": "long_unit"
+}

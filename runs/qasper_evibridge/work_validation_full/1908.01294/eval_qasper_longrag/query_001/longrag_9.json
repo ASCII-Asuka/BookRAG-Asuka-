@@ -1,0 +1,70 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Implementation Detail\n[source_id=68] Before mapping each token included in the unigram, bigram, and trigram to the embedding vector, we limit the minimum frequency of occurring words that are not marked as an unknown token. There are 2 parameters set for the unigram INLINEFORM0 and the remaining INLINEFORM1 , respectively. We found that model accuracy is highly sensitive to these parameters. Therefore, we use a grid search technique to find the best value for both parameters for the model.\n[source_id=69] We apply two optimizers used in this work: Adagard BIBREF39 and Adam BIBREF40 , whose learning rates are set to 0.02 and 0.001 for the Thai and English datasets, respectively. To generalize the model, we also integrate L2 regularization with an alpha of 0.01 to the loss function for model updating. Moreover, dropout is applied to the local representation vectors, recurrent representation vectors, between all bidirectional LSTMs and enclosed by the self-attention mechanism in the high-level module.\n[source_id=70] During training, both the supervised and semi-supervised models are trained until the validation metrics stop improving; the metrics are (1) sentence boundary F1 score and (2) overall F1 score for Thai sentence segmentation and English punctuation restoration, respectively.\n[source_id=71] CVT has three main parameters that impact model accuracy. The first is the drop rate of the masked language model, which determines the number of tokens that are dropped and used for learning auxiliary prediction modules as described in Section SECREF21 . The second is the number of unlabeled mini-batches INLINEFORM0 used for training between supervised mini-batches. Third, rather than using the same dropout rate for the local representation vectors, a new dropout rate is assigned.\n[source_id=72] The details of hyperparameters such as the hidden size of each layer and dropout rate are given in Section SECREF7 .",
+  "score": 4.315973730444159,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    68,
+    69,
+    70,
+    71,
+    72
+  ],
+  "child_qasper_evidence_texts": [
+    "Before mapping each token included in the unigram, bigram, and trigram to the embedding vector, we limit the minimum frequency of occurring words that are not marked as an unknown token. There are 2 parameters set for the unigram INLINEFORM0 and the remaining INLINEFORM1 , respectively. We found that model accuracy is highly sensitive to these parameters. Therefore, we use a grid search technique to find the best value for both parameters for the model.",
+    "We apply two optimizers used in this work: Adagard BIBREF39 and Adam BIBREF40 , whose learning rates are set to 0.02 and 0.001 for the Thai and English datasets, respectively. To generalize the model, we also integrate L2 regularization with an alpha of 0.01 to the loss function for model updating. Moreover, dropout is applied to the local representation vectors, recurrent representation vectors, between all bidirectional LSTMs and enclosed by the self-attention mechanism in the high-level module.",
+    "During training, both the supervised and semi-supervised models are trained until the validation metrics stop improving; the metrics are (1) sentence boundary F1 score and (2) overall F1 score for Thai sentence segmentation and English punctuation restoration, respectively.",
+    "CVT has three main parameters that impact model accuracy. The first is the drop rate of the masked language model, which determines the number of tokens that are dropped and used for learning auxiliary prediction modules as described in Section SECREF21 . The second is the number of unlabeled mini-batches INLINEFORM0 used for training between supervised mini-batches. Third, rather than using the same dropout rate for the local representation vectors, a new dropout rate is assigned.",
+    "The details of hyperparameters such as the hidden size of each layer and dropout rate are given in Section SECREF7 ."
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Implementation Detail",
+    "Implementation Detail",
+    "Implementation Detail",
+    "Implementation Detail",
+    "Implementation Detail"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Implementation Detail",
+      0
+    ],
+    [
+      "Implementation Detail",
+      1
+    ],
+    [
+      "Implementation Detail",
+      2
+    ],
+    [
+      "Implementation Detail",
+      3
+    ],
+    [
+      "Implementation Detail",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Implementation Detail",
+  "section": "Implementation Detail",
+  "title_path": "Implementation Detail",
+  "block_type": "long_unit"
+}

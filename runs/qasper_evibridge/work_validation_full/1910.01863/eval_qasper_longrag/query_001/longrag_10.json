@@ -1,0 +1,52 @@
+{
+  "id": "longrag_10",
+  "content": "[Section] Text Generation ::: Hockey Data Representation\n[source_id=42] Currently, we concentrate on training the model only with text spans aligning with single events, excluding the less frequent multi-event alignments. Furthermore, we are considering each event as a separate training example, independent of other events in the game.\n[source_id=43] Given a single event described as a sequence of features and their values, our text generation model is trained to produce the text span aligned with it. Following the data representation used in E2E NLG Challenge experiments, the input events are represented as a linearized sequence of tokens, where XML-style beginning and end tags are used to separate the different features (see Figure FIGREF18). This allows the model to directly copy some of the input tokens to the output when necessary. The ability to copy tokens is especially important with player names and exact times, where the vocabulary is sparse, and many of these can even be previously unseen, unknown tokens. In addition, we also include features that are meant to inform generation without being copied themselves, for example, the type of the event. The target of generation is a tokenized sequence of words, where also dashes inside scores are separated, allowing the model to swap scores when necessary. The reference text sometimes flips the order of the teams, requiring the score to be inverted as well (Team A–Team B 0–1 into Team B won Team A 1–0).\n[source_id=44] One particular challenge in our corpus is that the decision of which aspects to focus on, i.e., which particular features from the source event to verbalize, is relatively arbitrary. For example, sometimes a journalist mentions the player or players assisting a goal, but in many cases it is left out. Both options are equally correct, but overlap-based metrics such as BLEU penalize such creative variation. By contrast, in other text generation datasets such as the E2E NLG Challenge, the output text in general describes all input features. To account for this variation, we include a length feature to act as a minimal supervision signal for the model to rely on. We divide output text lengths into three evenly sized categories (short, medium and long) to provide a hint to the model during training of how long and detailed output it is expected to generate for each training example. At test time, we then have the possibility to control the desired approximate length of the generated text. In the experiments throughout this paper, we generate all three length variants for each event and pick the one with the highest average confidence of the generation model.",
+  "score": 3.477275868647578,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_10",
+  "child_source_node_ids": [
+    42,
+    43,
+    44
+  ],
+  "child_qasper_evidence_texts": [
+    "Currently, we concentrate on training the model only with text spans aligning with single events, excluding the less frequent multi-event alignments. Furthermore, we are considering each event as a separate training example, independent of other events in the game.",
+    "Given a single event described as a sequence of features and their values, our text generation model is trained to produce the text span aligned with it. Following the data representation used in E2E NLG Challenge experiments, the input events are represented as a linearized sequence of tokens, where XML-style beginning and end tags are used to separate the different features (see Figure FIGREF18). This allows the model to directly copy some of the input tokens to the output when necessary. The ability to copy tokens is especially important with player names and exact times, where the vocabulary is sparse, and many of these can even be previously unseen, unknown tokens. In addition, we also include features that are meant to inform generation without being copied themselves, for example, the type of the event. The target of generation is a tokenized sequence of words, where also dashes inside scores are separated, allowing the model to swap scores when necessary. The reference text sometimes flips the order of the teams, requiring the score to be inverted as well (Team A–Team B 0–1 into Team B won Team A 1–0).",
+    "One particular challenge in our corpus is that the decision of which aspects to focus on, i.e., which particular features from the source event to verbalize, is relatively arbitrary. For example, sometimes a journalist mentions the player or players assisting a goal, but in many cases it is left out. Both options are equally correct, but overlap-based metrics such as BLEU penalize such creative variation. By contrast, in other text generation datasets such as the E2E NLG Challenge, the output text in general describes all input features. To account for this variation, we include a length feature to act as a minimal supervision signal for the model to rely on. We divide output text lengths into three evenly sized categories (short, medium and long) to provide a hint to the model during training of how long and detailed output it is expected to generate for each training example. At test time, we then have the possibility to control the desired approximate length of the generated text. In the experiments throughout this paper, we generate all three length variants for each event and pick the one with the highest average confidence of the generation model."
+  ],
+  "child_pages": [
+    10,
+    10,
+    10
+  ],
+  "child_sections": [
+    "Text Generation ::: Hockey Data Representation",
+    "Text Generation ::: Hockey Data Representation",
+    "Text Generation ::: Hockey Data Representation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Text Generation ::: Hockey Data Representation",
+      0
+    ],
+    [
+      "Text Generation ::: Hockey Data Representation",
+      1
+    ],
+    [
+      "Text Generation ::: Hockey Data Representation",
+      2
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_10",
+  "section_id": "Text Generation ::: Hockey Data Representation",
+  "section": "Text Generation ::: Hockey Data Representation",
+  "title_path": "Text Generation ::: Hockey Data Representation",
+  "block_type": "long_unit"
+}

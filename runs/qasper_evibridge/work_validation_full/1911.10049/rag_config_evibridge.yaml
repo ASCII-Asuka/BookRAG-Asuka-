@@ -1,0 +1,172 @@
+graph:
+  embedding_config:
+    api_base: http://localhost:11434
+    api_key: '***REDACTED***'
+    backend: local
+    device: cuda:2
+    max_length: 8192
+    model_name: Qwen/Qwen3-Embedding-0.6B
+    type: text
+  extractor_type: llm
+  g: 0.6
+  image_description_force: false
+  local_model_name: en_core_web_sm
+  max_gleaning: 0
+  refine_type: advanced
+  reranker_config:
+    api_base: http://localhost:8011/v1
+    api_key: '***REDACTED***'
+    backend: local
+    device: cuda:2
+    max_length: 8192
+    max_retries: 3
+    model_name: Qwen/Qwen3-Reranker-0.6B
+    request_timeout: 60.0
+    retry_backoff: 0.5
+index_type: evibridge
+llm:
+  api_base: https://api.siliconflow.cn/v1
+  api_key: '***REDACTED***'
+  backend: openai
+  frequency_penalty: 0.0
+  max_tokens: 5000
+  max_workers: 1
+  model_name: Qwen/Qwen3-VL-8B-Instruct
+  presence_penalty: 0.0
+  temperature: 0.1
+mineru:
+  backend: pipeline
+  lang: en
+  method: auto
+  server_url: http://127.0.0.1:30000
+pdf_path: qasper:\1911.10049
+rag:
+  strategy_config:
+    ablation_variant: full
+    auxiliary_quota: 2
+    bm25_topk: 40
+    bridge_auxiliary_types:
+    - entity
+    - summary
+    - patch
+    - title
+    candidate_rerank_topk: 50
+    candidate_rerank_weight: 0.75
+    connector_max_paths: 3
+    demand_confidence_threshold: 0.7
+    demand_parser: hybrid
+    embedding_topk: 50
+    enable_boolean_answer_hint: true
+    enable_candidate_rerank: true
+    enable_llm_verifier: true
+    enable_shortest_path_connector: true
+    enable_supporting_rerank: true
+    enable_vector_recall: true
+    entity_topk: 10
+    evibridge_vdb_config:
+      collection_name: EviBridgeBlockVDB
+      embedding_config:
+        api_base: https://api.siliconflow.cn/v1
+        api_key: '***REDACTED***'
+        backend: openai
+        device: cpu
+        max_length: 32768
+        model_name: Qwen/Qwen3-Embedding-0.6B
+        type: text
+      force_rebuild: true
+      mm_embedding: false
+      vdb_dir_name: EviBridge_vdb
+    final_evidence_types:
+    - paragraph
+    - table
+    - caption
+    - figure
+    hybrid_bm25_weight: 0.35
+    hybrid_vector_weight: 0.65
+    max_context_blocks: 10
+    max_context_tokens: 4000
+    max_iterations: 2
+    multi_hop_requires_explicit_bridge: true
+    output_evidence_chain: true
+    paragraph_quota: 4
+    patch_topk: 5
+    ppr_max_iter: 50
+    ppr_restart_alpha: 0.15
+    ppr_topk: 60
+    preserve_seed_topk: 60
+    qasper_demand_mode: conservative
+    rerank_batch_size: 50
+    reranker_config:
+      api_base: https://api.siliconflow.cn/v1
+      api_key: '***REDACTED***'
+      backend: vllm
+      device: cpu
+      max_length: 4096
+      max_retries: 3
+      model_name: BAAI/bge-reranker-v2-m3
+      request_timeout: 60.0
+      retry_backoff: 0.5
+    strategy: evibridge
+    supporting_evidence_topk: 4
+    supporting_evidence_types:
+    - paragraph
+    - table
+    - caption
+    - figure
+    topk: null
+    trust_answer_supporting_ids: false
+    typed_edge_weights:
+      aggregation:
+        context: 0.35
+        hierarchy: 0.45
+        semantic: 0.2
+      boolean:
+        context: 0.5
+        hierarchy: 0.25
+        semantic: 0.25
+      comparison:
+        context: 0.25
+        hierarchy: 0.2
+        semantic: 0.55
+      fact:
+        context: 0.45
+        hierarchy: 0.2
+        semantic: 0.35
+      global-summary:
+        context: 0.35
+        hierarchy: 0.45
+        semantic: 0.2
+      multi-hop:
+        context: 0.25
+        hierarchy: 0.2
+        semantic: 0.55
+      table-figure:
+        context: 0.65
+        hierarchy: 0.15
+        semantic: 0.2
+rag_force_reprocess: true
+save_path: runs\qasper_evibridge\work_validation_full\1911.10049
+tree:
+  node_keywords: true
+  node_summary: false
+  use_vlm: false
+vdb:
+  collection_name: TreeVDB
+  embedding_config:
+    api_base: http://localhost:11434
+    api_key: '***REDACTED***'
+    backend: local
+    device: cuda:2
+    max_length: 8192
+    model_name: Qwen/Qwen3-Embedding-0.6B
+    type: text
+  force_rebuild: true
+  mm_embedding: false
+  vdb_dir_name: Tree_vdb
+vlm:
+  api_base: TODO
+  api_key: '***REDACTED***'
+  backend: ollama
+  max_tokens: 6000
+  model_name: TODO
+  temperature: 0.1

@@ -1,0 +1,70 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Users of photo-sharing websites such as Flickr often provide short textual descriptions in the form of tags to help others find the images. With the availability of GPS systems in current electronic devices such as smartphones, latitude and longitude coordinates are nowadays commonly made available as well. The tags associated with such georeferenced photos often describe the location where these photos were taken, and Flickr can thus be regarded as a source of environmental information. The use of Flickr for modelling urban environments has already received considerable attention. For instance, various approaches have been proposed for modelling urban regions BIBREF0 , and for identifying points-of-interest BIBREF1 and itineraries BIBREF2 , BIBREF3 . However, the usefulness of Flickr for characterizing the natural environment, which is the focus of this paper, is less well-understood.\n[source_id=5] Many recent studies have highlighted that Flickr tags capture valuable ecological information, which can be used as a complementary source to more traditional sources. To date, however, ecologists have mostly used social media to conduct manual evaluations of image content with little automated exploitation of the associated tags BIBREF4 , BIBREF5 , BIBREF6 . One recent exception is BIBREF7 , where bag-of-words representations derived from Flickr tags were found to give promising result for predicting a range of different environemental phenomena.\n[source_id=6] Our main hypothesis in this paper is that by using vector space embeddings instead of bag-of-words representations, the ecological information which is implicitly captured by Flickr tags can be utilized in a more effective way. Vector space embeddings are representations in which the objects from a given domain are encoded using relatively low-dimensional vectors. They have proven useful in natural language processing, especially for encoding word meaning BIBREF8 , BIBREF9 , and in machine learning more generally. In this paper, we are interested in the use of such representations for modelling geographic locations. Our main motivation for using vector space embeddings is that they allow us to integrate the textual information we get from Flickr with available structured information in a very natural way. To this end, we rely on an adaptation of the GloVe word embedding model BIBREF9 , but rather than learning word vectors, we learn vectors representing locations. Similar to how the representation of a word in GloVe is determined by the context words surrounding it, the representation of a location in our model is determined by the tags of the photos that have been taken near that location. To incorporate numerical features from structured environmental datasets (e.g. average temperature), we associate with each such feature a linear mapping that can be used to predict that feature from a given location vector. This is inspired by the fact that salient properties of a given domain can often be modelled as directions in vector space embeddings BIBREF10 , BIBREF11 , BIBREF12 . Finally, evidence from categorical datasets (e.g. land cover types) is taken into account by requiring that locations belonging to the same category are represented using similar vectors, similar to how semantic types are sometimes modelled in the context of knowledge graph embedding BIBREF13 .\n[source_id=7] While our point-of-departure is a standard word embedding model, we found that the off-the-shelf GloVe model performed surprisingly poorly, meaning that a number of modifications are needed to achieve good results. Our main findings are as follows. First, given that the number of tags associated with a given location can be quite small, it is important to apply some kind of spatial smoothing, i.e. the importance of a given tag for a given location should not only depend on the occurrences of the tag at that location, but also on its occurrences at nearby locations. To this end, we use a formulation which is based on spatially smoothed version of pointwise mutual information. Second, given the wide diversity in the kind of information that is covered by Flickr tags, we find that term selection is in some cases critical to obtain vector spaces that capture the relevant aspects of geographic locations. For instance, many tags on Flickr refer to photography related terms, which we would normally not want to affect the vector representation of a given location. Finally, even with these modifications, vector space embeddings learned from Flickr tags alone are sometimes outperformed by bag-of-words representations. However, our vector space embeddings lead to substantially better predictions in cases where structured (scientific) information is also taken into account. In this sense, the main value of using vector space embeddings in this context is not so much about abstracting away from specific tag usages, but rather about the fact that such representations allow us to integrate numerical and categorical features in a much more natural way than is possible with bag-of-words representations.\n[source_id=8] The remainder of this paper is organized as follows. In the next section, we provide a discussion of existing work. Section SECREF3 then presents our model for embedding geographic locations from Flickr tags and structured data. Next, in Section SECREF4 we provide a detailed discussion about the experimental results. Finally, Section SECREF5 summarizes our conclusions.",
+  "score": 2.7087090373300424,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "child_qasper_evidence_texts": [
+    "Users of photo-sharing websites such as Flickr often provide short textual descriptions in the form of tags to help others find the images. With the availability of GPS systems in current electronic devices such as smartphones, latitude and longitude coordinates are nowadays commonly made available as well. The tags associated with such georeferenced photos often describe the location where these photos were taken, and Flickr can thus be regarded as a source of environmental information. The use of Flickr for modelling urban environments has already received considerable attention. For instance, various approaches have been proposed for modelling urban regions BIBREF0 , and for identifying points-of-interest BIBREF1 and itineraries BIBREF2 , BIBREF3 . However, the usefulness of Flickr for characterizing the natural environment, which is the focus of this paper, is less well-understood.",
+    "Many recent studies have highlighted that Flickr tags capture valuable ecological information, which can be used as a complementary source to more traditional sources. To date, however, ecologists have mostly used social media to conduct manual evaluations of image content with little automated exploitation of the associated tags BIBREF4 , BIBREF5 , BIBREF6 . One recent exception is BIBREF7 , where bag-of-words representations derived from Flickr tags were found to give promising result for predicting a range of different environemental phenomena.",
+    "Our main hypothesis in this paper is that by using vector space embeddings instead of bag-of-words representations, the ecological information which is implicitly captured by Flickr tags can be utilized in a more effective way. Vector space embeddings are representations in which the objects from a given domain are encoded using relatively low-dimensional vectors. They have proven useful in natural language processing, especially for encoding word meaning BIBREF8 , BIBREF9 , and in machine learning more generally. In this paper, we are interested in the use of such representations for modelling geographic locations. Our main motivation for using vector space embeddings is that they allow us to integrate the textual information we get from Flickr with available structured information in a very natural way. To this end, we rely on an adaptation of the GloVe word embedding model BIBREF9 , but rather than learning word vectors, we learn vectors representing locations. Similar to how the representation of a word in GloVe is determined by the context words surrounding it, the representation of a location in our model is determined by the tags of the photos that have been taken near that location. To incorporate numerical features from structured environmental datasets (e.g. average temperature), we associate with each such feature a linear mapping that can be used to predict that feature from a given location vector. This is inspired by the fact that salient properties of a given domain can often be modelled as directions in vector space embeddings BIBREF10 , BIBREF11 , BIBREF12 . Finally, evidence from categorical datasets (e.g. land cover types) is taken into account by requiring that locations belonging to the same category are represented using similar vectors, similar to how semantic types are sometimes modelled in the context of knowledge graph embedding BIBREF13 .",
+    "While our point-of-departure is a standard word embedding model, we found that the off-the-shelf GloVe model performed surprisingly poorly, meaning that a number of modifications are needed to achieve good results. Our main findings are as follows. First, given that the number of tags associated with a given location can be quite small, it is important to apply some kind of spatial smoothing, i.e. the importance of a given tag for a given location should not only depend on the occurrences of the tag at that location, but also on its occurrences at nearby locations. To this end, we use a formulation which is based on spatially smoothed version of pointwise mutual information. Second, given the wide diversity in the kind of information that is covered by Flickr tags, we find that term selection is in some cases critical to obtain vector spaces that capture the relevant aspects of geographic locations. For instance, many tags on Flickr refer to photography related terms, which we would normally not want to affect the vector representation of a given location. Finally, even with these modifications, vector space embeddings learned from Flickr tags alone are sometimes outperformed by bag-of-words representations. However, our vector space embeddings lead to substantially better predictions in cases where structured (scientific) information is also taken into account. In this sense, the main value of using vector space embeddings in this context is not so much about abstracting away from specific tag usages, but rather about the fact that such representations allow us to integrate numerical and categorical features in a much more natural way than is possible with bag-of-words representations.",
+    "The remainder of this paper is organized as follows. In the next section, we provide a discussion of existing work. Section SECREF3 then presents our model for embedding geographic locations from Flickr tags and structured data. Next, in Section SECREF4 we provide a detailed discussion about the experimental results. Finally, Section SECREF5 summarizes our conclusions."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

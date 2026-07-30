@@ -1,0 +1,52 @@
+{
+  "id": "longrag_8",
+  "content": "[Section] Pooling submodule\n[source_id=39] The entity vectors $\\tilde{E}$ are pooled to create a single topic vector $t$ that represents the topic of the summary. One possible pooling technique is to use soft attention BIBREF18 on the vectors to determine the importance value of each vector, which can be done by matching each entity vector with the text vector $s$ from the text encoder as the context vector. The entity vectors are then pooled using weighted sum. One problem with soft attention is that it considers all entity vectors when constructing the topic vector. However, not all entities are important and necessary when generating summaries. Moreover, a number of these entities may be erroneous and irrelevant, as reported in Section \"Related work\" . Soft attention gives non-negligible important scores to these entities, thus adds unnecessary noise to the construction of the topic vector.\n[source_id=40] Our pooling submodule instead uses firm attention mechanism to consider only top $k$ entities when constructing the topic vector. This is done in a differentiable way as follows: $\nG &= v_a^\\top tanh(W_a \\tilde{E} + U_a s) \\\\\nK &= top\\_k(G) \\\\\nP &= sparse\\_vector(K, 0, -\\infty ) \\\\\ng^{\\prime }_i &= g_i + p_i \\\\\na_i &= \\frac{exp(g^{\\prime }_i)}{\\sum _i exp(g^{\\prime }_i)} \\\\\nt &= \\sum _i a_i \\tilde{e}_i \\nonumber $\n[source_id=41] where the functions $K = top\\_k(G)$ gets the indices of the top $k$ vectors in $G$ and $P = sparse\\_vector(K,0,-\\infty )$ creates a sparse vector where the values of $K$ is 0 and $-\\infty $ otherwise. The sparse vector $P$ is added to the original importance score vector $G$ to create a new importance score vector. In this new vector, important scores of non-top $k$0 entities are $k$1 . When softmax is applied, this gives very small, negligible, and close-to-zero values to non-top $k$2 entities. The value $k$3 depends on the lengths of the input text and summary. Moreover, when $k$4 increases towards infinity, firm attention becomes soft attention. We decide $k$5 empirically (see Section \"Experimental settings\" ).",
+  "score": 1.8458004675628716,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_8",
+  "child_source_node_ids": [
+    39,
+    40,
+    41
+  ],
+  "child_qasper_evidence_texts": [
+    "The entity vectors $\\tilde{E}$ are pooled to create a single topic vector $t$ that represents the topic of the summary. One possible pooling technique is to use soft attention BIBREF18 on the vectors to determine the importance value of each vector, which can be done by matching each entity vector with the text vector $s$ from the text encoder as the context vector. The entity vectors are then pooled using weighted sum. One problem with soft attention is that it considers all entity vectors when constructing the topic vector. However, not all entities are important and necessary when generating summaries. Moreover, a number of these entities may be erroneous and irrelevant, as reported in Section \"Related work\" . Soft attention gives non-negligible important scores to these entities, thus adds unnecessary noise to the construction of the topic vector.",
+    "Our pooling submodule instead uses firm attention mechanism to consider only top $k$ entities when constructing the topic vector. This is done in a differentiable way as follows: $\nG &= v_a^\\top tanh(W_a \\tilde{E} + U_a s) \\\\\nK &= top\\_k(G) \\\\\nP &= sparse\\_vector(K, 0, -\\infty ) \\\\\ng^{\\prime }_i &= g_i + p_i \\\\\na_i &= \\frac{exp(g^{\\prime }_i)}{\\sum _i exp(g^{\\prime }_i)} \\\\\nt &= \\sum _i a_i \\tilde{e}_i \\nonumber $",
+    "where the functions $K = top\\_k(G)$ gets the indices of the top $k$ vectors in $G$ and $P = sparse\\_vector(K,0,-\\infty )$ creates a sparse vector where the values of $K$ is 0 and $-\\infty $ otherwise. The sparse vector $P$ is added to the original importance score vector $G$ to create a new importance score vector. In this new vector, important scores of non-top $k$0 entities are $k$1 . When softmax is applied, this gives very small, negligible, and close-to-zero values to non-top $k$2 entities. The value $k$3 depends on the lengths of the input text and summary. Moreover, when $k$4 increases towards infinity, firm attention becomes soft attention. We decide $k$5 empirically (see Section \"Experimental settings\" )."
+  ],
+  "child_pages": [
+    8,
+    8,
+    8
+  ],
+  "child_sections": [
+    "Pooling submodule",
+    "Pooling submodule",
+    "Pooling submodule"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Pooling submodule",
+      0
+    ],
+    [
+      "Pooling submodule",
+      1
+    ],
+    [
+      "Pooling submodule",
+      2
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_8",
+  "section_id": "Pooling submodule",
+  "section": "Pooling submodule",
+  "title_path": "Pooling submodule",
+  "block_type": "long_unit"
+}

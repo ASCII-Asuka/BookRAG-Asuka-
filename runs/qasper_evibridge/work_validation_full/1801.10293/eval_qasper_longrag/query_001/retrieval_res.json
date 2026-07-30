@@ -1,0 +1,411 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Numerous lexical semantic properties are captured by representations encoding distributional properties of words, as has been demonstrated in a variety of tasks BIBREF0 , BIBREF1 , BIBREF2 . However, this distributional account of meaning does not scale to larger units like phrases and sentences BIBREF3 , BIBREF4 , motivating research into compositional models that combine word representations to produce representations of the semantics of longer units BIBREF5 , BIBREF6 , BIBREF7 . Previous work has learned these models using autoencoder formulations BIBREF8 or limited human supervision BIBREF5 . In this work, we explore the hypothesis that the equivalent knowledge about how words compose can be obtained through monolingual paraphrases that have been extracted using word alignments and an intermediate language BIBREF9 . Confirming this hypothesis would allow the rapid development of compositional models in a large number of languages.\n[source_id=5] As their name suggests, these models also impose the assumption that longer units like phrases are compositional, i.e., a phrase's meaning can be understood from the literal meaning of its parts. However, countless examples that run contrary to the assumption exist, and handling these non-compositional phrases has been problematic and of long-standing interest in the community BIBREF10 , BIBREF11 . (Non-) Compositionality detection can provide vital information to other language processing systems on whether a multiword unit should be treated semantically as a single entity or not, and scoring this phenomenon is particularly relevant for downstream tasks like machine translation (MT) or information retrieval. We explore the hypothesis that contextual evidence can be used to determine the relative degree to which a phrase is meant compositionally.\n[source_id=6] Rather than focusing purely on intrinsic clean-room evaluations, the goal of this work is to learn relatively accurate context-sensitive compositional models that are also directly applicable in real-world, noisy-data scenarios. This objective necessitates certain design decisions, and to this end we propose a robust, scalable framework that learns compositional functions and scores relative phrasal compositionality. We make three contributions: first, a novel way to learn compositional functions for part-of-speech pairs that uses supervision from an automatically-extracted list of paraphrases (§ SECREF3 ). Second, a context-dependent scoring model that scores the relative compositionality of a phrase BIBREF12 by computing the likelihood of its context given its paraphrase-learned representation (§ SECREF4 ). And third, an evaluation of the impact of compositionality knowledge in an end-to-end MT setup. Our experiments (§ SECREF5 ) reveal that using supervision from automatically extracted paraphrases produces compositional functions with equivalent performance to previous approaches that have relied on hand-annotated training data. Furthermore, compositionality features consistently improve the translations produced by a strong English–Spanish translation system.",
+      "score": 5.873256375497505,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6
+      ],
+      "child_qasper_evidence_texts": [
+        "Numerous lexical semantic properties are captured by representations encoding distributional properties of words, as has been demonstrated in a variety of tasks BIBREF0 , BIBREF1 , BIBREF2 . However, this distributional account of meaning does not scale to larger units like phrases and sentences BIBREF3 , BIBREF4 , motivating research into compositional models that combine word representations to produce representations of the semantics of longer units BIBREF5 , BIBREF6 , BIBREF7 . Previous work has learned these models using autoencoder formulations BIBREF8 or limited human supervision BIBREF5 . In this work, we explore the hypothesis that the equivalent knowledge about how words compose can be obtained through monolingual paraphrases that have been extracted using word alignments and an intermediate language BIBREF9 . Confirming this hypothesis would allow the rapid development of compositional models in a large number of languages.",
+        "As their name suggests, these models also impose the assumption that longer units like phrases are compositional, i.e., a phrase's meaning can be understood from the literal meaning of its parts. However, countless examples that run contrary to the assumption exist, and handling these non-compositional phrases has been problematic and of long-standing interest in the community BIBREF10 , BIBREF11 . (Non-) Compositionality detection can provide vital information to other language processing systems on whether a multiword unit should be treated semantically as a single entity or not, and scoring this phenomenon is particularly relevant for downstream tasks like machine translation (MT) or information retrieval. We explore the hypothesis that contextual evidence can be used to determine the relative degree to which a phrase is meant compositionally.",
+        "Rather than focusing purely on intrinsic clean-room evaluations, the goal of this work is to learn relatively accurate context-sensitive compositional models that are also directly applicable in real-world, noisy-data scenarios. This objective necessitates certain design decisions, and to this end we propose a robust, scalable framework that learns compositional functions and scores relative phrasal compositionality. We make three contributions: first, a novel way to learn compositional functions for part-of-speech pairs that uses supervision from an automatically-extracted list of paraphrases (§ SECREF3 ). Second, a context-dependent scoring model that scores the relative compositionality of a phrase BIBREF12 by computing the likelihood of its context given its paraphrase-learned representation (§ SECREF4 ). And third, an evaluation of the impact of compositionality knowledge in an end-to-end MT setup. Our experiments (§ SECREF5 ) reveal that using supervision from automatically extracted paraphrases produces compositional functions with equivalent performance to previous approaches that have relied on hand-annotated training data. Furthermore, compositionality features consistently improve the translations produced by a strong English–Spanish translation system."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_16",
+      "content": "[Section] Related Work\n[source_id=58] There has been a large amount of work on compositional models that operate on vector representations of words. With some exceptions BIBREF16 , BIBREF5 , all of these approaches are lexicalized i.e., parameters (generally in the form of vectors, matrices, or tensors) for specific words are learned, which works well for frequently occurring words but fails when dealing with compositions of arbitrary word sequences containing infrequent words. The functions are either learned with a neural network architecture BIBREF7 or as a linear regression BIBREF6 ; the latter require phrase representations extracted directly from the corpus for supervision, which can be computationally expensive and statistically inefficient. In contrast, we obtain this information through many-to-one PPDB mappings. Most of these models also require additional syntactic BIBREF31 or semantic BIBREF15 , BIBREF14 resources; on the other hand, our proposed approach only requires a shallow syntactic parse (POS tags). Recent efforts to make these models more practical BIBREF32 attempt to reduce their statistically complex and overly-parametrized nature, but with the exception of Zanzotto2010, who propose a way to extract compositional function training examples from a dictionary, these models generally require human-annotated data to work.\n[source_id=59] Most models that score the relative (non-) compositionality of phrases do so in a context-independent manner. A central idea is to replace phrase constituents with semantically-related words and compute the similarity of the new phrase to the original BIBREF22 , BIBREF33 or make use of a variety of lexical association measures BIBREF10 , BIBREF34 . Sporleder2009 however, do make use of context in a token-based approach, where the context in which a phrase occurs as well as the phrase itself is modeled as a lexical chain, and the cohesion of the chain is measured as an indicator of a phrase's compositionality. Cohesion is computed using a web search engine-based measure, whereas we use a probabilistic model of context given a phrase representation. Hermann2012 propose a Bayesian generative model that is also context-based, but learning and inference is done through a relatively expensive Gibbs sampling scheme.\n[source_id=60] In the context of MT, Zhang2008b present a Bayesian model that learns non-compositional phrases from a synchronous parse tree of a sentence pair. However, the primary aim of their work is phrase extraction for MT, and the non-compositional constraints are only applied to make the space of phrase pairs more tractable when bootstrapping their phrasal parser from their word-based parser. In contrast, we score every phrase that is extracted with the standard phrase extraction heuristics BIBREF29 , allowing the decoder to make the final decision on the impact of compositionality scores in translation. Thus, our work is more similar to Xiong2010, who propose maximum entropy classifiers that mark positions between words in a sentence as being a phrase boundary or not, and integrate these scores as additional features in an MT system.",
+      "score": 5.608982741159583,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_16",
+      "child_source_node_ids": [
+        58,
+        59,
+        60
+      ],
+      "child_qasper_evidence_texts": [
+        "There has been a large amount of work on compositional models that operate on vector representations of words. With some exceptions BIBREF16 , BIBREF5 , all of these approaches are lexicalized i.e., parameters (generally in the form of vectors, matrices, or tensors) for specific words are learned, which works well for frequently occurring words but fails when dealing with compositions of arbitrary word sequences containing infrequent words. The functions are either learned with a neural network architecture BIBREF7 or as a linear regression BIBREF6 ; the latter require phrase representations extracted directly from the corpus for supervision, which can be computationally expensive and statistically inefficient. In contrast, we obtain this information through many-to-one PPDB mappings. Most of these models also require additional syntactic BIBREF31 or semantic BIBREF15 , BIBREF14 resources; on the other hand, our proposed approach only requires a shallow syntactic parse (POS tags). Recent efforts to make these models more practical BIBREF32 attempt to reduce their statistically complex and overly-parametrized nature, but with the exception of Zanzotto2010, who propose a way to extract compositional function training examples from a dictionary, these models generally require human-annotated data to work.",
+        "Most models that score the relative (non-) compositionality of phrases do so in a context-independent manner. A central idea is to replace phrase constituents with semantically-related words and compute the similarity of the new phrase to the original BIBREF22 , BIBREF33 or make use of a variety of lexical association measures BIBREF10 , BIBREF34 . Sporleder2009 however, do make use of context in a token-based approach, where the context in which a phrase occurs as well as the phrase itself is modeled as a lexical chain, and the cohesion of the chain is measured as an indicator of a phrase's compositionality. Cohesion is computed using a web search engine-based measure, whereas we use a probabilistic model of context given a phrase representation. Hermann2012 propose a Bayesian generative model that is also context-based, but learning and inference is done through a relatively expensive Gibbs sampling scheme.",
+        "In the context of MT, Zhang2008b present a Bayesian model that learns non-compositional phrases from a synchronous parse tree of a sentence pair. However, the primary aim of their work is phrase extraction for MT, and the non-compositional constraints are only applied to make the space of phrase pairs more tractable when bootstrapping their phrasal parser from their word-based parser. In contrast, we score every phrase that is extracted with the standard phrase extraction heuristics BIBREF29 , allowing the decoder to make the final decision on the impact of compositionality scores in translation. Thus, our work is more similar to Xiong2010, who propose maximum entropy classifiers that mark positions between words in a sentence as being a phrase boundary or not, and integrate these scores as additional features in an MT system."
+      ],
+      "child_pages": [
+        16,
+        16,
+        16
+      ],
+      "child_sections": [
+        "Related Work",
+        "Related Work",
+        "Related Work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work",
+          0
+        ],
+        [
+          "Related Work",
+          1
+        ],
+        [
+          "Related Work",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_16",
+      "section_id": "Related Work",
+      "section": "Related Work",
+      "title_path": "Related Work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Measuring of Compositionality\n[source_id=28] The concatenation and tensor models compute an INLINEFORM0 -dimensional vector representation for a multi-word phrase by assuming the meaning of the phrase can be expressed in terms of the meaning of its constituents. This assumption holds true to varying degrees; while it clearly holds for “large amount\" and breaks down for “cloud nine\", it is partially valid for phrases such as “zebra crossing\" or “crash course\". In line with previous work, we assume a compositionality continuum BIBREF12 , but further conjecture that a phrase's level of compositionality is dependent on the specific context in which it occurs, motivating a context-based approach (§ SECREF21 ) which scores compositionality by computing the likelihoods of surrounding context words given a phrase representation. The effect of context is directly measured through a comparison with context-independent methods from prior work BIBREF20 , BIBREF21\n[source_id=29] It is important to note that most prior work on compositionality scoring assumes access to both word and phrase vector representations (for select phrases that will be evaluated) a priori. The latter are distinct from representations that are computed from learned compositional functions as they are extracted directly from the corpus, which is an expensive procedure. Our aim is to develop compositional models that are applicable in downstream tasks, and thus assuming pre-existing phrase vectors is unreasonable. Hence for phrases, we only rely on representations computed from our learned compositional functions.",
+      "score": 4.379292223619806,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        28,
+        29
+      ],
+      "child_qasper_evidence_texts": [
+        "The concatenation and tensor models compute an INLINEFORM0 -dimensional vector representation for a multi-word phrase by assuming the meaning of the phrase can be expressed in terms of the meaning of its constituents. This assumption holds true to varying degrees; while it clearly holds for “large amount\" and breaks down for “cloud nine\", it is partially valid for phrases such as “zebra crossing\" or “crash course\". In line with previous work, we assume a compositionality continuum BIBREF12 , but further conjecture that a phrase's level of compositionality is dependent on the specific context in which it occurs, motivating a context-based approach (§ SECREF21 ) which scores compositionality by computing the likelihoods of surrounding context words given a phrase representation. The effect of context is directly measured through a comparison with context-independent methods from prior work BIBREF20 , BIBREF21",
+        "It is important to note that most prior work on compositionality scoring assumes access to both word and phrase vector representations (for select phrases that will be evaluated) a priori. The latter are distinct from representations that are computed from learned compositional functions as they are extracted directly from the corpus, which is an expensive procedure. Our aim is to develop compositional models that are applicable in downstream tasks, and thus assuming pre-existing phrase vectors is unreasonable. Hence for phrases, we only rely on representations computed from our learned compositional functions."
+      ],
+      "child_pages": [
+        9,
+        9
+      ],
+      "child_sections": [
+        "Measuring of Compositionality",
+        "Measuring of Compositionality"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Measuring of Compositionality",
+          0
+        ],
+        [
+          "Measuring of Compositionality",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Measuring of Compositionality",
+      "section": "Measuring of Compositionality",
+      "title_path": "Measuring of Compositionality",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Supervision from Automatic Paraphrases\n[source_id=23] The Paraphrase Database BIBREF9 is a collection of ranked monolingual paraphrases that have been extracted from word-aligned parallel corpora using the bilingual pivot method BIBREF19 . The underlying assumption is that if two strings in the same language align to the same string in another language, then the strings in the original language share the same meaning. Paraphrases are ranked by their word alignment scores, and in this work we use the preselected small portion of PPDB as our training data. Although we can directly extract phrasal representations of a pre-specified list of phrases from the corpus used to compute word representations BIBREF6 , this approach is both computationally and statistically inefficient: the number of phrases increases exponentially in the length of the phrase, and correspondingly the occurrence of any individual phrase decreases exponentially. We can thus circumvent these computational and statistical issues by using monolingual paraphrases.\n[source_id=24] The training data is filtered to provide only two-to-one word paraphrase mappings, and the multiword portion of the paraphrase is subsequently POS-tagged. Table TABREF10 provides a breakdown of such paraphrases by their POS pair type. Given the lack of context when tagging, it is likely that the POS tagger yields the most probable tag for words and not the most probable tag given the (limited) context. Furthermore, even the higher quality portions of PPDB yield paraphrases of ranging quality, ranging from non-trivial mappings such as young people INLINEFORM0 youth, to redundant ones like the ceasefire INLINEFORM1 ceasefire. However, PPDB-like resources are more easily available than human-annotated resources (in multiple languages too: Ganitkevich2014), so it is imperative that methods which learn compositional functions from such sources handle noisy supervision adequately.",
+      "score": 4.1140656193759835,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        23,
+        24
+      ],
+      "child_qasper_evidence_texts": [
+        "The Paraphrase Database BIBREF9 is a collection of ranked monolingual paraphrases that have been extracted from word-aligned parallel corpora using the bilingual pivot method BIBREF19 . The underlying assumption is that if two strings in the same language align to the same string in another language, then the strings in the original language share the same meaning. Paraphrases are ranked by their word alignment scores, and in this work we use the preselected small portion of PPDB as our training data. Although we can directly extract phrasal representations of a pre-specified list of phrases from the corpus used to compute word representations BIBREF6 , this approach is both computationally and statistically inefficient: the number of phrases increases exponentially in the length of the phrase, and correspondingly the occurrence of any individual phrase decreases exponentially. We can thus circumvent these computational and statistical issues by using monolingual paraphrases.",
+        "The training data is filtered to provide only two-to-one word paraphrase mappings, and the multiword portion of the paraphrase is subsequently POS-tagged. Table TABREF10 provides a breakdown of such paraphrases by their POS pair type. Given the lack of context when tagging, it is likely that the POS tagger yields the most probable tag for words and not the most probable tag given the (limited) context. Furthermore, even the higher quality portions of PPDB yield paraphrases of ranging quality, ranging from non-trivial mappings such as young people INLINEFORM0 youth, to redundant ones like the ceasefire INLINEFORM1 ceasefire. However, PPDB-like resources are more easily available than human-annotated resources (in multiple languages too: Ganitkevich2014), so it is imperative that methods which learn compositional functions from such sources handle noisy supervision adequately."
+      ],
+      "child_pages": [
+        7,
+        7
+      ],
+      "child_sections": [
+        "Supervision from Automatic Paraphrases",
+        "Supervision from Automatic Paraphrases"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Supervision from Automatic Paraphrases",
+          0
+        ],
+        [
+          "Supervision from Automatic Paraphrases",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Supervision from Automatic Paraphrases",
+      "section": "Supervision from Automatic Paraphrases",
+      "title_path": "Supervision from Automatic Paraphrases",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] At the Token Level\n[source_id=34] Eq. EQREF20 scores phrases for compositionality regardless of the context that these phrases occur in. However, phrases such as “big fish\" or “heavy metal\" may occur in both compositional and non-compositional situations, depending on the nature and topic of the texts they occur in. Here, we propose a context-driven model for compositionality detection, inspired by the skip-gram model for learning word representations BIBREF2 . The intuition is simple: if a phrase is compositional, it should be sufficiently predictive of the context words around it; otherwise, it is acting in a non-compositional manner. Thus, we would like to compute the likelihood of the context ( INLINEFORM0 ) given a phrasal representation ( INLINEFORM1 ) and normalization constant INLINEFORM2 : DISPLAYFORM0\n[source_id=35] As explained in Goldberg2014, the context representations are distinct from the word representations. In practice, we compute the log-likelihood averaged over the context words or the perplexity instead of the actual likelihood.",
+      "score": 3.8574697914402853,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        34,
+        35
+      ],
+      "child_qasper_evidence_texts": [
+        "Eq. EQREF20 scores phrases for compositionality regardless of the context that these phrases occur in. However, phrases such as “big fish\" or “heavy metal\" may occur in both compositional and non-compositional situations, depending on the nature and topic of the texts they occur in. Here, we propose a context-driven model for compositionality detection, inspired by the skip-gram model for learning word representations BIBREF2 . The intuition is simple: if a phrase is compositional, it should be sufficiently predictive of the context words around it; otherwise, it is acting in a non-compositional manner. Thus, we would like to compute the likelihood of the context ( INLINEFORM0 ) given a phrasal representation ( INLINEFORM1 ) and normalization constant INLINEFORM2 : DISPLAYFORM0",
+        "As explained in Goldberg2014, the context representations are distinct from the word representations. In practice, we compute the log-likelihood averaged over the context words or the perplexity instead of the actual likelihood."
+      ],
+      "child_pages": [
+        11,
+        11
+      ],
+      "child_sections": [
+        "At the Token Level",
+        "At the Token Level"
+      ],
+      "child_hotpot_facts": [
+        [
+          "At the Token Level",
+          0
+        ],
+        [
+          "At the Token Level",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "At the Token Level",
+      "section": "At the Token Level",
+      "title_path": "At the Token Level",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Tensor Models\n[source_id=14] The second class of models leverages pairwise multiplicative interactions between the components of the two word vectors: DISPLAYFORM0\n[source_id=15] where INLINEFORM0 corresponds to a tensor contraction along the INLINEFORM1 mode of the tensor INLINEFORM2 . In this case, we first compute a contraction (tensor-vector product) between INLINEFORM3 and INLINEFORM4 along INLINEFORM5 's third mode, corresponding to interactions with the second word vector of a two-word phrase and resulting in a matrix, which is then multiplied along its second mode (corresponding to traditional matrix multiplication on the right) by INLINEFORM6 . The final result is an INLINEFORM7 vector. This model introduces INLINEFORM8 parameters.\n[source_id=16] Tensor models are a generalization of the element-wise multiplicative model BIBREF16 , which permits non-zero values only on the tensor diagonal. Operating at the vocabulary level, the model of Baroni2010 has interesting parallels to our tensor model. They focus on adjective–noun relationships and learn a specific matrix for every adjective in their dataset; in our case, the specific matrix for each adjective has a particular form, namely that it can be factorized into the product of a tensor and a vector; the tensor corresponds to the actual adjective–noun combiner function, and the vector corresponds to specific lexical information that the adjective carries. This concept generalizes to other POS pairs: for example, multiplying the tensor that represents determiner-noun combinations along the second mode with the vector for “the” results in a matrix that represents the semantic operation of definiteness. Learning these parameters jointly is statistically more efficient than separately learning versions for each word.",
+      "score": 3.4370932843793756,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        14,
+        15,
+        16
+      ],
+      "child_qasper_evidence_texts": [
+        "The second class of models leverages pairwise multiplicative interactions between the components of the two word vectors: DISPLAYFORM0",
+        "where INLINEFORM0 corresponds to a tensor contraction along the INLINEFORM1 mode of the tensor INLINEFORM2 . In this case, we first compute a contraction (tensor-vector product) between INLINEFORM3 and INLINEFORM4 along INLINEFORM5 's third mode, corresponding to interactions with the second word vector of a two-word phrase and resulting in a matrix, which is then multiplied along its second mode (corresponding to traditional matrix multiplication on the right) by INLINEFORM6 . The final result is an INLINEFORM7 vector. This model introduces INLINEFORM8 parameters.",
+        "Tensor models are a generalization of the element-wise multiplicative model BIBREF16 , which permits non-zero values only on the tensor diagonal. Operating at the vocabulary level, the model of Baroni2010 has interesting parallels to our tensor model. They focus on adjective–noun relationships and learn a specific matrix for every adjective in their dataset; in our case, the specific matrix for each adjective has a particular form, namely that it can be factorized into the product of a tensor and a vector; the tensor corresponds to the actual adjective–noun combiner function, and the vector corresponds to specific lexical information that the adjective carries. This concept generalizes to other POS pairs: for example, multiplying the tensor that represents determiner-noun combinations along the second mode with the vector for “the” results in a matrix that represents the semantic operation of definiteness. Learning these parameters jointly is statistically more efficient than separately learning versions for each word."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Tensor Models",
+        "Tensor Models",
+        "Tensor Models"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Tensor Models",
+          0
+        ],
+        [
+          "Tensor Models",
+          1
+        ],
+        [
+          "Tensor Models",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Tensor Models",
+      "section": "Tensor Models",
+      "title_path": "Tensor Models",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Concatenation Models\n[source_id=10] Our first class of models is a generalization of the additive models introduced in Mitchell2008: DISPLAYFORM0\n[source_id=11] where the notation INLINEFORM0 represents a vertical (row-wise) concatenation of two vectors; namely, the concatenation that results in a INLINEFORM1 -sized vector. In addition to the INLINEFORM2 parameters for the word vector representations that are provided a priori, this model introduces INLINEFORM3 parameters, where INLINEFORM4 is the number of POS-tag pairs we consider.\n[source_id=12] Mitchell2008 significantly simplify parameter estimation by assuming a certain structure for the parameter matrix INLINEFORM0 , which is necessary given the limited human-annotated data they use. For example, by assuming a block-diagonal structure, we get a scaled element-wise addition model INLINEFORM1 . While not strictly in this category due to the non-linearities involved, neural network-based compositional models BIBREF7 , BIBREF15 can be viewed as concatenation models, although the order of concatenation and matrix multiplication is switched. However, these models introduce more than INLINEFORM2 parameters.",
+      "score": 3.2554295384492087,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        10,
+        11,
+        12
+      ],
+      "child_qasper_evidence_texts": [
+        "Our first class of models is a generalization of the additive models introduced in Mitchell2008: DISPLAYFORM0",
+        "where the notation INLINEFORM0 represents a vertical (row-wise) concatenation of two vectors; namely, the concatenation that results in a INLINEFORM1 -sized vector. In addition to the INLINEFORM2 parameters for the word vector representations that are provided a priori, this model introduces INLINEFORM3 parameters, where INLINEFORM4 is the number of POS-tag pairs we consider.",
+        "Mitchell2008 significantly simplify parameter estimation by assuming a certain structure for the parameter matrix INLINEFORM0 , which is necessary given the limited human-annotated data they use. For example, by assuming a block-diagonal structure, we get a scaled element-wise addition model INLINEFORM1 . While not strictly in this category due to the non-linearities involved, neural network-based compositional models BIBREF7 , BIBREF15 can be viewed as concatenation models, although the order of concatenation and matrix multiplication is switched. However, these models introduce more than INLINEFORM2 parameters."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Concatenation Models",
+        "Concatenation Models",
+        "Concatenation Models"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Concatenation Models",
+          0
+        ],
+        [
+          "Concatenation Models",
+          1
+        ],
+        [
+          "Concatenation Models",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Concatenation Models",
+      "section": "Concatenation Models",
+      "title_path": "Concatenation Models",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] At the Type Level\n[source_id=31] Given vector representations for the constituent words in a phrase and the phrase itself, the idea behind the type-based model is to compute similarities between the constituent word representations and the phrasal representation, and average the similarities across the constituents. If the contexts in which a constituent word occurs, as dictated by its vector representation, are very different from the contexts of the composed phrase, as indicated by the cosine similarity between the word and phrase representations, then the phrase is likely to be non-compositional. Assuming unit-normalized word vectors INLINEFORM0 and phrase vector INLINEFORM1 computed from one of the learned models in § SECREF2 : DISPLAYFORM0\n[source_id=32] where INLINEFORM0 is a hyperparameter that controls the contribution of individual constituents. This model leverages the average statistics computed over the training corpora (as encapsulated in the word and phrase vectors) to detect compositionality, and is the primary way compositionality has been evaluated previously BIBREF21 , BIBREF22 . Note that for the simple additive model INLINEFORM1 with unit-normalized word vectors, INLINEFORM2 is independent of INLINEFORM3 .",
+      "score": 2.4292688147090606,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        31,
+        32
+      ],
+      "child_qasper_evidence_texts": [
+        "Given vector representations for the constituent words in a phrase and the phrase itself, the idea behind the type-based model is to compute similarities between the constituent word representations and the phrasal representation, and average the similarities across the constituents. If the contexts in which a constituent word occurs, as dictated by its vector representation, are very different from the contexts of the composed phrase, as indicated by the cosine similarity between the word and phrase representations, then the phrase is likely to be non-compositional. Assuming unit-normalized word vectors INLINEFORM0 and phrase vector INLINEFORM1 computed from one of the learned models in § SECREF2 : DISPLAYFORM0",
+        "where INLINEFORM0 is a hyperparameter that controls the contribution of individual constituents. This model leverages the average statistics computed over the training corpora (as encapsulated in the word and phrase vectors) to detect compositionality, and is the primary way compositionality has been evaluated previously BIBREF21 , BIBREF22 . Note that for the simple additive model INLINEFORM1 with unit-normalized word vectors, INLINEFORM2 is independent of INLINEFORM3 ."
+      ],
+      "child_pages": [
+        10,
+        10
+      ],
+      "child_sections": [
+        "At the Type Level",
+        "At the Type Level"
+      ],
+      "child_hotpot_facts": [
+        [
+          "At the Type Level",
+          0
+        ],
+        [
+          "At the Type Level",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "At the Type Level",
+      "section": "At the Type Level",
+      "title_path": "At the Type Level",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 5,
+      "content": "As their name suggests, these models also impose the assumption that longer units like phrases are compositional, i.e., a phrase's meaning can be understood from the literal meaning of its parts. However, countless examples that run contrary to the assumption exist, and handling these non-compositional phrases has been problematic and of long-standing interest in the community BIBREF10 , BIBREF11 . (Non-) Compositionality detection can provide vital information to other language processing systems on whether a multiword unit should be treated semantically as a single entity or not, and scoring this phenomenon is particularly relevant for downstream tasks like machine translation (MT) or information retrieval. We explore the hypothesis that contextual evidence can be used to determine the relative degree to which a phrase is meant compositionally.",
+      "qasper_evidence_text": "As their name suggests, these models also impose the assumption that longer units like phrases are compositional, i.e., a phrase's meaning can be understood from the literal meaning of its parts. However, countless examples that run contrary to the assumption exist, and handling these non-compositional phrases has been problematic and of long-standing interest in the community BIBREF10 , BIBREF11 . (Non-) Compositionality detection can provide vital information to other language processing systems on whether a multiword unit should be treated semantically as a single entity or not, and scoring this phenomenon is particularly relevant for downstream tasks like machine translation (MT) or information retrieval. We explore the hypothesis that contextual evidence can be used to determine the relative degree to which a phrase is meant compositionally.",
+      "source_node_id": 5,
+      "node_id": 5,
+      "paragraph_id": 5,
+      "evidence_id": 5,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 1,
+      "score": 5.873256375497505,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 1
+    }
+  ],
+  "supporting_block_ids": [
+    5
+  ]
+}

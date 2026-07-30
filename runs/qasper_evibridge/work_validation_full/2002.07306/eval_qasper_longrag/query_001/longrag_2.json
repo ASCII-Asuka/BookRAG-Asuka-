@@ -1,0 +1,52 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Bilingual Pre-trained LMs\n[source_id=11] We first provide some background of pre-trained language models. Let $_e$ be English word-embeddings and $\\Psi ()$ be the Transformer BIBREF10 encoder with parameters $$. Let $_{w_i}$ denote the embedding of word $w_i$ (i.e., $_{w_i} = _e[w_1]$). We omit positional embeddings and bias for clarity. A pre-trained LM typically performs the following computations: (i) transform a sequence of input tokens to contextualized representations $[_{w_1},\\dots ,_{w_n}] = \\Psi (_{w_1}, \\dots , _{w_n}; )$, and (ii) predict an output word $y_i$ at $i^{\\text{th}}$ position $p(y_i | _{w_i}) \\propto \\exp (_{w_i}^\\top _{y_i})$.\n[source_id=12] Autoencoding LM BIBREF0 corrupts some input tokens $w_i$ by replacing them with a special token [MASK]. It then predicts the original tokens $y_i = w_i$ from the corrupted tokens. Autoregressive LM BIBREF3 predicts the next token ($y_i = w_{i+1}$) given all the previous tokens. The recently proposed XLNet model BIBREF5 is an autoregressive LM that factorizes output with all possible permutations, which shows empirical performance improvement over GPT-2 due to the ability to capture bidirectional context. Here we assume that the encoder performs necessary masking with respect to each training objective.\n[source_id=13] Given an English pre-trained LM, we wish to learn a bilingual LM for English and a given target language $f$ under a limited computational resource budget. To quickly build a bilingual LM, we directly adapt the English pre-traind model to the target model. Our approach consists of three steps. First, we initialize target language word-embeddings $_f$ in the English embedding space such that embeddings of a target word and its English equivalents are close together (§SECREF8). Next, we create a target LM from the target embeddings and the English encoder $\\Psi ()$. We then fine-tune target embeddings while keeping $\\Psi ()$ fixed (§SECREF14). Finally, we construct a bilingual LM of $_e$, $_f$, and $\\Psi ()$ and fine-tune all the parameters (§SECREF15). Figure FIGREF7 illustrates the last two steps in our approach.",
+  "score": 4.158505967755696,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    11,
+    12,
+    13
+  ],
+  "child_qasper_evidence_texts": [
+    "We first provide some background of pre-trained language models. Let $_e$ be English word-embeddings and $\\Psi ()$ be the Transformer BIBREF10 encoder with parameters $$. Let $_{w_i}$ denote the embedding of word $w_i$ (i.e., $_{w_i} = _e[w_1]$). We omit positional embeddings and bias for clarity. A pre-trained LM typically performs the following computations: (i) transform a sequence of input tokens to contextualized representations $[_{w_1},\\dots ,_{w_n}] = \\Psi (_{w_1}, \\dots , _{w_n}; )$, and (ii) predict an output word $y_i$ at $i^{\\text{th}}$ position $p(y_i | _{w_i}) \\propto \\exp (_{w_i}^\\top _{y_i})$.",
+    "Autoencoding LM BIBREF0 corrupts some input tokens $w_i$ by replacing them with a special token [MASK]. It then predicts the original tokens $y_i = w_i$ from the corrupted tokens. Autoregressive LM BIBREF3 predicts the next token ($y_i = w_{i+1}$) given all the previous tokens. The recently proposed XLNet model BIBREF5 is an autoregressive LM that factorizes output with all possible permutations, which shows empirical performance improvement over GPT-2 due to the ability to capture bidirectional context. Here we assume that the encoder performs necessary masking with respect to each training objective.",
+    "Given an English pre-trained LM, we wish to learn a bilingual LM for English and a given target language $f$ under a limited computational resource budget. To quickly build a bilingual LM, we directly adapt the English pre-traind model to the target model. Our approach consists of three steps. First, we initialize target language word-embeddings $_f$ in the English embedding space such that embeddings of a target word and its English equivalents are close together (§SECREF8). Next, we create a target LM from the target embeddings and the English encoder $\\Psi ()$. We then fine-tune target embeddings while keeping $\\Psi ()$ fixed (§SECREF14). Finally, we construct a bilingual LM of $_e$, $_f$, and $\\Psi ()$ and fine-tune all the parameters (§SECREF15). Figure FIGREF7 illustrates the last two steps in our approach."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Bilingual Pre-trained LMs",
+    "Bilingual Pre-trained LMs",
+    "Bilingual Pre-trained LMs"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Bilingual Pre-trained LMs",
+      0
+    ],
+    [
+      "Bilingual Pre-trained LMs",
+      1
+    ],
+    [
+      "Bilingual Pre-trained LMs",
+      2
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Bilingual Pre-trained LMs",
+  "section": "Bilingual Pre-trained LMs",
+  "title_path": "Bilingual Pre-trained LMs",
+  "block_type": "long_unit"
+}

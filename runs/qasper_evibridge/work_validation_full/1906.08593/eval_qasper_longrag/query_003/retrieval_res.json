@@ -1,0 +1,497 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Attention is a very efficient way to model the relationship between two sequences by comparing how similar two intermediate representations are. Initially demonstrated in NMT, it is a standard in all NLU tasks today when efficient interaction between sequences is considered. However, we show that attention, by virtue of its composition, works best only when it is given that there is a match somewhere between two sequences. It does not very well adapt to cases when there is no similarity between two sequences or if the relationship is contrastive. We propose an Conflict model which is very similar to how attention works but which emphasizes mostly on how well two sequences repel each other and finally empirically show how this method in conjunction with attention can boost the overall performance.",
+      "score": 5.315596142134924,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Attention is a very efficient way to model the relationship between two sequences by comparing how similar two intermediate representations are. Initially demonstrated in NMT, it is a standard in all NLU tasks today when efficient interaction between sequences is considered. However, we show that attention, by virtue of its composition, works best only when it is given that there is a match somewhere between two sequences. It does not very well adapt to cases when there is no similarity between two sequences or if the relationship is contrastive. We propose an Conflict model which is very similar to how attention works but which emphasizes mostly on how well two sequences repel each other and finally empirically show how this method in conjunction with attention can boost the overall performance."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Related Work\n[source_id=10] Bahdanau et al. BIBREF2 introduced attention first in neural machine translation. It used a feed-forward network over addition of encoder and decoder states to compute alignment score. Our work is very similar to this except we use element wise difference instead of addition to build our conflict function. BIBREF3 came up with a scaled dot-product attention in their Transformer model which is fast and memory-efficient. Due to the scaling factor, it didn't have the issue of gradients zeroing out. On the other hand, BIBREF4 has experimented with global and local attention based on the how many hidden states the attention function takes into account. Their experiments have revolved around three attention functions - dot, concat and general. Their findings include that dot product works best for global attention. Our work also belongs to the global attention family as we consider all the hidden states of the sequence.\n[source_id=11] Attention has been widely used in pair-classification problems like natural language inference. Wang et al. BIBREF5 introduced BIMPM which matched one sequence with another in four different fashion but one single matching function which they used as cosine. Liu et al. BIBREF6 proposed SAN for language inference which also used dot-product attention between the sequences.\n[source_id=12] Summarizing, attention has helped in achieving state-of-the-art results in NLI and QA. Prior work in attention has been mostly in similarity based approaches while our work focuses on non-matching sequences.",
+      "score": 4.46985875937192,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        10,
+        11,
+        12
+      ],
+      "child_qasper_evidence_texts": [
+        "Bahdanau et al. BIBREF2 introduced attention first in neural machine translation. It used a feed-forward network over addition of encoder and decoder states to compute alignment score. Our work is very similar to this except we use element wise difference instead of addition to build our conflict function. BIBREF3 came up with a scaled dot-product attention in their Transformer model which is fast and memory-efficient. Due to the scaling factor, it didn't have the issue of gradients zeroing out. On the other hand, BIBREF4 has experimented with global and local attention based on the how many hidden states the attention function takes into account. Their experiments have revolved around three attention functions - dot, concat and general. Their findings include that dot product works best for global attention. Our work also belongs to the global attention family as we consider all the hidden states of the sequence.",
+        "Attention has been widely used in pair-classification problems like natural language inference. Wang et al. BIBREF5 introduced BIMPM which matched one sequence with another in four different fashion but one single matching function which they used as cosine. Liu et al. BIBREF6 proposed SAN for language inference which also used dot-product attention between the sequences.",
+        "Summarizing, attention has helped in achieving state-of-the-art results in NLI and QA. Prior work in attention has been mostly in similarity based approaches while our work focuses on non-matching sequences."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Related Work",
+        "Related Work",
+        "Related Work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work",
+          0
+        ],
+        [
+          "Related Work",
+          1
+        ],
+        [
+          "Related Work",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Related Work",
+      "section": "Related Work",
+      "title_path": "Related Work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_13",
+      "content": "[Section] Qualitative Comparison\n[source_id=46] We also show qualitative results where we can observe that our model with attention and conflict combined does better on cases where pairs are non-duplicate and has very small difference. We have observed that the conflict model is very sensitive to even minor differences and compensates in such cases where attention poses high bias towards similarities already there in the sequences.\n[source_id=47] Sequence 1: What are the best ways to learn French ?\n[source_id=48] Sequence 2: How do I learn french genders ?\n[source_id=49] Attention only: 1\n[source_id=50] Attention+Conflict: 0\n[source_id=51] Ground Truth: 0\n[source_id=52] Sequence 1: How do I prevent breast cancer ?\n[source_id=53] Sequence 2: Is breast cancer preventable ?\n[source_id=54] Attention only: 1\n[source_id=55] Attention+Conflict: 0\n[source_id=56] Ground Truth: 0\n[source_id=57] We provide two examples with predictions from the models with only attention and combination of attention and conflict. Each example is accompanied by the ground truth in our data.",
+      "score": 4.28913445642006,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_13",
+      "child_source_node_ids": [
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57
+      ],
+      "child_qasper_evidence_texts": [
+        "We also show qualitative results where we can observe that our model with attention and conflict combined does better on cases where pairs are non-duplicate and has very small difference. We have observed that the conflict model is very sensitive to even minor differences and compensates in such cases where attention poses high bias towards similarities already there in the sequences.",
+        "Sequence 1: What are the best ways to learn French ?",
+        "Sequence 2: How do I learn french genders ?",
+        "Attention only: 1",
+        "Attention+Conflict: 0",
+        "Ground Truth: 0",
+        "Sequence 1: How do I prevent breast cancer ?",
+        "Sequence 2: Is breast cancer preventable ?",
+        "Attention only: 1",
+        "Attention+Conflict: 0",
+        "Ground Truth: 0",
+        "We provide two examples with predictions from the models with only attention and combination of attention and conflict. Each example is accompanied by the ground truth in our data."
+      ],
+      "child_pages": [
+        13,
+        13,
+        13,
+        13,
+        13,
+        13,
+        13,
+        13,
+        13,
+        13,
+        13,
+        13
+      ],
+      "child_sections": [
+        "Qualitative Comparison",
+        "Qualitative Comparison",
+        "Qualitative Comparison",
+        "Qualitative Comparison",
+        "Qualitative Comparison",
+        "Qualitative Comparison",
+        "Qualitative Comparison",
+        "Qualitative Comparison",
+        "Qualitative Comparison",
+        "Qualitative Comparison",
+        "Qualitative Comparison",
+        "Qualitative Comparison"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Qualitative Comparison",
+          0
+        ],
+        [
+          "Qualitative Comparison",
+          1
+        ],
+        [
+          "Qualitative Comparison",
+          2
+        ],
+        [
+          "Qualitative Comparison",
+          3
+        ],
+        [
+          "Qualitative Comparison",
+          4
+        ],
+        [
+          "Qualitative Comparison",
+          5
+        ],
+        [
+          "Qualitative Comparison",
+          6
+        ],
+        [
+          "Qualitative Comparison",
+          7
+        ],
+        [
+          "Qualitative Comparison",
+          8
+        ],
+        [
+          "Qualitative Comparison",
+          9
+        ],
+        [
+          "Qualitative Comparison",
+          10
+        ],
+        [
+          "Qualitative Comparison",
+          11
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_13",
+      "section_id": "Qualitative Comparison",
+      "section": "Qualitative Comparison",
+      "title_path": "Qualitative Comparison",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Task 1: Quora Duplicate Question Pair Detection\n[source_id=37] The dataset includes pairs of questions labelled as 1 or 0 depending on whether a pair is duplicate or not respectively. This is a popular pair-level classification task on which extensive work has already been done before like BIBREF7 , BIBREF8 . For this task, we make the output layer of our model to predict two probabilities for non-duplicate and duplicate. We sample the data from the original dataset so that it contains equal positive and negative classes. Original dataset has some class imbalance but for sake simplicity we don't consider it. The final data that we use has roughly 400,000 question pairs and we split this data into train and test using 8:2 ratio.\n[source_id=38] We train all our models for roughly 2 epochs with a batch size of 64. We use a hidden dimension of 150 throughout the model. The embedding layer uses ELMO BIBREF9 which has proven to be very useful in various downstream language understanding tasks. Our FC layers consists of four dense layers with INLINEFORM0 activation after each layer. The dropout rate is kept as 0.2 for every recurrent and FC linear layers. We use Adam optimizer in our experiment with epsilon=1e-8, beta=0.9 and learning rate=1e-3.",
+      "score": 4.095804397025658,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        37,
+        38
+      ],
+      "child_qasper_evidence_texts": [
+        "The dataset includes pairs of questions labelled as 1 or 0 depending on whether a pair is duplicate or not respectively. This is a popular pair-level classification task on which extensive work has already been done before like BIBREF7 , BIBREF8 . For this task, we make the output layer of our model to predict two probabilities for non-duplicate and duplicate. We sample the data from the original dataset so that it contains equal positive and negative classes. Original dataset has some class imbalance but for sake simplicity we don't consider it. The final data that we use has roughly 400,000 question pairs and we split this data into train and test using 8:2 ratio.",
+        "We train all our models for roughly 2 epochs with a batch size of 64. We use a hidden dimension of 150 throughout the model. The embedding layer uses ELMO BIBREF9 which has proven to be very useful in various downstream language understanding tasks. Our FC layers consists of four dense layers with INLINEFORM0 activation after each layer. The dropout rate is kept as 0.2 for every recurrent and FC linear layers. We use Adam optimizer in our experiment with epsilon=1e-8, beta=0.9 and learning rate=1e-3."
+      ],
+      "child_pages": [
+        10,
+        10
+      ],
+      "child_sections": [
+        "Task 1: Quora Duplicate Question Pair Detection",
+        "Task 1: Quora Duplicate Question Pair Detection"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Task 1: Quora Duplicate Question Pair Detection",
+          0
+        ],
+        [
+          "Task 1: Quora Duplicate Question Pair Detection",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Task 1: Quora Duplicate Question Pair Detection",
+      "section": "Task 1: Quora Duplicate Question Pair Detection",
+      "title_path": "Task 1: Quora Duplicate Question Pair Detection",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Relation to Multi-Head attention\n[source_id=30] Multi-head attention, as introduced in BIBREF3 , computes multiple identical attention mechanism parallelly on multiple linear projections of same inputs. The parameters of each attention and projections are different in each head. Finally, they concatenate all the attentions which is similar to how we concatenate conflict and attention. However, they use dot-product to compute each of the attention.\n[source_id=31] Our combined model that contains both attention and conflict can be thought of as a 2-head attention model but both heads are different. Our conflict head explicitly captures difference between the inputs.",
+      "score": 3.101901627815762,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        30,
+        31
+      ],
+      "child_qasper_evidence_texts": [
+        "Multi-head attention, as introduced in BIBREF3 , computes multiple identical attention mechanism parallelly on multiple linear projections of same inputs. The parameters of each attention and projections are different in each head. Finally, they concatenate all the attentions which is similar to how we concatenate conflict and attention. However, they use dot-product to compute each of the attention.",
+        "Our combined model that contains both attention and conflict can be thought of as a 2-head attention model but both heads are different. Our conflict head explicitly captures difference between the inputs."
+      ],
+      "child_pages": [
+        7,
+        7
+      ],
+      "child_sections": [
+        "Relation to Multi-Head attention",
+        "Relation to Multi-Head attention"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Relation to Multi-Head attention",
+          0
+        ],
+        [
+          "Relation to Multi-Head attention",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Relation to Multi-Head attention",
+      "section": "Relation to Multi-Head attention",
+      "title_path": "Relation to Multi-Head attention",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Conflict model\n[source_id=22] We propose a different mechanism that does the opposite of what attention does that is computing how much two sequences repel each other. This works very similar to how attention works but inversely.\n[source_id=23] We demonstrate a general model but we also realize that there can be other variants of it which may be worked out to perform better. Our approach consists of using element wise difference between two vectors followed by a linear transformation to produce a scalar weight. The remaining of the process acts similar to how attention works. Mathematically, we can express it as: DISPLAYFORM0\n[source_id=24] where INLINEFORM0 INLINEFORM1 INLINEFORM2 is a parameter that we introduce to provide a weight for the pair. The two word representations INLINEFORM3 and INLINEFORM4 are projected to a space where their element wise difference can be used to model their dissimilarity and softmax applied on them can produce high probability to more dissimilar word pairs.\n[source_id=25] It is good to note that conflict suffers from the same limitation that attention suffers from. This is when a pair of sentences are highly matching especially with multiple associations. But when the two methods work together, each compensates for the other's shortcomings.",
+      "score": 3.054088470601108,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        22,
+        23,
+        24,
+        25
+      ],
+      "child_qasper_evidence_texts": [
+        "We propose a different mechanism that does the opposite of what attention does that is computing how much two sequences repel each other. This works very similar to how attention works but inversely.",
+        "We demonstrate a general model but we also realize that there can be other variants of it which may be worked out to perform better. Our approach consists of using element wise difference between two vectors followed by a linear transformation to produce a scalar weight. The remaining of the process acts similar to how attention works. Mathematically, we can express it as: DISPLAYFORM0",
+        "where INLINEFORM0 INLINEFORM1 INLINEFORM2 is a parameter that we introduce to provide a weight for the pair. The two word representations INLINEFORM3 and INLINEFORM4 are projected to a space where their element wise difference can be used to model their dissimilarity and softmax applied on them can produce high probability to more dissimilar word pairs.",
+        "It is good to note that conflict suffers from the same limitation that attention suffers from. This is when a pair of sentences are highly matching especially with multiple associations. But when the two methods work together, each compensates for the other's shortcomings."
+      ],
+      "child_pages": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "Conflict model",
+        "Conflict model",
+        "Conflict model",
+        "Conflict model"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conflict model",
+          0
+        ],
+        [
+          "Conflict model",
+          1
+        ],
+        [
+          "Conflict model",
+          2
+        ],
+        [
+          "Conflict model",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Conflict model",
+      "section": "Conflict model",
+      "title_path": "Conflict model",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Quantitative Analysis\n[source_id=43] For both tasks, we compute classification accuracy using three model variants and report the results in Table 1 and Table 2. We observe that model with both attention and conflict combined gives the best results.\n[source_id=44] We also show the training loss curve for both the models having attention and attention combined with conflict respectively. Figure 4 and 5 shows these curves for Task 1 and Task 2 respectively. The curves are smoothed using moving average having an window size of 8. We notice that the conflict model has much steeper slope and converges to a much better minima in both the tasks. It can also be noticed that in the training procedure for the model which has both attention and conflict, the updates are much smoother.",
+      "score": 2.999797303196191,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        43,
+        44
+      ],
+      "child_qasper_evidence_texts": [
+        "For both tasks, we compute classification accuracy using three model variants and report the results in Table 1 and Table 2. We observe that model with both attention and conflict combined gives the best results.",
+        "We also show the training loss curve for both the models having attention and attention combined with conflict respectively. Figure 4 and 5 shows these curves for Task 1 and Task 2 respectively. The curves are smoothed using moving average having an window size of 8. We notice that the conflict model has much steeper slope and converges to a much better minima in both the tasks. It can also be noticed that in the training procedure for the model which has both attention and conflict, the updates are much smoother."
+      ],
+      "child_pages": [
+        12,
+        12
+      ],
+      "child_sections": [
+        "Quantitative Analysis",
+        "Quantitative Analysis"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Quantitative Analysis",
+          0
+        ],
+        [
+          "Quantitative Analysis",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Quantitative Analysis",
+      "section": "Quantitative Analysis",
+      "title_path": "Quantitative Analysis",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_14",
+      "content": "[Section] Analyzing the gains\n[source_id=59] We analyzed the gains in Task 1 which we get from the attention-conflict model in order to ensure that they are not due to randomness in weight initialization or simply additional parameters. We particularly focused on the examples which were incorrectly marked in attention model but correctly in attention-conflict model. We saw that 70% of those cases are the ones where the pair was incorrectly marked as duplicate in the previous model but our combined model correctly marked them as non-duplicate.",
+      "score": 2.7919341493706233,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_14",
+      "child_source_node_ids": [
+        59
+      ],
+      "child_qasper_evidence_texts": [
+        "We analyzed the gains in Task 1 which we get from the attention-conflict model in order to ensure that they are not due to randomness in weight initialization or simply additional parameters. We particularly focused on the examples which were incorrectly marked in attention model but correctly in attention-conflict model. We saw that 70% of those cases are the ones where the pair was incorrectly marked as duplicate in the previous model but our combined model correctly marked them as non-duplicate."
+      ],
+      "child_pages": [
+        14
+      ],
+      "child_sections": [
+        "Analyzing the gains"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Analyzing the gains",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_14",
+      "section_id": "Analyzing the gains",
+      "section": "Analyzing the gains",
+      "title_path": "Analyzing the gains",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 37,
+      "content": "The dataset includes pairs of questions labelled as 1 or 0 depending on whether a pair is duplicate or not respectively. This is a popular pair-level classification task on which extensive work has already been done before like BIBREF7 , BIBREF8 . For this task, we make the output layer of our model to predict two probabilities for non-duplicate and duplicate. We sample the data from the original dataset so that it contains equal positive and negative classes. Original dataset has some class imbalance but for sake simplicity we don't consider it. The final data that we use has roughly 400,000 question pairs and we split this data into train and test using 8:2 ratio.",
+      "qasper_evidence_text": "The dataset includes pairs of questions labelled as 1 or 0 depending on whether a pair is duplicate or not respectively. This is a popular pair-level classification task on which extensive work has already been done before like BIBREF7 , BIBREF8 . For this task, we make the output layer of our model to predict two probabilities for non-duplicate and duplicate. We sample the data from the original dataset so that it contains equal positive and negative classes. Original dataset has some class imbalance but for sake simplicity we don't consider it. The final data that we use has roughly 400,000 question pairs and we split this data into train and test using 8:2 ratio.",
+      "source_node_id": 37,
+      "node_id": 37,
+      "paragraph_id": 37,
+      "evidence_id": 37,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_10",
+      "rank": 4,
+      "score": 4.095804397025658,
+      "block_type": "paragraph",
+      "page": 10,
+      "section_id": "Task 1: Quora Duplicate Question Pair Detection",
+      "section": "Task 1: Quora Duplicate Question Pair Detection",
+      "title": "Task 1: Quora Duplicate Question Pair Detection",
+      "hotpot_title": "Task 1: Quora Duplicate Question Pair Detection",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 43,
+      "content": "For both tasks, we compute classification accuracy using three model variants and report the results in Table 1 and Table 2. We observe that model with both attention and conflict combined gives the best results.",
+      "qasper_evidence_text": "For both tasks, we compute classification accuracy using three model variants and report the results in Table 1 and Table 2. We observe that model with both attention and conflict combined gives the best results.",
+      "source_node_id": 43,
+      "node_id": 43,
+      "paragraph_id": 43,
+      "evidence_id": 43,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_12",
+      "rank": 7,
+      "score": 2.999797303196191,
+      "block_type": "paragraph",
+      "page": 12,
+      "section_id": "Quantitative Analysis",
+      "section": "Quantitative Analysis",
+      "title": "Quantitative Analysis",
+      "hotpot_title": "Quantitative Analysis",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 2
+    }
+  ],
+  "supporting_block_ids": [
+    37,
+    43
+  ]
+}

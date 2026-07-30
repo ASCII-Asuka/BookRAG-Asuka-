@@ -1,0 +1,88 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Settings\n[source_id=64] In this work, all of our models are built on $BERT_{BASE}$ , although another larger pre-trained model with better performance ( $BERT_{LARGE}$ ) has published but it costs too much time and GPU memory. We use WordPiece embeddings with a 30,000 vocabulary which is the same as BERT. We set the layer of transformer decoders to 12(8 on NYT50), and set the attention heads number to 12(8 on NYT50), set fully-connected sub-layer hidden size to 3072. We train the model using an Adam optimizer with learning rate of $3e-4$ , $\\beta _1=0.9$ , $\\beta _2=0.999$ and $\\epsilon =10^{-9}$ and use a dynamic learning rate during the training process. For regularization, we use dropout BIBREF13 and label smoothing BIBREF14 in our models and set the dropout rate to 0.15, and the label smoothing value to 0.1. We set the RL objective factor $\\gamma $ to 0.99.\n[source_id=65] During training, we set the batch size to 36, and train for 4 epochs(8 epochs for NYT50 since it has many fewer training samples), after training the best model are selected from last 10 models based on development set performance. Due to GPU memory limit, we use gradient accumulation, set accumulate step to 12 and feed 3 samples at each step. We use beam size 4 and length penalty of 1.0 to generate logical form sequences.\n[source_id=66] We filter repeated tri-grams in beam-search process by setting word probability to zero if it will generate an tri-gram which exists in the existing summary. It is a nice method to avoid phrase repetition since the two datasets seldom contains repeated tri-grams in one summary. We also fine tune the generated sequences using another two simple rules. When there are multi summary sentences with exactly the same content, we keep the first one and remove the other sentences; we also remove sentences with less than 3 words from the result.\n[source_id=67] To evaluate the performance of our model, we conduct experiments on CNN/Daily Mail dataset, which is a large collection of news articles and modified for summarization. Following BIBREF0 we choose the non-anonymized version of the dataset, which consists of more than 280,000 training samples and 11490 test set samples.\n[source_id=68] We also conduct experiments on the New York Times(NYT) dataset which also consists of many news articles. The original dataset can be applied here. In our experiment, we follow the dataset splits and other pre-process settings of BIBREF15 . We first filter all samples without a full article text or abstract and then remove all samples with summaries shorter than 50 words. Then we choose the test set based on the date of publication(all examples published after January 1, 2007). The final dataset contains 22,000 training samples and 3,452 test samples and is called NYT50 since all summaries are longer than 50 words.\n[source_id=69] We tokenize all sequences of the two datasets using the WordPiece tokenizer. After tokenizing, the average article length and summary length of CNN/Daily Mail are 691 and 51, and NYT50's average article length and summary length are 1152 and 75. We truncate the article length to 512, and the summary length to 100 in our experiment(max summary length is set to 150 on NYT50 as its average golden summary length is longer).\n[source_id=70] On CNN/Daily Mail dataset, we report the full-length F-1 score of the ROUGE-1, ROUGE-2 and ROUGE-L metrics, calculated using PyRouge package and the Porter stemmer option. On NYT50, following BIBREF4 we evaluate limited length ROUGE recall score(limit the generated summary length to the ground truth length). We split NYT50 summaries into sentences by semicolons to calculate the ROUGE scores.",
+  "score": 3.9999576458288435,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70
+  ],
+  "child_qasper_evidence_texts": [
+    "In this work, all of our models are built on $BERT_{BASE}$ , although another larger pre-trained model with better performance ( $BERT_{LARGE}$ ) has published but it costs too much time and GPU memory. We use WordPiece embeddings with a 30,000 vocabulary which is the same as BERT. We set the layer of transformer decoders to 12(8 on NYT50), and set the attention heads number to 12(8 on NYT50), set fully-connected sub-layer hidden size to 3072. We train the model using an Adam optimizer with learning rate of $3e-4$ , $\\beta _1=0.9$ , $\\beta _2=0.999$ and $\\epsilon =10^{-9}$ and use a dynamic learning rate during the training process. For regularization, we use dropout BIBREF13 and label smoothing BIBREF14 in our models and set the dropout rate to 0.15, and the label smoothing value to 0.1. We set the RL objective factor $\\gamma $ to 0.99.",
+    "During training, we set the batch size to 36, and train for 4 epochs(8 epochs for NYT50 since it has many fewer training samples), after training the best model are selected from last 10 models based on development set performance. Due to GPU memory limit, we use gradient accumulation, set accumulate step to 12 and feed 3 samples at each step. We use beam size 4 and length penalty of 1.0 to generate logical form sequences.",
+    "We filter repeated tri-grams in beam-search process by setting word probability to zero if it will generate an tri-gram which exists in the existing summary. It is a nice method to avoid phrase repetition since the two datasets seldom contains repeated tri-grams in one summary. We also fine tune the generated sequences using another two simple rules. When there are multi summary sentences with exactly the same content, we keep the first one and remove the other sentences; we also remove sentences with less than 3 words from the result.",
+    "To evaluate the performance of our model, we conduct experiments on CNN/Daily Mail dataset, which is a large collection of news articles and modified for summarization. Following BIBREF0 we choose the non-anonymized version of the dataset, which consists of more than 280,000 training samples and 11490 test set samples.",
+    "We also conduct experiments on the New York Times(NYT) dataset which also consists of many news articles. The original dataset can be applied here. In our experiment, we follow the dataset splits and other pre-process settings of BIBREF15 . We first filter all samples without a full article text or abstract and then remove all samples with summaries shorter than 50 words. Then we choose the test set based on the date of publication(all examples published after January 1, 2007). The final dataset contains 22,000 training samples and 3,452 test samples and is called NYT50 since all summaries are longer than 50 words.",
+    "We tokenize all sequences of the two datasets using the WordPiece tokenizer. After tokenizing, the average article length and summary length of CNN/Daily Mail are 691 and 51, and NYT50's average article length and summary length are 1152 and 75. We truncate the article length to 512, and the summary length to 100 in our experiment(max summary length is set to 150 on NYT50 as its average golden summary length is longer).",
+    "On CNN/Daily Mail dataset, we report the full-length F-1 score of the ROUGE-1, ROUGE-2 and ROUGE-L metrics, calculated using PyRouge package and the Porter stemmer option. On NYT50, following BIBREF4 we evaluate limited length ROUGE recall score(limit the generated summary length to the ground truth length). We split NYT50 summaries into sentences by semicolons to calculate the ROUGE scores."
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Settings",
+    "Settings",
+    "Settings",
+    "Settings",
+    "Settings",
+    "Settings",
+    "Settings"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Settings",
+      0
+    ],
+    [
+      "Settings",
+      1
+    ],
+    [
+      "Settings",
+      2
+    ],
+    [
+      "Settings",
+      3
+    ],
+    [
+      "Settings",
+      4
+    ],
+    [
+      "Settings",
+      5
+    ],
+    [
+      "Settings",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Settings",
+  "section": "Settings",
+  "title_path": "Settings",
+  "block_type": "long_unit"
+}

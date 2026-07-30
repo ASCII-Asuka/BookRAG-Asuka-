@@ -1,0 +1,88 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Document Encoder\n[source_id=33] At the document level, a bi-directional recurrent neural network BIBREF20 is often used to encode all the sentences sequentially forward and backward, with such model achieving remarkable success in machine translation BIBREF21 . As units, we selected gated recurrent units (GRU) BIBREF22 , in light of favorable results shown in BIBREF23 . The GRU is represented with the standard reset, update, and new gates.\n[source_id=34] The output of the bi-directional GRU for each sentence INLINEFORM0 comprises two hidden states, INLINEFORM1 as forward and backward hidden state, respectively.\n[source_id=35] A. Sentence representation As shown in Figure FIGREF10 (A), for each sentence INLINEFORM0 , the sentence representation is the concatenation of both backward and forward hidden state of that sentence. INLINEFORM1\n[source_id=36] In this way, the sentence representation not only represents the current sentence, but also partially covers contextual information both before and after this sentence.\n[source_id=37] B. Document representation The document representation provides global information on the whole document. It is computed as the concatenation of the final state of the forward and backward GRU, labeled as B in Figure FIGREF10 . BIBREF24 INLINEFORM0\n[source_id=38] C. Topic segment representation To capture the local context of each sentence, namely the information of the topic segment that sentence falls into, we apply the LSTM-Minus method, a method for learning embeddings of text spans. LSTM-Minus is shown in detail in Figure 1 (left panel C), each topic segment is represented as the subtraction between the hidden states of the start and the end of that topic. As illustrated in Figure FIGREF10 , the representation for section 2 of the sample document (containing three sections and eight sentences overall) can be computed as INLINEFORM0 , where INLINEFORM1 are the forward hidden states of sentence 5 and 2, respectively, while INLINEFORM2 are the backward hidden states of sentence 3 and 6, respectively. In general, the topic segment representation INLINEFORM3 for segment INLINEFORM4 is computed as: INLINEFORM5\n[source_id=39] where INLINEFORM0 is the index of the beginning and the end of topic INLINEFORM1 , INLINEFORM2 and INLINEFORM3 denote the topic segment representation of forward and backward, respectively. The final representation of topic INLINEFORM4 is the concatenation of forward and backward representation INLINEFORM5 . To obtain INLINEFORM6 and INLINEFORM7 , we utilize subtraction between GRU hidden vectors of INLINEFORM8 and INLINEFORM9 , and we pad the hidden states with zero vectors both in the beginning and the end, to ensure the index can not be out of bound. The intuition behind this process is that the GRUs can keep previous useful information in their memory cell by exploiting reset, update, and new gates to decide how to utilize and update the memory of previous information. In this way, we can represent the contextual information within each topic segment for all the sentences in that segment.",
+  "score": 2.3564032685158707,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "child_qasper_evidence_texts": [
+    "At the document level, a bi-directional recurrent neural network BIBREF20 is often used to encode all the sentences sequentially forward and backward, with such model achieving remarkable success in machine translation BIBREF21 . As units, we selected gated recurrent units (GRU) BIBREF22 , in light of favorable results shown in BIBREF23 . The GRU is represented with the standard reset, update, and new gates.",
+    "The output of the bi-directional GRU for each sentence INLINEFORM0 comprises two hidden states, INLINEFORM1 as forward and backward hidden state, respectively.",
+    "A. Sentence representation As shown in Figure FIGREF10 (A), for each sentence INLINEFORM0 , the sentence representation is the concatenation of both backward and forward hidden state of that sentence. INLINEFORM1",
+    "In this way, the sentence representation not only represents the current sentence, but also partially covers contextual information both before and after this sentence.",
+    "B. Document representation The document representation provides global information on the whole document. It is computed as the concatenation of the final state of the forward and backward GRU, labeled as B in Figure FIGREF10 . BIBREF24 INLINEFORM0",
+    "C. Topic segment representation To capture the local context of each sentence, namely the information of the topic segment that sentence falls into, we apply the LSTM-Minus method, a method for learning embeddings of text spans. LSTM-Minus is shown in detail in Figure 1 (left panel C), each topic segment is represented as the subtraction between the hidden states of the start and the end of that topic. As illustrated in Figure FIGREF10 , the representation for section 2 of the sample document (containing three sections and eight sentences overall) can be computed as INLINEFORM0 , where INLINEFORM1 are the forward hidden states of sentence 5 and 2, respectively, while INLINEFORM2 are the backward hidden states of sentence 3 and 6, respectively. In general, the topic segment representation INLINEFORM3 for segment INLINEFORM4 is computed as: INLINEFORM5",
+    "where INLINEFORM0 is the index of the beginning and the end of topic INLINEFORM1 , INLINEFORM2 and INLINEFORM3 denote the topic segment representation of forward and backward, respectively. The final representation of topic INLINEFORM4 is the concatenation of forward and backward representation INLINEFORM5 . To obtain INLINEFORM6 and INLINEFORM7 , we utilize subtraction between GRU hidden vectors of INLINEFORM8 and INLINEFORM9 , and we pad the hidden states with zero vectors both in the beginning and the end, to ensure the index can not be out of bound. The intuition behind this process is that the GRUs can keep previous useful information in their memory cell by exploiting reset, update, and new gates to decide how to utilize and update the memory of previous information. In this way, we can represent the contextual information within each topic segment for all the sentences in that segment."
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Document Encoder",
+    "Document Encoder",
+    "Document Encoder",
+    "Document Encoder",
+    "Document Encoder",
+    "Document Encoder",
+    "Document Encoder"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Document Encoder",
+      0
+    ],
+    [
+      "Document Encoder",
+      1
+    ],
+    [
+      "Document Encoder",
+      2
+    ],
+    [
+      "Document Encoder",
+      3
+    ],
+    [
+      "Document Encoder",
+      4
+    ],
+    [
+      "Document Encoder",
+      5
+    ],
+    [
+      "Document Encoder",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Document Encoder",
+  "section": "Document Encoder",
+  "title_path": "Document Encoder",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,443 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Deep reading models for question-answering have demonstrated promising performance over the last couple of years. However current systems tend to learn how to cleverly extract a span of the source document, based on its similarity with the question, instead of seeking for the appropriate answer. Indeed, a reading machine should be able to detect relevant passages in a document regarding a question, but more importantly, it should be able to reason over the important pieces of the document in order to produce an answer when it is required. To motivate this purpose, we present ReviewQA, a question-answering dataset based on hotel reviews. The questions of this dataset are linked to a set of relational understanding competencies that we expect a model to master. Indeed, each question comes with an associated type that characterizes the required competency. With this framework, it is possible to benchmark the main families of models and to get an overview of what are the strengths and the weaknesses of a given model on the set of tasks evaluated in this dataset. Our corpus contains more than 500.000 questions in natural language over 100.000 hotel reviews. Our setup is projective, the answer of a question does not need to be extracted from a document, like in most of the recent datasets, but selected among a set of candidates that contains all the possible answers to the questions of the dataset. Finally, we present several baselines over this dataset.",
+      "score": 4.206301265131179,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Deep reading models for question-answering have demonstrated promising performance over the last couple of years. However current systems tend to learn how to cleverly extract a span of the source document, based on its similarity with the question, instead of seeking for the appropriate answer. Indeed, a reading machine should be able to detect relevant passages in a document regarding a question, but more importantly, it should be able to reason over the important pieces of the document in order to produce an answer when it is required. To motivate this purpose, we present ReviewQA, a question-answering dataset based on hotel reviews. The questions of this dataset are linked to a set of relational understanding competencies that we expect a model to master. Indeed, each question comes with an associated type that characterizes the required competency. With this framework, it is possible to benchmark the main families of models and to get an overview of what are the strengths and the weaknesses of a given model on the set of tasks evaluated in this dataset. Our corpus contains more than 500.000 questions in natural language over 100.000 hotel reviews. Our setup is projective, the answer of a question does not need to be extracted from a document, like in most of the recent datasets, but selected among a set of candidates that contains all the possible answers to the questions of the dataset. Finally, we present several baselines over this dataset."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Model performance\n[source_id=46] Table TABREF19 displays the performance of the 4 baselines on the ReviewQA's test set. These results are the performance achieved by our own implementation of these 4 models. According to our results, the simple LSTM network and the MemN2N perform very poorly on this dataset. Especially on the most advanced reasoning tasks. Indeed, the task 5 which corresponds to the prediction of the exact rating of an aspect seems to be very challenging for these model. Maybe the tokenization by sentence to create the memory blocks of the MemN2N, which is appropriated in the case of the bAbI tasks, is not a good representation of the documents when it has to handle human generated comments. However, the logistic regression achieves reasonable performance on these tasks, and do not suffer from catastrophic performance on any tasks. Its worst result comes on task 6 and one of the reason is probably that this architecture is not designed to predict a list of answers. On the contrary, the deep projective reader achieves encouraging on this dataset. It outperforms all the other baselines, with very good scores on the first fourth tasks. The question/document and document/document attention layers proposed in BIBREF12 seem once again to produce rich encodings of the inputs which are relevant for our projection layer.",
+      "score": 3.504680187785785,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        46
+      ],
+      "child_qasper_evidence_texts": [
+        "Table TABREF19 displays the performance of the 4 baselines on the ReviewQA's test set. These results are the performance achieved by our own implementation of these 4 models. According to our results, the simple LSTM network and the MemN2N perform very poorly on this dataset. Especially on the most advanced reasoning tasks. Indeed, the task 5 which corresponds to the prediction of the exact rating of an aspect seems to be very challenging for these model. Maybe the tokenization by sentence to create the memory blocks of the MemN2N, which is appropriated in the case of the bAbI tasks, is not a good representation of the documents when it has to handle human generated comments. However, the logistic regression achieves reasonable performance on these tasks, and do not suffer from catastrophic performance on any tasks. Its worst result comes on task 6 and one of the reason is probably that this architecture is not designed to predict a list of answers. On the contrary, the deep projective reader achieves encouraging on this dataset. It outperforms all the other baselines, with very good scores on the first fourth tasks. The question/document and document/document attention layers proposed in BIBREF12 seem once again to produce rich encodings of the inputs which are relevant for our projection layer."
+      ],
+      "child_pages": [
+        11
+      ],
+      "child_sections": [
+        "Model performance"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Model performance",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Model performance",
+      "section": "Model performance",
+      "title_path": "Model performance",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] A large majority of the human knowledge is recorded through text documents. That is why ability for a system to automatically infer information from text without any structured data has become a major challenge. Answering questions about a given document is a relevant proxy task that has been proposed as a way to evaluate the reading ability of a given model. In this configuration, a text document such as a news article, a document from Wikipedia or any type of text is presented to a machine with an associated set of questions. The system is then expected to answer these questions and evaluated by its accuracy on this task. The machine reading framework is very general and we can imagine a large panel of questions that can possibly handle most of the standard natural language processing tasks. For example, the task of named entities recognition can be formulated as a machine reading one where your document is the sentence and the question would be 'What are the named entities mentioned in this sentence?'. These natural language interactions are an important objective for reading systems.\n[source_id=5] Recently, many datasets have been proposed to build and evaluate reading models BIBREF0 , BIBREF1 . From cloze style questions BIBREF2 to open questions BIBREF3 , from synthetic data BIBREF4 to human written articles BIBREF5 , many styles of documents and questions have been proposed to challenge reading models. The correct answer to the questions proposed in most of these datasets is a span of text of the source document, which can be restricted to a single word in several cases. It means that the answer should explicitly be present in the source document and that the model should be able to locate it.\n[source_id=6] Different models have already shown superhuman performance on several of these datasets and particularly on the SQuAD dataset composed of Wikipedia articles BIBREF6 , BIBREF7 . However, some limits of such models have been highlighted when they encounter perturbations into the input documents BIBREF8 . Indeed almost all of the state of the art models on the SQuAD dataset suffer from a lack of robustness against adversarial examples. Once the model is trained, a meaningless sentence added at the end of the text document can completely disturb the reading system. Conversely, these adversarial examples do not seem to fool a human reader who will be capable of answering the questions as well as without this perturbation. One possible explanation of this phenomenon is that computers are good at extracting patterns in the document that match the representation of the question. If multiple spans of the documents look similar to the questions, the reader might not be able to decide which one is relevant. Moreover, Wikipedia articles tend to be written with the same standard writing style, factual, unambiguous. Such writing style tends to favor the pattern matching between the questions and the documents. This format of documents/questions has certainly influenced the design of the comprehension models that have been proposed so far. Most of them are composed of stacked attention layers that match question and document representations.\n[source_id=7] Following concepts proposed in the 20 bAbI tasks BIBREF4 or in the visual question-answering dataset CLEVR BIBREF9 , we think that the challenge, limited to the detection of relevant passages in a document, is only the first step in building systems that truly understand text. The second step is the ability of reasoning with the relevant information extracted from a document. To set up this challenge, we propose to leverage on a hotel reviews corpus that requires reasoning skills to answer natural language questions. The reviews we used have been extracted from TripAdvisor and originally proposed in BIBREF10 , BIBREF11 . In the original data, each review comes with a set of rated aspects among the seventh available: Business service, Check in / Front Desk, Cleanliness, Location, Room, Sleep Quality, Value and for all the reviews an Overall rating. In this articles we propose to exploit these data to create a dataset of question-answering that will challenge 8 competencies of the reader.\n[source_id=8] Our contributions can be summarized as follow:",
+      "score": 3.0263880963233936,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "child_qasper_evidence_texts": [
+        "A large majority of the human knowledge is recorded through text documents. That is why ability for a system to automatically infer information from text without any structured data has become a major challenge. Answering questions about a given document is a relevant proxy task that has been proposed as a way to evaluate the reading ability of a given model. In this configuration, a text document such as a news article, a document from Wikipedia or any type of text is presented to a machine with an associated set of questions. The system is then expected to answer these questions and evaluated by its accuracy on this task. The machine reading framework is very general and we can imagine a large panel of questions that can possibly handle most of the standard natural language processing tasks. For example, the task of named entities recognition can be formulated as a machine reading one where your document is the sentence and the question would be 'What are the named entities mentioned in this sentence?'. These natural language interactions are an important objective for reading systems.",
+        "Recently, many datasets have been proposed to build and evaluate reading models BIBREF0 , BIBREF1 . From cloze style questions BIBREF2 to open questions BIBREF3 , from synthetic data BIBREF4 to human written articles BIBREF5 , many styles of documents and questions have been proposed to challenge reading models. The correct answer to the questions proposed in most of these datasets is a span of text of the source document, which can be restricted to a single word in several cases. It means that the answer should explicitly be present in the source document and that the model should be able to locate it.",
+        "Different models have already shown superhuman performance on several of these datasets and particularly on the SQuAD dataset composed of Wikipedia articles BIBREF6 , BIBREF7 . However, some limits of such models have been highlighted when they encounter perturbations into the input documents BIBREF8 . Indeed almost all of the state of the art models on the SQuAD dataset suffer from a lack of robustness against adversarial examples. Once the model is trained, a meaningless sentence added at the end of the text document can completely disturb the reading system. Conversely, these adversarial examples do not seem to fool a human reader who will be capable of answering the questions as well as without this perturbation. One possible explanation of this phenomenon is that computers are good at extracting patterns in the document that match the representation of the question. If multiple spans of the documents look similar to the questions, the reader might not be able to decide which one is relevant. Moreover, Wikipedia articles tend to be written with the same standard writing style, factual, unambiguous. Such writing style tends to favor the pattern matching between the questions and the documents. This format of documents/questions has certainly influenced the design of the comprehension models that have been proposed so far. Most of them are composed of stacked attention layers that match question and document representations.",
+        "Following concepts proposed in the 20 bAbI tasks BIBREF4 or in the visual question-answering dataset CLEVR BIBREF9 , we think that the challenge, limited to the detection of relevant passages in a document, is only the first step in building systems that truly understand text. The second step is the ability of reasoning with the relevant information extracted from a document. To set up this challenge, we propose to leverage on a hotel reviews corpus that requires reasoning skills to answer natural language questions. The reviews we used have been extracted from TripAdvisor and originally proposed in BIBREF10 , BIBREF11 . In the original data, each review comes with a set of rated aspects among the seventh available: Business service, Check in / Front Desk, Cleanliness, Location, Room, Sleep Quality, Value and for all the reviews an Overall rating. In this articles we propose to exploit these data to create a dataset of question-answering that will challenge 8 competencies of the reader.",
+        "Our contributions can be summarized as follow:"
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Relational reasoning competencies\n[source_id=25] Objective: Starting with the original corpus, we aim at building a machine reading task where natural language questions will challenge the model on its understanding of the reviews. Indeed learning relational reasoning competencies over natural language documents is a major challenge of the current reading models. These original raw data allow us to generate relational questions that can possibly require a global understanding of the comment and reasoning skills to be treated. For example, asking a question like What is the best aspect rated in this comment ? is not an easy question that can be answered without a deep understanding of the review. It is necessary to capture all the aspects mentioned in the text, to predict their rating and finally to select the best one. The tasks and the dataset we propose are publicly available at http://www.europe.naverlabs.com/Blog/ReviewQA-A-novel-relational-aspect-based-opinion-dataset-for-machine-reading\n[source_id=26] We introduce a list of 8 different competencies that a reading system should master in order to process reviews and text documents in general. These 8 tasks require different competencies and a different level of understanding of the document to be well answered. For instance, detecting if an aspect is mentioned in a review will require less understanding of the review than predicting explicitly the rating of this aspect. Table TABREF10 presents the 8 tasks we have introduced in this dataset with an example of a question that corresponds to each task. We also provide the expected type of the answer (Yes/No question, rating question...). It can be an additional tool to analyze the errors of the readers.",
+      "score": 1.965530243946001,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        25,
+        26
+      ],
+      "child_qasper_evidence_texts": [
+        "Objective: Starting with the original corpus, we aim at building a machine reading task where natural language questions will challenge the model on its understanding of the reviews. Indeed learning relational reasoning competencies over natural language documents is a major challenge of the current reading models. These original raw data allow us to generate relational questions that can possibly require a global understanding of the comment and reasoning skills to be treated. For example, asking a question like What is the best aspect rated in this comment ? is not an easy question that can be answered without a deep understanding of the review. It is necessary to capture all the aspects mentioned in the text, to predict their rating and finally to select the best one. The tasks and the dataset we propose are publicly available at http://www.europe.naverlabs.com/Blog/ReviewQA-A-novel-relational-aspect-based-opinion-dataset-for-machine-reading",
+        "We introduce a list of 8 different competencies that a reading system should master in order to process reviews and text documents in general. These 8 tasks require different competencies and a different level of understanding of the document to be well answered. For instance, detecting if an aspect is mentioned in a review will require less understanding of the review than predicting explicitly the rating of this aspect. Table TABREF10 presents the 8 tasks we have introduced in this dataset with an example of a question that corresponds to each task. We also provide the expected type of the answer (Yes/No question, rating question...). It can be an additional tool to analyze the errors of the readers."
+      ],
+      "child_pages": [
+        6,
+        6
+      ],
+      "child_sections": [
+        "Relational reasoning competencies",
+        "Relational reasoning competencies"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Relational reasoning competencies",
+          0
+        ],
+        [
+          "Relational reasoning competencies",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Relational reasoning competencies",
+      "section": "Relational reasoning competencies",
+      "title_path": "Relational reasoning competencies",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Machine comprehension datasets\n[source_id=10] ReviewQA is proposed as a novel dataset regarding the collection of the existing ones. Indeed a large panel of available datasets, that evaluate models on different types of documents, can only be valuable for designing efficient models and learning protocols. In this following part, we describe several of these datasets.\n[source_id=11] SQuAD: The Standford Question Answering Dataset (SQuAD) introduced in BIBREF0 is a large dataset of natural questions over the 500 most popular articles of Wikipedia. All the questions have been crowdsourced and answers are spans of text extracted from source documents. This dataset has been very popular these last two years and the performance of the architectures that have been proposed have rapidly increased until several models surpass the human score. Indeed, in the original paper human performance has been measured at 82.304 points for the exact match metric and at the time we are writing this paper four models have already a higher score. In another hand BIBREF8 has shown that these models suffer from a lack of robustness against adversarial examples that are meaningless from a human point of view. This suggests the need for a more challenging dataset that will allow developing strongest reasoning architectures.\n[source_id=12] NewsQA: NewsQA BIBREF1 is a dataset very similar to SQuAD. It contains 120.000 human generated questions over 12.000 articles form CNN originally introduced in BIBREF5 . It has been designed to be more challenging than SQuAD with questions that might require to extract multiple spans of text or not be answerable.\n[source_id=13] WikiHop and MedHop: These are two recent datasets introduced in BIBREF13 . Unlike SQuAD and NewsQA, important facts are spread out across multiple documents and, in order to answer a question, it is necessary to jump over a set of passages to collect the required information. The relevant passages are not explicitly mentioned in the data so this dataset measures the ability that a model has to navigate across multiple documents. The questions come with a set of candidates which are all present in the text.\n[source_id=14] MS Marco: This dataset has been released in BIBREF14 . The documents come from the internet and the questions are real user queries asked through the bing search engine. The dataset contains around 100.000 queries and each of them comes with a set of approximatively 10 relevant passages. Like in SQuAD, several models are already doing superhuman performances on this dataset.\n[source_id=15] Facebook bAbI tasks: This is a set of 20 toy tasks proposed in BIBREF4 and designed to measure text understanding. Each task requires a certain capability to be completed like induction, deduction and more. Documents are synthetic stories, composed of few sentences that describe a set of actions. This dataset was one of the first attempt to introduce a general set of prerequisite capabilities required for the reading task. Although it has been a very challenging framework, beneficial to the emergence of the attention mechanism inside the reading architectures, a Gated end-to-end memory network BIBREF15 now succeed in almost all of the 20 tasks. One of the possible reason is that the data are synthetic data, without noise or ambiguity. We propose a comparable framework with understanding and reasoning tasks based on user-generated comments that are much more realistic and that required language competencies to be understood.\n[source_id=16] CLEVR: Beyond textual question-answering, Visual Question-Answering (VQA) has been largely studied during the last couple of years. More recently, the problem of relational reasoning has been introduced through this dataset BIBREF9 . The main original idea was to introduce relational reasoning questions over object shapes and placements. This dataset has already motivated the development of original deep models. To the best of our knowledge, no natural language question-answering corpus has been designed to investigate such capabilities. As we will present in the following of this paper, we think sentiment analysis is particularly suited for this task and we will introduce a novel machine reading corpus with such capability requirements.",
+      "score": 0.9180504546757129,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "child_qasper_evidence_texts": [
+        "ReviewQA is proposed as a novel dataset regarding the collection of the existing ones. Indeed a large panel of available datasets, that evaluate models on different types of documents, can only be valuable for designing efficient models and learning protocols. In this following part, we describe several of these datasets.",
+        "SQuAD: The Standford Question Answering Dataset (SQuAD) introduced in BIBREF0 is a large dataset of natural questions over the 500 most popular articles of Wikipedia. All the questions have been crowdsourced and answers are spans of text extracted from source documents. This dataset has been very popular these last two years and the performance of the architectures that have been proposed have rapidly increased until several models surpass the human score. Indeed, in the original paper human performance has been measured at 82.304 points for the exact match metric and at the time we are writing this paper four models have already a higher score. In another hand BIBREF8 has shown that these models suffer from a lack of robustness against adversarial examples that are meaningless from a human point of view. This suggests the need for a more challenging dataset that will allow developing strongest reasoning architectures.",
+        "NewsQA: NewsQA BIBREF1 is a dataset very similar to SQuAD. It contains 120.000 human generated questions over 12.000 articles form CNN originally introduced in BIBREF5 . It has been designed to be more challenging than SQuAD with questions that might require to extract multiple spans of text or not be answerable.",
+        "WikiHop and MedHop: These are two recent datasets introduced in BIBREF13 . Unlike SQuAD and NewsQA, important facts are spread out across multiple documents and, in order to answer a question, it is necessary to jump over a set of passages to collect the required information. The relevant passages are not explicitly mentioned in the data so this dataset measures the ability that a model has to navigate across multiple documents. The questions come with a set of candidates which are all present in the text.",
+        "MS Marco: This dataset has been released in BIBREF14 . The documents come from the internet and the questions are real user queries asked through the bing search engine. The dataset contains around 100.000 queries and each of them comes with a set of approximatively 10 relevant passages. Like in SQuAD, several models are already doing superhuman performances on this dataset.",
+        "Facebook bAbI tasks: This is a set of 20 toy tasks proposed in BIBREF4 and designed to measure text understanding. Each task requires a certain capability to be completed like induction, deduction and more. Documents are synthetic stories, composed of few sentences that describe a set of actions. This dataset was one of the first attempt to introduce a general set of prerequisite capabilities required for the reading task. Although it has been a very challenging framework, beneficial to the emergence of the attention mechanism inside the reading architectures, a Gated end-to-end memory network BIBREF15 now succeed in almost all of the 20 tasks. One of the possible reason is that the data are synthetic data, without noise or ambiguity. We propose a comparable framework with understanding and reasoning tasks based on user-generated comments that are much more realistic and that required language competencies to be understood.",
+        "CLEVR: Beyond textual question-answering, Visual Question-Answering (VQA) has been largely studied during the last couple of years. More recently, the problem of relational reasoning has been introduced through this dataset BIBREF9 . The main original idea was to introduce relational reasoning questions over object shapes and placements. This dataset has already motivated the development of original deep models. To the best of our knowledge, no natural language question-answering corpus has been designed to investigate such capabilities. As we will present in the following of this paper, we think sentiment analysis is particularly suited for this task and we will introduce a novel machine reading corpus with such capability requirements."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Machine comprehension datasets",
+        "Machine comprehension datasets",
+        "Machine comprehension datasets",
+        "Machine comprehension datasets",
+        "Machine comprehension datasets",
+        "Machine comprehension datasets",
+        "Machine comprehension datasets"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Machine comprehension datasets",
+          0
+        ],
+        [
+          "Machine comprehension datasets",
+          1
+        ],
+        [
+          "Machine comprehension datasets",
+          2
+        ],
+        [
+          "Machine comprehension datasets",
+          3
+        ],
+        [
+          "Machine comprehension datasets",
+          4
+        ],
+        [
+          "Machine comprehension datasets",
+          5
+        ],
+        [
+          "Machine comprehension datasets",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Machine comprehension datasets",
+      "section": "Machine comprehension datasets",
+      "title_path": "Machine comprehension datasets",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] ReviewQA dataset\n[source_id=21] We think that evaluating the task of sentiment analysis through the setup of question-answering is a relevant playground for machine reading research. Indeed natural language questions about the different aspects of the targeted venues are typical kind of questions we want to be able to ask to a system. In this context, we introduce a set of reasoning questions types over the relationships between aspects. We propose ReviewQA, a dataset of natural language questions over hotel reviews. These questions are divided into 8 groups, regarding the competency required to be answered. In this section, we describe each task and the process followed to generate this dataset.",
+      "score": 0.8165026582272039,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        21
+      ],
+      "child_qasper_evidence_texts": [
+        "We think that evaluating the task of sentiment analysis through the setup of question-answering is a relevant playground for machine reading research. Indeed natural language questions about the different aspects of the targeted venues are typical kind of questions we want to be able to ask to a system. In this context, we introduce a set of reasoning questions types over the relationships between aspects. We propose ReviewQA, a dataset of natural language questions over hotel reviews. These questions are divided into 8 groups, regarding the competency required to be answered. In this section, we describe each task and the process followed to generate this dataset."
+      ],
+      "child_pages": [
+        4
+      ],
+      "child_sections": [
+        "ReviewQA dataset"
+      ],
+      "child_hotpot_facts": [
+        [
+          "ReviewQA dataset",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "ReviewQA dataset",
+      "section": "ReviewQA dataset",
+      "title_path": "ReviewQA dataset",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Construction of the dataset\n[source_id=28] We sample 100.000 reviews from the original corpus. Figure FIGREF12 presents the distribution of the number of words of the reviews in the dataset. We explicitly favor reviews which contain an important number of words. In average, a review contains 200 words. Indeed these long reviews are most likely to contain challenging relations between different aspects. A short review which deals with only a few aspects is more likely to not be very relevant to the challenge we want to propose in this dataset. Figure FIGREF14 displays the distribution of the ratings per aspects in the 100.000 reviews we based our dataset. We can see that the average values of these ratings tend to be quite high. It could have introduced bias if it was not the case for all the aspects. For example, we do not want that the model learns that in general, the service is rated better than the location and them answer without looking at the document. Since this situation is the same for all the aspects, the relational tasks introduced in this dataset remains extremely relevant.\n[source_id=29] Then we randomly select 6 tasks for each review (the same task can be selected multiple times) and randomly select a natural language question that corresponds to this task. The questions are human-generated patterns that we have crowdsourced in order to produce a dataset as rich as possible. To this end, we have generated several patterns that correspond to the capabilities we wanted to express in a given question and we have crowdsourced rephrasing of these patterns.\n[source_id=30] The final dataset we propose is composed of more than 500.000 questions about 100.000 reviews. Table TABREF13 shows the repartition of the documents and queries into the train and test set. Each review contains a maximum of 6 questions. Sometimes less when it is not possible to generate all. For example, if only two or three aspects are mentioned in a review, we will be able to generate only a little set of relational questions. Figure FIGREF15 depicts the repartition of the answers in the generated dataset. A majority of the tasks we introduced, even if they possibly require a high level of understanding of the document and the question, are binary questions. It means that in the generated dataset the answers yes and no tend to be more present than the others. To balance in a better way the distribution of the answers, we chose to affect a higher probability of sampling to the task 5, 6, 7.1, 8. Indeed, these tasks are not binary questions and required an aspect name as the answer. Figure FIGREF17 represents the repartition of question types in our dataset. Finally, figure FIGREF15 shows the repartition of the answers in the dataset.",
+      "score": 0.7982156271158442,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        28,
+        29,
+        30
+      ],
+      "child_qasper_evidence_texts": [
+        "We sample 100.000 reviews from the original corpus. Figure FIGREF12 presents the distribution of the number of words of the reviews in the dataset. We explicitly favor reviews which contain an important number of words. In average, a review contains 200 words. Indeed these long reviews are most likely to contain challenging relations between different aspects. A short review which deals with only a few aspects is more likely to not be very relevant to the challenge we want to propose in this dataset. Figure FIGREF14 displays the distribution of the ratings per aspects in the 100.000 reviews we based our dataset. We can see that the average values of these ratings tend to be quite high. It could have introduced bias if it was not the case for all the aspects. For example, we do not want that the model learns that in general, the service is rated better than the location and them answer without looking at the document. Since this situation is the same for all the aspects, the relational tasks introduced in this dataset remains extremely relevant.",
+        "Then we randomly select 6 tasks for each review (the same task can be selected multiple times) and randomly select a natural language question that corresponds to this task. The questions are human-generated patterns that we have crowdsourced in order to produce a dataset as rich as possible. To this end, we have generated several patterns that correspond to the capabilities we wanted to express in a given question and we have crowdsourced rephrasing of these patterns.",
+        "The final dataset we propose is composed of more than 500.000 questions about 100.000 reviews. Table TABREF13 shows the repartition of the documents and queries into the train and test set. Each review contains a maximum of 6 questions. Sometimes less when it is not possible to generate all. For example, if only two or three aspects are mentioned in a review, we will be able to generate only a little set of relational questions. Figure FIGREF15 depicts the repartition of the answers in the generated dataset. A majority of the tasks we introduced, even if they possibly require a high level of understanding of the document and the question, are binary questions. It means that in the generated dataset the answers yes and no tend to be more present than the others. To balance in a better way the distribution of the answers, we chose to affect a higher probability of sampling to the task 5, 6, 7.1, 8. Indeed, these tasks are not binary questions and required an aspect name as the answer. Figure FIGREF17 represents the repartition of question types in our dataset. Finally, figure FIGREF15 shows the repartition of the answers in the dataset."
+      ],
+      "child_pages": [
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Construction of the dataset",
+        "Construction of the dataset",
+        "Construction of the dataset"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Construction of the dataset",
+          0
+        ],
+        [
+          "Construction of the dataset",
+          1
+        ],
+        [
+          "Construction of the dataset",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Construction of the dataset",
+      "section": "Construction of the dataset",
+      "title_path": "Construction of the dataset",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Training details\n[source_id=44] We propose to train these models on the entire set of tasks and them to measure the overall performance and the accuracy of each individual task. In all the models, we use the Adam optimizer BIBREF21 with a learning rate of 0.01 and the batch size is set to 64. All the parameter are initialized from a Gaussian distribution with mean 0 and a standard deviation of 0.01. The dimension of the word embeddings in the projective deep reading model and the LSTM model is 300 and we use Glove pre-trained vectors ( BIBREF22 ). We use a MemN2N with 5 memory hops and a linear start of 5 epochs. The reviews are split by sentence and each memory block corresponds to one sentence. Each sentence is represented by its bag-of-word representation augmented with temporal encoding as it is suggested in BIBREF18 .",
+      "score": 0.777072964255587,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        44
+      ],
+      "child_qasper_evidence_texts": [
+        "We propose to train these models on the entire set of tasks and them to measure the overall performance and the accuracy of each individual task. In all the models, we use the Adam optimizer BIBREF21 with a learning rate of 0.01 and the batch size is set to 64. All the parameter are initialized from a Gaussian distribution with mean 0 and a standard deviation of 0.01. The dimension of the word embeddings in the projective deep reading model and the LSTM model is 300 and we use Glove pre-trained vectors ( BIBREF22 ). We use a MemN2N with 5 memory hops and a linear start of 5 epochs. The reviews are split by sentence and each memory block corresponds to one sentence. Each sentence is represented by its bag-of-word representation augmented with temporal encoding as it is suggested in BIBREF18 ."
+      ],
+      "child_pages": [
+        10
+      ],
+      "child_sections": [
+        "Training details"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Training details",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Training details",
+      "section": "Training details",
+      "title_path": "Training details",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 46,
+      "content": "Table TABREF19 displays the performance of the 4 baselines on the ReviewQA's test set. These results are the performance achieved by our own implementation of these 4 models. According to our results, the simple LSTM network and the MemN2N perform very poorly on this dataset. Especially on the most advanced reasoning tasks. Indeed, the task 5 which corresponds to the prediction of the exact rating of an aspect seems to be very challenging for these model. Maybe the tokenization by sentence to create the memory blocks of the MemN2N, which is appropriated in the case of the bAbI tasks, is not a good representation of the documents when it has to handle human generated comments. However, the logistic regression achieves reasonable performance on these tasks, and do not suffer from catastrophic performance on any tasks. Its worst result comes on task 6 and one of the reason is probably that this architecture is not designed to predict a list of answers. On the contrary, the deep projective reader achieves encouraging on this dataset. It outperforms all the other baselines, with very good scores on the first fourth tasks. The question/document and document/document attention layers proposed in BIBREF12 seem once again to produce rich encodings of the inputs which are relevant for our projection layer.",
+      "qasper_evidence_text": "Table TABREF19 displays the performance of the 4 baselines on the ReviewQA's test set. These results are the performance achieved by our own implementation of these 4 models. According to our results, the simple LSTM network and the MemN2N perform very poorly on this dataset. Especially on the most advanced reasoning tasks. Indeed, the task 5 which corresponds to the prediction of the exact rating of an aspect seems to be very challenging for these model. Maybe the tokenization by sentence to create the memory blocks of the MemN2N, which is appropriated in the case of the bAbI tasks, is not a good representation of the documents when it has to handle human generated comments. However, the logistic regression achieves reasonable performance on these tasks, and do not suffer from catastrophic performance on any tasks. Its worst result comes on task 6 and one of the reason is probably that this architecture is not designed to predict a list of answers. On the contrary, the deep projective reader achieves encouraging on this dataset. It outperforms all the other baselines, with very good scores on the first fourth tasks. The question/document and document/document attention layers proposed in BIBREF12 seem once again to produce rich encodings of the inputs which are relevant for our projection layer.",
+      "source_node_id": 46,
+      "node_id": 46,
+      "paragraph_id": 46,
+      "evidence_id": 46,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_11",
+      "rank": 2,
+      "score": 3.504680187785785,
+      "block_type": "paragraph",
+      "page": 11,
+      "section_id": "Model performance",
+      "section": "Model performance",
+      "title": "Model performance",
+      "hotpot_title": "Model performance",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 2
+    },
+    {
+      "id": 44,
+      "content": "We propose to train these models on the entire set of tasks and them to measure the overall performance and the accuracy of each individual task. In all the models, we use the Adam optimizer BIBREF21 with a learning rate of 0.01 and the batch size is set to 64. All the parameter are initialized from a Gaussian distribution with mean 0 and a standard deviation of 0.01. The dimension of the word embeddings in the projective deep reading model and the LSTM model is 300 and we use Glove pre-trained vectors ( BIBREF22 ). We use a MemN2N with 5 memory hops and a linear start of 5 epochs. The reviews are split by sentence and each memory block corresponds to one sentence. Each sentence is represented by its bag-of-word representation augmented with temporal encoding as it is suggested in BIBREF18 .",
+      "qasper_evidence_text": "We propose to train these models on the entire set of tasks and them to measure the overall performance and the accuracy of each individual task. In all the models, we use the Adam optimizer BIBREF21 with a learning rate of 0.01 and the batch size is set to 64. All the parameter are initialized from a Gaussian distribution with mean 0 and a standard deviation of 0.01. The dimension of the word embeddings in the projective deep reading model and the LSTM model is 300 and we use Glove pre-trained vectors ( BIBREF22 ). We use a MemN2N with 5 memory hops and a linear start of 5 epochs. The reviews are split by sentence and each memory block corresponds to one sentence. Each sentence is represented by its bag-of-word representation augmented with temporal encoding as it is suggested in BIBREF18 .",
+      "source_node_id": 44,
+      "node_id": 44,
+      "paragraph_id": 44,
+      "evidence_id": 44,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_10",
+      "rank": 8,
+      "score": 0.777072964255587,
+      "block_type": "paragraph",
+      "page": 10,
+      "section_id": "Training details",
+      "section": "Training details",
+      "title": "Training details",
+      "hotpot_title": "Training details",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 3
+    }
+  ],
+  "supporting_block_ids": [
+    46,
+    44
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "id": "longrag_16",
+  "content": "[Section] Results ::: Experiment A: NUBes-PHI\n[source_id=73] Table shows the results of the conducted experiments in NUBes-PHI for all the compared systems. The included baseline serves to give a quick insight about how challenging the data is. With simple regular expressions and gazetteers a precision of 0.853 is obtained. On the other hand, the recall, which directly depends on the coverage provided by the rules and resources, drops to 0.469. Hence, this task is unlikely to be solved without the generalisation capabilities provided by machine-learning and deep-learning models.\n[source_id=74] Regarding the detection scenario –that is, the scenario concerned with a binary classification to determine whether each individual token conveys sensitive information or not–, it can be observed that BERT outperforms its competitors. A fact worth highlighting is that, according to these results, BERT achieves a precision lower than the rest of the systems (i.e., it makes more false positive predictions); in exchange, it obtains a remarkably higher recall. Noticeably, it reaches a recall of 0.979, improving by more than 4 points the second-best system, spaCy.\n[source_id=75] The table also shows the results for the relaxed metric that only takes into account the entity type detected, regardless of the BIO label (i.e., ignoring whether the token is at the beginning or in the middle of a sensitive sequence of tokens). The conclusions are very similar to those extracted previously, with BERT gaining 2.1 points of F1-score over the CRF based approach. The confusion matrices of the predictions made by CRF, spaCy, and BERT in this scenario are shown in Table . As can bee seen, BERT has less difficulty in predicting correctly less frequent categories, such as `Location', `Job', and `Patient'. One of the most common mistakes according to the confusion matrices is classifying hospital names as `Location' instead of the more accurate `Hospital'; this is hardly a harmful error, given that a hospital is actually a location. Last, the category `Other' is completely leaked by all the compared systems, most likely due to its almost total lack of support in both training and evaluation datasets.\n[source_id=76] To finish with this experiment set, Table also shows the strict classification precision, recall and F1-score for the compared systems. Despite the fact that, in general, the systems obtain high values, BERT outperforms them again. BERT's F1-score is 1.9 points higher than the next most competitive result in the comparison. More remarkably, the recall obtained by BERT is about 5 points above.\n[source_id=77] Upon manual inspection of the errors committed by the BERT-based model, we discovered that it has a slight tendency towards producing ill-formed BIO sequences (e.g, starting a sensitive span with `Inside' instead of `Begin'; see Table ). We could expect that complementing the BERT-based model with a CRF layer on top would help enforce the emission of valid sequences, alleviating this kind of errors and further improving its results.\n[source_id=78] Finally, Figure shows the impact of decreasing the amount of training data in the detection scenario. It shows the difference in precision, recall, and F1-score with respect to that obtained using 100% of the training data. A general downward trend can be observed, as one would expect: less training data leads to less accurate predictions. However, the BERT-based model is the most robust to training-data reduction, showing an steadily low performance loss. With 1% of the dataset (230 training instances), the BERT-based model only suffers a striking 7-point F1-score loss, in contrast to the 32 and 39 points lost by the CRF and spaCy models, respectively. This steep performance drop stems to a larger extent from recall decline, which is not that marked in the case of BERT. Overall, these results indicate that the transfer-learning achieved through the BERT multilingual pre-trained model not only helps obtain better results, but also lowers the need of manually labelled data for this application domain.",
+  "score": 4.652204718825298,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_16",
+  "child_source_node_ids": [
+    73,
+    74,
+    75,
+    76,
+    77,
+    78
+  ],
+  "child_qasper_evidence_texts": [
+    "Table shows the results of the conducted experiments in NUBes-PHI for all the compared systems. The included baseline serves to give a quick insight about how challenging the data is. With simple regular expressions and gazetteers a precision of 0.853 is obtained. On the other hand, the recall, which directly depends on the coverage provided by the rules and resources, drops to 0.469. Hence, this task is unlikely to be solved without the generalisation capabilities provided by machine-learning and deep-learning models.",
+    "Regarding the detection scenario –that is, the scenario concerned with a binary classification to determine whether each individual token conveys sensitive information or not–, it can be observed that BERT outperforms its competitors. A fact worth highlighting is that, according to these results, BERT achieves a precision lower than the rest of the systems (i.e., it makes more false positive predictions); in exchange, it obtains a remarkably higher recall. Noticeably, it reaches a recall of 0.979, improving by more than 4 points the second-best system, spaCy.",
+    "The table also shows the results for the relaxed metric that only takes into account the entity type detected, regardless of the BIO label (i.e., ignoring whether the token is at the beginning or in the middle of a sensitive sequence of tokens). The conclusions are very similar to those extracted previously, with BERT gaining 2.1 points of F1-score over the CRF based approach. The confusion matrices of the predictions made by CRF, spaCy, and BERT in this scenario are shown in Table . As can bee seen, BERT has less difficulty in predicting correctly less frequent categories, such as `Location', `Job', and `Patient'. One of the most common mistakes according to the confusion matrices is classifying hospital names as `Location' instead of the more accurate `Hospital'; this is hardly a harmful error, given that a hospital is actually a location. Last, the category `Other' is completely leaked by all the compared systems, most likely due to its almost total lack of support in both training and evaluation datasets.",
+    "To finish with this experiment set, Table also shows the strict classification precision, recall and F1-score for the compared systems. Despite the fact that, in general, the systems obtain high values, BERT outperforms them again. BERT's F1-score is 1.9 points higher than the next most competitive result in the comparison. More remarkably, the recall obtained by BERT is about 5 points above.",
+    "Upon manual inspection of the errors committed by the BERT-based model, we discovered that it has a slight tendency towards producing ill-formed BIO sequences (e.g, starting a sensitive span with `Inside' instead of `Begin'; see Table ). We could expect that complementing the BERT-based model with a CRF layer on top would help enforce the emission of valid sequences, alleviating this kind of errors and further improving its results.",
+    "Finally, Figure shows the impact of decreasing the amount of training data in the detection scenario. It shows the difference in precision, recall, and F1-score with respect to that obtained using 100% of the training data. A general downward trend can be observed, as one would expect: less training data leads to less accurate predictions. However, the BERT-based model is the most robust to training-data reduction, showing an steadily low performance loss. With 1% of the dataset (230 training instances), the BERT-based model only suffers a striking 7-point F1-score loss, in contrast to the 32 and 39 points lost by the CRF and spaCy models, respectively. This steep performance drop stems to a larger extent from recall decline, which is not that marked in the case of BERT. Overall, these results indicate that the transfer-learning achieved through the BERT multilingual pre-trained model not only helps obtain better results, but also lowers the need of manually labelled data for this application domain."
+  ],
+  "child_pages": [
+    16,
+    16,
+    16,
+    16,
+    16,
+    16
+  ],
+  "child_sections": [
+    "Results ::: Experiment A: NUBes-PHI",
+    "Results ::: Experiment A: NUBes-PHI",
+    "Results ::: Experiment A: NUBes-PHI",
+    "Results ::: Experiment A: NUBes-PHI",
+    "Results ::: Experiment A: NUBes-PHI",
+    "Results ::: Experiment A: NUBes-PHI"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Results ::: Experiment A: NUBes-PHI",
+      0
+    ],
+    [
+      "Results ::: Experiment A: NUBes-PHI",
+      1
+    ],
+    [
+      "Results ::: Experiment A: NUBes-PHI",
+      2
+    ],
+    [
+      "Results ::: Experiment A: NUBes-PHI",
+      3
+    ],
+    [
+      "Results ::: Experiment A: NUBes-PHI",
+      4
+    ],
+    [
+      "Results ::: Experiment A: NUBes-PHI",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_16",
+  "section_id": "Results ::: Experiment A: NUBes-PHI",
+  "section": "Results ::: Experiment A: NUBes-PHI",
+  "title_path": "Results ::: Experiment A: NUBes-PHI",
+  "block_type": "long_unit"
+}

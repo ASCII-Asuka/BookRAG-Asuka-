@@ -1,0 +1,429 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_2",
+      "content": "[Section] Background\n[source_id=10] NLP approaches for information extraction within the biomedical research areas range from rule-based systems BIBREF3 , to domain-specific systems using feature-based classification BIBREF1 , to the recent deep networks for end-to-end feature extraction and classification BIBREF0 . NLP has had varied degree of success with free-text pathology reports BIBREF4 . Various studies have acknowledge the success of NLP in interpreting pathology reports, especially for classification tasks or extracting a single attribute from a report BIBREF4 , BIBREF5 .\n[source_id=11] The Cancer Text Information Extraction System (caTIES) BIBREF6 is a framework developed in a caBIG project focuses on information extraction from pathology reports. Specifically, caTIES extracts information from surgical pathology reports (SPR) with good precision as well as recall.\n[source_id=12] Another system known as Open Registry BIBREF7 is capable of filtering the reports with disease codes containing cancer. In BIBREF8 , an approach called Automated Retrieval Console (ARC) is proposed which uses machine learning models to predict the degree of association of a given pathology or radiology with the cancer. The performance ranges from an F-measure of 0.75 for lung cancer to 0.94 for colorectal cancer. However, ARC uses domain-specific rules which hiders with the generalization of the approach to variety of pathology reports.\n[source_id=13] This research work is inspired by themes emerging in many of the above studies. Specifically, we are evaluating the task of predicting the primary diagnosis from the pathology report. Unlike previous approaches, the system does not rely on custom rule-based knowledge, domain specific features, balanced dataset with fewer number of classes.",
+      "score": 1.4640988689186725,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        10,
+        11,
+        12,
+        13
+      ],
+      "child_qasper_evidence_texts": [
+        "NLP approaches for information extraction within the biomedical research areas range from rule-based systems BIBREF3 , to domain-specific systems using feature-based classification BIBREF1 , to the recent deep networks for end-to-end feature extraction and classification BIBREF0 . NLP has had varied degree of success with free-text pathology reports BIBREF4 . Various studies have acknowledge the success of NLP in interpreting pathology reports, especially for classification tasks or extracting a single attribute from a report BIBREF4 , BIBREF5 .",
+        "The Cancer Text Information Extraction System (caTIES) BIBREF6 is a framework developed in a caBIG project focuses on information extraction from pathology reports. Specifically, caTIES extracts information from surgical pathology reports (SPR) with good precision as well as recall.",
+        "Another system known as Open Registry BIBREF7 is capable of filtering the reports with disease codes containing cancer. In BIBREF8 , an approach called Automated Retrieval Console (ARC) is proposed which uses machine learning models to predict the degree of association of a given pathology or radiology with the cancer. The performance ranges from an F-measure of 0.75 for lung cancer to 0.94 for colorectal cancer. However, ARC uses domain-specific rules which hiders with the generalization of the approach to variety of pathology reports.",
+        "This research work is inspired by themes emerging in many of the above studies. Specifically, we are evaluating the task of predicting the primary diagnosis from the pathology report. Unlike previous approaches, the system does not rely on custom rule-based knowledge, domain specific features, balanced dataset with fewer number of classes."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Background",
+        "Background",
+        "Background",
+        "Background"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Background",
+          0
+        ],
+        [
+          "Background",
+          1
+        ],
+        [
+          "Background",
+          2
+        ],
+        [
+          "Background",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Background",
+      "section": "Background",
+      "title_path": "Background",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Cancer is one of the leading causes of death in the world, with over 80,000 deaths registered in Canada in 2017 (Canadian Cancer Statistics 2017). A computer-aided system for cancer diagnosis usually involves a pathologist rendering a descriptive report after examining the tissue glass slides obtained from the biopsy of a patient. A pathology report contains specific analysis of cells and tissues, and other histopathological indicators that are crucial for diagnosing malignancies. An average sized laboratory may produces a large quantity of pathology reports annually (e.g., in excess of 50,000), but these reports are written in mostly unstructured text and with no direct link to the tissue sample. Furthermore, the report for each patient is a personalized document and offers very high variability in terminology due to lack of standards and may even include misspellings and missing punctuation, clinical diagnoses interspersed with complex explanations, different terminology to label the same malignancy, and information about multiple carcinoma appearances included in a single report BIBREF0 .\n[source_id=5] In Canada, each Provincial and Territorial Cancer Registry (PTCR) is responsible for collecting the data about cancer diseases and reporting them to Statistics Canada (StatCan). Every year, Canadian Cancer Registry (CCR) uses the information sources of StatCan to compile an annual report on cancer and tumor diseases. Many countries have their own cancer registry programs. These programs rely on the acquisition of diagnostic, treatment, and outcome information through manual processing and interpretation from various unstructured sources (e.g., pathology reports, autopsy/laboratory reports, medical billing summaries). The manual classification of cancer pathology reports is a challenging, time-consuming task and requires extensive training BIBREF0 .\n[source_id=6] With the continued growth in the number of cancer patients, and the increase in treatment complexity, cancer registries face a significant challenge in manually reviewing the large quantity of reports BIBREF1 , BIBREF0 . In this situation, Natural Language Processing (NLP) systems can offer a unique opportunity to automatically encode the unstructured reports into structured data. Since, the registries already have access to the large quantity of historically labeled and encoded reports, a supervised machine learning approach of feature extraction and classification is a compelling direction for making their workflow more effective and streamlined. If successful, such a solution would enable processing reports in much lesser time allowing trained personnel to focus on their research and analysis. However, developing an automated solution with high accuracy and consistency across wide variety of reports is a challenging problem.\n[source_id=7] For cancer registries, an important piece of information in a pathology report is the associated ICD-O code which describes the patient's histological diagnosis, as described by the World Health Organization's (WHO) International Classification of Diseases for Oncology BIBREF2 . Prediction of the primary diagnosis from a pathology report provides a valuable starting point for exploration of machine learning techniques for automated cancer surveillance. A major application for this purpose would be “auto-reporting” based on analysis of whole slide images, the digitization of the biopsy glass slides. Structured, summarized and categorized reports can be associated with the image content when searching in large archives. Such as system would be able to drastically increase the efficiency of diagnostic processes for the majority of cases where in spite of obvious primary diagnosis, still time and effort is required from the pathologists to write a descriptive report.\n[source_id=8] The primary objective of our study is to analyze the efficacy of existing machine learning approaches for the automated classification of pathology reports into different diagnosis categories. We demonstrate that TF-IDF feature vectors combined with linear SVM or XGBoost classifier can be an effective method for classification of the reports, achieving up to 83% accuracy. We also show that TF-IDF features are capable of identifying important keywords within a pathology report. Furthermore, we have created a new dataset consisting of 1,949 pathology reports across 37 primary diagnoses. Taken together, our exploratory experiments with a newly introduced dataset on pathology reports opens many new opportunities for researchers to develop a scalable and automatic information extraction from unstructured pathology reports.",
+      "score": 1.3625211161906148,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "child_qasper_evidence_texts": [
+        "Cancer is one of the leading causes of death in the world, with over 80,000 deaths registered in Canada in 2017 (Canadian Cancer Statistics 2017). A computer-aided system for cancer diagnosis usually involves a pathologist rendering a descriptive report after examining the tissue glass slides obtained from the biopsy of a patient. A pathology report contains specific analysis of cells and tissues, and other histopathological indicators that are crucial for diagnosing malignancies. An average sized laboratory may produces a large quantity of pathology reports annually (e.g., in excess of 50,000), but these reports are written in mostly unstructured text and with no direct link to the tissue sample. Furthermore, the report for each patient is a personalized document and offers very high variability in terminology due to lack of standards and may even include misspellings and missing punctuation, clinical diagnoses interspersed with complex explanations, different terminology to label the same malignancy, and information about multiple carcinoma appearances included in a single report BIBREF0 .",
+        "In Canada, each Provincial and Territorial Cancer Registry (PTCR) is responsible for collecting the data about cancer diseases and reporting them to Statistics Canada (StatCan). Every year, Canadian Cancer Registry (CCR) uses the information sources of StatCan to compile an annual report on cancer and tumor diseases. Many countries have their own cancer registry programs. These programs rely on the acquisition of diagnostic, treatment, and outcome information through manual processing and interpretation from various unstructured sources (e.g., pathology reports, autopsy/laboratory reports, medical billing summaries). The manual classification of cancer pathology reports is a challenging, time-consuming task and requires extensive training BIBREF0 .",
+        "With the continued growth in the number of cancer patients, and the increase in treatment complexity, cancer registries face a significant challenge in manually reviewing the large quantity of reports BIBREF1 , BIBREF0 . In this situation, Natural Language Processing (NLP) systems can offer a unique opportunity to automatically encode the unstructured reports into structured data. Since, the registries already have access to the large quantity of historically labeled and encoded reports, a supervised machine learning approach of feature extraction and classification is a compelling direction for making their workflow more effective and streamlined. If successful, such a solution would enable processing reports in much lesser time allowing trained personnel to focus on their research and analysis. However, developing an automated solution with high accuracy and consistency across wide variety of reports is a challenging problem.",
+        "For cancer registries, an important piece of information in a pathology report is the associated ICD-O code which describes the patient's histological diagnosis, as described by the World Health Organization's (WHO) International Classification of Diseases for Oncology BIBREF2 . Prediction of the primary diagnosis from a pathology report provides a valuable starting point for exploration of machine learning techniques for automated cancer surveillance. A major application for this purpose would be “auto-reporting” based on analysis of whole slide images, the digitization of the biopsy glass slides. Structured, summarized and categorized reports can be associated with the image content when searching in large archives. Such as system would be able to drastically increase the efficiency of diagnostic processes for the majority of cases where in spite of obvious primary diagnosis, still time and effort is required from the pathologists to write a descriptive report.",
+        "The primary objective of our study is to analyze the efficacy of existing machine learning approaches for the automated classification of pathology reports into different diagnosis categories. We demonstrate that TF-IDF feature vectors combined with linear SVM or XGBoost classifier can be an effective method for classification of the reports, achieving up to 83% accuracy. We also show that TF-IDF features are capable of identifying important keywords within a pathology report. Furthermore, we have created a new dataset consisting of 1,949 pathology reports across 37 primary diagnoses. Taken together, our exploratory experiments with a newly introduced dataset on pathology reports opens many new opportunities for researchers to develop a scalable and automatic information extraction from unstructured pathology reports."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] A Pathology report is arguably one of the most important documents in medicine containing interpretive information about the visual findings from the patient's biopsy sample. Each pathology report has a retention period of up to 20 years after the treatment of a patient. Cancer registries process and encode high volumes of free-text pathology reports for surveillance of cancer and tumor diseases all across the world. In spite of their extremely valuable information they hold, pathology reports are not used in any systematic way to facilitate computational pathology. Therefore, in this study, we investigate automated machine-learning techniques to identify/predict the primary diagnosis (based on ICD-O code) from pathology reports. We performed experiments by extracting the TF-IDF features from the reports and classifying them using three different methods---SVM, XGBoost, and Logistic Regression. We constructed a new dataset with 1,949 pathology reports arranged into 37 ICD-O categories, collected from four different primary sites, namely lung, kidney, thymus, and testis. The reports were manually transcribed into text format after collecting them as PDF files from NCI Genomic Data Commons public dataset. We subsequently pre-processed the reports by removing irrelevant textual artifacts produced by OCR software. The highest classification accuracy we achieved was 92\\% using XGBoost classifier on TF-IDF feature vectors, the linear SVM scored 87\\% accuracy. Furthermore, the study shows that TF-IDF vectors are suitable for highlighting the important keywords within a report which can be helpful for the cancer research and diagnostic workflow. The results are encouraging in demonstrating the potential of machine learning methods for classification and encoding of pathology reports.",
+      "score": 0.0,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "A Pathology report is arguably one of the most important documents in medicine containing interpretive information about the visual findings from the patient's biopsy sample. Each pathology report has a retention period of up to 20 years after the treatment of a patient. Cancer registries process and encode high volumes of free-text pathology reports for surveillance of cancer and tumor diseases all across the world. In spite of their extremely valuable information they hold, pathology reports are not used in any systematic way to facilitate computational pathology. Therefore, in this study, we investigate automated machine-learning techniques to identify/predict the primary diagnosis (based on ICD-O code) from pathology reports. We performed experiments by extracting the TF-IDF features from the reports and classifying them using three different methods---SVM, XGBoost, and Logistic Regression. We constructed a new dataset with 1,949 pathology reports arranged into 37 ICD-O categories, collected from four different primary sites, namely lung, kidney, thymus, and testis. The reports were manually transcribed into text format after collecting them as PDF files from NCI Genomic Data Commons public dataset. We subsequently pre-processed the reports by removing irrelevant textual artifacts produced by OCR software. The highest classification accuracy we achieved was 92\\% using XGBoost classifier on TF-IDF feature vectors, the linear SVM scored 87\\% accuracy. Furthermore, the study shows that TF-IDF vectors are suitable for highlighting the important keywords within a report which can be helpful for the cancer research and diagnostic workflow. The results are encouraging in demonstrating the potential of machine learning methods for classification and encoding of pathology reports."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Materials and Methods\n[source_id=15] We assembled a dataset of 1,949 cleaned pathology reports. Each report is associated with one of the 37 different primary diagnoses based on IDC-O codes. The reports are collected from four different body parts or primary sites from multiple patients. The distribution of reports across different primary diagnoses and primary sites is reported in tab:report-distribution. The dataset was developed in three steps as follows.\n[source_id=16] Collecting pathology reports: The total of 11,112 pathology reports were downloaded from NCI's Genomic Data Commons (GDC) dataset in PDF format BIBREF9 . Out of all PDF files, 1,949 reports were selected across multiple patients from four specific primary sites—thymus, testis, lung, and kidney. The selection was primarily made based on the quality of PDF files.\n[source_id=17] Cleaning reports: The next step was to extract the text content from these reports. Due to the significant time expense of manually re-typing all the pathology reports, we developed a new strategy to prepare our dataset. We applied an Optical Character Recognition (OCR) software to convert the PDF reports to text files. Then, we manually inspected all generated text files to fix any grammar/spelling issues and irrelevant characters as an artefact produced by the OCR system.\n[source_id=18] Splitting into training-testing data: We split the cleaned reports into 70% and 30% for training and testing, respectively. This split resulted in 1,364 training, and 585 testing reports.",
+      "score": 0.0,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        15,
+        16,
+        17,
+        18
+      ],
+      "child_qasper_evidence_texts": [
+        "We assembled a dataset of 1,949 cleaned pathology reports. Each report is associated with one of the 37 different primary diagnoses based on IDC-O codes. The reports are collected from four different body parts or primary sites from multiple patients. The distribution of reports across different primary diagnoses and primary sites is reported in tab:report-distribution. The dataset was developed in three steps as follows.",
+        "Collecting pathology reports: The total of 11,112 pathology reports were downloaded from NCI's Genomic Data Commons (GDC) dataset in PDF format BIBREF9 . Out of all PDF files, 1,949 reports were selected across multiple patients from four specific primary sites—thymus, testis, lung, and kidney. The selection was primarily made based on the quality of PDF files.",
+        "Cleaning reports: The next step was to extract the text content from these reports. Due to the significant time expense of manually re-typing all the pathology reports, we developed a new strategy to prepare our dataset. We applied an Optical Character Recognition (OCR) software to convert the PDF reports to text files. Then, we manually inspected all generated text files to fix any grammar/spelling issues and irrelevant characters as an artefact produced by the OCR system.",
+        "Splitting into training-testing data: We split the cleaned reports into 70% and 30% for training and testing, respectively. This split resulted in 1,364 training, and 585 testing reports."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Materials and Methods",
+        "Materials and Methods",
+        "Materials and Methods",
+        "Materials and Methods"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Materials and Methods",
+          0
+        ],
+        [
+          "Materials and Methods",
+          1
+        ],
+        [
+          "Materials and Methods",
+          2
+        ],
+        [
+          "Materials and Methods",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Materials and Methods",
+      "section": "Materials and Methods",
+      "title_path": "Materials and Methods",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Pre-Processing of Reports\n[source_id=20] We pre-processed the reports by setting their text content to lowercase and filtering out any non-alphanumeric characters. We used NLTK library to remove stopping words, e.g., `the', `an', `was', `if' and so on BIBREF10 . We then analyzed the reports to find common bigrams, such as “lung parenchyma”, “microscopic examination”, “lymph node” etc. We joined the biagrams with a hyphen, converting them into a single word. We further removed the words that occur less than 2% in each of the diagnostic category. As well, we removed the words that occur more than 90% across all the categories. We stored each pre-processed report in a separate text file.",
+      "score": 0.0,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        20
+      ],
+      "child_qasper_evidence_texts": [
+        "We pre-processed the reports by setting their text content to lowercase and filtering out any non-alphanumeric characters. We used NLTK library to remove stopping words, e.g., `the', `an', `was', `if' and so on BIBREF10 . We then analyzed the reports to find common bigrams, such as “lung parenchyma”, “microscopic examination”, “lymph node” etc. We joined the biagrams with a hyphen, converting them into a single word. We further removed the words that occur less than 2% in each of the diagnostic category. As well, we removed the words that occur more than 90% across all the categories. We stored each pre-processed report in a separate text file."
+      ],
+      "child_pages": [
+        4
+      ],
+      "child_sections": [
+        "Pre-Processing of Reports"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Pre-Processing of Reports",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Pre-Processing of Reports",
+      "section": "Pre-Processing of Reports",
+      "title_path": "Pre-Processing of Reports",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] TF-IDF features\n[source_id=22] TF-IDF stands for Term Frequency-Inverse Document Frequency, and it is a useful weighting scheme in information retrieval and text mining. TF-IDF signifies the importance of a term in a document within a corpus. It is important to note that a document here refers to a pathology report, a corpus refers to the collection of reports, and a term refers to a single word in a report. The TF-IDF weight for a term INLINEFORM0 in a document INLINEFORM1 is given by DISPLAYFORM0\n[source_id=23] We performed the following steps to transform a pathology report into a feature vector:\n[source_id=24] Create a set of vocabulary containing all unique words from all the pre-processed training reports.\n[source_id=25] Create a zero vector INLINEFORM0 of the same length as the vocabulary.\n[source_id=26] For each word INLINEFORM0 in a report INLINEFORM1 , set the corresponding index in INLINEFORM2 to INLINEFORM3 .\n[source_id=27] The resultant INLINEFORM0 is a feature vector for the report INLINEFORM1 and it is a highly sparse vector.",
+      "score": 0.0,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "child_qasper_evidence_texts": [
+        "TF-IDF stands for Term Frequency-Inverse Document Frequency, and it is a useful weighting scheme in information retrieval and text mining. TF-IDF signifies the importance of a term in a document within a corpus. It is important to note that a document here refers to a pathology report, a corpus refers to the collection of reports, and a term refers to a single word in a report. The TF-IDF weight for a term INLINEFORM0 in a document INLINEFORM1 is given by DISPLAYFORM0",
+        "We performed the following steps to transform a pathology report into a feature vector:",
+        "Create a set of vocabulary containing all unique words from all the pre-processed training reports.",
+        "Create a zero vector INLINEFORM0 of the same length as the vocabulary.",
+        "For each word INLINEFORM0 in a report INLINEFORM1 , set the corresponding index in INLINEFORM2 to INLINEFORM3 .",
+        "The resultant INLINEFORM0 is a feature vector for the report INLINEFORM1 and it is a highly sparse vector."
+      ],
+      "child_pages": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "TF-IDF features",
+        "TF-IDF features",
+        "TF-IDF features",
+        "TF-IDF features",
+        "TF-IDF features",
+        "TF-IDF features"
+      ],
+      "child_hotpot_facts": [
+        [
+          "TF-IDF features",
+          0
+        ],
+        [
+          "TF-IDF features",
+          1
+        ],
+        [
+          "TF-IDF features",
+          2
+        ],
+        [
+          "TF-IDF features",
+          3
+        ],
+        [
+          "TF-IDF features",
+          4
+        ],
+        [
+          "TF-IDF features",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "TF-IDF features",
+      "section": "TF-IDF features",
+      "title_path": "TF-IDF features",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Keyword extraction and topic modelling\n[source_id=29] The keyword extraction involves identifying important words within reports that summarizes its content. In contrast, the topic modelling allows grouping these keywords using an intelligent scheme, enabling users to further focus on certain aspects of a document. All the words in a pathology report are sorted according to their TF-IDF weights. The top INLINEFORM0 sorted words constitute the top INLINEFORM1 keywords for the report. The INLINEFORM2 is empirically set to 50 within this research. The extracted keywords are further grouped into different topics by using latent Dirichlet allocation (LDA) BIBREF11 . The keywords in a report are highlighted using the color theme based on their topics.",
+      "score": 0.0,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        29
+      ],
+      "child_qasper_evidence_texts": [
+        "The keyword extraction involves identifying important words within reports that summarizes its content. In contrast, the topic modelling allows grouping these keywords using an intelligent scheme, enabling users to further focus on certain aspects of a document. All the words in a pathology report are sorted according to their TF-IDF weights. The top INLINEFORM0 sorted words constitute the top INLINEFORM1 keywords for the report. The INLINEFORM2 is empirically set to 50 within this research. The extracted keywords are further grouped into different topics by using latent Dirichlet allocation (LDA) BIBREF11 . The keywords in a report are highlighted using the color theme based on their topics."
+      ],
+      "child_pages": [
+        6
+      ],
+      "child_sections": [
+        "Keyword extraction and topic modelling"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Keyword extraction and topic modelling",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Keyword extraction and topic modelling",
+      "section": "Keyword extraction and topic modelling",
+      "title_path": "Keyword extraction and topic modelling",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Evaluation metrics\n[source_id=31] Each model is evaluated using two standard NLP metrics—micro and macro averaged F-scores, the harmonic mean of related metrics precision and recall. For each diagnostic category INLINEFORM0 from a set of 37 different classes INLINEFORM1 , the number of true positives INLINEFORM2 , false positives INLINEFORM3 , and false negatives INLINEFORM4 , the micro F-score is defined as DISPLAYFORM0\n[source_id=32] whereas macro F-score is given by DISPLAYFORM0\n[source_id=33] In summary, micro-averaged metrics have class representation roughly proportional to their test set representation (same as accuracy for classification problem with a single label per data point), whereas macro-averaged metrics are averaged by class without weighting by class prevalence BIBREF12 .",
+      "score": 0.0,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        31,
+        32,
+        33
+      ],
+      "child_qasper_evidence_texts": [
+        "Each model is evaluated using two standard NLP metrics—micro and macro averaged F-scores, the harmonic mean of related metrics precision and recall. For each diagnostic category INLINEFORM0 from a set of 37 different classes INLINEFORM1 , the number of true positives INLINEFORM2 , false positives INLINEFORM3 , and false negatives INLINEFORM4 , the micro F-score is defined as DISPLAYFORM0",
+        "whereas macro F-score is given by DISPLAYFORM0",
+        "In summary, micro-averaged metrics have class representation roughly proportional to their test set representation (same as accuracy for classification problem with a single label per data point), whereas macro-averaged metrics are averaged by class without weighting by class prevalence BIBREF12 ."
+      ],
+      "child_pages": [
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Evaluation metrics",
+        "Evaluation metrics",
+        "Evaluation metrics"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Evaluation metrics",
+          0
+        ],
+        [
+          "Evaluation metrics",
+          1
+        ],
+        [
+          "Evaluation metrics",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Evaluation metrics",
+      "section": "Evaluation metrics",
+      "title_path": "Evaluation metrics",
+      "block_type": "long_unit"
+    }
+  ]
+}

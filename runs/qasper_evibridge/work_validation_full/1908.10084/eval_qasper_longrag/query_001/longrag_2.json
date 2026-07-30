@@ -1,0 +1,79 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Related Work\n[source_id=12] We first introduce BERT, then, we discuss state-of-the-art sentence embedding methods.\n[source_id=13] BERT BIBREF0 is a pre-trained transformer network BIBREF9, which set for various NLP tasks new state-of-the-art results, including question answering, sentence classification, and sentence-pair regression. The input for BERT for sentence-pair regression consists of the two sentences, separated by a special [SEP] token. Multi-head attention over 12 (base-model) or 24 layers (large-model) is applied and the output is passed to a simple regression function to derive the final label. Using this setup, BERT set a new state-of-the-art performance on the Semantic Textual Semilarity (STS) benchmark BIBREF10. RoBERTa BIBREF1 showed, that the performance of BERT can further improved by small adaptations to the pre-training process. We also tested XLNet BIBREF11, but it led in general to worse results than BERT.\n[source_id=14] A large disadvantage of the BERT network structure is that no independent sentence embeddings are computed, which makes it difficult to derive sentence embeddings from BERT. To bypass this limitations, researchers passed single sentences through BERT and then derive a fixed sized vector by either averaging the outputs (similar to average word embeddings) or by using the output of the special CLS token (for example: bertsentenceembeddings1,bertsentenceembeddings2,bertsentenceembeddings3). These two options are also provided by the popular bert-as-a-service-repository. Up to our knowledge, there is so far no evaluation if these methods lead to useful sentence embeddings.\n[source_id=15] Sentence embeddings are a well studied area with dozens of proposed methods. Skip-Thought BIBREF12 trains an encoder-decoder architecture to predict the surrounding sentences. InferSent BIBREF4 uses labeled data of the Stanford Natural Language Inference dataset BIBREF13 and the Multi-Genre NLI dataset BIBREF14 to train a siamese BiLSTM network with max-pooling over the output. Conneau et al. showed, that InferSent consistently outperforms unsupervised methods like SkipThought. Universal Sentence Encoder BIBREF5 trains a transformer network and augments unsupervised learning with training on SNLI. hill-etal-2016-learning showed, that the task on which sentence embeddings are trained significantly impacts their quality. Previous work BIBREF4, BIBREF5 found that the SNLI datasets are suitable for training sentence embeddings. yang-2018-learning presented a method to train on conversations from Reddit using siamese DAN and siamese transformer networks, which yielded good results on the STS benchmark dataset.\n[source_id=16] polyencoders addresses the run-time overhead of the cross-encoder from BERT and present a method (poly-encoders) to compute a score between $m$ context vectors and pre-computed candidate embeddings using attention. This idea works for finding the highest scoring sentence in a larger collection. However, poly-encoders have the drawback that the score function is not symmetric and the computational overhead is too large for use-cases like clustering, which would require $O(n^2)$ score computations.\n[source_id=17] Previous neural sentence embedding methods started the training from a random initialization. In this publication, we use the pre-trained BERT and RoBERTa network and only fine-tune it to yield useful sentence embeddings. This reduces significantly the needed training time: SBERT can be tuned in less than 20 minutes, while yielding better results than comparable sentence embedding methods.",
+  "score": 2.29557462731404,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "child_qasper_evidence_texts": [
+    "We first introduce BERT, then, we discuss state-of-the-art sentence embedding methods.",
+    "BERT BIBREF0 is a pre-trained transformer network BIBREF9, which set for various NLP tasks new state-of-the-art results, including question answering, sentence classification, and sentence-pair regression. The input for BERT for sentence-pair regression consists of the two sentences, separated by a special [SEP] token. Multi-head attention over 12 (base-model) or 24 layers (large-model) is applied and the output is passed to a simple regression function to derive the final label. Using this setup, BERT set a new state-of-the-art performance on the Semantic Textual Semilarity (STS) benchmark BIBREF10. RoBERTa BIBREF1 showed, that the performance of BERT can further improved by small adaptations to the pre-training process. We also tested XLNet BIBREF11, but it led in general to worse results than BERT.",
+    "A large disadvantage of the BERT network structure is that no independent sentence embeddings are computed, which makes it difficult to derive sentence embeddings from BERT. To bypass this limitations, researchers passed single sentences through BERT and then derive a fixed sized vector by either averaging the outputs (similar to average word embeddings) or by using the output of the special CLS token (for example: bertsentenceembeddings1,bertsentenceembeddings2,bertsentenceembeddings3). These two options are also provided by the popular bert-as-a-service-repository. Up to our knowledge, there is so far no evaluation if these methods lead to useful sentence embeddings.",
+    "Sentence embeddings are a well studied area with dozens of proposed methods. Skip-Thought BIBREF12 trains an encoder-decoder architecture to predict the surrounding sentences. InferSent BIBREF4 uses labeled data of the Stanford Natural Language Inference dataset BIBREF13 and the Multi-Genre NLI dataset BIBREF14 to train a siamese BiLSTM network with max-pooling over the output. Conneau et al. showed, that InferSent consistently outperforms unsupervised methods like SkipThought. Universal Sentence Encoder BIBREF5 trains a transformer network and augments unsupervised learning with training on SNLI. hill-etal-2016-learning showed, that the task on which sentence embeddings are trained significantly impacts their quality. Previous work BIBREF4, BIBREF5 found that the SNLI datasets are suitable for training sentence embeddings. yang-2018-learning presented a method to train on conversations from Reddit using siamese DAN and siamese transformer networks, which yielded good results on the STS benchmark dataset.",
+    "polyencoders addresses the run-time overhead of the cross-encoder from BERT and present a method (poly-encoders) to compute a score between $m$ context vectors and pre-computed candidate embeddings using attention. This idea works for finding the highest scoring sentence in a larger collection. However, poly-encoders have the drawback that the score function is not symmetric and the computational overhead is too large for use-cases like clustering, which would require $O(n^2)$ score computations.",
+    "Previous neural sentence embedding methods started the training from a random initialization. In this publication, we use the pre-trained BERT and RoBERTa network and only fine-tune it to yield useful sentence embeddings. This reduces significantly the needed training time: SBERT can be tuned in less than 20 minutes, while yielding better results than comparable sentence embedding methods."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Related Work",
+    "Related Work",
+    "Related Work",
+    "Related Work",
+    "Related Work",
+    "Related Work"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Related Work",
+      0
+    ],
+    [
+      "Related Work",
+      1
+    ],
+    [
+      "Related Work",
+      2
+    ],
+    [
+      "Related Work",
+      3
+    ],
+    [
+      "Related Work",
+      4
+    ],
+    [
+      "Related Work",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Related Work",
+  "section": "Related Work",
+  "title_path": "Related Work",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,294 @@
+{
+  "ranked_results": [
+    {
+      "id": 5,
+      "content": "For all the interest in adversarial computer vision, these attacks are rarely encountered outside of academic research. However, adversarial misspellings constitute a longstanding real-world problem. Spammers continually bombard email servers, subtly misspelling words in efforts to evade spam detection while preserving the emails' intended meaning BIBREF1 , BIBREF2 . As another example, programmatic censorship on the Internet has spurred communities to adopt similar methods to communicate surreptitiously BIBREF3 .",
+      "score": 0.0315136476426799,
+      "rrf_score": 0.0315136476426799,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 2,
+        "dense": 5
+      },
+      "chunk_id": 2,
+      "source_chunk_index": 0,
+      "source_node_id": 5,
+      "node_id": 5,
+      "paragraph_id": 5,
+      "evidence_id": 5,
+      "qasper_evidence_text": "For all the interest in adversarial computer vision, these attacks are rarely encountered outside of academic research. However, adversarial misspellings constitute a longstanding real-world problem. Spammers continually bombard email servers, subtly misspelling words in efforts to evade spam detection while preserving the emails' intended meaning BIBREF1 , BIBREF2 . As another example, programmatic censorship on the Internet has spurred communities to adopt similar methods to communicate surreptitiously BIBREF3 .",
+      "pdf_id": 5,
+      "page": 2,
+      "node_type": "text",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 21,
+      "content": "While BIBREF7 demonstrate strong word recognition performance, a drawback of their evaluation setup is that they only attack and evaluate on the subset of words that are a part of their training vocabulary. In such a setting, the word recognition performance is unreasonably dependent on the chosen vocabulary size. In principle, one can design models to predict (correctly) only a few chosen words, and ignore the remaining majority and still reach 100% accuracy. For the adversarial setting, rare and unseen words in the wild are particularly critical, as they provide opportunities for the attackers. A reliable word-recognizer should handle these cases gracefully. Below, we explore different ways to back off when the ScRNN predicts UNK (a frequent outcome for rare and unseen words):",
+      "score": 0.030886196246139225,
+      "rrf_score": 0.030886196246139225,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 1,
+        "dense": 9
+      },
+      "chunk_id": 15,
+      "source_chunk_index": 0,
+      "source_node_id": 21,
+      "node_id": 21,
+      "paragraph_id": 21,
+      "evidence_id": 21,
+      "qasper_evidence_text": "While BIBREF7 demonstrate strong word recognition performance, a drawback of their evaluation setup is that they only attack and evaluate on the subset of words that are a part of their training vocabulary. In such a setting, the word recognition performance is unreasonably dependent on the chosen vocabulary size. In principle, one can design models to predict (correctly) only a few chosen words, and ignore the remaining majority and still reach 100% accuracy. For the adversarial setting, rare and unseen words in the wild are particularly critical, as they provide opportunities for the attackers. A reliable word-recognizer should handle these cases gracefully. Below, we explore different ways to back off when the ScRNN predicts UNK (a frequent outcome for rare and unseen words):",
+      "pdf_id": 21,
+      "page": 5,
+      "node_type": "text",
+      "section_id": "ScRNN with Backoff",
+      "section": "ScRNN with Backoff",
+      "title_path": "ScRNN with Backoff",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 43,
+      "content": "Data: We evaluate the spell correctors from § \"Robust Word Recognition\" on movie reviews from the Stanford Sentiment Treebank (SST) BIBREF24 . The SST dataset consists of 8544 movie reviews, with a vocabulary of over 16K words. As a background corpus, we use the IMDB movie reviews BIBREF25 , which contain 54K movie reviews, and a vocabulary of over 78K words. The two datasets do not share any reviews in common. The spell-correction models are evaluated on their ability to correct misspellings. The test setting consists of reviews where each word (with length $\\ge 4$ , barring stopwords) is attacked by one of the attack types (from swap, add, drop and keyboard attacks). In the all attack setting, we mix all attacks by randomly choosing one for each word. This most closely resembles a real world attack setting.",
+      "score": 0.030798389007344232,
+      "rrf_score": 0.030798389007344232,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 3,
+        "dense": 7
+      },
+      "chunk_id": 33,
+      "source_chunk_index": 0,
+      "source_node_id": 43,
+      "node_id": 43,
+      "paragraph_id": 43,
+      "evidence_id": 43,
+      "qasper_evidence_text": "Data: We evaluate the spell correctors from § \"Robust Word Recognition\" on movie reviews from the Stanford Sentiment Treebank (SST) BIBREF24 . The SST dataset consists of 8544 movie reviews, with a vocabulary of over 16K words. As a background corpus, we use the IMDB movie reviews BIBREF25 , which contain 54K movie reviews, and a vocabulary of over 78K words. The two datasets do not share any reviews in common. The spell-correction models are evaluated on their ability to correct misspellings. The test setting consists of reviews where each word (with length $\\ge 4$ , barring stopwords) is attacked by one of the attack types (from swap, add, drop and keyboard attacks). In the all attack setting, we mix all attacks by randomly choosing one for each word. This most closely resembles a real world attack setting.",
+      "pdf_id": 43,
+      "page": 9,
+      "node_type": "text",
+      "section_id": "Word Error Correction",
+      "section": "Word Error Correction",
+      "title_path": "Word Error Correction",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 2,
+      "content": "To combat adversarial spelling mistakes, we propose placing a word recognition model in front of the downstream classifier. Our word recognition models build upon the RNN semicharacter architecture, introducing several new backoff strategies for handling rare and unseen words. Trained to recognize words corrupted by random adds, drops, swaps, and keyboard mistakes, our method achieves 32% relative (and 3.3% absolute) error reduction over the vanilla semi-character model. Notably, our pipeline confers robustness on the downstream classifier, outperforming both adversarial training and off-the-shelf spell checkers. Against a BERT model fine-tuned for sentiment analysis, a single adversarially-chosen character attack lowers accuracy from 90.3% to 45.8%. Our defense restores accuracy to 75%\n1 . Surprisingly, better word recognition does not always entail greater robustness. Our analysis reveals that robustness also depends upon a quantity that we denote the sensitivity.",
+      "score": 0.030621785881252923,
+      "rrf_score": 0.030621785881252923,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 9,
+        "dense": 2
+      },
+      "chunk_id": 0,
+      "source_chunk_index": 0,
+      "source_node_id": 2,
+      "node_id": 2,
+      "paragraph_id": 2,
+      "evidence_id": 2,
+      "qasper_evidence_text": "To combat adversarial spelling mistakes, we propose placing a word recognition model in front of the downstream classifier. Our word recognition models build upon the RNN semicharacter architecture, introducing several new backoff strategies for handling rare and unseen words. Trained to recognize words corrupted by random adds, drops, swaps, and keyboard mistakes, our method achieves 32% relative (and 3.3% absolute) error reduction over the vanilla semi-character model. Notably, our pipeline confers robustness on the downstream classifier, outperforming both adversarial training and off-the-shelf spell checkers. Against a BERT model fine-tuned for sentiment analysis, a single adversarially-chosen character attack lowers accuracy from 90.3% to 45.8%. Our defense restores accuracy to 75%\n1 . Surprisingly, better word recognition does not always entail greater robustness. Our analysis reveals that robustness also depends upon a quantity that we denote the sensitivity.",
+      "pdf_id": 2,
+      "page": 1,
+      "node_type": "text",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 13,
+      "content": "In related work on character-level attacks, BIBREF8 , BIBREF15 explored gradient-based methods to generate string edits to fool classification and translation systems, respectively. While their focus is on efficient methods for generating adversaries, ours is on improving the worst case adversarial performance. Similarly, BIBREF9 studied how synthetic and natural noise affects character-level machine translation. They considered structure invariant representations and adversarial training as defenses against such noise. Here, we show that an auxiliary word recognition model, which can be trained on unlabeled data, provides a strong defense.",
+      "score": 0.0293236301369863,
+      "rrf_score": 0.0293236301369863,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 4,
+        "dense": 13
+      },
+      "chunk_id": 9,
+      "source_chunk_index": 0,
+      "source_node_id": 13,
+      "node_id": 13,
+      "paragraph_id": 13,
+      "evidence_id": 13,
+      "qasper_evidence_text": "In related work on character-level attacks, BIBREF8 , BIBREF15 explored gradient-based methods to generate string edits to fool classification and translation systems, respectively. While their focus is on efficient methods for generating adversaries, ours is on improving the worst case adversarial performance. Similarly, BIBREF9 studied how synthetic and natural noise affects character-level machine translation. They considered structure invariant representations and adversarial training as defenses against such noise. Here, we show that an auxiliary word recognition model, which can be trained on unlabeled data, provides a strong defense.",
+      "pdf_id": 13,
+      "page": 3,
+      "node_type": "text",
+      "section_id": "Related Work",
+      "section": "Related Work",
+      "title_path": "Related Work",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 16,
+      "content": "To tackle character-level adversarial attacks, we introduce a simple two-stage solution, placing a word recognition model ( $W$ ) before the downstream classifier ( $C$ ). Under this scheme, all inputs are classified by the composed model $C \\circ W$ . This modular approach, with $W$ and $C$ trained separately, offers several benefits: (i) we can deploy the same word recognition model for multiple downstream classification tasks/models; and (ii) we can train the word recognition model with larger unlabeled corpora.",
+      "score": 0.029211087420042643,
+      "rrf_score": 0.029211087420042643,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 7,
+        "dense": 10
+      },
+      "chunk_id": 11,
+      "source_chunk_index": 0,
+      "source_node_id": 16,
+      "node_id": 16,
+      "paragraph_id": 16,
+      "evidence_id": 16,
+      "qasper_evidence_text": "To tackle character-level adversarial attacks, we introduce a simple two-stage solution, placing a word recognition model ( $W$ ) before the downstream classifier ( $C$ ). Under this scheme, all inputs are classified by the composed model $C \\circ W$ . This modular approach, with $W$ and $C$ trained separately, offers several benefits: (i) we can deploy the same word recognition model for multiple downstream classification tasks/models; and (ii) we can train the word recognition model with larger unlabeled corpora.",
+      "pdf_id": 16,
+      "page": 4,
+      "node_type": "text",
+      "section_id": "Robust Word Recognition",
+      "section": "Robust Word Recognition",
+      "title_path": "Robust Word Recognition",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 59,
+      "content": "Table 4 shows the accuracy of BERT on 200 examples from the dev set of the MRPC paraphrase detection task under various attack and defense settings. We re-trained the ScRNN model variants on the MRPC training set for these experiments. Again, we find that simple 1-2 character attacks can bring down the accuracy of BERT significantly ( $89\\%$ to $31\\%$ ). Word recognition models can provide an effective defense, with both our pass-through and neutral variants recovering most of the accuracy. While the neutral backoff model is effective on 2-char attacks, it hurts performance in the no attack setting, since it incorrectly modifies certain correctly spelled entity names. Since the two variants are already effective, we did not train a background model for this task.",
+      "score": 0.028371628371628373,
+      "rrf_score": 0.028371628371628373,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 5,
+        "dense": 17
+      },
+      "chunk_id": 48,
+      "source_chunk_index": 0,
+      "source_node_id": 59,
+      "node_id": 59,
+      "paragraph_id": 59,
+      "evidence_id": 59,
+      "qasper_evidence_text": "Table 4 shows the accuracy of BERT on 200 examples from the dev set of the MRPC paraphrase detection task under various attack and defense settings. We re-trained the ScRNN model variants on the MRPC training set for these experiments. Again, we find that simple 1-2 character attacks can bring down the accuracy of BERT significantly ( $89\\%$ to $31\\%$ ). Word recognition models can provide an effective defense, with both our pass-through and neutral variants recovering most of the accuracy. While the neutral backoff model is effective on 2-char attacks, it hurts performance in the no attack setting, since it incorrectly modifies certain correctly spelled entity names. Since the two variants are already effective, we did not train a background model for this task.",
+      "pdf_id": 59,
+      "page": 10,
+      "node_type": "text",
+      "section_id": "Robustness to adversarial attacks",
+      "section": "Robustness to adversarial attacks",
+      "title_path": "Robustness to adversarial attacks",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 66,
+      "content": "As character and word-piece inputs become commonplace in modern NLP pipelines, it is worth highlighting the vulnerability they add. We show that minimally-doctored attacks can bring down accuracy of classifiers to random guessing. We recommend word recognition as a safeguard against this and build upon RNN-based semi-character word recognizers. We discover that when used as a defense mechanism, the most accurate word recognition models are not always the most robust against adversarial attacks. Additionally, we highlight the need to control the sensitivity of these models to achieve high robustness.",
+      "score": 0.02797339593114241,
+      "rrf_score": 0.02797339593114241,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 11,
+        "dense": 12
+      },
+      "chunk_id": 53,
+      "source_chunk_index": 0,
+      "source_node_id": 66,
+      "node_id": 66,
+      "paragraph_id": 66,
+      "evidence_id": 66,
+      "qasper_evidence_text": "As character and word-piece inputs become commonplace in modern NLP pipelines, it is worth highlighting the vulnerability they add. We show that minimally-doctored attacks can bring down accuracy of classifiers to random guessing. We recommend word recognition as a safeguard against this and build upon RNN-based semi-character word recognizers. We discover that when used as a defense mechanism, the most accurate word recognition models are not always the most robust against adversarial attacks. Additionally, we highlight the need to control the sensitivity of these models to achieve high robustness.",
+      "pdf_id": 66,
+      "page": 12,
+      "node_type": "text",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 56,
+      "content": "The ScRNN model with pass-through backoff offers better protection, bringing back the adversarial accuracy within $5\\%$ range for the swap attack. It is also effective under other attack classes, and can mitigate the adversarial effect in word-piece models by $21\\%$ , character-only models by $19\\%$ , and in word, and word+char models by over $4.5\\%$ . This suggests that the direct training signal of word error correction is more effective than the indirect signal of sentiment classification available to DA and Adv for model robustness.",
+      "score": 0.027799227799227798,
+      "rrf_score": 0.027799227799227798,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 10,
+        "dense": 14
+      },
+      "chunk_id": 45,
+      "source_chunk_index": 0,
+      "source_node_id": 56,
+      "node_id": 56,
+      "paragraph_id": 56,
+      "evidence_id": 56,
+      "qasper_evidence_text": "The ScRNN model with pass-through backoff offers better protection, bringing back the adversarial accuracy within $5\\%$ range for the swap attack. It is also effective under other attack classes, and can mitigate the adversarial effect in word-piece models by $21\\%$ , character-only models by $19\\%$ , and in word, and word+char models by over $4.5\\%$ . This suggests that the direct training signal of word error correction is more effective than the indirect signal of sentiment classification available to DA and Adv for model robustness.",
+      "pdf_id": 56,
+      "page": 10,
+      "node_type": "text",
+      "section_id": "Robustness to adversarial attacks",
+      "section": "Robustness to adversarial attacks",
+      "title_path": "Robustness to adversarial attacks",
+      "block_type": "paragraph"
+    },
+    {
+      "id": 44,
+      "content": "In addition to our word recognition models, we also compare to After The Deadline (ATD), an open-source spell corrector. We found ATD to be the best freely-available corrector. We refer the reader to BIBREF7 for comparisons of ScRNN to other anonymized commercial spell checkers.",
+      "score": 0.027777777777777776,
+      "rrf_score": 0.027777777777777776,
+      "source": "hybrid",
+      "sources": [
+        "bm25",
+        "dense"
+      ],
+      "source_ranks": {
+        "bm25": 24,
+        "dense": 3
+      },
+      "chunk_id": 34,
+      "source_chunk_index": 0,
+      "source_node_id": 44,
+      "node_id": 44,
+      "paragraph_id": 44,
+      "evidence_id": 44,
+      "qasper_evidence_text": "In addition to our word recognition models, we also compare to After The Deadline (ATD), an open-source spell corrector. We found ATD to be the best freely-available corrector. We refer the reader to BIBREF7 for comparisons of ScRNN to other anonymized commercial spell checkers.",
+      "pdf_id": 44,
+      "page": 9,
+      "node_type": "text",
+      "section_id": "Word Error Correction",
+      "section": "Word Error Correction",
+      "title_path": "Word Error Correction",
+      "block_type": "paragraph"
+    }
+  ]
+}

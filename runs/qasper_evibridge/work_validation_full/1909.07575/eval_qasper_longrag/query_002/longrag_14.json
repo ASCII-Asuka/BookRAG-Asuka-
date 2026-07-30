@@ -1,0 +1,97 @@
+{
+  "id": "longrag_14",
+  "content": "[Section] Experiments ::: Baseline Models and Implementation\n[source_id=65] We compare our method with following baselines.\n[source_id=66] Vanilla ST baseline: The vanilla ST BIBREF9 has only a speech encoder and a decoder. It is trained from scratch on the ST-TED corpus.\n[source_id=67] Pre-training baselines: We conduct three pre-training baseline experiments: 1) encoder pre-training, in which the ST encoder is initialized from an ASR model; 2) decoder pre-training, in which the ST decoder is initialized from an MT model; and 3) encoder-decoder pre-training, where both the encoder and decoder are pre-trained. The ASR model has the same architecture with vanilla ST model, trained on the mixture of ST-TED and TED-LIUM2 corpus. The MT model has a text encoder and decoder with the same architecture of which in TCEN. It is first trained on WMT data (out-of-domain) and then fine-tuned on in-domain data.\n[source_id=68] Multi-task baselines: We also conduct three multi-task baseline experiments including one-to-many setting, many-to-one setting, and many-to-many setting. In the first two settings, we train the model with $\\alpha _{st}=0.75$ while $\\alpha _{asr}=0.25$ or $\\alpha _{mt}=0.25$. For many-to-many setting, we use $\\alpha _{st}=0.6, \\alpha _{asr}=0.2$ and $\\alpha _{mt}=0.2$.. For MT task, we use only in-domain data.\n[source_id=69] Many-to-many+pre-training: We train a many-to-many multi-task model where the encoders and decoders are derived from pre-trained ASR and MT models. Triangle+pre-train: BIBREF18 DBLP:conf/naacl/AnastasopoulosC18 proposed a triangle multi-task strategy for speech translation. Their model solves the subnet waste issue by concatenating an ST decoder to an ASR encoder-decoder model. Notably, their ST decoder can consume representations from the speech encoder as well as the ASR decoder. For a fair comparison, the speech encoder and the ASR decoder are initialized from the pre-trained ASR model. The Triangle model is fine-tuned under their multi-task manner.\n[source_id=70] All our baselines as well as TCEN are implemented based on ESPnet BIBREF12, the RNN size is set as $d=1024$ for all models. We use a dropout of 0.3 for embeddings and encoders, and train using Adadelta with initial learning rate of 1.0 for a maximum of 10 epochs.\n[source_id=71] For training of TCEN, we set $\\alpha _{asr}=0.2$ and $\\alpha _{mt}=0.8$ in the pre-training stage, since the MT dataset is much larger than ASR dataset. For fine-tune, we use $\\alpha _{st}=0.6, \\alpha _{asr}=0.2$ and $\\alpha _{mt}=0.2$, same as the `many-to-many' baseline.\n[source_id=72] For testing, we select the model with the best accuracy on speech translation task on dev set. At inference time, we use a beam size of 10, and the beam scores include length normalization with a weight of 0.2.",
+  "score": 0.8933456933921309,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_14",
+  "child_source_node_ids": [
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72
+  ],
+  "child_qasper_evidence_texts": [
+    "We compare our method with following baselines.",
+    "Vanilla ST baseline: The vanilla ST BIBREF9 has only a speech encoder and a decoder. It is trained from scratch on the ST-TED corpus.",
+    "Pre-training baselines: We conduct three pre-training baseline experiments: 1) encoder pre-training, in which the ST encoder is initialized from an ASR model; 2) decoder pre-training, in which the ST decoder is initialized from an MT model; and 3) encoder-decoder pre-training, where both the encoder and decoder are pre-trained. The ASR model has the same architecture with vanilla ST model, trained on the mixture of ST-TED and TED-LIUM2 corpus. The MT model has a text encoder and decoder with the same architecture of which in TCEN. It is first trained on WMT data (out-of-domain) and then fine-tuned on in-domain data.",
+    "Multi-task baselines: We also conduct three multi-task baseline experiments including one-to-many setting, many-to-one setting, and many-to-many setting. In the first two settings, we train the model with $\\alpha _{st}=0.75$ while $\\alpha _{asr}=0.25$ or $\\alpha _{mt}=0.25$. For many-to-many setting, we use $\\alpha _{st}=0.6, \\alpha _{asr}=0.2$ and $\\alpha _{mt}=0.2$.. For MT task, we use only in-domain data.",
+    "Many-to-many+pre-training: We train a many-to-many multi-task model where the encoders and decoders are derived from pre-trained ASR and MT models. Triangle+pre-train: BIBREF18 DBLP:conf/naacl/AnastasopoulosC18 proposed a triangle multi-task strategy for speech translation. Their model solves the subnet waste issue by concatenating an ST decoder to an ASR encoder-decoder model. Notably, their ST decoder can consume representations from the speech encoder as well as the ASR decoder. For a fair comparison, the speech encoder and the ASR decoder are initialized from the pre-trained ASR model. The Triangle model is fine-tuned under their multi-task manner.",
+    "All our baselines as well as TCEN are implemented based on ESPnet BIBREF12, the RNN size is set as $d=1024$ for all models. We use a dropout of 0.3 for embeddings and encoders, and train using Adadelta with initial learning rate of 1.0 for a maximum of 10 epochs.",
+    "For training of TCEN, we set $\\alpha _{asr}=0.2$ and $\\alpha _{mt}=0.8$ in the pre-training stage, since the MT dataset is much larger than ASR dataset. For fine-tune, we use $\\alpha _{st}=0.6, \\alpha _{asr}=0.2$ and $\\alpha _{mt}=0.2$, same as the `many-to-many' baseline.",
+    "For testing, we select the model with the best accuracy on speech translation task on dev set. At inference time, we use a beam size of 10, and the beam scores include length normalization with a weight of 0.2."
+  ],
+  "child_pages": [
+    14,
+    14,
+    14,
+    14,
+    14,
+    14,
+    14,
+    14
+  ],
+  "child_sections": [
+    "Experiments ::: Baseline Models and Implementation",
+    "Experiments ::: Baseline Models and Implementation",
+    "Experiments ::: Baseline Models and Implementation",
+    "Experiments ::: Baseline Models and Implementation",
+    "Experiments ::: Baseline Models and Implementation",
+    "Experiments ::: Baseline Models and Implementation",
+    "Experiments ::: Baseline Models and Implementation",
+    "Experiments ::: Baseline Models and Implementation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Experiments ::: Baseline Models and Implementation",
+      0
+    ],
+    [
+      "Experiments ::: Baseline Models and Implementation",
+      1
+    ],
+    [
+      "Experiments ::: Baseline Models and Implementation",
+      2
+    ],
+    [
+      "Experiments ::: Baseline Models and Implementation",
+      3
+    ],
+    [
+      "Experiments ::: Baseline Models and Implementation",
+      4
+    ],
+    [
+      "Experiments ::: Baseline Models and Implementation",
+      5
+    ],
+    [
+      "Experiments ::: Baseline Models and Implementation",
+      6
+    ],
+    [
+      "Experiments ::: Baseline Models and Implementation",
+      7
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_14",
+  "section_id": "Experiments ::: Baseline Models and Implementation",
+  "section": "Experiments ::: Baseline Models and Implementation",
+  "title_path": "Experiments ::: Baseline Models and Implementation",
+  "block_type": "long_unit"
+}

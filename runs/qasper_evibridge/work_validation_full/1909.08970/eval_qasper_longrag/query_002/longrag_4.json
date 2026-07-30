@@ -1,0 +1,79 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Experiments\n[source_id=24] We evaluate our model on RUN and assess the contribution of the particular components that we added on top of the standard CGA model.\n[source_id=25] We train the model using a negative log-likelihood loss, and used Adam BIBREF24 optimization. For weights initialization we rely on BIBREF25. We used a grid search to validate the hyper-parameters. The model converged at around 30 epochs and produced good results with 0.9 drop-out and a beam of size 4. During inference, we seek the best candidate path using beam-search and normalize the scores of the sequences according to BIBREF26.\n[source_id=26] We follow the evaluation methodology defined by BIBREF9 for SAIL where we use three-fold validation, and in each fold, we use two maps for training (90%) and validation (10%) and test on the third one. We report a sized-weighted average test result. For all models we report the accuracy per single sentences and full paragraphs. Success is measured by generating an exact route, not striding away from the path. The last position on the path should be within five tile euclidean distance from the intended destination, as the position explained in the instruction might not be specific enough for one tile. In single-sentences, the last position should also be facing the correct direction.\n[source_id=27] We provide three simple baselines for the RUN task: (1) NO-MOVE: the only position considered is the starting point; (2) RANDOM: As in BIBREF4, turn to a randomly selected heading, then execute a number of *WALK actions of an average route; (3) JUMP: at each sentence, extract entities from the map and move between them in the order they appear. If the *WALK action is invalid we take a random *TURN action.\n[source_id=28] Table TABREF8 shows the results for the baseline models as well as the HUMAN measured performance on the task. The human performance provides an upper bound for the RUN task performance, while the simple baselines provide lower bounds. The best baseline model is NO-MOVE, reaching an accuracy of 30.3% on single sentences and 0.3 on complete paragraphs. For the HUMAN case, paragraph accuracy reaches above 80.\n[source_id=29] Table TABREF8 shows the results of our model as an ablation study, and Table TABREF9 shows typical errors of each variant. We see that CGAE outperforms CGA, as the swap of entities with variables lowers the complexity of the language that the model needs to learn, allowing the model to effectively cope with unseen entities at test time. We further found that, in many cases, CGAE produces the right type of action, but it does not produce enough of it to reach the intended destination. We attribute these errors to the absence of a world-state representation, resulting in an incapability to ground instructions to specific locations. CGAEW improves upon CGAE as the existence of world-state in the score of the attention layer allows the model better learn the grounding of entities in the instruction to the map. However our best model still fails on features not captured by our world-state: abstract unmarked entities such as blocks, intersections, etc, and generic entities such as traffic-lights (Tab. TABREF9).",
+  "score": 1.4776188218059993,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "child_qasper_evidence_texts": [
+    "We evaluate our model on RUN and assess the contribution of the particular components that we added on top of the standard CGA model.",
+    "We train the model using a negative log-likelihood loss, and used Adam BIBREF24 optimization. For weights initialization we rely on BIBREF25. We used a grid search to validate the hyper-parameters. The model converged at around 30 epochs and produced good results with 0.9 drop-out and a beam of size 4. During inference, we seek the best candidate path using beam-search and normalize the scores of the sequences according to BIBREF26.",
+    "We follow the evaluation methodology defined by BIBREF9 for SAIL where we use three-fold validation, and in each fold, we use two maps for training (90%) and validation (10%) and test on the third one. We report a sized-weighted average test result. For all models we report the accuracy per single sentences and full paragraphs. Success is measured by generating an exact route, not striding away from the path. The last position on the path should be within five tile euclidean distance from the intended destination, as the position explained in the instruction might not be specific enough for one tile. In single-sentences, the last position should also be facing the correct direction.",
+    "We provide three simple baselines for the RUN task: (1) NO-MOVE: the only position considered is the starting point; (2) RANDOM: As in BIBREF4, turn to a randomly selected heading, then execute a number of *WALK actions of an average route; (3) JUMP: at each sentence, extract entities from the map and move between them in the order they appear. If the *WALK action is invalid we take a random *TURN action.",
+    "Table TABREF8 shows the results for the baseline models as well as the HUMAN measured performance on the task. The human performance provides an upper bound for the RUN task performance, while the simple baselines provide lower bounds. The best baseline model is NO-MOVE, reaching an accuracy of 30.3% on single sentences and 0.3 on complete paragraphs. For the HUMAN case, paragraph accuracy reaches above 80.",
+    "Table TABREF8 shows the results of our model as an ablation study, and Table TABREF9 shows typical errors of each variant. We see that CGAE outperforms CGA, as the swap of entities with variables lowers the complexity of the language that the model needs to learn, allowing the model to effectively cope with unseen entities at test time. We further found that, in many cases, CGAE produces the right type of action, but it does not produce enough of it to reach the intended destination. We attribute these errors to the absence of a world-state representation, resulting in an incapability to ground instructions to specific locations. CGAEW improves upon CGAE as the existence of world-state in the score of the attention layer allows the model better learn the grounding of entities in the instruction to the map. However our best model still fails on features not captured by our world-state: abstract unmarked entities such as blocks, intersections, etc, and generic entities such as traffic-lights (Tab. TABREF9)."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments",
+    "Experiments"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Experiments",
+      0
+    ],
+    [
+      "Experiments",
+      1
+    ],
+    [
+      "Experiments",
+      2
+    ],
+    [
+      "Experiments",
+      3
+    ],
+    [
+      "Experiments",
+      4
+    ],
+    [
+      "Experiments",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Experiments",
+  "section": "Experiments",
+  "title_path": "Experiments",
+  "block_type": "long_unit"
+}

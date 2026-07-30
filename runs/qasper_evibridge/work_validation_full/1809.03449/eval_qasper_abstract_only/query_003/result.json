@@ -1,0 +1,70 @@
+{
+  "question": "What type of model is KAR?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "Lexicon Embedding Layer",
+        "Context Embedding Layer",
+        "Coarse Memory Layer",
+        "Refined Memory Layer",
+        "Answer Span Prediction Layer"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "As shown in Figure FIGREF7 , KAR is an end-to-end MRC model consisting of five layers:",
+        "Lexicon Embedding Layer. This layer maps the words to the lexicon embeddings. The lexicon embedding of each word is composed of its word embedding and character embedding. For each word, we use the pre-trained GloVe BIBREF14 word vector as its word embedding, and obtain its character embedding with a Convolutional Neural Network (CNN) BIBREF15 . For both the passage and the question, we pass the concatenation of the word embeddings and the character embeddings through a shared dense layer with ReLU activation, whose output dimensionality is INLINEFORM0 . Therefore we obtain the passage lexicon embeddings INLINEFORM1 and the question lexicon embeddings INLINEFORM2 .",
+        "Context Embedding Layer. This layer maps the lexicon embeddings to the context embeddings. For both the passage and the question, we process the lexicon embeddings (i.e. INLINEFORM0 for the passage and INLINEFORM1 for the question) with a shared bidirectional LSTM (BiLSTM) BIBREF16 , whose hidden state dimensionality is INLINEFORM2 . By concatenating the forward LSTM outputs and the backward LSTM outputs, we obtain the passage context embeddings INLINEFORM3 and the question context embeddings INLINEFORM4 .",
+        "Coarse Memory Layer. This layer maps the context embeddings to the coarse memories. First we use knowledge aided mutual attention (introduced later) to fuse INLINEFORM0 into INLINEFORM1 , the outputs of which are represented as INLINEFORM2 . Then we process INLINEFORM3 with a BiLSTM, whose hidden state dimensionality is INLINEFORM4 . By concatenating the forward LSTM outputs and the backward LSTM outputs, we obtain the coarse memories INLINEFORM5 , which are the question-aware passage representations.",
+        "Refined Memory Layer. This layer maps the coarse memories to the refined memories. First we use knowledge aided self attention (introduced later) to fuse INLINEFORM0 into themselves, the outputs of which are represented as INLINEFORM1 . Then we process INLINEFORM2 with a BiLSTM, whose hidden state dimensionality is INLINEFORM3 . By concatenating the forward LSTM outputs and the backward LSTM outputs, we obtain the refined memories INLINEFORM4 , which are the final passage representations.",
+        "Answer Span Prediction Layer. This layer predicts the answer start position and the answer end position based on the above layers. First we obtain the answer start position distribution INLINEFORM0 : INLINEFORM1 INLINEFORM2"
+      ],
+      "evidence_block_ids": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "evidence_paragraph_ids": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ]
+    }
+  ],
+  "doc_uuid": "1809.03449",
+  "doc_path": "qasper://1809.03449",
+  "qasper_question_id": "d64383e39357bd4177b49c02eb48e12ba7ffd4fb",
+  "title": "Explicit Utilization of General Knowledge in Machine Reading Comprehension",
+  "evidence_block_ids": [
+    21,
+    22,
+    23,
+    24,
+    25,
+    26
+  ],
+  "evidence_paragraph_ids": [
+    21,
+    22,
+    23,
+    24,
+    25,
+    26
+  ],
+  "output": "{\n  \"answer_short\": \"end-to-end MRC model\",\n  \"answer_rationale\": \"Text 1 explicitly states that KAR is an 'end-to-end MRC model' designed to integrate general knowledge into attention mechanisms for improved performance and robustness.\"\n}",
+  "retrieved_node_ids": [
+    2
+  ],
+  "answer_short": "end-to-end MRC model",
+  "answer_rationale": "Text 1 explicitly states that KAR is an 'end-to-end MRC model' designed to integrate general knowledge into attention mechanisms for improved performance and robustness.",
+  "supporting_block_ids": [
+    2
+  ]
+}

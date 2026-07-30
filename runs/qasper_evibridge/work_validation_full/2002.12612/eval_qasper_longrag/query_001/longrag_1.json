@@ -1,0 +1,106 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction and related work\n[source_id=4] In recent years there has been increasing interest on the issue of disinformation spreading on online social media. Global concern over false (or \"fake\") news as a threat to modern democracies has been frequently raised–ever since 2016 US Presidential elections–in correspondence of events of political relevance, where the proliferation of manipulated and low-credibility content attempts to drive and influence people opinions BIBREF0BIBREF1BIBREF2BIBREF3.\n[source_id=5] Researchers have highlighted several drivers for the diffusion of such malicious phenomenon, which include human factors (confirmation bias BIBREF4, naive realism BIBREF5), algorithmic biases (filter bubble effect BIBREF0), the presence of deceptive agents on social platforms (bots and trolls BIBREF6) and, lastly, the formation of echo chambers BIBREF7 where people polarize their opinions as they are insulated from contrary perspectives.\n[source_id=6] The problem of automatically detecting online disinformation news has been typically formulated as a binary classification task (i.e. credible vs non-credible articles), and tackled with a variety of different techniques, based on traditional machine learning and/or deep learning, which mainly differ in the dataset and the features they employ to perform the classification. We may distinguish three approaches: those built on content-based features, those based on features extracted from the social context, and those which combine both aspects. A few main challenges hinder the task, namely the impossibility to manually verify all news items, the lack of gold-standard datasets and the adversarial setting in which malicious content is created BIBREF3BIBREF6.\n[source_id=7] In this work we follow the direction pointed out in a few recent contributions on the diffusion of disinformation compared to traditional and objective information. These have shown that false news spread faster and deeper than true news BIBREF8, and that social bots and echo chambers play an important role in the diffusion of malicious content BIBREF6, BIBREF7. Therefore we focus on the analysis of spreading patterns which naturally arise on social platforms as a consequence of multiple interactions between users, due to the increasing trend in online sharing of news BIBREF0.\n[source_id=8] A deep learning framework for detection of fake news cascades is provided in BIBREF9, where the authors refer to BIBREF8 in order to collect Twitter cascades pertaining to verified false and true rumors. They employ geometric deep learning, a novel paradigm for graph-based structures, to classify cascades based on four categories of features, such as user profile, user activity, network and spreading, and content. They also observe that a few hours of propagation are sufficient to distinguish false news from true news with high accuracy. Diffusion cascades on Weibo and Twitter are analyzed in BIBREF10, where authors focus on highlighting different topological properties, such as the number of hops from the source or the heterogeneity of the network, to show that fake news shape diffusion networks which are highly different from credible news, even at early stages of propagation.\n[source_id=9] In this work, we consider the results of BIBREF11 as our baseline. The authors use off-the-shelf machine learning classifiers to accurately classify news articles leveraging Twitter diffusion networks. To this aim, they consider a set of basic features which can be qualitatively interpreted w.r.t to the social behavior of users sharing credible vs non-credible information. Their methodology is overall in accordance with BIBREF12, where authors successfully detect Twitter astroturfing content, i.e. political campaigns disguised as spontaneous grassroots, with a machine learning framework based on network features.\n[source_id=10] In this paper, we propose a classification framework based on a multi-layer formulation of Twitter diffusion networks. For each article we disentangle different social interactions on Twitter, namely tweets, retweets, mentions, replies and quotes, to accordingly build a diffusion network composed of multiple layers (on for each type of interaction), and we compute structural features separately for each layer. We pick a set of global network properties from the network science toolbox which can be qualitatively explained in terms of social dimensions and allow us to encode different networks with a tuple of features. These include traditional indicators, e.g. network density, number of strong/weak connected components and diameter, and more elaborated ones such as main K-core number BIBREF13 and structural virality BIBREF14. Our main research question is whether the use of a multi-layer, disentangled network yields a significant advance in terms of classification accuracy over a conventional single-layer diffusion network. Additionally, we are interested in understanding which of the above features, and in which layer, are most effective in the classification task.\n[source_id=11] We perform classification experiments with an off-the-shelf Logistic Regression model on two different datasets of mainstream and disinformation news shared on Twitter respectively in the United States and in Italy during 2019. In the former case we also account for political biases inherent to different news sources, referring to the procedure proposed in BIBREF2 to label different outlets. Overall we show that we are able to classify credible vs non-credible diffusion networks (and consequently news articles) with high accuracy (AUROC up to 94%), even when accounting for the political bias of sources (and training only on left-biased or right-biased articles). We observe that the layer of mentions alone conveys useful information for the classification, denoting a different usage of this functionality when sharing news belonging to the two news domains. We also show that most discriminative features, which are relative to the breadth and depth of largest cascades in different layers, are the same across the two countries.\n[source_id=12] The outline of this paper is the following: we first formulate the problem and describe data collection, network representation and structural properties employed for the classification; then we provide experimental results–classification performances, layer and feature importance analyses and a temporal classification evaluation–and finally we draw conclusions and future directions.",
+  "score": 1.2770727111822808,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "child_qasper_evidence_texts": [
+    "In recent years there has been increasing interest on the issue of disinformation spreading on online social media. Global concern over false (or \"fake\") news as a threat to modern democracies has been frequently raised–ever since 2016 US Presidential elections–in correspondence of events of political relevance, where the proliferation of manipulated and low-credibility content attempts to drive and influence people opinions BIBREF0BIBREF1BIBREF2BIBREF3.",
+    "Researchers have highlighted several drivers for the diffusion of such malicious phenomenon, which include human factors (confirmation bias BIBREF4, naive realism BIBREF5), algorithmic biases (filter bubble effect BIBREF0), the presence of deceptive agents on social platforms (bots and trolls BIBREF6) and, lastly, the formation of echo chambers BIBREF7 where people polarize their opinions as they are insulated from contrary perspectives.",
+    "The problem of automatically detecting online disinformation news has been typically formulated as a binary classification task (i.e. credible vs non-credible articles), and tackled with a variety of different techniques, based on traditional machine learning and/or deep learning, which mainly differ in the dataset and the features they employ to perform the classification. We may distinguish three approaches: those built on content-based features, those based on features extracted from the social context, and those which combine both aspects. A few main challenges hinder the task, namely the impossibility to manually verify all news items, the lack of gold-standard datasets and the adversarial setting in which malicious content is created BIBREF3BIBREF6.",
+    "In this work we follow the direction pointed out in a few recent contributions on the diffusion of disinformation compared to traditional and objective information. These have shown that false news spread faster and deeper than true news BIBREF8, and that social bots and echo chambers play an important role in the diffusion of malicious content BIBREF6, BIBREF7. Therefore we focus on the analysis of spreading patterns which naturally arise on social platforms as a consequence of multiple interactions between users, due to the increasing trend in online sharing of news BIBREF0.",
+    "A deep learning framework for detection of fake news cascades is provided in BIBREF9, where the authors refer to BIBREF8 in order to collect Twitter cascades pertaining to verified false and true rumors. They employ geometric deep learning, a novel paradigm for graph-based structures, to classify cascades based on four categories of features, such as user profile, user activity, network and spreading, and content. They also observe that a few hours of propagation are sufficient to distinguish false news from true news with high accuracy. Diffusion cascades on Weibo and Twitter are analyzed in BIBREF10, where authors focus on highlighting different topological properties, such as the number of hops from the source or the heterogeneity of the network, to show that fake news shape diffusion networks which are highly different from credible news, even at early stages of propagation.",
+    "In this work, we consider the results of BIBREF11 as our baseline. The authors use off-the-shelf machine learning classifiers to accurately classify news articles leveraging Twitter diffusion networks. To this aim, they consider a set of basic features which can be qualitatively interpreted w.r.t to the social behavior of users sharing credible vs non-credible information. Their methodology is overall in accordance with BIBREF12, where authors successfully detect Twitter astroturfing content, i.e. political campaigns disguised as spontaneous grassroots, with a machine learning framework based on network features.",
+    "In this paper, we propose a classification framework based on a multi-layer formulation of Twitter diffusion networks. For each article we disentangle different social interactions on Twitter, namely tweets, retweets, mentions, replies and quotes, to accordingly build a diffusion network composed of multiple layers (on for each type of interaction), and we compute structural features separately for each layer. We pick a set of global network properties from the network science toolbox which can be qualitatively explained in terms of social dimensions and allow us to encode different networks with a tuple of features. These include traditional indicators, e.g. network density, number of strong/weak connected components and diameter, and more elaborated ones such as main K-core number BIBREF13 and structural virality BIBREF14. Our main research question is whether the use of a multi-layer, disentangled network yields a significant advance in terms of classification accuracy over a conventional single-layer diffusion network. Additionally, we are interested in understanding which of the above features, and in which layer, are most effective in the classification task.",
+    "We perform classification experiments with an off-the-shelf Logistic Regression model on two different datasets of mainstream and disinformation news shared on Twitter respectively in the United States and in Italy during 2019. In the former case we also account for political biases inherent to different news sources, referring to the procedure proposed in BIBREF2 to label different outlets. Overall we show that we are able to classify credible vs non-credible diffusion networks (and consequently news articles) with high accuracy (AUROC up to 94%), even when accounting for the political bias of sources (and training only on left-biased or right-biased articles). We observe that the layer of mentions alone conveys useful information for the classification, denoting a different usage of this functionality when sharing news belonging to the two news domains. We also show that most discriminative features, which are relative to the breadth and depth of largest cascades in different layers, are the same across the two countries.",
+    "The outline of this paper is the following: we first formulate the problem and describe data collection, network representation and structural properties employed for the classification; then we provide experimental results–classification performances, layer and feature importance analyses and a temporal classification evaluation–and finally we draw conclusions and future directions."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction and related work",
+    "Introduction and related work",
+    "Introduction and related work",
+    "Introduction and related work",
+    "Introduction and related work",
+    "Introduction and related work",
+    "Introduction and related work",
+    "Introduction and related work",
+    "Introduction and related work"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction and related work",
+      0
+    ],
+    [
+      "Introduction and related work",
+      1
+    ],
+    [
+      "Introduction and related work",
+      2
+    ],
+    [
+      "Introduction and related work",
+      3
+    ],
+    [
+      "Introduction and related work",
+      4
+    ],
+    [
+      "Introduction and related work",
+      5
+    ],
+    [
+      "Introduction and related work",
+      6
+    ],
+    [
+      "Introduction and related work",
+      7
+    ],
+    [
+      "Introduction and related work",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction and related work",
+  "section": "Introduction and related work",
+  "title_path": "Introduction and related work",
+  "block_type": "long_unit"
+}

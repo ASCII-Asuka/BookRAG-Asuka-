@@ -1,0 +1,133 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Robustness to adversarial attacks\n[source_id=48] We use sentiment analysis and paraphrase detection as downstream tasks, as for these two tasks, 1-2 character edits do not change the output labels.\n[source_id=49] For sentiment classification, we systematically study the effect of character-level adversarial attacks on two architectures and four different input formats. The first architecture encodes the input sentence into a sequence of embeddings, which are then sequentially processed by a BiLSTM. The first and last states of the BiLSTM are then used by the softmax layer to predict the sentiment of the input. We consider three input formats for this architecture: (1) Word-only: where the input words are encoded using a lookup table; (2) Char-only: where the input words are encoded using a separate single-layered BiLSTM over their characters; and (3) Word $+$ Char: where the input words are encoded using a concatenation of (1) and (2) .\n[source_id=50] The second architecture uses the fine-tuned BERT model BIBREF26 , with an input format of word-piece tokenization. This model has recently set a new state-of-the-art on several NLP benchmarks, including the sentiment analysis task we consider here. All models are trained and evaluated on the binary version of the sentence-level Stanford Sentiment Treebank BIBREF24 dataset with only positive and negative reviews.\n[source_id=51] We also consider the task of paraphrase detection. Here too, we make use of the fine-tuned BERT BIBREF26 , which is trained and evaluated on the Microsoft Research Paraphrase Corpus (MRPC) BIBREF27 .\n[source_id=52] Two common methods for dealing with adversarial examples include: (1) data augmentation (DA) BIBREF28 ; and (2) adversarial training (Adv) BIBREF29 . In DA, the trained model is fine-tuned after augmenting the training set with an equal number of examples randomly attacked with a 1-character edit. In Adv, the trained model is fine-tuned with additional adversarial examples (selected at random) that produce incorrect predictions from the current-state classifier. The process is repeated iteratively, generating and adding newer adversarial examples from the updated classifier model, until the adversarial accuracy on dev set stops improving.\n[source_id=53] In Table 3 , we examine the robustness of the sentiment models under each attack and defense method. In the absence of any attack or defense, BERT (a word-piece model) performs the best ( $90.3\\%$ ) followed by word+char models ( $80.5\\%$ ), word-only models ( $79.2\\%$ ) and then char-only models ( $70.3\\%$ ). However, even single-character attacks (chosen adversarially) can be catastrophic, resulting in a significantly degraded performance of $46\\%$ , $57\\%$ , $59\\%$ and $33\\%$ , respectively under the `all' setting.\n[source_id=54] Intuitively, one might suppose that word-piece and character-level models would be more robust to such attacks given they can make use of the remaining context. However, we find that they are the more susceptible. To see why, note that the word `beautiful' can only be altered in a few ways for word-only models, either leading to an UNK or an existing vocabulary word, whereas, word-piece and character-only models treat each unique character combination differently. This provides more variations that an attacker can exploit. Following similar reasoning, add and key attacks pose a greater threat than swap and drop attacks. The robustness of different models can be ordered as word-only $>$ word+char $>$ char-only $\\sim $ word-piece, and the efficacy of different attacks as add $>$ key $>$ drop $>$ swap.\n[source_id=55] Next, we scrutinize the effectiveness of defense methods when faced against adversarially chosen attacks. Clearly from table 3 , DA and Adv are not effective in this case. We observed that despite a low training error, these models were not able to generalize to attacks on newer words at test time. ATD spell corrector is the most effective on keyboard attacks, but performs poorly on other attack types, particularly the add attack strategy.\n[source_id=56] The ScRNN model with pass-through backoff offers better protection, bringing back the adversarial accuracy within $5\\%$ range for the swap attack. It is also effective under other attack classes, and can mitigate the adversarial effect in word-piece models by $21\\%$ , character-only models by $19\\%$ , and in word, and word+char models by over $4.5\\%$ . This suggests that the direct training signal of word error correction is more effective than the indirect signal of sentiment classification available to DA and Adv for model robustness.\n[source_id=57] We observe additional gains by using background models as a backoff alternative, because of its lower word error rate (WER), especially, under the swap and drop attacks. However, these gains do not consistently translate in all other settings, as lower WER is necessary but not sufficient. Besides lower error rate, we find that a solid defense should furnish the attacker the fewest options to attack, i.e. it should have a low sensitivity.\n[source_id=58] As we shall see in section § \"Understanding Model Sensitivity\" , the backoff neutral variation has the lowest sensitivity due to mapping UNK predictions to a fixed neutral word. Thus, it results in the highest robustness on most of the attack types for all four model classes.\n[source_id=59] Table 4 shows the accuracy of BERT on 200 examples from the dev set of the MRPC paraphrase detection task under various attack and defense settings. We re-trained the ScRNN model variants on the MRPC training set for these experiments. Again, we find that simple 1-2 character attacks can bring down the accuracy of BERT significantly ( $89\\%$ to $31\\%$ ). Word recognition models can provide an effective defense, with both our pass-through and neutral variants recovering most of the accuracy. While the neutral backoff model is effective on 2-char attacks, it hurts performance in the no attack setting, since it incorrectly modifies certain correctly spelled entity names. Since the two variants are already effective, we did not train a background model for this task.",
+  "score": 3.071032702010169,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59
+  ],
+  "child_qasper_evidence_texts": [
+    "We use sentiment analysis and paraphrase detection as downstream tasks, as for these two tasks, 1-2 character edits do not change the output labels.",
+    "For sentiment classification, we systematically study the effect of character-level adversarial attacks on two architectures and four different input formats. The first architecture encodes the input sentence into a sequence of embeddings, which are then sequentially processed by a BiLSTM. The first and last states of the BiLSTM are then used by the softmax layer to predict the sentiment of the input. We consider three input formats for this architecture: (1) Word-only: where the input words are encoded using a lookup table; (2) Char-only: where the input words are encoded using a separate single-layered BiLSTM over their characters; and (3) Word $+$ Char: where the input words are encoded using a concatenation of (1) and (2) .",
+    "The second architecture uses the fine-tuned BERT model BIBREF26 , with an input format of word-piece tokenization. This model has recently set a new state-of-the-art on several NLP benchmarks, including the sentiment analysis task we consider here. All models are trained and evaluated on the binary version of the sentence-level Stanford Sentiment Treebank BIBREF24 dataset with only positive and negative reviews.",
+    "We also consider the task of paraphrase detection. Here too, we make use of the fine-tuned BERT BIBREF26 , which is trained and evaluated on the Microsoft Research Paraphrase Corpus (MRPC) BIBREF27 .",
+    "Two common methods for dealing with adversarial examples include: (1) data augmentation (DA) BIBREF28 ; and (2) adversarial training (Adv) BIBREF29 . In DA, the trained model is fine-tuned after augmenting the training set with an equal number of examples randomly attacked with a 1-character edit. In Adv, the trained model is fine-tuned with additional adversarial examples (selected at random) that produce incorrect predictions from the current-state classifier. The process is repeated iteratively, generating and adding newer adversarial examples from the updated classifier model, until the adversarial accuracy on dev set stops improving.",
+    "In Table 3 , we examine the robustness of the sentiment models under each attack and defense method. In the absence of any attack or defense, BERT (a word-piece model) performs the best ( $90.3\\%$ ) followed by word+char models ( $80.5\\%$ ), word-only models ( $79.2\\%$ ) and then char-only models ( $70.3\\%$ ). However, even single-character attacks (chosen adversarially) can be catastrophic, resulting in a significantly degraded performance of $46\\%$ , $57\\%$ , $59\\%$ and $33\\%$ , respectively under the `all' setting.",
+    "Intuitively, one might suppose that word-piece and character-level models would be more robust to such attacks given they can make use of the remaining context. However, we find that they are the more susceptible. To see why, note that the word `beautiful' can only be altered in a few ways for word-only models, either leading to an UNK or an existing vocabulary word, whereas, word-piece and character-only models treat each unique character combination differently. This provides more variations that an attacker can exploit. Following similar reasoning, add and key attacks pose a greater threat than swap and drop attacks. The robustness of different models can be ordered as word-only $>$ word+char $>$ char-only $\\sim $ word-piece, and the efficacy of different attacks as add $>$ key $>$ drop $>$ swap.",
+    "Next, we scrutinize the effectiveness of defense methods when faced against adversarially chosen attacks. Clearly from table 3 , DA and Adv are not effective in this case. We observed that despite a low training error, these models were not able to generalize to attacks on newer words at test time. ATD spell corrector is the most effective on keyboard attacks, but performs poorly on other attack types, particularly the add attack strategy.",
+    "The ScRNN model with pass-through backoff offers better protection, bringing back the adversarial accuracy within $5\\%$ range for the swap attack. It is also effective under other attack classes, and can mitigate the adversarial effect in word-piece models by $21\\%$ , character-only models by $19\\%$ , and in word, and word+char models by over $4.5\\%$ . This suggests that the direct training signal of word error correction is more effective than the indirect signal of sentiment classification available to DA and Adv for model robustness.",
+    "We observe additional gains by using background models as a backoff alternative, because of its lower word error rate (WER), especially, under the swap and drop attacks. However, these gains do not consistently translate in all other settings, as lower WER is necessary but not sufficient. Besides lower error rate, we find that a solid defense should furnish the attacker the fewest options to attack, i.e. it should have a low sensitivity.",
+    "As we shall see in section § \"Understanding Model Sensitivity\" , the backoff neutral variation has the lowest sensitivity due to mapping UNK predictions to a fixed neutral word. Thus, it results in the highest robustness on most of the attack types for all four model classes.",
+    "Table 4 shows the accuracy of BERT on 200 examples from the dev set of the MRPC paraphrase detection task under various attack and defense settings. We re-trained the ScRNN model variants on the MRPC training set for these experiments. Again, we find that simple 1-2 character attacks can bring down the accuracy of BERT significantly ( $89\\%$ to $31\\%$ ). Word recognition models can provide an effective defense, with both our pass-through and neutral variants recovering most of the accuracy. While the neutral backoff model is effective on 2-char attacks, it hurts performance in the no attack setting, since it incorrectly modifies certain correctly spelled entity names. Since the two variants are already effective, we did not train a background model for this task."
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Robustness to adversarial attacks",
+    "Robustness to adversarial attacks",
+    "Robustness to adversarial attacks",
+    "Robustness to adversarial attacks",
+    "Robustness to adversarial attacks",
+    "Robustness to adversarial attacks",
+    "Robustness to adversarial attacks",
+    "Robustness to adversarial attacks",
+    "Robustness to adversarial attacks",
+    "Robustness to adversarial attacks",
+    "Robustness to adversarial attacks",
+    "Robustness to adversarial attacks"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Robustness to adversarial attacks",
+      0
+    ],
+    [
+      "Robustness to adversarial attacks",
+      1
+    ],
+    [
+      "Robustness to adversarial attacks",
+      2
+    ],
+    [
+      "Robustness to adversarial attacks",
+      3
+    ],
+    [
+      "Robustness to adversarial attacks",
+      4
+    ],
+    [
+      "Robustness to adversarial attacks",
+      5
+    ],
+    [
+      "Robustness to adversarial attacks",
+      6
+    ],
+    [
+      "Robustness to adversarial attacks",
+      7
+    ],
+    [
+      "Robustness to adversarial attacks",
+      8
+    ],
+    [
+      "Robustness to adversarial attacks",
+      9
+    ],
+    [
+      "Robustness to adversarial attacks",
+      10
+    ],
+    [
+      "Robustness to adversarial attacks",
+      11
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Robustness to adversarial attacks",
+  "section": "Robustness to adversarial attacks",
+  "title_path": "Robustness to adversarial attacks",
+  "block_type": "long_unit"
+}

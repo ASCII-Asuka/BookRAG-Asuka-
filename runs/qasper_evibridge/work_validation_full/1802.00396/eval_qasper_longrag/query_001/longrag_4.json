@@ -1,0 +1,88 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Word embeddings\n[source_id=15] In order to use texts together with votes to estimate preference polarization, we first consider how to better exploit the information contained in textual data. To do this, we introduce a new representation of textual data which more adequately captures dynamics of human language, namely unsupervised learned word embeddings. In the broader natural language processing (NLP) literature, there has been a surge of research devoted to the development of distributional representations of speech which retain syntactical language qualities in ways that the bag-of-words (BOW) approach typically used in political text analysis research is not equipped to retain. The hypothesis claims that words that occur in similar contexts tend to have similar meanings BIBREF12 . When operationalized, the unique intuition is that similar words and phrases, such as “atomic, weapons” and “nuclear, warheads” are found in relatively proximate vector space locations. Although the BOW performs surprisingly well, this example has no features in common, and a BOW representation would assign low similarity scores or high distances.\n[source_id=16] When results are projected onto a two dimensional space, language relationships surface, such as the clustering of synonyms, antonyms, scales (e.g. democracy to authoritarianism), hyponym-hypernyms (e.g. democracy is a type of regime), co-hyponyms (e.g. atom bombs and ballistic missiles are types of weapons), and groups of words which tend to appear in similar contexts like diplomat, envoy, and embassy. Mikolov and collaborators introduce an evaluation scheme based on word analogies that examines dimensions of difference in vector space BIBREF13 , BIBREF14 . They originally reached the surprising conclusion that simple vector addition and subtraction uncovers interesting linear substructures of human language, famously that INLINEFORM0 .\n[source_id=17] To locate vector space representations of our corpus, we utilize the Stanford NLP group's Global Vectors for Word Representation (GloVe) unsupervised learning algorithm BIBREF15 . GloVe is a popular log bilinear, weighted least squares model that trains on global word-word co-occurence counts to make efficient use of the corpus statistics. Because it factorizes a word-context co-occurrence matrix, it is closer to traditional count methods like latent semantic analysis or principle component analysis. Here, we present three analogical examples from the located embeddings: DISPLAYFORM0\n[source_id=18] where each INLINEFORM0 describes a vector space location of the given feature, and the cosine similarity between each vector space location is added or subtracted to find the closest vector offsets (with cosine similarity printed underneath). These analogies are interpreted, for example, as INLINEFORM1 is to INLINEFORM2 as INLINEFORM3 is to INLINEFORM4 . These examples appear to encode relations of cause-effect, threats/harm, and location/geography, respectively. As found in the wider NLP literature, the implication is that these vector space models are surprisingly effective at capturing different lexical relations, despite the lack of supervision.\n[source_id=19] To measure position similarities, we apply a new document-level distance measure to the embeddings: the (relaxed) Word Mover's Distance (RWMD) BIBREF17 . RWMD is described in greater detail in the Supplementary Materials, but in short, this measures the cumulative distance required to transform one state's speech point cloud into that of another state, ensuring that differences do not simply reflect the use of different words. States employ varied language and lexical patterns to describe similar topics. For example, if state A says “nuclear weapons are bad,\" and state B says “atom bombs are terrible,\" the only feature in common is the term “are,\" which leads to near-orthogonality in their BOW vectors and low similarity scores. If a third state C says “atom bombs are good,\" then B and C would exhibit the highest cosine similarity of the three, despite having the opposite expressed policy positions. Word embeddings and term-document matrices are located for each year in the corpus, 1970-2014, and state dyad RWMD distances are calculated, converted to similarity scores, and stored in an INLINEFORM1 matrix INLINEFORM2 for each year.\n[source_id=20] For texts to be considered as a useful complement to roll call data, we should see differences in the positions expressed in speeches versus votes. This would indicate that the two sources reveal different preference information and that using one over the other risks overlooking available preference signals. Further, for the proposed word embeddings approach to be considered useful, it should provide greater insight into intra-bloc position variation beyond what is available in the BOW, because intra-bloc variation is an important component of the definition of polarization used here, as well as in much of the recent text versus votes literature. The case of NATO and Warsaw Pact members is presented in [fig:diffs]Figure 1, which plots states' ideal points from BIBREF21 , BOW cosine similarities, and RWMD similarities, with the latter two scaled between INLINEFORM0 .\n[source_id=21] Visual assessment of intra-bloc similarities indicates that the RWMDs based on word embeddings yield higher variations in expressed positions compared to the cosine similarities between members' BOW vectors. This provides preliminary confirmation that the suggested word embeddings approach captures more interesting variation in the preferences of states compared to the BOW. Furthermore, while the ideal points clearly reflect a lessening of Cold War tensions, the RWMD similarities appear to detect greater intra-bloc position variations. Therefore, both appear to provide different and potentially valuable information for the estimation of state preferences.",
+  "score": 4.15335567610789,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
+  ],
+  "child_qasper_evidence_texts": [
+    "In order to use texts together with votes to estimate preference polarization, we first consider how to better exploit the information contained in textual data. To do this, we introduce a new representation of textual data which more adequately captures dynamics of human language, namely unsupervised learned word embeddings. In the broader natural language processing (NLP) literature, there has been a surge of research devoted to the development of distributional representations of speech which retain syntactical language qualities in ways that the bag-of-words (BOW) approach typically used in political text analysis research is not equipped to retain. The hypothesis claims that words that occur in similar contexts tend to have similar meanings BIBREF12 . When operationalized, the unique intuition is that similar words and phrases, such as “atomic, weapons” and “nuclear, warheads” are found in relatively proximate vector space locations. Although the BOW performs surprisingly well, this example has no features in common, and a BOW representation would assign low similarity scores or high distances.",
+    "When results are projected onto a two dimensional space, language relationships surface, such as the clustering of synonyms, antonyms, scales (e.g. democracy to authoritarianism), hyponym-hypernyms (e.g. democracy is a type of regime), co-hyponyms (e.g. atom bombs and ballistic missiles are types of weapons), and groups of words which tend to appear in similar contexts like diplomat, envoy, and embassy. Mikolov and collaborators introduce an evaluation scheme based on word analogies that examines dimensions of difference in vector space BIBREF13 , BIBREF14 . They originally reached the surprising conclusion that simple vector addition and subtraction uncovers interesting linear substructures of human language, famously that INLINEFORM0 .",
+    "To locate vector space representations of our corpus, we utilize the Stanford NLP group's Global Vectors for Word Representation (GloVe) unsupervised learning algorithm BIBREF15 . GloVe is a popular log bilinear, weighted least squares model that trains on global word-word co-occurence counts to make efficient use of the corpus statistics. Because it factorizes a word-context co-occurrence matrix, it is closer to traditional count methods like latent semantic analysis or principle component analysis. Here, we present three analogical examples from the located embeddings: DISPLAYFORM0",
+    "where each INLINEFORM0 describes a vector space location of the given feature, and the cosine similarity between each vector space location is added or subtracted to find the closest vector offsets (with cosine similarity printed underneath). These analogies are interpreted, for example, as INLINEFORM1 is to INLINEFORM2 as INLINEFORM3 is to INLINEFORM4 . These examples appear to encode relations of cause-effect, threats/harm, and location/geography, respectively. As found in the wider NLP literature, the implication is that these vector space models are surprisingly effective at capturing different lexical relations, despite the lack of supervision.",
+    "To measure position similarities, we apply a new document-level distance measure to the embeddings: the (relaxed) Word Mover's Distance (RWMD) BIBREF17 . RWMD is described in greater detail in the Supplementary Materials, but in short, this measures the cumulative distance required to transform one state's speech point cloud into that of another state, ensuring that differences do not simply reflect the use of different words. States employ varied language and lexical patterns to describe similar topics. For example, if state A says “nuclear weapons are bad,\" and state B says “atom bombs are terrible,\" the only feature in common is the term “are,\" which leads to near-orthogonality in their BOW vectors and low similarity scores. If a third state C says “atom bombs are good,\" then B and C would exhibit the highest cosine similarity of the three, despite having the opposite expressed policy positions. Word embeddings and term-document matrices are located for each year in the corpus, 1970-2014, and state dyad RWMD distances are calculated, converted to similarity scores, and stored in an INLINEFORM1 matrix INLINEFORM2 for each year.",
+    "For texts to be considered as a useful complement to roll call data, we should see differences in the positions expressed in speeches versus votes. This would indicate that the two sources reveal different preference information and that using one over the other risks overlooking available preference signals. Further, for the proposed word embeddings approach to be considered useful, it should provide greater insight into intra-bloc position variation beyond what is available in the BOW, because intra-bloc variation is an important component of the definition of polarization used here, as well as in much of the recent text versus votes literature. The case of NATO and Warsaw Pact members is presented in [fig:diffs]Figure 1, which plots states' ideal points from BIBREF21 , BOW cosine similarities, and RWMD similarities, with the latter two scaled between INLINEFORM0 .",
+    "Visual assessment of intra-bloc similarities indicates that the RWMDs based on word embeddings yield higher variations in expressed positions compared to the cosine similarities between members' BOW vectors. This provides preliminary confirmation that the suggested word embeddings approach captures more interesting variation in the preferences of states compared to the BOW. Furthermore, while the ideal points clearly reflect a lessening of Cold War tensions, the RWMD similarities appear to detect greater intra-bloc position variations. Therefore, both appear to provide different and potentially valuable information for the estimation of state preferences."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Word embeddings",
+    "Word embeddings",
+    "Word embeddings",
+    "Word embeddings",
+    "Word embeddings",
+    "Word embeddings",
+    "Word embeddings"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Word embeddings",
+      0
+    ],
+    [
+      "Word embeddings",
+      1
+    ],
+    [
+      "Word embeddings",
+      2
+    ],
+    [
+      "Word embeddings",
+      3
+    ],
+    [
+      "Word embeddings",
+      4
+    ],
+    [
+      "Word embeddings",
+      5
+    ],
+    [
+      "Word embeddings",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Word embeddings",
+  "section": "Word embeddings",
+  "title_path": "Word embeddings",
+  "block_type": "long_unit"
+}

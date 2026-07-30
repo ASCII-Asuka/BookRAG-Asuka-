@@ -1,0 +1,671 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_5",
+      "content": "[Section] Results\n[source_id=43] Results for IV evaluation are shown in tab:intrinsic, and for OOV in tab:oov.\n[source_id=44] Like in FT, the use of subword information in both LV-N and LV-M results in 1) better representation of rare words, as evidenced by the increase in RW correlation, and 2) significant improvement on the GSyn and MSR tasks, in evidence of subwords encoding information about a word's syntactic function (the suffix “ly”, for example, suggests an adverb).\n[source_id=45] There seems to a trade-off between capturing semantics and syntax as in both LV-N and FT there is an accompanying decrease on the GSem tasks in exchange for gains on the GSyn and MSR tasks. Morphological segmentation in LV-M appears to favor syntax less strongly than do simple n-grams.\n[source_id=46] On the downstream tasks, we only observe statistically significant ( $p < .05$ under a random permutation test) improvement on the chunking task, and it is a very small gain. We attribute this to both regular and subword models having very similar quality on frequent IV word representation. Statistically, these are the words are that are most likely to appear in the downstream task instances, and so the superior representation of rare words\n[source_id=47] has, due to their nature, little impact on overall accuracy. Because in all tasks OOV words are mapped to the “ $\\langle $ unk $\\rangle $ ” token, the subword models are not being used to the fullest, and in future work we will investigate whether generating representations for all words improves task performance.\n[source_id=48] In OOV representation (tab:oov), LV-N and FT work almost identically, as is to be expected. Both find highly coherent neighbors for the words “hellooo”, “marvelicious”, and “rereread”. Interestingly, the misspelling of “louisana” leads to coherent name-like neighbors, although none is the expected correct spelling “louisiana”. All models stumble on the made-up prefix “tuz”. A possible fix would be to down-weigh very rare subwords in the vector summation. LV-M is less robust than LV-N and FT on this task as it is highly sensitive to incorrect segmentation, exemplified in the “hellooo” example.\n[source_id=49] Finally, we see that nearest-neighbors are a mixture of similarly pre/suffixed words. If these pre/suffixes are semantic, the neighbors are semantically related, else if syntactic they have similar syntactic function. This suggests that it should be possible to get tunable representations which are more driven by semantics or syntax by a weighted summation of subword vectors, given we can identify whether a pre/suffix is semantic or syntactic in nature and weigh them accordingly. This might be possible without supervision using corpus statistics as syntactic subwords are likely to be more frequent, and so could be down-weighted for more semantic representations. This is something we will pursue in future work.",
+      "score": 4.166446267546106,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "child_qasper_evidence_texts": [
+        "Results for IV evaluation are shown in tab:intrinsic, and for OOV in tab:oov.",
+        "Like in FT, the use of subword information in both LV-N and LV-M results in 1) better representation of rare words, as evidenced by the increase in RW correlation, and 2) significant improvement on the GSyn and MSR tasks, in evidence of subwords encoding information about a word's syntactic function (the suffix “ly”, for example, suggests an adverb).",
+        "There seems to a trade-off between capturing semantics and syntax as in both LV-N and FT there is an accompanying decrease on the GSem tasks in exchange for gains on the GSyn and MSR tasks. Morphological segmentation in LV-M appears to favor syntax less strongly than do simple n-grams.",
+        "On the downstream tasks, we only observe statistically significant ( $p < .05$ under a random permutation test) improvement on the chunking task, and it is a very small gain. We attribute this to both regular and subword models having very similar quality on frequent IV word representation. Statistically, these are the words are that are most likely to appear in the downstream task instances, and so the superior representation of rare words",
+        "has, due to their nature, little impact on overall accuracy. Because in all tasks OOV words are mapped to the “ $\\langle $ unk $\\rangle $ ” token, the subword models are not being used to the fullest, and in future work we will investigate whether generating representations for all words improves task performance.",
+        "In OOV representation (tab:oov), LV-N and FT work almost identically, as is to be expected. Both find highly coherent neighbors for the words “hellooo”, “marvelicious”, and “rereread”. Interestingly, the misspelling of “louisana” leads to coherent name-like neighbors, although none is the expected correct spelling “louisiana”. All models stumble on the made-up prefix “tuz”. A possible fix would be to down-weigh very rare subwords in the vector summation. LV-M is less robust than LV-N and FT on this task as it is highly sensitive to incorrect segmentation, exemplified in the “hellooo” example.",
+        "Finally, we see that nearest-neighbors are a mixture of similarly pre/suffixed words. If these pre/suffixes are semantic, the neighbors are semantically related, else if syntactic they have similar syntactic function. This suggests that it should be possible to get tunable representations which are more driven by semantics or syntax by a weighted summation of subword vectors, given we can identify whether a pre/suffix is semantic or syntactic in nature and weigh them accordingly. This might be possible without supervision using corpus statistics as syntactic subwords are likely to be more frequent, and so could be down-weighted for more semantic representations. This is something we will pursue in future work."
+      ],
+      "child_pages": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "child_sections": [
+        "Results",
+        "Results",
+        "Results",
+        "Results",
+        "Results",
+        "Results",
+        "Results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results",
+          0
+        ],
+        [
+          "Results",
+          1
+        ],
+        [
+          "Results",
+          2
+        ],
+        [
+          "Results",
+          3
+        ],
+        [
+          "Results",
+          4
+        ],
+        [
+          "Results",
+          5
+        ],
+        [
+          "Results",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Results",
+      "section": "Results",
+      "title_path": "Results",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Related Work\n[source_id=17] Word embeddings that leverage subword information were first introduced by BIBREF14 which represented a word of as the sum of four-gram vectors obtained running an SVD of a four-gram to four-gram co-occurrence matrix. Our model differs by learning the subword vectors and resulting representation jointly as weighted factorization of a word-context co-occurrence matrix is performed.\n[source_id=18] There are many models that use character-level subword information to form word representations BIBREF15 , BIBREF16 , BIBREF17 , BIBREF18 , BIBREF19 , as well as fastText (the model on which we base our work). Closely related are models that use morphological segmentation in learning word representations BIBREF20 , BIBREF21 , BIBREF22 , BIBREF23 , BIBREF24 , BIBREF25 . Our model also uses n-grams and morphological segmentation, but it performs explicit matrix factorization to learn subword and word representations, unlike these related models which mostly use neural networks.\n[source_id=19] Finally, BIBREF26 and BIBREF27 retrofit morphological information onto pre-trained models. These differ from our work in that we incorporate morphological information at training time, and that only BIBREF26 is able to generate embeddings for OOV words.",
+      "score": 2.5131760578813287,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        17,
+        18,
+        19
+      ],
+      "child_qasper_evidence_texts": [
+        "Word embeddings that leverage subword information were first introduced by BIBREF14 which represented a word of as the sum of four-gram vectors obtained running an SVD of a four-gram to four-gram co-occurrence matrix. Our model differs by learning the subword vectors and resulting representation jointly as weighted factorization of a word-context co-occurrence matrix is performed.",
+        "There are many models that use character-level subword information to form word representations BIBREF15 , BIBREF16 , BIBREF17 , BIBREF18 , BIBREF19 , as well as fastText (the model on which we base our work). Closely related are models that use morphological segmentation in learning word representations BIBREF20 , BIBREF21 , BIBREF22 , BIBREF23 , BIBREF24 , BIBREF25 . Our model also uses n-grams and morphological segmentation, but it performs explicit matrix factorization to learn subword and word representations, unlike these related models which mostly use neural networks.",
+        "Finally, BIBREF26 and BIBREF27 retrofit morphological information onto pre-trained models. These differ from our work in that we incorporate morphological information at training time, and that only BIBREF26 is able to generate embeddings for OOV words."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Related Work",
+        "Related Work",
+        "Related Work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work",
+          0
+        ],
+        [
+          "Related Work",
+          1
+        ],
+        [
+          "Related Work",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Related Work",
+      "section": "Related Work",
+      "title_path": "Related Work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] The positive effect of adding subword information to word embeddings has been demonstrated for predictive models. In this paper we investigate whether similar benefits can also be derived from incorporating subwords into counting models. We evaluate the impact of different types of subwords (n-grams and unsupervised morphemes), with results confirming the importance of subword information in learning representations of rare and out-of-vocabulary words.",
+      "score": 2.2585170482977546,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "The positive effect of adding subword information to word embeddings has been demonstrated for predictive models. In this paper we investigate whether similar benefits can also be derived from incorporating subwords into counting models. We evaluate the impact of different types of subwords (n-grams and unsupervised morphemes), with results confirming the importance of subword information in learning representations of rare and out-of-vocabulary words."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Conclusion and Future Work\n[source_id=51] In this paper, we incorporated subword information (simple n-grams and unsupervised morphemes) into the LexVec word embedding model and evaluated its impact on the resulting IV and OOV word vectors. Like fastText, subword LexVec learns better representations for rare words than its word-level counterpart. All models generated coherent representations for OOV words, with simple n-grams demonstrating more robustness than unsupervised morphemes. In future work, we will verify whether using OOV representations in downstream tasks improves performance. We will also explore the trade-off between semantics and syntax when subword information is used.",
+      "score": 1.8052652157493945,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        51
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper, we incorporated subword information (simple n-grams and unsupervised morphemes) into the LexVec word embedding model and evaluated its impact on the resulting IV and OOV word vectors. Like fastText, subword LexVec learns better representations for rare words than its word-level counterpart. All models generated coherent representations for OOV words, with simple n-grams demonstrating more robustness than unsupervised morphemes. In future work, we will verify whether using OOV representations in downstream tasks improves performance. We will also explore the trade-off between semantics and syntax when subword information is used."
+      ],
+      "child_pages": [
+        6
+      ],
+      "child_sections": [
+        "Conclusion and Future Work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion and Future Work",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Conclusion and Future Work",
+      "section": "Conclusion and Future Work",
+      "title_path": "Conclusion and Future Work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Subword LexVec\n[source_id=21] The LexVec BIBREF7 model factorizes the PPMI-weighted word-context co-occurrence matrix using stochastic gradient descent.\n[source_id=22] $$PPMI_{wc} = max(0, \\log \\frac{M_{wc} \\; M_{**}}{ M_{w*} \\; M_{*c} })$$   (Eq. 3)\n[source_id=23] where $M$ is the word-context co-occurrence matrix constructed by sliding a window of fixed size centered over every target word\n[source_id=24] $w$ in the subsampled BIBREF2 training corpus and incrementing cell $M_{wc}$ for every context word $c$ appearing within this window (forming a $(w,c)$ pair). LexVec adjusts the PPMI matrix using context distribution smoothing BIBREF3 .\n[source_id=25] With the PPMI matrix calculated, the sliding window process is repeated and the following loss functions are minimized for every observed $(w,c)$ pair and target word $w$ :\n[source_id=26] $$L_{wc} &= \\frac{1}{2} (u_w^\\top v_c - PPMI_{wc})^2 \\\\\n\nL_{w} &= \\frac{1}{2} \\sum \\limits _{i=1}^k{\\mathbf {E}_{c_i \\sim P_n(c)} (u_w^\\top v_{c_i} - PPMI_{wc_i})^2 }$$   (Eq. 4)\n[source_id=27] where $u_w$ and $v_c$ are $d$ -dimensional word and context vectors. The second loss function describes how, for each target word, $k$ negative samples BIBREF2 are drawn from the smoothed context unigram distribution.\n[source_id=28] Given a set of subwords $S_w$ for a word $w$ , we follow fastText and replace $u_w$ in eq:lexvec2,eq:lexvec3 by $u^{\\prime }_w$ such that:\n[source_id=29] $$u^{\\prime }_w = \\frac{1}{|S_w| + 1} (u_w + \\sum _{s \\in S_w} q_{hash(s)})$$   (Eq. 5)\n[source_id=30] such that a word is the sum of its word vector and its $d$ -dimensional subword vectors $q_x$ . The number of possible subwords is very large so the function $hash(s)$ hashes a subword to the interval $[1, buckets]$ . For OOV words,\n[source_id=31] $$u^{\\prime }_w = \\frac{1}{|S_w|} \\sum _{s \\in S_w} q_{hash(s)}$$   (Eq. 7)\n[source_id=32] We compare two types of subwords: simple n-grams (like fastText) and unsupervised morphemes. For example, given the word “cat”, we mark beginning and end with angled brackets and use all n-grams of length 3 to 6 as subwords, yielding $S_{\\textnormal {cat}} = \\lbrace  \\textnormal {$ $ ca, at$ $, cat} \\rbrace $ . Morfessor BIBREF11 is used to probabilistically segment words into morphemes. The Morfessor model is trained using raw text so it is entirely unsupervised. For the word “subsequent”, we get $S_{\\textnormal {subsequent}} = \\lbrace  \\textnormal {$ $ sub, sequent$ $} \\rbrace $ .",
+      "score": 1.5911421884552286,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "child_qasper_evidence_texts": [
+        "The LexVec BIBREF7 model factorizes the PPMI-weighted word-context co-occurrence matrix using stochastic gradient descent.",
+        "$$PPMI_{wc} = max(0, \\log \\frac{M_{wc} \\; M_{**}}{ M_{w*} \\; M_{*c} })$$   (Eq. 3)",
+        "where $M$ is the word-context co-occurrence matrix constructed by sliding a window of fixed size centered over every target word",
+        "$w$ in the subsampled BIBREF2 training corpus and incrementing cell $M_{wc}$ for every context word $c$ appearing within this window (forming a $(w,c)$ pair). LexVec adjusts the PPMI matrix using context distribution smoothing BIBREF3 .",
+        "With the PPMI matrix calculated, the sliding window process is repeated and the following loss functions are minimized for every observed $(w,c)$ pair and target word $w$ :",
+        "$$L_{wc} &= \\frac{1}{2} (u_w^\\top v_c - PPMI_{wc})^2 \\\\\n\nL_{w} &= \\frac{1}{2} \\sum \\limits _{i=1}^k{\\mathbf {E}_{c_i \\sim P_n(c)} (u_w^\\top v_{c_i} - PPMI_{wc_i})^2 }$$   (Eq. 4)",
+        "where $u_w$ and $v_c$ are $d$ -dimensional word and context vectors. The second loss function describes how, for each target word, $k$ negative samples BIBREF2 are drawn from the smoothed context unigram distribution.",
+        "Given a set of subwords $S_w$ for a word $w$ , we follow fastText and replace $u_w$ in eq:lexvec2,eq:lexvec3 by $u^{\\prime }_w$ such that:",
+        "$$u^{\\prime }_w = \\frac{1}{|S_w| + 1} (u_w + \\sum _{s \\in S_w} q_{hash(s)})$$   (Eq. 5)",
+        "such that a word is the sum of its word vector and its $d$ -dimensional subword vectors $q_x$ . The number of possible subwords is very large so the function $hash(s)$ hashes a subword to the interval $[1, buckets]$ . For OOV words,",
+        "$$u^{\\prime }_w = \\frac{1}{|S_w|} \\sum _{s \\in S_w} q_{hash(s)}$$   (Eq. 7)",
+        "We compare two types of subwords: simple n-grams (like fastText) and unsupervised morphemes. For example, given the word “cat”, we mark beginning and end with angled brackets and use all n-grams of length 3 to 6 as subwords, yielding $S_{\\textnormal {cat}} = \\lbrace  \\textnormal {$ $ ca, at$ $, cat} \\rbrace $ . Morfessor BIBREF11 is used to probabilistically segment words into morphemes. The Morfessor model is trained using raw text so it is entirely unsupervised. For the word “subsequent”, we get $S_{\\textnormal {subsequent}} = \\lbrace  \\textnormal {$ $ sub, sequent$ $} \\rbrace $ ."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Subword LexVec",
+        "Subword LexVec",
+        "Subword LexVec",
+        "Subword LexVec",
+        "Subword LexVec",
+        "Subword LexVec",
+        "Subword LexVec",
+        "Subword LexVec",
+        "Subword LexVec",
+        "Subword LexVec",
+        "Subword LexVec",
+        "Subword LexVec"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Subword LexVec",
+          0
+        ],
+        [
+          "Subword LexVec",
+          1
+        ],
+        [
+          "Subword LexVec",
+          2
+        ],
+        [
+          "Subword LexVec",
+          3
+        ],
+        [
+          "Subword LexVec",
+          4
+        ],
+        [
+          "Subword LexVec",
+          5
+        ],
+        [
+          "Subword LexVec",
+          6
+        ],
+        [
+          "Subword LexVec",
+          7
+        ],
+        [
+          "Subword LexVec",
+          8
+        ],
+        [
+          "Subword LexVec",
+          9
+        ],
+        [
+          "Subword LexVec",
+          10
+        ],
+        [
+          "Subword LexVec",
+          11
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Subword LexVec",
+      "section": "Subword LexVec",
+      "title_path": "Subword LexVec",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Materials\n[source_id=34] Our experiments aim to measure if the incorporation of subword information into LexVec results in similar improvements as observed in moving from Skip-gram to fastText, and whether unsupervised morphemes offer any advantage over n-grams. For IV words, we perform intrinsic evaluation via word similarity and word analogy tasks, as well as downstream tasks. OOV word representation is tested through qualitative nearest-neighbor analysis.\n[source_id=35] All models are trained using a 2015 dump of Wikipedia, lowercased and using only alphanumeric characters. Vocabulary is limited to words that appear at least 100 times for a total of 303517 words. Morfessor is trained on this vocabulary list.\n[source_id=36] We train the standard LexVec (LV), LexVec using n-grams (LV-N), and LexVec using unsupervised morphemes (LV-M) using the same hyper-parameters as BIBREF7 ( $\\textnormal {window} = 2$ , $\\textnormal {initial learning rate} = .025$ , $\\textnormal {subsampling} = 10^{-5}$ , $\\textnormal {negative samples} = 5$ , $\\textnormal {context distribution smoothing} = .75$ , $\\textnormal {positional contexts} = \\textnormal {True}$ ).\n[source_id=37] Both Skip-gram (SG) and fastText (FT) are trained using the reference implementation of fastText with the hyper-parameters given by BIBREF6 ( $\\textnormal {window} = 5$ , $\\textnormal {initial learning rate} = .025$ , $\\textnormal {subsampling} = 10^{-4}$ , $\\textnormal {negative samples} = 5$ ).\n[source_id=38] All five models are run for 5 iterations over the training corpus and generate 300 dimensional word representations. LV-N, LV-M, and FT use 2000000 buckets when hashing subwords.\n[source_id=39] For word similarity evaluations, we use the WordSim-353 Similarity (WS-Sim) and Relatedness (WS-Rel) BIBREF28 and SimLex-999 (SimLex) BIBREF29 datasets, and the Rare Word (RW) BIBREF20 dataset to verify if subword information improves rare word representation. Relationships are measured using the Google semantic (GSem) and syntactic (GSyn) analogies BIBREF2 and the Microsoft syntactic analogies (MSR) dataset BIBREF30 .\n[source_id=40] We also evaluate all five models on downstream tasks from the VecEval suite BIBREF13 , using only the tasks for which training and evaluation data is freely available: chunking, sentiment and question classification, and natural language identification (NLI). The default settings from the suite are used, but we run only the fixed settings, where the embeddings themselves are not tunable parameters of the models, forcing the system to use only the information already in the embeddings.\n[source_id=41] Finally, we use LV-N, LV-M, and FT to generate OOV word representations for the following words: 1) “hellooo”: a greeting commonly used in instant messaging which emphasizes a syllable. 2) “marvelicious”: a made-up word obtained by merging “marvelous” and “delicious”. 3) “louisana”: a misspelling of the proper name “Louisiana”. 4) “rereread”: recursive use of prefix “re”. 5) “tuzread”: made-up prefix “tuz”.",
+      "score": 1.5602839170637641,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41
+      ],
+      "child_qasper_evidence_texts": [
+        "Our experiments aim to measure if the incorporation of subword information into LexVec results in similar improvements as observed in moving from Skip-gram to fastText, and whether unsupervised morphemes offer any advantage over n-grams. For IV words, we perform intrinsic evaluation via word similarity and word analogy tasks, as well as downstream tasks. OOV word representation is tested through qualitative nearest-neighbor analysis.",
+        "All models are trained using a 2015 dump of Wikipedia, lowercased and using only alphanumeric characters. Vocabulary is limited to words that appear at least 100 times for a total of 303517 words. Morfessor is trained on this vocabulary list.",
+        "We train the standard LexVec (LV), LexVec using n-grams (LV-N), and LexVec using unsupervised morphemes (LV-M) using the same hyper-parameters as BIBREF7 ( $\\textnormal {window} = 2$ , $\\textnormal {initial learning rate} = .025$ , $\\textnormal {subsampling} = 10^{-5}$ , $\\textnormal {negative samples} = 5$ , $\\textnormal {context distribution smoothing} = .75$ , $\\textnormal {positional contexts} = \\textnormal {True}$ ).",
+        "Both Skip-gram (SG) and fastText (FT) are trained using the reference implementation of fastText with the hyper-parameters given by BIBREF6 ( $\\textnormal {window} = 5$ , $\\textnormal {initial learning rate} = .025$ , $\\textnormal {subsampling} = 10^{-4}$ , $\\textnormal {negative samples} = 5$ ).",
+        "All five models are run for 5 iterations over the training corpus and generate 300 dimensional word representations. LV-N, LV-M, and FT use 2000000 buckets when hashing subwords.",
+        "For word similarity evaluations, we use the WordSim-353 Similarity (WS-Sim) and Relatedness (WS-Rel) BIBREF28 and SimLex-999 (SimLex) BIBREF29 datasets, and the Rare Word (RW) BIBREF20 dataset to verify if subword information improves rare word representation. Relationships are measured using the Google semantic (GSem) and syntactic (GSyn) analogies BIBREF2 and the Microsoft syntactic analogies (MSR) dataset BIBREF30 .",
+        "We also evaluate all five models on downstream tasks from the VecEval suite BIBREF13 , using only the tasks for which training and evaluation data is freely available: chunking, sentiment and question classification, and natural language identification (NLI). The default settings from the suite are used, but we run only the fixed settings, where the embeddings themselves are not tunable parameters of the models, forcing the system to use only the information already in the embeddings.",
+        "Finally, we use LV-N, LV-M, and FT to generate OOV word representations for the following words: 1) “hellooo”: a greeting commonly used in instant messaging which emphasizes a syllable. 2) “marvelicious”: a made-up word obtained by merging “marvelous” and “delicious”. 3) “louisana”: a misspelling of the proper name “Louisiana”. 4) “rereread”: recursive use of prefix “re”. 5) “tuzread”: made-up prefix “tuz”."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Materials",
+        "Materials",
+        "Materials",
+        "Materials",
+        "Materials",
+        "Materials",
+        "Materials",
+        "Materials"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Materials",
+          0
+        ],
+        [
+          "Materials",
+          1
+        ],
+        [
+          "Materials",
+          2
+        ],
+        [
+          "Materials",
+          3
+        ],
+        [
+          "Materials",
+          4
+        ],
+        [
+          "Materials",
+          5
+        ],
+        [
+          "Materials",
+          6
+        ],
+        [
+          "Materials",
+          7
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Materials",
+      "section": "Materials",
+      "title_path": "Materials",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Low dimensional word representations (embeddings) have become a key component in modern NLP systems for language modeling, parsing, sentiment classification, and many others. These embeddings are usually derived by employing the distributional hypothesis: that similar words appear in similar contexts BIBREF0 .\n[source_id=5] The models that perform the word embedding can be divided into two classes: predictive, which learn a target or context word distribution, and counting, which use a raw, weighted, or factored word-context co-occurrence matrix BIBREF1 . The most well-known predictive model, which has become eponymous with word embedding, is word2vec BIBREF2 . Popular counting models include PPMI-SVD BIBREF3 , GloVe BIBREF4 , and LexVec BIBREF5 .\n[source_id=6] These models all learn word-level representations, which presents two main problems: 1) Learned information is not explicitly shared among the representations as each word has an independent vector. 2) There is no clear way to represent out-of-vocabulary (OOV) words.\n[source_id=7] fastText BIBREF6 addresses these issues in the Skip-gram word2vec model by representing a word by the sum of a unique vector and a set of shared character n-grams (from hereon simply referred to as n-grams) vectors. This addresses both issues above as learned information is shared through the n-gram vectors and from these OOV word representations can be constructed.\n[source_id=8] In this paper we propose incorporating subword information into counting models using a strategy similar to fastText.\n[source_id=9] We use LexVec as the counting model as it generally outperforms PPMI-SVD and GloVe on intrinsic and extrinsic evaluations BIBREF7 , BIBREF8 , BIBREF9 , BIBREF10 , but the method proposed here should transfer to GloVe unchanged.\n[source_id=10] The LexVec objective is modified such that a word's vector is the sum of all its subword vectors.\n[source_id=11] We compare 1) the use of n-gram subwords, like fastText, and 2) unsupervised morphemes identified using Morfessor BIBREF11 to learn whether more linguistically motivated subwords offer any advantage over simple n-grams.\n[source_id=12] To evaluate the impact subword information has on in-vocabulary (IV) word representations, we run intrinsic evaluations consisting of word similarity and word analogy tasks. The incorporation of subword information results in similar gains (and losses) to that of fastText over Skip-gram. Whereas incorporating n-gram subwords tends to capture more syntactic information, unsupervised morphemes better preserve semantics while also improving syntactic results. Given that intrinsic performance can correlate poorly with performance on downstream tasks BIBREF12 , we also conduct evaluation using the VecEval suite of tasks BIBREF13 , in which\n[source_id=13] all subword models, including fastText, show no significant improvement over word-level models.\n[source_id=14] We verify the model's ability to represent OOV words by quantitatively evaluating nearest-neighbors. Results show that, like fastText, both LexVec n-gram and (to a lesser degree) unsupervised morpheme models give coherent answers.\n[source_id=15] This paper discusses related word ( $§$ \"Related Work\" ), introduces the subword LexVec model ( $§$ \"Subword LexVec\" ), describes experiments ( $§$ \"Materials\" ), analyzes results ( $§$ \"Results\" ), and concludes with ideas for future works ( $§$ \"Conclusion and Future Work\" ).",
+      "score": 1.4723713555971947,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "child_qasper_evidence_texts": [
+        "Low dimensional word representations (embeddings) have become a key component in modern NLP systems for language modeling, parsing, sentiment classification, and many others. These embeddings are usually derived by employing the distributional hypothesis: that similar words appear in similar contexts BIBREF0 .",
+        "The models that perform the word embedding can be divided into two classes: predictive, which learn a target or context word distribution, and counting, which use a raw, weighted, or factored word-context co-occurrence matrix BIBREF1 . The most well-known predictive model, which has become eponymous with word embedding, is word2vec BIBREF2 . Popular counting models include PPMI-SVD BIBREF3 , GloVe BIBREF4 , and LexVec BIBREF5 .",
+        "These models all learn word-level representations, which presents two main problems: 1) Learned information is not explicitly shared among the representations as each word has an independent vector. 2) There is no clear way to represent out-of-vocabulary (OOV) words.",
+        "fastText BIBREF6 addresses these issues in the Skip-gram word2vec model by representing a word by the sum of a unique vector and a set of shared character n-grams (from hereon simply referred to as n-grams) vectors. This addresses both issues above as learned information is shared through the n-gram vectors and from these OOV word representations can be constructed.",
+        "In this paper we propose incorporating subword information into counting models using a strategy similar to fastText.",
+        "We use LexVec as the counting model as it generally outperforms PPMI-SVD and GloVe on intrinsic and extrinsic evaluations BIBREF7 , BIBREF8 , BIBREF9 , BIBREF10 , but the method proposed here should transfer to GloVe unchanged.",
+        "The LexVec objective is modified such that a word's vector is the sum of all its subword vectors.",
+        "We compare 1) the use of n-gram subwords, like fastText, and 2) unsupervised morphemes identified using Morfessor BIBREF11 to learn whether more linguistically motivated subwords offer any advantage over simple n-grams.",
+        "To evaluate the impact subword information has on in-vocabulary (IV) word representations, we run intrinsic evaluations consisting of word similarity and word analogy tasks. The incorporation of subword information results in similar gains (and losses) to that of fastText over Skip-gram. Whereas incorporating n-gram subwords tends to capture more syntactic information, unsupervised morphemes better preserve semantics while also improving syntactic results. Given that intrinsic performance can correlate poorly with performance on downstream tasks BIBREF12 , we also conduct evaluation using the VecEval suite of tasks BIBREF13 , in which",
+        "all subword models, including fastText, show no significant improvement over word-level models.",
+        "We verify the model's ability to represent OOV words by quantitatively evaluating nearest-neighbors. Results show that, like fastText, both LexVec n-gram and (to a lesser degree) unsupervised morpheme models give coherent answers.",
+        "This paper discusses related word ( $§$ \"Related Work\" ), introduces the subword LexVec model ( $§$ \"Subword LexVec\" ), describes experiments ( $§$ \"Materials\" ), analyzes results ( $§$ \"Results\" ), and concludes with ideas for future works ( $§$ \"Conclusion and Future Work\" )."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ],
+        [
+          "Introduction",
+          6
+        ],
+        [
+          "Introduction",
+          7
+        ],
+        [
+          "Introduction",
+          8
+        ],
+        [
+          "Introduction",
+          9
+        ],
+        [
+          "Introduction",
+          10
+        ],
+        [
+          "Introduction",
+          11
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 34,
+      "content": "Our experiments aim to measure if the incorporation of subword information into LexVec results in similar improvements as observed in moving from Skip-gram to fastText, and whether unsupervised morphemes offer any advantage over n-grams. For IV words, we perform intrinsic evaluation via word similarity and word analogy tasks, as well as downstream tasks. OOV word representation is tested through qualitative nearest-neighbor analysis.",
+      "qasper_evidence_text": "Our experiments aim to measure if the incorporation of subword information into LexVec results in similar improvements as observed in moving from Skip-gram to fastText, and whether unsupervised morphemes offer any advantage over n-grams. For IV words, we perform intrinsic evaluation via word similarity and word analogy tasks, as well as downstream tasks. OOV word representation is tested through qualitative nearest-neighbor analysis.",
+      "source_node_id": 34,
+      "node_id": 34,
+      "paragraph_id": 34,
+      "evidence_id": 34,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 6,
+      "score": 1.5602839170637641,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Materials",
+      "section": "Materials",
+      "title": "Materials",
+      "hotpot_title": "Materials",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 39,
+      "content": "For word similarity evaluations, we use the WordSim-353 Similarity (WS-Sim) and Relatedness (WS-Rel) BIBREF28 and SimLex-999 (SimLex) BIBREF29 datasets, and the Rare Word (RW) BIBREF20 dataset to verify if subword information improves rare word representation. Relationships are measured using the Google semantic (GSem) and syntactic (GSyn) analogies BIBREF2 and the Microsoft syntactic analogies (MSR) dataset BIBREF30 .",
+      "qasper_evidence_text": "For word similarity evaluations, we use the WordSim-353 Similarity (WS-Sim) and Relatedness (WS-Rel) BIBREF28 and SimLex-999 (SimLex) BIBREF29 datasets, and the Rare Word (RW) BIBREF20 dataset to verify if subword information improves rare word representation. Relationships are measured using the Google semantic (GSem) and syntactic (GSyn) analogies BIBREF2 and the Microsoft syntactic analogies (MSR) dataset BIBREF30 .",
+      "source_node_id": 39,
+      "node_id": 39,
+      "paragraph_id": 39,
+      "evidence_id": 39,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 6,
+      "score": 1.5602839170637641,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Materials",
+      "section": "Materials",
+      "title": "Materials",
+      "hotpot_title": "Materials",
+      "sent_id": 5,
+      "hotpot_sent_id": 5,
+      "supporting_rank": 2
+    },
+    {
+      "id": 40,
+      "content": "We also evaluate all five models on downstream tasks from the VecEval suite BIBREF13 , using only the tasks for which training and evaluation data is freely available: chunking, sentiment and question classification, and natural language identification (NLI). The default settings from the suite are used, but we run only the fixed settings, where the embeddings themselves are not tunable parameters of the models, forcing the system to use only the information already in the embeddings.",
+      "qasper_evidence_text": "We also evaluate all five models on downstream tasks from the VecEval suite BIBREF13 , using only the tasks for which training and evaluation data is freely available: chunking, sentiment and question classification, and natural language identification (NLI). The default settings from the suite are used, but we run only the fixed settings, where the embeddings themselves are not tunable parameters of the models, forcing the system to use only the information already in the embeddings.",
+      "source_node_id": 40,
+      "node_id": 40,
+      "paragraph_id": 40,
+      "evidence_id": 40,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 6,
+      "score": 1.5602839170637641,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Materials",
+      "section": "Materials",
+      "title": "Materials",
+      "hotpot_title": "Materials",
+      "sent_id": 6,
+      "hotpot_sent_id": 6,
+      "supporting_rank": 3
+    },
+    {
+      "id": 41,
+      "content": "Finally, we use LV-N, LV-M, and FT to generate OOV word representations for the following words: 1) “hellooo”: a greeting commonly used in instant messaging which emphasizes a syllable. 2) “marvelicious”: a made-up word obtained by merging “marvelous” and “delicious”. 3) “louisana”: a misspelling of the proper name “Louisiana”. 4) “rereread”: recursive use of prefix “re”. 5) “tuzread”: made-up prefix “tuz”.",
+      "qasper_evidence_text": "Finally, we use LV-N, LV-M, and FT to generate OOV word representations for the following words: 1) “hellooo”: a greeting commonly used in instant messaging which emphasizes a syllable. 2) “marvelicious”: a made-up word obtained by merging “marvelous” and “delicious”. 3) “louisana”: a misspelling of the proper name “Louisiana”. 4) “rereread”: recursive use of prefix “re”. 5) “tuzread”: made-up prefix “tuz”.",
+      "source_node_id": 41,
+      "node_id": 41,
+      "paragraph_id": 41,
+      "evidence_id": 41,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 6,
+      "score": 1.5602839170637641,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Materials",
+      "section": "Materials",
+      "title": "Materials",
+      "hotpot_title": "Materials",
+      "sent_id": 7,
+      "hotpot_sent_id": 7,
+      "supporting_rank": 4
+    }
+  ],
+  "supporting_block_ids": [
+    34,
+    39,
+    40,
+    41
+  ]
+}

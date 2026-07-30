@@ -1,0 +1,457 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_2",
+      "content": "[Section] Intrinsic Analysis\n[source_id=8] Four publicly available corpora are selected for our analysis. These corpora are based on Wikipedia, so more comparable than the others, and have already been used for the evaluation of several QA systems.\n[source_id=9] WikiQA BIBREF6 comprises questions selected from the Bing search queries, where user click data give the questions and their corresponding Wikipedia articles. The abstracts of these articles are then extracted to create answer candidates. The assumption is made that if many queries lead to the same article, it must contain the answer context; however, this assumption fails for some occasions, which makes this dataset more challenging. Since the existence of answer contexts is not guaranteed in this task, it is called answer triggering instead of answer selection.\n[source_id=10] SelQA BIBREF7 is a product of five annotation tasks through crowdsourcing. It consists of about 8K questions where a half of the questions are paraphrased from the other half, aiming to reduce contextual similarities between questions and answers. Each question is associated with a section in Wikipedia where the answer context is guaranteed, and also with five sections selected from the entire Wikipedia where the selection is made by the Lucene search engine. This second dataset does not assume the existence of the answer context, so can be used for the evaluation of answer triggering.\n[source_id=11] SQuAD BIBREF12 presents 107K+ crowdsourced questions on 536 Wikipedia articles, where the answer contexts are guaranteed to exist within the provided paragraph. It contains annotation of answer phrases as well as the pointers to the sentences including the answer phrases; thus, it can be used for both answer extraction and selection. This corpus also provides human accuracy on those questions, setting up a reasonable upper bound for machines. To avoid overfitting, the evaluation set is not publicly available although system outputs can be evaluated by their provided script.\n[source_id=12] InfoboxQA BIBREF13 gives 15K+ questions based on the infoboxes from 150 articles in Wikipedia. Each question is crowdsourced and associated with an infobox, where each line of the infobox is considered an answer candidate. This corpus emphasizes the gravity of infoboxes, which summary arguably the most commonly asked information about those articles. Although the nature of this corpus is different from the others, it can also be used to evaluate answer selection.",
+      "score": 9.078147304205496,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "child_qasper_evidence_texts": [
+        "Four publicly available corpora are selected for our analysis. These corpora are based on Wikipedia, so more comparable than the others, and have already been used for the evaluation of several QA systems.",
+        "WikiQA BIBREF6 comprises questions selected from the Bing search queries, where user click data give the questions and their corresponding Wikipedia articles. The abstracts of these articles are then extracted to create answer candidates. The assumption is made that if many queries lead to the same article, it must contain the answer context; however, this assumption fails for some occasions, which makes this dataset more challenging. Since the existence of answer contexts is not guaranteed in this task, it is called answer triggering instead of answer selection.",
+        "SelQA BIBREF7 is a product of five annotation tasks through crowdsourcing. It consists of about 8K questions where a half of the questions are paraphrased from the other half, aiming to reduce contextual similarities between questions and answers. Each question is associated with a section in Wikipedia where the answer context is guaranteed, and also with five sections selected from the entire Wikipedia where the selection is made by the Lucene search engine. This second dataset does not assume the existence of the answer context, so can be used for the evaluation of answer triggering.",
+        "SQuAD BIBREF12 presents 107K+ crowdsourced questions on 536 Wikipedia articles, where the answer contexts are guaranteed to exist within the provided paragraph. It contains annotation of answer phrases as well as the pointers to the sentences including the answer phrases; thus, it can be used for both answer extraction and selection. This corpus also provides human accuracy on those questions, setting up a reasonable upper bound for machines. To avoid overfitting, the evaluation set is not publicly available although system outputs can be evaluated by their provided script.",
+        "InfoboxQA BIBREF13 gives 15K+ questions based on the infoboxes from 150 articles in Wikipedia. Each question is crowdsourced and associated with an infobox, where each line of the infobox is considered an answer candidate. This corpus emphasizes the gravity of infoboxes, which summary arguably the most commonly asked information about those articles. Although the nature of this corpus is different from the others, it can also be used to evaluate answer selection."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Intrinsic Analysis",
+        "Intrinsic Analysis",
+        "Intrinsic Analysis",
+        "Intrinsic Analysis",
+        "Intrinsic Analysis"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Intrinsic Analysis",
+          0
+        ],
+        [
+          "Intrinsic Analysis",
+          1
+        ],
+        [
+          "Intrinsic Analysis",
+          2
+        ],
+        [
+          "Intrinsic Analysis",
+          3
+        ],
+        [
+          "Intrinsic Analysis",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Intrinsic Analysis",
+      "section": "Intrinsic Analysis",
+      "title_path": "Intrinsic Analysis",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Answer Retrieval\n[source_id=19] This section describes another selection-based QA task, called answer retrieval, that finds the answer context from a larger dataset, the entire Wikipedia. SQuAD provides no mapping of the answer contexts to Wikipedia, whereas WikiQA and SelQA provide mappings; however, their data do not come from the same version of Wikipedia. We propose an automatic way of mapping the answer contexts from all corpora to the same version of Wikipeda so they can be coherently used for answer retrieval.\n[source_id=20] Each paragraph in Wikipedia is first indexed by Lucene using {1,2,3}-grams, where the paragraphs are separated by WikiExtractor and segmented by NLP4J (28.7M+ paragraphs are indexed). Each answer sentence from the corpora in Table TABREF3 is then queried to Lucene, and the top-5 ranked paragraphs are retrieved. The cosine similarity between each sentence in these paragraphs and the answer sentence is measured for INLINEFORM0 -grams, say INLINEFORM1 . A weight is assigned to each INLINEFORM2 -gram score, say INLINEFORM3 , and the weighted sum is measured: INLINEFORM4 . The fixed weights of INLINEFORM5 are used for our experiments, which can be improved.\n[source_id=21] If there exists a sentence whose INLINEFORM0 , the paragraph consisting of that sentence is considered the silver-standard answer passage. Table TABREF3 shows how robust these silver-standard passages are based on human judgement ( INLINEFORM1 ) and how many passages are collected ( INLINEFORM2 ) for INLINEFORM3 , where the human judgement is performed on 50 random samples for each case. For answer retrieval, a dataset is created by INLINEFORM4 , which gives INLINEFORM5 accuracy and INLINEFORM6 coverage, respectively. Finally, each question is queried to Lucene and the top- INLINEFORM7 paragraphs are retrieved from the entire Wikipedia. If the answer sentence exists within those retrieved paragraphs according to the silver-standard, it is considered correct.\n[source_id=22] Finding a paragraph that includes the answer context out of the entire Wikipedia is an extremely difficult task (128.7M). The last row of Table TABREF3 shows results from answer retrieval. Given INLINEFORM0 , SelQA and SQuAD show about 34% and 35% accuracy, which are reasonable. However, WikiQA shows a significantly lower accuracy of 12.47%; this is because the questions in WikiQA is about twice shorter than the questions in the other corpora such that not enough lexicons can be extracted from these questions for the Lucene search.",
+      "score": 7.653229570455173,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        19,
+        20,
+        21,
+        22
+      ],
+      "child_qasper_evidence_texts": [
+        "This section describes another selection-based QA task, called answer retrieval, that finds the answer context from a larger dataset, the entire Wikipedia. SQuAD provides no mapping of the answer contexts to Wikipedia, whereas WikiQA and SelQA provide mappings; however, their data do not come from the same version of Wikipedia. We propose an automatic way of mapping the answer contexts from all corpora to the same version of Wikipeda so they can be coherently used for answer retrieval.",
+        "Each paragraph in Wikipedia is first indexed by Lucene using {1,2,3}-grams, where the paragraphs are separated by WikiExtractor and segmented by NLP4J (28.7M+ paragraphs are indexed). Each answer sentence from the corpora in Table TABREF3 is then queried to Lucene, and the top-5 ranked paragraphs are retrieved. The cosine similarity between each sentence in these paragraphs and the answer sentence is measured for INLINEFORM0 -grams, say INLINEFORM1 . A weight is assigned to each INLINEFORM2 -gram score, say INLINEFORM3 , and the weighted sum is measured: INLINEFORM4 . The fixed weights of INLINEFORM5 are used for our experiments, which can be improved.",
+        "If there exists a sentence whose INLINEFORM0 , the paragraph consisting of that sentence is considered the silver-standard answer passage. Table TABREF3 shows how robust these silver-standard passages are based on human judgement ( INLINEFORM1 ) and how many passages are collected ( INLINEFORM2 ) for INLINEFORM3 , where the human judgement is performed on 50 random samples for each case. For answer retrieval, a dataset is created by INLINEFORM4 , which gives INLINEFORM5 accuracy and INLINEFORM6 coverage, respectively. Finally, each question is queried to Lucene and the top- INLINEFORM7 paragraphs are retrieved from the entire Wikipedia. If the answer sentence exists within those retrieved paragraphs according to the silver-standard, it is considered correct.",
+        "Finding a paragraph that includes the answer context out of the entire Wikipedia is an extremely difficult task (128.7M). The last row of Table TABREF3 shows results from answer retrieval. Given INLINEFORM0 , SelQA and SQuAD show about 34% and 35% accuracy, which are reasonable. However, WikiQA shows a significantly lower accuracy of 12.47%; this is because the questions in WikiQA is about twice shorter than the questions in the other corpora such that not enough lexicons can be extracted from these questions for the Lucene search."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Answer Retrieval",
+        "Answer Retrieval",
+        "Answer Retrieval",
+        "Answer Retrieval"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Answer Retrieval",
+          0
+        ],
+        [
+          "Answer Retrieval",
+          1
+        ],
+        [
+          "Answer Retrieval",
+          2
+        ],
+        [
+          "Answer Retrieval",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Answer Retrieval",
+      "section": "Answer Retrieval",
+      "title_path": "Answer Retrieval",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Question answering (QA) has been a blooming research field for the last decade. Selection-based QA implies a family of tasks that find answer contexts from large data given questions in natural language. Three tasks have been proposed for selection-based QA. Given a document, answer extraction BIBREF0 , BIBREF1 finds answer phrases whereas answer selection BIBREF2 , BIBREF3 , BIBREF4 , BIBREF5 and answer triggering BIBREF6 , BIBREF7 find answer sentences instead, although the presence of the answer context is not assumed within the provided document for answer triggering but it is for the other two tasks. Recently, various QA tasks that are not selection-based have been proposed BIBREF8 , BIBREF9 , BIBREF10 , BIBREF11 ; however, selection-based QA remains still important because of its practical value to real applications (e.g., IBM Watson, MIT Start).\n[source_id=5] Several datasets have been released for selection-based QA. wang:07a created the QASent dataset consisting of 277 questions, which has been widely used for benchmarking the answer selection task. feng:15a presented InsuranceQA comprising 16K+ questions on insurance contexts. yang:15a introduced WikiQA for answer selection and triggering. jurczyk:16 created SelQA for large real-scale answer triggering. rajpurkar2016squad presented SQuAD for answer extraction and selection as well as for reading comprehension. Finally, morales-EtAl:2016:EMNLP2016 provided InfoboxQA for answer selection.\n[source_id=6] These corpora make it possible to evaluate the robustness of statistical question answering learning. Although all of these corpora target on selection-based QA, they are designed for different purposes such that it is important to understand the nature of these corpora so a better use of them can be made. In this paper, we make both intrinsic and extrinsic analyses of four latest corpora based on Wikipedia, WikiQA, SelQA, SQuAD, and InfoboxQA. We first give a thorough intrinsic analysis regarding contextual similarities, question types, and answer categories (Section SECREF2 ). We then map questions in all corpora to the current version of English Wikipedia and benchmark another selection-based QA task, answer retrieval (Section SECREF3 ). Finally, we present an extrinsic analysis through a set of experiments cross-testing these corpora using a convolutional neural network architecture (Section SECREF4 ).",
+      "score": 7.55011726533699,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6
+      ],
+      "child_qasper_evidence_texts": [
+        "Question answering (QA) has been a blooming research field for the last decade. Selection-based QA implies a family of tasks that find answer contexts from large data given questions in natural language. Three tasks have been proposed for selection-based QA. Given a document, answer extraction BIBREF0 , BIBREF1 finds answer phrases whereas answer selection BIBREF2 , BIBREF3 , BIBREF4 , BIBREF5 and answer triggering BIBREF6 , BIBREF7 find answer sentences instead, although the presence of the answer context is not assumed within the provided document for answer triggering but it is for the other two tasks. Recently, various QA tasks that are not selection-based have been proposed BIBREF8 , BIBREF9 , BIBREF10 , BIBREF11 ; however, selection-based QA remains still important because of its practical value to real applications (e.g., IBM Watson, MIT Start).",
+        "Several datasets have been released for selection-based QA. wang:07a created the QASent dataset consisting of 277 questions, which has been widely used for benchmarking the answer selection task. feng:15a presented InsuranceQA comprising 16K+ questions on insurance contexts. yang:15a introduced WikiQA for answer selection and triggering. jurczyk:16 created SelQA for large real-scale answer triggering. rajpurkar2016squad presented SQuAD for answer extraction and selection as well as for reading comprehension. Finally, morales-EtAl:2016:EMNLP2016 provided InfoboxQA for answer selection.",
+        "These corpora make it possible to evaluate the robustness of statistical question answering learning. Although all of these corpora target on selection-based QA, they are designed for different purposes such that it is important to understand the nature of these corpora so a better use of them can be made. In this paper, we make both intrinsic and extrinsic analyses of four latest corpora based on Wikipedia, WikiQA, SelQA, SQuAD, and InfoboxQA. We first give a thorough intrinsic analysis regarding contextual similarities, question types, and answer categories (Section SECREF2 ). We then map questions in all corpora to the current version of English Wikipedia and benchmark another selection-based QA task, answer retrieval (Section SECREF3 ). Finally, we present an extrinsic analysis through a set of experiments cross-testing these corpora using a convolutional neural network architecture (Section SECREF4 )."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] This paper gives comprehensive analyses of corpora based on Wikipedia for several tasks in question answering. Four recent corpora are collected,WikiQA, SelQA, SQuAD, and InfoQA, and first analyzed intrinsically by contextual similarities, question types, and answer categories. These corpora are then analyzed extrinsically by three question answering tasks, answer retrieval, selection, and triggering. An indexing-based method for the creation of a silver-standard dataset for answer retrieval using the entire Wikipedia is also presented. Our analysis shows the uniqueness of these corpora and suggests a better use of them for statistical question answering learning.",
+      "score": 7.392774099296497,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "This paper gives comprehensive analyses of corpora based on Wikipedia for several tasks in question answering. Four recent corpora are collected,WikiQA, SelQA, SQuAD, and InfoQA, and first analyzed intrinsically by contextual similarities, question types, and answer categories. These corpora are then analyzed extrinsically by three question answering tasks, answer retrieval, selection, and triggering. An indexing-based method for the creation of a silver-standard dataset for answer retrieval using the entire Wikipedia is also presented. Our analysis shows the uniqueness of these corpora and suggests a better use of them for statistical question answering learning."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Answer Selection\n[source_id=24] Answer selection is evaluated by two metrics, mean average precision (MAP) and mean reciprocal rank (MRR). The bigram CNN introduced by yu:14a is used to generate all the results in Table TABREF11 , where models are trained on either single or combined datasets. Clearly, the questions in WikiQA are the most challenging, and adding more training data from the other corpora hurts accuracy due to the uniqueness of query-based questions in this corpus. The best model is achieved by training on W+S+Q for SelQA; adding InfoboxQA hurts accuracy for SelQA although it gives a marginal gain for SQuAD. Just like WikiQA, InfoboxQA performs the best when it is trained on only itself. From our analysis, we suggest that to use models trained on WikiQA and InfoboxQA for short query-like questions, whereas to use ones trained on SelQA and SQuAD for long natural questions.",
+      "score": 6.139843205276543,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        24
+      ],
+      "child_qasper_evidence_texts": [
+        "Answer selection is evaluated by two metrics, mean average precision (MAP) and mean reciprocal rank (MRR). The bigram CNN introduced by yu:14a is used to generate all the results in Table TABREF11 , where models are trained on either single or combined datasets. Clearly, the questions in WikiQA are the most challenging, and adding more training data from the other corpora hurts accuracy due to the uniqueness of query-based questions in this corpus. The best model is achieved by training on W+S+Q for SelQA; adding InfoboxQA hurts accuracy for SelQA although it gives a marginal gain for SQuAD. Just like WikiQA, InfoboxQA performs the best when it is trained on only itself. From our analysis, we suggest that to use models trained on WikiQA and InfoboxQA for short query-like questions, whereas to use ones trained on SelQA and SQuAD for long natural questions."
+      ],
+      "child_pages": [
+        5
+      ],
+      "child_sections": [
+        "Answer Selection"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Answer Selection",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Answer Selection",
+      "section": "Answer Selection",
+      "title_path": "Answer Selection",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Related work\n[source_id=28] Lately, several deep learning approaches have been proposed for question answering. yu:14a presented a CNN model that recognizes the semantic similarity between two sentences. wang-nyberg:2015:ACL-IJCNLP presented a stacked bidirectional LSTM approach to read words in sequence, then outputs their similarity scores. feng:15a applied a general deep learning framework to non-factoid question answering. santos:16a introduced an attentive pooling mechanism that led to further improvements in selection-based QA.",
+      "score": 5.726328234449471,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        28
+      ],
+      "child_qasper_evidence_texts": [
+        "Lately, several deep learning approaches have been proposed for question answering. yu:14a presented a CNN model that recognizes the semantic similarity between two sentences. wang-nyberg:2015:ACL-IJCNLP presented a stacked bidirectional LSTM approach to read words in sequence, then outputs their similarity scores. feng:15a applied a general deep learning framework to non-factoid question answering. santos:16a introduced an attentive pooling mechanism that led to further improvements in selection-based QA."
+      ],
+      "child_pages": [
+        7
+      ],
+      "child_sections": [
+        "Related work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related work",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Related work",
+      "section": "Related work",
+      "title_path": "Related work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Answer Triggering\n[source_id=26] The results of INLINEFORM0 from the answer retrieval task in Section SECREF13 are used to create the datasets for answer triggering, where about 65% of the questions are not expected to find their answer contexts from the provided paragraphs for SelQA and SQuAD and 87.5% are not expected for WikiQA. Answer triggering is evaluated by the F1 scores as presented in Table TABREF11 , where three corpora are cross validated. The results on WikiQA are pretty low as expected from the poor accuracy on the answer retrieval task. Training on SelQA gives the best models for both WikiQA and SelQA. Training on SQuAD gives the best model for SQuAD although the model trained on SelQA is comparable. Since the answer triggering datasets are about 5 times larger than the answer selection datasets, it is computationally too expensive to combine all data for training. We plan to find a strong machine to perform this experiment in near future.",
+      "score": 4.8875526562156635,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        26
+      ],
+      "child_qasper_evidence_texts": [
+        "The results of INLINEFORM0 from the answer retrieval task in Section SECREF13 are used to create the datasets for answer triggering, where about 65% of the questions are not expected to find their answer contexts from the provided paragraphs for SelQA and SQuAD and 87.5% are not expected for WikiQA. Answer triggering is evaluated by the F1 scores as presented in Table TABREF11 , where three corpora are cross validated. The results on WikiQA are pretty low as expected from the poor accuracy on the answer retrieval task. Training on SelQA gives the best models for both WikiQA and SelQA. Training on SQuAD gives the best model for SQuAD although the model trained on SelQA is comparable. Since the answer triggering datasets are about 5 times larger than the answer selection datasets, it is computationally too expensive to combine all data for training. We plan to find a strong machine to perform this experiment in near future."
+      ],
+      "child_pages": [
+        6
+      ],
+      "child_sections": [
+        "Answer Triggering"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Answer Triggering",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Answer Triggering",
+      "section": "Answer Triggering",
+      "title_path": "Answer Triggering",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Analysis\n[source_id=14] All corpora provide datasets/splits for answer selection, whereas only (WikiQA, SQuAD) and (WikiQA, SelQA) provide datasets for answer extraction and answer triggering, respectively. SQuAD is much larger in size although questions in this corpus are often paraphrased multiple times. On the contrary, SQuAD's average candidates per question ( INLINEFORM0 ) is the smallest because SQuAD extracts answer candidates from paragraphs whereas the others extract them from sections or infoboxes that consist of bigger contexts. Although InfoboxQA is larger than WikiQA or SelQA, the number of token types ( INLINEFORM1 ) in InfoboxQA is smaller than those two, due to the repetitive nature of infoboxes.\n[source_id=15] All corpora show similar average answer candidate lengths ( INLINEFORM0 ), except for InfoboxQA where each line in the infobox is considered a candidate. SelQA and SQuAD show similar average question lengths ( INLINEFORM1 ) because of the similarity between their annotation schemes. It is not surprising that WikiQA's average question length is the smallest, considering their questions are taken from search queries. InfoboxQA's average question length is relatively small, due to the restricted information that can be asked from the infoboxes. InfoboxQA and WikiQA show the least question-answer word overlaps over questions and answers ( INLINEFORM2 and INLINEFORM3 in Table TABREF2 ), respectively. In terms of the F1-score for overlapping words ( INLINEFORM4 ), SQuAD gives the least portion of overlaps between question-answer pairs although WikiQA comes very close.\n[source_id=16] Fig. FIGREF4 shows the distributions of seven question types grouped deterministically from the lexicons. Although these corpora have been independently developed, a general trend is found, where the what question type dominates, followed by how and who, followed by when and where, and so on.\n[source_id=17] Fig. FIGREF6 shows the distributions of answer categories automatically classified by our Convolutional Neural Network model trained on the data distributed by li:02a. Interestingly, each corpus focuses on different categories, Numeric for WikiQA and SelQA, Entity for SQuAD, and Person for InfoboxQA, which gives enough diversities for statistical learning to build robust models.",
+      "score": 3.9881457779124765,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        14,
+        15,
+        16,
+        17
+      ],
+      "child_qasper_evidence_texts": [
+        "All corpora provide datasets/splits for answer selection, whereas only (WikiQA, SQuAD) and (WikiQA, SelQA) provide datasets for answer extraction and answer triggering, respectively. SQuAD is much larger in size although questions in this corpus are often paraphrased multiple times. On the contrary, SQuAD's average candidates per question ( INLINEFORM0 ) is the smallest because SQuAD extracts answer candidates from paragraphs whereas the others extract them from sections or infoboxes that consist of bigger contexts. Although InfoboxQA is larger than WikiQA or SelQA, the number of token types ( INLINEFORM1 ) in InfoboxQA is smaller than those two, due to the repetitive nature of infoboxes.",
+        "All corpora show similar average answer candidate lengths ( INLINEFORM0 ), except for InfoboxQA where each line in the infobox is considered a candidate. SelQA and SQuAD show similar average question lengths ( INLINEFORM1 ) because of the similarity between their annotation schemes. It is not surprising that WikiQA's average question length is the smallest, considering their questions are taken from search queries. InfoboxQA's average question length is relatively small, due to the restricted information that can be asked from the infoboxes. InfoboxQA and WikiQA show the least question-answer word overlaps over questions and answers ( INLINEFORM2 and INLINEFORM3 in Table TABREF2 ), respectively. In terms of the F1-score for overlapping words ( INLINEFORM4 ), SQuAD gives the least portion of overlaps between question-answer pairs although WikiQA comes very close.",
+        "Fig. FIGREF4 shows the distributions of seven question types grouped deterministically from the lexicons. Although these corpora have been independently developed, a general trend is found, where the what question type dominates, followed by how and who, followed by when and where, and so on.",
+        "Fig. FIGREF6 shows the distributions of answer categories automatically classified by our Convolutional Neural Network model trained on the data distributed by li:02a. Interestingly, each corpus focuses on different categories, Numeric for WikiQA and SelQA, Entity for SQuAD, and Person for InfoboxQA, which gives enough diversities for statistical learning to build robust models."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Analysis",
+        "Analysis",
+        "Analysis",
+        "Analysis"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Analysis",
+          0
+        ],
+        [
+          "Analysis",
+          1
+        ],
+        [
+          "Analysis",
+          2
+        ],
+        [
+          "Analysis",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Analysis",
+      "section": "Analysis",
+      "title_path": "Analysis",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 20,
+      "content": "Each paragraph in Wikipedia is first indexed by Lucene using {1,2,3}-grams, where the paragraphs are separated by WikiExtractor and segmented by NLP4J (28.7M+ paragraphs are indexed). Each answer sentence from the corpora in Table TABREF3 is then queried to Lucene, and the top-5 ranked paragraphs are retrieved. The cosine similarity between each sentence in these paragraphs and the answer sentence is measured for INLINEFORM0 -grams, say INLINEFORM1 . A weight is assigned to each INLINEFORM2 -gram score, say INLINEFORM3 , and the weighted sum is measured: INLINEFORM4 . The fixed weights of INLINEFORM5 are used for our experiments, which can be improved.",
+      "qasper_evidence_text": "Each paragraph in Wikipedia is first indexed by Lucene using {1,2,3}-grams, where the paragraphs are separated by WikiExtractor and segmented by NLP4J (28.7M+ paragraphs are indexed). Each answer sentence from the corpora in Table TABREF3 is then queried to Lucene, and the top-5 ranked paragraphs are retrieved. The cosine similarity between each sentence in these paragraphs and the answer sentence is measured for INLINEFORM0 -grams, say INLINEFORM1 . A weight is assigned to each INLINEFORM2 -gram score, say INLINEFORM3 , and the weighted sum is measured: INLINEFORM4 . The fixed weights of INLINEFORM5 are used for our experiments, which can be improved.",
+      "source_node_id": 20,
+      "node_id": 20,
+      "paragraph_id": 20,
+      "evidence_id": 20,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 2,
+      "score": 7.653229570455173,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Answer Retrieval",
+      "section": "Answer Retrieval",
+      "title": "Answer Retrieval",
+      "hotpot_title": "Answer Retrieval",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 1
+    },
+    {
+      "id": 21,
+      "content": "If there exists a sentence whose INLINEFORM0 , the paragraph consisting of that sentence is considered the silver-standard answer passage. Table TABREF3 shows how robust these silver-standard passages are based on human judgement ( INLINEFORM1 ) and how many passages are collected ( INLINEFORM2 ) for INLINEFORM3 , where the human judgement is performed on 50 random samples for each case. For answer retrieval, a dataset is created by INLINEFORM4 , which gives INLINEFORM5 accuracy and INLINEFORM6 coverage, respectively. Finally, each question is queried to Lucene and the top- INLINEFORM7 paragraphs are retrieved from the entire Wikipedia. If the answer sentence exists within those retrieved paragraphs according to the silver-standard, it is considered correct.",
+      "qasper_evidence_text": "If there exists a sentence whose INLINEFORM0 , the paragraph consisting of that sentence is considered the silver-standard answer passage. Table TABREF3 shows how robust these silver-standard passages are based on human judgement ( INLINEFORM1 ) and how many passages are collected ( INLINEFORM2 ) for INLINEFORM3 , where the human judgement is performed on 50 random samples for each case. For answer retrieval, a dataset is created by INLINEFORM4 , which gives INLINEFORM5 accuracy and INLINEFORM6 coverage, respectively. Finally, each question is queried to Lucene and the top- INLINEFORM7 paragraphs are retrieved from the entire Wikipedia. If the answer sentence exists within those retrieved paragraphs according to the silver-standard, it is considered correct.",
+      "source_node_id": 21,
+      "node_id": 21,
+      "paragraph_id": 21,
+      "evidence_id": 21,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 2,
+      "score": 7.653229570455173,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Answer Retrieval",
+      "section": "Answer Retrieval",
+      "title": "Answer Retrieval",
+      "hotpot_title": "Answer Retrieval",
+      "sent_id": 2,
+      "hotpot_sent_id": 2,
+      "supporting_rank": 2
+    },
+    {
+      "id": 22,
+      "content": "Finding a paragraph that includes the answer context out of the entire Wikipedia is an extremely difficult task (128.7M). The last row of Table TABREF3 shows results from answer retrieval. Given INLINEFORM0 , SelQA and SQuAD show about 34% and 35% accuracy, which are reasonable. However, WikiQA shows a significantly lower accuracy of 12.47%; this is because the questions in WikiQA is about twice shorter than the questions in the other corpora such that not enough lexicons can be extracted from these questions for the Lucene search.",
+      "qasper_evidence_text": "Finding a paragraph that includes the answer context out of the entire Wikipedia is an extremely difficult task (128.7M). The last row of Table TABREF3 shows results from answer retrieval. Given INLINEFORM0 , SelQA and SQuAD show about 34% and 35% accuracy, which are reasonable. However, WikiQA shows a significantly lower accuracy of 12.47%; this is because the questions in WikiQA is about twice shorter than the questions in the other corpora such that not enough lexicons can be extracted from these questions for the Lucene search.",
+      "source_node_id": 22,
+      "node_id": 22,
+      "paragraph_id": 22,
+      "evidence_id": 22,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 2,
+      "score": 7.653229570455173,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Answer Retrieval",
+      "section": "Answer Retrieval",
+      "title": "Answer Retrieval",
+      "hotpot_title": "Answer Retrieval",
+      "sent_id": 3,
+      "hotpot_sent_id": 3,
+      "supporting_rank": 3
+    }
+  ],
+  "supporting_block_ids": [
+    20,
+    21,
+    22
+  ]
+}

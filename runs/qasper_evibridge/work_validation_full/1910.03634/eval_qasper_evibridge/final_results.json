@@ -1,0 +1,444 @@
+[
+  {
+    "question": "What models are used for painting embedding and what for language style transfer?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "generating a poem from images we use an existing actor-critic architecture",
+          "various types of sequence to sequence models"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "For generating a poem from images we use an existing actor-critic architecture BIBREF1. This involves 3 parallel CNNs: an object CNN, sentiment CNN, and scene CNN, for feature extraction. These features are combined with a skip-thought model which provides poetic clues, which are then fed into a sequence-to-sequence model trained by policy gradient with 2 discriminator networks for rewards. This as a whole forms a pipeline that takes in an image and outputs a poem as shown on the top left of Figure FIGREF4. A CNN-RNN generative model acts as an agent. The parameters of this agent define a policy whose execution determines which word is selected as an action. When the agent selects all words in a poem, it receives a reward. Two discriminative networks, shown on the top right of Figure FIGREF4, are defined to serve as rewards concerning whether the generated poem properly describes the input image and whether the generated poem is poetic. The goal of the poem generation model is to generate a sequence of words as a poem for an image to maximize the expected return.",
+          "For Shakespearizing modern English texts, we experimented with various types of sequence to sequence models. Since the size of the parallel translation data available is small, we leverage a dictionary providing a mapping between Shakespearean words and modern English words to retrofit pre-trained word embeddings. Incorporating this extra information improves the translation task. The large number of shared word types between the source and target sentences indicates that sharing the representation between them is beneficial.",
+          "We use a sequence-to-sequence model which consists of a single layer unidrectional LSTM encoder and a single layer LSTM decoder and pre-trained retrofitted word embeddings shared between source and target sentences. We experimented with two different types of attention: global attention BIBREF9, in which the model makes use of the output from the encoder and decoder for the current time step only, and Bahdanau attention BIBREF10, where computing attention requires the output of the decoder from the prior time step. We found that global attention performs better in practice for our task of text style transfer.",
+          "Since a pair of corresponding Shakespeare and modern English sentences have significant vocabulary overlap we extend the sequence-to-sequence model mentioned above using pointer networks BIBREF11 that provide location based attention and have been used to enable copying of tokens directly from the input. Moreover, there are lot of proper nouns and rare words which might not be predicted by a vanilla sequence to sequence model."
+        ],
+        "evidence_block_ids": [
+          13,
+          15,
+          17,
+          19
+        ],
+        "evidence_paragraph_ids": [
+          13,
+          15,
+          17,
+          19
+        ]
+      }
+    ],
+    "doc_uuid": "1910.03634",
+    "doc_path": "qasper://1910.03634",
+    "qasper_question_id": "72e4e26d0dd79c590c28b10938952a9f9497ff1e",
+    "title": "Prose for a Painting",
+    "evidence_block_ids": [
+      13,
+      15,
+      17,
+      19
+    ],
+    "evidence_paragraph_ids": [
+      13,
+      15,
+      17,
+      19
+    ],
+    "output": "{\n  \"answer_short\": \"A CNN-RNN based image-to-poem net is used for painting embedding, and a seq2seq model with global attention is used for language style transfer.\",\n  \"answer_rationale\": \"The document states that the pipeline combines a CNN-RNN based image-to-poem net for generating poetic captions from paintings (painting embedding) and a seq2seq model with global attention for style transfer to Shakespearean prose (language style transfer). Block 31 confirms this combination as effective in practice.\",\n  \"supporting_block_ids\": [31, 17, 6, 11]\n}",
+    "retrieved_node_ids": [
+      2,
+      7,
+      31,
+      4,
+      17,
+      27,
+      6,
+      9,
+      11,
+      21
+    ],
+    "retrieved_block_ids": [
+      2,
+      7,
+      31,
+      4,
+      17,
+      27,
+      6,
+      9,
+      11,
+      21
+    ],
+    "answer_short": "A CNN-RNN based image-to-poem net is used for painting embedding, and a seq2seq model with global attention is used for language style transfer.",
+    "answer_rationale": "The document states that the pipeline combines a CNN-RNN based image-to-poem net for generating poetic captions from paintings (painting embedding) and a seq2seq model with global attention for style transfer to Shakespearean prose (language style transfer). Block 31 confirms this combination as effective in practice.",
+    "supporting_block_ids": [
+      2,
+      31,
+      7,
+      17
+    ]
+  },
+  {
+    "question": "What applicability of their approach is demonstrated by the authors?",
+    "answer": [
+      {
+        "unanswerable": true,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      }
+    ],
+    "doc_uuid": "1910.03634",
+    "doc_path": "qasper://1910.03634",
+    "qasper_question_id": "63b92dcc701ec77fdb3355ede5d37d2fbf057bcc",
+    "title": "Prose for a Painting",
+    "evidence_block_ids": [],
+    "evidence_paragraph_ids": [],
+    "output": "{\n  \"answer_short\": \"We demonstrate the applicability and limitations of our approach by generating Shakespearean prose for famous paintings.\",\n  \"answer_rationale\": \"The authors explicitly state in the abstract that they demonstrate the applicability and limitations of their approach by generating Shakespearean prose for famous paintings, which directly answers the question.\",\n  \"supporting_block_ids\": [1]\n}",
+    "retrieved_node_ids": [
+      2,
+      6,
+      7,
+      25,
+      10,
+      13,
+      4,
+      27,
+      15,
+      19
+    ],
+    "retrieved_block_ids": [
+      2,
+      6,
+      7,
+      25,
+      10,
+      13,
+      4,
+      27,
+      15,
+      19
+    ],
+    "answer_short": "We demonstrate the applicability and limitations of our approach by generating Shakespearean prose for famous paintings.",
+    "answer_rationale": "The authors explicitly state in the abstract that they demonstrate the applicability and limitations of their approach by generating Shakespearean prose for famous paintings, which directly answers the question.",
+    "supporting_block_ids": [
+      2,
+      7,
+      6,
+      4
+    ]
+  },
+  {
+    "question": "What limitations do the authors demnostrate of their model?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Since we do not have an end-to-end dataset, the generated English poem may not work well with Shakespeare style transfer"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Since we do not have an end-to-end dataset, the generated English poem may not work well with Shakespeare style transfer as shown in Figure FIGREF12 for \"Starry Night\" with a low average content score. This happens when the style transfer dataset does not have similar words in the training set of sentences. A solution would be to expand the style transfer dataset, for a better representation of the poem data."
+        ],
+        "evidence_block_ids": [
+          29
+        ],
+        "evidence_paragraph_ids": [
+          29
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "we do not have an end-to-end dataset, the generated English poem may not work well with Shakespeare style transfer as shown in Figure FIGREF12 for \"Starry Night\" with a low average content score"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Since we do not have an end-to-end dataset, the generated English poem may not work well with Shakespeare style transfer as shown in Figure FIGREF12 for \"Starry Night\" with a low average content score. This happens when the style transfer dataset does not have similar words in the training set of sentences. A solution would be to expand the style transfer dataset, for a better representation of the poem data."
+        ],
+        "evidence_block_ids": [
+          29
+        ],
+        "evidence_paragraph_ids": [
+          29
+        ]
+      }
+    ],
+    "doc_uuid": "1910.03634",
+    "doc_path": "qasper://1910.03634",
+    "qasper_question_id": "58ee0cbf1d8e3711c617b1cd3d7aca8620e26187",
+    "title": "Prose for a Painting",
+    "evidence_block_ids": [
+      29
+    ],
+    "evidence_paragraph_ids": [
+      29
+    ],
+    "output": "{\n  \"answer_short\": \"The generated English poem may not work well with Shakespeare style transfer when the style transfer dataset does not have similar words in the training set of sentences.\",\n  \"answer_rationale\": \"The limitation is explicitly stated in block 29, which notes that without an end-to-end dataset, the model struggles with style transfer when the training set lacks similar words, as demonstrated by low content scores in examples like 'Starry Night'.\",\n  \"supporting_block_ids\": [29]\n}",
+    "retrieved_node_ids": [
+      2,
+      29,
+      17,
+      19,
+      13,
+      7,
+      24,
+      6,
+      10,
+      27
+    ],
+    "retrieved_block_ids": [
+      2,
+      29,
+      17,
+      19,
+      13,
+      7,
+      24,
+      6,
+      10,
+      27
+    ],
+    "answer_short": "The generated English poem may not work well with Shakespeare style transfer when the style transfer dataset does not have similar words in the training set of sentences.",
+    "answer_rationale": "The limitation is explicitly stated in block 29, which notes that without an end-to-end dataset, the model struggles with style transfer when the training set lacks similar words, as demonstrated by low content scores in examples like 'Starry Night'.",
+    "supporting_block_ids": [
+      2,
+      24,
+      6,
+      7
+    ]
+  },
+  {
+    "question": "How does final model rate on Likert scale?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "average content score across the paintings is 3.7",
+          "average creativity score is 3.9",
+          "average style score is 3.9 "
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "The average content score across the paintings is 3.7 which demonstrates that the prose generated is relevant to the painting. The average creativity score is 3.9 which demonstrates that the model captures more than basic objects in the painting successfully using poetic clues in the scene. The average style score is 3.9 which demonstrates that the prose generated is perceived to be in the style of Shakespeare."
+        ],
+        "evidence_block_ids": [
+          24
+        ],
+        "evidence_paragraph_ids": [
+          24
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "average content score across the paintings is 3.7",
+          "average creativity score is 3.9",
+          "average style score is 3.9"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "We perform a qualitative analysis of the Shakespearean prose generated for the input paintings. We conducted a survey, in which we presented famous paintings including those shown in Figures FIGREF1 and FIGREF10 and the corresponding Shakespearean prose generated by the model, and asked 32 students to rate them on the basis of content, creativity and similarity to Shakespearean style on a Likert scale of 1-5. Figure FIGREF12 shows the result of our human evaluation.",
+          "The average content score across the paintings is 3.7 which demonstrates that the prose generated is relevant to the painting. The average creativity score is 3.9 which demonstrates that the model captures more than basic objects in the painting successfully using poetic clues in the scene. The average style score is 3.9 which demonstrates that the prose generated is perceived to be in the style of Shakespeare."
+        ],
+        "evidence_block_ids": [
+          23,
+          24
+        ],
+        "evidence_paragraph_ids": [
+          23,
+          24
+        ]
+      }
+    ],
+    "doc_uuid": "1910.03634",
+    "doc_path": "qasper://1910.03634",
+    "qasper_question_id": "f71b52e00e0be80c926f153b9fe0a06dd93af11e",
+    "title": "Prose for a Painting",
+    "evidence_block_ids": [
+      24,
+      23
+    ],
+    "evidence_paragraph_ids": [
+      24,
+      23
+    ],
+    "output": "{\n  \"answer_short\": \"3.7 for content, 3.9 for creativity, 3.9 for style\",\n  \"answer_rationale\": \"The results section explicitly states the average scores for content (3.7), creativity (3.9), and style (3.9) on a Likert scale based on human evaluation.\",\n  \"supporting_block_ids\": [24]\n}",
+    "retrieved_node_ids": [
+      23,
+      2,
+      27,
+      13,
+      7,
+      10,
+      21,
+      6,
+      19,
+      24
+    ],
+    "retrieved_block_ids": [
+      23,
+      2,
+      27,
+      13,
+      7,
+      10,
+      21,
+      6,
+      19,
+      24
+    ],
+    "answer_short": "3.7 for content, 3.9 for creativity, 3.9 for style",
+    "answer_rationale": "The results section explicitly states the average scores for content (3.7), creativity (3.9), and style (3.9) on a Likert scale based on human evaluation.",
+    "supporting_block_ids": [
+      2,
+      23,
+      27,
+      24
+    ]
+  },
+  {
+    "question": "How big is English poem description of the painting dataset?",
+    "answer": [
+      {
+        "unanswerable": true,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      }
+    ],
+    "doc_uuid": "1910.03634",
+    "doc_path": "qasper://1910.03634",
+    "qasper_question_id": "8db6f8714bda7f3781b4fbde5ebb3794f2a60cfe",
+    "title": "Prose for a Painting",
+    "evidence_block_ids": [],
+    "evidence_paragraph_ids": [],
+    "output": "{\n  \"answer_short\": \"Unanswerable\",\n  \"answer_rationale\": \"The document mentions the use of an 'English poem description of the painting dataset' as an intermediate step in the methodology but does not provide any quantitative measure of its size (e.g., number of poems, tokens, or images). While it references datasets like MultiM-Poem and UniM-Poem, it does not specify the size of the 'English poem description of the painting dataset' itself.\",\n  \"supporting_block_ids\": [\n    2,\n    4,\n    10\n  ]\n}",
+    "retrieved_node_ids": [
+      2,
+      4,
+      10,
+      29,
+      13,
+      15,
+      24,
+      25,
+      7,
+      21
+    ],
+    "retrieved_block_ids": [
+      2,
+      4,
+      10,
+      29,
+      13,
+      15,
+      24,
+      25,
+      7,
+      21
+    ],
+    "answer_short": "Unanswerable",
+    "answer_rationale": "The document mentions the use of an 'English poem description of the painting dataset' as an intermediate step in the methodology but does not provide any quantitative measure of its size (e.g., number of poems, tokens, or images). While it references datasets like MultiM-Poem and UniM-Poem, it does not specify the size of the 'English poem description of the painting dataset' itself.",
+    "supporting_block_ids": [
+      2,
+      4,
+      10,
+      29
+    ]
+  },
+  {
+    "question": "What is best BLEU score of language style transfer authors got?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "seq2seq model with global attention gives the best results with an average target BLEU score of 29.65"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "For both seq2seq models, we use the attention matrices returned at each decoder time step during inference, to compute the next word in the translated sequence if the decoder output at the current time step is the UNK token. We replace the UNKs in the target output with the highest aligned, maximum attention, source word. The seq2seq model with global attention gives the best results with an average target BLEU score of 29.65 on the style transfer dataset, compared with an average target BLEU score of 26.97 using the seq2seq model with pointer networks."
+        ],
+        "evidence_block_ids": [
+          21
+        ],
+        "evidence_paragraph_ids": [
+          21
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "average target BLEU score of 29.65"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "For both seq2seq models, we use the attention matrices returned at each decoder time step during inference, to compute the next word in the translated sequence if the decoder output at the current time step is the UNK token. We replace the UNKs in the target output with the highest aligned, maximum attention, source word. The seq2seq model with global attention gives the best results with an average target BLEU score of 29.65 on the style transfer dataset, compared with an average target BLEU score of 26.97 using the seq2seq model with pointer networks."
+        ],
+        "evidence_block_ids": [
+          21
+        ],
+        "evidence_paragraph_ids": [
+          21
+        ]
+      }
+    ],
+    "doc_uuid": "1910.03634",
+    "doc_path": "qasper://1910.03634",
+    "qasper_question_id": "54e945ea4b014e11ed4e1e61abc2aa9e68fea310",
+    "title": "Prose for a Painting",
+    "evidence_block_ids": [
+      21
+    ],
+    "evidence_paragraph_ids": [
+      21
+    ],
+    "output": "{\n  \"answer_short\": \"29.65\",\n  \"answer_rationale\": \"The best BLEU score achieved by the language style transfer authors is explicitly stated as 29.65 in block 6, which reports the average target BLEU score for the seq2seq model with global attention.\",\n  \"supporting_block_ids\": [\"6\"]\n}",
+    "retrieved_node_ids": [
+      21,
+      2,
+      25,
+      7,
+      24,
+      29,
+      4,
+      6,
+      17,
+      31
+    ],
+    "retrieved_block_ids": [
+      21,
+      2,
+      25,
+      7,
+      24,
+      29,
+      4,
+      6,
+      17,
+      31
+    ],
+    "answer_short": "29.65",
+    "answer_rationale": "The best BLEU score achieved by the language style transfer authors is explicitly stated as 29.65 in block 6, which reports the average target BLEU score for the seq2seq model with global attention.",
+    "supporting_block_ids": [
+      21,
+      25,
+      2,
+      7
+    ]
+  }
+]

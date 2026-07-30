@@ -1,0 +1,389 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_4",
+      "content": "[Section] System Description ::: Language Model\n[source_id=14] Our language model training pipeline is described in Figure FIGREF6. First, we collect and clean large amount of text data from various sources including news, manual labeled conversation video. Then, the collected data is categorized into domains. This is an important step as the ASR performance is highly depends on the speech domain. After that, the text is fed into a data cleaning pipeline to clean bad tone marks, normalizing numbers and dates.\n[source_id=15] For each domain text data, we train an n-gram language modelBIBREF1 that is optimized for that domain. As the results, we have more than 10 language models. These language models are combined based on perplexity calculated on a small text of a domain that we want to optimize for.\n[source_id=16] In our system, the language model is used in 2 pass-decoding. In the first pass, the language model is combined with acoustic and lexicon model to form a full decoding graph. In this stage, the language model is typically small in size by utilizing pruning method. In the second stage, we use a un-pruned language model to rescore decoded lattices.",
+      "score": 1.6863521923974143,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        14,
+        15,
+        16
+      ],
+      "child_qasper_evidence_texts": [
+        "Our language model training pipeline is described in Figure FIGREF6. First, we collect and clean large amount of text data from various sources including news, manual labeled conversation video. Then, the collected data is categorized into domains. This is an important step as the ASR performance is highly depends on the speech domain. After that, the text is fed into a data cleaning pipeline to clean bad tone marks, normalizing numbers and dates.",
+        "For each domain text data, we train an n-gram language modelBIBREF1 that is optimized for that domain. As the results, we have more than 10 language models. These language models are combined based on perplexity calculated on a small text of a domain that we want to optimize for.",
+        "In our system, the language model is used in 2 pass-decoding. In the first pass, the language model is combined with acoustic and lexicon model to form a full decoding graph. In this stage, the language model is typically small in size by utilizing pruning method. In the second stage, we use a un-pruned language model to rescore decoded lattices."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "System Description ::: Language Model",
+        "System Description ::: Language Model",
+        "System Description ::: Language Model"
+      ],
+      "child_hotpot_facts": [
+        [
+          "System Description ::: Language Model",
+          0
+        ],
+        [
+          "System Description ::: Language Model",
+          1
+        ],
+        [
+          "System Description ::: Language Model",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "System Description ::: Language Model",
+      "section": "System Description ::: Language Model",
+      "title_path": "System Description ::: Language Model",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] System Description ::: Acoustic Model\n[source_id=10] We adopt a DNN-based acoustic model BIBREF0 with 11 hidden layers and the alignment used to train the model is derived from a HMM-GMM model trained with SAT criterion. In a conventional Gaussian Mixture Model - Hidden Markov Model (GMM-HMM) acoustic model, the state emission log-likelihood of the observation feature vector $o_t$ for certain tied state $s_j$ of HMMs at time $t$ is computed as\n[source_id=11] where M is the number of Gaussian mixtures in the GMM for state $j$ and $\\pi _{jm}$ is the mixing weight. As the outputs from DNNs represent the state posteriors $p(s_j|\\mathbf {o}_t)$, a DNN-HMM hybrid system uses pseudo log-likelihood as the state emissions that is computed as\n[source_id=12] where the state priors log $p(s_j )$ can be estimated using the state alignments on the training speech data.",
+      "score": 1.6859268064250417,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        10,
+        11,
+        12
+      ],
+      "child_qasper_evidence_texts": [
+        "We adopt a DNN-based acoustic model BIBREF0 with 11 hidden layers and the alignment used to train the model is derived from a HMM-GMM model trained with SAT criterion. In a conventional Gaussian Mixture Model - Hidden Markov Model (GMM-HMM) acoustic model, the state emission log-likelihood of the observation feature vector $o_t$ for certain tied state $s_j$ of HMMs at time $t$ is computed as",
+        "where M is the number of Gaussian mixtures in the GMM for state $j$ and $\\pi _{jm}$ is the mixing weight. As the outputs from DNNs represent the state posteriors $p(s_j|\\mathbf {o}_t)$, a DNN-HMM hybrid system uses pseudo log-likelihood as the state emissions that is computed as",
+        "where the state priors log $p(s_j )$ can be estimated using the state alignments on the training speech data."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "System Description ::: Acoustic Model",
+        "System Description ::: Acoustic Model",
+        "System Description ::: Acoustic Model"
+      ],
+      "child_hotpot_facts": [
+        [
+          "System Description ::: Acoustic Model",
+          0
+        ],
+        [
+          "System Description ::: Acoustic Model",
+          1
+        ],
+        [
+          "System Description ::: Acoustic Model",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "System Description ::: Acoustic Model",
+      "section": "System Description ::: Acoustic Model",
+      "title_path": "System Description ::: Acoustic Model",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Informal speech is different from formal speech, especially in Vietnamese due to many conjunctive words in this language. Building an ASR model to handle such kind of speech is particularly difficult due to the lack of training data and also cost for data collection. There are two components of an ASR system that contribute the most to the accuracy of it, an acoustic model and a language model. While collecting data for acoustic model is time-consuming and costly, language model data is much easier to collect.\n[source_id=5] The language model training for the Automatic Speech Recognition (ASR) system usually based on corpus crawled on formal text, so that some conjunctive words which often used in conversation will be missed out, leading to the system is getting biased to writing-style speech.\n[source_id=6] In this paper, we present our attempt to mitigate the problems using a large scale data set and a language model combination technique that only require a small amount of conversation data but can still handle very well conversation speech.",
+      "score": 1.6223211708418614,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6
+      ],
+      "child_qasper_evidence_texts": [
+        "Informal speech is different from formal speech, especially in Vietnamese due to many conjunctive words in this language. Building an ASR model to handle such kind of speech is particularly difficult due to the lack of training data and also cost for data collection. There are two components of an ASR system that contribute the most to the accuracy of it, an acoustic model and a language model. While collecting data for acoustic model is time-consuming and costly, language model data is much easier to collect.",
+        "The language model training for the Automatic Speech Recognition (ASR) system usually based on corpus crawled on formal text, so that some conjunctive words which often used in conversation will be missed out, leading to the system is getting biased to writing-style speech.",
+        "In this paper, we present our attempt to mitigate the problems using a large scale data set and a language model combination technique that only require a small amount of conversation data but can still handle very well conversation speech."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Experiments ::: System combination\n[source_id=29] To further improve the performance, we adopt system combination on the decoding lattice level. By combining systems, we can take advantage of the strength of each model that is optimized for different domains. The results for 2 test sets is showed on Table TABREF17 and TABREF18.\n[source_id=30] As we can see, for both test sets, system combination significantly reduce the WER. The best result for vlsp2018 of 4.85% WER is obtained by the combination weights 0.6:0.4 where 0.6 is given to the general language model and 0.4 is given to the conversation one. On the vlsp2019 set, the ratio is change slightly by 0.7:0.3 to deliver the best result of 15.09%.",
+      "score": 1.4016770244792336,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        29,
+        30
+      ],
+      "child_qasper_evidence_texts": [
+        "To further improve the performance, we adopt system combination on the decoding lattice level. By combining systems, we can take advantage of the strength of each model that is optimized for different domains. The results for 2 test sets is showed on Table TABREF17 and TABREF18.",
+        "As we can see, for both test sets, system combination significantly reduce the WER. The best result for vlsp2018 of 4.85% WER is obtained by the combination weights 0.6:0.4 where 0.6 is given to the general language model and 0.4 is given to the conversation one. On the vlsp2019 set, the ratio is change slightly by 0.7:0.3 to deliver the best result of 15.09%."
+      ],
+      "child_pages": [
+        10,
+        10
+      ],
+      "child_sections": [
+        "Experiments ::: System combination",
+        "Experiments ::: System combination"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments ::: System combination",
+          0
+        ],
+        [
+          "Experiments ::: System combination",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Experiments ::: System combination",
+      "section": "Experiments ::: System combination",
+      "title_path": "Experiments ::: System combination",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] System Description\n[source_id=8] In this section, we describe our ASR system, which consists of 2 main components, an acoustic model which models the correlation between phonemes and speech signal; and a language model which guides the search algorithm throughout inference process.",
+      "score": 1.0264499953321344,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        8
+      ],
+      "child_qasper_evidence_texts": [
+        "In this section, we describe our ASR system, which consists of 2 main components, an acoustic model which models the correlation between phonemes and speech signal; and a language model which guides the search algorithm throughout inference process."
+      ],
+      "child_pages": [
+        2
+      ],
+      "child_sections": [
+        "System Description"
+      ],
+      "child_hotpot_facts": [
+        [
+          "System Description",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "System Description",
+      "section": "System Description",
+      "title_path": "System Description",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Experiments ::: Single system evaluation\n[source_id=27] Table TABREF15 shows the results on the VLSP 2019 test set with two language models. Various language model weights were also used to find the optimal value for the test set. As we can see, the conversation language model with the weight of 8 yielded the best single system of 15.47% WER.",
+      "score": 0.9833709763183219,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        27
+      ],
+      "child_qasper_evidence_texts": [
+        "Table TABREF15 shows the results on the VLSP 2019 test set with two language models. Various language model weights were also used to find the optimal value for the test set. As we can see, the conversation language model with the weight of 8 yielded the best single system of 15.47% WER."
+      ],
+      "child_pages": [
+        9
+      ],
+      "child_sections": [
+        "Experiments ::: Single system evaluation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments ::: Single system evaluation",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Experiments ::: Single system evaluation",
+      "section": "Experiments ::: Single system evaluation",
+      "title_path": "Experiments ::: Single system evaluation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Conclusion\n[source_id=32] In this paper, we presented our ASR system participated in VLSP 2019 challenge that incorporates a language model combination technique to handle conversation speech with small amount of text data required. The method demonstrated that it can help to reduce WER by 3% on the VLSP 2019 challenge.",
+      "score": 0.7633990937357398,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        32
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper, we presented our ASR system participated in VLSP 2019 challenge that incorporates a language model combination technique to handle conversation speech with small amount of text data required. The method demonstrated that it can help to reduce WER by 3% on the VLSP 2019 challenge."
+      ],
+      "child_pages": [
+        11
+      ],
+      "child_sections": [
+        "Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Experiments\n[source_id=22] There are two different testing sets from VLSP 2018 and VLSP 2019. In general, the data of this year is more complex than the last year one, so there is a big gap in results between two of them. The experiments are conducted using the Kaldi speech recognition toolkitBIBREF2.",
+      "score": 0.6044495573250769,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        22
+      ],
+      "child_qasper_evidence_texts": [
+        "There are two different testing sets from VLSP 2018 and VLSP 2019. In general, the data of this year is more complex than the last year one, so there is a big gap in results between two of them. The experiments are conducted using the Kaldi speech recognition toolkitBIBREF2."
+      ],
+      "child_pages": [
+        7
+      ],
+      "child_sections": [
+        "Experiments"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Experiments",
+      "section": "Experiments",
+      "title_path": "Experiments",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 29,
+      "content": "To further improve the performance, we adopt system combination on the decoding lattice level. By combining systems, we can take advantage of the strength of each model that is optimized for different domains. The results for 2 test sets is showed on Table TABREF17 and TABREF18.",
+      "qasper_evidence_text": "To further improve the performance, we adopt system combination on the decoding lattice level. By combining systems, we can take advantage of the strength of each model that is optimized for different domains. The results for 2 test sets is showed on Table TABREF17 and TABREF18.",
+      "source_node_id": 29,
+      "node_id": 29,
+      "paragraph_id": 29,
+      "evidence_id": 29,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_10",
+      "rank": 4,
+      "score": 1.4016770244792336,
+      "block_type": "paragraph",
+      "page": 10,
+      "section_id": "Experiments ::: System combination",
+      "section": "Experiments ::: System combination",
+      "title": "Experiments ::: System combination",
+      "hotpot_title": "Experiments ::: System combination",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 30,
+      "content": "As we can see, for both test sets, system combination significantly reduce the WER. The best result for vlsp2018 of 4.85% WER is obtained by the combination weights 0.6:0.4 where 0.6 is given to the general language model and 0.4 is given to the conversation one. On the vlsp2019 set, the ratio is change slightly by 0.7:0.3 to deliver the best result of 15.09%.",
+      "qasper_evidence_text": "As we can see, for both test sets, system combination significantly reduce the WER. The best result for vlsp2018 of 4.85% WER is obtained by the combination weights 0.6:0.4 where 0.6 is given to the general language model and 0.4 is given to the conversation one. On the vlsp2019 set, the ratio is change slightly by 0.7:0.3 to deliver the best result of 15.09%.",
+      "source_node_id": 30,
+      "node_id": 30,
+      "paragraph_id": 30,
+      "evidence_id": 30,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_10",
+      "rank": 4,
+      "score": 1.4016770244792336,
+      "block_type": "paragraph",
+      "page": 10,
+      "section_id": "Experiments ::: System combination",
+      "section": "Experiments ::: System combination",
+      "title": "Experiments ::: System combination",
+      "hotpot_title": "Experiments ::: System combination",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 2
+    }
+  ],
+  "supporting_block_ids": [
+    29,
+    30
+  ]
+}

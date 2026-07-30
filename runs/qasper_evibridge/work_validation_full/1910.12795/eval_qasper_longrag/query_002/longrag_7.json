@@ -1,0 +1,88 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters\n[source_id=32] To learn the parameters $\\mathbf {\\phi }$ in the manipulation reward $R_\\phi (\\mathbf {x}, y | \\mathcal {D})$, we could in principle adopt any off-the-shelf reward learning algorithm in the literature. In this work, we draw inspiration from the above gradient-based reward learning (section SECREF3) due to its simplicity and efficiency. Briefly, the objective of $\\mathbf {\\phi }$ is to maximize the ultimate measure of the performance of model $p_\\theta (\\mathbf {y}|\\mathbf {x})$, which, in the context of supervised learning, is the model performance on a held-out validation set.\n[source_id=33] The algorithm optimizes $\\mathbf {\\theta }$ and $\\mathbf {\\phi }$ alternatingly, corresponding to Eq.(DISPLAY_FORM7) and Eq.(DISPLAY_FORM8), respectively. More concretely, in each iteration, we first update the model parameters $\\mathbf {\\theta }$ in analogue to Eq.(DISPLAY_FORM7) which optimizes intrinsic reward-enriched objective. Here, we optimize the log-likelihood of the training set enriched with data manipulation. That is, we replace $R_\\delta $ with $R_\\phi $ in Eq.(DISPLAY_FORM5), and obtain the augmented M-step:\n[source_id=34] By noticing that the new $\\mathbf {\\theta }^{\\prime }$ depends on $\\mathbf {\\phi }$, we can write $\\mathbf {\\theta }^{\\prime }$ as a function of $\\mathbf {\\phi }$, namely, $\\mathbf {\\theta }^{\\prime }=\\mathbf {\\theta }^{\\prime }(\\mathbf {\\phi })$. The practical implementation of the above update depends on the actual parameterization of manipulation $R_\\phi $, which we discuss in more details in the next section.\n[source_id=35] The next step is to optimize $\\mathbf {\\phi }$ in terms of the model validation performance, in analogue to Eq.(DISPLAY_FORM8). Formally, let $\\mathcal {D}^v$ be the validation set of data examples. The update is then:\n[source_id=36] where, since $\\mathbf {\\theta }^{\\prime }$ is a function of $\\mathbf {\\phi }$, the gradient is backpropagated to $\\mathbf {\\phi }$ through $\\mathbf {\\theta }^{\\prime }(\\mathbf {\\phi })$. Taking data weighting for example where $\\mathbf {\\phi }$ is the training sample weights (more details in section SECREF15), the update is to optimize the weights of training samples so that the model performs best on the validation set.\n[source_id=37] The resulting algorithm is summarized in Algorithm FIGREF11. Figure FIGREF11 illustrates the computation flow. Learning the manipulation parameters effectively uses a held-out validation set. We show in our experiments that a very small set of validation examples (e.g., 2 labels per class) is enough to significantly improve the model performance in low data regime.\n[source_id=38] It is worth noting that some previous work has also leveraged validation examples, such as learning data augmentation with policy gradient BIBREF3 or inducing data weights with meta-learning BIBREF4. Our approach is inspired from a distinct paradigm of (intrinsic) reward learning. In contrast to BIBREF3 that treats data augmentation as a policy, we instead formulate manipulation as a reward function and enable efficient stochastic gradient updates. Our approach is also more broadly applicable to diverse data manipulation types than BIBREF4, BIBREF3.",
+  "score": 9.24723657149561,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38
+  ],
+  "child_qasper_evidence_texts": [
+    "To learn the parameters $\\mathbf {\\phi }$ in the manipulation reward $R_\\phi (\\mathbf {x}, y | \\mathcal {D})$, we could in principle adopt any off-the-shelf reward learning algorithm in the literature. In this work, we draw inspiration from the above gradient-based reward learning (section SECREF3) due to its simplicity and efficiency. Briefly, the objective of $\\mathbf {\\phi }$ is to maximize the ultimate measure of the performance of model $p_\\theta (\\mathbf {y}|\\mathbf {x})$, which, in the context of supervised learning, is the model performance on a held-out validation set.",
+    "The algorithm optimizes $\\mathbf {\\theta }$ and $\\mathbf {\\phi }$ alternatingly, corresponding to Eq.(DISPLAY_FORM7) and Eq.(DISPLAY_FORM8), respectively. More concretely, in each iteration, we first update the model parameters $\\mathbf {\\theta }$ in analogue to Eq.(DISPLAY_FORM7) which optimizes intrinsic reward-enriched objective. Here, we optimize the log-likelihood of the training set enriched with data manipulation. That is, we replace $R_\\delta $ with $R_\\phi $ in Eq.(DISPLAY_FORM5), and obtain the augmented M-step:",
+    "By noticing that the new $\\mathbf {\\theta }^{\\prime }$ depends on $\\mathbf {\\phi }$, we can write $\\mathbf {\\theta }^{\\prime }$ as a function of $\\mathbf {\\phi }$, namely, $\\mathbf {\\theta }^{\\prime }=\\mathbf {\\theta }^{\\prime }(\\mathbf {\\phi })$. The practical implementation of the above update depends on the actual parameterization of manipulation $R_\\phi $, which we discuss in more details in the next section.",
+    "The next step is to optimize $\\mathbf {\\phi }$ in terms of the model validation performance, in analogue to Eq.(DISPLAY_FORM8). Formally, let $\\mathcal {D}^v$ be the validation set of data examples. The update is then:",
+    "where, since $\\mathbf {\\theta }^{\\prime }$ is a function of $\\mathbf {\\phi }$, the gradient is backpropagated to $\\mathbf {\\phi }$ through $\\mathbf {\\theta }^{\\prime }(\\mathbf {\\phi })$. Taking data weighting for example where $\\mathbf {\\phi }$ is the training sample weights (more details in section SECREF15), the update is to optimize the weights of training samples so that the model performs best on the validation set.",
+    "The resulting algorithm is summarized in Algorithm FIGREF11. Figure FIGREF11 illustrates the computation flow. Learning the manipulation parameters effectively uses a held-out validation set. We show in our experiments that a very small set of validation examples (e.g., 2 labels per class) is enough to significantly improve the model performance in low data regime.",
+    "It is worth noting that some previous work has also leveraged validation examples, such as learning data augmentation with policy gradient BIBREF3 or inducing data weights with meta-learning BIBREF4. Our approach is inspired from a distinct paradigm of (intrinsic) reward learning. In contrast to BIBREF3 that treats data augmentation as a policy, we instead formulate manipulation as a reward function and enable efficient stochastic gradient updates. Our approach is also more broadly applicable to diverse data manipulation types than BIBREF4, BIBREF3."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+    "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+    "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+    "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+    "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+    "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+    "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+      0
+    ],
+    [
+      "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+      1
+    ],
+    [
+      "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+      2
+    ],
+    [
+      "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+      3
+    ],
+    [
+      "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+      4
+    ],
+    [
+      "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+      5
+    ],
+    [
+      "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+  "section": "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+  "title_path": "Learning Data Manipulation ::: Method ::: Learning Manipulation Parameters",
+  "block_type": "long_unit"
+}

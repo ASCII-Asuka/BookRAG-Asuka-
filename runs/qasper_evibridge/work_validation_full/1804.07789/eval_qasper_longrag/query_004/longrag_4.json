@@ -1,0 +1,88 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Fused Bifocal Attention Mechanism\n[source_id=17] Intuitively, when a human writes a description from a table she keeps track of information at two levels. At the macro level, it is important to decide which is the appropriate field to attend to next and at a micro level (i.e., within a field) it is important to know which values to attend to next. To capture this behavior, we use a bifocal attention mechanism as described below.\n[source_id=18] Macro Attention: Consider the INLINEFORM0 -th field INLINEFORM1 which has values INLINEFORM2 . Let INLINEFORM3 be the representation of this field in the infobox. This representation can either be (i) the word embedding of the field name or (ii) some function INLINEFORM4 of the values in the field or (iii) a concatenation of (i) and (ii). The function INLINEFORM5 could simply be the sum or average of the embeddings of the values in the field. Alternately, this function could be a GRU (or LSTM) which treats these values within a field as a sequence and computes the field representation as the final representation of this sequence (i.e., the representation of the last time-step). We found that bidirectional GRU is a better choice for INLINEFORM6 and concatenating the embedding of the field name with this GRU representation works best. Further, using a bidirectional GRU cell to take contextual information from neighboring fields also helps (these are the orange colored cells in the top-left block in Figure FIGREF3 with macro attention). Given these representations INLINEFORM7 for all the INLINEFORM8 fields we compute an attention over the fields (macro level). DISPLAYFORM0\n[source_id=19] where INLINEFORM0 is the state of the decoder at time step INLINEFORM1 . INLINEFORM2 and INLINEFORM3 are parameters, INLINEFORM4 is the total number of fields in the input, INLINEFORM5 is the macro (field level) context vector at the INLINEFORM6 -th time step of the decoder.\n[source_id=20] Micro Attention: Let INLINEFORM0 be the representation of the INLINEFORM1 -th value in a given field. This representation could again either be (i) simply the embedding of this value (ii) or a contextual representation computed using a function INLINEFORM2 which also considers the other values in the field. For example, if INLINEFORM3 are the values in a field then these values can be treated as a sequence and the representation of the INLINEFORM4 -th value can be computed using a bidirectional GRU over this sequence. Once again, we found that using a bi-GRU works better then simply using the embedding of the value. Once we have such a representation computed for all values across all the fields, we compute the attention over these values (micro level) as shown below : DISPLAYFORM0\n[source_id=21] where INLINEFORM0 is the state of the decoder at time step INLINEFORM1 . INLINEFORM2 and INLINEFORM3 are parameters, INLINEFORM4 is the total number of values across all the fields.\n[source_id=22] Fused Attention: Intuitively, the attention weights assigned to a field should have an influence on all the values belonging to the particular field. To ensure this, we reweigh the micro level attention weights based on the corresponding macro level attention weights. In other words, we fuse the attention weights at the two levels as: DISPLAYFORM0\n[source_id=23] where INLINEFORM0 is the field corresponding to the INLINEFORM1 -th value, INLINEFORM2 is the macro level context vector.",
+  "score": 3.849992791897534,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "child_qasper_evidence_texts": [
+    "Intuitively, when a human writes a description from a table she keeps track of information at two levels. At the macro level, it is important to decide which is the appropriate field to attend to next and at a micro level (i.e., within a field) it is important to know which values to attend to next. To capture this behavior, we use a bifocal attention mechanism as described below.",
+    "Macro Attention: Consider the INLINEFORM0 -th field INLINEFORM1 which has values INLINEFORM2 . Let INLINEFORM3 be the representation of this field in the infobox. This representation can either be (i) the word embedding of the field name or (ii) some function INLINEFORM4 of the values in the field or (iii) a concatenation of (i) and (ii). The function INLINEFORM5 could simply be the sum or average of the embeddings of the values in the field. Alternately, this function could be a GRU (or LSTM) which treats these values within a field as a sequence and computes the field representation as the final representation of this sequence (i.e., the representation of the last time-step). We found that bidirectional GRU is a better choice for INLINEFORM6 and concatenating the embedding of the field name with this GRU representation works best. Further, using a bidirectional GRU cell to take contextual information from neighboring fields also helps (these are the orange colored cells in the top-left block in Figure FIGREF3 with macro attention). Given these representations INLINEFORM7 for all the INLINEFORM8 fields we compute an attention over the fields (macro level). DISPLAYFORM0",
+    "where INLINEFORM0 is the state of the decoder at time step INLINEFORM1 . INLINEFORM2 and INLINEFORM3 are parameters, INLINEFORM4 is the total number of fields in the input, INLINEFORM5 is the macro (field level) context vector at the INLINEFORM6 -th time step of the decoder.",
+    "Micro Attention: Let INLINEFORM0 be the representation of the INLINEFORM1 -th value in a given field. This representation could again either be (i) simply the embedding of this value (ii) or a contextual representation computed using a function INLINEFORM2 which also considers the other values in the field. For example, if INLINEFORM3 are the values in a field then these values can be treated as a sequence and the representation of the INLINEFORM4 -th value can be computed using a bidirectional GRU over this sequence. Once again, we found that using a bi-GRU works better then simply using the embedding of the value. Once we have such a representation computed for all values across all the fields, we compute the attention over these values (micro level) as shown below : DISPLAYFORM0",
+    "where INLINEFORM0 is the state of the decoder at time step INLINEFORM1 . INLINEFORM2 and INLINEFORM3 are parameters, INLINEFORM4 is the total number of values across all the fields.",
+    "Fused Attention: Intuitively, the attention weights assigned to a field should have an influence on all the values belonging to the particular field. To ensure this, we reweigh the micro level attention weights based on the corresponding macro level attention weights. In other words, we fuse the attention weights at the two levels as: DISPLAYFORM0",
+    "where INLINEFORM0 is the field corresponding to the INLINEFORM1 -th value, INLINEFORM2 is the macro level context vector."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Fused Bifocal Attention Mechanism",
+    "Fused Bifocal Attention Mechanism",
+    "Fused Bifocal Attention Mechanism",
+    "Fused Bifocal Attention Mechanism",
+    "Fused Bifocal Attention Mechanism",
+    "Fused Bifocal Attention Mechanism",
+    "Fused Bifocal Attention Mechanism"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Fused Bifocal Attention Mechanism",
+      0
+    ],
+    [
+      "Fused Bifocal Attention Mechanism",
+      1
+    ],
+    [
+      "Fused Bifocal Attention Mechanism",
+      2
+    ],
+    [
+      "Fused Bifocal Attention Mechanism",
+      3
+    ],
+    [
+      "Fused Bifocal Attention Mechanism",
+      4
+    ],
+    [
+      "Fused Bifocal Attention Mechanism",
+      5
+    ],
+    [
+      "Fused Bifocal Attention Mechanism",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Fused Bifocal Attention Mechanism",
+  "section": "Fused Bifocal Attention Mechanism",
+  "title_path": "Fused Bifocal Attention Mechanism",
+  "block_type": "long_unit"
+}

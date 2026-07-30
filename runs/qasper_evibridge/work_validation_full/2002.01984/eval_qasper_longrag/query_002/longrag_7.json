@@ -1,0 +1,106 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Experiments: Factoid Question Answering Task ::: Setup\n[source_id=21] BioASQ provides the training data. This data is based on previous BioASQ competitions. Train data we have considered is aggregate of all train data sets till the 5th version of BioASQ competition. We cleaned the data, that is, question-answering data without answers are removed and left with a total count of ‘530’ question answers. The data is split into train and test data in the ratio of 94 to 6; that is, count of '495' for training and '35' for testing.\n[source_id=22] The original data format is converted to the BERT/BioBERT format, where BioBERT expects ‘start_index’ of the actual answer. The ‘start_index corresponds to the index of the answer text present in the paragraph/ Context. For finding ‘start_index’ we used built-in python function find(). The function returns the lowest index of the actual answer present in the context(paragraph). If the answer is not found ‘-1’ is returned as the index. The efficient way of finding start_index is, if the paragraph (Context) has multiple instances of answer text, then ‘start_index’ of the answer should be that instance of answer text whose context actually matches with what’s been asked in the question.\n[source_id=23] Example (Question, Answer and Paragraph from BIBREF8):\n[source_id=24] Question: Which drug should be used as an antidote in benzodiazepine overdose?\n[source_id=25] Answer: 'Flumazenil'\n[source_id=26] Paragraph(context):\n[source_id=27] \"Flumazenil use in benzodiazepine overdose in the UK: a retrospective survey of NPIS data. OBJECTIVE: Benzodiazepine (BZD) overdose (OD) continues to cause significant morbidity and mortality in the UK. Flumazenil is an effective antidote but there is a risk of seizures, particularly in those who have co-ingested tricyclic antidepressants. A study was undertaken to examine the frequency of use, safety and efficacy of flumazenil in the management of BZD OD in the UK. METHODS: A 2-year retrospective cohort study was performed of all enquiries to the UK National Poisons Information Service involving BZD OD. RESULTS: Flumazenil was administered to 80 patients in 4504 BZD-related enquiries, 68 of whom did not have ventilatory failure or had recognised contraindications to flumazenil. Factors associated with flumazenil use were increased age, severe poisoning and ventilatory failure. Co-ingestion of tricyclic antidepressants and chronic obstructive pulmonary disease did not influence flumazenil administration. Seizure frequency in patients not treated with flumazenil was 0.3%\".\n[source_id=28] Actual answer is 'Flumazenil', but there are multiple instances of word 'Flu-mazenil'. Efficient way to identify the start-index for 'Flumazenil'(answer) is to find that particular instance of the word 'Flumazenil' which matches the context for the question. In the above example 'Flumazenil' highlighted in bold is the actual instance that matches question's context. Unfortunately, we could not identify readily available tools that can achieve this goal. In our future work, we look forward to handling these scenarios effectively.\n[source_id=29] Note: The creators of 'SQuAD' BIBREF7 have handled the task of identifying answer's start_index effectively. But 'SQuAD' data set is much more general and does not include biomedical question answering data.",
+  "score": 5.2658841674569885,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "child_qasper_evidence_texts": [
+    "BioASQ provides the training data. This data is based on previous BioASQ competitions. Train data we have considered is aggregate of all train data sets till the 5th version of BioASQ competition. We cleaned the data, that is, question-answering data without answers are removed and left with a total count of ‘530’ question answers. The data is split into train and test data in the ratio of 94 to 6; that is, count of '495' for training and '35' for testing.",
+    "The original data format is converted to the BERT/BioBERT format, where BioBERT expects ‘start_index’ of the actual answer. The ‘start_index corresponds to the index of the answer text present in the paragraph/ Context. For finding ‘start_index’ we used built-in python function find(). The function returns the lowest index of the actual answer present in the context(paragraph). If the answer is not found ‘-1’ is returned as the index. The efficient way of finding start_index is, if the paragraph (Context) has multiple instances of answer text, then ‘start_index’ of the answer should be that instance of answer text whose context actually matches with what’s been asked in the question.",
+    "Example (Question, Answer and Paragraph from BIBREF8):",
+    "Question: Which drug should be used as an antidote in benzodiazepine overdose?",
+    "Answer: 'Flumazenil'",
+    "Paragraph(context):",
+    "\"Flumazenil use in benzodiazepine overdose in the UK: a retrospective survey of NPIS data. OBJECTIVE: Benzodiazepine (BZD) overdose (OD) continues to cause significant morbidity and mortality in the UK. Flumazenil is an effective antidote but there is a risk of seizures, particularly in those who have co-ingested tricyclic antidepressants. A study was undertaken to examine the frequency of use, safety and efficacy of flumazenil in the management of BZD OD in the UK. METHODS: A 2-year retrospective cohort study was performed of all enquiries to the UK National Poisons Information Service involving BZD OD. RESULTS: Flumazenil was administered to 80 patients in 4504 BZD-related enquiries, 68 of whom did not have ventilatory failure or had recognised contraindications to flumazenil. Factors associated with flumazenil use were increased age, severe poisoning and ventilatory failure. Co-ingestion of tricyclic antidepressants and chronic obstructive pulmonary disease did not influence flumazenil administration. Seizure frequency in patients not treated with flumazenil was 0.3%\".",
+    "Actual answer is 'Flumazenil', but there are multiple instances of word 'Flu-mazenil'. Efficient way to identify the start-index for 'Flumazenil'(answer) is to find that particular instance of the word 'Flumazenil' which matches the context for the question. In the above example 'Flumazenil' highlighted in bold is the actual instance that matches question's context. Unfortunately, we could not identify readily available tools that can achieve this goal. In our future work, we look forward to handling these scenarios effectively.",
+    "Note: The creators of 'SQuAD' BIBREF7 have handled the task of identifying answer's start_index effectively. But 'SQuAD' data set is much more general and does not include biomedical question answering data."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Experiments: Factoid Question Answering Task ::: Setup",
+    "Experiments: Factoid Question Answering Task ::: Setup",
+    "Experiments: Factoid Question Answering Task ::: Setup",
+    "Experiments: Factoid Question Answering Task ::: Setup",
+    "Experiments: Factoid Question Answering Task ::: Setup",
+    "Experiments: Factoid Question Answering Task ::: Setup",
+    "Experiments: Factoid Question Answering Task ::: Setup",
+    "Experiments: Factoid Question Answering Task ::: Setup",
+    "Experiments: Factoid Question Answering Task ::: Setup"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Experiments: Factoid Question Answering Task ::: Setup",
+      0
+    ],
+    [
+      "Experiments: Factoid Question Answering Task ::: Setup",
+      1
+    ],
+    [
+      "Experiments: Factoid Question Answering Task ::: Setup",
+      2
+    ],
+    [
+      "Experiments: Factoid Question Answering Task ::: Setup",
+      3
+    ],
+    [
+      "Experiments: Factoid Question Answering Task ::: Setup",
+      4
+    ],
+    [
+      "Experiments: Factoid Question Answering Task ::: Setup",
+      5
+    ],
+    [
+      "Experiments: Factoid Question Answering Task ::: Setup",
+      6
+    ],
+    [
+      "Experiments: Factoid Question Answering Task ::: Setup",
+      7
+    ],
+    [
+      "Experiments: Factoid Question Answering Task ::: Setup",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Experiments: Factoid Question Answering Task ::: Setup",
+  "section": "Experiments: Factoid Question Answering Task ::: Setup",
+  "title_path": "Experiments: Factoid Question Answering Task ::: Setup",
+  "block_type": "long_unit"
+}

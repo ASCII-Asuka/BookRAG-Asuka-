@@ -1,0 +1,133 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Models ::: Gaussian-Masked Directional Multi-Head Attention\n[source_id=27] Similar as scaled dot-product attention BIBREF24, Gaussian-masked directional attention can be described as a function to map queries and key-value pairs to the representation of input. Here queries, keys and values are all vectors. Standard scaled dot-product attention is calculated by dotting query $Q$ with all keys $K$, dividing each values by $\\sqrt{d_k}$, where $\\sqrt{d_k}$ is the dimension of keys, and apply a softmax function to generate the weights in the attention:\n[source_id=28] Different from scaled dot-product attention, Gaussian-masked directional attention expects to pay attention to the adjacent characters of each positions and cast the localness relationship between characters as a fix Gaussian weight for attention. We assume that the Gaussian weight only relys on the distance between characters.\n[source_id=29] Firstly we introduce the Gaussian weight matrix $G$ which presents the localness relationship between each two characters:\n[source_id=30] where $g_{ij}$ is the Gaussian weight between character $i$ and $j$, $dis_{ij}$ is the distance between character $i$ and $j$, $\\Phi (x)$ is the cumulative distribution function of Gaussian, $\\sigma $ is the standard deviation of Gaussian function and it is a hyperparameter in our method. Equation (DISPLAY_FORM13) can ensure the Gaussian weight equals 1 when $dis_{ij}$ is 0. The larger distance between charactersis, the smaller the weight is, which makes one character can affect its adjacent characters more compared with other characters.\n[source_id=31] To combine the Gaussian weight to the self-attention, we produce the Hadamard product of Gaussian weight matrix $G$ and the score matrix produced by $Q{K^{T}}$\n[source_id=32] where $AG$ is the Gaussian-masked attention. It ensures that the relationship between two characters with long distances is weaker than adjacent characters.\n[source_id=33] The scaled dot-product attention models the relationship between two characters without regard to their distances in one sequence. For CWS task, the weight between adjacent characters should be more important while it is hard for self-attention to achieve the effect explicitly because the self-attention cannot get the order of sentences directly. The Gaussian-masked attention adjusts the weight between characters and their adjacent character to a larger value which stands for the effect of adjacent characters.\n[source_id=34] For forward and backward encoder, the self-attention sublayer needs to use a triangular matrix mask to let the self-attention focus on different weights:\n[source_id=35] where $pos_i$ is the position of character $c_i$. The triangular matrix for forward and backward encode are:\n[source_id=36] $\\left[ \\begin{matrix} 1 & 0 & 0 & \\cdots &0\\\\ 1 & 1 & 0 & \\cdots &0\\\\ 1 & 1 & 1 & \\cdots &0\\\\ \\vdots &\\vdots &\\vdots &\\ddots &\\vdots \\\\ 1 & 1 & 1 & \\cdots & 1\\\\ \\end{matrix} \\right]$ $\\left[ \\begin{matrix} 1 & 1 & 1 & \\cdots &1 \\\\ 0 & 1 & 1 & \\cdots &1 \\\\ 0 & 0& 1 & \\cdots &1 \\\\ \\vdots &\\vdots &\\vdots &\\ddots &\\vdots \\\\ 0 & 0 & 0 & \\cdots & 1\\\\ \\end{matrix}\\right]$\n[source_id=37] Similar as BIBREF24, we use multi-head attention to capture information from different dimension positions as Figure FIGREF16 and get Gaussian-masked directional multi-head attention. With multi-head attention architecture, the representation of input can be captured by\n[source_id=38] where $MH$ is the Gaussian-masked multi-head attention, ${W_i^q, W_i^k,W_i^v} \\in \\mathbb {R}^{d_k \\times d_h}$ is the parameter matrices to generate heads, $d_k$ is the dimension of model and $d_h$ is the dimension of one head.",
+  "score": 8.014157394826862,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38
+  ],
+  "child_qasper_evidence_texts": [
+    "Similar as scaled dot-product attention BIBREF24, Gaussian-masked directional attention can be described as a function to map queries and key-value pairs to the representation of input. Here queries, keys and values are all vectors. Standard scaled dot-product attention is calculated by dotting query $Q$ with all keys $K$, dividing each values by $\\sqrt{d_k}$, where $\\sqrt{d_k}$ is the dimension of keys, and apply a softmax function to generate the weights in the attention:",
+    "Different from scaled dot-product attention, Gaussian-masked directional attention expects to pay attention to the adjacent characters of each positions and cast the localness relationship between characters as a fix Gaussian weight for attention. We assume that the Gaussian weight only relys on the distance between characters.",
+    "Firstly we introduce the Gaussian weight matrix $G$ which presents the localness relationship between each two characters:",
+    "where $g_{ij}$ is the Gaussian weight between character $i$ and $j$, $dis_{ij}$ is the distance between character $i$ and $j$, $\\Phi (x)$ is the cumulative distribution function of Gaussian, $\\sigma $ is the standard deviation of Gaussian function and it is a hyperparameter in our method. Equation (DISPLAY_FORM13) can ensure the Gaussian weight equals 1 when $dis_{ij}$ is 0. The larger distance between charactersis, the smaller the weight is, which makes one character can affect its adjacent characters more compared with other characters.",
+    "To combine the Gaussian weight to the self-attention, we produce the Hadamard product of Gaussian weight matrix $G$ and the score matrix produced by $Q{K^{T}}$",
+    "where $AG$ is the Gaussian-masked attention. It ensures that the relationship between two characters with long distances is weaker than adjacent characters.",
+    "The scaled dot-product attention models the relationship between two characters without regard to their distances in one sequence. For CWS task, the weight between adjacent characters should be more important while it is hard for self-attention to achieve the effect explicitly because the self-attention cannot get the order of sentences directly. The Gaussian-masked attention adjusts the weight between characters and their adjacent character to a larger value which stands for the effect of adjacent characters.",
+    "For forward and backward encoder, the self-attention sublayer needs to use a triangular matrix mask to let the self-attention focus on different weights:",
+    "where $pos_i$ is the position of character $c_i$. The triangular matrix for forward and backward encode are:",
+    "$\\left[ \\begin{matrix} 1 & 0 & 0 & \\cdots &0\\\\ 1 & 1 & 0 & \\cdots &0\\\\ 1 & 1 & 1 & \\cdots &0\\\\ \\vdots &\\vdots &\\vdots &\\ddots &\\vdots \\\\ 1 & 1 & 1 & \\cdots & 1\\\\ \\end{matrix} \\right]$ $\\left[ \\begin{matrix} 1 & 1 & 1 & \\cdots &1 \\\\ 0 & 1 & 1 & \\cdots &1 \\\\ 0 & 0& 1 & \\cdots &1 \\\\ \\vdots &\\vdots &\\vdots &\\ddots &\\vdots \\\\ 0 & 0 & 0 & \\cdots & 1\\\\ \\end{matrix}\\right]$",
+    "Similar as BIBREF24, we use multi-head attention to capture information from different dimension positions as Figure FIGREF16 and get Gaussian-masked directional multi-head attention. With multi-head attention architecture, the representation of input can be captured by",
+    "where $MH$ is the Gaussian-masked multi-head attention, ${W_i^q, W_i^k,W_i^v} \\in \\mathbb {R}^{d_k \\times d_h}$ is the parameter matrices to generate heads, $d_k$ is the dimension of model and $d_h$ is the dimension of one head."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+    "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+    "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+    "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+    "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+    "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+    "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+    "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+    "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+    "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+    "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+    "Models ::: Gaussian-Masked Directional Multi-Head Attention"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      0
+    ],
+    [
+      "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      1
+    ],
+    [
+      "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      2
+    ],
+    [
+      "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      3
+    ],
+    [
+      "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      4
+    ],
+    [
+      "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      5
+    ],
+    [
+      "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      6
+    ],
+    [
+      "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      7
+    ],
+    [
+      "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      8
+    ],
+    [
+      "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      9
+    ],
+    [
+      "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      10
+    ],
+    [
+      "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      11
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+  "section": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+  "title_path": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+  "block_type": "long_unit"
+}

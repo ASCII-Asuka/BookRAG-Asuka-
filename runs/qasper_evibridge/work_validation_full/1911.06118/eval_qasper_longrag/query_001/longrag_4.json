@@ -1,0 +1,88 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Objective function ::: Proposed Energy function\n[source_id=17] As each word is represented by a mixture of Gaussian distributions, KL divergence is a better choice of energy function to capture distance between distributions. Since, KL divergence is minimum when the distributions are similar and maximum when they are dissimilar, energy function is taken as exponentiated negative KL divergence.\n[source_id=18] However, computing KL divergence between Gaussian mixtures is intractable and obtaining exact KL value is not possible. One way of approximating the KL is by Monte-Carlo approximation but it requires large number of samples to get a good approximation and is computationally expensive on high dimensional embedding space.\n[source_id=19] Alternatively, BIBREF12 presents a KL approximation between Gaussian mixtures where they obtain an upper bound through product of Gaussian approximation method and a lower bound through variational approximation method. In BIBREF13, the authors combine the lower and upper bounds from approximation methods of BIBREF12 to provide a stricter bound on KL between Gaussian mixtures. Lets consider Gaussian mixtures for the words $w$ and $v$ as follows.\n[source_id=20] The approximate KL divergence between the Gaussian mixture representations over the words $w$ and $v$ is shown in equation DISPLAY_FORM8. More details on approximation is included in the Supplementary Material.\n[source_id=21] where $EL_{ik}(w,w) = \\int f_{w,i} (\\operatorname{\\mathbf {x}}) f_{w,k} (\\operatorname{\\mathbf {x}}) d\\operatorname{\\mathbf {x}}$ and $EL_{ij}(w,v) = \\int f_{w,i} (\\operatorname{\\mathbf {x}}) f_{v,k} (\\operatorname{\\mathbf {x}}) d\\operatorname{\\mathbf {x}}$. Note that the expected likelihood kernel appears component wise inside the approximate KL divergence derivation.\n[source_id=22] One advantage of using KL as energy function is that it enables to capture asymmetry in entailment datasets. For eg., let us consider the words 'chair' with two senses as 'bench' and 'sling', and 'wood' with two senses as 'trees' and 'furniture'. The word chair ($w$) is entailed within wood ($v$), i.e. chair $\\models $ wood. Now, minimizing the KL divergence necessitates maximizing $\\log {\\sum _j p_{v,j} \\exp ({-KL(f_{w,i} (\\operatorname{\\mathbf {x}})||f_{v,j}(\\operatorname{\\mathbf {x}}))})}$ which in turn minimizes $KL(f_{w,i}(\\operatorname{\\mathbf {x}})||f_{v,j}(\\operatorname{\\mathbf {x}}))$. This will result in the support of the $i^{th}$ component of $w$ to be within the $j^{th}$ component of $v$, and holds for all component pairs leading to the entailment of $w$ within $v$. Consequently, we can see that bench $\\models $ trees, bench $\\models $ furniture, sling $\\models $ trees, and sling $\\models $ furniture. Thus, it introduces lexical relationship between the senses of child word and that of the parent word. Minimizing the KL also necessitates maximizing $\\log {\\sum _j {p_{v,j}} EL_{ij}(w,v)}$ term for all component pairs among $w$ and $v$. This is similar to maximizing expected likelihood kernel, which brings the means of $f_{w,i}(\\operatorname{\\mathbf {x}})$ and $f_{v,j}(\\operatorname{\\mathbf {x}})$ closer (weighted by their co-variances) as discussed in BIBREF10. Hence, the proposed approach captures the best of both worlds, thereby catering to both word similarity and entailment.\n[source_id=23] We also note that minimizing the KL divergence necessitates minimizing $\\log {\\sum _k p_{w,k} \\exp ({-KL(f_{w,i}||f_{w,k})})}$ which in turn maximizes $KL(f_{w,i}||f_{w,k})$. This prevents the different mixture components of a word converging to single Gaussian and encourages capturing different possible senses of the word. The same is also achieved by minimizing $\\sum _k {p_{w,k}} EL_{ik}(w,w)$ term and act as a regularization term which promotes diversity in learning senses of a word.",
+  "score": 1.9499721101583174,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "child_qasper_evidence_texts": [
+    "As each word is represented by a mixture of Gaussian distributions, KL divergence is a better choice of energy function to capture distance between distributions. Since, KL divergence is minimum when the distributions are similar and maximum when they are dissimilar, energy function is taken as exponentiated negative KL divergence.",
+    "However, computing KL divergence between Gaussian mixtures is intractable and obtaining exact KL value is not possible. One way of approximating the KL is by Monte-Carlo approximation but it requires large number of samples to get a good approximation and is computationally expensive on high dimensional embedding space.",
+    "Alternatively, BIBREF12 presents a KL approximation between Gaussian mixtures where they obtain an upper bound through product of Gaussian approximation method and a lower bound through variational approximation method. In BIBREF13, the authors combine the lower and upper bounds from approximation methods of BIBREF12 to provide a stricter bound on KL between Gaussian mixtures. Lets consider Gaussian mixtures for the words $w$ and $v$ as follows.",
+    "The approximate KL divergence between the Gaussian mixture representations over the words $w$ and $v$ is shown in equation DISPLAY_FORM8. More details on approximation is included in the Supplementary Material.",
+    "where $EL_{ik}(w,w) = \\int f_{w,i} (\\operatorname{\\mathbf {x}}) f_{w,k} (\\operatorname{\\mathbf {x}}) d\\operatorname{\\mathbf {x}}$ and $EL_{ij}(w,v) = \\int f_{w,i} (\\operatorname{\\mathbf {x}}) f_{v,k} (\\operatorname{\\mathbf {x}}) d\\operatorname{\\mathbf {x}}$. Note that the expected likelihood kernel appears component wise inside the approximate KL divergence derivation.",
+    "One advantage of using KL as energy function is that it enables to capture asymmetry in entailment datasets. For eg., let us consider the words 'chair' with two senses as 'bench' and 'sling', and 'wood' with two senses as 'trees' and 'furniture'. The word chair ($w$) is entailed within wood ($v$), i.e. chair $\\models $ wood. Now, minimizing the KL divergence necessitates maximizing $\\log {\\sum _j p_{v,j} \\exp ({-KL(f_{w,i} (\\operatorname{\\mathbf {x}})||f_{v,j}(\\operatorname{\\mathbf {x}}))})}$ which in turn minimizes $KL(f_{w,i}(\\operatorname{\\mathbf {x}})||f_{v,j}(\\operatorname{\\mathbf {x}}))$. This will result in the support of the $i^{th}$ component of $w$ to be within the $j^{th}$ component of $v$, and holds for all component pairs leading to the entailment of $w$ within $v$. Consequently, we can see that bench $\\models $ trees, bench $\\models $ furniture, sling $\\models $ trees, and sling $\\models $ furniture. Thus, it introduces lexical relationship between the senses of child word and that of the parent word. Minimizing the KL also necessitates maximizing $\\log {\\sum _j {p_{v,j}} EL_{ij}(w,v)}$ term for all component pairs among $w$ and $v$. This is similar to maximizing expected likelihood kernel, which brings the means of $f_{w,i}(\\operatorname{\\mathbf {x}})$ and $f_{v,j}(\\operatorname{\\mathbf {x}})$ closer (weighted by their co-variances) as discussed in BIBREF10. Hence, the proposed approach captures the best of both worlds, thereby catering to both word similarity and entailment.",
+    "We also note that minimizing the KL divergence necessitates minimizing $\\log {\\sum _k p_{w,k} \\exp ({-KL(f_{w,i}||f_{w,k})})}$ which in turn maximizes $KL(f_{w,i}||f_{w,k})$. This prevents the different mixture components of a word converging to single Gaussian and encourages capturing different possible senses of the word. The same is also achieved by minimizing $\\sum _k {p_{w,k}} EL_{ik}(w,w)$ term and act as a regularization term which promotes diversity in learning senses of a word."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Objective function ::: Proposed Energy function",
+    "Objective function ::: Proposed Energy function",
+    "Objective function ::: Proposed Energy function",
+    "Objective function ::: Proposed Energy function",
+    "Objective function ::: Proposed Energy function",
+    "Objective function ::: Proposed Energy function",
+    "Objective function ::: Proposed Energy function"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Objective function ::: Proposed Energy function",
+      0
+    ],
+    [
+      "Objective function ::: Proposed Energy function",
+      1
+    ],
+    [
+      "Objective function ::: Proposed Energy function",
+      2
+    ],
+    [
+      "Objective function ::: Proposed Energy function",
+      3
+    ],
+    [
+      "Objective function ::: Proposed Energy function",
+      4
+    ],
+    [
+      "Objective function ::: Proposed Energy function",
+      5
+    ],
+    [
+      "Objective function ::: Proposed Energy function",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Objective function ::: Proposed Energy function",
+  "section": "Objective function ::: Proposed Energy function",
+  "title_path": "Objective function ::: Proposed Energy function",
+  "block_type": "long_unit"
+}

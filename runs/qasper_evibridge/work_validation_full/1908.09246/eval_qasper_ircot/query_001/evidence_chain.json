@@ -1,0 +1,129 @@
+{
+  "strategy": "ircot",
+  "thoughts": [
+    "The retrieved evidence discusses model performance and dataset usage but does not mention language-specific reporting.",
+    "The evidence mentions evaluation on Twitter datasets and a news article dataset, but does not specify whether results are reported only on English data.",
+    "The datasets used (Twitter and news article) are not explicitly stated to be English-only, and the Google dataset is described as a subset of GDELT, which typically includes multilingual data."
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "retrieval_query": "Do they report results only on English data?",
+      "thought": "The retrieved evidence discusses model performance and dataset usage but does not mention language-specific reporting.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 64,
+          "score": 5.462342654259655,
+          "content": "(1) Do the entity/organization, location, date/person and keyword that we have extracted refer to the same event?",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "(1) Do the entity/organization, location, date/person and keyword that we have extracted refer to the same event?",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 70,
+          "score": 5.045156266510487,
+          "content": "Finally, we compare in Figure FIGREF37 the training time required for each model, excluding the constant time required by each model to load the data. We could observe that K-means runs fastest among all four approaches. Both LEM and DPEMM need to sample the event allocation for each document and update the relevant counts during Gibbs sampling which are time consuming. AEM only requires a fraction of the training time compared to LEM and DPEMM. Moreover, on a larger dataset such as the Google dataset, AEM appears to be far more efficient compared to LEM and DPEMM.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "Finally, we compare in Figure FIGREF37 the training time required for each model, excluding the constant time required by each model to load the data. We could observe that K-means runs fastest among all four approaches. Both LEM and DPEMM need to sample the event allocation for each document and update the relevant counts during Gibbs sampling which are time consuming. AEM only requires a fraction of the training time compared to LEM and DPEMM. Moreover, on a larger dataset such as the Google dataset, AEM appears to be far more efficient compared to LEM and DPEMM.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 68,
+          "score": 4.906247404964783,
+          "content": "We next visualize the detected events based on the discriminative features learned by the trained INLINEFORM0 network in AEM. The t-SNE BIBREF16 visualization results on the datasets are shown in Figure FIGREF19 . For clarity, each subplot is plotted on a subset of the dataset containing ten randomly selected events. It can be observed that documents describing the same event have been grouped into the same cluster.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "We next visualize the detected events based on the discriminative features learned by the trained INLINEFORM0 network in AEM. The t-SNE BIBREF16 visualization results on the datasets are shown in Figure FIGREF19 . For clarity, each subplot is plotted on a subset of the dataset containing ten randomly selected events. It can be observed that documents describing the same event have been grouped into the same cluster.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "retrieval_query": "Do they report results only on English data?\nThought 1: The retrieved evidence discusses model performance and dataset usage but does not mention language-specific reporting.",
+      "thought": "The evidence mentions evaluation on Twitter datasets and a news article dataset, but does not specify whether results are reported only on English data.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 2,
+          "score": 10.614264736595482,
+          "content": "To extract the structured representations of open-domain events, Bayesian graphical models have made some progress. However, these approaches typically assume that all words in a document are generated from a single event. While this may be true for short text such as tweets, such an assumption does not generally hold for long text such as news articles. Moreover, Bayesian graphical models often rely on Gibbs sampling for parameter inference which may take long time to converge. To address these limitations, we propose an event extraction model based on Generative Adversarial Nets, called Adversarial-neural Event Model (AEM). AEM models an event with a Dirichlet prior and uses a generator network to capture the patterns underlying latent events. A discriminator is used to distinguish documents reconstructed from the latent events and the original documents. A byproduct of the discriminator is that the features generated by the learned discriminator network allow the visualization of the extracted events. Our model has been evaluated on two Twitter datasets and a news article dataset. Experimental results show that our model outperforms the baseline approaches on all the datasets, with more significant improvements observed on the news article dataset where an increase of 15\\% is observed in F-measure.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "To extract the structured representations of open-domain events, Bayesian graphical models have made some progress. However, these approaches typically assume that all words in a document are generated from a single event. While this may be true for short text such as tweets, such an assumption does not generally hold for long text such as news articles. Moreover, Bayesian graphical models often rely on Gibbs sampling for parameter inference which may take long time to converge. To address these limitations, we propose an event extraction model based on Generative Adversarial Nets, called Adversarial-neural Event Model (AEM). AEM models an event with a Dirichlet prior and uses a generator network to capture the patterns underlying latent events. A discriminator is used to distinguish documents reconstructed from the latent events and the original documents. A byproduct of the discriminator is that the features generated by the learned discriminator network allow the visualization of the extracted events. Our model has been evaluated on two Twitter datasets and a news article dataset. Experimental results show that our model outperforms the baseline approaches on all the datasets, with more significant improvements observed on the news article dataset where an increase of 15\\% is observed in F-measure.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 67,
+          "score": 10.232999397259407,
+          "content": "It can be observed that K-means performs the worst over all three datasets. On the social media datasets, AEM outpoerforms both LEM and DPEMM by 6.5% and 1.7% respectively in F-measure on the FSD dataset, and 4.4% and 3.7% in F-measure on the Twitter dataset. We can also observe that apart from K-means, all the approaches perform worse on the Twitter dataset compared to FSD, possibly due to the limited size of the Twitter dataset. Moreover, on the Google dataset, the proposed AEM performs significantly better than LEM and DPEMM. It improves upon LEM by 15.5% and upon DPEMM by more than 30% in F-measure. This is because: (1) the assumption made by LEM and DPEMM that all words in a document are generated from a single event is not suitable for long text such as news articles; (2) DPEMM generates too many irrelevant events which leads to a very low precision score. Overall, we see the superior performance of AEM across all datasets, with more significant improvement on the for Google datasets (long text).",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "It can be observed that K-means performs the worst over all three datasets. On the social media datasets, AEM outpoerforms both LEM and DPEMM by 6.5% and 1.7% respectively in F-measure on the FSD dataset, and 4.4% and 3.7% in F-measure on the Twitter dataset. We can also observe that apart from K-means, all the approaches perform worse on the Twitter dataset compared to FSD, possibly due to the limited size of the Twitter dataset. Moreover, on the Google dataset, the proposed AEM performs significantly better than LEM and DPEMM. It improves upon LEM by 15.5% and upon DPEMM by more than 30% in F-measure. This is because: (1) the assumption made by LEM and DPEMM that all words in a document are generated from a single event is not suitable for long text such as news articles; (2) DPEMM generates too many irrelevant events which leads to a very low precision score. Overall, we see the superior performance of AEM across all datasets, with more significant improvement on the for Google datasets (long text).",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 70,
+          "score": 9.729771743648817,
+          "content": "Finally, we compare in Figure FIGREF37 the training time required for each model, excluding the constant time required by each model to load the data. We could observe that K-means runs fastest among all four approaches. Both LEM and DPEMM need to sample the event allocation for each document and update the relevant counts during Gibbs sampling which are time consuming. AEM only requires a fraction of the training time compared to LEM and DPEMM. Moreover, on a larger dataset such as the Google dataset, AEM appears to be far more efficient compared to LEM and DPEMM.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "Finally, we compare in Figure FIGREF37 the training time required for each model, excluding the constant time required by each model to load the data. We could observe that K-means runs fastest among all four approaches. Both LEM and DPEMM need to sample the event allocation for each document and update the relevant counts during Gibbs sampling which are time consuming. AEM only requires a fraction of the training time compared to LEM and DPEMM. Moreover, on a larger dataset such as the Google dataset, AEM appears to be far more efficient compared to LEM and DPEMM.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "retrieval_query": "Do they report results only on English data?\nThought 1: The retrieved evidence discusses model performance and dataset usage but does not mention language-specific reporting.\nThought 2: The evidence mentions evaluation on Twitter datasets and a news article dataset, but does not specify whether results are reported only on English data.",
+      "thought": "The datasets used (Twitter and news article) are not explicitly stated to be English-only, and the Google dataset is described as a subset of GDELT, which typically includes multilingual data.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 2,
+          "score": 30.807564529130982,
+          "content": "To extract the structured representations of open-domain events, Bayesian graphical models have made some progress. However, these approaches typically assume that all words in a document are generated from a single event. While this may be true for short text such as tweets, such an assumption does not generally hold for long text such as news articles. Moreover, Bayesian graphical models often rely on Gibbs sampling for parameter inference which may take long time to converge. To address these limitations, we propose an event extraction model based on Generative Adversarial Nets, called Adversarial-neural Event Model (AEM). AEM models an event with a Dirichlet prior and uses a generator network to capture the patterns underlying latent events. A discriminator is used to distinguish documents reconstructed from the latent events and the original documents. A byproduct of the discriminator is that the features generated by the learned discriminator network allow the visualization of the extracted events. Our model has been evaluated on two Twitter datasets and a news article dataset. Experimental results show that our model outperforms the baseline approaches on all the datasets, with more significant improvements observed on the news article dataset where an increase of 15\\% is observed in F-measure.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "To extract the structured representations of open-domain events, Bayesian graphical models have made some progress. However, these approaches typically assume that all words in a document are generated from a single event. While this may be true for short text such as tweets, such an assumption does not generally hold for long text such as news articles. Moreover, Bayesian graphical models often rely on Gibbs sampling for parameter inference which may take long time to converge. To address these limitations, we propose an event extraction model based on Generative Adversarial Nets, called Adversarial-neural Event Model (AEM). AEM models an event with a Dirichlet prior and uses a generator network to capture the patterns underlying latent events. A discriminator is used to distinguish documents reconstructed from the latent events and the original documents. A byproduct of the discriminator is that the features generated by the learned discriminator network allow the visualization of the extracted events. Our model has been evaluated on two Twitter datasets and a news article dataset. Experimental results show that our model outperforms the baseline approaches on all the datasets, with more significant improvements observed on the news article dataset where an increase of 15\\% is observed in F-measure.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 67,
+          "score": 28.782407299319733,
+          "content": "It can be observed that K-means performs the worst over all three datasets. On the social media datasets, AEM outpoerforms both LEM and DPEMM by 6.5% and 1.7% respectively in F-measure on the FSD dataset, and 4.4% and 3.7% in F-measure on the Twitter dataset. We can also observe that apart from K-means, all the approaches perform worse on the Twitter dataset compared to FSD, possibly due to the limited size of the Twitter dataset. Moreover, on the Google dataset, the proposed AEM performs significantly better than LEM and DPEMM. It improves upon LEM by 15.5% and upon DPEMM by more than 30% in F-measure. This is because: (1) the assumption made by LEM and DPEMM that all words in a document are generated from a single event is not suitable for long text such as news articles; (2) DPEMM generates too many irrelevant events which leads to a very low precision score. Overall, we see the superior performance of AEM across all datasets, with more significant improvement on the for Google datasets (long text).",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "It can be observed that K-means performs the worst over all three datasets. On the social media datasets, AEM outpoerforms both LEM and DPEMM by 6.5% and 1.7% respectively in F-measure on the FSD dataset, and 4.4% and 3.7% in F-measure on the Twitter dataset. We can also observe that apart from K-means, all the approaches perform worse on the Twitter dataset compared to FSD, possibly due to the limited size of the Twitter dataset. Moreover, on the Google dataset, the proposed AEM performs significantly better than LEM and DPEMM. It improves upon LEM by 15.5% and upon DPEMM by more than 30% in F-measure. This is because: (1) the assumption made by LEM and DPEMM that all words in a document are generated from a single event is not suitable for long text such as news articles; (2) DPEMM generates too many irrelevant events which leads to a very low precision score. Overall, we see the superior performance of AEM across all datasets, with more significant improvement on the for Google datasets (long text).",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 56,
+          "score": 21.175341630877867,
+          "content": "Google dataset (news article) is a subset of GDELT Event Database INLINEFORM0 , documents are retrieved by event related words. For example, documents which contain `malaysia', `airline', `search' and `plane' are retrieved for event MH370. By combining 30 events related documents, the dataset contains 11,909 news articles.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "Google dataset (news article) is a subset of GDELT Event Database INLINEFORM0 , documents are retrieved by event related words. For example, documents which contain `malaysia', `airline', `search' and `plane' are retrieved for event MH370. By combining 30 events related documents, the dataset contains 11,909 news articles.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    }
+  ],
+  "retrieved_block_ids": [
+    64,
+    70,
+    68,
+    2,
+    67,
+    56
+  ],
+  "supporting_block_ids": [
+    2,
+    64,
+    67,
+    68
+  ]
+}

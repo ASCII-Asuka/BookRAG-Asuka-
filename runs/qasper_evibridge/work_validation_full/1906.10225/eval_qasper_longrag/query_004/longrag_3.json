@@ -1,0 +1,151 @@
+{
+  "id": "longrag_3",
+  "content": "[Section] Compound PCFGs\n[source_id=17] A compound probability distribution BIBREF19 is a distribution whose parameters are themselves random variables. These distributions generalize mixture models to the continuous case, for example in factor analysis which assumes the following generative process,\n[source_id=18] INLINEFORM0\n[source_id=19] Compound distributions provide the ability to model rich generative processes, but marginalizing over the latent parameter can be computationally intractable unless conjugacy can be exploited.\n[source_id=20] In this work, we study compound probabilistic context-free grammars whose distribution over trees arises from the following generative process: we first obtain rule probabilities via\n[source_id=21] INLINEFORM0\n[source_id=22] where INLINEFORM0 is a prior with parameters INLINEFORM1 (spherical Gaussian in this paper), and INLINEFORM2 is a neural network that concatenates the input symbol embeddings with INLINEFORM3 and outputs the sentence-level rule probabilities INLINEFORM4 ,\n[source_id=23] INLINEFORM0\n[source_id=24] where INLINEFORM0 denotes vector concatenation. Then a tree/sentence is sampled from a PCFG with rule probabilities given by INLINEFORM1 ,\n[source_id=25] INLINEFORM0\n[source_id=26] This can be viewed as a continuous mixture of PCFGs, or alternatively, a Bayesian PCFG with a prior on sentence-level rule probabilities parameterized by INLINEFORM0 . Importantly, under this generative model the context-free assumptions hold conditioned on INLINEFORM3 , but they do not hold unconditionally. This is shown in Figure FIGREF3 (right) where there is a dependence path through INLINEFORM4 if it is not conditioned upon. Compound PCFGs give rise to a marginal distribution over parse trees INLINEFORM5 via\n[source_id=27] INLINEFORM0\n[source_id=28] where INLINEFORM0 . The subscript in INLINEFORM1 denotes the fact that the rule probabilities depend on INLINEFORM2 . Compound PCFGs are clearly more expressive than PCFGs as each sentence has its own set of rule probabilities. However, it still assumes a tree-based generative process, making it possible to learn latent tree structures.\n[source_id=29] Our motivation for the compound PCFG is based on the observation that for grammar induction, context-free assumptions are generally made not because they represent an adequate model of natural language, but because they allow for tractable training. We can in principle model richer dependencies through vertical/horizontal Markovization BIBREF21 , BIBREF22 and lexicalization BIBREF23 . However such dependencies complicate training due to the rapid increase in the number of rules. Under this view, we can interpret the compound PCFG as a restricted version of some lexicalized, higher-order PCFG where a child can depend on structural and lexical context through a shared latent vector. We hypothesize that this dependence among siblings is especially useful in grammar induction from words, where (for example) if we know that watched is used as a verb then the noun phrase is likely to be a movie.\n[source_id=30] In contrast to the usual Bayesian treatment of PCFGs which places priors on global rule probabilities BIBREF3 , BIBREF4 , BIBREF6 , the compound PCFG assumes a prior on local, sentence-level rule probabilities. It is therefore closely related to the Bayesian grammars studied by BIBREF25 and BIBREF26 , who also sample local rule probabilities from a logistic normal prior for training dependency models with valence (DMV) BIBREF27 .",
+  "score": 1.1115427994035583,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_3",
+  "child_source_node_ids": [
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ],
+  "child_qasper_evidence_texts": [
+    "A compound probability distribution BIBREF19 is a distribution whose parameters are themselves random variables. These distributions generalize mixture models to the continuous case, for example in factor analysis which assumes the following generative process,",
+    "INLINEFORM0",
+    "Compound distributions provide the ability to model rich generative processes, but marginalizing over the latent parameter can be computationally intractable unless conjugacy can be exploited.",
+    "In this work, we study compound probabilistic context-free grammars whose distribution over trees arises from the following generative process: we first obtain rule probabilities via",
+    "INLINEFORM0",
+    "where INLINEFORM0 is a prior with parameters INLINEFORM1 (spherical Gaussian in this paper), and INLINEFORM2 is a neural network that concatenates the input symbol embeddings with INLINEFORM3 and outputs the sentence-level rule probabilities INLINEFORM4 ,",
+    "INLINEFORM0",
+    "where INLINEFORM0 denotes vector concatenation. Then a tree/sentence is sampled from a PCFG with rule probabilities given by INLINEFORM1 ,",
+    "INLINEFORM0",
+    "This can be viewed as a continuous mixture of PCFGs, or alternatively, a Bayesian PCFG with a prior on sentence-level rule probabilities parameterized by INLINEFORM0 . Importantly, under this generative model the context-free assumptions hold conditioned on INLINEFORM3 , but they do not hold unconditionally. This is shown in Figure FIGREF3 (right) where there is a dependence path through INLINEFORM4 if it is not conditioned upon. Compound PCFGs give rise to a marginal distribution over parse trees INLINEFORM5 via",
+    "INLINEFORM0",
+    "where INLINEFORM0 . The subscript in INLINEFORM1 denotes the fact that the rule probabilities depend on INLINEFORM2 . Compound PCFGs are clearly more expressive than PCFGs as each sentence has its own set of rule probabilities. However, it still assumes a tree-based generative process, making it possible to learn latent tree structures.",
+    "Our motivation for the compound PCFG is based on the observation that for grammar induction, context-free assumptions are generally made not because they represent an adequate model of natural language, but because they allow for tractable training. We can in principle model richer dependencies through vertical/horizontal Markovization BIBREF21 , BIBREF22 and lexicalization BIBREF23 . However such dependencies complicate training due to the rapid increase in the number of rules. Under this view, we can interpret the compound PCFG as a restricted version of some lexicalized, higher-order PCFG where a child can depend on structural and lexical context through a shared latent vector. We hypothesize that this dependence among siblings is especially useful in grammar induction from words, where (for example) if we know that watched is used as a verb then the noun phrase is likely to be a movie.",
+    "In contrast to the usual Bayesian treatment of PCFGs which places priors on global rule probabilities BIBREF3 , BIBREF4 , BIBREF6 , the compound PCFG assumes a prior on local, sentence-level rule probabilities. It is therefore closely related to the Bayesian grammars studied by BIBREF25 and BIBREF26 , who also sample local rule probabilities from a logistic normal prior for training dependency models with valence (DMV) BIBREF27 ."
+  ],
+  "child_pages": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "child_sections": [
+    "Compound PCFGs",
+    "Compound PCFGs",
+    "Compound PCFGs",
+    "Compound PCFGs",
+    "Compound PCFGs",
+    "Compound PCFGs",
+    "Compound PCFGs",
+    "Compound PCFGs",
+    "Compound PCFGs",
+    "Compound PCFGs",
+    "Compound PCFGs",
+    "Compound PCFGs",
+    "Compound PCFGs",
+    "Compound PCFGs"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Compound PCFGs",
+      0
+    ],
+    [
+      "Compound PCFGs",
+      1
+    ],
+    [
+      "Compound PCFGs",
+      2
+    ],
+    [
+      "Compound PCFGs",
+      3
+    ],
+    [
+      "Compound PCFGs",
+      4
+    ],
+    [
+      "Compound PCFGs",
+      5
+    ],
+    [
+      "Compound PCFGs",
+      6
+    ],
+    [
+      "Compound PCFGs",
+      7
+    ],
+    [
+      "Compound PCFGs",
+      8
+    ],
+    [
+      "Compound PCFGs",
+      9
+    ],
+    [
+      "Compound PCFGs",
+      10
+    ],
+    [
+      "Compound PCFGs",
+      11
+    ],
+    [
+      "Compound PCFGs",
+      12
+    ],
+    [
+      "Compound PCFGs",
+      13
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_3",
+  "section_id": "Compound PCFGs",
+  "section": "Compound PCFGs",
+  "title_path": "Compound PCFGs",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,115 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Question Answering with QC Labels\n[source_id=33] Because of the challenges of errorful label predictions correlating with incorrect answers, it is difficult to determine the ultimate benefit a QA model might receive from reporting QC performance in isolation. Coupling QA and QC systems can often be laborious – either a large number of independent solvers targeted to specific question types must be constructed BIBREF46 , or an existing single model must be able to productively incorporate question classification information. Here we demostrate the latter – that a BERT QA model is able to incorporate question classification information through query expansion. BERT BIBREF43 recently demonstrated state-of-the-art performance on benchmark question answering datasets such as SQUaD BIBREF47 , and near human-level performance on SWAG BIBREF48 . Similarly, Pan et al. BIBREF49 demonstrated that BERT achieves the highest accuracy on the most challenging subset of ARC science questions. We make use of a BERT QA model using the same QA paradigm described by Pan et al. BIBREF49 , where QA is modeled as a next-sentence prediction task that predicts the likelihood of a given multiple choice answer candidate following the question text. We evaluate the question text and the text of each multiple choice answer candidate separately, where the answer candidate with the highest probablity is selected as the predicted answer for a given question. Performance is evaluated using Precision@1 BIBREF36 . Additional model details and hyperparameters are included in the Appendix.\n[source_id=34] We incorporate QC information into the QA process by implementing a variant of a query expansion model BIBREF50 . Specifically, for a given {question, QC_label} pair, we expand the question text by concatenating the definition text of the question classification label to the start of the question. We use of the top predicted question classification label for each question. Because QC labels are hierarchical, we append the label definition text for each level of the label INLINEFORM0 . An exampe of this process is shown in Table TABREF23 .\n[source_id=35] Figure FIGREF24 shows QA peformance using predicted labels from the BERT-QC model, compared to a baseline model that does not contain question classification information. As predicted by the error analysis, while a model trained with question and answer candidate text performs better at QC than a model using question text alone, a large proportion of the incorrect predictions become associated with a negative answer candidate, reducing overall QA performance, and highlighting the importance of evaluating QC and QA models together. When using BERT-QC trained on question text alone, at the finest level of specificity (L6) where overall question classification accuracy is 57.8% P@1, question classification significantly improves QA performance by +1.7% P@1 INLINEFORM0 . Using gold labels shows ceiling QA performance can reach +10.0% P@1 over baseline, demonstrating that as question classification model performance improves, substantial future gains are possible. An analysis of expected gains for a given level of QC performance is included in the Appendix, showing approximately linear gains in QA performance above baseline for QC systems able to achieve over 40% classification accuracy. Below this level, the decreased performance from noise induced by incorrect labels surpasses gains from correct labels.\n[source_id=36] Hyperparameters: Pilot experiments on both pre-trained BERT-Base and BERT-Large checkpoints showed similar performance benefits at the finest levels of question classification granularity (L6), but the BERT-Large model demonstrated higher overall baseline performance, and larger incremental benefits at lower levels of QC granularity, so we evaluated using that model. We lightly tuned hyperparameters on the development set surrounding those reported by Devlin et al. BIBREF43 , and ultimately settled on parameters similar to their original work, tempered by technical limitations in running the BERT-Large model on available hardware: maximum sequence length = 128, batch size = 16, learning rate: 1e-5. We report performance as the average of 10 runs for each datapoint. The number of epochs were tuned on each run on the development set (to a maximum of 8 epochs), where most models converged to maximum performance within 5 epochs.\n[source_id=37] Preference for uncorrelated errors in multiple choice question classification: We primarily report QA performance using BERT-QC trained using text from only the multiple choice questions and not their answer candidates. While this model achieved lower overall QC performance compared to the model trained with both question and multiple choice answer candidate text, it achieved slightly higher performance in the QA+QC setting. Our error analysis in Section SECREF21 shows that though models trained on both question and answer text can achieve higher QC performance, when they make QC errors, the errors tend to be highly correlated with an incorrect answer candidate, which can substantially reduce QA performance. This is an important result for question classification in the context of multiple choice exams.In the context of multiple choice exams, correlated noise can substantially reduce QA performance, meaning the kinds of errors that a model makes are important, and evaluating QC performance in context with QA models that make use of those QC systems is critical.\n[source_id=38] Related to this result, we provide an analysis of the noise sensitivity of the QA+QC model for different levels of question classification prediction accuracy. Here, we perturb gold question labels by randomly selecting a proportion of questions (between 5% and 40%) and randomly assigning that question a different label. Figure FIGREF36 shows that this uncorrelated noise provides roughly linear decreases in performance, and still shows moderate gains at 60% accuracy (40% noise) with uncorrelated noise. This suggests that when making errors, making random errors (that are not correlated to incorrect multiple choice answers) is preferential.\n[source_id=39] Training with predicted labels: We observed small gains when training the BERT-QA model with predicted QC labels. We generate predicted labels for the training set using 5-fold crossvalidation over only the training questions.\n[source_id=40] Statistics: We use non-parametric bootstrap resampling to compare baseline (no label) and experimental (QC labeled) runs of the QA+QC experiment. Because the BERT-QA model produces different performance values across successive runs, we perform 10 runs of each condition. We then compute pairwise p-values for each of the 10 no label and QC labeled runs (generating 100 comparisons), then use Fisher's method to combine these into a final statistic.\n[source_id=41] Question classification paired with question answering shows statistically significant gains of +1.7% P@1 at L6 using predicted labels, and a ceiling gain of up to +10% P@1 using gold labels. The QA performance graph in Figure FIGREF24 contains two deviations from the expectation of linear gains with increasing specificity, at L1 and L3. Region at INLINEFORM0 On gold labels, L3 provides small gains over L2, where as L4 provides large gains over L3. We hypothesize that this is because approximately 57% of question labels belong to the Earth Science or Life Science categories which have much more depth than breadth in the standardized science curriculum, and as such these categories are primarily differentiated from broad topics into detailed problem types at levels L4 through L6. Most other curriculum categories have more breadth than depth, and show strong (but not necessarily full) differentiation at L2. Region at INLINEFORM1 Predicted performance at L1 is higher than gold performance at L1. We hypothesize this is because we train using predicted rather than gold labels, which provides a boost in performance. Training on gold labels and testing on predicted labels substantially reduces the difference between gold and predicted performance.\n[source_id=42] Though initial raw interannotator agreement was measured at INLINEFORM0 , to maximize the quality of the annotation the annotators performed a second pass where all disagreements were manually resolved. Table TABREF30 shows question classification performance of the BERT-QC model at 57.8% P@1, meaning 42.2% of the predicted labels were different than the gold labels. The question classification error analysis in Table TABREF20 found that of these 42.2% of errorful predictions, 10% of errors (4.2% of total labels) were caused by the gold labels being incorrect. This allows us to estimate that the overall quality of the annotation (the proportion of questions that have a correct human authored label) is approximately 96%.",
+  "score": 0.870872250012334,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42
+  ],
+  "child_qasper_evidence_texts": [
+    "Because of the challenges of errorful label predictions correlating with incorrect answers, it is difficult to determine the ultimate benefit a QA model might receive from reporting QC performance in isolation. Coupling QA and QC systems can often be laborious – either a large number of independent solvers targeted to specific question types must be constructed BIBREF46 , or an existing single model must be able to productively incorporate question classification information. Here we demostrate the latter – that a BERT QA model is able to incorporate question classification information through query expansion. BERT BIBREF43 recently demonstrated state-of-the-art performance on benchmark question answering datasets such as SQUaD BIBREF47 , and near human-level performance on SWAG BIBREF48 . Similarly, Pan et al. BIBREF49 demonstrated that BERT achieves the highest accuracy on the most challenging subset of ARC science questions. We make use of a BERT QA model using the same QA paradigm described by Pan et al. BIBREF49 , where QA is modeled as a next-sentence prediction task that predicts the likelihood of a given multiple choice answer candidate following the question text. We evaluate the question text and the text of each multiple choice answer candidate separately, where the answer candidate with the highest probablity is selected as the predicted answer for a given question. Performance is evaluated using Precision@1 BIBREF36 . Additional model details and hyperparameters are included in the Appendix.",
+    "We incorporate QC information into the QA process by implementing a variant of a query expansion model BIBREF50 . Specifically, for a given {question, QC_label} pair, we expand the question text by concatenating the definition text of the question classification label to the start of the question. We use of the top predicted question classification label for each question. Because QC labels are hierarchical, we append the label definition text for each level of the label INLINEFORM0 . An exampe of this process is shown in Table TABREF23 .",
+    "Figure FIGREF24 shows QA peformance using predicted labels from the BERT-QC model, compared to a baseline model that does not contain question classification information. As predicted by the error analysis, while a model trained with question and answer candidate text performs better at QC than a model using question text alone, a large proportion of the incorrect predictions become associated with a negative answer candidate, reducing overall QA performance, and highlighting the importance of evaluating QC and QA models together. When using BERT-QC trained on question text alone, at the finest level of specificity (L6) where overall question classification accuracy is 57.8% P@1, question classification significantly improves QA performance by +1.7% P@1 INLINEFORM0 . Using gold labels shows ceiling QA performance can reach +10.0% P@1 over baseline, demonstrating that as question classification model performance improves, substantial future gains are possible. An analysis of expected gains for a given level of QC performance is included in the Appendix, showing approximately linear gains in QA performance above baseline for QC systems able to achieve over 40% classification accuracy. Below this level, the decreased performance from noise induced by incorrect labels surpasses gains from correct labels.",
+    "Hyperparameters: Pilot experiments on both pre-trained BERT-Base and BERT-Large checkpoints showed similar performance benefits at the finest levels of question classification granularity (L6), but the BERT-Large model demonstrated higher overall baseline performance, and larger incremental benefits at lower levels of QC granularity, so we evaluated using that model. We lightly tuned hyperparameters on the development set surrounding those reported by Devlin et al. BIBREF43 , and ultimately settled on parameters similar to their original work, tempered by technical limitations in running the BERT-Large model on available hardware: maximum sequence length = 128, batch size = 16, learning rate: 1e-5. We report performance as the average of 10 runs for each datapoint. The number of epochs were tuned on each run on the development set (to a maximum of 8 epochs), where most models converged to maximum performance within 5 epochs.",
+    "Preference for uncorrelated errors in multiple choice question classification: We primarily report QA performance using BERT-QC trained using text from only the multiple choice questions and not their answer candidates. While this model achieved lower overall QC performance compared to the model trained with both question and multiple choice answer candidate text, it achieved slightly higher performance in the QA+QC setting. Our error analysis in Section SECREF21 shows that though models trained on both question and answer text can achieve higher QC performance, when they make QC errors, the errors tend to be highly correlated with an incorrect answer candidate, which can substantially reduce QA performance. This is an important result for question classification in the context of multiple choice exams.In the context of multiple choice exams, correlated noise can substantially reduce QA performance, meaning the kinds of errors that a model makes are important, and evaluating QC performance in context with QA models that make use of those QC systems is critical.",
+    "Related to this result, we provide an analysis of the noise sensitivity of the QA+QC model for different levels of question classification prediction accuracy. Here, we perturb gold question labels by randomly selecting a proportion of questions (between 5% and 40%) and randomly assigning that question a different label. Figure FIGREF36 shows that this uncorrelated noise provides roughly linear decreases in performance, and still shows moderate gains at 60% accuracy (40% noise) with uncorrelated noise. This suggests that when making errors, making random errors (that are not correlated to incorrect multiple choice answers) is preferential.",
+    "Training with predicted labels: We observed small gains when training the BERT-QA model with predicted QC labels. We generate predicted labels for the training set using 5-fold crossvalidation over only the training questions.",
+    "Statistics: We use non-parametric bootstrap resampling to compare baseline (no label) and experimental (QC labeled) runs of the QA+QC experiment. Because the BERT-QA model produces different performance values across successive runs, we perform 10 runs of each condition. We then compute pairwise p-values for each of the 10 no label and QC labeled runs (generating 100 comparisons), then use Fisher's method to combine these into a final statistic.",
+    "Question classification paired with question answering shows statistically significant gains of +1.7% P@1 at L6 using predicted labels, and a ceiling gain of up to +10% P@1 using gold labels. The QA performance graph in Figure FIGREF24 contains two deviations from the expectation of linear gains with increasing specificity, at L1 and L3. Region at INLINEFORM0 On gold labels, L3 provides small gains over L2, where as L4 provides large gains over L3. We hypothesize that this is because approximately 57% of question labels belong to the Earth Science or Life Science categories which have much more depth than breadth in the standardized science curriculum, and as such these categories are primarily differentiated from broad topics into detailed problem types at levels L4 through L6. Most other curriculum categories have more breadth than depth, and show strong (but not necessarily full) differentiation at L2. Region at INLINEFORM1 Predicted performance at L1 is higher than gold performance at L1. We hypothesize this is because we train using predicted rather than gold labels, which provides a boost in performance. Training on gold labels and testing on predicted labels substantially reduces the difference between gold and predicted performance.",
+    "Though initial raw interannotator agreement was measured at INLINEFORM0 , to maximize the quality of the annotation the annotators performed a second pass where all disagreements were manually resolved. Table TABREF30 shows question classification performance of the BERT-QC model at 57.8% P@1, meaning 42.2% of the predicted labels were different than the gold labels. The question classification error analysis in Table TABREF20 found that of these 42.2% of errorful predictions, 10% of errors (4.2% of total labels) were caused by the gold labels being incorrect. This allows us to estimate that the overall quality of the annotation (the proportion of questions that have a correct human authored label) is approximately 96%."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Question Answering with QC Labels",
+    "Question Answering with QC Labels",
+    "Question Answering with QC Labels",
+    "Question Answering with QC Labels",
+    "Question Answering with QC Labels",
+    "Question Answering with QC Labels",
+    "Question Answering with QC Labels",
+    "Question Answering with QC Labels",
+    "Question Answering with QC Labels",
+    "Question Answering with QC Labels"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Question Answering with QC Labels",
+      0
+    ],
+    [
+      "Question Answering with QC Labels",
+      1
+    ],
+    [
+      "Question Answering with QC Labels",
+      2
+    ],
+    [
+      "Question Answering with QC Labels",
+      3
+    ],
+    [
+      "Question Answering with QC Labels",
+      4
+    ],
+    [
+      "Question Answering with QC Labels",
+      5
+    ],
+    [
+      "Question Answering with QC Labels",
+      6
+    ],
+    [
+      "Question Answering with QC Labels",
+      7
+    ],
+    [
+      "Question Answering with QC Labels",
+      8
+    ],
+    [
+      "Question Answering with QC Labels",
+      9
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Question Answering with QC Labels",
+  "section": "Question Answering with QC Labels",
+  "title_path": "Question Answering with QC Labels",
+  "block_type": "long_unit"
+}

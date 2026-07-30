@@ -1,0 +1,278 @@
+[
+  {
+    "question": "Do they compare human-level performance to model performance for their dataset?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": false,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": false,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      }
+    ],
+    "doc_uuid": "1910.14599",
+    "doc_path": "qasper://1910.14599",
+    "qasper_question_id": "a69a59b6c0ab27bcee1a780d6867df21e30aec08",
+    "title": "Adversarial NLI: A New Benchmark for Natural Language Understanding",
+    "evidence_block_ids": [],
+    "evidence_paragraph_ids": [],
+    "output": "{\n  \"answer_short\": \"Not answerable\",\n  \"answer_rationale\": \"The retrieved documents discuss model performance relative to other datasets and human annotators' ability to stump models, but none explicitly compare human-level performance to model performance for their specific dataset.\"\n}",
+    "retrieved_node_ids": [
+      58,
+      5,
+      78,
+      6,
+      9,
+      2,
+      79,
+      40,
+      29,
+      63
+    ],
+    "answer_short": "Not answerable",
+    "answer_rationale": "The retrieved documents discuss model performance relative to other datasets and human annotators' ability to stump models, but none explicitly compare human-level performance to model performance for their specific dataset.",
+    "supporting_block_ids": [
+      58,
+      5,
+      78,
+      6,
+      9,
+      2,
+      79,
+      40,
+      29,
+      63
+    ]
+  },
+  {
+    "question": "What are the weaknesses found by non-expert annotators of current state-of-the-art NLI models?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "state-of-the-art models learn to exploit spurious statistical patterns in datasets",
+          "human annotators—be they seasoned NLP researchers or non-experts—might easily be able to construct examples that expose model brittleness"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "The speed with which benchmarks become obsolete raises another important question: are current NLU models genuinely as good as their high performance on benchmarks suggests? A growing body of evidence shows that state-of-the-art models learn to exploit spurious statistical patterns in datasets BIBREF12, BIBREF13, BIBREF14, BIBREF15, BIBREF16, BIBREF17, instead of learning meaning in the flexible and generalizable way that humans do. Given this, human annotators—be they seasoned NLP researchers or non-experts—might easily be able to construct examples that expose model brittleness."
+        ],
+        "evidence_block_ids": [
+          6
+        ],
+        "evidence_paragraph_ids": [
+          6
+        ]
+      }
+    ],
+    "doc_uuid": "1910.14599",
+    "doc_path": "qasper://1910.14599",
+    "qasper_question_id": "b3d01ac226ee979e188a4141877a6d2a5482de98",
+    "title": "Adversarial NLI: A New Benchmark for Natural Language Understanding",
+    "evidence_block_ids": [
+      6
+    ],
+    "evidence_paragraph_ids": [
+      6
+    ],
+    "output": "{\n  \"answer_short\": \"non-expert annotators are remarkably creative at finding and exploiting weaknesses in models\",\n  \"answer_rationale\": \"Text 3 explicitly states that non-expert annotators, in a gamified setting with incentives to fool the model, are remarkably creative at finding and exploiting weaknesses in models. This directly addresses the question about the weaknesses found by non-expert annotators of current state-of-the-art NLI models.\"\n}",
+    "retrieved_node_ids": [
+      2,
+      9,
+      76,
+      27,
+      60,
+      6,
+      14,
+      70,
+      61,
+      11
+    ],
+    "answer_short": "non-expert annotators are remarkably creative at finding and exploiting weaknesses in models",
+    "answer_rationale": "Text 3 explicitly states that non-expert annotators, in a gamified setting with incentives to fool the model, are remarkably creative at finding and exploiting weaknesses in models. This directly addresses the question about the weaknesses found by non-expert annotators of current state-of-the-art NLI models.",
+    "supporting_block_ids": [
+      2,
+      9,
+      76,
+      27,
+      60,
+      6,
+      14,
+      70,
+      61,
+      11
+    ]
+  },
+  {
+    "question": "What data sources do they use for creating their dataset?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Wikipedia (of 250-600 characters) from the manually curated HotpotQA training set",
+          "Manually Annotated Sub-Corpus (MASC) of the Open American National Corpus)",
+          "RTE5"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "For the first round, we used a BERT-Large model BIBREF10 trained on a concatenation of SNLI BIBREF1 and MNLI BIBREF22, and selected the best-performing model we could train as the starting point for our dataset collection procedure. For Round 1 contexts, we randomly sampled short multi-sentence passages from Wikipedia (of 250-600 characters) from the manually curated HotpotQA training set BIBREF23. Contexts are either ground-truth contexts from that dataset, or they are Wikipedia passages retrieved using TF-IDF BIBREF24 based on a HotpotQA question.",
+          "For the second round, we used a more powerful RoBERTa model BIBREF25 trained on SNLI, MNLI, an NLI-version of FEVER BIBREF26, and the training data from the previous round (A1). After a hyperparameter search, we selected the model with the best performance on the A1 development set. Then, using the hyperparameters selected from this search, we created a final set of models by training several models with different random seeds. During annotation, we constructed an ensemble by randomly picking a model from the model set as the adversary each turn. This helps us avoid annotators exploiting vulnerabilities in one single model. A new non-overlapping set of contexts was again constructed from Wikipedia via HotpotQA using the same method as Round 1.",
+          "For the third round, we selected a more diverse set of contexts, in order to explore robustness under domain transfer. In addition to contexts from Wikipedia for Round 3, we also included contexts from the following domains: News (extracted from Common Crawl), fiction (extracted from BIBREF27, and BIBREF28), formal spoken text (excerpted from court and presidential debate transcripts in the Manually Annotated Sub-Corpus (MASC) of the Open American National Corpus), and causal or procedural text, which describes sequences of events or actions, extracted from WikiHow. Finally, we also collected annotations using the longer contexts present in the GLUE RTE training data, which came from the RTE5 dataset BIBREF29. We trained an even stronger RoBERTa model by adding the training set from the second round (A2) to the training data."
+        ],
+        "evidence_block_ids": [
+          20,
+          22,
+          24
+        ],
+        "evidence_paragraph_ids": [
+          20,
+          22,
+          24
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Wikipedia (of 250-600 characters) from the manually curated HotpotQA training set",
+          "formal spoken text (excerpted from court and presidential debate transcripts in the Manually Annotated Sub-Corpus (MASC) of the Open American National Corpus)",
+          "causal or procedural text, which describes sequences of events or actions, extracted from WikiHow",
+          "annotations using the longer contexts present in the GLUE RTE training data, which came from the RTE5 dataset"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "For the first round, we used a BERT-Large model BIBREF10 trained on a concatenation of SNLI BIBREF1 and MNLI BIBREF22, and selected the best-performing model we could train as the starting point for our dataset collection procedure. For Round 1 contexts, we randomly sampled short multi-sentence passages from Wikipedia (of 250-600 characters) from the manually curated HotpotQA training set BIBREF23. Contexts are either ground-truth contexts from that dataset, or they are Wikipedia passages retrieved using TF-IDF BIBREF24 based on a HotpotQA question.",
+          "For the third round, we selected a more diverse set of contexts, in order to explore robustness under domain transfer. In addition to contexts from Wikipedia for Round 3, we also included contexts from the following domains: News (extracted from Common Crawl), fiction (extracted from BIBREF27, and BIBREF28), formal spoken text (excerpted from court and presidential debate transcripts in the Manually Annotated Sub-Corpus (MASC) of the Open American National Corpus), and causal or procedural text, which describes sequences of events or actions, extracted from WikiHow. Finally, we also collected annotations using the longer contexts present in the GLUE RTE training data, which came from the RTE5 dataset BIBREF29. We trained an even stronger RoBERTa model by adding the training set from the second round (A2) to the training data."
+        ],
+        "evidence_block_ids": [
+          20,
+          24
+        ],
+        "evidence_paragraph_ids": [
+          20,
+          24
+        ]
+      }
+    ],
+    "doc_uuid": "1910.14599",
+    "doc_path": "qasper://1910.14599",
+    "qasper_question_id": "af5730d82535464cedfa707a03415ac2e7a21295",
+    "title": "Adversarial NLI: A New Benchmark for Natural Language Understanding",
+    "evidence_block_ids": [
+      20,
+      22,
+      24
+    ],
+    "evidence_paragraph_ids": [
+      20,
+      22,
+      24
+    ],
+    "output": "{\n  \"answer_short\": \"Not answerable\",\n  \"answer_rationale\": \"The retrieved documents discuss the dataset's construction, collection process, and comparison with other datasets, but none explicitly list or identify specific external data sources used for creating the dataset. While they mention using existing data and iteratively collecting new examples, they do not specify particular data sources.\"\n}",
+    "retrieved_node_ids": [
+      74,
+      31,
+      63,
+      29,
+      16,
+      78,
+      26,
+      72,
+      77,
+      58
+    ],
+    "answer_short": "Not answerable",
+    "answer_rationale": "The retrieved documents discuss the dataset's construction, collection process, and comparison with other datasets, but none explicitly list or identify specific external data sources used for creating the dataset. While they mention using existing data and iteratively collecting new examples, they do not specify particular data sources.",
+    "supporting_block_ids": [
+      74,
+      31,
+      63,
+      29,
+      16,
+      78,
+      26,
+      72,
+      77,
+      58
+    ]
+  },
+  {
+    "question": "Do they use active learning to create their dataset?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": true,
+        "evidence": [
+          "In our setup, our starting point is a base model, trained on NLI data. Rather than employing automated adversarial methods, here the model's “adversary” is a human annotator. Given a context (also often called a “premise” in NLI), and a desired target label, we ask the human writer to provide a hypothesis that fools the model into misclassifying the label. One can think of the writer as a “white hat” hacker, trying to identify vulnerabilities in the system. For each human-generated example that is misclassified, we also ask the writer to provide a reason why they believe it was misclassified."
+        ],
+        "evidence_block_ids": [
+          14
+        ],
+        "evidence_paragraph_ids": [
+          14
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": false,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      }
+    ],
+    "doc_uuid": "1910.14599",
+    "doc_path": "qasper://1910.14599",
+    "qasper_question_id": "ee2c9bc24d70daa0c87e38e0558e09ab97feb4f2",
+    "title": "Adversarial NLI: A New Benchmark for Natural Language Understanding",
+    "evidence_block_ids": [
+      14
+    ],
+    "evidence_paragraph_ids": [
+      14
+    ],
+    "output": "{\n  \"answer_short\": \"Yes\",\n  \"answer_rationale\": \"The document mentions 'Human-And-Model-in-the-Loop Entailment Training (HAMLET)', which employs both human-in-the-loop and model-in-the-loop strategies iteratively to collect new examples, indicating active learning in dataset creation.\"\n}",
+    "retrieved_node_ids": [
+      72,
+      29,
+      16,
+      74,
+      13,
+      63,
+      77,
+      11,
+      31,
+      78
+    ],
+    "answer_short": "Yes",
+    "answer_rationale": "The document mentions 'Human-And-Model-in-the-Loop Entailment Training (HAMLET)', which employs both human-in-the-loop and model-in-the-loop strategies iteratively to collect new examples, indicating active learning in dataset creation.",
+    "supporting_block_ids": [
+      72,
+      29,
+      16,
+      74,
+      13,
+      63,
+      77,
+      11,
+      31,
+      78
+    ]
+  }
+]

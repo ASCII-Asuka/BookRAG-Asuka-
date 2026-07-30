@@ -1,0 +1,97 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Standard setup\n[source_id=18] Table TABREF14 shows the results of our main experiments on the 2016 and 2018 test sets for French and German. We use Meteor BIBREF31 as the main metric, as in the WMT tasks BIBREF25 . We compare our transformer baseline to transformer models enriched with image information, as well as to the deliberation models, with or without image information.\n[source_id=19] We first note that our multimodal models achieve the state of the art performance for transformer networks (constrained models) on the English-German dataset, as compared to BIBREF30 . Second, our deliberation models lead to significant improvements over this baseline across test sets (average INLINEFORM0 , INLINEFORM1 ).\n[source_id=20] Transformer-based models enriched with image information (base+sum, base+att and base+obj), on the other hand, show no major improvements with respect to the base performance. This is also the case for deliberation models with image information (del+sum, del+att, del+obj), which do not show significant improvement over the vanilla deliberation performance (del).\n[source_id=21] However, as it has been shown in the WMT shared tasks on MMT BIBREF23 , BIBREF24 , BIBREF25 , automatic metrics often fail to capture nuances in translation quality, such as, the ones we expect the visual modality to help with, which – according to human perception – lead to better translations. To test this assumption in our settings, we performed human evaluation involving professional translators and native speakers of both French and German (three annotators).\n[source_id=22] The annotators were asked to rank randomly selected test samples according to how well they convey the meaning of the source, given the image (50 samples per language pair per annotator). For each source segment, the annotator was shown the outputs of three systems: base+att, the current MMT state-of-the-art BIBREF30 , del and del+obj. A rank could be assigned from 1 to 3, allowing ties BIBREF32 . Annotators could assign zero rank to all translations if they were judged incomprehensible. Following the common practice in WMT BIBREF32 , each system was then assigned a score which reflects the proportion of times it was judged to be better or equal other systems.\n[source_id=23] Table TABREF19 shows the human evaluation results. They are consistent with the automatic evaluation results when it comes to the preference of humans towards the deliberation-based setups, but show a more positive outlook regarding the addition of visual information (del+obj over del) for French.\n[source_id=24] Manual inspection of translations suggests that deliberation setups tend to improve both the grammaticality and adequacy of the first pass outputs. For German, the most common modifications performed by the second-pass decoder are substitutions of adjectives and verbs (for test 2016, 15% and 12% respectively, of all the edit distance operations). Changes to adjectives are mainly grammatical, changes to verbs are contextual (e.g., changing laufen to rennen, both verbs mean run, but the second refers to running very fast). For French, 15% of all the changes are substitutions of nouns (for test 2016). These are again very contextual. For example, the French word travailleur (worker) is replaced by ouvrier (manual worker) in the contexts where tools, machinery or buildings are mentioned. For our analysis we used again spacy.\n[source_id=25] The information on detected objects is particularly helpful for specific adequacy issues. Figure FIGREF15 demonstrates some such cases. In the first case, the base+att model misses the translation of race car: the German word Rennen translates only the word race. del introduces the word car (Auto) into the translation. Finally, del+obj correctly translates the expression race car (Rennwagen) by exploiting the object information. For French, del translates the source part in a body of water, missing from the base+att translation. del+obj additionally translated the word paddling according to the detected object Paddle.",
+  "score": 6.037116137911783,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+  ],
+  "child_qasper_evidence_texts": [
+    "Table TABREF14 shows the results of our main experiments on the 2016 and 2018 test sets for French and German. We use Meteor BIBREF31 as the main metric, as in the WMT tasks BIBREF25 . We compare our transformer baseline to transformer models enriched with image information, as well as to the deliberation models, with or without image information.",
+    "We first note that our multimodal models achieve the state of the art performance for transformer networks (constrained models) on the English-German dataset, as compared to BIBREF30 . Second, our deliberation models lead to significant improvements over this baseline across test sets (average INLINEFORM0 , INLINEFORM1 ).",
+    "Transformer-based models enriched with image information (base+sum, base+att and base+obj), on the other hand, show no major improvements with respect to the base performance. This is also the case for deliberation models with image information (del+sum, del+att, del+obj), which do not show significant improvement over the vanilla deliberation performance (del).",
+    "However, as it has been shown in the WMT shared tasks on MMT BIBREF23 , BIBREF24 , BIBREF25 , automatic metrics often fail to capture nuances in translation quality, such as, the ones we expect the visual modality to help with, which – according to human perception – lead to better translations. To test this assumption in our settings, we performed human evaluation involving professional translators and native speakers of both French and German (three annotators).",
+    "The annotators were asked to rank randomly selected test samples according to how well they convey the meaning of the source, given the image (50 samples per language pair per annotator). For each source segment, the annotator was shown the outputs of three systems: base+att, the current MMT state-of-the-art BIBREF30 , del and del+obj. A rank could be assigned from 1 to 3, allowing ties BIBREF32 . Annotators could assign zero rank to all translations if they were judged incomprehensible. Following the common practice in WMT BIBREF32 , each system was then assigned a score which reflects the proportion of times it was judged to be better or equal other systems.",
+    "Table TABREF19 shows the human evaluation results. They are consistent with the automatic evaluation results when it comes to the preference of humans towards the deliberation-based setups, but show a more positive outlook regarding the addition of visual information (del+obj over del) for French.",
+    "Manual inspection of translations suggests that deliberation setups tend to improve both the grammaticality and adequacy of the first pass outputs. For German, the most common modifications performed by the second-pass decoder are substitutions of adjectives and verbs (for test 2016, 15% and 12% respectively, of all the edit distance operations). Changes to adjectives are mainly grammatical, changes to verbs are contextual (e.g., changing laufen to rennen, both verbs mean run, but the second refers to running very fast). For French, 15% of all the changes are substitutions of nouns (for test 2016). These are again very contextual. For example, the French word travailleur (worker) is replaced by ouvrier (manual worker) in the contexts where tools, machinery or buildings are mentioned. For our analysis we used again spacy.",
+    "The information on detected objects is particularly helpful for specific adequacy issues. Figure FIGREF15 demonstrates some such cases. In the first case, the base+att model misses the translation of race car: the German word Rennen translates only the word race. del introduces the word car (Auto) into the translation. Finally, del+obj correctly translates the expression race car (Rennwagen) by exploiting the object information. For French, del translates the source part in a body of water, missing from the base+att translation. del+obj additionally translated the word paddling according to the detected object Paddle."
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Standard setup",
+    "Standard setup",
+    "Standard setup",
+    "Standard setup",
+    "Standard setup",
+    "Standard setup",
+    "Standard setup",
+    "Standard setup"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Standard setup",
+      0
+    ],
+    [
+      "Standard setup",
+      1
+    ],
+    [
+      "Standard setup",
+      2
+    ],
+    [
+      "Standard setup",
+      3
+    ],
+    [
+      "Standard setup",
+      4
+    ],
+    [
+      "Standard setup",
+      5
+    ],
+    [
+      "Standard setup",
+      6
+    ],
+    [
+      "Standard setup",
+      7
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Standard setup",
+  "section": "Standard setup",
+  "title_path": "Standard setup",
+  "block_type": "long_unit"
+}

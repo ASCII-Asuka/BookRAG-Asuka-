@@ -1,0 +1,70 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Jasper Architecture\n[source_id=11] Jasper is a family of end-to-end ASR models that replace acoustic and pronunciation models with a convolutional neural network. Jasper uses mel-filterbank features calculated from 20ms windows with a 10ms overlap, and outputs a probability distribution over characters per frame. Jasper has a block architecture: a Jasper INLINEFORM0 x INLINEFORM1 model has INLINEFORM2 blocks, each with INLINEFORM3 sub-blocks. Each sub-block applies the following operations: a 1D-convolution, batch norm, ReLU, and dropout. All sub-blocks in a block have the same number of output channels.\n[source_id=12] Each block input is connected directly into the last sub-block via a residual connection. The residual connection is first projected through a 1x1 convolution to account for different numbers of input and output channels, then through a batch norm layer. The output of this batch norm layer is added to the output of the batch norm layer in the last sub-block. The result of this sum is passed through the activation function and dropout to produce the output of the sub-block.\n[source_id=13] The sub-block architecture of Jasper was designed to facilitate fast GPU inference. Each sub-block can be fused into a single GPU kernel: dropout is not used at inference-time and is eliminated, batch norm can be fused with the preceding convolution, ReLU clamps the result, and residual summation can be treated as a modified bias term in this fused operation.\n[source_id=14] All Jasper models have four additional convolutional blocks: one pre-processing and three post-processing. See Figure FIGREF7 and Table TABREF8 for details.\n[source_id=15] We also build a variant of Jasper, Jasper Dense Residual (DR). Jasper DR follows DenseNet BIBREF15 and DenseRNet BIBREF16 , but instead of having dense connections within a block, the output of a convolution block is added to the inputs of all the following blocks. While DenseNet and DenseRNet concatenates the outputs of different layers, Jasper DR adds them in the same way that residuals are added in ResNet. As explained below, we find addition to be as effective as concatenation.",
+  "score": 0.29744762490729687,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "child_qasper_evidence_texts": [
+    "Jasper is a family of end-to-end ASR models that replace acoustic and pronunciation models with a convolutional neural network. Jasper uses mel-filterbank features calculated from 20ms windows with a 10ms overlap, and outputs a probability distribution over characters per frame. Jasper has a block architecture: a Jasper INLINEFORM0 x INLINEFORM1 model has INLINEFORM2 blocks, each with INLINEFORM3 sub-blocks. Each sub-block applies the following operations: a 1D-convolution, batch norm, ReLU, and dropout. All sub-blocks in a block have the same number of output channels.",
+    "Each block input is connected directly into the last sub-block via a residual connection. The residual connection is first projected through a 1x1 convolution to account for different numbers of input and output channels, then through a batch norm layer. The output of this batch norm layer is added to the output of the batch norm layer in the last sub-block. The result of this sum is passed through the activation function and dropout to produce the output of the sub-block.",
+    "The sub-block architecture of Jasper was designed to facilitate fast GPU inference. Each sub-block can be fused into a single GPU kernel: dropout is not used at inference-time and is eliminated, batch norm can be fused with the preceding convolution, ReLU clamps the result, and residual summation can be treated as a modified bias term in this fused operation.",
+    "All Jasper models have four additional convolutional blocks: one pre-processing and three post-processing. See Figure FIGREF7 and Table TABREF8 for details.",
+    "We also build a variant of Jasper, Jasper Dense Residual (DR). Jasper DR follows DenseNet BIBREF15 and DenseRNet BIBREF16 , but instead of having dense connections within a block, the output of a convolution block is added to the inputs of all the following blocks. While DenseNet and DenseRNet concatenates the outputs of different layers, Jasper DR adds them in the same way that residuals are added in ResNet. As explained below, we find addition to be as effective as concatenation."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Jasper Architecture",
+    "Jasper Architecture",
+    "Jasper Architecture",
+    "Jasper Architecture",
+    "Jasper Architecture"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Jasper Architecture",
+      0
+    ],
+    [
+      "Jasper Architecture",
+      1
+    ],
+    [
+      "Jasper Architecture",
+      2
+    ],
+    [
+      "Jasper Architecture",
+      3
+    ],
+    [
+      "Jasper Architecture",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Jasper Architecture",
+  "section": "Jasper Architecture",
+  "title_path": "Jasper Architecture",
+  "block_type": "long_unit"
+}

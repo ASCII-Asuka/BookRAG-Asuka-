@@ -1,0 +1,246 @@
+[
+  {
+    "question": "Do they report results only on English data?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": true,
+        "evidence": [
+          "Especially after the introduction of the word2vec algorithm by Mikolov BIBREF0 , BIBREF1 , there has been a growing interest in algorithms that generate improved word representations under some performance metric. Significant effort is spent on appropriately modifying the objective functions of the algorithms in order to incorporate knowledge from external resources, with the purpose of increasing the performance of the resulting word representations BIBREF28 , BIBREF29 , BIBREF30 , BIBREF31 , BIBREF32 , BIBREF33 , BIBREF34 , BIBREF35 , BIBREF36 , BIBREF37 . Inspired by the line of work reported in these studies, we propose to use modified objective functions for a different purpose: learning more interpretable dense word embeddings. By doing this, we aim to incorporate semantic information from an external lexical resource into the word embedding so that the embedding dimensions are aligned along predefined concepts. This alignment is achieved by introducing a modification to the embedding learning process. In our proposed method, which is built on top of the GloVe algorithm BIBREF2 , the cost function for any one of the words of concept word-groups is modified by the introduction of an additive term to the cost function. Each embedding vector dimension is first associated with a concept. For a word belonging to any one of the word-groups representing these concepts, the modified cost term favors an increase for the value of this word's embedding vector dimension corresponding to the concept that the particular word belongs to. For words that do not belong to any one of the word-groups, the cost term is left untouched. Specifically, Roget's Thesaurus BIBREF38 , BIBREF39 is used to derive the concepts and concept word-groups to be used as the external lexical resource for our proposed method. We quantitatively demonstrate the increase in interpretability by using the measure given in BIBREF27 , BIBREF40 as well as demonstrating qualitative results. We also show that the semantic structure of the original embedding has not been harmed in the process since there is no performance loss with standard word-similarity or word-analogy tests.",
+          "By using the concept word-groups, we have trained the GloVe algorithm with the proposed modification given in Section SECREF4 on a snapshot of English Wikipedia measuring 8GB in size, with the stop-words filtered out. Using the parameters given in Table TABREF10 , this resulted in a vocabulary size of 287,847. For the weighting parameter in Eq. SECREF4 , we used a value of INLINEFORM0 . The algorithm was trained over 20 iterations. The GloVe algorithm without any modifications was also trained as a baseline with the same parameters. In addition to the original GloVe algorithm, we compare our proposed method with previous studies that aim to obtain interpretable word vectors. We train the improved projected gradient model proposed in BIBREF20 to obtain word vectors (called OIWE-IPG) using the same corpus we use to train GloVe and our proposed method. Using the methods proposed in BIBREF23 , BIBREF26 , BIBREF24 on our baseline GloVe embeddings, we obtain SOV, SPINE and Parsimax (orthogonal) word representations, respectively. We train all the models with the proposed parameters. However, in BIBREF26 , the authors show results for a relatively small vocabulary of 15,000 words. When we trained their model on our baseline GloVe embeddings with a large vocabulary of size 287,847, the resulting vectors performed significantly poor on word similarity tasks compared to the results presented in their paper. In addition, Parsimax (orthogonal) word vectors obtained using method in BIBREF26 are nearly identical to the baseline vectors (i.e. learned orthogonal transformation matrix is very close to identity). Therefore, Parsimax (orthogonal) yields almost same results with baseline vectors in all evaluations. We evaluate the interpretability of the resulting embeddings qualitatively and quantitatively. We also test the performance of the embeddings on word similarity and word analogy tests."
+        ],
+        "evidence_block_ids": [
+          8,
+          29
+        ],
+        "evidence_paragraph_ids": [
+          8,
+          29
+        ]
+      },
+      {
+        "unanswerable": true,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      }
+    ],
+    "doc_uuid": "1807.07279",
+    "doc_path": "qasper://1807.07279",
+    "qasper_question_id": "c7eb71683f53ab7acffd691a36cad6edc7f5522e",
+    "title": "Imparting Interpretability to Word Embeddings while Preserving Semantic Structure",
+    "evidence_block_ids": [
+      8,
+      29
+    ],
+    "evidence_paragraph_ids": [
+      8,
+      29
+    ],
+    "output": "{\n  \"answer_short\": \"Yes\",\n  \"answer_rationale\": \"The evidence consistently references English Wikipedia as the training and evaluation corpus, and no mention is made of testing or reporting results on non-English data, suggesting results are likely reported only on English data.\",\n  \"supporting_block_ids\": [29, 44, 48]\n}",
+    "retrieved_node_ids": [
+      16,
+      29,
+      44,
+      2,
+      48,
+      6
+    ],
+    "retrieved_block_ids": [
+      16,
+      29,
+      44,
+      2,
+      48,
+      6
+    ],
+    "answer_short": "Yes",
+    "answer_rationale": "The evidence consistently references English Wikipedia as the training and evaluation corpus, and no mention is made of testing or reporting results on non-English data, suggesting results are likely reported only on English data.",
+    "supporting_block_ids": [
+      29,
+      44,
+      48
+    ]
+  },
+  {
+    "question": "What experiments do they use to quantify the extent of interpretability?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "Human evaluation for interpretability using the word intrusion test and automated evaluation for interpretability using a semantic category-based approach based on the method and category dataset (SEMCAT).",
+        "yes_no": null,
+        "evidence": [
+          "One of the main goals of this study is to improve the interpretability of dense word embeddings by aligning the dimensions with predefined concepts from a suitable lexicon. A quantitative measure is required to reliably evaluate the achieved improvement. One of the methods proposed to measure the interpretability is the word intrusion test BIBREF41 . But, this method is expensive to apply since it requires evaluations from multiple human evaluators for each embedding dimension. In this study, we use a semantic category-based approach based on the method and category dataset (SEMCAT) introduced in BIBREF27 to quantify interpretability. Specifically, we apply a modified version of the approach presented in BIBREF40 in order to consider possible sub-groupings within the categories in SEMCAT. Interpretability scores are calculated using Interpretability Score (IS) as given below:"
+        ],
+        "evidence_block_ids": [
+          35
+        ],
+        "evidence_paragraph_ids": [
+          35
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "semantic category-based approach"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "One of the main goals of this study is to improve the interpretability of dense word embeddings by aligning the dimensions with predefined concepts from a suitable lexicon. A quantitative measure is required to reliably evaluate the achieved improvement. One of the methods proposed to measure the interpretability is the word intrusion test BIBREF41 . But, this method is expensive to apply since it requires evaluations from multiple human evaluators for each embedding dimension. In this study, we use a semantic category-based approach based on the method and category dataset (SEMCAT) introduced in BIBREF27 to quantify interpretability. Specifically, we apply a modified version of the approach presented in BIBREF40 in order to consider possible sub-groupings within the categories in SEMCAT. Interpretability scores are calculated using Interpretability Score (IS) as given below:"
+        ],
+        "evidence_block_ids": [
+          35
+        ],
+        "evidence_paragraph_ids": [
+          35
+        ]
+      }
+    ],
+    "doc_uuid": "1807.07279",
+    "doc_path": "qasper://1807.07279",
+    "qasper_question_id": "17a1eff7993c47c54eddc7344e7454fbe64191cd",
+    "title": "Imparting Interpretability to Word Embeddings while Preserving Semantic Structure",
+    "evidence_block_ids": [
+      35
+    ],
+    "evidence_paragraph_ids": [
+      35
+    ],
+    "output": "{\n  \"answer_short\": \"a semantic category-based approach based on SEMCAT and a modified version of the method from BIBREF40\",\n  \"answer_rationale\": \"The study explicitly states in Text 3 that it uses a semantic category-based approach based on SEMCAT and a modified version of the method from BIBREF40 to quantify interpretability. This is directly supported by the text, which details the use of Interpretability Scores (IS) calculated using this method.\",\n  \"supporting_block_ids\": [35]\n}",
+    "retrieved_node_ids": [
+      16,
+      2,
+      35
+    ],
+    "retrieved_block_ids": [
+      16,
+      2,
+      35
+    ],
+    "answer_short": "a semantic category-based approach based on SEMCAT and a modified version of the method from BIBREF40",
+    "answer_rationale": "The study explicitly states in Text 3 that it uses a semantic category-based approach based on SEMCAT and a modified version of the method from BIBREF40 to quantify interpretability. This is directly supported by the text, which details the use of Interpretability Scores (IS) calculated using this method.",
+    "supporting_block_ids": [
+      35
+    ]
+  },
+  {
+    "question": "Along which dimension do the semantically related words take larger values?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "dimension corresponding to the concept that the particular word belongs to"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Especially after the introduction of the word2vec algorithm by Mikolov BIBREF0 , BIBREF1 , there has been a growing interest in algorithms that generate improved word representations under some performance metric. Significant effort is spent on appropriately modifying the objective functions of the algorithms in order to incorporate knowledge from external resources, with the purpose of increasing the performance of the resulting word representations BIBREF28 , BIBREF29 , BIBREF30 , BIBREF31 , BIBREF32 , BIBREF33 , BIBREF34 , BIBREF35 , BIBREF36 , BIBREF37 . Inspired by the line of work reported in these studies, we propose to use modified objective functions for a different purpose: learning more interpretable dense word embeddings. By doing this, we aim to incorporate semantic information from an external lexical resource into the word embedding so that the embedding dimensions are aligned along predefined concepts. This alignment is achieved by introducing a modification to the embedding learning process. In our proposed method, which is built on top of the GloVe algorithm BIBREF2 , the cost function for any one of the words of concept word-groups is modified by the introduction of an additive term to the cost function. Each embedding vector dimension is first associated with a concept. For a word belonging to any one of the word-groups representing these concepts, the modified cost term favors an increase for the value of this word's embedding vector dimension corresponding to the concept that the particular word belongs to. For words that do not belong to any one of the word-groups, the cost term is left untouched. Specifically, Roget's Thesaurus BIBREF38 , BIBREF39 is used to derive the concepts and concept word-groups to be used as the external lexical resource for our proposed method. We quantitatively demonstrate the increase in interpretability by using the measure given in BIBREF27 , BIBREF40 as well as demonstrating qualitative results. We also show that the semantic structure of the original embedding has not been harmed in the process since there is no performance loss with standard word-similarity or word-analogy tests."
+        ],
+        "evidence_block_ids": [
+          8
+        ],
+        "evidence_paragraph_ids": [
+          8
+        ]
+      }
+    ],
+    "doc_uuid": "1807.07279",
+    "doc_path": "qasper://1807.07279",
+    "qasper_question_id": "a5e5cda1f6195ab1336855f1e39a609d61326d62",
+    "title": "Imparting Interpretability to Word Embeddings while Preserving Semantic Structure",
+    "evidence_block_ids": [
+      8
+    ],
+    "evidence_paragraph_ids": [
+      8
+    ],
+    "output": "{\n  \"answer_short\": \"Along a specified dimension aligned with a predefined concept, such as JUDGMENT or WARFARE.\",\n  \"answer_rationale\": \"The semantically related words take larger values along a specified dimension that is aligned with a predefined concept, such as JUDGMENT or WARFARE, as demonstrated in the experiments. This is explicitly stated in Text 1 and further illustrated in Text 2 with examples such as the 32nd dimension being aligned with JUDGMENT, where words like 'committee' and 'article' show increased values even if not explicitly in the predefined group. Text 4 also supports this by explaining that words not in the lexical groups are 'pulled along' by the semantic alignment mechanism, reinforcing the concept-based dimension alignment.\",\n  \"supporting_block_ids\": [2, 32, 48]\n}",
+    "retrieved_node_ids": [
+      2,
+      32,
+      49,
+      48
+    ],
+    "retrieved_block_ids": [
+      2,
+      32,
+      49,
+      48
+    ],
+    "answer_short": "Along a specified dimension aligned with a predefined concept, such as JUDGMENT or WARFARE.",
+    "answer_rationale": "The semantically related words take larger values along a specified dimension that is aligned with a predefined concept, such as JUDGMENT or WARFARE, as demonstrated in the experiments. This is explicitly stated in Text 1 and further illustrated in Text 2 with examples such as the 32nd dimension being aligned with JUDGMENT, where words like 'committee' and 'article' show increased values even if not explicitly in the predefined group. Text 4 also supports this by explaining that words not in the lexical groups are 'pulled along' by the semantic alignment mechanism, reinforcing the concept-based dimension alignment.",
+    "supporting_block_ids": [
+      2,
+      32,
+      48
+    ]
+  },
+  {
+    "question": "What is the additive modification to the objective function?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "The cost function for any one of the words of concept word-groups is modified by the introduction of an additive term to the cost function. . Each embedding vector dimension is first associated with a concept. For a word belonging to any one of the word-groups representing these concepts, the modified cost term favors an increase for the value of this word's embedding vector dimension corresponding to the concept that the particular word belongs to,",
+        "yes_no": null,
+        "evidence": [
+          "Especially after the introduction of the word2vec algorithm by Mikolov BIBREF0 , BIBREF1 , there has been a growing interest in algorithms that generate improved word representations under some performance metric. Significant effort is spent on appropriately modifying the objective functions of the algorithms in order to incorporate knowledge from external resources, with the purpose of increasing the performance of the resulting word representations BIBREF28 , BIBREF29 , BIBREF30 , BIBREF31 , BIBREF32 , BIBREF33 , BIBREF34 , BIBREF35 , BIBREF36 , BIBREF37 . Inspired by the line of work reported in these studies, we propose to use modified objective functions for a different purpose: learning more interpretable dense word embeddings. By doing this, we aim to incorporate semantic information from an external lexical resource into the word embedding so that the embedding dimensions are aligned along predefined concepts. This alignment is achieved by introducing a modification to the embedding learning process. In our proposed method, which is built on top of the GloVe algorithm BIBREF2 , the cost function for any one of the words of concept word-groups is modified by the introduction of an additive term to the cost function. Each embedding vector dimension is first associated with a concept. For a word belonging to any one of the word-groups representing these concepts, the modified cost term favors an increase for the value of this word's embedding vector dimension corresponding to the concept that the particular word belongs to. For words that do not belong to any one of the word-groups, the cost term is left untouched. Specifically, Roget's Thesaurus BIBREF38 , BIBREF39 is used to derive the concepts and concept word-groups to be used as the external lexical resource for our proposed method. We quantitatively demonstrate the increase in interpretability by using the measure given in BIBREF27 , BIBREF40 as well as demonstrating qualitative results. We also show that the semantic structure of the original embedding has not been harmed in the process since there is no performance loss with standard word-similarity or word-analogy tests."
+        ],
+        "evidence_block_ids": [
+          8
+        ],
+        "evidence_paragraph_ids": [
+          8
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "An additive term added to the cost function for any one of the words of concept word-groups",
+        "yes_no": null,
+        "evidence": [
+          "Especially after the introduction of the word2vec algorithm by Mikolov BIBREF0 , BIBREF1 , there has been a growing interest in algorithms that generate improved word representations under some performance metric. Significant effort is spent on appropriately modifying the objective functions of the algorithms in order to incorporate knowledge from external resources, with the purpose of increasing the performance of the resulting word representations BIBREF28 , BIBREF29 , BIBREF30 , BIBREF31 , BIBREF32 , BIBREF33 , BIBREF34 , BIBREF35 , BIBREF36 , BIBREF37 . Inspired by the line of work reported in these studies, we propose to use modified objective functions for a different purpose: learning more interpretable dense word embeddings. By doing this, we aim to incorporate semantic information from an external lexical resource into the word embedding so that the embedding dimensions are aligned along predefined concepts. This alignment is achieved by introducing a modification to the embedding learning process. In our proposed method, which is built on top of the GloVe algorithm BIBREF2 , the cost function for any one of the words of concept word-groups is modified by the introduction of an additive term to the cost function. Each embedding vector dimension is first associated with a concept. For a word belonging to any one of the word-groups representing these concepts, the modified cost term favors an increase for the value of this word's embedding vector dimension corresponding to the concept that the particular word belongs to. For words that do not belong to any one of the word-groups, the cost term is left untouched. Specifically, Roget's Thesaurus BIBREF38 , BIBREF39 is used to derive the concepts and concept word-groups to be used as the external lexical resource for our proposed method. We quantitatively demonstrate the increase in interpretability by using the measure given in BIBREF27 , BIBREF40 as well as demonstrating qualitative results. We also show that the semantic structure of the original embedding has not been harmed in the process since there is no performance loss with standard word-similarity or word-analogy tests."
+        ],
+        "evidence_block_ids": [
+          8
+        ],
+        "evidence_paragraph_ids": [
+          8
+        ]
+      }
+    ],
+    "doc_uuid": "1807.07279",
+    "doc_path": "qasper://1807.07279",
+    "qasper_question_id": "32d99dcd8d46e2cda04a9a9fa0e6693d2349a7a9",
+    "title": "Imparting Interpretability to Word Embeddings while Preserving Semantic Structure",
+    "evidence_block_ids": [
+      8
+    ],
+    "evidence_paragraph_ids": [
+      8
+    ],
+    "output": "{\n  \"answer_short\": \"an additive term to align embedding dimensions with predefined concepts using an external lexical resource like Roget's Thesaurus\",\n  \"answer_rationale\": \"The additive modification to the objective function is introduced to align embedding dimensions with predefined concepts using an external lexical resource like Roget's Thesaurus. This is explicitly stated in Text 3, which explains that the modification involves adding a term to the cost function to favor embedding dimensions corresponding to the concept a word belongs to, using Roget's Thesaurus as the lexical resource.\",\n  \"supporting_block_ids\": [8]\n}",
+    "retrieved_node_ids": [
+      43,
+      9,
+      8
+    ],
+    "retrieved_block_ids": [
+      43,
+      9,
+      8
+    ],
+    "answer_short": "an additive term to align embedding dimensions with predefined concepts using an external lexical resource like Roget's Thesaurus",
+    "answer_rationale": "The additive modification to the objective function is introduced to align embedding dimensions with predefined concepts using an external lexical resource like Roget's Thesaurus. This is explicitly stated in Text 3, which explains that the modification involves adding a term to the cost function to favor embedding dimensions corresponding to the concept a word belongs to, using Roget's Thesaurus as the lexical resource.",
+    "supporting_block_ids": [
+      8
+    ]
+  }
+]

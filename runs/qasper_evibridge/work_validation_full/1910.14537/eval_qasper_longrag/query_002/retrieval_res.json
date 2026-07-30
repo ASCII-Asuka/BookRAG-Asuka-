@@ -1,0 +1,687 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_4",
+      "content": "[Section] Models ::: Gaussian-Masked Directional Multi-Head Attention\n[source_id=27] Similar as scaled dot-product attention BIBREF24, Gaussian-masked directional attention can be described as a function to map queries and key-value pairs to the representation of input. Here queries, keys and values are all vectors. Standard scaled dot-product attention is calculated by dotting query $Q$ with all keys $K$, dividing each values by $\\sqrt{d_k}$, where $\\sqrt{d_k}$ is the dimension of keys, and apply a softmax function to generate the weights in the attention:\n[source_id=28] Different from scaled dot-product attention, Gaussian-masked directional attention expects to pay attention to the adjacent characters of each positions and cast the localness relationship between characters as a fix Gaussian weight for attention. We assume that the Gaussian weight only relys on the distance between characters.\n[source_id=29] Firstly we introduce the Gaussian weight matrix $G$ which presents the localness relationship between each two characters:\n[source_id=30] where $g_{ij}$ is the Gaussian weight between character $i$ and $j$, $dis_{ij}$ is the distance between character $i$ and $j$, $\\Phi (x)$ is the cumulative distribution function of Gaussian, $\\sigma $ is the standard deviation of Gaussian function and it is a hyperparameter in our method. Equation (DISPLAY_FORM13) can ensure the Gaussian weight equals 1 when $dis_{ij}$ is 0. The larger distance between charactersis, the smaller the weight is, which makes one character can affect its adjacent characters more compared with other characters.\n[source_id=31] To combine the Gaussian weight to the self-attention, we produce the Hadamard product of Gaussian weight matrix $G$ and the score matrix produced by $Q{K^{T}}$\n[source_id=32] where $AG$ is the Gaussian-masked attention. It ensures that the relationship between two characters with long distances is weaker than adjacent characters.\n[source_id=33] The scaled dot-product attention models the relationship between two characters without regard to their distances in one sequence. For CWS task, the weight between adjacent characters should be more important while it is hard for self-attention to achieve the effect explicitly because the self-attention cannot get the order of sentences directly. The Gaussian-masked attention adjusts the weight between characters and their adjacent character to a larger value which stands for the effect of adjacent characters.\n[source_id=34] For forward and backward encoder, the self-attention sublayer needs to use a triangular matrix mask to let the self-attention focus on different weights:\n[source_id=35] where $pos_i$ is the position of character $c_i$. The triangular matrix for forward and backward encode are:\n[source_id=36] $\\left[ \\begin{matrix} 1 & 0 & 0 & \\cdots &0\\\\ 1 & 1 & 0 & \\cdots &0\\\\ 1 & 1 & 1 & \\cdots &0\\\\ \\vdots &\\vdots &\\vdots &\\ddots &\\vdots \\\\ 1 & 1 & 1 & \\cdots & 1\\\\ \\end{matrix} \\right]$ $\\left[ \\begin{matrix} 1 & 1 & 1 & \\cdots &1 \\\\ 0 & 1 & 1 & \\cdots &1 \\\\ 0 & 0& 1 & \\cdots &1 \\\\ \\vdots &\\vdots &\\vdots &\\ddots &\\vdots \\\\ 0 & 0 & 0 & \\cdots & 1\\\\ \\end{matrix}\\right]$\n[source_id=37] Similar as BIBREF24, we use multi-head attention to capture information from different dimension positions as Figure FIGREF16 and get Gaussian-masked directional multi-head attention. With multi-head attention architecture, the representation of input can be captured by\n[source_id=38] where $MH$ is the Gaussian-masked multi-head attention, ${W_i^q, W_i^k,W_i^v} \\in \\mathbb {R}^{d_k \\times d_h}$ is the parameter matrices to generate heads, $d_k$ is the dimension of model and $d_h$ is the dimension of one head.",
+      "score": 8.014157394826862,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38
+      ],
+      "child_qasper_evidence_texts": [
+        "Similar as scaled dot-product attention BIBREF24, Gaussian-masked directional attention can be described as a function to map queries and key-value pairs to the representation of input. Here queries, keys and values are all vectors. Standard scaled dot-product attention is calculated by dotting query $Q$ with all keys $K$, dividing each values by $\\sqrt{d_k}$, where $\\sqrt{d_k}$ is the dimension of keys, and apply a softmax function to generate the weights in the attention:",
+        "Different from scaled dot-product attention, Gaussian-masked directional attention expects to pay attention to the adjacent characters of each positions and cast the localness relationship between characters as a fix Gaussian weight for attention. We assume that the Gaussian weight only relys on the distance between characters.",
+        "Firstly we introduce the Gaussian weight matrix $G$ which presents the localness relationship between each two characters:",
+        "where $g_{ij}$ is the Gaussian weight between character $i$ and $j$, $dis_{ij}$ is the distance between character $i$ and $j$, $\\Phi (x)$ is the cumulative distribution function of Gaussian, $\\sigma $ is the standard deviation of Gaussian function and it is a hyperparameter in our method. Equation (DISPLAY_FORM13) can ensure the Gaussian weight equals 1 when $dis_{ij}$ is 0. The larger distance between charactersis, the smaller the weight is, which makes one character can affect its adjacent characters more compared with other characters.",
+        "To combine the Gaussian weight to the self-attention, we produce the Hadamard product of Gaussian weight matrix $G$ and the score matrix produced by $Q{K^{T}}$",
+        "where $AG$ is the Gaussian-masked attention. It ensures that the relationship between two characters with long distances is weaker than adjacent characters.",
+        "The scaled dot-product attention models the relationship between two characters without regard to their distances in one sequence. For CWS task, the weight between adjacent characters should be more important while it is hard for self-attention to achieve the effect explicitly because the self-attention cannot get the order of sentences directly. The Gaussian-masked attention adjusts the weight between characters and their adjacent character to a larger value which stands for the effect of adjacent characters.",
+        "For forward and backward encoder, the self-attention sublayer needs to use a triangular matrix mask to let the self-attention focus on different weights:",
+        "where $pos_i$ is the position of character $c_i$. The triangular matrix for forward and backward encode are:",
+        "$\\left[ \\begin{matrix} 1 & 0 & 0 & \\cdots &0\\\\ 1 & 1 & 0 & \\cdots &0\\\\ 1 & 1 & 1 & \\cdots &0\\\\ \\vdots &\\vdots &\\vdots &\\ddots &\\vdots \\\\ 1 & 1 & 1 & \\cdots & 1\\\\ \\end{matrix} \\right]$ $\\left[ \\begin{matrix} 1 & 1 & 1 & \\cdots &1 \\\\ 0 & 1 & 1 & \\cdots &1 \\\\ 0 & 0& 1 & \\cdots &1 \\\\ \\vdots &\\vdots &\\vdots &\\ddots &\\vdots \\\\ 0 & 0 & 0 & \\cdots & 1\\\\ \\end{matrix}\\right]$",
+        "Similar as BIBREF24, we use multi-head attention to capture information from different dimension positions as Figure FIGREF16 and get Gaussian-masked directional multi-head attention. With multi-head attention architecture, the representation of input can be captured by",
+        "where $MH$ is the Gaussian-masked multi-head attention, ${W_i^q, W_i^k,W_i^v} \\in \\mathbb {R}^{d_k \\times d_h}$ is the parameter matrices to generate heads, $d_k$ is the dimension of model and $d_h$ is the dimension of one head."
+      ],
+      "child_pages": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "child_sections": [
+        "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+        "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+        "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+        "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+        "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+        "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+        "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+        "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+        "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+        "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+        "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+        "Models ::: Gaussian-Masked Directional Multi-Head Attention"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+          0
+        ],
+        [
+          "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+          1
+        ],
+        [
+          "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+          2
+        ],
+        [
+          "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+          3
+        ],
+        [
+          "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+          4
+        ],
+        [
+          "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+          5
+        ],
+        [
+          "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+          6
+        ],
+        [
+          "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+          7
+        ],
+        [
+          "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+          8
+        ],
+        [
+          "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+          9
+        ],
+        [
+          "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+          10
+        ],
+        [
+          "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+          11
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "section": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "title_path": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_13",
+      "content": "[Section] Related Work ::: Transformer\n[source_id=67] Transformer BIBREF24 is an attention-based neural machine translation model. The Transformer is one kind of self-attention networks (SANs) which is proposed in BIBREF38. Encoder of the Transformer consists of one self-attention layer and a position-wise feed-forward layer. Decoder of the Transformer contains one self-attention layer, one encoder-decoder attention layer and one position-wise feed-forward layer. The Transformer uses residual connections around the sublayers and then followed by a layer normalization layer.\n[source_id=68] Scaled dot-product attention is the key component in the Transformer. The input of attention contains queries, keys, and values of input sequences. The attention is generated using queries and keys like Equation (DISPLAY_FORM11). Structure of scaled dot-product attention allows the self-attention layer generate the representation of sentences at once and contain the information of the sentence which is different from RNN that process characters of sentences one by one. Standard self-attention is similar as Gaussian-masked direction attention while it does not have directional mask and gaussian mask. BIBREF24 also propose multi-head attention which is better to generate representation of sentence by dividing queries, keys and values to different heads and get information from different subspaces.",
+      "score": 7.600821472699694,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_13",
+      "child_source_node_ids": [
+        67,
+        68
+      ],
+      "child_qasper_evidence_texts": [
+        "Transformer BIBREF24 is an attention-based neural machine translation model. The Transformer is one kind of self-attention networks (SANs) which is proposed in BIBREF38. Encoder of the Transformer consists of one self-attention layer and a position-wise feed-forward layer. Decoder of the Transformer contains one self-attention layer, one encoder-decoder attention layer and one position-wise feed-forward layer. The Transformer uses residual connections around the sublayers and then followed by a layer normalization layer.",
+        "Scaled dot-product attention is the key component in the Transformer. The input of attention contains queries, keys, and values of input sequences. The attention is generated using queries and keys like Equation (DISPLAY_FORM11). Structure of scaled dot-product attention allows the self-attention layer generate the representation of sentences at once and contain the information of the sentence which is different from RNN that process characters of sentences one by one. Standard self-attention is similar as Gaussian-masked direction attention while it does not have directional mask and gaussian mask. BIBREF24 also propose multi-head attention which is better to generate representation of sentence by dividing queries, keys and values to different heads and get information from different subspaces."
+      ],
+      "child_pages": [
+        13,
+        13
+      ],
+      "child_sections": [
+        "Related Work ::: Transformer",
+        "Related Work ::: Transformer"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work ::: Transformer",
+          0
+        ],
+        [
+          "Related Work ::: Transformer",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_13",
+      "section_id": "Related Work ::: Transformer",
+      "section": "Related Work ::: Transformer",
+      "title_path": "Related Work ::: Transformer",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_14",
+      "content": "[Section] Conclusion\n[source_id=70] In this paper, we propose an attention mechanism only based Chinese word segmentation model. Our model uses self-attention from the Transformer encoder to take sequence input and bi-affine attention scorer to predict the label of gaps. To improve the ability of capturing the localness and directional information of self-attention based encoder, we propose a variant of self-attention called Gaussian-masked directional multi-head attention to replace the standard self-attention. We also extend the Transformer encoder to capture directional features. Our model uses only unigram features instead of multiple $n$-gram features in previous work. Our model is evaluated on standard benchmark dataset, SIGHAN Bakeoff 2005, which shows not only our model performs segmentation faster than any previous models but also gives new higher or comparable segmentation performance against previous state-of-the-art models.",
+      "score": 6.55038225415314,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_14",
+      "child_source_node_ids": [
+        70
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper, we propose an attention mechanism only based Chinese word segmentation model. Our model uses self-attention from the Transformer encoder to take sequence input and bi-affine attention scorer to predict the label of gaps. To improve the ability of capturing the localness and directional information of self-attention based encoder, we propose a variant of self-attention called Gaussian-masked directional multi-head attention to replace the standard self-attention. We also extend the Transformer encoder to capture directional features. Our model uses only unigram features instead of multiple $n$-gram features in previous work. Our model is evaluated on standard benchmark dataset, SIGHAN Bakeoff 2005, which shows not only our model performs segmentation faster than any previous models but also gives new higher or comparable segmentation performance against previous state-of-the-art models."
+      ],
+      "child_pages": [
+        14
+      ],
+      "child_sections": [
+        "Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_14",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] This paper presents a fast and accurate Chinese word segmentation (CWS) model with only unigram feature and greedy decoding algorithm. Our model uses only attention mechanism for network block building. In detail, we adopt a Transformer-based encoder empowered by self-attention mechanism as backbone to take input representation. Then we extend the Transformer encoder with our proposed Gaussian-masked directional multi-head attention, which is a variant of scaled dot-product attention. At last, a bi-affinal attention scorer is to make segmentation decision in a linear time. Our model is evaluated on SIGHAN Bakeoff benchmark dataset. The experimental results show that with the highest segmentation speed, the proposed attention-only model achieves new state-of-the-art or comparable performance against strong baselines in terms of closed test setting.",
+      "score": 6.226290841538299,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "This paper presents a fast and accurate Chinese word segmentation (CWS) model with only unigram feature and greedy decoding algorithm. Our model uses only attention mechanism for network block building. In detail, we adopt a Transformer-based encoder empowered by self-attention mechanism as backbone to take input representation. Then we extend the Transformer encoder with our proposed Gaussian-masked directional multi-head attention, which is a variant of scaled dot-product attention. At last, a bi-affinal attention scorer is to make segmentation decision in a linear time. Our model is evaluated on SIGHAN Bakeoff benchmark dataset. The experimental results show that with the highest segmentation speed, the proposed attention-only model achieves new state-of-the-art or comparable performance against strong baselines in terms of closed test setting."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Chinese word segmentation (CWS) is a task for Chinese natural language process to delimit word boundary. CWS is a basic and essential task for Chinese which is written without explicit word delimiters and different from alphabetical languages like English. BIBREF0 treats Chinese word segmentation (CWS) as a sequence labeling task with character position tags, which is followed by BIBREF1, BIBREF2, BIBREF3. Traditional CWS models depend on the design of features heavily which effects the performance of model. To minimize the effort in feature engineering, some CWS models BIBREF4, BIBREF5, BIBREF6, BIBREF7, BIBREF8, BIBREF9, BIBREF10, BIBREF11 are developed following neural network architecture for sequence labeling tasks BIBREF12. Neural CWS models perform strong ability of feature representation, employing unigram and bigram character embedding as input and approach good performance.\n[source_id=5] The CWS task is often modeled as one graph model based on a scoring model that means it is composed of two parts, one part is an encoder which is used to generate the representation of characters from the input sequence, the other part is a decoder which performs segmentation according to the encoder scoring. Table TABREF1 summarizes typical CWS models according to their decoding ways for both traditional and neural models. Markov models such as BIBREF13 and BIBREF4 depend on the maximum entropy model or maximum entropy Markov model both with a Viterbi decoder. Besides, conditional random field (CRF) or Semi-CRF for sequence labeling has been used for both traditional and neural models though with different representations BIBREF2, BIBREF15, BIBREF10, BIBREF17, BIBREF18. Generally speaking, the major difference between traditional and neural network models is about the way to represent input sentences.\n[source_id=6] Recent works about neural CWS which focus on benchmark dataset, namely SIGHAN Bakeoff BIBREF21, may be put into the following three categories roughly.\n[source_id=7] Encoder. Practice in various natural language processing tasks has been shown that effective representation is essential to the performance improvement. Thus for better CWS, it is crucial to encode the input character, word or sentence into effective representation. Table TABREF2 summarizes regular feature sets for typical CWS models including ours as well. The building blocks that encoders use include recurrent neural network (RNN) and convolutional neural network (CNN), and long-term memory network (LSTM).\n[source_id=8] Graph model. As CWS is a kind of structure learning task, the graph model determines which type of decoder should be adopted for segmentation, also it may limit the capability of defining feature, as shown in Table 2, not all graph models can support the word features. Thus recent work focused on finding more general or flexible graph model to make model learn the representation of segmentation more effective as BIBREF9, BIBREF11.\n[source_id=9] External data and pre-trained embedding. Whereas both encoder and graph model are about exploring a way to get better performance only by improving the model strength itself. Using external resource such as pre-trained embeddings or language representation is an alternative for the same purpose BIBREF22, BIBREF23. SIGHAN Bakeoff defines two types of evaluation settings, closed test limits all the data for learning should not be beyond the given training set, while open test does not take this limitation BIBREF21. In this work, we will focus on the closed test setting by finding a better model design for further CWS performance improvement.\n[source_id=10] Shown in Table TABREF1, different decoders have particular decoding algorithms to match the respective CWS models. Markov models and CRF-based models often use Viterbi decoders with polynomial time complexity. In general graph model, search space may be too large for model to search. Thus it forces graph models to use an approximate beam search strategy. Beam search algorithm has a kind low-order polynomial time complexity. Especially, when beam width $b$=1, the beam search algorithm will reduce to greedy algorithm with a better time complexity $O(Mn)$ against the general beam search time complexity $O(Mnb^2)$, where $n$ is the number of units in one sentences, $M$ is a constant representing the model complexity. Greedy decoding algorithm can bring the fastest speed of decoding while it is not easy to guarantee the precision of decoding when the encoder is not strong enough.\n[source_id=11] In this paper, we focus on more effective encoder design which is capable of offering fast and accurate Chinese word segmentation with only unigram feature and greedy decoding. Our proposed encoder will only consist of attention mechanisms as building blocks but nothing else. Motivated by the Transformer BIBREF24 and its strength of capturing long-range dependencies of input sentences, we use a self-attention network to generate the representation of input which makes the model encode sentences at once without feeding input iteratively. Considering the weakness of the Transformer to model relative and absolute position information directly BIBREF25 and the importance of localness information, position information and directional information for CWS, we further improve the architecture of standard multi-head self-attention of the Transformer with a directional Gaussian mask and get a variant called Gaussian-masked directional multi-head attention. Based on the newly improved attention mechanism, we expand the encoder of the Transformer to capture different directional information. With our powerful encoder, our model uses only simple unigram features to generate representation of sentences.\n[source_id=12] For decoder which directly performs the segmentation, we use the bi-affinal attention scorer, which has been used in dependency parsing BIBREF26 and semantic role labeling BIBREF27, to implement greedy decoding on finding the boundaries of words. In our proposed model, greedy decoding ensures a fast segmentation while powerful encoder design ensures a good enough segmentation performance even working with greedy decoder together. Our model will be strictly evaluated on benchmark datasets from SIGHAN Bakeoff shared task on CWS in terms of closed test setting, and the experimental results show that our proposed model achieves new state-of-the-art.\n[source_id=13] The technical contributions of this paper can be summarized as follows.\n[source_id=14] We propose a CWS model with only attention structure. The encoder and decoder are both based on attention structure.\n[source_id=15] With a powerful enough encoder, we for the first time show that unigram (character) featues can help yield strong performance instead of diverse $n$-gram (character and word) features in most of previous work.\n[source_id=16] To capture the representation of localness information and directional information, we propose a variant of directional multi-head self-attention to further enhance the state-of-the-art Transformer encoder.",
+      "score": 5.644642196532875,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "child_qasper_evidence_texts": [
+        "Chinese word segmentation (CWS) is a task for Chinese natural language process to delimit word boundary. CWS is a basic and essential task for Chinese which is written without explicit word delimiters and different from alphabetical languages like English. BIBREF0 treats Chinese word segmentation (CWS) as a sequence labeling task with character position tags, which is followed by BIBREF1, BIBREF2, BIBREF3. Traditional CWS models depend on the design of features heavily which effects the performance of model. To minimize the effort in feature engineering, some CWS models BIBREF4, BIBREF5, BIBREF6, BIBREF7, BIBREF8, BIBREF9, BIBREF10, BIBREF11 are developed following neural network architecture for sequence labeling tasks BIBREF12. Neural CWS models perform strong ability of feature representation, employing unigram and bigram character embedding as input and approach good performance.",
+        "The CWS task is often modeled as one graph model based on a scoring model that means it is composed of two parts, one part is an encoder which is used to generate the representation of characters from the input sequence, the other part is a decoder which performs segmentation according to the encoder scoring. Table TABREF1 summarizes typical CWS models according to their decoding ways for both traditional and neural models. Markov models such as BIBREF13 and BIBREF4 depend on the maximum entropy model or maximum entropy Markov model both with a Viterbi decoder. Besides, conditional random field (CRF) or Semi-CRF for sequence labeling has been used for both traditional and neural models though with different representations BIBREF2, BIBREF15, BIBREF10, BIBREF17, BIBREF18. Generally speaking, the major difference between traditional and neural network models is about the way to represent input sentences.",
+        "Recent works about neural CWS which focus on benchmark dataset, namely SIGHAN Bakeoff BIBREF21, may be put into the following three categories roughly.",
+        "Encoder. Practice in various natural language processing tasks has been shown that effective representation is essential to the performance improvement. Thus for better CWS, it is crucial to encode the input character, word or sentence into effective representation. Table TABREF2 summarizes regular feature sets for typical CWS models including ours as well. The building blocks that encoders use include recurrent neural network (RNN) and convolutional neural network (CNN), and long-term memory network (LSTM).",
+        "Graph model. As CWS is a kind of structure learning task, the graph model determines which type of decoder should be adopted for segmentation, also it may limit the capability of defining feature, as shown in Table 2, not all graph models can support the word features. Thus recent work focused on finding more general or flexible graph model to make model learn the representation of segmentation more effective as BIBREF9, BIBREF11.",
+        "External data and pre-trained embedding. Whereas both encoder and graph model are about exploring a way to get better performance only by improving the model strength itself. Using external resource such as pre-trained embeddings or language representation is an alternative for the same purpose BIBREF22, BIBREF23. SIGHAN Bakeoff defines two types of evaluation settings, closed test limits all the data for learning should not be beyond the given training set, while open test does not take this limitation BIBREF21. In this work, we will focus on the closed test setting by finding a better model design for further CWS performance improvement.",
+        "Shown in Table TABREF1, different decoders have particular decoding algorithms to match the respective CWS models. Markov models and CRF-based models often use Viterbi decoders with polynomial time complexity. In general graph model, search space may be too large for model to search. Thus it forces graph models to use an approximate beam search strategy. Beam search algorithm has a kind low-order polynomial time complexity. Especially, when beam width $b$=1, the beam search algorithm will reduce to greedy algorithm with a better time complexity $O(Mn)$ against the general beam search time complexity $O(Mnb^2)$, where $n$ is the number of units in one sentences, $M$ is a constant representing the model complexity. Greedy decoding algorithm can bring the fastest speed of decoding while it is not easy to guarantee the precision of decoding when the encoder is not strong enough.",
+        "In this paper, we focus on more effective encoder design which is capable of offering fast and accurate Chinese word segmentation with only unigram feature and greedy decoding. Our proposed encoder will only consist of attention mechanisms as building blocks but nothing else. Motivated by the Transformer BIBREF24 and its strength of capturing long-range dependencies of input sentences, we use a self-attention network to generate the representation of input which makes the model encode sentences at once without feeding input iteratively. Considering the weakness of the Transformer to model relative and absolute position information directly BIBREF25 and the importance of localness information, position information and directional information for CWS, we further improve the architecture of standard multi-head self-attention of the Transformer with a directional Gaussian mask and get a variant called Gaussian-masked directional multi-head attention. Based on the newly improved attention mechanism, we expand the encoder of the Transformer to capture different directional information. With our powerful encoder, our model uses only simple unigram features to generate representation of sentences.",
+        "For decoder which directly performs the segmentation, we use the bi-affinal attention scorer, which has been used in dependency parsing BIBREF26 and semantic role labeling BIBREF27, to implement greedy decoding on finding the boundaries of words. In our proposed model, greedy decoding ensures a fast segmentation while powerful encoder design ensures a good enough segmentation performance even working with greedy decoder together. Our model will be strictly evaluated on benchmark datasets from SIGHAN Bakeoff shared task on CWS in terms of closed test setting, and the experimental results show that our proposed model achieves new state-of-the-art.",
+        "The technical contributions of this paper can be summarized as follows.",
+        "We propose a CWS model with only attention structure. The encoder and decoder are both based on attention structure.",
+        "With a powerful enough encoder, we for the first time show that unigram (character) featues can help yield strong performance instead of diverse $n$-gram (character and word) features in most of previous work.",
+        "To capture the representation of localness information and directional information, we propose a variant of directional multi-head self-attention to further enhance the state-of-the-art Transformer encoder."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ],
+        [
+          "Introduction",
+          6
+        ],
+        [
+          "Introduction",
+          7
+        ],
+        [
+          "Introduction",
+          8
+        ],
+        [
+          "Introduction",
+          9
+        ],
+        [
+          "Introduction",
+          10
+        ],
+        [
+          "Introduction",
+          11
+        ],
+        [
+          "Introduction",
+          12
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Models ::: Encoder Stacks\n[source_id=20] In the Transformer, the encoder is composed of a stack of N identical layers and each layer has one multi-head self-attention layer and one position-wise fully connected feed-forward layer. One residual connection is around two sub-layers and followed by layer normalization BIBREF24. This architecture provides the Transformer a good ability to generate representation of sentence.\n[source_id=21] With the variant of multi-head self-attention, we design a Gaussian-masked directional encoder to capture representation of different directions to improve the ability of capturing the localness information and position information for the importance of adjacent characters. One unidirectional encoder can capture information of one particular direction.\n[source_id=22] For CWS tasks, one gap of characters, which is from a word boundary, can divide one sequence into two parts, one part in front of the gap and one part in the rear of it. The forward encoder and backward encoder are used to capture information of two directions which correspond to two parts divided by the gap.\n[source_id=23] One central encoder is paralleled with forward and backward encoders to capture the information of entire sentences. The central encoder is a special directional encoder for forward and backward information of sentences. The central encoder can fuse the information and enable the encoder to capture the global information.\n[source_id=24] The encoder outputs one forward information and one backward information of each positions. The representation of sentence generated by center encoder will be added to these information directly:\n[source_id=25] where $v^{b}=(v^b_1,...,v^b_n)$ is the backward information, $v^{f}=(v^f_1,...,v^f_n)$ is the forward information, $r^{b}=(r^b_1,...,r^b_n)$ is the output of backward encoder, $r^{c}=(r^c_1,...,r^c_n)$ is the output of center encoder and $r^{f}=(r^f_1,...,r^f_n)$ is the output of forward encoder.",
+      "score": 5.258039831902574,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "child_qasper_evidence_texts": [
+        "In the Transformer, the encoder is composed of a stack of N identical layers and each layer has one multi-head self-attention layer and one position-wise fully connected feed-forward layer. One residual connection is around two sub-layers and followed by layer normalization BIBREF24. This architecture provides the Transformer a good ability to generate representation of sentence.",
+        "With the variant of multi-head self-attention, we design a Gaussian-masked directional encoder to capture representation of different directions to improve the ability of capturing the localness information and position information for the importance of adjacent characters. One unidirectional encoder can capture information of one particular direction.",
+        "For CWS tasks, one gap of characters, which is from a word boundary, can divide one sequence into two parts, one part in front of the gap and one part in the rear of it. The forward encoder and backward encoder are used to capture information of two directions which correspond to two parts divided by the gap.",
+        "One central encoder is paralleled with forward and backward encoders to capture the information of entire sentences. The central encoder is a special directional encoder for forward and backward information of sentences. The central encoder can fuse the information and enable the encoder to capture the global information.",
+        "The encoder outputs one forward information and one backward information of each positions. The representation of sentence generated by center encoder will be added to these information directly:",
+        "where $v^{b}=(v^b_1,...,v^b_n)$ is the backward information, $v^{f}=(v^f_1,...,v^f_n)$ is the forward information, $r^{b}=(r^b_1,...,r^b_n)$ is the output of backward encoder, $r^{c}=(r^c_1,...,r^c_n)$ is the output of center encoder and $r^{f}=(r^f_1,...,r^f_n)$ is the output of forward encoder."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Models ::: Encoder Stacks",
+        "Models ::: Encoder Stacks",
+        "Models ::: Encoder Stacks",
+        "Models ::: Encoder Stacks",
+        "Models ::: Encoder Stacks",
+        "Models ::: Encoder Stacks"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Models ::: Encoder Stacks",
+          0
+        ],
+        [
+          "Models ::: Encoder Stacks",
+          1
+        ],
+        [
+          "Models ::: Encoder Stacks",
+          2
+        ],
+        [
+          "Models ::: Encoder Stacks",
+          3
+        ],
+        [
+          "Models ::: Encoder Stacks",
+          4
+        ],
+        [
+          "Models ::: Encoder Stacks",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Models ::: Encoder Stacks",
+      "section": "Models ::: Encoder Stacks",
+      "title_path": "Models ::: Encoder Stacks",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Related Work ::: Chinese Word Segmentation\n[source_id=64] CWS is a task for Chinese natural language process to delimit word boundary. BIBREF0 for the first time formulize CWS as a sequence labeling task. BIBREF3 show that different character tag sets can make essential impact for CWS. BIBREF2 use CRFs as a model for CWS, achieving new state-of-the-art. Works of statistical CWS has built the basis for neural CWS.\n[source_id=65] Neural word segmentation has been widely used to minimize the efforts in feature engineering which was important in statistical CWS. BIBREF4 introduce the neural model with sliding-window based sequence labeling. BIBREF6 propose a gated recursive neural network (GRNN) for CWS to incorporate complicated combination of contextual character and n-gram features. BIBREF7 use LSTM to learn long distance information. BIBREF9 propose a neural framework that eliminates context windows and utilize complete segmentation history. BIBREF33 explore a joint model that performs segmentation, POS-Tagging and chunking simultaneously. BIBREF34 propose a feature-enriched neural model for joint CWS and part-of-speech tagging. BIBREF35 present a joint model to enhance the segmentation of Chinese microtext by performing CWS and informal word detection simultaneously. BIBREF17 propose a character-based convolutional neural model to capture $n$-gram features automatically and an effective approach to incorporate word embeddings. BIBREF11 improve the model in BIBREF9 and propose a greedy neural word segmenter with balanced word and character embedding inputs. BIBREF23 propose a novel neural network model to incorporate unlabeled and partially-labeled data. BIBREF36 propose two methods that extend the Bi-LSTM to perform incorporating dictionaries into neural networks for CWS. BIBREF37 propose Switch-LSTMs to segment words and provided a more flexible solution for multi-criteria CWS which is easy to transfer the learned knowledge to new criteria.",
+      "score": 2.5045329082896717,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        64,
+        65
+      ],
+      "child_qasper_evidence_texts": [
+        "CWS is a task for Chinese natural language process to delimit word boundary. BIBREF0 for the first time formulize CWS as a sequence labeling task. BIBREF3 show that different character tag sets can make essential impact for CWS. BIBREF2 use CRFs as a model for CWS, achieving new state-of-the-art. Works of statistical CWS has built the basis for neural CWS.",
+        "Neural word segmentation has been widely used to minimize the efforts in feature engineering which was important in statistical CWS. BIBREF4 introduce the neural model with sliding-window based sequence labeling. BIBREF6 propose a gated recursive neural network (GRNN) for CWS to incorporate complicated combination of contextual character and n-gram features. BIBREF7 use LSTM to learn long distance information. BIBREF9 propose a neural framework that eliminates context windows and utilize complete segmentation history. BIBREF33 explore a joint model that performs segmentation, POS-Tagging and chunking simultaneously. BIBREF34 propose a feature-enriched neural model for joint CWS and part-of-speech tagging. BIBREF35 present a joint model to enhance the segmentation of Chinese microtext by performing CWS and informal word detection simultaneously. BIBREF17 propose a character-based convolutional neural model to capture $n$-gram features automatically and an effective approach to incorporate word embeddings. BIBREF11 improve the model in BIBREF9 and propose a greedy neural word segmenter with balanced word and character embedding inputs. BIBREF23 propose a novel neural network model to incorporate unlabeled and partially-labeled data. BIBREF36 propose two methods that extend the Bi-LSTM to perform incorporating dictionaries into neural networks for CWS. BIBREF37 propose Switch-LSTMs to segment words and provided a more flexible solution for multi-criteria CWS which is easy to transfer the learned knowledge to new criteria."
+      ],
+      "child_pages": [
+        12,
+        12
+      ],
+      "child_sections": [
+        "Related Work ::: Chinese Word Segmentation",
+        "Related Work ::: Chinese Word Segmentation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Work ::: Chinese Word Segmentation",
+          0
+        ],
+        [
+          "Related Work ::: Chinese Word Segmentation",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Related Work ::: Chinese Word Segmentation",
+      "section": "Related Work ::: Chinese Word Segmentation",
+      "title_path": "Related Work ::: Chinese Word Segmentation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Experiments ::: Results\n[source_id=57] Tables TABREF25 and TABREF26 reports the performance of recent models and ours in terms of closed test setting. Without the assistance of unsupervised segmentation features userd in BIBREF20, our model outperforms all the other models in MSR and AS except BIBREF18 and get comparable performance in PKU and CITYU. Note that all the other models for this comparison adopt various $n$-gram features while only our model takes unigram ones.\n[source_id=58] With unsupervised segmentation features introduced by BIBREF20, our model gets a higher result. Specially, the results in MSR and AS achieve new state-of-the-art and approaching previous state-of-the-art in CITYU and PKU. The unsupervised segmentation features are derived from the given training dataset, thus using them does not violate the rule of closed test of SIGHAN Bakeoff.\n[source_id=59] Table TABREF36 compares our model and recent neural models in terms of open test setting in which any external resources, especially pre-trained embeddings or language models can be used. In MSR and AS, our model gets a comparable result while our results in CITYU and PKU are not remarkable.\n[source_id=60] However, it is well known that it is always hard to compare models when using open test setting, especially with pre-trained embedding. Not all models may use the same method and data to pre-train. Though pre-trained embedding or language model can improve the performance, the performance improvement itself may be from multiple sources. It often that there is a success of pre-trained embedding to improve the performance, while it cannot prove that the model is better.\n[source_id=61] Compared with other LSTM models, our model performs better in AS and MSR than in CITYU and PKU. Considering the scale of different corpora, we believe that the size of corpus affects our model and the larger size is, the better model performs. For small corpus, the model tends to be overfitting.\n[source_id=62] Tables TABREF25 and TABREF26 also show the decoding time in different datasets. Our model finishes the segmentation with the least decoding time in all four datasets, thanks to the architecture of model which only takes attention mechanism as basic block.",
+      "score": 1.7457574310085537,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        57,
+        58,
+        59,
+        60,
+        61,
+        62
+      ],
+      "child_qasper_evidence_texts": [
+        "Tables TABREF25 and TABREF26 reports the performance of recent models and ours in terms of closed test setting. Without the assistance of unsupervised segmentation features userd in BIBREF20, our model outperforms all the other models in MSR and AS except BIBREF18 and get comparable performance in PKU and CITYU. Note that all the other models for this comparison adopt various $n$-gram features while only our model takes unigram ones.",
+        "With unsupervised segmentation features introduced by BIBREF20, our model gets a higher result. Specially, the results in MSR and AS achieve new state-of-the-art and approaching previous state-of-the-art in CITYU and PKU. The unsupervised segmentation features are derived from the given training dataset, thus using them does not violate the rule of closed test of SIGHAN Bakeoff.",
+        "Table TABREF36 compares our model and recent neural models in terms of open test setting in which any external resources, especially pre-trained embeddings or language models can be used. In MSR and AS, our model gets a comparable result while our results in CITYU and PKU are not remarkable.",
+        "However, it is well known that it is always hard to compare models when using open test setting, especially with pre-trained embedding. Not all models may use the same method and data to pre-train. Though pre-trained embedding or language model can improve the performance, the performance improvement itself may be from multiple sources. It often that there is a success of pre-trained embedding to improve the performance, while it cannot prove that the model is better.",
+        "Compared with other LSTM models, our model performs better in AS and MSR than in CITYU and PKU. Considering the scale of different corpora, we believe that the size of corpus affects our model and the larger size is, the better model performs. For small corpus, the model tends to be overfitting.",
+        "Tables TABREF25 and TABREF26 also show the decoding time in different datasets. Our model finishes the segmentation with the least decoding time in all four datasets, thanks to the architecture of model which only takes attention mechanism as basic block."
+      ],
+      "child_pages": [
+        11,
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "child_sections": [
+        "Experiments ::: Results",
+        "Experiments ::: Results",
+        "Experiments ::: Results",
+        "Experiments ::: Results",
+        "Experiments ::: Results",
+        "Experiments ::: Results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments ::: Results",
+          0
+        ],
+        [
+          "Experiments ::: Results",
+          1
+        ],
+        [
+          "Experiments ::: Results",
+          2
+        ],
+        [
+          "Experiments ::: Results",
+          3
+        ],
+        [
+          "Experiments ::: Results",
+          4
+        ],
+        [
+          "Experiments ::: Results",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Experiments ::: Results",
+      "section": "Experiments ::: Results",
+      "title_path": "Experiments ::: Results",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 27,
+      "content": "Similar as scaled dot-product attention BIBREF24, Gaussian-masked directional attention can be described as a function to map queries and key-value pairs to the representation of input. Here queries, keys and values are all vectors. Standard scaled dot-product attention is calculated by dotting query $Q$ with all keys $K$, dividing each values by $\\sqrt{d_k}$, where $\\sqrt{d_k}$ is the dimension of keys, and apply a softmax function to generate the weights in the attention:",
+      "qasper_evidence_text": "Similar as scaled dot-product attention BIBREF24, Gaussian-masked directional attention can be described as a function to map queries and key-value pairs to the representation of input. Here queries, keys and values are all vectors. Standard scaled dot-product attention is calculated by dotting query $Q$ with all keys $K$, dividing each values by $\\sqrt{d_k}$, where $\\sqrt{d_k}$ is the dimension of keys, and apply a softmax function to generate the weights in the attention:",
+      "source_node_id": 27,
+      "node_id": 27,
+      "paragraph_id": 27,
+      "evidence_id": 27,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 1,
+      "score": 8.014157394826862,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "section": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "title": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "hotpot_title": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 28,
+      "content": "Different from scaled dot-product attention, Gaussian-masked directional attention expects to pay attention to the adjacent characters of each positions and cast the localness relationship between characters as a fix Gaussian weight for attention. We assume that the Gaussian weight only relys on the distance between characters.",
+      "qasper_evidence_text": "Different from scaled dot-product attention, Gaussian-masked directional attention expects to pay attention to the adjacent characters of each positions and cast the localness relationship between characters as a fix Gaussian weight for attention. We assume that the Gaussian weight only relys on the distance between characters.",
+      "source_node_id": 28,
+      "node_id": 28,
+      "paragraph_id": 28,
+      "evidence_id": 28,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 1,
+      "score": 8.014157394826862,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "section": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "title": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "hotpot_title": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 2
+    },
+    {
+      "id": 30,
+      "content": "where $g_{ij}$ is the Gaussian weight between character $i$ and $j$, $dis_{ij}$ is the distance between character $i$ and $j$, $\\Phi (x)$ is the cumulative distribution function of Gaussian, $\\sigma $ is the standard deviation of Gaussian function and it is a hyperparameter in our method. Equation (DISPLAY_FORM13) can ensure the Gaussian weight equals 1 when $dis_{ij}$ is 0. The larger distance between charactersis, the smaller the weight is, which makes one character can affect its adjacent characters more compared with other characters.",
+      "qasper_evidence_text": "where $g_{ij}$ is the Gaussian weight between character $i$ and $j$, $dis_{ij}$ is the distance between character $i$ and $j$, $\\Phi (x)$ is the cumulative distribution function of Gaussian, $\\sigma $ is the standard deviation of Gaussian function and it is a hyperparameter in our method. Equation (DISPLAY_FORM13) can ensure the Gaussian weight equals 1 when $dis_{ij}$ is 0. The larger distance between charactersis, the smaller the weight is, which makes one character can affect its adjacent characters more compared with other characters.",
+      "source_node_id": 30,
+      "node_id": 30,
+      "paragraph_id": 30,
+      "evidence_id": 30,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 1,
+      "score": 8.014157394826862,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "section": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "title": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "hotpot_title": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "sent_id": 3,
+      "hotpot_sent_id": 3,
+      "supporting_rank": 3
+    },
+    {
+      "id": 31,
+      "content": "To combine the Gaussian weight to the self-attention, we produce the Hadamard product of Gaussian weight matrix $G$ and the score matrix produced by $Q{K^{T}}$",
+      "qasper_evidence_text": "To combine the Gaussian weight to the self-attention, we produce the Hadamard product of Gaussian weight matrix $G$ and the score matrix produced by $Q{K^{T}}$",
+      "source_node_id": 31,
+      "node_id": 31,
+      "paragraph_id": 31,
+      "evidence_id": 31,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_4",
+      "rank": 1,
+      "score": 8.014157394826862,
+      "block_type": "paragraph",
+      "page": 4,
+      "section_id": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "section": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "title": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "hotpot_title": "Models ::: Gaussian-Masked Directional Multi-Head Attention",
+      "sent_id": 4,
+      "hotpot_sent_id": 4,
+      "supporting_rank": 4
+    }
+  ],
+  "supporting_block_ids": [
+    27,
+    28,
+    30,
+    31
+  ]
+}

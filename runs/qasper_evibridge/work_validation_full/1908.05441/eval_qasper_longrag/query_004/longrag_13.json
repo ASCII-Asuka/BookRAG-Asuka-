@@ -1,0 +1,106 @@
+{
+  "id": "longrag_13",
+  "content": "[Section] Question Classification\n[source_id=64] Because of space limitations the question classification results are reported in Table TABREF7 only using Mean Average Precision (MAP). We also include Precision@1 (P@1), the overall accuracy of the highest-ranked prediction for each question classification model, in Table TABREF30 .\n[source_id=65] CNN: We implemented the CNN sentence classifier of Kim BIBREF28 , which demonstrated near state-of-the-art performance on a number of sentence classification tasks (including TREC question classification) by using pre-trained word embeddings BIBREF40 as feature extractors in a CNN model. We adapted the original CNN non-static model to multi-label classification by changing the fully connected softmax layer to sigmoid layer to produce a sigmoid output for each label simultaneously. We followed the same parameter settings reported by Kim et al. except the learning rate, which was tuned based on the development set. Pilot experiments did not show a performance improvement over the baseline model.\n[source_id=66] Label Definitions: Question terms can be mapped to categories using manual heuristics BIBREF19 . To mitigate sparsity and limit heuristic use, here we generated a feature comparing the cosine similarity of composite embedding vectors BIBREF51 representing question text and category definition text, using pretrained GloVe embeddings BIBREF52 . Pilot experiments showed that performance did not significantly improve.\n[source_id=67] Question Expansion with Hypernyms (Probase Version): One of the challenges of hypernym expansion BIBREF22 , BIBREF19 , BIBREF3 is determining a heuristic for the termination depth of hypernym expansion, as in Van-tu et al. BIBREF24 . Because science exam questions are often grounded in specific examples (e.g. a car rolling down a hill coming to a stop due to friction), we hypothesized that knowing certain categories of entities can be important for identifying specific question types – for example, observing that a question contains a kind of animal may be suggestive of a Life Science question, where similarly vehicles or materials present in questions may suggest questions about Forces or Matter, respectively. The challenge with WordNet is that key hypernyms can be at very different depths from query terms – for example, “cat” is distance 10 away from living thing, “car” is distance 4 away from vehicle, and “copper” is distance 2 away from material. Choosing a static threshold (or decaying threshold, as in Van-tu et al. BIBREF24 ) will inheriently reduce recall and limit the utility of this method of query expansion.\n[source_id=68] To address this, we piloted a hypernym expansion experiment using the Probase taxonomy BIBREF53 , a collection of 20.7M is-a pairs mined from the web, in place of WordNet. Because the taxonomic pairs in Probase come from use in naturalistic settings, links tend to jump levels in the WordNet taxonomy and be expressed in common forms. For example, INLINEFORM0 , INLINEFORM1 , and INLINEFORM2 , are each distance 1 in the Probase taxonomy, and high-frequency (i.e. high-confidence) taxonomic pairs.\n[source_id=69] Similar to query expansion using WordNet Hypernyms, our pilot experiments did not observe a benefit to using Probase hypernyms over the baseline model. An error analysis suggested that the large number of noisy and out-of-context links present in Probase may have reduced performance, and in response we constructed a filtered list of 710 key hypernym categories manually filtered from a list of hypernyms seeded using high-frequency words from an in-house corpus of 250 in-domain science textbooks. We also did not observe a benefit to question classification over the baseline model when expanding only to this manually curated list of key hypernyms.\n[source_id=70] Topic words: We made use of the 77 TREC word lists of Li and Roth BIBREF6 , containing a total of 3,257 terms, as well as an in-house set of 144 word lists on general and elementary science topics mined from the web, such as ANIMALS, VEGETABLES, and VEHICLES, containing a total of 29,059 words. To mitigate sparsity, features take the form of counts for a specific topic – detecting the words turtle and giraffe in a question would provide a count of 2 for the ANIMAL feature. This provides a light form of domain-specific entity and action (e.g. types of changes) recognition. Pilot experiments showed that this wordlist feature did add a modest performance benefit of approximately 2% to question classification accuracy. Taken together with our results on hypernym expansion, this suggests that manually curated wordlists can show modest benefits for question classification performance, but at the expense of substantial effort in authoring or collecting these extensive wordlists.\n[source_id=71] Hyperparameters: For each layer of the class label hierarchy, we tune the hyperparameters based on the development set. We use the pretrained BERT-Base (uncased) checkpoint. We use the following hyperparameters: maximum sequence length = 256, batch size = 16, learning rates: 2e-5 (L1), 5e-5 (L2-L6), epochs: 5 (L1), 25 (L2-L6).\n[source_id=72] Statistics: We use non-parametric bootstrap resampling to compare the baseline (Li and Roth BIBREF6 model) to all experimental models to determine significance, using 10,000 bootstrap resamples.",
+  "score": 1.1068814114304821,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_13",
+  "child_source_node_ids": [
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72
+  ],
+  "child_qasper_evidence_texts": [
+    "Because of space limitations the question classification results are reported in Table TABREF7 only using Mean Average Precision (MAP). We also include Precision@1 (P@1), the overall accuracy of the highest-ranked prediction for each question classification model, in Table TABREF30 .",
+    "CNN: We implemented the CNN sentence classifier of Kim BIBREF28 , which demonstrated near state-of-the-art performance on a number of sentence classification tasks (including TREC question classification) by using pre-trained word embeddings BIBREF40 as feature extractors in a CNN model. We adapted the original CNN non-static model to multi-label classification by changing the fully connected softmax layer to sigmoid layer to produce a sigmoid output for each label simultaneously. We followed the same parameter settings reported by Kim et al. except the learning rate, which was tuned based on the development set. Pilot experiments did not show a performance improvement over the baseline model.",
+    "Label Definitions: Question terms can be mapped to categories using manual heuristics BIBREF19 . To mitigate sparsity and limit heuristic use, here we generated a feature comparing the cosine similarity of composite embedding vectors BIBREF51 representing question text and category definition text, using pretrained GloVe embeddings BIBREF52 . Pilot experiments showed that performance did not significantly improve.",
+    "Question Expansion with Hypernyms (Probase Version): One of the challenges of hypernym expansion BIBREF22 , BIBREF19 , BIBREF3 is determining a heuristic for the termination depth of hypernym expansion, as in Van-tu et al. BIBREF24 . Because science exam questions are often grounded in specific examples (e.g. a car rolling down a hill coming to a stop due to friction), we hypothesized that knowing certain categories of entities can be important for identifying specific question types – for example, observing that a question contains a kind of animal may be suggestive of a Life Science question, where similarly vehicles or materials present in questions may suggest questions about Forces or Matter, respectively. The challenge with WordNet is that key hypernyms can be at very different depths from query terms – for example, “cat” is distance 10 away from living thing, “car” is distance 4 away from vehicle, and “copper” is distance 2 away from material. Choosing a static threshold (or decaying threshold, as in Van-tu et al. BIBREF24 ) will inheriently reduce recall and limit the utility of this method of query expansion.",
+    "To address this, we piloted a hypernym expansion experiment using the Probase taxonomy BIBREF53 , a collection of 20.7M is-a pairs mined from the web, in place of WordNet. Because the taxonomic pairs in Probase come from use in naturalistic settings, links tend to jump levels in the WordNet taxonomy and be expressed in common forms. For example, INLINEFORM0 , INLINEFORM1 , and INLINEFORM2 , are each distance 1 in the Probase taxonomy, and high-frequency (i.e. high-confidence) taxonomic pairs.",
+    "Similar to query expansion using WordNet Hypernyms, our pilot experiments did not observe a benefit to using Probase hypernyms over the baseline model. An error analysis suggested that the large number of noisy and out-of-context links present in Probase may have reduced performance, and in response we constructed a filtered list of 710 key hypernym categories manually filtered from a list of hypernyms seeded using high-frequency words from an in-house corpus of 250 in-domain science textbooks. We also did not observe a benefit to question classification over the baseline model when expanding only to this manually curated list of key hypernyms.",
+    "Topic words: We made use of the 77 TREC word lists of Li and Roth BIBREF6 , containing a total of 3,257 terms, as well as an in-house set of 144 word lists on general and elementary science topics mined from the web, such as ANIMALS, VEGETABLES, and VEHICLES, containing a total of 29,059 words. To mitigate sparsity, features take the form of counts for a specific topic – detecting the words turtle and giraffe in a question would provide a count of 2 for the ANIMAL feature. This provides a light form of domain-specific entity and action (e.g. types of changes) recognition. Pilot experiments showed that this wordlist feature did add a modest performance benefit of approximately 2% to question classification accuracy. Taken together with our results on hypernym expansion, this suggests that manually curated wordlists can show modest benefits for question classification performance, but at the expense of substantial effort in authoring or collecting these extensive wordlists.",
+    "Hyperparameters: For each layer of the class label hierarchy, we tune the hyperparameters based on the development set. We use the pretrained BERT-Base (uncased) checkpoint. We use the following hyperparameters: maximum sequence length = 256, batch size = 16, learning rates: 2e-5 (L1), 5e-5 (L2-L6), epochs: 5 (L1), 25 (L2-L6).",
+    "Statistics: We use non-parametric bootstrap resampling to compare the baseline (Li and Roth BIBREF6 model) to all experimental models to determine significance, using 10,000 bootstrap resamples."
+  ],
+  "child_pages": [
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13
+  ],
+  "child_sections": [
+    "Question Classification",
+    "Question Classification",
+    "Question Classification",
+    "Question Classification",
+    "Question Classification",
+    "Question Classification",
+    "Question Classification",
+    "Question Classification",
+    "Question Classification"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Question Classification",
+      0
+    ],
+    [
+      "Question Classification",
+      1
+    ],
+    [
+      "Question Classification",
+      2
+    ],
+    [
+      "Question Classification",
+      3
+    ],
+    [
+      "Question Classification",
+      4
+    ],
+    [
+      "Question Classification",
+      5
+    ],
+    [
+      "Question Classification",
+      6
+    ],
+    [
+      "Question Classification",
+      7
+    ],
+    [
+      "Question Classification",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_13",
+  "section_id": "Question Classification",
+  "section": "Question Classification",
+  "title_path": "Question Classification",
+  "block_type": "long_unit"
+}

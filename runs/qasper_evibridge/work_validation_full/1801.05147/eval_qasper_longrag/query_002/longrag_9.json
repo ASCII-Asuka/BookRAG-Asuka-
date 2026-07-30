@@ -1,0 +1,88 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Common Bi-LSTM over Characters\n[source_id=47] To build the adversarial part, first we create a new bi-directional LSTM, named by the common Bi-LSTM:\n[source_id=48] $$\\mathbf {h}_1^{\\text{\\tiny common}} \\mathbf {h}_2^{\\text{\\tiny common}} \\cdots \\mathbf {h}_n^{\\text{\\tiny common}} = \\text{Bi-LSTM}(\\mathbf {x}_1\\mathbf {x}_2\\cdots \\mathbf {x}_n).$$   (Eq. 13)\n[source_id=49] As shown in Figure 1 , this Bi-LSTM is constructed over the same input character representations of the private Bi-LSTM, in order to extract worker independent features.\n[source_id=50] The resulting features of the common Bi-LSTM are used for both NER and the worker discriminator, different with the features of private Bi-LSTM which are used for NER only. As shown in Figure 1 , we concatenate the outputs of the common and private Bi-LSTMs together, and then feed the results into the feed-forward combination layer of the NER part. Thus Formula 6 can be rewritten as:\n[source_id=51] $$\\mathbf {h}_t^{\\text{ner}} = \\mathbf {W} (\\mathbf {h}_t^{\\text{common}} \\oplus \\mathbf {h}_t^{\\text{private}}) + \\mathbf {b},$$   (Eq. 14)\n[source_id=52] where $\\mathbf {W}$ is wider than the original combination because the newly-added $\\mathbf {h}_t^{\\text{common}}$ .\n[source_id=53] Noticeably, although the resulting common features are used for the worker discriminator, they actually have no capability to distinguish the workers. Because this part is exploited to maximize the loss of the worker discriminator, it will be interpreted in the later training subsection. These features are invariant among different workers, thus they can have less noises for NER. This is the goal of adversarial learning, and we hope the NER being able to find useful features from these worker independent features.",
+  "score": 1.9136124991954033,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53
+  ],
+  "child_qasper_evidence_texts": [
+    "To build the adversarial part, first we create a new bi-directional LSTM, named by the common Bi-LSTM:",
+    "$$\\mathbf {h}_1^{\\text{\\tiny common}} \\mathbf {h}_2^{\\text{\\tiny common}} \\cdots \\mathbf {h}_n^{\\text{\\tiny common}} = \\text{Bi-LSTM}(\\mathbf {x}_1\\mathbf {x}_2\\cdots \\mathbf {x}_n).$$   (Eq. 13)",
+    "As shown in Figure 1 , this Bi-LSTM is constructed over the same input character representations of the private Bi-LSTM, in order to extract worker independent features.",
+    "The resulting features of the common Bi-LSTM are used for both NER and the worker discriminator, different with the features of private Bi-LSTM which are used for NER only. As shown in Figure 1 , we concatenate the outputs of the common and private Bi-LSTMs together, and then feed the results into the feed-forward combination layer of the NER part. Thus Formula 6 can be rewritten as:",
+    "$$\\mathbf {h}_t^{\\text{ner}} = \\mathbf {W} (\\mathbf {h}_t^{\\text{common}} \\oplus \\mathbf {h}_t^{\\text{private}}) + \\mathbf {b},$$   (Eq. 14)",
+    "where $\\mathbf {W}$ is wider than the original combination because the newly-added $\\mathbf {h}_t^{\\text{common}}$ .",
+    "Noticeably, although the resulting common features are used for the worker discriminator, they actually have no capability to distinguish the workers. Because this part is exploited to maximize the loss of the worker discriminator, it will be interpreted in the later training subsection. These features are invariant among different workers, thus they can have less noises for NER. This is the goal of adversarial learning, and we hope the NER being able to find useful features from these worker independent features."
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Common Bi-LSTM over Characters",
+    "Common Bi-LSTM over Characters",
+    "Common Bi-LSTM over Characters",
+    "Common Bi-LSTM over Characters",
+    "Common Bi-LSTM over Characters",
+    "Common Bi-LSTM over Characters",
+    "Common Bi-LSTM over Characters"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Common Bi-LSTM over Characters",
+      0
+    ],
+    [
+      "Common Bi-LSTM over Characters",
+      1
+    ],
+    [
+      "Common Bi-LSTM over Characters",
+      2
+    ],
+    [
+      "Common Bi-LSTM over Characters",
+      3
+    ],
+    [
+      "Common Bi-LSTM over Characters",
+      4
+    ],
+    [
+      "Common Bi-LSTM over Characters",
+      5
+    ],
+    [
+      "Common Bi-LSTM over Characters",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Common Bi-LSTM over Characters",
+  "section": "Common Bi-LSTM over Characters",
+  "title_path": "Common Bi-LSTM over Characters",
+  "block_type": "long_unit"
+}

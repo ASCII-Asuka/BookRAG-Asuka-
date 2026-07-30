@@ -1,0 +1,296 @@
+[
+  {
+    "question": "What model is used to encode the images?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "a Convolutional Neural Network (CNN)"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Our model extends the image description model by BIBREF0 , which consists of an encoder-decoder architecture. The encoder is a Convolutional Neural Network (CNN) and the decoder is a Long Short-Term Memory (LSTM) network, as presented in Figure 2 . The image is passed through the encoder generating the image representation that is used by the decoder to know the content of the image and generate the description word by word. In the following, we describe how we extended this model for the visual storytelling task."
+        ],
+        "evidence_block_ids": [
+          11
+        ],
+        "evidence_paragraph_ids": [
+          11
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "LSTM"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "The model's first component is a Recurrent Neural Network (RNN), more precisely an LSTM that summarizes the sequence of images. At every timestep $t$ the network takes as input an image $I_i$ where $i\\in \\lbrace 1,2,3,4,5\\rbrace $ from the sequence. At time $t=5$ , the LSTM has encoded the 5 images and provides the sequence's context through its last hidden state denoted by $h_e^{(t)}$ . The representation of the images was obtained through Inception V3."
+        ],
+        "evidence_block_ids": [
+          13
+        ],
+        "evidence_paragraph_ids": [
+          13
+        ]
+      }
+    ],
+    "doc_uuid": "1806.00738",
+    "doc_path": "qasper://1806.00738",
+    "qasper_question_id": "c37f65c9f0d543a35c784263b79236ccf1c44fac",
+    "title": "Contextualize, Show and Tell: A Neural Visual Storyteller",
+    "evidence_block_ids": [
+      11,
+      13
+    ],
+    "evidence_paragraph_ids": [
+      11,
+      13
+    ],
+    "output": "{\n  \"answer_short\": \"Inception V3\",\n  \"answer_rationale\": \"Text 1 (page=5, section=Encoder) states that 'The representation of the images was obtained through Inception V3.' Text 6 (page=6, section=Decoder) also confirms that 'For each image in the sequence, we obtain its representation {e(I_1),...,e(I_5)} using Inception v3.' This directly identifies Inception V3 as the model used to encode the images.\"\n}",
+    "retrieved_node_ids": [
+      13,
+      16,
+      11,
+      2,
+      15,
+      17,
+      27,
+      8,
+      4,
+      22
+    ],
+    "answer_short": "Inception V3",
+    "answer_rationale": "Text 1 (page=5, section=Encoder) states that 'The representation of the images was obtained through Inception V3.' Text 6 (page=6, section=Decoder) also confirms that 'For each image in the sequence, we obtain its representation {e(I_1),...,e(I_5)} using Inception v3.' This directly identifies Inception V3 as the model used to encode the images.",
+    "supporting_block_ids": [
+      13,
+      16,
+      11,
+      2,
+      15,
+      17,
+      27,
+      8,
+      4,
+      22
+    ]
+  },
+  {
+    "question": "How is the sequential nature of the story captured?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "we provide the decoder with the context of the whole sequence and the content of the current image (i.e. global and local information) to generate the corresponding text that will contribute to the overall story"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "The decoder is the second LSTM network that uses the information obtained from the encoder to generate the sequence's story. The first input $x_0$ to the decoder is the image for which the text is being generated. The last hidden state from the encoder $h_e^{(t)}$ is used to initialize the first hidden state of the decoder $h_d^{(0)}$ . With this strategy, we provide the decoder with the context of the whole sequence and the content of the current image (i.e. global and local information) to generate the corresponding text that will contribute to the overall story."
+        ],
+        "evidence_block_ids": [
+          15
+        ],
+        "evidence_paragraph_ids": [
+          15
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "The encoder takes the images in order, one at every timestep $t$ . At time $t=5$ , we obtain the context vector through $h_e^{(t)}$ (represented by $\\mathbf {Z}$ ). This vector is used to initialize each decoder's hidden state while the first input to each decoder is its corresponding image embedding $e(I_i)$ . Each decoder generates a sequence of words $\\lbrace p_1,...,p_{n}\\rbrace $ for each image in the sequence. "
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Our proposed architecture is presented in Figure 3 . For each image in the sequence, we obtain its representation $\\lbrace e(I_1),...,e(I_5)\\rbrace $ using Inception v3. The encoder takes the images in order, one at every timestep $t$ . At time $t=5$ , we obtain the context vector through $h_e^{(t)}$ (represented by $\\mathbf {Z}$ ). This vector is used to initialize each decoder's hidden state while the first input to each decoder is its corresponding image embedding $e(I_i)$ . Each decoder generates a sequence of words $\\lbrace p_1,...,p_{n}\\rbrace $ for each image in the sequence. The final story is the concatenation of the output of the 5 decoders."
+        ],
+        "evidence_block_ids": [
+          17
+        ],
+        "evidence_paragraph_ids": [
+          17
+        ]
+      }
+    ],
+    "doc_uuid": "1806.00738",
+    "doc_path": "qasper://1806.00738",
+    "qasper_question_id": "584af673429c7f8621c6bf83362a37048daa0e5d",
+    "title": "Contextualize, Show and Tell: A Neural Visual Storyteller",
+    "evidence_block_ids": [
+      15,
+      17
+    ],
+    "evidence_paragraph_ids": [
+      15,
+      17
+    ],
+    "output": "{\n  \"answer_short\": \"The sequential nature is captured by using an encoder LSTM to compute a context vector from the image sequence, which initializes the first hidden state of multiple independent decoders, each generating text for a specific image in sequence.\",\n  \"answer_rationale\": \"Text 2 and Text 4 describe how the encoder LSTM computes a context vector from the image sequence, which is then used to initialize the first hidden state of multiple independent decoders. Each decoder generates text for a specific image in sequence, thereby capturing the sequential nature of the story. Text 7 and Text 8 further clarify that each decoder corresponds to a specific image position, allowing the model to generate story parts in sequence, with the first decoder handling the opening and the last handling the closing, thus preserving the narrative order.\"\n}",
+    "retrieved_node_ids": [
+      28,
+      2,
+      20,
+      15,
+      4,
+      27,
+      17,
+      16,
+      8,
+      19
+    ],
+    "answer_short": "The sequential nature is captured by using an encoder LSTM to compute a context vector from the image sequence, which initializes the first hidden state of multiple independent decoders, each generating text for a specific image in sequence.",
+    "answer_rationale": "Text 2 and Text 4 describe how the encoder LSTM computes a context vector from the image sequence, which is then used to initialize the first hidden state of multiple independent decoders. Each decoder generates text for a specific image in sequence, thereby capturing the sequential nature of the story. Text 7 and Text 8 further clarify that each decoder corresponds to a specific image position, allowing the model to generate story parts in sequence, with the first decoder handling the opening and the last handling the closing, thus preserving the narrative order.",
+    "supporting_block_ids": [
+      28,
+      2,
+      20,
+      15,
+      4,
+      27,
+      17,
+      16,
+      8,
+      19
+    ]
+  },
+  {
+    "question": "Is the position in the sequence part of the input?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": false,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": true,
+        "evidence": [
+          "The model's first component is a Recurrent Neural Network (RNN), more precisely an LSTM that summarizes the sequence of images. At every timestep $t$ the network takes as input an image $I_i$ where $i\\in \\lbrace 1,2,3,4,5\\rbrace $ from the sequence. At time $t=5$ , the LSTM has encoded the 5 images and provides the sequence's context through its last hidden state denoted by $h_e^{(t)}$ . The representation of the images was obtained through Inception V3."
+        ],
+        "evidence_block_ids": [
+          13
+        ],
+        "evidence_paragraph_ids": [
+          13
+        ]
+      }
+    ],
+    "doc_uuid": "1806.00738",
+    "doc_path": "qasper://1806.00738",
+    "qasper_question_id": "1be54c5b3ea67d837ffba2290a40c1e720d9587f",
+    "title": "Contextualize, Show and Tell: A Neural Visual Storyteller",
+    "evidence_block_ids": [
+      13
+    ],
+    "evidence_paragraph_ids": [
+      13
+    ],
+    "output": "{\n  \"answer_short\": \"Yes\",\n  \"answer_rationale\": \"The documents state that the encoder takes images from the sequence as input at each timestep (Text 1, Text 4), and each decoder uses the corresponding image embedding as its first input (Text 2, Text 4, Text 5). This indicates that the position in the sequence is part of the input, as each image at a specific position is processed individually.\"\n}",
+    "retrieved_node_ids": [
+      13,
+      16,
+      28,
+      17,
+      15,
+      27,
+      23,
+      7,
+      2,
+      9
+    ],
+    "answer_short": "Yes",
+    "answer_rationale": "The documents state that the encoder takes images from the sequence as input at each timestep (Text 1, Text 4), and each decoder uses the corresponding image embedding as its first input (Text 2, Text 4, Text 5). This indicates that the position in the sequence is part of the input, as each image at a specific position is processed individually.",
+    "supporting_block_ids": [
+      13,
+      16,
+      28,
+      17,
+      15,
+      27,
+      23,
+      7,
+      2,
+      9
+    ]
+  },
+  {
+    "question": "Do the decoder LSTMs all have the same weights?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": false,
+        "evidence": [
+          "Our model contains five independent decoders, one for each image in the sequence. All the 5 decoders use the last hidden state of the encoder (i.e. the context) as its first hidden state and take the corresponding image embedding as its first input. In this way, the first decoder generates the sequence of words for the first image in the sequence, the second decoder for the second image in the sequence, and so on. This allows each decoder to learn a specific language model for each position of the sequence. For instance, the first decoder will learn the opening sentences of the story while the last decoder the closing sentences. The word embeddings were computed using word2vec BIBREF8 ."
+        ],
+        "evidence_block_ids": [
+          16
+        ],
+        "evidence_paragraph_ids": [
+          16
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": false,
+        "evidence": [
+          "Our model contains five independent decoders, one for each image in the sequence. All the 5 decoders use the last hidden state of the encoder (i.e. the context) as its first hidden state and take the corresponding image embedding as its first input. In this way, the first decoder generates the sequence of words for the first image in the sequence, the second decoder for the second image in the sequence, and so on. This allows each decoder to learn a specific language model for each position of the sequence. For instance, the first decoder will learn the opening sentences of the story while the last decoder the closing sentences. The word embeddings were computed using word2vec BIBREF8 ."
+        ],
+        "evidence_block_ids": [
+          16
+        ],
+        "evidence_paragraph_ids": [
+          16
+        ]
+      }
+    ],
+    "doc_uuid": "1806.00738",
+    "doc_path": "qasper://1806.00738",
+    "qasper_question_id": "b08f88d1facefceb87e134ba2c1fa90035018e83",
+    "title": "Contextualize, Show and Tell: A Neural Visual Storyteller",
+    "evidence_block_ids": [
+      16
+    ],
+    "evidence_paragraph_ids": [
+      16
+    ],
+    "output": "{\n  \"answer_short\": \"No\",\n  \"answer_rationale\": \"The documents state that there are five independent decoders, each generating a sequence for a specific image in the sequence, and each decoder learns a specific language model for its position. This implies that the decoders have different weights to handle their specific tasks.\"\n}",
+    "retrieved_node_ids": [
+      16,
+      15,
+      13,
+      17,
+      2,
+      27,
+      11,
+      28,
+      24,
+      9
+    ],
+    "answer_short": "No",
+    "answer_rationale": "The documents state that there are five independent decoders, each generating a sequence for a specific image in the sequence, and each decoder learns a specific language model for its position. This implies that the decoders have different weights to handle their specific tasks.",
+    "supporting_block_ids": [
+      16,
+      15,
+      13,
+      17,
+      2,
+      27,
+      11,
+      28,
+      24,
+      9
+    ]
+  }
+]

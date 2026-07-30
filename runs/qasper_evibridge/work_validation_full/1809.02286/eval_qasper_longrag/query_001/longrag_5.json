@@ -1,0 +1,106 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Structure-aware Tag Representation\n[source_id=29] In most previous works using linguistic tag information BIBREF16 , BIBREF9 , BIBREF18 , tags are usually represented as simple low-dimensional dense vectors, similar to word embeddings. This approach seems reasonable in the case of POS tags that are attached to the corresponding words, but phrase-level constituent tags (e.g. NP, VP, ADJP) vary greatly in size and shape, making them less amenable to uniform treatment. For instance, even the same phrase tags within different syntactic contexts can vary greatly in size and internal structure, as the case of NP tags in Figure 1 shows. Here, the NP consisting of DT[the]-NN[stories] has a different internal structure than the NP consisting of NP[the film 's]-NNS[shortcomings].\n[source_id=30] One way of deriving structure-aware tag representations from the original tag embeddings is to introduce a separate tag-level tree-LSTM which accepts the typical tag embeddings at each node of a tree and outputs the computed structure-aware tag representations for the nodes. Note that the module concentrates on extracting useful syntactic features by considering only the tags and structures of the trees, excluding word information.\n[source_id=31] Formally, we denote a tag embedding for the tag attached to each node in a tree as $\\textbf {e} \\in \\mathbb {R}^{d_\\text{T}}$ . Then, the function of each cell in the tag tree-LSTM is defined in the following way. Leaf nodes are defined by the following:\n[source_id=32] $$ \n\\begin{bmatrix}\n\\hat{\\mathbf {c}} \\\\\n\\hat{\\mathbf {h}} \\\\\n\\end{bmatrix}\n= \\tanh {\\left(\\mathbf {U}_\\text{T} \\mathbf {e} + \\mathbf {a}_\\text{T}\\right)}$$   (Eq. 13)\n[source_id=33] while non-leaf nodes are defined by the following:\n[source_id=34] $$ \n\\begin{bmatrix}\n\\hat{\\mathbf {i}} \\\\\n\\hat{\\mathbf {f}}_l \\\\\n\\hat{\\mathbf {f}}_r \\\\\n\\hat{\\mathbf {o}} \\\\\n\\hat{\\mathbf {g}}\n\\end{bmatrix}\n=\n\\begin{bmatrix}\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\tanh \\end{bmatrix}\n\\Bigg ( \\mathbf {W_\\text{T}}\n\\begin{bmatrix}\n\\hat{\\mathbf {h}}_l \\\\\n\\hat{\\mathbf {h}}_r \\\\\n\\mathbf {e} \\\\\n\\end{bmatrix}\n+ \\mathbf {b}_\\text{T} \\Bigg )$$   (Eq. 14)\n[source_id=35] $$ \n\\hat{\\mathbf {c}} = \\hat{\\mathbf {f}}_l \\odot \\hat{\\mathbf {c}}_l + \\hat{\\mathbf {f}}_r \\odot \\hat{\\mathbf {c}}_r + \\hat{\\mathbf {i}} \\odot \\hat{\\mathbf {g}}\\\\$$   (Eq. 15)\n[source_id=36] where $\\hat{\\mathbf {h}}, \\hat{\\mathbf {c}} \\in \\mathbb {R}^{d_\\text{T}}$ represent the hidden state and cell state of each node in the tag tree-LSTM. We regard the hidden state ( $\\hat{\\mathbf {h}}$ ) as a structure-aware tag representation for the node. $ \\mathbf {U}_\\text{T} \\in \\mathbb {R}^{2d_\\text{T} \\times d_\\text{T}}, \\textbf {a}_\\text{T} \\in \\mathbb {R}^{2d_\\text{T}}, \\mathbf {W}_\\text{T} \\in \\mathbb {R}^{5d_\\text{T} \\times 3d_\\text{T}}$ , and $\\mathbf {b}_\\text{T} \\in \\mathbb {R}^{5d_\\text{T}}$ are trainable parameters. The rest of the notation follows equations 8 , 9 , and 10 . In case of leaf nodes, the states are computed by a simple non-linear transformation. Meanwhile, the composition function in a non-leaf node absorbs the tag embedding ( $\\mathbf {e}$ ) as an additional input as well as the hidden states of the two children nodes. The benefit of revising tag representations according to the internal structure is that the derived embedding is a function of the corresponding makeup of the node, rather than a monolithic, categorical tag.\n[source_id=37] With regard to the tags themselves, we conjecture that the taxonomy of the tags currently in use in many NLP systems is too complex to be utilized effectively in deep neural models, considering the specificity of many tag sets and the limited amount of data with which to train. Thus, we cluster POS (word-level) tags into 12 groups following the universal POS tagset BIBREF20 and phrase-level tags into 11 groups according to criteria analogous to the case of words, resulting in 23 tag categories in total. In this work, we use the revised coarse-grained tags instead of the original ones. For more details, we refer readers to the supplemental materials.",
+  "score": 0.34418919969327905,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37
+  ],
+  "child_qasper_evidence_texts": [
+    "In most previous works using linguistic tag information BIBREF16 , BIBREF9 , BIBREF18 , tags are usually represented as simple low-dimensional dense vectors, similar to word embeddings. This approach seems reasonable in the case of POS tags that are attached to the corresponding words, but phrase-level constituent tags (e.g. NP, VP, ADJP) vary greatly in size and shape, making them less amenable to uniform treatment. For instance, even the same phrase tags within different syntactic contexts can vary greatly in size and internal structure, as the case of NP tags in Figure 1 shows. Here, the NP consisting of DT[the]-NN[stories] has a different internal structure than the NP consisting of NP[the film 's]-NNS[shortcomings].",
+    "One way of deriving structure-aware tag representations from the original tag embeddings is to introduce a separate tag-level tree-LSTM which accepts the typical tag embeddings at each node of a tree and outputs the computed structure-aware tag representations for the nodes. Note that the module concentrates on extracting useful syntactic features by considering only the tags and structures of the trees, excluding word information.",
+    "Formally, we denote a tag embedding for the tag attached to each node in a tree as $\\textbf {e} \\in \\mathbb {R}^{d_\\text{T}}$ . Then, the function of each cell in the tag tree-LSTM is defined in the following way. Leaf nodes are defined by the following:",
+    "$$ \n\\begin{bmatrix}\n\\hat{\\mathbf {c}} \\\\\n\\hat{\\mathbf {h}} \\\\\n\\end{bmatrix}\n= \\tanh {\\left(\\mathbf {U}_\\text{T} \\mathbf {e} + \\mathbf {a}_\\text{T}\\right)}$$   (Eq. 13)",
+    "while non-leaf nodes are defined by the following:",
+    "$$ \n\\begin{bmatrix}\n\\hat{\\mathbf {i}} \\\\\n\\hat{\\mathbf {f}}_l \\\\\n\\hat{\\mathbf {f}}_r \\\\\n\\hat{\\mathbf {o}} \\\\\n\\hat{\\mathbf {g}}\n\\end{bmatrix}\n=\n\\begin{bmatrix}\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\sigma \\\\\n\\tanh \\end{bmatrix}\n\\Bigg ( \\mathbf {W_\\text{T}}\n\\begin{bmatrix}\n\\hat{\\mathbf {h}}_l \\\\\n\\hat{\\mathbf {h}}_r \\\\\n\\mathbf {e} \\\\\n\\end{bmatrix}\n+ \\mathbf {b}_\\text{T} \\Bigg )$$   (Eq. 14)",
+    "$$ \n\\hat{\\mathbf {c}} = \\hat{\\mathbf {f}}_l \\odot \\hat{\\mathbf {c}}_l + \\hat{\\mathbf {f}}_r \\odot \\hat{\\mathbf {c}}_r + \\hat{\\mathbf {i}} \\odot \\hat{\\mathbf {g}}\\\\$$   (Eq. 15)",
+    "where $\\hat{\\mathbf {h}}, \\hat{\\mathbf {c}} \\in \\mathbb {R}^{d_\\text{T}}$ represent the hidden state and cell state of each node in the tag tree-LSTM. We regard the hidden state ( $\\hat{\\mathbf {h}}$ ) as a structure-aware tag representation for the node. $ \\mathbf {U}_\\text{T} \\in \\mathbb {R}^{2d_\\text{T} \\times d_\\text{T}}, \\textbf {a}_\\text{T} \\in \\mathbb {R}^{2d_\\text{T}}, \\mathbf {W}_\\text{T} \\in \\mathbb {R}^{5d_\\text{T} \\times 3d_\\text{T}}$ , and $\\mathbf {b}_\\text{T} \\in \\mathbb {R}^{5d_\\text{T}}$ are trainable parameters. The rest of the notation follows equations 8 , 9 , and 10 . In case of leaf nodes, the states are computed by a simple non-linear transformation. Meanwhile, the composition function in a non-leaf node absorbs the tag embedding ( $\\mathbf {e}$ ) as an additional input as well as the hidden states of the two children nodes. The benefit of revising tag representations according to the internal structure is that the derived embedding is a function of the corresponding makeup of the node, rather than a monolithic, categorical tag.",
+    "With regard to the tags themselves, we conjecture that the taxonomy of the tags currently in use in many NLP systems is too complex to be utilized effectively in deep neural models, considering the specificity of many tag sets and the limited amount of data with which to train. Thus, we cluster POS (word-level) tags into 12 groups following the universal POS tagset BIBREF20 and phrase-level tags into 11 groups according to criteria analogous to the case of words, resulting in 23 tag categories in total. In this work, we use the revised coarse-grained tags instead of the original ones. For more details, we refer readers to the supplemental materials."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Structure-aware Tag Representation",
+    "Structure-aware Tag Representation",
+    "Structure-aware Tag Representation",
+    "Structure-aware Tag Representation",
+    "Structure-aware Tag Representation",
+    "Structure-aware Tag Representation",
+    "Structure-aware Tag Representation",
+    "Structure-aware Tag Representation",
+    "Structure-aware Tag Representation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Structure-aware Tag Representation",
+      0
+    ],
+    [
+      "Structure-aware Tag Representation",
+      1
+    ],
+    [
+      "Structure-aware Tag Representation",
+      2
+    ],
+    [
+      "Structure-aware Tag Representation",
+      3
+    ],
+    [
+      "Structure-aware Tag Representation",
+      4
+    ],
+    [
+      "Structure-aware Tag Representation",
+      5
+    ],
+    [
+      "Structure-aware Tag Representation",
+      6
+    ],
+    [
+      "Structure-aware Tag Representation",
+      7
+    ],
+    [
+      "Structure-aware Tag Representation",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Structure-aware Tag Representation",
+  "section": "Structure-aware Tag Representation",
+  "title_path": "Structure-aware Tag Representation",
+  "block_type": "long_unit"
+}

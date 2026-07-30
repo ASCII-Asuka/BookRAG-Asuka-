@@ -1,0 +1,124 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview\n[source_id=23] Let's consider the following notations:\n[source_id=24] $\\bullet $ An entity $e_i$ is a set of $J_i$ unordered records $\\lbrace r_{i,1}, ..., r_{i,j}, ..., r_{i,J_i}\\rbrace $; where record $r_{i,j}$ is defined as a pair of key $k_{i,j}$ and value $v_{i,j}$. We outline that $J_i$ might differ between entities.\n[source_id=25] $\\bullet $ A data-structure $s$ is an unordered set of $I$ entities $e_i$. We thus denote $s \\lbrace e_1, ..., e_i, ..., e_I\\rbrace $.\n[source_id=26] $\\bullet $ For each data-structure, a textual description $y$ is associated. We refer to the first $t$ words of a description $y$ as $y_{1:t}$. Thus, the full sequence of words can be noted as $y = y_{1:T}$.\n[source_id=27] $\\bullet $ The dataset $\\mathcal {D}$ is a collection of $N$ aligned (data-structure, description) pairs $(s,y)$.\n[source_id=28] For instance, Figure FIGREF1 illustrates a data-structure associated with a description. The data-structure includes a set of entities (Hawks, Magic, Al Horford, Jeff Teague, ...). The entity Jeff Teague is modeled as a set of records {(PTS, 17), (REB, 0), (AST, 7) ...} in which, e.g., the record (PTS, 17) is characterized by a key (PTS) and a value (17).\n[source_id=29] For each data-structure $s$ in $\\mathcal {D}$, the objective function aims to generate a description $\\hat{y}$ as close as possible to the ground truth $y$. This objective function optimizes the following log-likelihood over the whole dataset $\\mathcal {D}$:\n[source_id=30] where $\\theta $ stands for the model parameters and $P(\\hat{y}=y\\ |\\ s; \\theta )$ the probability of the model to generate the adequate description $y$ for table $s$.\n[source_id=31] During inference, we generate the sequence $\\hat{y}^*$ with the maximum a posteriori probability conditioned on table $s$. Using the chain rule, we get:\n[source_id=32] This equation is intractable in practice, we approximate a solution using beam search, as in BIBREF11, BIBREF19, BIBREF12, BIBREF13, BIBREF10.\n[source_id=33] Our model follows the encoder-decoder architecture BIBREF14. Because our contribution focuses on the encoding process, we chose the decoding module used in BIBREF12, BIBREF10: a two-layers LSTM network with a copy mechanism. In order to supervise this mechanism, we assume that each record value that also appears in the target is copied from the data-structure and we train the model to switch between freely generating words from the vocabulary and copying words from the input. We now describe the hierarchical encoder and the hierarchical attention.",
+  "score": 2.0033287672351587,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33
+  ],
+  "child_qasper_evidence_texts": [
+    "Let's consider the following notations:",
+    "$\\bullet $ An entity $e_i$ is a set of $J_i$ unordered records $\\lbrace r_{i,1}, ..., r_{i,j}, ..., r_{i,J_i}\\rbrace $; where record $r_{i,j}$ is defined as a pair of key $k_{i,j}$ and value $v_{i,j}$. We outline that $J_i$ might differ between entities.",
+    "$\\bullet $ A data-structure $s$ is an unordered set of $I$ entities $e_i$. We thus denote $s \\lbrace e_1, ..., e_i, ..., e_I\\rbrace $.",
+    "$\\bullet $ For each data-structure, a textual description $y$ is associated. We refer to the first $t$ words of a description $y$ as $y_{1:t}$. Thus, the full sequence of words can be noted as $y = y_{1:T}$.",
+    "$\\bullet $ The dataset $\\mathcal {D}$ is a collection of $N$ aligned (data-structure, description) pairs $(s,y)$.",
+    "For instance, Figure FIGREF1 illustrates a data-structure associated with a description. The data-structure includes a set of entities (Hawks, Magic, Al Horford, Jeff Teague, ...). The entity Jeff Teague is modeled as a set of records {(PTS, 17), (REB, 0), (AST, 7) ...} in which, e.g., the record (PTS, 17) is characterized by a key (PTS) and a value (17).",
+    "For each data-structure $s$ in $\\mathcal {D}$, the objective function aims to generate a description $\\hat{y}$ as close as possible to the ground truth $y$. This objective function optimizes the following log-likelihood over the whole dataset $\\mathcal {D}$:",
+    "where $\\theta $ stands for the model parameters and $P(\\hat{y}=y\\ |\\ s; \\theta )$ the probability of the model to generate the adequate description $y$ for table $s$.",
+    "During inference, we generate the sequence $\\hat{y}^*$ with the maximum a posteriori probability conditioned on table $s$. Using the chain rule, we get:",
+    "This equation is intractable in practice, we approximate a solution using beam search, as in BIBREF11, BIBREF19, BIBREF12, BIBREF13, BIBREF10.",
+    "Our model follows the encoder-decoder architecture BIBREF14. Because our contribution focuses on the encoding process, we chose the decoding module used in BIBREF12, BIBREF10: a two-layers LSTM network with a copy mechanism. In order to supervise this mechanism, we assume that each record value that also appears in the target is copied from the data-structure and we train the model to switch between freely generating words from the vocabulary and copying words from the input. We now describe the hierarchical encoder and the hierarchical attention."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+    "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+    "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+    "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+    "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+    "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+    "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+    "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+    "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+    "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+    "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+      0
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+      1
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+      2
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+      3
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+      4
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+      5
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+      6
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+      7
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+      8
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+      9
+    ],
+    [
+      "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+      10
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+  "section": "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+  "title_path": "Hierarchical Encoder Model for Data-to-Text ::: Notation and General Overview",
+  "block_type": "long_unit"
+}

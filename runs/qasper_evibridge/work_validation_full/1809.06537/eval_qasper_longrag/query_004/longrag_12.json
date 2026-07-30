@@ -1,0 +1,70 @@
+{
+  "id": "longrag_12",
+  "content": "[Section] Dataset Construction for Evaluation\n[source_id=64] Since none of the datasets from previous works have been published, we decide to build a new one. We randomly collect INLINEFORM0 cases from China Judgments Online, among which INLINEFORM1 cases are for training, INLINEFORM2 each for validation and testing. Among the original cases, INLINEFORM3 are granted divorce and others not. There are INLINEFORM4 valid pleas in total, with INLINEFORM5 supported and INLINEFORM6 rejected. Note that, if the divorce plea in a case is not granted, the other pleas of this case will not be considered by the judge. Case materials are all natural language sentences, with averagely INLINEFORM7 tokens per fact description and INLINEFORM8 per plea. There are 62 relevant law articles in total, each with INLINEFORM9 tokens averagely. Note that the case documents include special typographical signals, making it easy to extract labeled data with regular expression.\n[source_id=65] We apply some rules with legal prior to preprocess the dataset according to previous works BIBREF33 , BIBREF34 , BIBREF35 , which have proved effective in our experiments.\n[source_id=66] Name Replacement: All names in case documents are replaced with marks indicating their roles, instead of simply anonymizing them, e.g. <Plantiff>, <Defendant>, <Daughter_x> and so on. Since “all are equal before the law”, names should make no more difference than what role they take.\n[source_id=67] Law Article Filtration : Since most accessible divorce proceeding documents do not contain ground-truth fine-grained articles, we use an unsupervised method instead. First, we extract all the articles from the law text with regular expression. Afterwards, we select the most relevant 10 articles according to the fact descriptions as follows. We obtain sentence representation with CBOW BIBREF36 , BIBREF37 weighted by inverse document frequency, and calculate cosine distance between cases and law articles. Word embeddings are pre-trained with Chinese Wikipedia pages. As the final step, we extract top 5 relevant articles for each sample respectively from the main marriage law articles and their interpretations, which are equally important. We manually check the extracted articles for 100 cases to ensure that the extraction quality is fairly good and acceptable.\n[source_id=68] The filtration process is automatic and fully unsupervised since the original documents have no ground-truth labels for fine-grained law articles, and coarse-grained law-articles only provide limited information. We also experiment with the ground-truth articles, but only a small fraction of them has fine-grained ones, and they are usually not available in real-world scenarios.",
+  "score": 3.385765226379556,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_12",
+  "child_source_node_ids": [
+    64,
+    65,
+    66,
+    67,
+    68
+  ],
+  "child_qasper_evidence_texts": [
+    "Since none of the datasets from previous works have been published, we decide to build a new one. We randomly collect INLINEFORM0 cases from China Judgments Online, among which INLINEFORM1 cases are for training, INLINEFORM2 each for validation and testing. Among the original cases, INLINEFORM3 are granted divorce and others not. There are INLINEFORM4 valid pleas in total, with INLINEFORM5 supported and INLINEFORM6 rejected. Note that, if the divorce plea in a case is not granted, the other pleas of this case will not be considered by the judge. Case materials are all natural language sentences, with averagely INLINEFORM7 tokens per fact description and INLINEFORM8 per plea. There are 62 relevant law articles in total, each with INLINEFORM9 tokens averagely. Note that the case documents include special typographical signals, making it easy to extract labeled data with regular expression.",
+    "We apply some rules with legal prior to preprocess the dataset according to previous works BIBREF33 , BIBREF34 , BIBREF35 , which have proved effective in our experiments.",
+    "Name Replacement: All names in case documents are replaced with marks indicating their roles, instead of simply anonymizing them, e.g. <Plantiff>, <Defendant>, <Daughter_x> and so on. Since “all are equal before the law”, names should make no more difference than what role they take.",
+    "Law Article Filtration : Since most accessible divorce proceeding documents do not contain ground-truth fine-grained articles, we use an unsupervised method instead. First, we extract all the articles from the law text with regular expression. Afterwards, we select the most relevant 10 articles according to the fact descriptions as follows. We obtain sentence representation with CBOW BIBREF36 , BIBREF37 weighted by inverse document frequency, and calculate cosine distance between cases and law articles. Word embeddings are pre-trained with Chinese Wikipedia pages. As the final step, we extract top 5 relevant articles for each sample respectively from the main marriage law articles and their interpretations, which are equally important. We manually check the extracted articles for 100 cases to ensure that the extraction quality is fairly good and acceptable.",
+    "The filtration process is automatic and fully unsupervised since the original documents have no ground-truth labels for fine-grained law articles, and coarse-grained law-articles only provide limited information. We also experiment with the ground-truth articles, but only a small fraction of them has fine-grained ones, and they are usually not available in real-world scenarios."
+  ],
+  "child_pages": [
+    12,
+    12,
+    12,
+    12,
+    12
+  ],
+  "child_sections": [
+    "Dataset Construction for Evaluation",
+    "Dataset Construction for Evaluation",
+    "Dataset Construction for Evaluation",
+    "Dataset Construction for Evaluation",
+    "Dataset Construction for Evaluation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Dataset Construction for Evaluation",
+      0
+    ],
+    [
+      "Dataset Construction for Evaluation",
+      1
+    ],
+    [
+      "Dataset Construction for Evaluation",
+      2
+    ],
+    [
+      "Dataset Construction for Evaluation",
+      3
+    ],
+    [
+      "Dataset Construction for Evaluation",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_12",
+  "section_id": "Dataset Construction for Evaluation",
+  "section": "Dataset Construction for Evaluation",
+  "title_path": "Dataset Construction for Evaluation",
+  "block_type": "long_unit"
+}

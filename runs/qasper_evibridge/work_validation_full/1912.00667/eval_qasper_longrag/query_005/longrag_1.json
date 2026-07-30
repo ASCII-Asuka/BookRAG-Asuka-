@@ -1,0 +1,106 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Event detection on microblogging platforms such as Twitter aims to detect events preemptively. A main task in event detection is detecting events of predetermined types BIBREF0, such as concerts or controversial events based on microposts matching specific event descriptions. This task has extensive applications ranging from cyber security BIBREF1, BIBREF2 to political elections BIBREF3 or public health BIBREF4, BIBREF5. Due to the high ambiguity and inconsistency of the terms used in microposts, event detection is generally performed though statistical machine learning models, which require a labeled dataset for model training. Data labeling is, however, a long, laborious, and usually costly process. For the case of micropost classification, though positive labels can be collected (e.g., using specific hashtags, or event-related date-time information), there is no straightforward way to generate negative labels useful for model training. To tackle this lack of negative labels and the significant manual efforts in data labeling, BIBREF1 (BIBREF1, BIBREF3) introduced a weak supervision based learning approach, which uses only positively labeled data, accompanied by unlabeled examples by filtering microposts that contain a certain keyword indicative of the event type under consideration (e.g., `hack' for cyber security). Another key technique in this context is expectation regularization BIBREF6, BIBREF7, BIBREF1. Here, the estimated proportion of relevant microposts in an unlabeled dataset containing a keyword is given as a keyword-specific expectation. This expectation is used in the regularization term of the model's objective function to constrain the posterior distribution of the model predictions. By doing so, the model is trained with an expectation on its prediction for microposts that contain the keyword. Such a method, however, suffers from two key problems:\n[source_id=5] Due to the unpredictability of event occurrences and the constantly changing dynamics of users' posting frequency BIBREF8, estimating the expectation associated with a keyword is a challenging task, even for domain experts;\n[source_id=6] The performance of the event detection model is constrained by the informativeness of the keyword used for model training. As of now, we lack a principled method for discovering new keywords and improve the model performance.\n[source_id=7] To address the above issues, we advocate a human-AI loop approach for discovering informative keywords and estimating their expectations reliably. Our approach iteratively leverages 1) crowd workers for estimating keyword-specific expectations, and 2) the disagreement between the model and the crowd for discovering new informative keywords. More specifically, at each iteration after we obtain a keyword-specific expectation from the crowd, we train the model using expectation regularization and select those keyword-related microposts for which the model's prediction disagrees the most with the crowd's expectation; such microposts are then presented to the crowd to identify new keywords that best explain the disagreement. By doing so, our approach identifies new keywords which convey more relevant information with respect to existing ones, thus effectively boosting model performance. By exploiting the disagreement between the model and the crowd, our approach can make efficient use of the crowd, which is of critical importance in a human-in-the-loop context BIBREF9, BIBREF10. An additional advantage of our approach is that by obtaining new keywords that improve model performance over time, we are able to gain insight into how the model learns for specific event detection tasks. Such an advantage is particularly useful for event detection using complex models, e.g., deep neural networks, which are intrinsically hard to understand BIBREF11, BIBREF12. An additional challenge in involving crowd workers is that their contributions are not fully reliable BIBREF13. In the crowdsourcing literature, this problem is usually tackled with probabilistic latent variable models BIBREF14, BIBREF15, BIBREF16, which are used to perform truth inference by aggregating a redundant set of crowd contributions. Our human-AI loop approach improves the inference of keyword expectation by aggregating contributions not only from the crowd but also from the model. This, however, comes with its own challenge as the model's predictions are further dependent on the results of expectation inference, which is used for model training. To address this problem, we introduce a unified probabilistic model that seamlessly integrates expectation inference and model training, thereby allowing the former to benefit from the latter while resolving the inter-dependency between the two.\n[source_id=8] To the best of our knowledge, we are the first to propose a human-AI loop approach that iteratively improves machine learning models for event detection. In summary, our work makes the following key contributions:\n[source_id=9] A novel human-AI loop approach for micropost event detection that jointly discovers informative keywords and estimates their expectation;\n[source_id=10] A unified probabilistic model that infers keyword expectation and simultaneously performs model training;\n[source_id=11] An extensive empirical evaluation of our approach on multiple real-world datasets demonstrating that our approach significantly improves the state of the art by an average of 24.3% AUC.\n[source_id=12] The rest of this paper is organized as follows. First, we present our human-AI loop approach in Section SECREF2. Subsequently, we introduce our proposed probabilistic model in Section SECREF3. The experimental setup and results are presented in Section SECREF4. Finally, we briefly cover related work in Section SECREF5 before concluding our work in Section SECREF6.",
+  "score": 2.8425079240329825,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "child_qasper_evidence_texts": [
+    "Event detection on microblogging platforms such as Twitter aims to detect events preemptively. A main task in event detection is detecting events of predetermined types BIBREF0, such as concerts or controversial events based on microposts matching specific event descriptions. This task has extensive applications ranging from cyber security BIBREF1, BIBREF2 to political elections BIBREF3 or public health BIBREF4, BIBREF5. Due to the high ambiguity and inconsistency of the terms used in microposts, event detection is generally performed though statistical machine learning models, which require a labeled dataset for model training. Data labeling is, however, a long, laborious, and usually costly process. For the case of micropost classification, though positive labels can be collected (e.g., using specific hashtags, or event-related date-time information), there is no straightforward way to generate negative labels useful for model training. To tackle this lack of negative labels and the significant manual efforts in data labeling, BIBREF1 (BIBREF1, BIBREF3) introduced a weak supervision based learning approach, which uses only positively labeled data, accompanied by unlabeled examples by filtering microposts that contain a certain keyword indicative of the event type under consideration (e.g., `hack' for cyber security). Another key technique in this context is expectation regularization BIBREF6, BIBREF7, BIBREF1. Here, the estimated proportion of relevant microposts in an unlabeled dataset containing a keyword is given as a keyword-specific expectation. This expectation is used in the regularization term of the model's objective function to constrain the posterior distribution of the model predictions. By doing so, the model is trained with an expectation on its prediction for microposts that contain the keyword. Such a method, however, suffers from two key problems:",
+    "Due to the unpredictability of event occurrences and the constantly changing dynamics of users' posting frequency BIBREF8, estimating the expectation associated with a keyword is a challenging task, even for domain experts;",
+    "The performance of the event detection model is constrained by the informativeness of the keyword used for model training. As of now, we lack a principled method for discovering new keywords and improve the model performance.",
+    "To address the above issues, we advocate a human-AI loop approach for discovering informative keywords and estimating their expectations reliably. Our approach iteratively leverages 1) crowd workers for estimating keyword-specific expectations, and 2) the disagreement between the model and the crowd for discovering new informative keywords. More specifically, at each iteration after we obtain a keyword-specific expectation from the crowd, we train the model using expectation regularization and select those keyword-related microposts for which the model's prediction disagrees the most with the crowd's expectation; such microposts are then presented to the crowd to identify new keywords that best explain the disagreement. By doing so, our approach identifies new keywords which convey more relevant information with respect to existing ones, thus effectively boosting model performance. By exploiting the disagreement between the model and the crowd, our approach can make efficient use of the crowd, which is of critical importance in a human-in-the-loop context BIBREF9, BIBREF10. An additional advantage of our approach is that by obtaining new keywords that improve model performance over time, we are able to gain insight into how the model learns for specific event detection tasks. Such an advantage is particularly useful for event detection using complex models, e.g., deep neural networks, which are intrinsically hard to understand BIBREF11, BIBREF12. An additional challenge in involving crowd workers is that their contributions are not fully reliable BIBREF13. In the crowdsourcing literature, this problem is usually tackled with probabilistic latent variable models BIBREF14, BIBREF15, BIBREF16, which are used to perform truth inference by aggregating a redundant set of crowd contributions. Our human-AI loop approach improves the inference of keyword expectation by aggregating contributions not only from the crowd but also from the model. This, however, comes with its own challenge as the model's predictions are further dependent on the results of expectation inference, which is used for model training. To address this problem, we introduce a unified probabilistic model that seamlessly integrates expectation inference and model training, thereby allowing the former to benefit from the latter while resolving the inter-dependency between the two.",
+    "To the best of our knowledge, we are the first to propose a human-AI loop approach that iteratively improves machine learning models for event detection. In summary, our work makes the following key contributions:",
+    "A novel human-AI loop approach for micropost event detection that jointly discovers informative keywords and estimates their expectation;",
+    "A unified probabilistic model that infers keyword expectation and simultaneously performs model training;",
+    "An extensive empirical evaluation of our approach on multiple real-world datasets demonstrating that our approach significantly improves the state of the art by an average of 24.3% AUC.",
+    "The rest of this paper is organized as follows. First, we present our human-AI loop approach in Section SECREF2. Subsequently, we introduce our proposed probabilistic model in Section SECREF3. The experimental setup and results are presented in Section SECREF4. Finally, we briefly cover related work in Section SECREF5 before concluding our work in Section SECREF6."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ],
+    [
+      "Introduction",
+      7
+    ],
+    [
+      "Introduction",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

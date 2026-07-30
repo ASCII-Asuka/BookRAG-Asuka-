@@ -1,0 +1,52 @@
+{
+  "id": "longrag_3",
+  "content": "[Section] PolyResponse: Conversational Search ::: Text Representation.\n[source_id=12] The model, implemented as a deep neural network, learns to respond by training on hundreds of millions context-reply $(c,r)$ pairs. First, similar to Henderson:2017arxiv, raw text from both $c$ and $r$ is converted to unigrams and bigrams. All input text is first lower-cased and tokenised, numbers with 5 or more digits get their digits replaced by a wildcard symbol #, while words longer than 16 characters are replaced by a wildcard token LONGWORD. Sentence boundary tokens are added to each sentence. The vocabulary consists of the unigrams that occur at least 10 times in a random 10M subset of the Reddit training set (see Figure FIGREF2) plus the 200K most frequent bigrams in the same random subset.\n[source_id=13] During training, we obtain $d$-dimensional feature representations ($d=320$) shared between contexts and replies for each unigram and bigram jointly with other neural net parameters. A state-of-the-art architecture based on transformers BIBREF13 is then applied to unigram and bigram vectors separately, which are then averaged to form the final 320-dimensional encoding. That encoding is then passed through three fully-connected non-linear hidden layers of dimensionality $1,024$. The final layer is linear and maps the text into the final $l$-dimensional ($l=512$) representation: $h_c$ and $h_r$. Other standard and more sophisticated encoder models can also be used to provide final encodings $h_c$ and $h_r$, but the current architecture shows a good trade-off between speed and efficacy with strong and robust performance in our empirical evaluations on the response retrieval task using Reddit BIBREF14, OpenSubtitles BIBREF15, and AmazonQA BIBREF16 conversational test data, see BIBREF12 for further details.\n[source_id=14] In training the constant $C$ is constrained to lie between 0 and $\\sqrt{l}$. Following Henderson:2017arxiv, the scoring function in the training objective aims to maximise the similarity score of context-reply pairs that go together, while minimising the score of random pairings: negative examples. Training proceeds via SGD with batches comprising 500 pairs (1 positive and 499 negatives).",
+  "score": 2.43200546554894,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_3",
+  "child_source_node_ids": [
+    12,
+    13,
+    14
+  ],
+  "child_qasper_evidence_texts": [
+    "The model, implemented as a deep neural network, learns to respond by training on hundreds of millions context-reply $(c,r)$ pairs. First, similar to Henderson:2017arxiv, raw text from both $c$ and $r$ is converted to unigrams and bigrams. All input text is first lower-cased and tokenised, numbers with 5 or more digits get their digits replaced by a wildcard symbol #, while words longer than 16 characters are replaced by a wildcard token LONGWORD. Sentence boundary tokens are added to each sentence. The vocabulary consists of the unigrams that occur at least 10 times in a random 10M subset of the Reddit training set (see Figure FIGREF2) plus the 200K most frequent bigrams in the same random subset.",
+    "During training, we obtain $d$-dimensional feature representations ($d=320$) shared between contexts and replies for each unigram and bigram jointly with other neural net parameters. A state-of-the-art architecture based on transformers BIBREF13 is then applied to unigram and bigram vectors separately, which are then averaged to form the final 320-dimensional encoding. That encoding is then passed through three fully-connected non-linear hidden layers of dimensionality $1,024$. The final layer is linear and maps the text into the final $l$-dimensional ($l=512$) representation: $h_c$ and $h_r$. Other standard and more sophisticated encoder models can also be used to provide final encodings $h_c$ and $h_r$, but the current architecture shows a good trade-off between speed and efficacy with strong and robust performance in our empirical evaluations on the response retrieval task using Reddit BIBREF14, OpenSubtitles BIBREF15, and AmazonQA BIBREF16 conversational test data, see BIBREF12 for further details.",
+    "In training the constant $C$ is constrained to lie between 0 and $\\sqrt{l}$. Following Henderson:2017arxiv, the scoring function in the training objective aims to maximise the similarity score of context-reply pairs that go together, while minimising the score of random pairings: negative examples. Training proceeds via SGD with batches comprising 500 pairs (1 positive and 499 negatives)."
+  ],
+  "child_pages": [
+    3,
+    3,
+    3
+  ],
+  "child_sections": [
+    "PolyResponse: Conversational Search ::: Text Representation.",
+    "PolyResponse: Conversational Search ::: Text Representation.",
+    "PolyResponse: Conversational Search ::: Text Representation."
+  ],
+  "child_hotpot_facts": [
+    [
+      "PolyResponse: Conversational Search ::: Text Representation.",
+      0
+    ],
+    [
+      "PolyResponse: Conversational Search ::: Text Representation.",
+      1
+    ],
+    [
+      "PolyResponse: Conversational Search ::: Text Representation.",
+      2
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_3",
+  "section_id": "PolyResponse: Conversational Search ::: Text Representation.",
+  "section": "PolyResponse: Conversational Search ::: Text Representation.",
+  "title_path": "PolyResponse: Conversational Search ::: Text Representation.",
+  "block_type": "long_unit"
+}

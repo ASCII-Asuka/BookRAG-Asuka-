@@ -1,0 +1,115 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Mechanisms for Diverse Generation\n[source_id=32] There are usually multiple keyphrases for a given source text because each keyphrase represents certain aspects of the text. Therefore keyphrase diversity is desired for the keyphrase generation. Most previous keyphrase generation models generate multiple phrases by over-generation, which is highly prone to generate similar phrases due to the nature of beam search. Given our objective to generate variable numbers of keyphrases, we need to adopt new strategies for achieving better diversity in the output.\n[source_id=33] Recall that we represent variable numbers of keyphrases as delimiter-separated sequences. One particular issue we observed during error analysis is that the model tends to produce identical tokens following the delimiter token. For example, suppose a target sequence contains INLINEFORM0 delimiter tokens at time-steps INLINEFORM1 . During training, the model is rewarded for generating the same delimiter token at these time-steps, which presumably introduces much homogeneity in the corresponding decoder states INLINEFORM2 . When these states are subsequently used as inputs at the time-steps immediately following the delimiter, the decoder naturally produces highly similar distributions over the following tokens, resulting in identical tokens being decoded. To alleviate this problem, we propose two plug-in components for the sequential generation model.\n[source_id=34] We propose a mechanism called semantic coverage that focuses on the semantic representations of generated phrases. Specifically, we introduce another uni-directional recurrent model INLINEFORM0 (dubbed target encoder) which encodes decoder-generated tokens INLINEFORM1 , where INLINEFORM2 , into hidden states INLINEFORM3 . This state is then taken as an extra input to the decoder GRU, modifying Equation EQREF12 to: DISPLAYFORM0\n[source_id=35] If the target encoder were to be updated with the training signal from generation (i.e., backpropagating error from the decoder GRU to the target encoder), the resulting decoder is essentially a 2-layer GRU with residual connections. Instead, inspired by previous representation learning works BIBREF29 , BIBREF30 , BIBREF31 , we train the target encoder in an self-supervised fashion (Figure FIGREF8 ). That is, we extract target encoder's final hidden state vector INLINEFORM0 , where INLINEFORM1 is the length of target sequence, and use it as a general representation of the target phrases. We train by maximizing the mutual information between these phrase representations and the final state of the source encoder INLINEFORM2 as follows. For each phrase representation vector INLINEFORM3 , we take the enocdings INLINEFORM4 of INLINEFORM5 different source texts, where INLINEFORM6 is the encoder representation for the current source text, and the remaining INLINEFORM7 are negative samples (sampled at random) from the training data. The target encoder is trained to minimize the classification loss: DISPLAYFORM0\n[source_id=36] where INLINEFORM0 is bi-linear transformation.\n[source_id=37] The motivation here is to constrain the overall representation of generated keyphrase to be semantically close to the overall meaning of the source text. With such representations as input to the decoder, the semantic coverage mechanism can potentially help to provide useful keyphrase information and guide generation.\n[source_id=38] We also propose orthogonal regularization, which explicitly encourages the delimiter-generating decoder states to be different from each other. This is inspired by BIBREF32 , who use orthogonal regularization to encourage representations across domains to be as distinct as possible. Specifically, we stack the decoder hidden states corresponding to delimiters together to form matrix INLINEFORM0 and use the following equation as the orthogonal regularization loss: DISPLAYFORM0\n[source_id=39] where INLINEFORM0 is the matrix transpose of INLINEFORM1 , INLINEFORM2 is the identity matrix of rank INLINEFORM3 , INLINEFORM4 indicates element wise multiplication, INLINEFORM5 indicates INLINEFORM6 norm of each element in a matrix INLINEFORM7 . This loss function prefers orthogonality among the hidden states INLINEFORM8 and thus improves diversity in the tokens following the delimiters.\n[source_id=40] We adopt the widely used negative log-likelihood loss in our sequence generation model, denoted as INLINEFORM0 . The overall loss we use in our model is DISPLAYFORM0\n[source_id=41] where INLINEFORM0 and INLINEFORM1 are hyper-parameters.",
+  "score": 1.3777479838722857,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41
+  ],
+  "child_qasper_evidence_texts": [
+    "There are usually multiple keyphrases for a given source text because each keyphrase represents certain aspects of the text. Therefore keyphrase diversity is desired for the keyphrase generation. Most previous keyphrase generation models generate multiple phrases by over-generation, which is highly prone to generate similar phrases due to the nature of beam search. Given our objective to generate variable numbers of keyphrases, we need to adopt new strategies for achieving better diversity in the output.",
+    "Recall that we represent variable numbers of keyphrases as delimiter-separated sequences. One particular issue we observed during error analysis is that the model tends to produce identical tokens following the delimiter token. For example, suppose a target sequence contains INLINEFORM0 delimiter tokens at time-steps INLINEFORM1 . During training, the model is rewarded for generating the same delimiter token at these time-steps, which presumably introduces much homogeneity in the corresponding decoder states INLINEFORM2 . When these states are subsequently used as inputs at the time-steps immediately following the delimiter, the decoder naturally produces highly similar distributions over the following tokens, resulting in identical tokens being decoded. To alleviate this problem, we propose two plug-in components for the sequential generation model.",
+    "We propose a mechanism called semantic coverage that focuses on the semantic representations of generated phrases. Specifically, we introduce another uni-directional recurrent model INLINEFORM0 (dubbed target encoder) which encodes decoder-generated tokens INLINEFORM1 , where INLINEFORM2 , into hidden states INLINEFORM3 . This state is then taken as an extra input to the decoder GRU, modifying Equation EQREF12 to: DISPLAYFORM0",
+    "If the target encoder were to be updated with the training signal from generation (i.e., backpropagating error from the decoder GRU to the target encoder), the resulting decoder is essentially a 2-layer GRU with residual connections. Instead, inspired by previous representation learning works BIBREF29 , BIBREF30 , BIBREF31 , we train the target encoder in an self-supervised fashion (Figure FIGREF8 ). That is, we extract target encoder's final hidden state vector INLINEFORM0 , where INLINEFORM1 is the length of target sequence, and use it as a general representation of the target phrases. We train by maximizing the mutual information between these phrase representations and the final state of the source encoder INLINEFORM2 as follows. For each phrase representation vector INLINEFORM3 , we take the enocdings INLINEFORM4 of INLINEFORM5 different source texts, where INLINEFORM6 is the encoder representation for the current source text, and the remaining INLINEFORM7 are negative samples (sampled at random) from the training data. The target encoder is trained to minimize the classification loss: DISPLAYFORM0",
+    "where INLINEFORM0 is bi-linear transformation.",
+    "The motivation here is to constrain the overall representation of generated keyphrase to be semantically close to the overall meaning of the source text. With such representations as input to the decoder, the semantic coverage mechanism can potentially help to provide useful keyphrase information and guide generation.",
+    "We also propose orthogonal regularization, which explicitly encourages the delimiter-generating decoder states to be different from each other. This is inspired by BIBREF32 , who use orthogonal regularization to encourage representations across domains to be as distinct as possible. Specifically, we stack the decoder hidden states corresponding to delimiters together to form matrix INLINEFORM0 and use the following equation as the orthogonal regularization loss: DISPLAYFORM0",
+    "where INLINEFORM0 is the matrix transpose of INLINEFORM1 , INLINEFORM2 is the identity matrix of rank INLINEFORM3 , INLINEFORM4 indicates element wise multiplication, INLINEFORM5 indicates INLINEFORM6 norm of each element in a matrix INLINEFORM7 . This loss function prefers orthogonality among the hidden states INLINEFORM8 and thus improves diversity in the tokens following the delimiters.",
+    "We adopt the widely used negative log-likelihood loss in our sequence generation model, denoted as INLINEFORM0 . The overall loss we use in our model is DISPLAYFORM0",
+    "where INLINEFORM0 and INLINEFORM1 are hyper-parameters."
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Mechanisms for Diverse Generation",
+    "Mechanisms for Diverse Generation",
+    "Mechanisms for Diverse Generation",
+    "Mechanisms for Diverse Generation",
+    "Mechanisms for Diverse Generation",
+    "Mechanisms for Diverse Generation",
+    "Mechanisms for Diverse Generation",
+    "Mechanisms for Diverse Generation",
+    "Mechanisms for Diverse Generation",
+    "Mechanisms for Diverse Generation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Mechanisms for Diverse Generation",
+      0
+    ],
+    [
+      "Mechanisms for Diverse Generation",
+      1
+    ],
+    [
+      "Mechanisms for Diverse Generation",
+      2
+    ],
+    [
+      "Mechanisms for Diverse Generation",
+      3
+    ],
+    [
+      "Mechanisms for Diverse Generation",
+      4
+    ],
+    [
+      "Mechanisms for Diverse Generation",
+      5
+    ],
+    [
+      "Mechanisms for Diverse Generation",
+      6
+    ],
+    [
+      "Mechanisms for Diverse Generation",
+      7
+    ],
+    [
+      "Mechanisms for Diverse Generation",
+      8
+    ],
+    [
+      "Mechanisms for Diverse Generation",
+      9
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Mechanisms for Diverse Generation",
+  "section": "Mechanisms for Diverse Generation",
+  "title_path": "Mechanisms for Diverse Generation",
+  "block_type": "long_unit"
+}

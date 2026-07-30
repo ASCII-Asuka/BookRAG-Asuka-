@@ -1,0 +1,97 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] PDTB-style discourse relations, mostly defined between two adjacent text spans (i.e., discourse units, either clauses or sentences), specify how two discourse units are logically connected (e.g., causal, contrast). Recognizing discourse relations is one crucial step in discourse analysis and can be beneficial for many downstream NLP applications such as information extraction, machine translation and natural language generation.\n[source_id=5] Commonly, explicit discourse relations were distinguished from implicit ones, depending on whether a discourse connective (e.g., “because” and “after”) appears between two discourse units BIBREF0 . While explicit discourse relation detection can be framed as a discourse connective disambiguation problem BIBREF1 , BIBREF2 and has achieved reasonable performance (F1 score $>$ 90%), implicit discourse relations have no discourse connective and are especially difficult to identify BIBREF3 , BIBREF2 , BIBREF4 . To fill the gap, implicit discourse relation prediction has drawn significant research interest recently and progress has been made BIBREF5 , BIBREF6 by modeling compositional meanings of two discourse units and exploiting word interactions between discourse units using neural tensor networks or attention mechanisms in neural nets. However, most of existing approaches ignore wider paragraph-level contexts beyond the two discourse units that are examined for predicting a discourse relation in between.\n[source_id=6] To further improve implicit discourse relation prediction, we aim to improve discourse unit representations by positioning a discourse unit (DU) in its wider context of a paragraph. The key observation is that semantic meaning of a DU can not be interpreted independently from the rest of the paragraph that contains it, or independently from the overall paragraph-level discourse structure that involve the DU. Considering the following paragraph with four discourse relations, one relation between each two adjacent DUs:\n[source_id=7] (1): [The Butler, Wis., manufacturer went public at $15.75 a share in August 1987,] $_{DU1}$ and (Explicit-Expansion) [Mr. Sim's goal then was a $29 per-share price by 1992.] $_{DU2}$ (Implicit-Expansion) [Strong earnings growth helped achieve that price far ahead of schedule, in August 1988.] $_{DU3}$ (Implicit-Comparison) [The stock has since softened, trading around $25 a share last week and closing yesterday at $23 in national over-the-counter trading.] $_{DU4}$ But (Explicit-Comparison) [Mr. Sim has set a fresh target of $50 a share by the end of reaching that goal.] $_{DU5}$\n[source_id=8] Clearly, each DU is an integral part of the paragraph and not independent from other units. First, predicting a discourse relation may require understanding wider paragraph-level contexts beyond two relevant DUs and the overall discourse structure of a paragraph. For example, the implicit “Comparison” discourse relation between DU3 and DU4 is difficult to identify without the background information (the history of per-share price) introduced in DU1 and DU2. Second, a DU may be involved in multiple discourse relations (e.g., DU4 is connected with both DU3 and DU5 with a “Comparison” relation), therefore the pragmatic meaning representation of a DU should reflect all the discourse relations the unit was involved in. Third, implicit discourse relation prediction should benefit from modeling discourse relation continuity and patterns in a paragraph that involve easy-to-identify explicit discourse relations (e.g., “Implicit-Comparison” relation is followed by “Explicit-Comparison” in the above example).\n[source_id=9] Following these observations, we construct a neural net model to process a paragraph each time and jointly build meaning representations for all DUs in the paragraph. The learned DU representations are used to predict a sequence of discourse relations in the paragraph, including both implicit and explicit relations. Although explicit relations are not our focus, predicting an explicit relation will help to reveal the pragmatic roles of its two DUs and reconstruct their representations, which will facilitate predicting neighboring implicit discourse relations that involve one of the DUs.\n[source_id=10] In addition, we introduce two novel designs to further improve discourse relation classification performance of our paragraph-level neural net model. First, previous work has indicated that recognizing explicit and implicit discourse relations requires different strategies, we therefore untie parameters in the discourse relation prediction layer of the neural networks and train two separate classifiers for predicting explicit and implicit discourse relations respectively. This unique design has improved both implicit and explicit discourse relation identification performance. Second, we add a CRF layer on top of the discourse relation prediction layer to fine-tune a sequence of predicted discourse relations by modeling discourse relation continuity and patterns in a paragraph.\n[source_id=11] Experimental results show that the intuitive paragraph-level discourse relation prediction model achieves improved performance on PDTB for both implicit discourse relation classification and explicit discourse relation classification.",
+  "score": 4.225858192136244,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "child_qasper_evidence_texts": [
+    "PDTB-style discourse relations, mostly defined between two adjacent text spans (i.e., discourse units, either clauses or sentences), specify how two discourse units are logically connected (e.g., causal, contrast). Recognizing discourse relations is one crucial step in discourse analysis and can be beneficial for many downstream NLP applications such as information extraction, machine translation and natural language generation.",
+    "Commonly, explicit discourse relations were distinguished from implicit ones, depending on whether a discourse connective (e.g., “because” and “after”) appears between two discourse units BIBREF0 . While explicit discourse relation detection can be framed as a discourse connective disambiguation problem BIBREF1 , BIBREF2 and has achieved reasonable performance (F1 score $>$ 90%), implicit discourse relations have no discourse connective and are especially difficult to identify BIBREF3 , BIBREF2 , BIBREF4 . To fill the gap, implicit discourse relation prediction has drawn significant research interest recently and progress has been made BIBREF5 , BIBREF6 by modeling compositional meanings of two discourse units and exploiting word interactions between discourse units using neural tensor networks or attention mechanisms in neural nets. However, most of existing approaches ignore wider paragraph-level contexts beyond the two discourse units that are examined for predicting a discourse relation in between.",
+    "To further improve implicit discourse relation prediction, we aim to improve discourse unit representations by positioning a discourse unit (DU) in its wider context of a paragraph. The key observation is that semantic meaning of a DU can not be interpreted independently from the rest of the paragraph that contains it, or independently from the overall paragraph-level discourse structure that involve the DU. Considering the following paragraph with four discourse relations, one relation between each two adjacent DUs:",
+    "(1): [The Butler, Wis., manufacturer went public at $15.75 a share in August 1987,] $_{DU1}$ and (Explicit-Expansion) [Mr. Sim's goal then was a $29 per-share price by 1992.] $_{DU2}$ (Implicit-Expansion) [Strong earnings growth helped achieve that price far ahead of schedule, in August 1988.] $_{DU3}$ (Implicit-Comparison) [The stock has since softened, trading around $25 a share last week and closing yesterday at $23 in national over-the-counter trading.] $_{DU4}$ But (Explicit-Comparison) [Mr. Sim has set a fresh target of $50 a share by the end of reaching that goal.] $_{DU5}$",
+    "Clearly, each DU is an integral part of the paragraph and not independent from other units. First, predicting a discourse relation may require understanding wider paragraph-level contexts beyond two relevant DUs and the overall discourse structure of a paragraph. For example, the implicit “Comparison” discourse relation between DU3 and DU4 is difficult to identify without the background information (the history of per-share price) introduced in DU1 and DU2. Second, a DU may be involved in multiple discourse relations (e.g., DU4 is connected with both DU3 and DU5 with a “Comparison” relation), therefore the pragmatic meaning representation of a DU should reflect all the discourse relations the unit was involved in. Third, implicit discourse relation prediction should benefit from modeling discourse relation continuity and patterns in a paragraph that involve easy-to-identify explicit discourse relations (e.g., “Implicit-Comparison” relation is followed by “Explicit-Comparison” in the above example).",
+    "Following these observations, we construct a neural net model to process a paragraph each time and jointly build meaning representations for all DUs in the paragraph. The learned DU representations are used to predict a sequence of discourse relations in the paragraph, including both implicit and explicit relations. Although explicit relations are not our focus, predicting an explicit relation will help to reveal the pragmatic roles of its two DUs and reconstruct their representations, which will facilitate predicting neighboring implicit discourse relations that involve one of the DUs.",
+    "In addition, we introduce two novel designs to further improve discourse relation classification performance of our paragraph-level neural net model. First, previous work has indicated that recognizing explicit and implicit discourse relations requires different strategies, we therefore untie parameters in the discourse relation prediction layer of the neural networks and train two separate classifiers for predicting explicit and implicit discourse relations respectively. This unique design has improved both implicit and explicit discourse relation identification performance. Second, we add a CRF layer on top of the discourse relation prediction layer to fine-tune a sequence of predicted discourse relations by modeling discourse relation continuity and patterns in a paragraph.",
+    "Experimental results show that the intuitive paragraph-level discourse relation prediction model achieves improved performance on PDTB for both implicit discourse relation classification and explicit discourse relation classification."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ],
+    [
+      "Introduction",
+      7
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

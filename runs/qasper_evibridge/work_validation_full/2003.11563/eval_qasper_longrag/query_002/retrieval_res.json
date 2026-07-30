@@ -1,0 +1,556 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_12",
+      "content": "[Section] Methodology ::: Fragment-level classification (FLC)\n[source_id=62] In addition to participating in the Sentence Level Classification task we also participate in the Fragment Level Classification task. We note that extracting fragments that are propagandistic is similar to the task of Named Entity Recognition, in that they are both span extraction tasks, and so use a BERT based model designed for this task - We build on the work by BIBREF18 which makes use of Continuous Random Field stacked on top of an LSTM to predict spans. This architecture is standard amongst state of the art models that perform span identification.\n[source_id=63] While the same span of text cannot have multiple named entity labels, it can have different propaganda labels. We get around this problem by picking one of the labels at random. Additionally, so as to speed up training, we only train our model on those sentences that contain some propagandistic fragment. In hindsight, we note that both these decisions were not ideal and discuss what we might have otherwise done in Section SECREF7.",
+      "score": 3.949908234295659,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        62,
+        63
+      ],
+      "child_qasper_evidence_texts": [
+        "In addition to participating in the Sentence Level Classification task we also participate in the Fragment Level Classification task. We note that extracting fragments that are propagandistic is similar to the task of Named Entity Recognition, in that they are both span extraction tasks, and so use a BERT based model designed for this task - We build on the work by BIBREF18 which makes use of Continuous Random Field stacked on top of an LSTM to predict spans. This architecture is standard amongst state of the art models that perform span identification.",
+        "While the same span of text cannot have multiple named entity labels, it can have different propaganda labels. We get around this problem by picking one of the labels at random. Additionally, so as to speed up training, we only train our model on those sentences that contain some propagandistic fragment. In hindsight, we note that both these decisions were not ideal and discuss what we might have otherwise done in Section SECREF7."
+      ],
+      "child_pages": [
+        12,
+        12
+      ],
+      "child_sections": [
+        "Methodology ::: Fragment-level classification (FLC)",
+        "Methodology ::: Fragment-level classification (FLC)"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Methodology ::: Fragment-level classification (FLC)",
+          0
+        ],
+        [
+          "Methodology ::: Fragment-level classification (FLC)",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Methodology ::: Fragment-level classification (FLC)",
+      "section": "Methodology ::: Fragment-level classification (FLC)",
+      "title_path": "Methodology ::: Fragment-level classification (FLC)",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Methodology\n[source_id=43] We were provided with two tasks: (1) propaganda fragment-level identification (FLC) and (2) propagandistic sentence-level identification (SLC). While we develop systems for both tasks, our main focus is toward the latter. Given the differences between the training, development, and test sets, we focus on methods for generalising our models. We note that propaganda identification is, in general, an imbalanced binary classification problem as most sentences are not propagandistic.\n[source_id=44] Due to the non-deterministic nature of fast GPU computations, we run each of our models three times and report the average of these three runs through the rest of this section. When picking the model to use for our final submission, we pick the model that performs best on the development set.\n[source_id=45] When testing our models, we split the labelled training data into two non-overlapping parts: the first one, consisting of 75% of the training data is used to train models, whereas the other is used to test the effectiveness of the models. All models are trained and tested on the same split to ensure comparability. Similarly, to ensure that our models remain comparable, we continue to train on the same 75% of the training set even when testing on the development set.\n[source_id=46] Once the best model is found using these methods, we train that model on all of the training data available before then submitting the results on the development set to the leaderboard. These results are detailed in the section describing our results (Section SECREF5).",
+      "score": 2.7379853887037955,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        43,
+        44,
+        45,
+        46
+      ],
+      "child_qasper_evidence_texts": [
+        "We were provided with two tasks: (1) propaganda fragment-level identification (FLC) and (2) propagandistic sentence-level identification (SLC). While we develop systems for both tasks, our main focus is toward the latter. Given the differences between the training, development, and test sets, we focus on methods for generalising our models. We note that propaganda identification is, in general, an imbalanced binary classification problem as most sentences are not propagandistic.",
+        "Due to the non-deterministic nature of fast GPU computations, we run each of our models three times and report the average of these three runs through the rest of this section. When picking the model to use for our final submission, we pick the model that performs best on the development set.",
+        "When testing our models, we split the labelled training data into two non-overlapping parts: the first one, consisting of 75% of the training data is used to train models, whereas the other is used to test the effectiveness of the models. All models are trained and tested on the same split to ensure comparability. Similarly, to ensure that our models remain comparable, we continue to train on the same 75% of the training set even when testing on the development set.",
+        "Once the best model is found using these methods, we train that model on all of the training data available before then submitting the results on the development set to the leaderboard. These results are detailed in the section describing our results (Section SECREF5)."
+      ],
+      "child_pages": [
+        9,
+        9,
+        9,
+        9
+      ],
+      "child_sections": [
+        "Methodology",
+        "Methodology",
+        "Methodology",
+        "Methodology"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Methodology",
+          0
+        ],
+        [
+          "Methodology",
+          1
+        ],
+        [
+          "Methodology",
+          2
+        ],
+        [
+          "Methodology",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Methodology",
+      "section": "Methodology",
+      "title_path": "Methodology",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Dataset ::: Data Distribution\n[source_id=37] One of the most interesting aspects of the data provided for this task is the notable difference between the training and the development/test sets. We emphasise that this difference is realistic and reflective of real world news data, in which major stories are often accompanied by the introduction of new terms, names, and even phrases. This is because the training data is a subset of past data while the model is to be used on future data which deals with different newsworthy topics.\n[source_id=38] We demonstrate this difference statistically by using a method for finding the similarity of corpora suggested by BIBREF14. We use the Wilcoxon signed-rank test BIBREF15 which compares the frequency counts of randomly sampled elements from different datasets to determine if those datasets have a statistically similar distribution of elements.\n[source_id=39] We implement this as follows. For each of the training, development and test sets, we extract all words (retaining the repeats) while ignoring a set of stopwords (identified through the Python Natural Language Toolkit). We then extract 10,000 samples (with replacements) for various pairs of these datasets (training, development, and test sets along with splits of each of these datasets). Finally, we use comparative word frequencies from the two sets to calculate the p-value using the Wilcoxon signed-rank test. Table TABREF15 provides the minimum and maximum p-values and their interpretations for ten such runs of each pair reported.\n[source_id=40] With p-value less than 0.05, we show that the train, development and test sets are self-similar and also significantly different from each other. In measuring self-similarity, we split each dataset after shuffling all sentences. While this comparison is made at the sentence level (as opposed to the article level), it is consistent with the granularity used for propaganda detection, which is also at the sentence level. We also perform measurements of self similarity after splitting the data at the article level and find that the conclusions of similarity between the sets hold with a p-value threshold of 0.001, where p-values for similarity between the training and dev/test sets are orders of magnitude lower compared to self-similarity. Since we use random sampling we run this test 10 times and present the both the maximum and minimum p-values. We include the similarity between 25% of a dataset and the remaining 75% of that set because that is the train/test ratio we use in our experiments, further described in our methodology (Section SECREF4).\n[source_id=41] This analysis shows that while all splits of each of the datasets are statistically similar, the training set (and the split of the training set that we use for experimentation) are significantly different from the development and test sets. While our analysis does show that the development and the test sets are dissimilar, we note (based on the p-values) that they are significantly more similar to each other than they are to the training set.",
+      "score": 2.421361506795336,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        37,
+        38,
+        39,
+        40,
+        41
+      ],
+      "child_qasper_evidence_texts": [
+        "One of the most interesting aspects of the data provided for this task is the notable difference between the training and the development/test sets. We emphasise that this difference is realistic and reflective of real world news data, in which major stories are often accompanied by the introduction of new terms, names, and even phrases. This is because the training data is a subset of past data while the model is to be used on future data which deals with different newsworthy topics.",
+        "We demonstrate this difference statistically by using a method for finding the similarity of corpora suggested by BIBREF14. We use the Wilcoxon signed-rank test BIBREF15 which compares the frequency counts of randomly sampled elements from different datasets to determine if those datasets have a statistically similar distribution of elements.",
+        "We implement this as follows. For each of the training, development and test sets, we extract all words (retaining the repeats) while ignoring a set of stopwords (identified through the Python Natural Language Toolkit). We then extract 10,000 samples (with replacements) for various pairs of these datasets (training, development, and test sets along with splits of each of these datasets). Finally, we use comparative word frequencies from the two sets to calculate the p-value using the Wilcoxon signed-rank test. Table TABREF15 provides the minimum and maximum p-values and their interpretations for ten such runs of each pair reported.",
+        "With p-value less than 0.05, we show that the train, development and test sets are self-similar and also significantly different from each other. In measuring self-similarity, we split each dataset after shuffling all sentences. While this comparison is made at the sentence level (as opposed to the article level), it is consistent with the granularity used for propaganda detection, which is also at the sentence level. We also perform measurements of self similarity after splitting the data at the article level and find that the conclusions of similarity between the sets hold with a p-value threshold of 0.001, where p-values for similarity between the training and dev/test sets are orders of magnitude lower compared to self-similarity. Since we use random sampling we run this test 10 times and present the both the maximum and minimum p-values. We include the similarity between 25% of a dataset and the remaining 75% of that set because that is the train/test ratio we use in our experiments, further described in our methodology (Section SECREF4).",
+        "This analysis shows that while all splits of each of the datasets are statistically similar, the training set (and the split of the training set that we use for experimentation) are significantly different from the development and test sets. While our analysis does show that the development and the test sets are dissimilar, we note (based on the p-values) that they are significantly more similar to each other than they are to the training set."
+      ],
+      "child_pages": [
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "child_sections": [
+        "Dataset ::: Data Distribution",
+        "Dataset ::: Data Distribution",
+        "Dataset ::: Data Distribution",
+        "Dataset ::: Data Distribution",
+        "Dataset ::: Data Distribution"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Dataset ::: Data Distribution",
+          0
+        ],
+        [
+          "Dataset ::: Data Distribution",
+          1
+        ],
+        [
+          "Dataset ::: Data Distribution",
+          2
+        ],
+        [
+          "Dataset ::: Data Distribution",
+          3
+        ],
+        [
+          "Dataset ::: Data Distribution",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Dataset ::: Data Distribution",
+      "section": "Dataset ::: Data Distribution",
+      "title_path": "Dataset ::: Data Distribution",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Methodology ::: Class Imbalance in Sentence Level Classification\n[source_id=48] The sentence level classification task is an imbalanced binary classification problem that we address using BERT BIBREF0. We use BERTBASE, uncased, which consists of 12 self-attention layers, and returns a 768-dimension vector that representation a sentence. So as to make use of BERT for sentence classification, we include a fully connected layer on top of the BERT self-attention layers, which classifies the sentence embedding provided by BERT into the two classes of interest (propaganda or non-propaganda).\n[source_id=49] We attempt to exploit various data augmentation techniques to address the problem of class imbalance. Table TABREF17 shows the results of our experiments for different data augmentation techniques when, after shuffling the training data, we train the model on 75% of the training data and test it on the remaining 25% of the training data and the development data.\n[source_id=50] We observe that BERT without augmentation consistently outperforms BERT with augmentation in the experiments when the model is trained on 75% of the training data and evaluated on the rest, i.e trained and evaluated on similar data, coming from the same distribution. This is consistent with observations by Wei et al. wei2019eda that contextual word embeddings do not gain from data augmentation. The fact that we shuffle the training data prior to splitting it into training and testing subsets could imply that the model is learning to associate topic words, such as `Mueller', as propaganda. However, when we perform model evaluation using the development set, which is dissimilar to the training, we observe that synonym insertion and word dropping techniques also do not bring performance gains, while random oversampling increases performance over base BERT by 4%. Synonym insertion provides results very similar to base BERT, while random deletion harms model performance producing lower scores. We believe that this could be attributed to the fact that synonym insertion and random word dropping involve the introduction of noise to the data, while oversampling does not. As we are working with natural language data, this type of noise can in fact change the meaning of the sentence. Oversampling on the other hand purely increases the importance of the minority class by repeating training on the unchanged instances.\n[source_id=51] So as to better understand the aspects of oversampling that contribute to these gains, we perform a class-wise performance analysis of BERT with/without oversampling. The results of these experiments (Table TABREF18) show that oversampling increases the overall recall while maintaining precision. This is achieved by significantly improving the recall of the minority class (propaganda) at the cost of the recall of the majority class.\n[source_id=52] So far we have been able to establish that a) the training and test sets are dissimilar, thus requiring us to generalise our model, b) oversampling provides a method of generalisation, and c) oversampling does this while maintaining recall on the minority (and thus more interesting) class.\n[source_id=53] Given this we explore alternative methods of increasing minority class recall without a significant drop in precision. One such method is cost-sensitive classification, which differs from random oversampling in that it provides a more continuous-valued and consistent method of weighting samples of imbalanced training data; for example, random oversampling will inevitably emphasise some training instances at the expense of others. We detail our methods of using cost-sensitive classification in the next section. Further experiments with oversampling might have provided insights into the relationships between these methods, which we leave for future exploration.",
+      "score": 2.252173323379096,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        48,
+        49,
+        50,
+        51,
+        52,
+        53
+      ],
+      "child_qasper_evidence_texts": [
+        "The sentence level classification task is an imbalanced binary classification problem that we address using BERT BIBREF0. We use BERTBASE, uncased, which consists of 12 self-attention layers, and returns a 768-dimension vector that representation a sentence. So as to make use of BERT for sentence classification, we include a fully connected layer on top of the BERT self-attention layers, which classifies the sentence embedding provided by BERT into the two classes of interest (propaganda or non-propaganda).",
+        "We attempt to exploit various data augmentation techniques to address the problem of class imbalance. Table TABREF17 shows the results of our experiments for different data augmentation techniques when, after shuffling the training data, we train the model on 75% of the training data and test it on the remaining 25% of the training data and the development data.",
+        "We observe that BERT without augmentation consistently outperforms BERT with augmentation in the experiments when the model is trained on 75% of the training data and evaluated on the rest, i.e trained and evaluated on similar data, coming from the same distribution. This is consistent with observations by Wei et al. wei2019eda that contextual word embeddings do not gain from data augmentation. The fact that we shuffle the training data prior to splitting it into training and testing subsets could imply that the model is learning to associate topic words, such as `Mueller', as propaganda. However, when we perform model evaluation using the development set, which is dissimilar to the training, we observe that synonym insertion and word dropping techniques also do not bring performance gains, while random oversampling increases performance over base BERT by 4%. Synonym insertion provides results very similar to base BERT, while random deletion harms model performance producing lower scores. We believe that this could be attributed to the fact that synonym insertion and random word dropping involve the introduction of noise to the data, while oversampling does not. As we are working with natural language data, this type of noise can in fact change the meaning of the sentence. Oversampling on the other hand purely increases the importance of the minority class by repeating training on the unchanged instances.",
+        "So as to better understand the aspects of oversampling that contribute to these gains, we perform a class-wise performance analysis of BERT with/without oversampling. The results of these experiments (Table TABREF18) show that oversampling increases the overall recall while maintaining precision. This is achieved by significantly improving the recall of the minority class (propaganda) at the cost of the recall of the majority class.",
+        "So far we have been able to establish that a) the training and test sets are dissimilar, thus requiring us to generalise our model, b) oversampling provides a method of generalisation, and c) oversampling does this while maintaining recall on the minority (and thus more interesting) class.",
+        "Given this we explore alternative methods of increasing minority class recall without a significant drop in precision. One such method is cost-sensitive classification, which differs from random oversampling in that it provides a more continuous-valued and consistent method of weighting samples of imbalanced training data; for example, random oversampling will inevitably emphasise some training instances at the expense of others. We detail our methods of using cost-sensitive classification in the next section. Further experiments with oversampling might have provided insights into the relationships between these methods, which we leave for future exploration."
+      ],
+      "child_pages": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ],
+      "child_sections": [
+        "Methodology ::: Class Imbalance in Sentence Level Classification",
+        "Methodology ::: Class Imbalance in Sentence Level Classification",
+        "Methodology ::: Class Imbalance in Sentence Level Classification",
+        "Methodology ::: Class Imbalance in Sentence Level Classification",
+        "Methodology ::: Class Imbalance in Sentence Level Classification",
+        "Methodology ::: Class Imbalance in Sentence Level Classification"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Methodology ::: Class Imbalance in Sentence Level Classification",
+          0
+        ],
+        [
+          "Methodology ::: Class Imbalance in Sentence Level Classification",
+          1
+        ],
+        [
+          "Methodology ::: Class Imbalance in Sentence Level Classification",
+          2
+        ],
+        [
+          "Methodology ::: Class Imbalance in Sentence Level Classification",
+          3
+        ],
+        [
+          "Methodology ::: Class Imbalance in Sentence Level Classification",
+          4
+        ],
+        [
+          "Methodology ::: Class Imbalance in Sentence Level Classification",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Methodology ::: Class Imbalance in Sentence Level Classification",
+      "section": "Methodology ::: Class Imbalance in Sentence Level Classification",
+      "title_path": "Methodology ::: Class Imbalance in Sentence Level Classification",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Methodology ::: Cost-sensitive Classification\n[source_id=55] As discussed in Section SECREF10, cost-sensitive classification can be performed by weighting the cost function. We increase the weight of incorrectly labelling a propagandistic sentence by altering the cost function of the training of the final fully connected layer of our model previously described in Section SECREF16. We make these changes through the use of PyTorch BIBREF16 which calculates the cross-entropy loss for a single prediction $x$, an array where the $j^{th}$ element represents the models prediction for class $j$, labelled with the class $class$ as given by Equation DISPLAY_FORM20.\n[source_id=56] The cross-entropy loss given in Equation DISPLAY_FORM20 is modified to accommodate an array $weight$, the $i^{th}$ element of which represents the weight of the $i^{th}$ class, as described in Equation DISPLAY_FORM21.\n[source_id=57] Intuitively, we increase the cost of getting the classification of an “important” class wrong and corresponding decrees the cost of getting a less important class wrong. In our case, we increase the cost of mislabelling the minority class which is “propaganda” (as opposed to “non-propaganda”).\n[source_id=58] We expect the effect of this to be similar to that of oversampling, in that it is likely to enable us to increase the recall of the minority class thus resulting in the decrease in recall of the overall model while maintaining high precision. We reiterate that this specific change to a model results in increasing the model's ability to better identify elements belonging to the minority class in dissimilar datasets when using BERT.\n[source_id=59] We explore the validity of this by performing several experiments with different weights assigned to the minority class. We note that in our experiments use significantly higher weights than the weights proportional to class frequencies in the training data, that are common in literature BIBREF17. Rather than directly using the class proportions of the training set, we show that tuning weights based on performance on the development set is more beneficial. Figure FIGREF22 shows the results of these experiments wherein we are able to maintain the precision on the subset of the training set used for testing while reducing its recall and thus generalising the model. The fact that the model is generalising on a dissimilar dataset is confirmed by the increase in the development set F1 score. We note that the gains are not infinite and that a balance must be struck based on the amount of generalisation and the corresponding loss in accuracy. The exact weight to use for the best transfer of classification accuracy is related to the dissimilarity of that other dataset and hence is to be obtained experimentally through hyperparameter search. Our experiments showed that a value of 4 is best suited for this task.\n[source_id=60] We do not include the complete results of our experiments here due to space constraints but include them along with charts and program code on our project website. Based on this exploration we find that the best weights for this particular dataset are 1 for non-propaganda and 4 for propaganda and we use this to train the final model used to submit results to the leaderboard. We also found that adding Part of Speech tags and Named Entity information to BERT embeddings by concatenating these one-hot vectors to the BERT embeddings does not improve model performance. We describe these results in Section SECREF5.",
+      "score": 2.180688071371072,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        55,
+        56,
+        57,
+        58,
+        59,
+        60
+      ],
+      "child_qasper_evidence_texts": [
+        "As discussed in Section SECREF10, cost-sensitive classification can be performed by weighting the cost function. We increase the weight of incorrectly labelling a propagandistic sentence by altering the cost function of the training of the final fully connected layer of our model previously described in Section SECREF16. We make these changes through the use of PyTorch BIBREF16 which calculates the cross-entropy loss for a single prediction $x$, an array where the $j^{th}$ element represents the models prediction for class $j$, labelled with the class $class$ as given by Equation DISPLAY_FORM20.",
+        "The cross-entropy loss given in Equation DISPLAY_FORM20 is modified to accommodate an array $weight$, the $i^{th}$ element of which represents the weight of the $i^{th}$ class, as described in Equation DISPLAY_FORM21.",
+        "Intuitively, we increase the cost of getting the classification of an “important” class wrong and corresponding decrees the cost of getting a less important class wrong. In our case, we increase the cost of mislabelling the minority class which is “propaganda” (as opposed to “non-propaganda”).",
+        "We expect the effect of this to be similar to that of oversampling, in that it is likely to enable us to increase the recall of the minority class thus resulting in the decrease in recall of the overall model while maintaining high precision. We reiterate that this specific change to a model results in increasing the model's ability to better identify elements belonging to the minority class in dissimilar datasets when using BERT.",
+        "We explore the validity of this by performing several experiments with different weights assigned to the minority class. We note that in our experiments use significantly higher weights than the weights proportional to class frequencies in the training data, that are common in literature BIBREF17. Rather than directly using the class proportions of the training set, we show that tuning weights based on performance on the development set is more beneficial. Figure FIGREF22 shows the results of these experiments wherein we are able to maintain the precision on the subset of the training set used for testing while reducing its recall and thus generalising the model. The fact that the model is generalising on a dissimilar dataset is confirmed by the increase in the development set F1 score. We note that the gains are not infinite and that a balance must be struck based on the amount of generalisation and the corresponding loss in accuracy. The exact weight to use for the best transfer of classification accuracy is related to the dissimilarity of that other dataset and hence is to be obtained experimentally through hyperparameter search. Our experiments showed that a value of 4 is best suited for this task.",
+        "We do not include the complete results of our experiments here due to space constraints but include them along with charts and program code on our project website. Based on this exploration we find that the best weights for this particular dataset are 1 for non-propaganda and 4 for propaganda and we use this to train the final model used to submit results to the leaderboard. We also found that adding Part of Speech tags and Named Entity information to BERT embeddings by concatenating these one-hot vectors to the BERT embeddings does not improve model performance. We describe these results in Section SECREF5."
+      ],
+      "child_pages": [
+        11,
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "child_sections": [
+        "Methodology ::: Cost-sensitive Classification",
+        "Methodology ::: Cost-sensitive Classification",
+        "Methodology ::: Cost-sensitive Classification",
+        "Methodology ::: Cost-sensitive Classification",
+        "Methodology ::: Cost-sensitive Classification",
+        "Methodology ::: Cost-sensitive Classification"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Methodology ::: Cost-sensitive Classification",
+          0
+        ],
+        [
+          "Methodology ::: Cost-sensitive Classification",
+          1
+        ],
+        [
+          "Methodology ::: Cost-sensitive Classification",
+          2
+        ],
+        [
+          "Methodology ::: Cost-sensitive Classification",
+          3
+        ],
+        [
+          "Methodology ::: Cost-sensitive Classification",
+          4
+        ],
+        [
+          "Methodology ::: Cost-sensitive Classification",
+          5
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Methodology ::: Cost-sensitive Classification",
+      "section": "Methodology ::: Cost-sensitive Classification",
+      "title_path": "Methodology ::: Cost-sensitive Classification",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] The challenges of imbalanced classification—in which the proportion of elements in each class for a classification task significantly differ—and of the ability to generalise on dissimilar data have remained important problems in Natural Language Processing (NLP) and Machine Learning in general. Popular NLP tasks including sentiment analysis, propaganda detection, and event extraction from social media are all examples of imbalanced classification problems. In each case the number of elements in one of the classes (e.g. negative sentiment, propagandistic content, or specific events discussed on social media, respectively) is significantly lower than the number of elements in the other classes.\n[source_id=5] The recently introduced BERT language model for transfer learning BIBREF0 uses a deep bidirectional transformer architecture to produce pre-trained context-dependent embeddings. It has proven to be powerful in solving many NLP tasks and, as we find, also appears to handle imbalanced classification well, thus removing the need to use standard methods of data augmentation to mitigate this problem (see Section SECREF11 for related work and Section SECREF16 for analysis).\n[source_id=6] BERT is credited with the ability to adapt to many tasks and data with very little training BIBREF0. However, we show that BERT fails to perform well when the training and test data are significantly dissimilar, as is the case with several tasks that deal with social and news data. In these cases, the training data is necessarily a subset of past data, while the model is likely to be used on future data which deals with different topics. This work addresses this problem by incorporating cost-sensitivity (Section SECREF19) into BERT.\n[source_id=7] We test these methods by participating in the Shared Task on Fine-Grained Propaganda Detection for the 2nd Workshop on NLP for Internet Freedom, for which we achieve the second rank on sentence-level classification of propaganda, confirming the importance of cost-sensitivity when the training and test sets are dissimilar.",
+      "score": 2.0590164779524924,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "child_qasper_evidence_texts": [
+        "The challenges of imbalanced classification—in which the proportion of elements in each class for a classification task significantly differ—and of the ability to generalise on dissimilar data have remained important problems in Natural Language Processing (NLP) and Machine Learning in general. Popular NLP tasks including sentiment analysis, propaganda detection, and event extraction from social media are all examples of imbalanced classification problems. In each case the number of elements in one of the classes (e.g. negative sentiment, propagandistic content, or specific events discussed on social media, respectively) is significantly lower than the number of elements in the other classes.",
+        "The recently introduced BERT language model for transfer learning BIBREF0 uses a deep bidirectional transformer architecture to produce pre-trained context-dependent embeddings. It has proven to be powerful in solving many NLP tasks and, as we find, also appears to handle imbalanced classification well, thus removing the need to use standard methods of data augmentation to mitigate this problem (see Section SECREF11 for related work and Section SECREF16 for analysis).",
+        "BERT is credited with the ability to adapt to many tasks and data with very little training BIBREF0. However, we show that BERT fails to perform well when the training and test data are significantly dissimilar, as is the case with several tasks that deal with social and news data. In these cases, the training data is necessarily a subset of past data, while the model is likely to be used on future data which deals with different topics. This work addresses this problem by incorporating cost-sensitivity (Section SECREF19) into BERT.",
+        "We test these methods by participating in the Shared Task on Fine-Grained Propaganda Detection for the 2nd Workshop on NLP for Internet Freedom, for which we achieve the second rank on sentence-level classification of propaganda, confirming the importance of cost-sensitivity when the training and test sets are dissimilar."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Related work ::: Class imbalance ::: Cost-sensitive learning\n[source_id=28] Cost-sensitive classification can be used when the “cost” of mislabelling one class is higher than that of mislabelling other classes BIBREF9, BIBREF10. For example, the real cost to a bank of miscategorising a large fraudulent transaction as authentic is potentially higher than miscategorising (perhaps only temporarily) a valid transaction as fraudulent. Cost-sensitive learning tackles the issue of class imbalance by changing the cost function of the model such that misclassification of training examples from the minority class carries more weight and is thus more `expensive'. This is achieved by simply multiplying the loss of each example by a certain factor. This cost-sensitive learning technique takes misclassification costs into account during model training, and does not modify the imbalanced data distribution directly.",
+      "score": 1.6524253196589103,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        28
+      ],
+      "child_qasper_evidence_texts": [
+        "Cost-sensitive classification can be used when the “cost” of mislabelling one class is higher than that of mislabelling other classes BIBREF9, BIBREF10. For example, the real cost to a bank of miscategorising a large fraudulent transaction as authentic is potentially higher than miscategorising (perhaps only temporarily) a valid transaction as fraudulent. Cost-sensitive learning tackles the issue of class imbalance by changing the cost function of the model such that misclassification of training examples from the minority class carries more weight and is thus more `expensive'. This is achieved by simply multiplying the loss of each example by a certain factor. This cost-sensitive learning technique takes misclassification costs into account during model training, and does not modify the imbalanced data distribution directly."
+      ],
+      "child_pages": [
+        5
+      ],
+      "child_sections": [
+        "Related work ::: Class imbalance ::: Cost-sensitive learning"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related work ::: Class imbalance ::: Cost-sensitive learning",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Related work ::: Class imbalance ::: Cost-sensitive learning",
+      "section": "Related work ::: Class imbalance ::: Cost-sensitive learning",
+      "title_path": "Related work ::: Class imbalance ::: Cost-sensitive learning",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Dataset\n[source_id=33] The Propaganda Techniques Corpus (PTC) dataset for the 2019 Shared Task on Fine-Grained Propaganda consists of a training set of 350 news articles, consisting of just over 16,965 total sentences, in which specifically propagandistic fragments have been manually spotted and labelled by experts. This is accompanied by a development set (or dev set) of 61 articles with 2,235 total sentences, whose labels are maintained by the shared task organisers; and two months after the release of this data, the organisers released a test set of 86 articles and 3,526 total sentences. In the training set, 4,720 ($\\sim 28\\%$) of the sentences have been assessed as containing propaganda, with 12,245 sentences ($\\sim 72 \\%$) as non-propaganda, demonstrating a clear class imbalance.\n[source_id=34] In the binary sentence-level classification (SLC) task, a model is trained to detect whether each and every sentence is either 'propaganda' or 'non-propaganda'; in the more challenging field-level classification (FLC) task, a model is trained to detect one of 18 possible propaganda technique types in spans of characters within sentences. These propaganda types are listed in BIBREF4 and range from those which might be recognisable at the lexical level (e.g. Name_Calling, Repetition), and those which would likely need to incorporate semantic understanding (Red_Herring, Straw_Man).\n[source_id=35] For several example sentences from a sample document annotated with fragment-level classifications (FLC) (Figure FIGREF13). The corresponding sentence-level classification (SLC) labels would indicate that sentences 3, 4, and 7 are 'propaganda' while the the other sentences are `non-propaganda'.",
+      "score": 1.005732750305268,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        33,
+        34,
+        35
+      ],
+      "child_qasper_evidence_texts": [
+        "The Propaganda Techniques Corpus (PTC) dataset for the 2019 Shared Task on Fine-Grained Propaganda consists of a training set of 350 news articles, consisting of just over 16,965 total sentences, in which specifically propagandistic fragments have been manually spotted and labelled by experts. This is accompanied by a development set (or dev set) of 61 articles with 2,235 total sentences, whose labels are maintained by the shared task organisers; and two months after the release of this data, the organisers released a test set of 86 articles and 3,526 total sentences. In the training set, 4,720 ($\\sim 28\\%$) of the sentences have been assessed as containing propaganda, with 12,245 sentences ($\\sim 72 \\%$) as non-propaganda, demonstrating a clear class imbalance.",
+        "In the binary sentence-level classification (SLC) task, a model is trained to detect whether each and every sentence is either 'propaganda' or 'non-propaganda'; in the more challenging field-level classification (FLC) task, a model is trained to detect one of 18 possible propaganda technique types in spans of characters within sentences. These propaganda types are listed in BIBREF4 and range from those which might be recognisable at the lexical level (e.g. Name_Calling, Repetition), and those which would likely need to incorporate semantic understanding (Red_Herring, Straw_Man).",
+        "For several example sentences from a sample document annotated with fragment-level classifications (FLC) (Figure FIGREF13). The corresponding sentence-level classification (SLC) labels would indicate that sentences 3, 4, and 7 are 'propaganda' while the the other sentences are `non-propaganda'."
+      ],
+      "child_pages": [
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Dataset",
+        "Dataset",
+        "Dataset"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Dataset",
+          0
+        ],
+        [
+          "Dataset",
+          1
+        ],
+        [
+          "Dataset",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Dataset",
+      "section": "Dataset",
+      "title_path": "Dataset",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 59,
+      "content": "We explore the validity of this by performing several experiments with different weights assigned to the minority class. We note that in our experiments use significantly higher weights than the weights proportional to class frequencies in the training data, that are common in literature BIBREF17. Rather than directly using the class proportions of the training set, we show that tuning weights based on performance on the development set is more beneficial. Figure FIGREF22 shows the results of these experiments wherein we are able to maintain the precision on the subset of the training set used for testing while reducing its recall and thus generalising the model. The fact that the model is generalising on a dissimilar dataset is confirmed by the increase in the development set F1 score. We note that the gains are not infinite and that a balance must be struck based on the amount of generalisation and the corresponding loss in accuracy. The exact weight to use for the best transfer of classification accuracy is related to the dissimilarity of that other dataset and hence is to be obtained experimentally through hyperparameter search. Our experiments showed that a value of 4 is best suited for this task.",
+      "qasper_evidence_text": "We explore the validity of this by performing several experiments with different weights assigned to the minority class. We note that in our experiments use significantly higher weights than the weights proportional to class frequencies in the training data, that are common in literature BIBREF17. Rather than directly using the class proportions of the training set, we show that tuning weights based on performance on the development set is more beneficial. Figure FIGREF22 shows the results of these experiments wherein we are able to maintain the precision on the subset of the training set used for testing while reducing its recall and thus generalising the model. The fact that the model is generalising on a dissimilar dataset is confirmed by the increase in the development set F1 score. We note that the gains are not infinite and that a balance must be struck based on the amount of generalisation and the corresponding loss in accuracy. The exact weight to use for the best transfer of classification accuracy is related to the dissimilarity of that other dataset and hence is to be obtained experimentally through hyperparameter search. Our experiments showed that a value of 4 is best suited for this task.",
+      "source_node_id": 59,
+      "node_id": 59,
+      "paragraph_id": 59,
+      "evidence_id": 59,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_11",
+      "rank": 5,
+      "score": 2.180688071371072,
+      "block_type": "paragraph",
+      "page": 11,
+      "section_id": "Methodology ::: Cost-sensitive Classification",
+      "section": "Methodology ::: Cost-sensitive Classification",
+      "title": "Methodology ::: Cost-sensitive Classification",
+      "hotpot_title": "Methodology ::: Cost-sensitive Classification",
+      "sent_id": 4,
+      "hotpot_sent_id": 4,
+      "supporting_rank": 1
+    },
+    {
+      "id": 49,
+      "content": "We attempt to exploit various data augmentation techniques to address the problem of class imbalance. Table TABREF17 shows the results of our experiments for different data augmentation techniques when, after shuffling the training data, we train the model on 75% of the training data and test it on the remaining 25% of the training data and the development data.",
+      "qasper_evidence_text": "We attempt to exploit various data augmentation techniques to address the problem of class imbalance. Table TABREF17 shows the results of our experiments for different data augmentation techniques when, after shuffling the training data, we train the model on 75% of the training data and test it on the remaining 25% of the training data and the development data.",
+      "source_node_id": 49,
+      "node_id": 49,
+      "paragraph_id": 49,
+      "evidence_id": 49,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_10",
+      "rank": 4,
+      "score": 2.252173323379096,
+      "block_type": "paragraph",
+      "page": 10,
+      "section_id": "Methodology ::: Class Imbalance in Sentence Level Classification",
+      "section": "Methodology ::: Class Imbalance in Sentence Level Classification",
+      "title": "Methodology ::: Class Imbalance in Sentence Level Classification",
+      "hotpot_title": "Methodology ::: Class Imbalance in Sentence Level Classification",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 2
+    },
+    {
+      "id": 51,
+      "content": "So as to better understand the aspects of oversampling that contribute to these gains, we perform a class-wise performance analysis of BERT with/without oversampling. The results of these experiments (Table TABREF18) show that oversampling increases the overall recall while maintaining precision. This is achieved by significantly improving the recall of the minority class (propaganda) at the cost of the recall of the majority class.",
+      "qasper_evidence_text": "So as to better understand the aspects of oversampling that contribute to these gains, we perform a class-wise performance analysis of BERT with/without oversampling. The results of these experiments (Table TABREF18) show that oversampling increases the overall recall while maintaining precision. This is achieved by significantly improving the recall of the minority class (propaganda) at the cost of the recall of the majority class.",
+      "source_node_id": 51,
+      "node_id": 51,
+      "paragraph_id": 51,
+      "evidence_id": 51,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_10",
+      "rank": 4,
+      "score": 2.252173323379096,
+      "block_type": "paragraph",
+      "page": 10,
+      "section_id": "Methodology ::: Class Imbalance in Sentence Level Classification",
+      "section": "Methodology ::: Class Imbalance in Sentence Level Classification",
+      "title": "Methodology ::: Class Imbalance in Sentence Level Classification",
+      "hotpot_title": "Methodology ::: Class Imbalance in Sentence Level Classification",
+      "sent_id": 3,
+      "hotpot_sent_id": 3,
+      "supporting_rank": 3
+    }
+  ],
+  "supporting_block_ids": [
+    59,
+    49,
+    51
+  ]
+}

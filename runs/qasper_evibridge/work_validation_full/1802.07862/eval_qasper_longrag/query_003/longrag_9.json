@@ -1,0 +1,106 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Results: SnapCaptions Dataset\n[source_id=64] Table TABREF6 shows the NER performance on the Snap Captions dataset. We report both entity types recognition (PER, LOC, ORG, MISC) and named entity segmentation (named entity or not) results.\n[source_id=65] Parameters: We tune the parameters of each model with the following search space (bold indicate the choice for our final model): character embeddings dimension: {25, 50, 100, 150, 200, 300}, word embeddings size: {25, 50, 100, 150, 200, 300}, LSTM hidden states: {25, 50, 100, 150, 200, 300}, and INLINEFORM0 dimension: {25, 50, 100, 150, 200, 300}. We optimize the parameters with Adagrad BIBREF28 with batch size 10, learning rate 0.02, epsilon INLINEFORM1 , and decay 0.0.\n[source_id=66] Main Results: When visual context is available (W+C+V), we see that the model performance greatly improves over the textual models (W+C), showing that visual contexts are complimentary to textual information in named entity recognition tasks. In addition, it can be seen that the modality attention module further improves the entity type recognition performance for (W+C+V). This result indicates that the modality attention is able to focus on the most effective modality (visual, words, or characters) adaptive to each sample to maximize information gain. Note that our text-only model (W+C) with the modality attention module also significantly outperform the state-of-the-art baselines BIBREF8 , BIBREF1 , BIBREF0 that use the same textual modalities (W+C), showing the effectiveness of the modality attention module for textual models as well.\n[source_id=67] Error Analysis: Table TABREF17 shows example cases where incorporation of visual contexts affects prediction of named entities. For example, the token `curry' in the caption “The curry's \" is polysemous and may refer to either a type of food or a famous basketball player `Stephen Curry', and the surrounding textual contexts do not provide enough information to disambiguate it. On the other hand, visual contexts (visual tags: `parade', `urban area', ...) provide similarities to the token's distributional semantics from other training examples (snaps from “NBA Championship Parade Story\"), and thus the model successfully predicts the token as a named entity. Similarly, while the text-only model erroneously predicts `Apple' in the caption “Grandma w dat lit Apple Crisp\" as an organization (Apple Inc.), the visual contexts (describing objects related to food) help disambiguate the token, making the model predict it correctly as a non-named entity (a fruit). Trending entities (musicians or DJs such as `CID', `Duke Dumont', `Marshmello', etc.) are also recognized correctly with strengthened contexts from visual information (describing concert scenes) despite lack of surrounding textual contexts. A few cases where visual contexts harmed the performance mostly include visual tags that are unrelated to a token or its surrounding textual contexts.\n[source_id=68] Visualization of Modality Attention: Figure FIGREF19 visualizes the modality attention module at each decoding step (each column), where amplified modality is represented with darker color, and attenuated modality is represented with lighter color.\n[source_id=69] For the image-aided model (W+C+V; upper row in Figure FIGREF19 ), we confirm that the modality attention successfully attenuates irrelevant signals (selfies, etc.) and amplifies relevant modality-based contexts in prediction of a given token. In the example of “disney word essential = coffee\" with visual tags selfie, phone, person, the modality attention successfully attenuates distracting visual signals and focuses on textual modalities, consequently making correct predictions. The named entities in the examples of “Beautiful night atop The Space Needle\" and “Splash Mountain\" are challenging to predict because they are composed of common nouns (space, needle, splash, mountain), and thus they often need additional contexts to correctly predict. In the training data, visual contexts make stronger indicators for these named entities (space needle, splash mountain), and the modality attention module successfully attends more to stronger signals.\n[source_id=70] For text-only model (W+C), we observe that performance gains mostly come from the modality attention module better handling tokens unseen during training or unknown tokens from the pre-trained word embeddings matrix. For example, while WaRriOoOrs and Kooler Matic are missing tokens in the word embeddings matrix, it successfully amplifies character-based contexts (capitalized first letters, similarity to known entities `Golden State Warriors') and suppresses word-based contexts (word embeddings for unknown tokens `WaRriOoOrs'), leading to correct predictions. This result is significant because it shows performance of the model, with an almost identical architecture, can still improve without having to scale the word embeddings matrix indefinitely.\n[source_id=71] Figure FIGREF19 (b) shows the cases where the modality attention led to incorrect predictions. For example, the model predicts missing tokens HUUUGE and Shampooer incorrectly as named entities by amplifying misleading character-based contexts (capitalized first letters) or visual contexts (concert scenes, associated contexts of which often include named entities in the training dataset).\n[source_id=72] Sensitivity to Word Embeddings Vocabulary Size: In order to isolate the effectiveness of the modality attention module on textual models in handling missing tokens, we report the performance with varying word embeddings vocabulary sizes in Table TABREF20 . By increasing the number of missing tokens artificially by randomly removing words from the word embeddings matrix (original vocab size: 400K), we observe that while the overall performance degrades, the modality attention module is able to suppress the peformance degradation. Note also that the performance gap generally gets bigger as we decrease the vocabulary size of the word embeddings matrix. This result is significant in that the modality attention is able to improve the model more robust to missing tokens without having to train an indefinitely large word embeddings matrix for arbitrarily noisy social media text datasets.",
+  "score": 4.184038504248941,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72
+  ],
+  "child_qasper_evidence_texts": [
+    "Table TABREF6 shows the NER performance on the Snap Captions dataset. We report both entity types recognition (PER, LOC, ORG, MISC) and named entity segmentation (named entity or not) results.",
+    "Parameters: We tune the parameters of each model with the following search space (bold indicate the choice for our final model): character embeddings dimension: {25, 50, 100, 150, 200, 300}, word embeddings size: {25, 50, 100, 150, 200, 300}, LSTM hidden states: {25, 50, 100, 150, 200, 300}, and INLINEFORM0 dimension: {25, 50, 100, 150, 200, 300}. We optimize the parameters with Adagrad BIBREF28 with batch size 10, learning rate 0.02, epsilon INLINEFORM1 , and decay 0.0.",
+    "Main Results: When visual context is available (W+C+V), we see that the model performance greatly improves over the textual models (W+C), showing that visual contexts are complimentary to textual information in named entity recognition tasks. In addition, it can be seen that the modality attention module further improves the entity type recognition performance for (W+C+V). This result indicates that the modality attention is able to focus on the most effective modality (visual, words, or characters) adaptive to each sample to maximize information gain. Note that our text-only model (W+C) with the modality attention module also significantly outperform the state-of-the-art baselines BIBREF8 , BIBREF1 , BIBREF0 that use the same textual modalities (W+C), showing the effectiveness of the modality attention module for textual models as well.",
+    "Error Analysis: Table TABREF17 shows example cases where incorporation of visual contexts affects prediction of named entities. For example, the token `curry' in the caption “The curry's \" is polysemous and may refer to either a type of food or a famous basketball player `Stephen Curry', and the surrounding textual contexts do not provide enough information to disambiguate it. On the other hand, visual contexts (visual tags: `parade', `urban area', ...) provide similarities to the token's distributional semantics from other training examples (snaps from “NBA Championship Parade Story\"), and thus the model successfully predicts the token as a named entity. Similarly, while the text-only model erroneously predicts `Apple' in the caption “Grandma w dat lit Apple Crisp\" as an organization (Apple Inc.), the visual contexts (describing objects related to food) help disambiguate the token, making the model predict it correctly as a non-named entity (a fruit). Trending entities (musicians or DJs such as `CID', `Duke Dumont', `Marshmello', etc.) are also recognized correctly with strengthened contexts from visual information (describing concert scenes) despite lack of surrounding textual contexts. A few cases where visual contexts harmed the performance mostly include visual tags that are unrelated to a token or its surrounding textual contexts.",
+    "Visualization of Modality Attention: Figure FIGREF19 visualizes the modality attention module at each decoding step (each column), where amplified modality is represented with darker color, and attenuated modality is represented with lighter color.",
+    "For the image-aided model (W+C+V; upper row in Figure FIGREF19 ), we confirm that the modality attention successfully attenuates irrelevant signals (selfies, etc.) and amplifies relevant modality-based contexts in prediction of a given token. In the example of “disney word essential = coffee\" with visual tags selfie, phone, person, the modality attention successfully attenuates distracting visual signals and focuses on textual modalities, consequently making correct predictions. The named entities in the examples of “Beautiful night atop The Space Needle\" and “Splash Mountain\" are challenging to predict because they are composed of common nouns (space, needle, splash, mountain), and thus they often need additional contexts to correctly predict. In the training data, visual contexts make stronger indicators for these named entities (space needle, splash mountain), and the modality attention module successfully attends more to stronger signals.",
+    "For text-only model (W+C), we observe that performance gains mostly come from the modality attention module better handling tokens unseen during training or unknown tokens from the pre-trained word embeddings matrix. For example, while WaRriOoOrs and Kooler Matic are missing tokens in the word embeddings matrix, it successfully amplifies character-based contexts (capitalized first letters, similarity to known entities `Golden State Warriors') and suppresses word-based contexts (word embeddings for unknown tokens `WaRriOoOrs'), leading to correct predictions. This result is significant because it shows performance of the model, with an almost identical architecture, can still improve without having to scale the word embeddings matrix indefinitely.",
+    "Figure FIGREF19 (b) shows the cases where the modality attention led to incorrect predictions. For example, the model predicts missing tokens HUUUGE and Shampooer incorrectly as named entities by amplifying misleading character-based contexts (capitalized first letters) or visual contexts (concert scenes, associated contexts of which often include named entities in the training dataset).",
+    "Sensitivity to Word Embeddings Vocabulary Size: In order to isolate the effectiveness of the modality attention module on textual models in handling missing tokens, we report the performance with varying word embeddings vocabulary sizes in Table TABREF20 . By increasing the number of missing tokens artificially by randomly removing words from the word embeddings matrix (original vocab size: 400K), we observe that while the overall performance degrades, the modality attention module is able to suppress the peformance degradation. Note also that the performance gap generally gets bigger as we decrease the vocabulary size of the word embeddings matrix. This result is significant in that the modality attention is able to improve the model more robust to missing tokens without having to train an indefinitely large word embeddings matrix for arbitrarily noisy social media text datasets."
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Results: SnapCaptions Dataset",
+    "Results: SnapCaptions Dataset",
+    "Results: SnapCaptions Dataset",
+    "Results: SnapCaptions Dataset",
+    "Results: SnapCaptions Dataset",
+    "Results: SnapCaptions Dataset",
+    "Results: SnapCaptions Dataset",
+    "Results: SnapCaptions Dataset",
+    "Results: SnapCaptions Dataset"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Results: SnapCaptions Dataset",
+      0
+    ],
+    [
+      "Results: SnapCaptions Dataset",
+      1
+    ],
+    [
+      "Results: SnapCaptions Dataset",
+      2
+    ],
+    [
+      "Results: SnapCaptions Dataset",
+      3
+    ],
+    [
+      "Results: SnapCaptions Dataset",
+      4
+    ],
+    [
+      "Results: SnapCaptions Dataset",
+      5
+    ],
+    [
+      "Results: SnapCaptions Dataset",
+      6
+    ],
+    [
+      "Results: SnapCaptions Dataset",
+      7
+    ],
+    [
+      "Results: SnapCaptions Dataset",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Results: SnapCaptions Dataset",
+  "section": "Results: SnapCaptions Dataset",
+  "title_path": "Results: SnapCaptions Dataset",
+  "block_type": "long_unit"
+}

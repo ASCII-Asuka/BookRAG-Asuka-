@@ -1,0 +1,160 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Model Evaluation\n[source_id=21] Language models are evaluated using perplexity, which is a standard measure of performance for unseen data. For bias evaluation, we use an array of metrics to provide a holistic diagnosis of the model behavior under debiasing treatment. These metrics are discussed in detail below. In all the evaluation metrics requiring gender pairs, we use gender pairs provided by BIBREF7 . This list contains 223 pairs, all other words are considered gender-neutral.\n[source_id=22] Co-occurrence bias is computed from the model-generated texts by comparing the occurrences of all gender-neutral words with female and male words. A word is considered to be biased towards a certain gender if it occurs more frequently with words of that gender. This definition was first used by BIBREF7 and later adapted by BIBREF5 . Using the definition of gender bias similar to the one used by BIBREF5 , we define gender bias as INLINEFORM0\n[source_id=23] where INLINEFORM0 is a set of gender-neutral words, and INLINEFORM1 is the occurrences of a word INLINEFORM2 with words of gender INLINEFORM3 in the same window. This score is designed to capture unequal co-occurrences of neutral words with male and female words. Co-occurrences are computed using a sliding window of size 10 extending equally in both directions. Furthermore, we only consider words that occur more than 20 times with gendered words to exclude random effects.\n[source_id=24] We also evaluate a normalized version of INLINEFORM0 which we denote by conditional co-occurrence bias, INLINEFORM1 . This is defined as INLINEFORM2\n[source_id=25] where INLINEFORM0\n[source_id=26] INLINEFORM0 is less affected by the disparity in the general distribution of male and female words in the text. The disparity between the occurrences of the two genders means that text is more inclined to mention one over the other, so it can also be considered a form of bias. We report the ratio of occurrence of male and female words in the model generated text, INLINEFORM1 , as INLINEFORM2\n[source_id=27] Another way of quantifying bias in NLP models is based on the idea of causal testing. The model is exposed to paired samples which differ only in one attribute (e.g. gender) and the disparity in the output is interpreted as bias related to that attribute. BIBREF1 and BIBREF0 applied this method to measure bias in coreference resolution and BIBREF0 also used it for evaluating gender bias in language modelling.\n[source_id=28] Following the approach similar to BIBREF0 , we limit this bias evaluation to a set of gender-neutral occupations. We create a list of sentences based on a set of templates. There are two sets of templates used for evaluating causal occupation bias (Table TABREF7 ). The first set of templates is designed to measure how the probabilities of occupation words depend on the gender information in the seed. Below is an example of the first set of templates: INLINEFORM0\n[source_id=29] Here, the vertical bar separates the seed sequence that is fed into the language models from the target occupation, for which we observe the output softmax probability. We measure causal occupation bias conditioned on gender as INLINEFORM0\n[source_id=30] where INLINEFORM0 is a set of gender-neutral occupations and INLINEFORM1 is the size of the gender pairs set. For example, INLINEFORM2 is the softmax probability of the word INLINEFORM3 where the seed sequence is He is a. The second set of templates like below, aims to capture how the probabilities of gendered words depend on the occupation words in the seed. INLINEFORM4\n[source_id=31] Causal occupation bias conditioned on occupation is represented as INLINEFORM0\n[source_id=32] where INLINEFORM0 is a set of gender-neutral occupations and INLINEFORM1 is the size of the gender pairs set. For example, INLINEFORM2 is the softmax probability of man where the seed sequence is The doctor is a.\n[source_id=33] We believe that both INLINEFORM0 and INLINEFORM1 contribute to gender bias in the model-generated texts. We also note that INLINEFORM2 is more easily influenced by the general disparity in male and female word probabilities.\n[source_id=34] Our debiasing approach does not explicitly address the bias in the embedding layer. Therefore, we use gender-neutral occupations to measure the embedding bias to observe if debiasing the output layer also decreases the bias in the embedding. We define the embedding bias, INLINEFORM0 , as the difference between the Euclidean distance of an occupation word to male words and the distance of the occupation word to the female counterparts. This definition is equivalent to bias by projection described by BIBREF6 . We define INLINEFORM1 as INLINEFORM2\n[source_id=35] where INLINEFORM0 is a set of gender-neutral occupations, INLINEFORM1 is the size of the gender pairs set and INLINEFORM2 is the word-to-vector dictionary.",
+  "score": 5.303276319245365,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35
+  ],
+  "child_qasper_evidence_texts": [
+    "Language models are evaluated using perplexity, which is a standard measure of performance for unseen data. For bias evaluation, we use an array of metrics to provide a holistic diagnosis of the model behavior under debiasing treatment. These metrics are discussed in detail below. In all the evaluation metrics requiring gender pairs, we use gender pairs provided by BIBREF7 . This list contains 223 pairs, all other words are considered gender-neutral.",
+    "Co-occurrence bias is computed from the model-generated texts by comparing the occurrences of all gender-neutral words with female and male words. A word is considered to be biased towards a certain gender if it occurs more frequently with words of that gender. This definition was first used by BIBREF7 and later adapted by BIBREF5 . Using the definition of gender bias similar to the one used by BIBREF5 , we define gender bias as INLINEFORM0",
+    "where INLINEFORM0 is a set of gender-neutral words, and INLINEFORM1 is the occurrences of a word INLINEFORM2 with words of gender INLINEFORM3 in the same window. This score is designed to capture unequal co-occurrences of neutral words with male and female words. Co-occurrences are computed using a sliding window of size 10 extending equally in both directions. Furthermore, we only consider words that occur more than 20 times with gendered words to exclude random effects.",
+    "We also evaluate a normalized version of INLINEFORM0 which we denote by conditional co-occurrence bias, INLINEFORM1 . This is defined as INLINEFORM2",
+    "where INLINEFORM0",
+    "INLINEFORM0 is less affected by the disparity in the general distribution of male and female words in the text. The disparity between the occurrences of the two genders means that text is more inclined to mention one over the other, so it can also be considered a form of bias. We report the ratio of occurrence of male and female words in the model generated text, INLINEFORM1 , as INLINEFORM2",
+    "Another way of quantifying bias in NLP models is based on the idea of causal testing. The model is exposed to paired samples which differ only in one attribute (e.g. gender) and the disparity in the output is interpreted as bias related to that attribute. BIBREF1 and BIBREF0 applied this method to measure bias in coreference resolution and BIBREF0 also used it for evaluating gender bias in language modelling.",
+    "Following the approach similar to BIBREF0 , we limit this bias evaluation to a set of gender-neutral occupations. We create a list of sentences based on a set of templates. There are two sets of templates used for evaluating causal occupation bias (Table TABREF7 ). The first set of templates is designed to measure how the probabilities of occupation words depend on the gender information in the seed. Below is an example of the first set of templates: INLINEFORM0",
+    "Here, the vertical bar separates the seed sequence that is fed into the language models from the target occupation, for which we observe the output softmax probability. We measure causal occupation bias conditioned on gender as INLINEFORM0",
+    "where INLINEFORM0 is a set of gender-neutral occupations and INLINEFORM1 is the size of the gender pairs set. For example, INLINEFORM2 is the softmax probability of the word INLINEFORM3 where the seed sequence is He is a. The second set of templates like below, aims to capture how the probabilities of gendered words depend on the occupation words in the seed. INLINEFORM4",
+    "Causal occupation bias conditioned on occupation is represented as INLINEFORM0",
+    "where INLINEFORM0 is a set of gender-neutral occupations and INLINEFORM1 is the size of the gender pairs set. For example, INLINEFORM2 is the softmax probability of man where the seed sequence is The doctor is a.",
+    "We believe that both INLINEFORM0 and INLINEFORM1 contribute to gender bias in the model-generated texts. We also note that INLINEFORM2 is more easily influenced by the general disparity in male and female word probabilities.",
+    "Our debiasing approach does not explicitly address the bias in the embedding layer. Therefore, we use gender-neutral occupations to measure the embedding bias to observe if debiasing the output layer also decreases the bias in the embedding. We define the embedding bias, INLINEFORM0 , as the difference between the Euclidean distance of an occupation word to male words and the distance of the occupation word to the female counterparts. This definition is equivalent to bias by projection described by BIBREF6 . We define INLINEFORM1 as INLINEFORM2",
+    "where INLINEFORM0 is a set of gender-neutral occupations, INLINEFORM1 is the size of the gender pairs set and INLINEFORM2 is the word-to-vector dictionary."
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Model Evaluation",
+    "Model Evaluation",
+    "Model Evaluation",
+    "Model Evaluation",
+    "Model Evaluation",
+    "Model Evaluation",
+    "Model Evaluation",
+    "Model Evaluation",
+    "Model Evaluation",
+    "Model Evaluation",
+    "Model Evaluation",
+    "Model Evaluation",
+    "Model Evaluation",
+    "Model Evaluation",
+    "Model Evaluation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Model Evaluation",
+      0
+    ],
+    [
+      "Model Evaluation",
+      1
+    ],
+    [
+      "Model Evaluation",
+      2
+    ],
+    [
+      "Model Evaluation",
+      3
+    ],
+    [
+      "Model Evaluation",
+      4
+    ],
+    [
+      "Model Evaluation",
+      5
+    ],
+    [
+      "Model Evaluation",
+      6
+    ],
+    [
+      "Model Evaluation",
+      7
+    ],
+    [
+      "Model Evaluation",
+      8
+    ],
+    [
+      "Model Evaluation",
+      9
+    ],
+    [
+      "Model Evaluation",
+      10
+    ],
+    [
+      "Model Evaluation",
+      11
+    ],
+    [
+      "Model Evaluation",
+      12
+    ],
+    [
+      "Model Evaluation",
+      13
+    ],
+    [
+      "Model Evaluation",
+      14
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Model Evaluation",
+  "section": "Model Evaluation",
+  "title_path": "Model Evaluation",
+  "block_type": "long_unit"
+}

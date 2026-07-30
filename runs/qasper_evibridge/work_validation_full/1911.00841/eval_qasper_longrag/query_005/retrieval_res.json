@@ -1,0 +1,606 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_10",
+      "content": "[Section] Experimental Setup ::: Answerability Identification Baselines\n[source_id=39] We define answerability identification as a binary classification task, evaluating model ability to predict if a question can be answered, given a question in isolation. This can serve as a prior for downstream question-answering. We describe three baselines on the answerability task, and find they considerably improve performance over a majority-class baseline.\n[source_id=40] SVM: We define 3 sets of features to characterize each question. The first is a simple bag-of-words set of features over the question (SVM-BOW), the second is bag-of-words features of the question as well as length of the question in words (SVM-BOW + LEN), and lastly we extract bag-of-words features, length of the question in words as well as part-of-speech tags for the question (SVM-BOW + LEN + POS). This results in vectors of 200, 201 and 228 dimensions respectively, which are provided to an SVM with a linear kernel.\n[source_id=41] CNN: We utilize a CNN neural encoder for answerability prediction. We use GloVe word embeddings BIBREF50, and a filter size of 5 with 64 filters to encode questions.\n[source_id=42] BERT: BERT BIBREF51 is a bidirectional transformer-based language-model BIBREF52. We fine-tune BERT-base on our binary answerability identification task with a learning rate of 2e-5 for 3 epochs, with a maximum sequence length of 128.",
+      "score": 5.88175009921094,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        39,
+        40,
+        41,
+        42
+      ],
+      "child_qasper_evidence_texts": [
+        "We define answerability identification as a binary classification task, evaluating model ability to predict if a question can be answered, given a question in isolation. This can serve as a prior for downstream question-answering. We describe three baselines on the answerability task, and find they considerably improve performance over a majority-class baseline.",
+        "SVM: We define 3 sets of features to characterize each question. The first is a simple bag-of-words set of features over the question (SVM-BOW), the second is bag-of-words features of the question as well as length of the question in words (SVM-BOW + LEN), and lastly we extract bag-of-words features, length of the question in words as well as part-of-speech tags for the question (SVM-BOW + LEN + POS). This results in vectors of 200, 201 and 228 dimensions respectively, which are provided to an SVM with a linear kernel.",
+        "CNN: We utilize a CNN neural encoder for answerability prediction. We use GloVe word embeddings BIBREF50, and a filter size of 5 with 64 filters to encode questions.",
+        "BERT: BERT BIBREF51 is a bidirectional transformer-based language-model BIBREF52. We fine-tune BERT-base on our binary answerability identification task with a learning rate of 2e-5 for 3 epochs, with a maximum sequence length of 128."
+      ],
+      "child_pages": [
+        10,
+        10,
+        10,
+        10
+      ],
+      "child_sections": [
+        "Experimental Setup ::: Answerability Identification Baselines",
+        "Experimental Setup ::: Answerability Identification Baselines",
+        "Experimental Setup ::: Answerability Identification Baselines",
+        "Experimental Setup ::: Answerability Identification Baselines"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experimental Setup ::: Answerability Identification Baselines",
+          0
+        ],
+        [
+          "Experimental Setup ::: Answerability Identification Baselines",
+          1
+        ],
+        [
+          "Experimental Setup ::: Answerability Identification Baselines",
+          2
+        ],
+        [
+          "Experimental Setup ::: Answerability Identification Baselines",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Experimental Setup ::: Answerability Identification Baselines",
+      "section": "Experimental Setup ::: Answerability Identification Baselines",
+      "title_path": "Experimental Setup ::: Answerability Identification Baselines",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_13",
+      "content": "[Section] Experimental Setup ::: Privacy Question Answering ::: Baselines\n[source_id=48] We describe baselines on this task, including a human performance baseline.\n[source_id=49] No-Answer Baseline (NA) : Most of the questions we receive are difficult to answer in a legally-sound way on the basis of information present in the privacy policy. We establish a simple baseline to quantify the effect of identifying every question as unanswerable.\n[source_id=50] Word Count Baseline : To quantify the effect of using simple lexical matching to answer the questions, we retrieve the top candidate policy sentences for each question using a word count baseline BIBREF53, which counts the number of question words that also appear in a sentence. We include the top 2, 3 and 5 candidates as baselines.\n[source_id=51] BERT: We implement two BERT-based baselines BIBREF51 for evidence identification. First, we train BERT on each query-policy sentence pair as a binary classification task to identify if the sentence is evidence for the question or not (Bert). We also experiment with a two-stage classifier, where we separately train the model on questions only to predict answerability. At inference time, if the answerable classifier predicts the question is answerable, the evidence identification classifier produces a set of candidate sentences (Bert + Unanswerable).\n[source_id=52] Human Performance: We pick each reference answer provided by an annotator, and compute the F1 with respect to the remaining references, as described in section 4.2.1. Each reference answer is treated as the prediction, and the remaining n-1 answers are treated as the gold reference. The average of the maximum F1 across all reference answers is computed as the human baseline.",
+      "score": 5.862000709907225,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_13",
+      "child_source_node_ids": [
+        48,
+        49,
+        50,
+        51,
+        52
+      ],
+      "child_qasper_evidence_texts": [
+        "We describe baselines on this task, including a human performance baseline.",
+        "No-Answer Baseline (NA) : Most of the questions we receive are difficult to answer in a legally-sound way on the basis of information present in the privacy policy. We establish a simple baseline to quantify the effect of identifying every question as unanswerable.",
+        "Word Count Baseline : To quantify the effect of using simple lexical matching to answer the questions, we retrieve the top candidate policy sentences for each question using a word count baseline BIBREF53, which counts the number of question words that also appear in a sentence. We include the top 2, 3 and 5 candidates as baselines.",
+        "BERT: We implement two BERT-based baselines BIBREF51 for evidence identification. First, we train BERT on each query-policy sentence pair as a binary classification task to identify if the sentence is evidence for the question or not (Bert). We also experiment with a two-stage classifier, where we separately train the model on questions only to predict answerability. At inference time, if the answerable classifier predicts the question is answerable, the evidence identification classifier produces a set of candidate sentences (Bert + Unanswerable).",
+        "Human Performance: We pick each reference answer provided by an annotator, and compute the F1 with respect to the remaining references, as described in section 4.2.1. Each reference answer is treated as the prediction, and the remaining n-1 answers are treated as the gold reference. The average of the maximum F1 across all reference answers is computed as the human baseline."
+      ],
+      "child_pages": [
+        13,
+        13,
+        13,
+        13,
+        13
+      ],
+      "child_sections": [
+        "Experimental Setup ::: Privacy Question Answering ::: Baselines",
+        "Experimental Setup ::: Privacy Question Answering ::: Baselines",
+        "Experimental Setup ::: Privacy Question Answering ::: Baselines",
+        "Experimental Setup ::: Privacy Question Answering ::: Baselines",
+        "Experimental Setup ::: Privacy Question Answering ::: Baselines"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experimental Setup ::: Privacy Question Answering ::: Baselines",
+          0
+        ],
+        [
+          "Experimental Setup ::: Privacy Question Answering ::: Baselines",
+          1
+        ],
+        [
+          "Experimental Setup ::: Privacy Question Answering ::: Baselines",
+          2
+        ],
+        [
+          "Experimental Setup ::: Privacy Question Answering ::: Baselines",
+          3
+        ],
+        [
+          "Experimental Setup ::: Privacy Question Answering ::: Baselines",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_13",
+      "section_id": "Experimental Setup ::: Privacy Question Answering ::: Baselines",
+      "section": "Experimental Setup ::: Privacy Question Answering ::: Baselines",
+      "title_path": "Experimental Setup ::: Privacy Question Answering ::: Baselines",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_15",
+      "content": "[Section] Results and Discussion ::: Error Analysis\n[source_id=57] Disagreements are analyzed based on the OPP-115 categories of each question (Table.TABREF34). We compare our best performing BERT variant against the NA model and human performance. We observe significant room for improvement across all categories of questions but especially for first party, third party and data retention categories.\n[source_id=58] We analyze the performance of our strongest BERT variant, to identify classes of errors and directions for future improvement (Table.8). We observe that a majority of answerability mistakes made by the BERT model are questions which are in fact answerable, but are identified as unanswerable by BERT. We observe that BERT makes 124 such mistakes on the test set. We collect expert judgments on relevance, subjectivity , silence and information about how likely the question is to be answered from the privacy policy from our experts. We find that most of these mistakes are relevant questions. However many of them were identified as subjective by the annotators, and at least one annotator marked 19 of these questions as having no answer within the privacy policy. However, only 6 of these questions were unexpected or do not usually have an answer in privacy policies. These findings suggest that a more nuanced understanding of answerability might help improve model performance in his challenging domain.",
+      "score": 5.287198712737846,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_15",
+      "child_source_node_ids": [
+        57,
+        58
+      ],
+      "child_qasper_evidence_texts": [
+        "Disagreements are analyzed based on the OPP-115 categories of each question (Table.TABREF34). We compare our best performing BERT variant against the NA model and human performance. We observe significant room for improvement across all categories of questions but especially for first party, third party and data retention categories.",
+        "We analyze the performance of our strongest BERT variant, to identify classes of errors and directions for future improvement (Table.8). We observe that a majority of answerability mistakes made by the BERT model are questions which are in fact answerable, but are identified as unanswerable by BERT. We observe that BERT makes 124 such mistakes on the test set. We collect expert judgments on relevance, subjectivity , silence and information about how likely the question is to be answered from the privacy policy from our experts. We find that most of these mistakes are relevant questions. However many of them were identified as subjective by the annotators, and at least one annotator marked 19 of these questions as having no answer within the privacy policy. However, only 6 of these questions were unexpected or do not usually have an answer in privacy policies. These findings suggest that a more nuanced understanding of answerability might help improve model performance in his challenging domain."
+      ],
+      "child_pages": [
+        15,
+        15
+      ],
+      "child_sections": [
+        "Results and Discussion ::: Error Analysis",
+        "Results and Discussion ::: Error Analysis"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results and Discussion ::: Error Analysis",
+          0
+        ],
+        [
+          "Results and Discussion ::: Error Analysis",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_15",
+      "section_id": "Results and Discussion ::: Error Analysis",
+      "section": "Results and Discussion ::: Error Analysis",
+      "title_path": "Results and Discussion ::: Error Analysis",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_14",
+      "content": "[Section] Results and Discussion\n[source_id=54] The results of the answerability baselines are presented in Table TABREF31, and on answer sentence selection in Table TABREF32. We observe that bert exhibits the best performance on a binary answerability identification task. However, most baselines considerably exceed the performance of a majority-class baseline. This suggests considerable information in the question, indicating it's possible answerability within this domain.\n[source_id=55] Table.TABREF32 describes the performance of our baselines on the answer sentence selection task. The No-answer (NA) baseline performs at 28 F1, providing a lower bound on performance at this task. We observe that our best-performing baseline, Bert + Unanswerable achieves an F1 of 39.8. This suggest that bert is capable of making some progress towards answering questions in this difficult domain, while still leaving considerable headroom for improvement to reach human performance. Bert + Unanswerable performance suggests that incorporating information about answerability can help in this difficult domain. We examine this challenging phenomena of unanswerability further in Section .",
+      "score": 5.134434751674371,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_14",
+      "child_source_node_ids": [
+        54,
+        55
+      ],
+      "child_qasper_evidence_texts": [
+        "The results of the answerability baselines are presented in Table TABREF31, and on answer sentence selection in Table TABREF32. We observe that bert exhibits the best performance on a binary answerability identification task. However, most baselines considerably exceed the performance of a majority-class baseline. This suggests considerable information in the question, indicating it's possible answerability within this domain.",
+        "Table.TABREF32 describes the performance of our baselines on the answer sentence selection task. The No-answer (NA) baseline performs at 28 F1, providing a lower bound on performance at this task. We observe that our best-performing baseline, Bert + Unanswerable achieves an F1 of 39.8. This suggest that bert is capable of making some progress towards answering questions in this difficult domain, while still leaving considerable headroom for improvement to reach human performance. Bert + Unanswerable performance suggests that incorporating information about answerability can help in this difficult domain. We examine this challenging phenomena of unanswerability further in Section ."
+      ],
+      "child_pages": [
+        14,
+        14
+      ],
+      "child_sections": [
+        "Results and Discussion",
+        "Results and Discussion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results and Discussion",
+          0
+        ],
+        [
+          "Results and Discussion",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_14",
+      "section_id": "Results and Discussion",
+      "section": "Results and Discussion",
+      "title_path": "Results and Discussion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_16",
+      "content": "[Section] Results and Discussion ::: What makes Questions Unanswerable?\n[source_id=60] We further ask legal experts to identify potential causes of unanswerability of questions. This analysis has considerable implications. While past work BIBREF17 has treated unanswerable questions as homogeneous, a question answering system might wish to have different treatments for different categories of `unanswerable' questions. The following factors were identified to play a role in unanswerability:\n[source_id=61] Incomprehensibility: If a question is incomprehensible to the extent that its meaning is not intelligible.\n[source_id=62] Relevance: Is this question in the scope of what could be answered by reading the privacy policy.\n[source_id=63] Ill-formedness: Is this question ambiguous or vague. An ambiguous statement will typically contain expressions that can refer to multiple potential explanations, whereas a vague statement carries a concept with an unclear or soft definition.\n[source_id=64] Silence: Other policies answer this type of question but this one does not.\n[source_id=65] Atypicality: The question is of a nature such that it is unlikely for any policy policy to have an answer to the question.\n[source_id=66] Our experts attempt to identify the different `unanswerable' factors for all 573 such questions in the corpus. 4.18% of the questions were identified as being incomprehensible (for example, `any difficulties to occupy the privacy assistant'). Amongst the comprehendable questions, 50% were identified as likely to have an answer within the privacy policy, 33.1% were identified as being privacy-related questions but not within the scope of a privacy policy (e.g., 'has Viber had any privacy breaches in the past?') and 16.9% of questions were identified as completely out-of-scope (e.g., `'will the app consume much space?'). In the questions identified as relevant, 32% were ill-formed questions that were phrased by the user in a manner considered vague or ambiguous. Of the questions that were both relevant as well as `well-formed', 95.7% of the questions were not answered by the policy in question but it was reasonable to expect that a privacy policy would contain an answer. The remaining 4.3% were described as reasonable questions, but of a nature generally not discussed in privacy policies. This suggests that the answerability of questions over privacy policies is a complex issue, and future systems should consider each of these factors when serving user's information seeking intent.\n[source_id=67] We examine a large-scale dataset of “natural” unanswerable questions BIBREF54 based on real user search engine queries to identify if similar unanswerability factors exist. It is important to note that these questions have previously been filtered, according to a criteria for bad questions defined as “(questions that are) ambiguous, incomprehensible, dependent on clear false presuppositions, opinion-seeking, or not clearly a request for factual information.” Annotators made the decision based on the content of the question without viewing the equivalent Wikipedia page. We randomly sample 100 questions from the development set which were identified as unanswerable, and find that 20% of the questions are not questions (e.g., “all I want for christmas is you mariah carey tour”). 12% of questions are unlikely to ever contain an answer on Wikipedia, corresponding closely to our atypicality category. 3% of questions are unlikely to have an answer anywhere (e.g., `what guides Santa home after he has delivered presents?'). 7% of questions are incomplete or open-ended (e.g., `the south west wind blows across nigeria between'). 3% of questions have an unresolvable coreference (e.g., `how do i get to Warsaw Missouri from here'). 4% of questions are vague, and a further 7% have unknown sources of error. 2% still contain false presuppositions (e.g., `what is the only fruit that does not have seeds?') and the remaining 42% do not have an answer within the document. This reinforces our belief that though they have been understudied in past work, any question answering system interacting with real users should expect to receive such unanticipated and unanswerable questions.",
+      "score": 4.741508021773742,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_16",
+      "child_source_node_ids": [
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67
+      ],
+      "child_qasper_evidence_texts": [
+        "We further ask legal experts to identify potential causes of unanswerability of questions. This analysis has considerable implications. While past work BIBREF17 has treated unanswerable questions as homogeneous, a question answering system might wish to have different treatments for different categories of `unanswerable' questions. The following factors were identified to play a role in unanswerability:",
+        "Incomprehensibility: If a question is incomprehensible to the extent that its meaning is not intelligible.",
+        "Relevance: Is this question in the scope of what could be answered by reading the privacy policy.",
+        "Ill-formedness: Is this question ambiguous or vague. An ambiguous statement will typically contain expressions that can refer to multiple potential explanations, whereas a vague statement carries a concept with an unclear or soft definition.",
+        "Silence: Other policies answer this type of question but this one does not.",
+        "Atypicality: The question is of a nature such that it is unlikely for any policy policy to have an answer to the question.",
+        "Our experts attempt to identify the different `unanswerable' factors for all 573 such questions in the corpus. 4.18% of the questions were identified as being incomprehensible (for example, `any difficulties to occupy the privacy assistant'). Amongst the comprehendable questions, 50% were identified as likely to have an answer within the privacy policy, 33.1% were identified as being privacy-related questions but not within the scope of a privacy policy (e.g., 'has Viber had any privacy breaches in the past?') and 16.9% of questions were identified as completely out-of-scope (e.g., `'will the app consume much space?'). In the questions identified as relevant, 32% were ill-formed questions that were phrased by the user in a manner considered vague or ambiguous. Of the questions that were both relevant as well as `well-formed', 95.7% of the questions were not answered by the policy in question but it was reasonable to expect that a privacy policy would contain an answer. The remaining 4.3% were described as reasonable questions, but of a nature generally not discussed in privacy policies. This suggests that the answerability of questions over privacy policies is a complex issue, and future systems should consider each of these factors when serving user's information seeking intent.",
+        "We examine a large-scale dataset of “natural” unanswerable questions BIBREF54 based on real user search engine queries to identify if similar unanswerability factors exist. It is important to note that these questions have previously been filtered, according to a criteria for bad questions defined as “(questions that are) ambiguous, incomprehensible, dependent on clear false presuppositions, opinion-seeking, or not clearly a request for factual information.” Annotators made the decision based on the content of the question without viewing the equivalent Wikipedia page. We randomly sample 100 questions from the development set which were identified as unanswerable, and find that 20% of the questions are not questions (e.g., “all I want for christmas is you mariah carey tour”). 12% of questions are unlikely to ever contain an answer on Wikipedia, corresponding closely to our atypicality category. 3% of questions are unlikely to have an answer anywhere (e.g., `what guides Santa home after he has delivered presents?'). 7% of questions are incomplete or open-ended (e.g., `the south west wind blows across nigeria between'). 3% of questions have an unresolvable coreference (e.g., `how do i get to Warsaw Missouri from here'). 4% of questions are vague, and a further 7% have unknown sources of error. 2% still contain false presuppositions (e.g., `what is the only fruit that does not have seeds?') and the remaining 42% do not have an answer within the document. This reinforces our belief that though they have been understudied in past work, any question answering system interacting with real users should expect to receive such unanticipated and unanswerable questions."
+      ],
+      "child_pages": [
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16
+      ],
+      "child_sections": [
+        "Results and Discussion ::: What makes Questions Unanswerable?",
+        "Results and Discussion ::: What makes Questions Unanswerable?",
+        "Results and Discussion ::: What makes Questions Unanswerable?",
+        "Results and Discussion ::: What makes Questions Unanswerable?",
+        "Results and Discussion ::: What makes Questions Unanswerable?",
+        "Results and Discussion ::: What makes Questions Unanswerable?",
+        "Results and Discussion ::: What makes Questions Unanswerable?",
+        "Results and Discussion ::: What makes Questions Unanswerable?"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results and Discussion ::: What makes Questions Unanswerable?",
+          0
+        ],
+        [
+          "Results and Discussion ::: What makes Questions Unanswerable?",
+          1
+        ],
+        [
+          "Results and Discussion ::: What makes Questions Unanswerable?",
+          2
+        ],
+        [
+          "Results and Discussion ::: What makes Questions Unanswerable?",
+          3
+        ],
+        [
+          "Results and Discussion ::: What makes Questions Unanswerable?",
+          4
+        ],
+        [
+          "Results and Discussion ::: What makes Questions Unanswerable?",
+          5
+        ],
+        [
+          "Results and Discussion ::: What makes Questions Unanswerable?",
+          6
+        ],
+        [
+          "Results and Discussion ::: What makes Questions Unanswerable?",
+          7
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_16",
+      "section_id": "Results and Discussion ::: What makes Questions Unanswerable?",
+      "section": "Results and Discussion ::: What makes Questions Unanswerable?",
+      "title_path": "Results and Discussion ::: What makes Questions Unanswerable?",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Privacy policies are long and complex documents that are difficult for users to read and understand, and yet, they have legal effects on how user data is collected, managed and used. Ideally, we would like to empower users to inform themselves about issues that matter to them, and enable them to selectively explore those issues. We present PrivacyQA, a corpus consisting of 1750 questions about the privacy policies of mobile applications, and over 3500 expert annotations of relevant answers. We observe that a strong neural baseline underperforms human performance by almost 0.3 F1 on PrivacyQA, suggesting considerable room for improvement for future systems. Further, we use this dataset to shed light on challenges to question answerability, with domain-general implications for any question answering system. The PrivacyQA corpus offers a challenging corpus for question answering, with genuine real-world utility.",
+      "score": 4.650816205520941,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Privacy policies are long and complex documents that are difficult for users to read and understand, and yet, they have legal effects on how user data is collected, managed and used. Ideally, we would like to empower users to inform themselves about issues that matter to them, and enable them to selectively explore those issues. We present PrivacyQA, a corpus consisting of 1750 questions about the privacy policies of mobile applications, and over 3500 expert annotations of relevant answers. We observe that a strong neural baseline underperforms human performance by almost 0.3 F1 on PrivacyQA, suggesting considerable room for improvement for future systems. Further, we use this dataset to shed light on challenges to question answerability, with domain-general implications for any question answering system. The PrivacyQA corpus offers a challenging corpus for question answering, with genuine real-world utility."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_17",
+      "content": "[Section] Conclusion\n[source_id=69] We present PrivacyQA, the first significant corpus of privacy policy questions and more than 3500 expert annotations of relevant answers. The goal of this work is to promote question-answering research in the specialized privacy domain, where it can have large real-world impact. Strong neural baselines on PrivacyQA achieve a performance of only 39.8 F1 on this corpus, indicating considerable room for future research. Further, we shed light on several important considerations that affect the answerability of questions. We hope this contribution leads to multidisciplinary efforts to precisely understand user intent and reconcile it with information in policy documents, from both the privacy and NLP communities.",
+      "score": 4.625112773825268,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_17",
+      "child_source_node_ids": [
+        69
+      ],
+      "child_qasper_evidence_texts": [
+        "We present PrivacyQA, the first significant corpus of privacy policy questions and more than 3500 expert annotations of relevant answers. The goal of this work is to promote question-answering research in the specialized privacy domain, where it can have large real-world impact. Strong neural baselines on PrivacyQA achieve a performance of only 39.8 F1 on this corpus, indicating considerable room for future research. Further, we shed light on several important considerations that affect the answerability of questions. We hope this contribution leads to multidisciplinary efforts to precisely understand user intent and reconcile it with information in policy documents, from both the privacy and NLP communities."
+      ],
+      "child_pages": [
+        17
+      ],
+      "child_sections": [
+        "Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_17",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Data Collection ::: Analysis ::: Categories of Questions\n[source_id=22] Questions are organized under nine categories from the OPP-115 Corpus annotation scheme BIBREF49:\n[source_id=23] First Party Collection/Use: What, why and how information is collected by the service provider\n[source_id=24] Third Party Sharing/Collection: What, why and how information shared with or collected by third parties\n[source_id=25] Data Security: Protection measures for user information\n[source_id=26] Data Retention: How long user information will be stored\n[source_id=27] User Choice/Control: Control options available to users\n[source_id=28] User Access, Edit and Deletion: If/how users can access, edit or delete information\n[source_id=29] Policy Change: Informing users if policy information has been changed\n[source_id=30] International and Specific Audiences: Practices pertaining to a specific group of users\n[source_id=31] Other: General text, contact information or practices not covered by other categories.\n[source_id=32] For each question, domain experts indicate one or more relevant OPP-115 categories. We mark a category as relevant to a question if it is identified as such by at least two annotators. If no such category exists, the category is marked as `Other' if atleast one annotator has identified the `Other' category to be relevant. If neither of these conditions is satisfied, we label the question as having no agreement. The distribution of questions in the corpus across OPP-115 categories is as shown in Table.TABREF16. First party and third party related questions are the largest categories, forming nearly 66.4% of all questions asked to the privacy assistant.",
+      "score": 3.620189347207425,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "child_qasper_evidence_texts": [
+        "Questions are organized under nine categories from the OPP-115 Corpus annotation scheme BIBREF49:",
+        "First Party Collection/Use: What, why and how information is collected by the service provider",
+        "Third Party Sharing/Collection: What, why and how information shared with or collected by third parties",
+        "Data Security: Protection measures for user information",
+        "Data Retention: How long user information will be stored",
+        "User Choice/Control: Control options available to users",
+        "User Access, Edit and Deletion: If/how users can access, edit or delete information",
+        "Policy Change: Informing users if policy information has been changed",
+        "International and Specific Audiences: Practices pertaining to a specific group of users",
+        "Other: General text, contact information or practices not covered by other categories.",
+        "For each question, domain experts indicate one or more relevant OPP-115 categories. We mark a category as relevant to a question if it is identified as such by at least two annotators. If no such category exists, the category is marked as `Other' if atleast one annotator has identified the `Other' category to be relevant. If neither of these conditions is satisfied, we label the question as having no agreement. The distribution of questions in the corpus across OPP-115 categories is as shown in Table.TABREF16. First party and third party related questions are the largest categories, forming nearly 66.4% of all questions asked to the privacy assistant."
+      ],
+      "child_pages": [
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Data Collection ::: Analysis ::: Categories of Questions",
+        "Data Collection ::: Analysis ::: Categories of Questions",
+        "Data Collection ::: Analysis ::: Categories of Questions",
+        "Data Collection ::: Analysis ::: Categories of Questions",
+        "Data Collection ::: Analysis ::: Categories of Questions",
+        "Data Collection ::: Analysis ::: Categories of Questions",
+        "Data Collection ::: Analysis ::: Categories of Questions",
+        "Data Collection ::: Analysis ::: Categories of Questions",
+        "Data Collection ::: Analysis ::: Categories of Questions",
+        "Data Collection ::: Analysis ::: Categories of Questions",
+        "Data Collection ::: Analysis ::: Categories of Questions"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Data Collection ::: Analysis ::: Categories of Questions",
+          0
+        ],
+        [
+          "Data Collection ::: Analysis ::: Categories of Questions",
+          1
+        ],
+        [
+          "Data Collection ::: Analysis ::: Categories of Questions",
+          2
+        ],
+        [
+          "Data Collection ::: Analysis ::: Categories of Questions",
+          3
+        ],
+        [
+          "Data Collection ::: Analysis ::: Categories of Questions",
+          4
+        ],
+        [
+          "Data Collection ::: Analysis ::: Categories of Questions",
+          5
+        ],
+        [
+          "Data Collection ::: Analysis ::: Categories of Questions",
+          6
+        ],
+        [
+          "Data Collection ::: Analysis ::: Categories of Questions",
+          7
+        ],
+        [
+          "Data Collection ::: Analysis ::: Categories of Questions",
+          8
+        ],
+        [
+          "Data Collection ::: Analysis ::: Categories of Questions",
+          9
+        ],
+        [
+          "Data Collection ::: Analysis ::: Categories of Questions",
+          10
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Data Collection ::: Analysis ::: Categories of Questions",
+      "section": "Data Collection ::: Analysis ::: Categories of Questions",
+      "title_path": "Data Collection ::: Analysis ::: Categories of Questions",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 39,
+      "content": "We define answerability identification as a binary classification task, evaluating model ability to predict if a question can be answered, given a question in isolation. This can serve as a prior for downstream question-answering. We describe three baselines on the answerability task, and find they considerably improve performance over a majority-class baseline.",
+      "qasper_evidence_text": "We define answerability identification as a binary classification task, evaluating model ability to predict if a question can be answered, given a question in isolation. This can serve as a prior for downstream question-answering. We describe three baselines on the answerability task, and find they considerably improve performance over a majority-class baseline.",
+      "source_node_id": 39,
+      "node_id": 39,
+      "paragraph_id": 39,
+      "evidence_id": 39,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_10",
+      "rank": 1,
+      "score": 5.88175009921094,
+      "block_type": "paragraph",
+      "page": 10,
+      "section_id": "Experimental Setup ::: Answerability Identification Baselines",
+      "section": "Experimental Setup ::: Answerability Identification Baselines",
+      "title": "Experimental Setup ::: Answerability Identification Baselines",
+      "hotpot_title": "Experimental Setup ::: Answerability Identification Baselines",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 40,
+      "content": "SVM: We define 3 sets of features to characterize each question. The first is a simple bag-of-words set of features over the question (SVM-BOW), the second is bag-of-words features of the question as well as length of the question in words (SVM-BOW + LEN), and lastly we extract bag-of-words features, length of the question in words as well as part-of-speech tags for the question (SVM-BOW + LEN + POS). This results in vectors of 200, 201 and 228 dimensions respectively, which are provided to an SVM with a linear kernel.",
+      "qasper_evidence_text": "SVM: We define 3 sets of features to characterize each question. The first is a simple bag-of-words set of features over the question (SVM-BOW), the second is bag-of-words features of the question as well as length of the question in words (SVM-BOW + LEN), and lastly we extract bag-of-words features, length of the question in words as well as part-of-speech tags for the question (SVM-BOW + LEN + POS). This results in vectors of 200, 201 and 228 dimensions respectively, which are provided to an SVM with a linear kernel.",
+      "source_node_id": 40,
+      "node_id": 40,
+      "paragraph_id": 40,
+      "evidence_id": 40,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_10",
+      "rank": 1,
+      "score": 5.88175009921094,
+      "block_type": "paragraph",
+      "page": 10,
+      "section_id": "Experimental Setup ::: Answerability Identification Baselines",
+      "section": "Experimental Setup ::: Answerability Identification Baselines",
+      "title": "Experimental Setup ::: Answerability Identification Baselines",
+      "hotpot_title": "Experimental Setup ::: Answerability Identification Baselines",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 2
+    },
+    {
+      "id": 41,
+      "content": "CNN: We utilize a CNN neural encoder for answerability prediction. We use GloVe word embeddings BIBREF50, and a filter size of 5 with 64 filters to encode questions.",
+      "qasper_evidence_text": "CNN: We utilize a CNN neural encoder for answerability prediction. We use GloVe word embeddings BIBREF50, and a filter size of 5 with 64 filters to encode questions.",
+      "source_node_id": 41,
+      "node_id": 41,
+      "paragraph_id": 41,
+      "evidence_id": 41,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_10",
+      "rank": 1,
+      "score": 5.88175009921094,
+      "block_type": "paragraph",
+      "page": 10,
+      "section_id": "Experimental Setup ::: Answerability Identification Baselines",
+      "section": "Experimental Setup ::: Answerability Identification Baselines",
+      "title": "Experimental Setup ::: Answerability Identification Baselines",
+      "hotpot_title": "Experimental Setup ::: Answerability Identification Baselines",
+      "sent_id": 2,
+      "hotpot_sent_id": 2,
+      "supporting_rank": 3
+    },
+    {
+      "id": 42,
+      "content": "BERT: BERT BIBREF51 is a bidirectional transformer-based language-model BIBREF52. We fine-tune BERT-base on our binary answerability identification task with a learning rate of 2e-5 for 3 epochs, with a maximum sequence length of 128.",
+      "qasper_evidence_text": "BERT: BERT BIBREF51 is a bidirectional transformer-based language-model BIBREF52. We fine-tune BERT-base on our binary answerability identification task with a learning rate of 2e-5 for 3 epochs, with a maximum sequence length of 128.",
+      "source_node_id": 42,
+      "node_id": 42,
+      "paragraph_id": 42,
+      "evidence_id": 42,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_10",
+      "rank": 1,
+      "score": 5.88175009921094,
+      "block_type": "paragraph",
+      "page": 10,
+      "section_id": "Experimental Setup ::: Answerability Identification Baselines",
+      "section": "Experimental Setup ::: Answerability Identification Baselines",
+      "title": "Experimental Setup ::: Answerability Identification Baselines",
+      "hotpot_title": "Experimental Setup ::: Answerability Identification Baselines",
+      "sent_id": 3,
+      "hotpot_sent_id": 3,
+      "supporting_rank": 4
+    }
+  ],
+  "supporting_block_ids": [
+    39,
+    40,
+    41,
+    42
+  ]
+}

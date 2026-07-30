@@ -1,0 +1,106 @@
+{
+  "id": "longrag_12",
+  "content": "[Section] Robustness of the results and comparison with other methods\n[source_id=70] Our framework consists of a series of steps for which there are choices and alternatives. Although it is not possible to provide comparisons to the myriad of methods and possibilities available, we have examined quantitatively the robustness of the results to parametric and methodological choices in different steps of the framework: (i) the importance of using Doc2Vec embeddings instead of BoW vectors, (ii) the size of training corpus for Doc2Vec; (iii) the sparsity of the MST-kNN similarity graph construction. We have also carried out quantitative comparisons to other methods, including: (i) LDA-BoW, and (ii) clustering with other community detection methods. We provide a brief summary here and additional material in the SI.\n[source_id=71] The use of fixed-sized vector embeddings (Doc2Vec) instead of standard bag of words (BoW) is an integral part of our pipeline. Doc2Vec produces lower dimensional vector representations (as compared to BoW) with higher semantic and syntactic content. It has been reported that Doc2Vec outperforms BoW representations in practical benchmarks of semantic similarity, as well as being less sensitive to hyper-parameters BIBREF22 .\n[source_id=72] To quantify the improvement provided by Doc2Vec in our framework, we constructed a MST-kNN graph following the same steps but starting with TF-iDF vectors for each document. We then ran MS on this TF-iDF similarity graph, and compared the results to those obtained from the Doc2Vec similarity graph. Figure 7 shows that the Doc2Vec version outperforms the BoW version across all resolutions in terms of both $NMI$ and $\\widehat{PMI}$ scores.\n[source_id=73] As shown in Table 1 , we have tested the effect of the size of the training corpus on the Doc2Vec model. We trained Doc2Vec on two additional training sets of 1 million and 2 million records (randomly chosen from the full set of $\\sim $ 13 million records). We then followed the same procedure to construct the MST-kNN similarity graph and carried out the MS analysis. The results, presented in Figure S3 in the SI, show that the performance is affected only mildly by the size of the Doc2Vec training set.\n[source_id=74] To examine the effect of sparsification in the graph construction, we have studied the dependence of quality of the partitions against the number of neighbours, $k$ , in the MST-kNN graph. Our numerics, shown in Figure S4 in the SI, indicate that both the $NMI$ and $\\widehat{PMI}$ scores of the MS clusterings reach a similar level of quality for values of $k$ above 13-16, with minor improvement after that. Hence our results are robust to the choice of $k$ , provided it is not too small. Due to computational efficiency, we thus favour a relatively small $k$ , but not too small.\n[source_id=75] We carried out a comparison with LDA, a widely used methodology for text analysis. A key difference between standard LDA and our MS method is the fact that a different LDA model needs to be trained separately for each number of topics pre-determined by the user. To offer a comparison across the methods, We obtained five LDA models corresponding to the five MS levels we considered in detail. The results in Table 2 show that MS and LDA give partitions that are comparably similar to the hand-coded categories (as measured with $NMI$ ), with some differences depending on the scale, whereas the MS clusterings have higher topic coherence (as given by $\\widehat{PMI}$ ) across all scales.\n[source_id=76] To give an indication of the computational cost, we ran both methods on the same servers. Our method takes approximately 13 hours in total to compute both the Doc2Vec model on 13 million records (11 hours) and the full MS scan with 400 partitions across all resolutions (2 hours). The time required to train just the 5 LDA models on the same corpus amounts to 30 hours (with timings ranging from $\\sim $ 2 hours for the 3 topic LDA model to 12.5 hours for the 44 topic LDA model).\n[source_id=77] This comparison also highlights the conceptual difference between our multi-scale methodology and LDA topic modelling. While LDA computes topics at a pre-determined level of resolution, our method obtains partitions at all resolutions in one sweep of the Markov time, from which relevant partitions are chosen based on their robustness. However, the MS partitions at all resolutions are available for further investigation if so needed.\n[source_id=78] We have used several algorithms readily available in code libraries (i.e., the iGraph module for Python) to cluster/partition the same kNN-MST graph. Figure S5 in the SI shows the comparison against several well-known partitioning methods (Modularity Optimisation BIBREF44 , InfoMap BIBREF4 , Walktrap BIBREF45 , Label Propagation BIBREF46 , and Multi-resolution Louvain BIBREF35 ) which give just one partition (or two in the case of the Louvain implementation in iGraph) into a particular number of clusters, in contrast with our multiscale MS analysis. Our results show that MS provides improved or equal results to other graph partitioning methods for both $NMI$ and $\\widehat{PMI}$ across all scales. Only for very fine resolution with more than 50 clusters, Infomap, which partitions graphs into small clique-like subgraphs BIBREF32 , BIBREF47 , provides a slightly improved $NMI$ for that particular scale. Therefore, MS allows us to find relevant, yet high quality clusterings across all scales by sweeping the Markov time parameter.",
+  "score": 2.9835296978718175,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_12",
+  "child_source_node_ids": [
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78
+  ],
+  "child_qasper_evidence_texts": [
+    "Our framework consists of a series of steps for which there are choices and alternatives. Although it is not possible to provide comparisons to the myriad of methods and possibilities available, we have examined quantitatively the robustness of the results to parametric and methodological choices in different steps of the framework: (i) the importance of using Doc2Vec embeddings instead of BoW vectors, (ii) the size of training corpus for Doc2Vec; (iii) the sparsity of the MST-kNN similarity graph construction. We have also carried out quantitative comparisons to other methods, including: (i) LDA-BoW, and (ii) clustering with other community detection methods. We provide a brief summary here and additional material in the SI.",
+    "The use of fixed-sized vector embeddings (Doc2Vec) instead of standard bag of words (BoW) is an integral part of our pipeline. Doc2Vec produces lower dimensional vector representations (as compared to BoW) with higher semantic and syntactic content. It has been reported that Doc2Vec outperforms BoW representations in practical benchmarks of semantic similarity, as well as being less sensitive to hyper-parameters BIBREF22 .",
+    "To quantify the improvement provided by Doc2Vec in our framework, we constructed a MST-kNN graph following the same steps but starting with TF-iDF vectors for each document. We then ran MS on this TF-iDF similarity graph, and compared the results to those obtained from the Doc2Vec similarity graph. Figure 7 shows that the Doc2Vec version outperforms the BoW version across all resolutions in terms of both $NMI$ and $\\widehat{PMI}$ scores.",
+    "As shown in Table 1 , we have tested the effect of the size of the training corpus on the Doc2Vec model. We trained Doc2Vec on two additional training sets of 1 million and 2 million records (randomly chosen from the full set of $\\sim $ 13 million records). We then followed the same procedure to construct the MST-kNN similarity graph and carried out the MS analysis. The results, presented in Figure S3 in the SI, show that the performance is affected only mildly by the size of the Doc2Vec training set.",
+    "To examine the effect of sparsification in the graph construction, we have studied the dependence of quality of the partitions against the number of neighbours, $k$ , in the MST-kNN graph. Our numerics, shown in Figure S4 in the SI, indicate that both the $NMI$ and $\\widehat{PMI}$ scores of the MS clusterings reach a similar level of quality for values of $k$ above 13-16, with minor improvement after that. Hence our results are robust to the choice of $k$ , provided it is not too small. Due to computational efficiency, we thus favour a relatively small $k$ , but not too small.",
+    "We carried out a comparison with LDA, a widely used methodology for text analysis. A key difference between standard LDA and our MS method is the fact that a different LDA model needs to be trained separately for each number of topics pre-determined by the user. To offer a comparison across the methods, We obtained five LDA models corresponding to the five MS levels we considered in detail. The results in Table 2 show that MS and LDA give partitions that are comparably similar to the hand-coded categories (as measured with $NMI$ ), with some differences depending on the scale, whereas the MS clusterings have higher topic coherence (as given by $\\widehat{PMI}$ ) across all scales.",
+    "To give an indication of the computational cost, we ran both methods on the same servers. Our method takes approximately 13 hours in total to compute both the Doc2Vec model on 13 million records (11 hours) and the full MS scan with 400 partitions across all resolutions (2 hours). The time required to train just the 5 LDA models on the same corpus amounts to 30 hours (with timings ranging from $\\sim $ 2 hours for the 3 topic LDA model to 12.5 hours for the 44 topic LDA model).",
+    "This comparison also highlights the conceptual difference between our multi-scale methodology and LDA topic modelling. While LDA computes topics at a pre-determined level of resolution, our method obtains partitions at all resolutions in one sweep of the Markov time, from which relevant partitions are chosen based on their robustness. However, the MS partitions at all resolutions are available for further investigation if so needed.",
+    "We have used several algorithms readily available in code libraries (i.e., the iGraph module for Python) to cluster/partition the same kNN-MST graph. Figure S5 in the SI shows the comparison against several well-known partitioning methods (Modularity Optimisation BIBREF44 , InfoMap BIBREF4 , Walktrap BIBREF45 , Label Propagation BIBREF46 , and Multi-resolution Louvain BIBREF35 ) which give just one partition (or two in the case of the Louvain implementation in iGraph) into a particular number of clusters, in contrast with our multiscale MS analysis. Our results show that MS provides improved or equal results to other graph partitioning methods for both $NMI$ and $\\widehat{PMI}$ across all scales. Only for very fine resolution with more than 50 clusters, Infomap, which partitions graphs into small clique-like subgraphs BIBREF32 , BIBREF47 , provides a slightly improved $NMI$ for that particular scale. Therefore, MS allows us to find relevant, yet high quality clusterings across all scales by sweeping the Markov time parameter."
+  ],
+  "child_pages": [
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12
+  ],
+  "child_sections": [
+    "Robustness of the results and comparison with other methods",
+    "Robustness of the results and comparison with other methods",
+    "Robustness of the results and comparison with other methods",
+    "Robustness of the results and comparison with other methods",
+    "Robustness of the results and comparison with other methods",
+    "Robustness of the results and comparison with other methods",
+    "Robustness of the results and comparison with other methods",
+    "Robustness of the results and comparison with other methods",
+    "Robustness of the results and comparison with other methods"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Robustness of the results and comparison with other methods",
+      0
+    ],
+    [
+      "Robustness of the results and comparison with other methods",
+      1
+    ],
+    [
+      "Robustness of the results and comparison with other methods",
+      2
+    ],
+    [
+      "Robustness of the results and comparison with other methods",
+      3
+    ],
+    [
+      "Robustness of the results and comparison with other methods",
+      4
+    ],
+    [
+      "Robustness of the results and comparison with other methods",
+      5
+    ],
+    [
+      "Robustness of the results and comparison with other methods",
+      6
+    ],
+    [
+      "Robustness of the results and comparison with other methods",
+      7
+    ],
+    [
+      "Robustness of the results and comparison with other methods",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_12",
+  "section_id": "Robustness of the results and comparison with other methods",
+  "section": "Robustness of the results and comparison with other methods",
+  "title_path": "Robustness of the results and comparison with other methods",
+  "block_type": "long_unit"
+}

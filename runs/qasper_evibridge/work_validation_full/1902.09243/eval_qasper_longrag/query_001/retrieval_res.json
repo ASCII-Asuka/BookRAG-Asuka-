@@ -1,0 +1,736 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_7",
+      "content": "[Section] Summary Refine Process\n[source_id=50] The main reason to introduce the refine process is to enhance the decoder using BERT's contextualized representations, so we do not modify the encoder and reuse it during this process.\n[source_id=51] On the decoder side, we propose a new word-level refine decoder. The refine decoder receives a generated summary draft as input, and outputs a refined summary. It first masks each word in the summary draft one by one, then feeds the draft to BERT to generate context vectors. Finally it predicts a refined summary word using an $N$ layer Transformer decoder which is the same as the draft decoder. At t-th time step the n-th word of input summary is masked, and the decoder predicts the n-th refined word given other words of the summary.\n[source_id=52] The learning objective of this process is shown in Eq. ( 19 ), $y_i$ is the i-th summary word and $y_{i}^*$ for the ground-truth summary word, and $a_{\\ne i} = \\lbrace a_1, \\ldots , a_{i-1}, a_{i+1}, \\ldots , a_{|y|}\\rbrace $ .\n[source_id=53] $$L_{refine} = \\sum _{i=1}^{|y|} -\\log P(y_i = y_i^*|a_{\\ne i}, H) $$   (Eq. 19)\n[source_id=54] From the view of BERT or other contextualized embeddings, the refine decoding process provides a more complete input sequence which is consistent with their pre-training processes. Intuitively, this process works as follows: first the draft decoder writes a summary draft based on a document, and then the refine decoder edits the draft. It concentrates on one word at a time, based on the source document as well as other words.\n[source_id=55] We design the word-level refine decoder because this process is similar to the cloze task in BERT's pre-train process, therefore by using the ability of the contextual language model the decoder can generate more fluent and natural sequences.\n[source_id=56] The parameters are shared between the draft decoder and refine decoder, as we find that using individual parameters the model's performance degrades a lot. The reason may be that we use teach-forcing during training, and thus the word-level refine decoder learns to predict words given all the other ground-truth words of summary. This objective is similar to the language model's pre-train objective, and is probably not enough for the decoder to learn to generate refined summaries. So in our model all decoders share the same parameters.\n[source_id=57] Researchers usually use ROUGE as the evaluation metric for summarization, however during sequence-to-sequence model training, the objective is to maximize the log likelihood of generated sequences. This mis-match harms the model's performance, so we add a discrete objective to the model, and optimize it by introducing the policy gradient method. For example, the discrete objective for the summary draft process is as Eq. ( 21 ) shows, where $a^s$ is the draft summary sampled from predicted distribution, and $R(a^s)$ is the reward score compared with the ground-truth summary, we use ROUGE-L in our experiment. To balance between optimizing the discrete objective and generating readable sequences, we mix the discrete objective with maximum-likelihood objective. As Eq. () shows, minimizing $\\hat{L}_{dec}$ is the final objective for the draft process, note here $L_{dec}$ is $-logP(a|x)$ . In the refine process we introduce similar objectives.\n[source_id=58] $$L^{rl}_{dec} = R(a^s)\\cdot [-\\log (P(a^s|x))]  \\\\\n\\hat{L}_{dec} = \\gamma * L^{rl}_{dec} + (1 - \\gamma ) * L_{dec} $$   (Eq. 21)",
+      "score": 2.5710907397023552,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58
+      ],
+      "child_qasper_evidence_texts": [
+        "The main reason to introduce the refine process is to enhance the decoder using BERT's contextualized representations, so we do not modify the encoder and reuse it during this process.",
+        "On the decoder side, we propose a new word-level refine decoder. The refine decoder receives a generated summary draft as input, and outputs a refined summary. It first masks each word in the summary draft one by one, then feeds the draft to BERT to generate context vectors. Finally it predicts a refined summary word using an $N$ layer Transformer decoder which is the same as the draft decoder. At t-th time step the n-th word of input summary is masked, and the decoder predicts the n-th refined word given other words of the summary.",
+        "The learning objective of this process is shown in Eq. ( 19 ), $y_i$ is the i-th summary word and $y_{i}^*$ for the ground-truth summary word, and $a_{\\ne i} = \\lbrace a_1, \\ldots , a_{i-1}, a_{i+1}, \\ldots , a_{|y|}\\rbrace $ .",
+        "$$L_{refine} = \\sum _{i=1}^{|y|} -\\log P(y_i = y_i^*|a_{\\ne i}, H) $$   (Eq. 19)",
+        "From the view of BERT or other contextualized embeddings, the refine decoding process provides a more complete input sequence which is consistent with their pre-training processes. Intuitively, this process works as follows: first the draft decoder writes a summary draft based on a document, and then the refine decoder edits the draft. It concentrates on one word at a time, based on the source document as well as other words.",
+        "We design the word-level refine decoder because this process is similar to the cloze task in BERT's pre-train process, therefore by using the ability of the contextual language model the decoder can generate more fluent and natural sequences.",
+        "The parameters are shared between the draft decoder and refine decoder, as we find that using individual parameters the model's performance degrades a lot. The reason may be that we use teach-forcing during training, and thus the word-level refine decoder learns to predict words given all the other ground-truth words of summary. This objective is similar to the language model's pre-train objective, and is probably not enough for the decoder to learn to generate refined summaries. So in our model all decoders share the same parameters.",
+        "Researchers usually use ROUGE as the evaluation metric for summarization, however during sequence-to-sequence model training, the objective is to maximize the log likelihood of generated sequences. This mis-match harms the model's performance, so we add a discrete objective to the model, and optimize it by introducing the policy gradient method. For example, the discrete objective for the summary draft process is as Eq. ( 21 ) shows, where $a^s$ is the draft summary sampled from predicted distribution, and $R(a^s)$ is the reward score compared with the ground-truth summary, we use ROUGE-L in our experiment. To balance between optimizing the discrete objective and generating readable sequences, we mix the discrete objective with maximum-likelihood objective. As Eq. () shows, minimizing $\\hat{L}_{dec}$ is the final objective for the draft process, note here $L_{dec}$ is $-logP(a|x)$ . In the refine process we introduce similar objectives.",
+        "$$L^{rl}_{dec} = R(a^s)\\cdot [-\\log (P(a^s|x))]  \\\\\n\\hat{L}_{dec} = \\gamma * L^{rl}_{dec} + (1 - \\gamma ) * L_{dec} $$   (Eq. 21)"
+      ],
+      "child_pages": [
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Summary Refine Process",
+        "Summary Refine Process",
+        "Summary Refine Process",
+        "Summary Refine Process",
+        "Summary Refine Process",
+        "Summary Refine Process",
+        "Summary Refine Process",
+        "Summary Refine Process",
+        "Summary Refine Process"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Summary Refine Process",
+          0
+        ],
+        [
+          "Summary Refine Process",
+          1
+        ],
+        [
+          "Summary Refine Process",
+          2
+        ],
+        [
+          "Summary Refine Process",
+          3
+        ],
+        [
+          "Summary Refine Process",
+          4
+        ],
+        [
+          "Summary Refine Process",
+          5
+        ],
+        [
+          "Summary Refine Process",
+          6
+        ],
+        [
+          "Summary Refine Process",
+          7
+        ],
+        [
+          "Summary Refine Process",
+          8
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Summary Refine Process",
+      "section": "Summary Refine Process",
+      "title_path": "Summary Refine Process",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Text Summarization\n[source_id=13] In this paper, we focus on single-document multi-sentence summarization and propose a supervised abstractive model based on the neural attentive sequence-to-sequence framework which consists of two parts: a neural network for the encoder and another network for the decoder. The encoder encodes the input sequence to intermediate representation and the decoder predicts one word at a time step given the input sequence representation vector and previous decoded output. The goal of the model is to maximize the probability of generating the correct target sequences. In the encoding and generation process, the attention mechanism is used to concentrate on the most important positions of text. The learning objective of most sequence-to-sequence models is to minimize the negative log likelihood of the generated sequence as following equation shows, where $y^*_i$ is the i-th ground-truth summary token.\n[source_id=14] $$Loss = - \\log \\sum _{t=1}^N P(y_t^*|y_{<t}^*, X)$$   (Eq. 3)\n[source_id=15] However, with this objective, traditional sequence generation models consider only one direction context in the decoding process, which could cause performance degradation since complete context of one token contains preceding and following tokens, thus feeding only preceded decoded words to the decoder so that the model may generate unnatural sequences. For example, attentive sequence-to-sequence models often generate sequences with repeated phrases which harm the naturalness. Some previous works mitigate this problem by improving the attention calculation process, but in this paper we show that feeding bi-directional context instead of left-only-context can better alleviate this problem.\n[source_id=16] Text summarization models are usually classified to abstractive and extractive ones. Recently, extractive models like DeepChannel BIBREF8 , rnn-ext+RL BIBREF9 and NeuSUM BIBREF2 achieve higher performances using well-designed structures. For example, DeepChannel propose a salience estimation network and iteratively extract salient sentences. BIBREF16 train a sentence compression model to teach another latent variable extractive model.\n[source_id=17] Also, several recent works focus on improving abstractive methods. BIBREF3 design a content selector to over-determine phrases in a source document that should be part of the summary. BIBREF11 introduce inconsistency loss to force words in less attended sentences(which determined by extractive model) to have lower generation probabilities. BIBREF5 extend seq2seq model with an information selection network to generate more informative summaries.",
+      "score": 2.2426802361064158,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper, we focus on single-document multi-sentence summarization and propose a supervised abstractive model based on the neural attentive sequence-to-sequence framework which consists of two parts: a neural network for the encoder and another network for the decoder. The encoder encodes the input sequence to intermediate representation and the decoder predicts one word at a time step given the input sequence representation vector and previous decoded output. The goal of the model is to maximize the probability of generating the correct target sequences. In the encoding and generation process, the attention mechanism is used to concentrate on the most important positions of text. The learning objective of most sequence-to-sequence models is to minimize the negative log likelihood of the generated sequence as following equation shows, where $y^*_i$ is the i-th ground-truth summary token.",
+        "$$Loss = - \\log \\sum _{t=1}^N P(y_t^*|y_{<t}^*, X)$$   (Eq. 3)",
+        "However, with this objective, traditional sequence generation models consider only one direction context in the decoding process, which could cause performance degradation since complete context of one token contains preceding and following tokens, thus feeding only preceded decoded words to the decoder so that the model may generate unnatural sequences. For example, attentive sequence-to-sequence models often generate sequences with repeated phrases which harm the naturalness. Some previous works mitigate this problem by improving the attention calculation process, but in this paper we show that feeding bi-directional context instead of left-only-context can better alleviate this problem.",
+        "Text summarization models are usually classified to abstractive and extractive ones. Recently, extractive models like DeepChannel BIBREF8 , rnn-ext+RL BIBREF9 and NeuSUM BIBREF2 achieve higher performances using well-designed structures. For example, DeepChannel propose a salience estimation network and iteratively extract salient sentences. BIBREF16 train a sentence compression model to teach another latent variable extractive model.",
+        "Also, several recent works focus on improving abstractive methods. BIBREF3 design a content selector to over-determine phrases in a source document that should be part of the summary. BIBREF11 introduce inconsistency loss to force words in less attended sentences(which determined by extractive model) to have lower generation probabilities. BIBREF5 extend seq2seq model with an information selection network to generate more informative summaries."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Text Summarization",
+        "Text Summarization",
+        "Text Summarization",
+        "Text Summarization",
+        "Text Summarization"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Text Summarization",
+          0
+        ],
+        [
+          "Text Summarization",
+          1
+        ],
+        [
+          "Text Summarization",
+          2
+        ],
+        [
+          "Text Summarization",
+          3
+        ],
+        [
+          "Text Summarization",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Text Summarization",
+      "section": "Text Summarization",
+      "title_path": "Text Summarization",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Summary Draft Generation\n[source_id=32] The summary draft is based on the sequence-to-sequence model. On the encoder side the input document $X$ is encoded into representation vectors $H = \\lbrace h_1, \\ldots , h_m\\rbrace $ , and then fed to the decoder to generate the summary draft $A = \\lbrace a_1, \\ldots , a_{|a|}\\rbrace $ .\n[source_id=33] We simply use BERT as the encoder. It first maps the input sequence to word embeddings and then computes document embeddings as the encoder's output, denoted by following equation.\n[source_id=34] $$H = BERT(x_1, \\ldots , x_m)$$   (Eq. 10)\n[source_id=35] In the draft decoder, we first introduce BERT's word embedding matrix to map the previous summary draft outputs $\\lbrace y_1, \\ldots , y_{t-1}\\rbrace $ into embeddings vectors $\\lbrace q_1, \\ldots , q_{t-1}\\rbrace $ at t-th time step. Note that as the input sequence of the decoder is not complete, we do not use the BERT network to predict the context vectors here.\n[source_id=36] Then we introduce an $N$ layer Transformer decoder to learn the conditional probability $P(A|H)$ . Transformer's decoder-encoder multi-head attention helps the decoder learn soft alignments between summary and source document. At the t-th time step, the draft decoder predicts output probability conditioned on previous outputs and encoder hidden representations as Eq. ( 13 ) shows, in which $q_{<t} = \\lbrace q_1, \\ldots , q_{t-1}\\rbrace $ . Each generated sequence will be truncated in the first position of a special token '[PAD]'.\n[source_id=37] $$&P^{vocab}_t(w) = f_{dec}(q_{<t}, H)  \\\\\n&L_{dec} = \\sum _{i=1}^{|a|} -\\log P(a_i = y_i^*|a_{< i}, H) $$   (Eq. 13)\n[source_id=38] As Eq. () shows, the decoder's learning objective is to minimize negative likelihood of conditional probability, in which $y_i^*$ is the i-th ground truth word of summary.\n[source_id=39] However a decoder with this structure is not sufficient enough: if we use the BERT network in this decoder, then during training and inference, in-complete context(part of sentence) is fed into the BERT module, and although we can fine-tune BERT's parameters, the input distribution is quite different from the pre-train process, and thus harms the quality of generated context representations.\n[source_id=40] If we just use the embedding matrix here, it will be more difficult for the decoder with fresh parameters to learn to model representations as well as vocabulary probabilities, from a relative small corpus compared to BERT's huge pre-training corpus. In a word, the decoder cannot utilize BERT's ability to generate high quality context vectors, which will also harm performance.\n[source_id=41] This issue exists when using any other contextualized word representations, so we design a refine process to mitigate it in our approach which will be described in the next sub-section.\n[source_id=42] As some summary tokens are out-of-vocabulary words and occurs in input document, we incorporate copy mechanism BIBREF6 based on the Transformer decoder, we will describe it briefly.\n[source_id=43] At decoder time step $t$ , we first calculate the attention probability distribution over source document $X$ using the bi-linear dot product of the last layer decoder output of Transformer $o_t$ and the encoder output $h_j$ , as Eq. ( 15 ) () shows.\n[source_id=44] $$u_t^j =& o_t W_c h_j \\\\\n\\alpha _t^j =& \\cfrac{\\exp {u_t^j}}{\\sum _{k=1}^N\\exp {u_t^k}} $$   (Eq. 15)\n[source_id=45] We then calculate copying gate $g_t\\in [0, 1]$ , which makes a soft choice between selecting from source and generating from vocabulary, $W_c, W_g, b_g$ are parameters:\n[source_id=46] $$g_t = sigmoid(W_g \\cdot [o_t, h] + b_g) $$   (Eq. 16)\n[source_id=47] Using $g_t$ we calculate the weighted sum of copy probability and generation probability to get the final predicted probability of extended vocabulary $\\mathcal {V} + \\mathcal {X}$ , where $\\mathcal {X}$ is the set of out of vocabulary words from the source document. The final probability is calculated as follow:\n[source_id=48] $$P_t(w) = (1-g_t)P_t^{vocab}(w) + g_t\\sum _{i:w_i=w} \\alpha _t^i$$   (Eq. 17)",
+      "score": 2.053858922879108,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48
+      ],
+      "child_qasper_evidence_texts": [
+        "The summary draft is based on the sequence-to-sequence model. On the encoder side the input document $X$ is encoded into representation vectors $H = \\lbrace h_1, \\ldots , h_m\\rbrace $ , and then fed to the decoder to generate the summary draft $A = \\lbrace a_1, \\ldots , a_{|a|}\\rbrace $ .",
+        "We simply use BERT as the encoder. It first maps the input sequence to word embeddings and then computes document embeddings as the encoder's output, denoted by following equation.",
+        "$$H = BERT(x_1, \\ldots , x_m)$$   (Eq. 10)",
+        "In the draft decoder, we first introduce BERT's word embedding matrix to map the previous summary draft outputs $\\lbrace y_1, \\ldots , y_{t-1}\\rbrace $ into embeddings vectors $\\lbrace q_1, \\ldots , q_{t-1}\\rbrace $ at t-th time step. Note that as the input sequence of the decoder is not complete, we do not use the BERT network to predict the context vectors here.",
+        "Then we introduce an $N$ layer Transformer decoder to learn the conditional probability $P(A|H)$ . Transformer's decoder-encoder multi-head attention helps the decoder learn soft alignments between summary and source document. At the t-th time step, the draft decoder predicts output probability conditioned on previous outputs and encoder hidden representations as Eq. ( 13 ) shows, in which $q_{<t} = \\lbrace q_1, \\ldots , q_{t-1}\\rbrace $ . Each generated sequence will be truncated in the first position of a special token '[PAD]'.",
+        "$$&P^{vocab}_t(w) = f_{dec}(q_{<t}, H)  \\\\\n&L_{dec} = \\sum _{i=1}^{|a|} -\\log P(a_i = y_i^*|a_{< i}, H) $$   (Eq. 13)",
+        "As Eq. () shows, the decoder's learning objective is to minimize negative likelihood of conditional probability, in which $y_i^*$ is the i-th ground truth word of summary.",
+        "However a decoder with this structure is not sufficient enough: if we use the BERT network in this decoder, then during training and inference, in-complete context(part of sentence) is fed into the BERT module, and although we can fine-tune BERT's parameters, the input distribution is quite different from the pre-train process, and thus harms the quality of generated context representations.",
+        "If we just use the embedding matrix here, it will be more difficult for the decoder with fresh parameters to learn to model representations as well as vocabulary probabilities, from a relative small corpus compared to BERT's huge pre-training corpus. In a word, the decoder cannot utilize BERT's ability to generate high quality context vectors, which will also harm performance.",
+        "This issue exists when using any other contextualized word representations, so we design a refine process to mitigate it in our approach which will be described in the next sub-section.",
+        "As some summary tokens are out-of-vocabulary words and occurs in input document, we incorporate copy mechanism BIBREF6 based on the Transformer decoder, we will describe it briefly.",
+        "At decoder time step $t$ , we first calculate the attention probability distribution over source document $X$ using the bi-linear dot product of the last layer decoder output of Transformer $o_t$ and the encoder output $h_j$ , as Eq. ( 15 ) () shows.",
+        "$$u_t^j =& o_t W_c h_j \\\\\n\\alpha _t^j =& \\cfrac{\\exp {u_t^j}}{\\sum _{k=1}^N\\exp {u_t^k}} $$   (Eq. 15)",
+        "We then calculate copying gate $g_t\\in [0, 1]$ , which makes a soft choice between selecting from source and generating from vocabulary, $W_c, W_g, b_g$ are parameters:",
+        "$$g_t = sigmoid(W_g \\cdot [o_t, h] + b_g) $$   (Eq. 16)",
+        "Using $g_t$ we calculate the weighted sum of copy probability and generation probability to get the final predicted probability of extended vocabulary $\\mathcal {V} + \\mathcal {X}$ , where $\\mathcal {X}$ is the set of out of vocabulary words from the source document. The final probability is calculated as follow:",
+        "$$P_t(w) = (1-g_t)P_t^{vocab}(w) + g_t\\sum _{i:w_i=w} \\alpha _t^i$$   (Eq. 17)"
+      ],
+      "child_pages": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "child_sections": [
+        "Summary Draft Generation",
+        "Summary Draft Generation",
+        "Summary Draft Generation",
+        "Summary Draft Generation",
+        "Summary Draft Generation",
+        "Summary Draft Generation",
+        "Summary Draft Generation",
+        "Summary Draft Generation",
+        "Summary Draft Generation",
+        "Summary Draft Generation",
+        "Summary Draft Generation",
+        "Summary Draft Generation",
+        "Summary Draft Generation",
+        "Summary Draft Generation",
+        "Summary Draft Generation",
+        "Summary Draft Generation",
+        "Summary Draft Generation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Summary Draft Generation",
+          0
+        ],
+        [
+          "Summary Draft Generation",
+          1
+        ],
+        [
+          "Summary Draft Generation",
+          2
+        ],
+        [
+          "Summary Draft Generation",
+          3
+        ],
+        [
+          "Summary Draft Generation",
+          4
+        ],
+        [
+          "Summary Draft Generation",
+          5
+        ],
+        [
+          "Summary Draft Generation",
+          6
+        ],
+        [
+          "Summary Draft Generation",
+          7
+        ],
+        [
+          "Summary Draft Generation",
+          8
+        ],
+        [
+          "Summary Draft Generation",
+          9
+        ],
+        [
+          "Summary Draft Generation",
+          10
+        ],
+        [
+          "Summary Draft Generation",
+          11
+        ],
+        [
+          "Summary Draft Generation",
+          12
+        ],
+        [
+          "Summary Draft Generation",
+          13
+        ],
+        [
+          "Summary Draft Generation",
+          14
+        ],
+        [
+          "Summary Draft Generation",
+          15
+        ],
+        [
+          "Summary Draft Generation",
+          16
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Summary Draft Generation",
+      "section": "Summary Draft Generation",
+      "title_path": "Summary Draft Generation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Settings\n[source_id=64] In this work, all of our models are built on $BERT_{BASE}$ , although another larger pre-trained model with better performance ( $BERT_{LARGE}$ ) has published but it costs too much time and GPU memory. We use WordPiece embeddings with a 30,000 vocabulary which is the same as BERT. We set the layer of transformer decoders to 12(8 on NYT50), and set the attention heads number to 12(8 on NYT50), set fully-connected sub-layer hidden size to 3072. We train the model using an Adam optimizer with learning rate of $3e-4$ , $\\beta _1=0.9$ , $\\beta _2=0.999$ and $\\epsilon =10^{-9}$ and use a dynamic learning rate during the training process. For regularization, we use dropout BIBREF13 and label smoothing BIBREF14 in our models and set the dropout rate to 0.15, and the label smoothing value to 0.1. We set the RL objective factor $\\gamma $ to 0.99.\n[source_id=65] During training, we set the batch size to 36, and train for 4 epochs(8 epochs for NYT50 since it has many fewer training samples), after training the best model are selected from last 10 models based on development set performance. Due to GPU memory limit, we use gradient accumulation, set accumulate step to 12 and feed 3 samples at each step. We use beam size 4 and length penalty of 1.0 to generate logical form sequences.\n[source_id=66] We filter repeated tri-grams in beam-search process by setting word probability to zero if it will generate an tri-gram which exists in the existing summary. It is a nice method to avoid phrase repetition since the two datasets seldom contains repeated tri-grams in one summary. We also fine tune the generated sequences using another two simple rules. When there are multi summary sentences with exactly the same content, we keep the first one and remove the other sentences; we also remove sentences with less than 3 words from the result.\n[source_id=67] To evaluate the performance of our model, we conduct experiments on CNN/Daily Mail dataset, which is a large collection of news articles and modified for summarization. Following BIBREF0 we choose the non-anonymized version of the dataset, which consists of more than 280,000 training samples and 11490 test set samples.\n[source_id=68] We also conduct experiments on the New York Times(NYT) dataset which also consists of many news articles. The original dataset can be applied here. In our experiment, we follow the dataset splits and other pre-process settings of BIBREF15 . We first filter all samples without a full article text or abstract and then remove all samples with summaries shorter than 50 words. Then we choose the test set based on the date of publication(all examples published after January 1, 2007). The final dataset contains 22,000 training samples and 3,452 test samples and is called NYT50 since all summaries are longer than 50 words.\n[source_id=69] We tokenize all sequences of the two datasets using the WordPiece tokenizer. After tokenizing, the average article length and summary length of CNN/Daily Mail are 691 and 51, and NYT50's average article length and summary length are 1152 and 75. We truncate the article length to 512, and the summary length to 100 in our experiment(max summary length is set to 150 on NYT50 as its average golden summary length is longer).\n[source_id=70] On CNN/Daily Mail dataset, we report the full-length F-1 score of the ROUGE-1, ROUGE-2 and ROUGE-L metrics, calculated using PyRouge package and the Porter stemmer option. On NYT50, following BIBREF4 we evaluate limited length ROUGE recall score(limit the generated summary length to the ground truth length). We split NYT50 summaries into sentences by semicolons to calculate the ROUGE scores.",
+      "score": 1.9304363117070695,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70
+      ],
+      "child_qasper_evidence_texts": [
+        "In this work, all of our models are built on $BERT_{BASE}$ , although another larger pre-trained model with better performance ( $BERT_{LARGE}$ ) has published but it costs too much time and GPU memory. We use WordPiece embeddings with a 30,000 vocabulary which is the same as BERT. We set the layer of transformer decoders to 12(8 on NYT50), and set the attention heads number to 12(8 on NYT50), set fully-connected sub-layer hidden size to 3072. We train the model using an Adam optimizer with learning rate of $3e-4$ , $\\beta _1=0.9$ , $\\beta _2=0.999$ and $\\epsilon =10^{-9}$ and use a dynamic learning rate during the training process. For regularization, we use dropout BIBREF13 and label smoothing BIBREF14 in our models and set the dropout rate to 0.15, and the label smoothing value to 0.1. We set the RL objective factor $\\gamma $ to 0.99.",
+        "During training, we set the batch size to 36, and train for 4 epochs(8 epochs for NYT50 since it has many fewer training samples), after training the best model are selected from last 10 models based on development set performance. Due to GPU memory limit, we use gradient accumulation, set accumulate step to 12 and feed 3 samples at each step. We use beam size 4 and length penalty of 1.0 to generate logical form sequences.",
+        "We filter repeated tri-grams in beam-search process by setting word probability to zero if it will generate an tri-gram which exists in the existing summary. It is a nice method to avoid phrase repetition since the two datasets seldom contains repeated tri-grams in one summary. We also fine tune the generated sequences using another two simple rules. When there are multi summary sentences with exactly the same content, we keep the first one and remove the other sentences; we also remove sentences with less than 3 words from the result.",
+        "To evaluate the performance of our model, we conduct experiments on CNN/Daily Mail dataset, which is a large collection of news articles and modified for summarization. Following BIBREF0 we choose the non-anonymized version of the dataset, which consists of more than 280,000 training samples and 11490 test set samples.",
+        "We also conduct experiments on the New York Times(NYT) dataset which also consists of many news articles. The original dataset can be applied here. In our experiment, we follow the dataset splits and other pre-process settings of BIBREF15 . We first filter all samples without a full article text or abstract and then remove all samples with summaries shorter than 50 words. Then we choose the test set based on the date of publication(all examples published after January 1, 2007). The final dataset contains 22,000 training samples and 3,452 test samples and is called NYT50 since all summaries are longer than 50 words.",
+        "We tokenize all sequences of the two datasets using the WordPiece tokenizer. After tokenizing, the average article length and summary length of CNN/Daily Mail are 691 and 51, and NYT50's average article length and summary length are 1152 and 75. We truncate the article length to 512, and the summary length to 100 in our experiment(max summary length is set to 150 on NYT50 as its average golden summary length is longer).",
+        "On CNN/Daily Mail dataset, we report the full-length F-1 score of the ROUGE-1, ROUGE-2 and ROUGE-L metrics, calculated using PyRouge package and the Porter stemmer option. On NYT50, following BIBREF4 we evaluate limited length ROUGE recall score(limit the generated summary length to the ground truth length). We split NYT50 summaries into sentences by semicolons to calculate the ROUGE scores."
+      ],
+      "child_pages": [
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        9
+      ],
+      "child_sections": [
+        "Settings",
+        "Settings",
+        "Settings",
+        "Settings",
+        "Settings",
+        "Settings",
+        "Settings"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Settings",
+          0
+        ],
+        [
+          "Settings",
+          1
+        ],
+        [
+          "Settings",
+          2
+        ],
+        [
+          "Settings",
+          3
+        ],
+        [
+          "Settings",
+          4
+        ],
+        [
+          "Settings",
+          5
+        ],
+        [
+          "Settings",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Settings",
+      "section": "Settings",
+      "title_path": "Settings",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Additional Results on NYT50\n[source_id=78] Table 2 shows experiments on the NYT50 corpus. Since the short summary samples are filtered, NYT50 has average longer summaries than CNN/Daily Mail. So the model needs to catch long-term dependency of the sequences to generate good summaries.\n[source_id=79] The first two lines of Table 2 show results of the two baselines introduced by BIBREF15 : these baselines select first n sentences, or select the first k words from the original document. Also we compare performance of our model with two recent models, we see 2.39 ROUGE-1 improvements compared to the ML+RL with intra-attn approach(previous SOTA) carries over to this dataset, which is a large margin. On ROUGE-2, our model also get an improvement of 0.51. The experiment proves that our approach can outperform competitive methods on different data distributions.",
+      "score": 1.5463350091611536,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        78,
+        79
+      ],
+      "child_qasper_evidence_texts": [
+        "Table 2 shows experiments on the NYT50 corpus. Since the short summary samples are filtered, NYT50 has average longer summaries than CNN/Daily Mail. So the model needs to catch long-term dependency of the sequences to generate good summaries.",
+        "The first two lines of Table 2 show results of the two baselines introduced by BIBREF15 : these baselines select first n sentences, or select the first k words from the original document. Also we compare performance of our model with two recent models, we see 2.39 ROUGE-1 improvements compared to the ML+RL with intra-attn approach(previous SOTA) carries over to this dataset, which is a large margin. On ROUGE-2, our model also get an improvement of 0.51. The experiment proves that our approach can outperform competitive methods on different data distributions."
+      ],
+      "child_pages": [
+        11,
+        11
+      ],
+      "child_sections": [
+        "Additional Results on NYT50",
+        "Additional Results on NYT50"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Additional Results on NYT50",
+          0
+        ],
+        [
+          "Additional Results on NYT50",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Additional Results on NYT50",
+      "section": "Additional Results on NYT50",
+      "title_path": "Additional Results on NYT50",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Text summarization generates summaries from input documents while keeping salient information. It is an important task and can be applied to several real-world applications. Many methods have been proposed to solve the text summarization problem BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 . There are two main text summarization techniques: extractive and abstractive. Extractive summarization generates summary by selecting salient sentences or phrases from the source text, while abstractive methods paraphrase and restructure sentences to compose the summary. We focus on abstractive summarization in this work as it is more flexible and thus can generate more diverse summaries.\n[source_id=5] Recently, many abstractive approaches are introduced based on neural sequence-to-sequence framework BIBREF4 , BIBREF0 , BIBREF3 , BIBREF5 . Based on the sequence-to-sequence model with copy mechanism BIBREF6 , BIBREF0 incorporates a coverage vector to track and control attention scores on source text. BIBREF4 introduce intra-temporal attention processes in the encoder and decoder to address the repetition and incoherent problem.\n[source_id=6] There are two issues in previous abstractive methods: 1) these methods use left-context-only decoder, thus do not have complete context when predicting each word. 2) they do not utilize the pre-trained contextualized language models on the decoder side, so it is more difficult for the decoder to learn summary representations, context interactions and language modeling together.\n[source_id=7] Recently, BERT has been successfully used in various natural language processing tasks, such as textual entailment, name entity recognition and machine reading comprehensions. In this paper, we present a novel natural language generation model based on pre-trained language models (we use BERT in this work). As far as we know, this is the first work to extend BERT to the sequence generation task. To address the above issues of previous abstractive methods, in our model, we design a two-stage decoding process to make good use of BERT's context modeling ability. On the first stage, we generate the summary using a left-context-only-decoder. On the second stage, we mask each word of the summary and predict the refined word one-by-one using a refine decoder. To further improve the naturalness of the generated sequence, we cooperate reinforcement objective with the refine decoder.\n[source_id=8] The main contributions of this work are:\n[source_id=9] 1. We propose a natural language generation model based on BERT, making good use of the pre-trained language model in the encoder and decoder process, and the model can be trained end-to-end without handcrafted features.\n[source_id=10] 2. We design a two-stage decoder process. In this architecture, our model can generate each word of the summary considering both sides' context information.\n[source_id=11] 3. We conduct experiments on the benchmark datasets CNN/Daily Mail and New York Times. Our model achieves a 33.33 average of ROUGE-1, ROUGE-2 and ROUGE-L on the CNN/Daily Mail, which is state-of-the-art. On the New York Times dataset, our model achieves about 5.6% relative improvement over ROUGE-1.",
+      "score": 0.9981660919551623,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "child_qasper_evidence_texts": [
+        "Text summarization generates summaries from input documents while keeping salient information. It is an important task and can be applied to several real-world applications. Many methods have been proposed to solve the text summarization problem BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 . There are two main text summarization techniques: extractive and abstractive. Extractive summarization generates summary by selecting salient sentences or phrases from the source text, while abstractive methods paraphrase and restructure sentences to compose the summary. We focus on abstractive summarization in this work as it is more flexible and thus can generate more diverse summaries.",
+        "Recently, many abstractive approaches are introduced based on neural sequence-to-sequence framework BIBREF4 , BIBREF0 , BIBREF3 , BIBREF5 . Based on the sequence-to-sequence model with copy mechanism BIBREF6 , BIBREF0 incorporates a coverage vector to track and control attention scores on source text. BIBREF4 introduce intra-temporal attention processes in the encoder and decoder to address the repetition and incoherent problem.",
+        "There are two issues in previous abstractive methods: 1) these methods use left-context-only decoder, thus do not have complete context when predicting each word. 2) they do not utilize the pre-trained contextualized language models on the decoder side, so it is more difficult for the decoder to learn summary representations, context interactions and language modeling together.",
+        "Recently, BERT has been successfully used in various natural language processing tasks, such as textual entailment, name entity recognition and machine reading comprehensions. In this paper, we present a novel natural language generation model based on pre-trained language models (we use BERT in this work). As far as we know, this is the first work to extend BERT to the sequence generation task. To address the above issues of previous abstractive methods, in our model, we design a two-stage decoding process to make good use of BERT's context modeling ability. On the first stage, we generate the summary using a left-context-only-decoder. On the second stage, we mask each word of the summary and predict the refined word one-by-one using a refine decoder. To further improve the naturalness of the generated sequence, we cooperate reinforcement objective with the refine decoder.",
+        "The main contributions of this work are:",
+        "1. We propose a natural language generation model based on BERT, making good use of the pre-trained language model in the encoder and decoder process, and the model can be trained end-to-end without handcrafted features.",
+        "2. We design a two-stage decoder process. In this architecture, our model can generate each word of the summary considering both sides' context information.",
+        "3. We conduct experiments on the benchmark datasets CNN/Daily Mail and New York Times. Our model achieves a 33.33 average of ROUGE-1, ROUGE-2 and ROUGE-L on the CNN/Daily Mail, which is state-of-the-art. On the New York Times dataset, our model achieves about 5.6% relative improvement over ROUGE-1."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ],
+        [
+          "Introduction",
+          5
+        ],
+        [
+          "Introduction",
+          6
+        ],
+        [
+          "Introduction",
+          7
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] In this paper, we propose a novel pretraining-based encoder-decoder framework, which can generate the output sequence based on the input sequence in a two-stage manner. For the encoder of our model, we encode the input sequence into context representations using BERT. For the decoder, there are two stages in our model, in the first stage, we use a Transformer-based decoder to generate a draft output sequence. In the second stage, we mask each word of the draft sequence and feed it to BERT, then by combining the input sequence and the draft representation generated by BERT, we use a Transformer-based decoder to predict the refined word for each masked position. To the best of our knowledge, our approach is the first method which applies the BERT into text generation tasks. As the first step in this direction, we evaluate our proposed method on the text summarization task. Experimental results show that our model achieves new state-of-the-art on both CNN/Daily Mail and New York Times datasets.",
+      "score": 0.9681243124963259,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper, we propose a novel pretraining-based encoder-decoder framework, which can generate the output sequence based on the input sequence in a two-stage manner. For the encoder of our model, we encode the input sequence into context representations using BERT. For the decoder, there are two stages in our model, in the first stage, we use a Transformer-based decoder to generate a draft output sequence. In the second stage, we mask each word of the draft sequence and feed it to BERT, then by combining the input sequence and the draft representation generated by BERT, we use a Transformer-based decoder to predict the refined word for each masked position. To the best of our knowledge, our approach is the first method which applies the BERT into text generation tasks. As the first step in this direction, we evaluate our proposed method on the text summarization task. Experimental results show that our model achieves new state-of-the-art on both CNN/Daily Mail and New York Times datasets."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Model\n[source_id=26] In this section, we describe the structure of our model, which learns to generate an abstractive multi-sentence summary from a given source document.\n[source_id=27] Based on the sequence-to-sequence framework built on top of BERT, we first design a refine decoder at word-level to tackle the two problems described in the above section. We also introduce a discrete objective for the refine decoders to reduce the exposure bias problem. The overall structure of our model is illustrated in Figure 1 .",
+      "score": 0.8745178971704686,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        26,
+        27
+      ],
+      "child_qasper_evidence_texts": [
+        "In this section, we describe the structure of our model, which learns to generate an abstractive multi-sentence summary from a given source document.",
+        "Based on the sequence-to-sequence framework built on top of BERT, we first design a refine decoder at word-level to tackle the two problems described in the above section. We also introduce a discrete objective for the refine decoders to reduce the exposure bias problem. The overall structure of our model is illustrated in Figure 1 ."
+      ],
+      "child_pages": [
+        4,
+        4
+      ],
+      "child_sections": [
+        "Model",
+        "Model"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Model",
+          0
+        ],
+        [
+          "Model",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Model",
+      "section": "Model",
+      "title_path": "Model",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 50,
+      "content": "The main reason to introduce the refine process is to enhance the decoder using BERT's contextualized representations, so we do not modify the encoder and reuse it during this process.",
+      "qasper_evidence_text": "The main reason to introduce the refine process is to enhance the decoder using BERT's contextualized representations, so we do not modify the encoder and reuse it during this process.",
+      "source_node_id": 50,
+      "node_id": 50,
+      "paragraph_id": 50,
+      "evidence_id": 50,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_7",
+      "rank": 1,
+      "score": 2.5710907397023552,
+      "block_type": "paragraph",
+      "page": 7,
+      "section_id": "Summary Refine Process",
+      "section": "Summary Refine Process",
+      "title": "Summary Refine Process",
+      "hotpot_title": "Summary Refine Process",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 55,
+      "content": "We design the word-level refine decoder because this process is similar to the cloze task in BERT's pre-train process, therefore by using the ability of the contextual language model the decoder can generate more fluent and natural sequences.",
+      "qasper_evidence_text": "We design the word-level refine decoder because this process is similar to the cloze task in BERT's pre-train process, therefore by using the ability of the contextual language model the decoder can generate more fluent and natural sequences.",
+      "source_node_id": 55,
+      "node_id": 55,
+      "paragraph_id": 55,
+      "evidence_id": 55,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_7",
+      "rank": 1,
+      "score": 2.5710907397023552,
+      "block_type": "paragraph",
+      "page": 7,
+      "section_id": "Summary Refine Process",
+      "section": "Summary Refine Process",
+      "title": "Summary Refine Process",
+      "hotpot_title": "Summary Refine Process",
+      "sent_id": 5,
+      "hotpot_sent_id": 5,
+      "supporting_rank": 2
+    },
+    {
+      "id": 51,
+      "content": "On the decoder side, we propose a new word-level refine decoder. The refine decoder receives a generated summary draft as input, and outputs a refined summary. It first masks each word in the summary draft one by one, then feeds the draft to BERT to generate context vectors. Finally it predicts a refined summary word using an $N$ layer Transformer decoder which is the same as the draft decoder. At t-th time step the n-th word of input summary is masked, and the decoder predicts the n-th refined word given other words of the summary.",
+      "qasper_evidence_text": "On the decoder side, we propose a new word-level refine decoder. The refine decoder receives a generated summary draft as input, and outputs a refined summary. It first masks each word in the summary draft one by one, then feeds the draft to BERT to generate context vectors. Finally it predicts a refined summary word using an $N$ layer Transformer decoder which is the same as the draft decoder. At t-th time step the n-th word of input summary is masked, and the decoder predicts the n-th refined word given other words of the summary.",
+      "source_node_id": 51,
+      "node_id": 51,
+      "paragraph_id": 51,
+      "evidence_id": 51,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_7",
+      "rank": 1,
+      "score": 2.5710907397023552,
+      "block_type": "paragraph",
+      "page": 7,
+      "section_id": "Summary Refine Process",
+      "section": "Summary Refine Process",
+      "title": "Summary Refine Process",
+      "hotpot_title": "Summary Refine Process",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 3
+    }
+  ],
+  "supporting_block_ids": [
+    50,
+    55,
+    51
+  ]
+}

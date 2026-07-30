@@ -1,0 +1,88 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Analysis\n[source_id=59] We now examine the behavior of CRAFT in greater detail, to better understand its benefits and limitations. We specifically address the following questions: (1) How much early warning does the the model provide? (2) Does the model actually learn an order-sensitive representation of conversational context?\n[source_id=60] Early warning, but how early? The recent interest in forecasting antisocial behavior has been driven by a desire to provide pre-emptive, actionable warning to moderators. But does our model trigger early enough for any such practical goals?\n[source_id=61] For each personal attack correctly forecasted by our model, we count the number of comments elapsed between the time the model is first triggered and the attack. Figure FIGREF22 shows the distribution of these counts: on average, the model warns of an attack 3 comments before it actually happens (4 comments for CMV). To further evaluate how much time this early warning would give to the moderator, we also consider the difference in timestamps between the comment where the model first triggers and the comment containing the actual attack. Over 50% of conversations get at least 3 hours of advance warning (2 hours for CMV). Moreover, 39% of conversations get at least 12 hours of early warning before they derail.\n[source_id=62] Does order matter? One motivation behind the design of our model was the intuition that comments in a conversation are not independent events; rather, the order in which they appear matters (e.g., a blunt comment followed by a polite one feels intuitively different from a polite comment followed by a blunt one). By design, CRAFT has the capacity to learn an order-sensitive representation of conversational context, but how can we know that this capacity is actually used? It is conceivable that the model is simply computing an order-insensitive “bag-of-features”. Neural network models are notorious for their lack of transparency, precluding an analysis of how exactly CRAFT models conversational context. Nevertheless, through two simple exploratory experiments, we seek to show that it does not completely ignore comment order.\n[source_id=63] The first experiment for testing whether the model accounts for comment order is a prefix-shuffling experiment, visualized in Figure FIGREF23. For each conversation that the model predicts will derail, let $t$ denote the index of the triggering comment, i.e., the index where the model first made a derailment forecast. We then construct synthetic conversations by taking the first $t-1$ comments (henceforth referred to as the prefix) and randomizing their order. Finally, we count how often the model no longer predicts derailment at index $t$ in the synthetic conversations. If the model were ignoring comment order, its prediction should remain unchanged (as it remains for the Cumulative BoW baseline), since the actual content of the first $t$ comments has not changed (and CRAFT inference is deterministic). We instead find that in roughly one fifth of cases (12% for CMV) the model changes its prediction on the synthetic conversations. This suggests that CRAFT learns an order-sensitive representation of context, not a mere “bag-of-features”.\n[source_id=64] To more concretely quantify how much this order-sensitive context modeling helps with prediction, we can actively prevent the model from learning and exploiting any order-related dynamics. We achieve this through another type of shuffling experiment, where we go back even further and shuffle the comment order in the conversations used for pre-training, fine-tuning and testing. This procedure preserves the model's ability to capture signals present within the individual comments processed so far, as the utterance encoder is unaffected, but inhibits it from capturing any meaningful order-sensitive dynamics. We find that this hurts the model's performance (65% accuracy for Wikipedia, 59.5% for CMV), lowering it to a level similar to that of the version where we completely disable the context encoder.\n[source_id=65] Taken together, these experiments provide evidence that CRAFT uses its capacity to model conversational context in an order-sensitive fashion, and that it makes effective use of the dynamics within. An important avenue for future work would be developing more transparent models that can shed light on exactly what kinds of order-related features are being extracted and how they are used in prediction.",
+  "score": 2.061827463006588,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65
+  ],
+  "child_qasper_evidence_texts": [
+    "We now examine the behavior of CRAFT in greater detail, to better understand its benefits and limitations. We specifically address the following questions: (1) How much early warning does the the model provide? (2) Does the model actually learn an order-sensitive representation of conversational context?",
+    "Early warning, but how early? The recent interest in forecasting antisocial behavior has been driven by a desire to provide pre-emptive, actionable warning to moderators. But does our model trigger early enough for any such practical goals?",
+    "For each personal attack correctly forecasted by our model, we count the number of comments elapsed between the time the model is first triggered and the attack. Figure FIGREF22 shows the distribution of these counts: on average, the model warns of an attack 3 comments before it actually happens (4 comments for CMV). To further evaluate how much time this early warning would give to the moderator, we also consider the difference in timestamps between the comment where the model first triggers and the comment containing the actual attack. Over 50% of conversations get at least 3 hours of advance warning (2 hours for CMV). Moreover, 39% of conversations get at least 12 hours of early warning before they derail.",
+    "Does order matter? One motivation behind the design of our model was the intuition that comments in a conversation are not independent events; rather, the order in which they appear matters (e.g., a blunt comment followed by a polite one feels intuitively different from a polite comment followed by a blunt one). By design, CRAFT has the capacity to learn an order-sensitive representation of conversational context, but how can we know that this capacity is actually used? It is conceivable that the model is simply computing an order-insensitive “bag-of-features”. Neural network models are notorious for their lack of transparency, precluding an analysis of how exactly CRAFT models conversational context. Nevertheless, through two simple exploratory experiments, we seek to show that it does not completely ignore comment order.",
+    "The first experiment for testing whether the model accounts for comment order is a prefix-shuffling experiment, visualized in Figure FIGREF23. For each conversation that the model predicts will derail, let $t$ denote the index of the triggering comment, i.e., the index where the model first made a derailment forecast. We then construct synthetic conversations by taking the first $t-1$ comments (henceforth referred to as the prefix) and randomizing their order. Finally, we count how often the model no longer predicts derailment at index $t$ in the synthetic conversations. If the model were ignoring comment order, its prediction should remain unchanged (as it remains for the Cumulative BoW baseline), since the actual content of the first $t$ comments has not changed (and CRAFT inference is deterministic). We instead find that in roughly one fifth of cases (12% for CMV) the model changes its prediction on the synthetic conversations. This suggests that CRAFT learns an order-sensitive representation of context, not a mere “bag-of-features”.",
+    "To more concretely quantify how much this order-sensitive context modeling helps with prediction, we can actively prevent the model from learning and exploiting any order-related dynamics. We achieve this through another type of shuffling experiment, where we go back even further and shuffle the comment order in the conversations used for pre-training, fine-tuning and testing. This procedure preserves the model's ability to capture signals present within the individual comments processed so far, as the utterance encoder is unaffected, but inhibits it from capturing any meaningful order-sensitive dynamics. We find that this hurts the model's performance (65% accuracy for Wikipedia, 59.5% for CMV), lowering it to a level similar to that of the version where we completely disable the context encoder.",
+    "Taken together, these experiments provide evidence that CRAFT uses its capacity to model conversational context in an order-sensitive fashion, and that it makes effective use of the dynamics within. An important avenue for future work would be developing more transparent models that can shed light on exactly what kinds of order-related features are being extracted and how they are used in prediction."
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Analysis",
+    "Analysis",
+    "Analysis",
+    "Analysis",
+    "Analysis",
+    "Analysis",
+    "Analysis"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Analysis",
+      0
+    ],
+    [
+      "Analysis",
+      1
+    ],
+    [
+      "Analysis",
+      2
+    ],
+    [
+      "Analysis",
+      3
+    ],
+    [
+      "Analysis",
+      4
+    ],
+    [
+      "Analysis",
+      5
+    ],
+    [
+      "Analysis",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Analysis",
+  "section": "Analysis",
+  "title_path": "Analysis",
+  "block_type": "long_unit"
+}

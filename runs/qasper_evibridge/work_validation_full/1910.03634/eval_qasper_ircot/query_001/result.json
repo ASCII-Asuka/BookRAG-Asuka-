@@ -1,0 +1,66 @@
+{
+  "question": "What models are used for painting embedding and what for language style transfer?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "generating a poem from images we use an existing actor-critic architecture",
+        "various types of sequence to sequence models"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "For generating a poem from images we use an existing actor-critic architecture BIBREF1. This involves 3 parallel CNNs: an object CNN, sentiment CNN, and scene CNN, for feature extraction. These features are combined with a skip-thought model which provides poetic clues, which are then fed into a sequence-to-sequence model trained by policy gradient with 2 discriminator networks for rewards. This as a whole forms a pipeline that takes in an image and outputs a poem as shown on the top left of Figure FIGREF4. A CNN-RNN generative model acts as an agent. The parameters of this agent define a policy whose execution determines which word is selected as an action. When the agent selects all words in a poem, it receives a reward. Two discriminative networks, shown on the top right of Figure FIGREF4, are defined to serve as rewards concerning whether the generated poem properly describes the input image and whether the generated poem is poetic. The goal of the poem generation model is to generate a sequence of words as a poem for an image to maximize the expected return.",
+        "For Shakespearizing modern English texts, we experimented with various types of sequence to sequence models. Since the size of the parallel translation data available is small, we leverage a dictionary providing a mapping between Shakespearean words and modern English words to retrofit pre-trained word embeddings. Incorporating this extra information improves the translation task. The large number of shared word types between the source and target sentences indicates that sharing the representation between them is beneficial.",
+        "We use a sequence-to-sequence model which consists of a single layer unidrectional LSTM encoder and a single layer LSTM decoder and pre-trained retrofitted word embeddings shared between source and target sentences. We experimented with two different types of attention: global attention BIBREF9, in which the model makes use of the output from the encoder and decoder for the current time step only, and Bahdanau attention BIBREF10, where computing attention requires the output of the decoder from the prior time step. We found that global attention performs better in practice for our task of text style transfer.",
+        "Since a pair of corresponding Shakespeare and modern English sentences have significant vocabulary overlap we extend the sequence-to-sequence model mentioned above using pointer networks BIBREF11 that provide location based attention and have been used to enable copying of tokens directly from the input. Moreover, there are lot of proper nouns and rare words which might not be predicted by a vanilla sequence to sequence model."
+      ],
+      "evidence_block_ids": [
+        13,
+        15,
+        17,
+        19
+      ],
+      "evidence_paragraph_ids": [
+        13,
+        15,
+        17,
+        19
+      ]
+    }
+  ],
+  "doc_uuid": "1910.03634",
+  "doc_path": "qasper://1910.03634",
+  "qasper_question_id": "72e4e26d0dd79c590c28b10938952a9f9497ff1e",
+  "title": "Prose for a Painting",
+  "evidence_block_ids": [
+    13,
+    15,
+    17,
+    19
+  ],
+  "evidence_paragraph_ids": [
+    13,
+    15,
+    17,
+    19
+  ],
+  "output": "{\n  \"answer_short\": \"Painting embedding uses intermediate English poem descriptions; language style transfer uses sequence-to-sequence models and GANs.\",\n  \"answer_rationale\": \"The document states that painting embedding involves using intermediate English poem descriptions to generate Shakespearean prose (Text 1 and Text 2). For language style transfer, sequence-to-sequence models and GANs are employed to transform text into Shakespearean prose (Text 3).\",\n  \"supporting_block_ids\": [2, 4, 7]\n}",
+  "retrieved_node_ids": [
+    2,
+    4,
+    7
+  ],
+  "retrieved_block_ids": [
+    2,
+    4,
+    7
+  ],
+  "answer_short": "Painting embedding uses intermediate English poem descriptions; language style transfer uses sequence-to-sequence models and GANs.",
+  "answer_rationale": "The document states that painting embedding involves using intermediate English poem descriptions to generate Shakespearean prose (Text 1 and Text 2). For language style transfer, sequence-to-sequence models and GANs are employed to transform text into Shakespearean prose (Text 3).",
+  "supporting_block_ids": [
+    2,
+    4,
+    7
+  ]
+}

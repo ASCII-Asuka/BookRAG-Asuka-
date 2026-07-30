@@ -1,0 +1,70 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Methodology ::: Fine-Tuning Strategies\n[source_id=18] Different layers of a neural network can capture different levels of syntactic and semantic information. The lower layer of the BERT model may contain more general information whereas the higher layers contain task-specific information BIBREF11, and we can fine-tune them with different learning rates. Here, four different fine-tuning approaches are implemented that exploit pre-trained BERTbase transformer encoders for our classification task. More information about these transformer encoders' architectures are presented in BIBREF11. In the fine-tuning phase, the model is initialized with the pre-trained parameters and then are fine-tuned using the labelled datasets. Different fine-tuning approaches on the hate speech detection task are depicted in Figure FIGREF8, in which $X_{i}$ is the vector representation of token $i$ in a tweet sample, and are explained in more detail as follows:\n[source_id=19] 1. BERT based fine-tuning: In the first approach, which is shown in Figure FIGREF8, very few changes are applied to the BERTbase. In this architecture, only the [CLS] token output provided by BERT is used. The [CLS] output, which is equivalent to the [CLS] token output of the 12th transformer encoder, a vector of size 768, is given as input to a fully connected network without hidden layer. The softmax activation function is applied to the hidden layer to classify.\n[source_id=20] 2. Insert nonlinear layers: Here, the first architecture is upgraded and an architecture with a more robust classifier is provided in which instead of using a fully connected network without hidden layer, a fully connected network with two hidden layers in size 768 is used. The first two layers use the Leaky Relu activation function with negative slope = 0.01, but the final layer, as the first architecture, uses softmax activation function as shown in Figure FIGREF8.\n[source_id=21] 3. Insert Bi-LSTM layer: Unlike previous architectures that only use [CLS] as the input for the classifier, in this architecture all outputs of the latest transformer encoder are used in such a way that they are given as inputs to a bidirectional recurrent neural network (Bi-LSTM) as shown in Figure FIGREF8. After processing the input, the network sends the final hidden state to a fully connected network that performs classification using the softmax activation function.\n[source_id=22] 4. Insert CNN layer: In this architecture shown in Figure FIGREF8, the outputs of all transformer encoders are used instead of using the output of the latest transformer encoder. So that the output vectors of each transformer encoder are concatenated, and a matrix is produced. The convolutional operation is performed with a window of size (3, hidden size of BERT which is 768 in BERTbase model) and the maximum value is generated for each transformer encoder by applying max pooling on the convolution output. By concatenating these values, a vector is generated which is given as input to a fully connected network. By applying softmax on the input, the classification operation is performed.",
+  "score": 3.1831476629410247,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    18,
+    19,
+    20,
+    21,
+    22
+  ],
+  "child_qasper_evidence_texts": [
+    "Different layers of a neural network can capture different levels of syntactic and semantic information. The lower layer of the BERT model may contain more general information whereas the higher layers contain task-specific information BIBREF11, and we can fine-tune them with different learning rates. Here, four different fine-tuning approaches are implemented that exploit pre-trained BERTbase transformer encoders for our classification task. More information about these transformer encoders' architectures are presented in BIBREF11. In the fine-tuning phase, the model is initialized with the pre-trained parameters and then are fine-tuned using the labelled datasets. Different fine-tuning approaches on the hate speech detection task are depicted in Figure FIGREF8, in which $X_{i}$ is the vector representation of token $i$ in a tweet sample, and are explained in more detail as follows:",
+    "1. BERT based fine-tuning: In the first approach, which is shown in Figure FIGREF8, very few changes are applied to the BERTbase. In this architecture, only the [CLS] token output provided by BERT is used. The [CLS] output, which is equivalent to the [CLS] token output of the 12th transformer encoder, a vector of size 768, is given as input to a fully connected network without hidden layer. The softmax activation function is applied to the hidden layer to classify.",
+    "2. Insert nonlinear layers: Here, the first architecture is upgraded and an architecture with a more robust classifier is provided in which instead of using a fully connected network without hidden layer, a fully connected network with two hidden layers in size 768 is used. The first two layers use the Leaky Relu activation function with negative slope = 0.01, but the final layer, as the first architecture, uses softmax activation function as shown in Figure FIGREF8.",
+    "3. Insert Bi-LSTM layer: Unlike previous architectures that only use [CLS] as the input for the classifier, in this architecture all outputs of the latest transformer encoder are used in such a way that they are given as inputs to a bidirectional recurrent neural network (Bi-LSTM) as shown in Figure FIGREF8. After processing the input, the network sends the final hidden state to a fully connected network that performs classification using the softmax activation function.",
+    "4. Insert CNN layer: In this architecture shown in Figure FIGREF8, the outputs of all transformer encoders are used instead of using the output of the latest transformer encoder. So that the output vectors of each transformer encoder are concatenated, and a matrix is produced. The convolutional operation is performed with a window of size (3, hidden size of BERT which is 768 in BERTbase model) and the maximum value is generated for each transformer encoder by applying max pooling on the convolution output. By concatenating these values, a vector is generated which is given as input to a fully connected network. By applying softmax on the input, the classification operation is performed."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Methodology ::: Fine-Tuning Strategies",
+    "Methodology ::: Fine-Tuning Strategies",
+    "Methodology ::: Fine-Tuning Strategies",
+    "Methodology ::: Fine-Tuning Strategies",
+    "Methodology ::: Fine-Tuning Strategies"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Methodology ::: Fine-Tuning Strategies",
+      0
+    ],
+    [
+      "Methodology ::: Fine-Tuning Strategies",
+      1
+    ],
+    [
+      "Methodology ::: Fine-Tuning Strategies",
+      2
+    ],
+    [
+      "Methodology ::: Fine-Tuning Strategies",
+      3
+    ],
+    [
+      "Methodology ::: Fine-Tuning Strategies",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Methodology ::: Fine-Tuning Strategies",
+  "section": "Methodology ::: Fine-Tuning Strategies",
+  "title_path": "Methodology ::: Fine-Tuning Strategies",
+  "block_type": "long_unit"
+}

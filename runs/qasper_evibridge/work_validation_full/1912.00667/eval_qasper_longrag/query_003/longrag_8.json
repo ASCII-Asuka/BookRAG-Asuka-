@@ -1,0 +1,70 @@
+{
+  "id": "longrag_8",
+  "content": "[Section] Experiments and Results ::: Experimental Setup\n[source_id=58] Datasets. We perform our experiments with two predetermined event categories: cyber security (CyberAttack) and death of politicians (PoliticianDeath). These event categories are chosen as they are representative of important event types that are of interest to many governments and companies. The need to create our own dataset was motivated by the lack of public datasets for event detection on microposts. The few available datasets do not suit our requirements. For example, the publicly available Events-2012 Twitter dataset BIBREF20 contains generic event descriptions such as Politics, Sports, Culture etc. Our work targets more specific event categories BIBREF21. Following previous studies BIBREF1, we collect event-related microposts from Twitter using 11 and 8 seed events (see Section SECREF2) for CyberAttack and PoliticianDeath, respectively. Unlabeled microposts are collected by using the keyword `hack' for CyberAttack, while for PoliticianDeath, we use a set of keywords related to `politician' and `death' (such as `bureaucrat', `dead' etc.) For each dataset, we randomly select 500 tweets from the unlabeled subset and manually label them for evaluation. Table TABREF25 shows key statistics from our two datasets.\n[source_id=59] Comparison Methods. To demonstrate the generality of our approach on different event detection models, we consider Logistic Regression (LR) BIBREF1 and Multilayer Perceptron (MLP) BIBREF2 as the target models. As the goal of our experiments is to demonstrate the effectiveness of our approach as a new model training technique, we use these widely used models. Also, we note that in our case other neural network models with more complex network architectures for event detection, such as the bi-directional LSTM BIBREF17, turn out to be less effective than a simple feedforward network. For both LR and MLP, we evaluate our proposed human-AI loop approach for keyword discovery and expectation estimation by comparing against the weakly supervised learning method proposed by BIBREF1 (BIBREF1) and BIBREF17 (BIBREF17) where only one initial keyword is used with an expectation estimated by an individual expert.\n[source_id=60] Parameter Settings. We empirically set optimal parameters based on a held-out validation set that contains 20% of the test data. These include the hyperparamters of the target model, those of our proposed probabilistic model, and the parameters used for training the target model. We explore MLP with 1, 2 and 3 hidden layers and apply a grid search in 32, 64, 128, 256, 512 for the dimension of the embeddings and that of the hidden layers. For the coefficient of expectation regularization, we follow BIBREF6 (BIBREF6) and set it to $\\lambda =10 \\times $ #labeled examples. For model training, we use the Adam BIBREF22 optimization algorithm for both models.\n[source_id=61] Evaluation. Following BIBREF1 (BIBREF1) and BIBREF3 (BIBREF3), we use accuracy and area under the precision-recall curve (AUC) metrics to measure the performance of our proposed approach. We note that due to the imbalance in our datasets (20% positive microposts in CyberAttack and 27% in PoliticianDeath), accuracy is dominated by negative examples; AUC, in comparison, better characterizes the discriminative power of the model.\n[source_id=62] Crowdsourcing. We chose Level 3 workers on the Figure-Eight crowdsourcing platform for our experiments. The inter-annotator agreement in micropost classification is taken into account through the EM algorithm. For keyword discovery, we filter keywords based on the frequency of the keyword being selected by the crowd. In terms of cost-effectiveness, our approach is motivated from the fact that crowdsourced data annotation can be expensive, and is thus designed with minimal crowd involvement. For each iteration, we selected 50 tweets for keyword discovery and 50 tweets for micropost classification per keyword. For a dataset with 80k tweets (e.g., CyberAttack), our approach only requires to manually inspect 800 tweets (for 8 keywords), which is only 1% of the entire dataset.",
+  "score": 4.0732097441718995,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_8",
+  "child_source_node_ids": [
+    58,
+    59,
+    60,
+    61,
+    62
+  ],
+  "child_qasper_evidence_texts": [
+    "Datasets. We perform our experiments with two predetermined event categories: cyber security (CyberAttack) and death of politicians (PoliticianDeath). These event categories are chosen as they are representative of important event types that are of interest to many governments and companies. The need to create our own dataset was motivated by the lack of public datasets for event detection on microposts. The few available datasets do not suit our requirements. For example, the publicly available Events-2012 Twitter dataset BIBREF20 contains generic event descriptions such as Politics, Sports, Culture etc. Our work targets more specific event categories BIBREF21. Following previous studies BIBREF1, we collect event-related microposts from Twitter using 11 and 8 seed events (see Section SECREF2) for CyberAttack and PoliticianDeath, respectively. Unlabeled microposts are collected by using the keyword `hack' for CyberAttack, while for PoliticianDeath, we use a set of keywords related to `politician' and `death' (such as `bureaucrat', `dead' etc.) For each dataset, we randomly select 500 tweets from the unlabeled subset and manually label them for evaluation. Table TABREF25 shows key statistics from our two datasets.",
+    "Comparison Methods. To demonstrate the generality of our approach on different event detection models, we consider Logistic Regression (LR) BIBREF1 and Multilayer Perceptron (MLP) BIBREF2 as the target models. As the goal of our experiments is to demonstrate the effectiveness of our approach as a new model training technique, we use these widely used models. Also, we note that in our case other neural network models with more complex network architectures for event detection, such as the bi-directional LSTM BIBREF17, turn out to be less effective than a simple feedforward network. For both LR and MLP, we evaluate our proposed human-AI loop approach for keyword discovery and expectation estimation by comparing against the weakly supervised learning method proposed by BIBREF1 (BIBREF1) and BIBREF17 (BIBREF17) where only one initial keyword is used with an expectation estimated by an individual expert.",
+    "Parameter Settings. We empirically set optimal parameters based on a held-out validation set that contains 20% of the test data. These include the hyperparamters of the target model, those of our proposed probabilistic model, and the parameters used for training the target model. We explore MLP with 1, 2 and 3 hidden layers and apply a grid search in 32, 64, 128, 256, 512 for the dimension of the embeddings and that of the hidden layers. For the coefficient of expectation regularization, we follow BIBREF6 (BIBREF6) and set it to $\\lambda =10 \\times $ #labeled examples. For model training, we use the Adam BIBREF22 optimization algorithm for both models.",
+    "Evaluation. Following BIBREF1 (BIBREF1) and BIBREF3 (BIBREF3), we use accuracy and area under the precision-recall curve (AUC) metrics to measure the performance of our proposed approach. We note that due to the imbalance in our datasets (20% positive microposts in CyberAttack and 27% in PoliticianDeath), accuracy is dominated by negative examples; AUC, in comparison, better characterizes the discriminative power of the model.",
+    "Crowdsourcing. We chose Level 3 workers on the Figure-Eight crowdsourcing platform for our experiments. The inter-annotator agreement in micropost classification is taken into account through the EM algorithm. For keyword discovery, we filter keywords based on the frequency of the keyword being selected by the crowd. In terms of cost-effectiveness, our approach is motivated from the fact that crowdsourced data annotation can be expensive, and is thus designed with minimal crowd involvement. For each iteration, we selected 50 tweets for keyword discovery and 50 tweets for micropost classification per keyword. For a dataset with 80k tweets (e.g., CyberAttack), our approach only requires to manually inspect 800 tweets (for 8 keywords), which is only 1% of the entire dataset."
+  ],
+  "child_pages": [
+    8,
+    8,
+    8,
+    8,
+    8
+  ],
+  "child_sections": [
+    "Experiments and Results ::: Experimental Setup",
+    "Experiments and Results ::: Experimental Setup",
+    "Experiments and Results ::: Experimental Setup",
+    "Experiments and Results ::: Experimental Setup",
+    "Experiments and Results ::: Experimental Setup"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Experiments and Results ::: Experimental Setup",
+      0
+    ],
+    [
+      "Experiments and Results ::: Experimental Setup",
+      1
+    ],
+    [
+      "Experiments and Results ::: Experimental Setup",
+      2
+    ],
+    [
+      "Experiments and Results ::: Experimental Setup",
+      3
+    ],
+    [
+      "Experiments and Results ::: Experimental Setup",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_8",
+  "section_id": "Experiments and Results ::: Experimental Setup",
+  "section": "Experiments and Results ::: Experimental Setup",
+  "title_path": "Experiments and Results ::: Experimental Setup",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,488 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_16",
+      "content": "[Section] Experiment ::: Comparison with Supervised Erasure\n[source_id=59] There exists another straightforward method, Erasure BIBREF7, BIBREF22, BIBREF25, which directly evaluates the word importance by measuring the translation performance degradation of each word. Specifically, it erases (i.e., Mask) one word from the input sentence each time and uses the BLEU score changes to denote the word importance (after normalization).\n[source_id=60] In Figure FIGREF31, we compare Erasure method with Attribution method under the Mask perturbation. The results show that Attribution method is less effective than Erasure method when only one word is perturbed. But it outperforms the Erasure method when perturbing 2 or more words. The results reveal that the importance calculated by erasing only one word cannot be generalized to multiple-words scenarios very well. Besides, the Erasure method is a supervised method which requires ground-truth references, and finding a better words combination is computation infeasible when erasing multiple words.\n[source_id=61] We close this section by pointing out that our gradient-based method consistently outperforms its black-box counterparts in various settings, demonstrating the effectiveness and universality of exploiting gradients for estimating word importance. In addition, our approach is on par with or even outperforms the supervised erasure method (on multiple-word perturbations). This is encouraging since our approach does not require any external resource and is fully unsupervised.",
+      "score": 7.274811399202792,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_16",
+      "child_source_node_ids": [
+        59,
+        60,
+        61
+      ],
+      "child_qasper_evidence_texts": [
+        "There exists another straightforward method, Erasure BIBREF7, BIBREF22, BIBREF25, which directly evaluates the word importance by measuring the translation performance degradation of each word. Specifically, it erases (i.e., Mask) one word from the input sentence each time and uses the BLEU score changes to denote the word importance (after normalization).",
+        "In Figure FIGREF31, we compare Erasure method with Attribution method under the Mask perturbation. The results show that Attribution method is less effective than Erasure method when only one word is perturbed. But it outperforms the Erasure method when perturbing 2 or more words. The results reveal that the importance calculated by erasing only one word cannot be generalized to multiple-words scenarios very well. Besides, the Erasure method is a supervised method which requires ground-truth references, and finding a better words combination is computation infeasible when erasing multiple words.",
+        "We close this section by pointing out that our gradient-based method consistently outperforms its black-box counterparts in various settings, demonstrating the effectiveness and universality of exploiting gradients for estimating word importance. In addition, our approach is on par with or even outperforms the supervised erasure method (on multiple-word perturbations). This is encouraging since our approach does not require any external resource and is fully unsupervised."
+      ],
+      "child_pages": [
+        16,
+        16,
+        16
+      ],
+      "child_sections": [
+        "Experiment ::: Comparison with Supervised Erasure",
+        "Experiment ::: Comparison with Supervised Erasure",
+        "Experiment ::: Comparison with Supervised Erasure"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiment ::: Comparison with Supervised Erasure",
+          0
+        ],
+        [
+          "Experiment ::: Comparison with Supervised Erasure",
+          1
+        ],
+        [
+          "Experiment ::: Comparison with Supervised Erasure",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_16",
+      "section_id": "Experiment ::: Comparison with Supervised Erasure",
+      "section": "Experiment ::: Comparison with Supervised Erasure",
+      "title_path": "Experiment ::: Comparison with Supervised Erasure",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_10",
+      "content": "[Section] Experiment ::: Evaluation\n[source_id=40] We evaluate the effectiveness of estimating word importance by the translation performance decrease. More specifically, unlike the usual way, we measure the decrease of translation performance when perturbing a set of important words that are of top-most word importance in a sentence. The more translation performance degrades, the more important the word is.\n[source_id=41] We use the standard BLEU score as the evaluation metric for translation performance. To make the conclusion more convincing, we conduct experiments on different types of synthetic perturbations (Section SECREF21), as well as different NMT architectures and language pairs (Section SECREF27). In addition, we compare with a supervised erasure method, which requires ground-truth translations for scoring word importance (Section SECREF30).",
+      "score": 6.128880819991102,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_10",
+      "child_source_node_ids": [
+        40,
+        41
+      ],
+      "child_qasper_evidence_texts": [
+        "We evaluate the effectiveness of estimating word importance by the translation performance decrease. More specifically, unlike the usual way, we measure the decrease of translation performance when perturbing a set of important words that are of top-most word importance in a sentence. The more translation performance degrades, the more important the word is.",
+        "We use the standard BLEU score as the evaluation metric for translation performance. To make the conclusion more convincing, we conduct experiments on different types of synthetic perturbations (Section SECREF21), as well as different NMT architectures and language pairs (Section SECREF27). In addition, we compare with a supervised erasure method, which requires ground-truth translations for scoring word importance (Section SECREF30)."
+      ],
+      "child_pages": [
+        10,
+        10
+      ],
+      "child_sections": [
+        "Experiment ::: Evaluation",
+        "Experiment ::: Evaluation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiment ::: Evaluation",
+          0
+        ],
+        [
+          "Experiment ::: Evaluation",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_10",
+      "section_id": "Experiment ::: Evaluation",
+      "section": "Experiment ::: Evaluation",
+      "title_path": "Experiment ::: Evaluation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Approach ::: Word Importance\n[source_id=22] In this work, the notion of “word importance” is employed to quantify the contribution that a word in the input sentence makes to the NMT generations. We categorize the methods of word importance estimation into two types: black-box methods without the knowledge of the model and white-box methods that have access to the model internal information (e.g., parameters and gradients). Previous studies mostly fall into the former type, and in this study, we investigate several representative black-box methods:\n[source_id=23] Content Words: In linguistics, all words can be categorized as either content or content-free words. Content words consist mostly of nouns, verbs, and adjectives, which carry descriptive meanings of the sentence and thereby are often considered as important.\n[source_id=24] Frequent Words: We rank the relative importance of input words according to their frequency in the training corpus. We do not consider the top 50 most frequent words since they are mostly punctuation and stop words.\n[source_id=25] Causal Model BIBREF7: Since the causal model is complicated to implement and its scores closely resemble attention scores in NMT models. In this study, we use Attention scores to simulate the causal model.\n[source_id=26] Our approach belongs to the white-box category by exploiting the intermediate gradients, which will be described in the next section.",
+      "score": 4.603465451529837,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "child_qasper_evidence_texts": [
+        "In this work, the notion of “word importance” is employed to quantify the contribution that a word in the input sentence makes to the NMT generations. We categorize the methods of word importance estimation into two types: black-box methods without the knowledge of the model and white-box methods that have access to the model internal information (e.g., parameters and gradients). Previous studies mostly fall into the former type, and in this study, we investigate several representative black-box methods:",
+        "Content Words: In linguistics, all words can be categorized as either content or content-free words. Content words consist mostly of nouns, verbs, and adjectives, which carry descriptive meanings of the sentence and thereby are often considered as important.",
+        "Frequent Words: We rank the relative importance of input words according to their frequency in the training corpus. We do not consider the top 50 most frequent words since they are mostly punctuation and stop words.",
+        "Causal Model BIBREF7: Since the causal model is complicated to implement and its scores closely resemble attention scores in NMT models. In this study, we use Attention scores to simulate the causal model.",
+        "Our approach belongs to the white-box category by exploiting the intermediate gradients, which will be described in the next section."
+      ],
+      "child_pages": [
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "child_sections": [
+        "Approach ::: Word Importance",
+        "Approach ::: Word Importance",
+        "Approach ::: Word Importance",
+        "Approach ::: Word Importance",
+        "Approach ::: Word Importance"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Approach ::: Word Importance",
+          0
+        ],
+        [
+          "Approach ::: Word Importance",
+          1
+        ],
+        [
+          "Approach ::: Word Importance",
+          2
+        ],
+        [
+          "Approach ::: Word Importance",
+          3
+        ],
+        [
+          "Approach ::: Word Importance",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Approach ::: Word Importance",
+      "section": "Approach ::: Word Importance",
+      "title_path": "Approach ::: Word Importance",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_7",
+      "content": "[Section] Approach ::: Integrated Gradients\n[source_id=28] In this work, we resort to a gradient-based method, integrated gradients BIBREF9 (IG), which was originally proposed to attribute the model predictions to input features. It exploits the handy model gradient information by integrating first-order derivatives. IG is implementation invariant and does not require neural models to be differentiable or smooth, thereby is suitable for complex neural networks like Transformer. In this work, we use IG to estimate the word importance in an input sentence precisely.\n[source_id=29] Formally, let $\\textbf {x} = (x_1, ..., x_M)$ be the input sentence and $\\textbf {x}^{\\prime }$ be a baseline input. $F$ is a well-trained NMT model, and $F(\\textbf {x})_n$ is the model output (i.e., $P(y_n|\\textbf {y}_{<n},\\textbf {x})$) at time step $n$. Integrated gradients is then defined as the integral of gradients along the straightline path from the baseline $\\textbf {x}^{\\prime }$ to the input $\\textbf {x}$. In detail, the contribution of the $m^{th}$ word in $\\textbf {x}$ to the prediction of $F(\\textbf {x})_n$ is defined as follows.\n[source_id=30] where $\\frac{\\partial {F(\\textbf {x})_n}}{\\partial {\\textbf {x}_m}}$ is the gradient of $F(\\textbf {x})_n$ w.r.t. the embedding of the $m^{th}$ word. In this paper, as suggested, the baseline input $\\textbf {x}^{\\prime }$ is set as a sequence of zero embeddings that has the same sequence length $M$. In this way, we can compute the contribution of a specific input word to a designated output word. Since the above formula is intractable for deep neural models, we approximate it by summing the gradients along a multi-step path from baseline $\\textbf {x}^{\\prime }$ to the input x.\n[source_id=31] where $S$ denotes the number of steps that are uniformly distributed along the path. The IG will be more accurate if a larger S is used. In our preliminary experiments, we varied the steps and found 300 steps yielding fairly good performance.\n[source_id=32] Following the formula, we can calculate the contribution of every input word makes to every output word, forming a contribution matrix of size $M \\times N$, where $N$ is the output sentence length. Given the contribution matrix, we can obtain the word importance of each input word to the entire output sentence. To this end, for each input word, we first aggregate its contribution values to all output words by the sum operation, and then normalize all sums through the Softmax function. Figure FIGREF13 illustrates an example of the calculated word importance and the contribution matrix, where an English sentence is translated into a French sentence using the Transformer model. A negative contribution value indicates that the input word has negative effects on the output word.",
+      "score": 3.5863391421127155,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_7",
+      "child_source_node_ids": [
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "child_qasper_evidence_texts": [
+        "In this work, we resort to a gradient-based method, integrated gradients BIBREF9 (IG), which was originally proposed to attribute the model predictions to input features. It exploits the handy model gradient information by integrating first-order derivatives. IG is implementation invariant and does not require neural models to be differentiable or smooth, thereby is suitable for complex neural networks like Transformer. In this work, we use IG to estimate the word importance in an input sentence precisely.",
+        "Formally, let $\\textbf {x} = (x_1, ..., x_M)$ be the input sentence and $\\textbf {x}^{\\prime }$ be a baseline input. $F$ is a well-trained NMT model, and $F(\\textbf {x})_n$ is the model output (i.e., $P(y_n|\\textbf {y}_{<n},\\textbf {x})$) at time step $n$. Integrated gradients is then defined as the integral of gradients along the straightline path from the baseline $\\textbf {x}^{\\prime }$ to the input $\\textbf {x}$. In detail, the contribution of the $m^{th}$ word in $\\textbf {x}$ to the prediction of $F(\\textbf {x})_n$ is defined as follows.",
+        "where $\\frac{\\partial {F(\\textbf {x})_n}}{\\partial {\\textbf {x}_m}}$ is the gradient of $F(\\textbf {x})_n$ w.r.t. the embedding of the $m^{th}$ word. In this paper, as suggested, the baseline input $\\textbf {x}^{\\prime }$ is set as a sequence of zero embeddings that has the same sequence length $M$. In this way, we can compute the contribution of a specific input word to a designated output word. Since the above formula is intractable for deep neural models, we approximate it by summing the gradients along a multi-step path from baseline $\\textbf {x}^{\\prime }$ to the input x.",
+        "where $S$ denotes the number of steps that are uniformly distributed along the path. The IG will be more accurate if a larger S is used. In our preliminary experiments, we varied the steps and found 300 steps yielding fairly good performance.",
+        "Following the formula, we can calculate the contribution of every input word makes to every output word, forming a contribution matrix of size $M \\times N$, where $N$ is the output sentence length. Given the contribution matrix, we can obtain the word importance of each input word to the entire output sentence. To this end, for each input word, we first aggregate its contribution values to all output words by the sum operation, and then normalize all sums through the Softmax function. Figure FIGREF13 illustrates an example of the calculated word importance and the contribution matrix, where an English sentence is translated into a French sentence using the Transformer model. A negative contribution value indicates that the input word has negative effects on the output word."
+      ],
+      "child_pages": [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "child_sections": [
+        "Approach ::: Integrated Gradients",
+        "Approach ::: Integrated Gradients",
+        "Approach ::: Integrated Gradients",
+        "Approach ::: Integrated Gradients",
+        "Approach ::: Integrated Gradients"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Approach ::: Integrated Gradients",
+          0
+        ],
+        [
+          "Approach ::: Integrated Gradients",
+          1
+        ],
+        [
+          "Approach ::: Integrated Gradients",
+          2
+        ],
+        [
+          "Approach ::: Integrated Gradients",
+          3
+        ],
+        [
+          "Approach ::: Integrated Gradients",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_7",
+      "section_id": "Approach ::: Integrated Gradients",
+      "section": "Approach ::: Integrated Gradients",
+      "title_path": "Approach ::: Integrated Gradients",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_23",
+      "content": "[Section] Acknowledgement\n[source_id=85] Shilin He and Michael R. Lyu were supported by the Research Grants Council of the Hong Kong Special Administrative Region, China (No. CUHK 14210717 of the General Research Fund), and Microsoft Research Asia (2018 Microsoft Research Asia Collaborative Research Award). We thank the anonymous reviewers for their insightful comments and suggestions.",
+      "score": 3.4835831514850506,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_23",
+      "child_source_node_ids": [
+        85
+      ],
+      "child_qasper_evidence_texts": [
+        "Shilin He and Michael R. Lyu were supported by the Research Grants Council of the Hong Kong Special Administrative Region, China (No. CUHK 14210717 of the General Research Fund), and Microsoft Research Asia (2018 Microsoft Research Asia Collaborative Research Award). We thank the anonymous reviewers for their insightful comments and suggestions."
+      ],
+      "child_pages": [
+        23
+      ],
+      "child_sections": [
+        "Acknowledgement"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Acknowledgement",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_23",
+      "section_id": "Acknowledgement",
+      "section": "Acknowledgement",
+      "title_path": "Acknowledgement",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_9",
+      "content": "[Section] Experiment ::: Implementation\n[source_id=37] We choose the state-of-the-art Transformer BIBREF1 model and the conventional RNN-Search model BIBREF0 as our test bed. We implement the Attribution method based on the Fairseq-py BIBREF19 framework for the above models. All models are trained on the training corpus for 100k steps under the standard settings, which achieve comparable translation results. All the following experiments are conducted on the test dataset, and we estimate the input word importance using the model generated hypotheses.\n[source_id=38] In the following experiments, we compare IG (Attribution) with several black-box methods (i.e., Content, Frequency, Attention) as introduced in Section SECREF8. In Section SECREF21, to ensure that the translation performance decrease attributes to the selected words instead of the perturbation operations, we randomly select the same number of words to perturb (Random), which serves as a baseline. Since there is no ranking for content words, we randomly select a set of content words as important words. To avoid the potential bias introduced by randomness (i.e., Random and Content), we repeat the experiments for 10 times and report the averaged results. We calculate the Attention importance in a similar manner as the Attribution, except that the attention scores use a max operation due to the better performance.",
+      "score": 3.345828981032461,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_9",
+      "child_source_node_ids": [
+        37,
+        38
+      ],
+      "child_qasper_evidence_texts": [
+        "We choose the state-of-the-art Transformer BIBREF1 model and the conventional RNN-Search model BIBREF0 as our test bed. We implement the Attribution method based on the Fairseq-py BIBREF19 framework for the above models. All models are trained on the training corpus for 100k steps under the standard settings, which achieve comparable translation results. All the following experiments are conducted on the test dataset, and we estimate the input word importance using the model generated hypotheses.",
+        "In the following experiments, we compare IG (Attribution) with several black-box methods (i.e., Content, Frequency, Attention) as introduced in Section SECREF8. In Section SECREF21, to ensure that the translation performance decrease attributes to the selected words instead of the perturbation operations, we randomly select the same number of words to perturb (Random), which serves as a baseline. Since there is no ranking for content words, we randomly select a set of content words as important words. To avoid the potential bias introduced by randomness (i.e., Random and Content), we repeat the experiments for 10 times and report the averaged results. We calculate the Attention importance in a similar manner as the Attribution, except that the attention scores use a max operation due to the better performance."
+      ],
+      "child_pages": [
+        9,
+        9
+      ],
+      "child_sections": [
+        "Experiment ::: Implementation",
+        "Experiment ::: Implementation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiment ::: Implementation",
+          0
+        ],
+        [
+          "Experiment ::: Implementation",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_9",
+      "section_id": "Experiment ::: Implementation",
+      "section": "Experiment ::: Implementation",
+      "title_path": "Experiment ::: Implementation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_22",
+      "content": "[Section] Discussion and Conclusion\n[source_id=77] We approach understanding NMT by investigating the word importance via a gradient-based method, which bridges the gap between word importance and translation performance. Empirical results show that the gradient-based method is superior to several black-box methods in estimating the word importance. Further analyses show that important words are of distinct syntactic categories on different language pairs, which might support the viewpoint that essential inductive bias should be introduced into the model design BIBREF28. Our study also suggests the possibility of detecting the notorious under-translation problem via the gradient-based method.\n[source_id=78] This paper is an initiating step towards the general understanding of NMT models, which may bring some potential improvements, such as\n[source_id=79] Interactive MT and Constraint Decoding BIBREF29, BIBREF26: The model pays more attention to the detected unimportant words, which are possibly under-translated;\n[source_id=80] Adaptive Input Embedding BIBREF30: We can extend the adaptive softmax BIBREF31 to the input embedding of variable capacity – more important words are assigned with more capacity;\n[source_id=81] NMT Architecture Design: The language-specific inductive bias (e.g., different behaviors on POS) should be incorporated into the model design.\n[source_id=82] We can also explore other applications of word importance to improve NMT models, such as more tailored training methods. In general, model interpretability can build trust in model predictions, help error diagnosis and facilitate model refinement. We expect our work could shed light on the NMT model understanding and benefit the model improvement.\n[source_id=83] There are many possible ways to implement the general idea of exploiting gradients for model interpretation. The aim of this paper is not to explore this whole space but simply to show that some fairly straightforward implementations work well. Our approach can benefit from advanced exploitation of the gradients or other useful intermediate information, which we leave to the future work.",
+      "score": 3.26398012000036,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_22",
+      "child_source_node_ids": [
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83
+      ],
+      "child_qasper_evidence_texts": [
+        "We approach understanding NMT by investigating the word importance via a gradient-based method, which bridges the gap between word importance and translation performance. Empirical results show that the gradient-based method is superior to several black-box methods in estimating the word importance. Further analyses show that important words are of distinct syntactic categories on different language pairs, which might support the viewpoint that essential inductive bias should be introduced into the model design BIBREF28. Our study also suggests the possibility of detecting the notorious under-translation problem via the gradient-based method.",
+        "This paper is an initiating step towards the general understanding of NMT models, which may bring some potential improvements, such as",
+        "Interactive MT and Constraint Decoding BIBREF29, BIBREF26: The model pays more attention to the detected unimportant words, which are possibly under-translated;",
+        "Adaptive Input Embedding BIBREF30: We can extend the adaptive softmax BIBREF31 to the input embedding of variable capacity – more important words are assigned with more capacity;",
+        "NMT Architecture Design: The language-specific inductive bias (e.g., different behaviors on POS) should be incorporated into the model design.",
+        "We can also explore other applications of word importance to improve NMT models, such as more tailored training methods. In general, model interpretability can build trust in model predictions, help error diagnosis and facilitate model refinement. We expect our work could shed light on the NMT model understanding and benefit the model improvement.",
+        "There are many possible ways to implement the general idea of exploiting gradients for model interpretation. The aim of this paper is not to explore this whole space but simply to show that some fairly straightforward implementations work well. Our approach can benefit from advanced exploitation of the gradients or other useful intermediate information, which we leave to the future work."
+      ],
+      "child_pages": [
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22
+      ],
+      "child_sections": [
+        "Discussion and Conclusion",
+        "Discussion and Conclusion",
+        "Discussion and Conclusion",
+        "Discussion and Conclusion",
+        "Discussion and Conclusion",
+        "Discussion and Conclusion",
+        "Discussion and Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Discussion and Conclusion",
+          0
+        ],
+        [
+          "Discussion and Conclusion",
+          1
+        ],
+        [
+          "Discussion and Conclusion",
+          2
+        ],
+        [
+          "Discussion and Conclusion",
+          3
+        ],
+        [
+          "Discussion and Conclusion",
+          4
+        ],
+        [
+          "Discussion and Conclusion",
+          5
+        ],
+        [
+          "Discussion and Conclusion",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_22",
+      "section_id": "Discussion and Conclusion",
+      "section": "Discussion and Conclusion",
+      "title_path": "Discussion and Conclusion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Although neural machine translation (NMT) has advanced the state-of-the-art on various language pairs, the interpretability of NMT remains unsatisfactory. In this work, we propose to address this gap by focusing on understanding the input-output behavior of NMT models. Specifically, we measure the word importance by attributing the NMT output to every input word through a gradient-based method. We validate the approach on a couple of perturbation operations, language pairs, and model architectures, demonstrating its superiority on identifying input words with higher influence on translation performance. Encouragingly, the calculated importance can serve as indicators of input words that are under-translated by NMT models. Furthermore, our analysis reveals that words of certain syntactic categories have higher importance while the categories vary across language pairs, which can inspire better design principles of NMT architectures for multi-lingual translation.",
+      "score": 3.059409394422053,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Although neural machine translation (NMT) has advanced the state-of-the-art on various language pairs, the interpretability of NMT remains unsatisfactory. In this work, we propose to address this gap by focusing on understanding the input-output behavior of NMT models. Specifically, we measure the word importance by attributing the NMT output to every input word through a gradient-based method. We validate the approach on a couple of perturbation operations, language pairs, and model architectures, demonstrating its superiority on identifying input words with higher influence on translation performance. Encouragingly, the calculated importance can serve as indicators of input words that are under-translated by NMT models. Furthermore, our analysis reveals that words of certain syntactic categories have higher importance while the categories vary across language pairs, which can inspire better design principles of NMT architectures for multi-lingual translation."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 60,
+      "content": "In Figure FIGREF31, we compare Erasure method with Attribution method under the Mask perturbation. The results show that Attribution method is less effective than Erasure method when only one word is perturbed. But it outperforms the Erasure method when perturbing 2 or more words. The results reveal that the importance calculated by erasing only one word cannot be generalized to multiple-words scenarios very well. Besides, the Erasure method is a supervised method which requires ground-truth references, and finding a better words combination is computation infeasible when erasing multiple words.",
+      "qasper_evidence_text": "In Figure FIGREF31, we compare Erasure method with Attribution method under the Mask perturbation. The results show that Attribution method is less effective than Erasure method when only one word is perturbed. But it outperforms the Erasure method when perturbing 2 or more words. The results reveal that the importance calculated by erasing only one word cannot be generalized to multiple-words scenarios very well. Besides, the Erasure method is a supervised method which requires ground-truth references, and finding a better words combination is computation infeasible when erasing multiple words.",
+      "source_node_id": 60,
+      "node_id": 60,
+      "paragraph_id": 60,
+      "evidence_id": 60,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_16",
+      "rank": 1,
+      "score": 7.274811399202792,
+      "block_type": "paragraph",
+      "page": 16,
+      "section_id": "Experiment ::: Comparison with Supervised Erasure",
+      "section": "Experiment ::: Comparison with Supervised Erasure",
+      "title": "Experiment ::: Comparison with Supervised Erasure",
+      "hotpot_title": "Experiment ::: Comparison with Supervised Erasure",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 1
+    },
+    {
+      "id": 61,
+      "content": "We close this section by pointing out that our gradient-based method consistently outperforms its black-box counterparts in various settings, demonstrating the effectiveness and universality of exploiting gradients for estimating word importance. In addition, our approach is on par with or even outperforms the supervised erasure method (on multiple-word perturbations). This is encouraging since our approach does not require any external resource and is fully unsupervised.",
+      "qasper_evidence_text": "We close this section by pointing out that our gradient-based method consistently outperforms its black-box counterparts in various settings, demonstrating the effectiveness and universality of exploiting gradients for estimating word importance. In addition, our approach is on par with or even outperforms the supervised erasure method (on multiple-word perturbations). This is encouraging since our approach does not require any external resource and is fully unsupervised.",
+      "source_node_id": 61,
+      "node_id": 61,
+      "paragraph_id": 61,
+      "evidence_id": 61,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_16",
+      "rank": 1,
+      "score": 7.274811399202792,
+      "block_type": "paragraph",
+      "page": 16,
+      "section_id": "Experiment ::: Comparison with Supervised Erasure",
+      "section": "Experiment ::: Comparison with Supervised Erasure",
+      "title": "Experiment ::: Comparison with Supervised Erasure",
+      "hotpot_title": "Experiment ::: Comparison with Supervised Erasure",
+      "sent_id": 2,
+      "hotpot_sent_id": 2,
+      "supporting_rank": 2
+    }
+  ],
+  "supporting_block_ids": [
+    60,
+    61
+  ]
+}

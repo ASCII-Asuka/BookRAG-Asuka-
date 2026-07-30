@@ -1,0 +1,97 @@
+{
+  "id": "longrag_8",
+  "content": "[Section] Experiments ::: Baselines\n[source_id=31] For the CoinCollector games, we compared Go-Explore with the episodic discovery bonus BIBREF30 that was used by BIBREF8 to improve two Q-learning-based baselines: DQN++ and DRQN++. We used the code provided by the authors and the same hyper-parameters.\n[source_id=32] For the CookingWorld games, we implemented three different treatments based on two existing methods:\n[source_id=33] [leftmargin=*]\n[source_id=34] LSTM-DQN BIBREF7, BIBREF8: An LSTM based state encoder with a separate $Q$-functions for each component (word) of a fixed pattern of Verb, Adjective1, Noun1, Adjective2, and Noun2. In this approach, given the observation $o_t$, the tokens are first converted into embeddings, then an LSTM is used to extract a sequence of hidden states $H_{dqn}\\in \\mathbb {R}^{d \\times |o_t|}$. A mean-pool layer is applied to $H_{dqn}$ to produce a single vector $h_{o^t}$ that represents the whole sequence. Next, a linear transformation $W_{\\text{type}}\\in \\mathbb {R}^{d \\times |V_{\\text{type}}|}$ is used to generate each of the Q values, where $|V_{\\text{type}}| \\ll |V|$ is the subset of the original vocabulary restricted to the word type of a particular game (e.g for Verb type: take, drop, etc.). Formally, we have:\n[source_id=35] Next, all the $Q$-functions are jointly trained using the DQN algorithm with $\\epsilon $-greedy exploration BIBREF15, BIBREF16. At evaluation time, the argmax of each $Q$-function is concatenated to produce $a_t$. Importantly, in $V_{\\text{type}}$ a special token $<$s$>$ is used to denote the absence of a word, so the model can produce actions with different lengths. Figure FIGREF57 in Appendix SECREF55 shows a depiction of this model.\n[source_id=36] LSTM-DQN+ADM: It is the same model as LSTM-DQN, except that the random actions for $\\epsilon $-greedy exploration are sampled from the set of admissible actions instead of creating them by sampling each word separately.\n[source_id=37] DRRN BIBREF10: In this approach a model learns how to score admissible actions instead of directly generating the action token by token. The policy uses an LSTM for encoding the observation and actions are represented as the sum of the embedding of the word tokens they contain. Then, the $Q$ value is defined as the dot product between the embedded representations of the observation and the action. Following the aforementioned notation, $h_{o^t}$ is generated as in the LSTM-DQN baseline. Next, we define its embedded representation as $c_i=\\sum _k^{|a_i|} E(a_i^k)$, where $E$ is an embedding matrix as in Equation 1. Thus, the $Q$-function is defined as:\n[source_id=38] At testing time the action with the highest $Q$ value is chosen. Figure FIGREF58 in Appendix SECREF55 shows a depiction of this model.",
+  "score": 3.0975154097097146,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_8",
+  "child_source_node_ids": [
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38
+  ],
+  "child_qasper_evidence_texts": [
+    "For the CoinCollector games, we compared Go-Explore with the episodic discovery bonus BIBREF30 that was used by BIBREF8 to improve two Q-learning-based baselines: DQN++ and DRQN++. We used the code provided by the authors and the same hyper-parameters.",
+    "For the CookingWorld games, we implemented three different treatments based on two existing methods:",
+    "[leftmargin=*]",
+    "LSTM-DQN BIBREF7, BIBREF8: An LSTM based state encoder with a separate $Q$-functions for each component (word) of a fixed pattern of Verb, Adjective1, Noun1, Adjective2, and Noun2. In this approach, given the observation $o_t$, the tokens are first converted into embeddings, then an LSTM is used to extract a sequence of hidden states $H_{dqn}\\in \\mathbb {R}^{d \\times |o_t|}$. A mean-pool layer is applied to $H_{dqn}$ to produce a single vector $h_{o^t}$ that represents the whole sequence. Next, a linear transformation $W_{\\text{type}}\\in \\mathbb {R}^{d \\times |V_{\\text{type}}|}$ is used to generate each of the Q values, where $|V_{\\text{type}}| \\ll |V|$ is the subset of the original vocabulary restricted to the word type of a particular game (e.g for Verb type: take, drop, etc.). Formally, we have:",
+    "Next, all the $Q$-functions are jointly trained using the DQN algorithm with $\\epsilon $-greedy exploration BIBREF15, BIBREF16. At evaluation time, the argmax of each $Q$-function is concatenated to produce $a_t$. Importantly, in $V_{\\text{type}}$ a special token $<$s$>$ is used to denote the absence of a word, so the model can produce actions with different lengths. Figure FIGREF57 in Appendix SECREF55 shows a depiction of this model.",
+    "LSTM-DQN+ADM: It is the same model as LSTM-DQN, except that the random actions for $\\epsilon $-greedy exploration are sampled from the set of admissible actions instead of creating them by sampling each word separately.",
+    "DRRN BIBREF10: In this approach a model learns how to score admissible actions instead of directly generating the action token by token. The policy uses an LSTM for encoding the observation and actions are represented as the sum of the embedding of the word tokens they contain. Then, the $Q$ value is defined as the dot product between the embedded representations of the observation and the action. Following the aforementioned notation, $h_{o^t}$ is generated as in the LSTM-DQN baseline. Next, we define its embedded representation as $c_i=\\sum _k^{|a_i|} E(a_i^k)$, where $E$ is an embedding matrix as in Equation 1. Thus, the $Q$-function is defined as:",
+    "At testing time the action with the highest $Q$ value is chosen. Figure FIGREF58 in Appendix SECREF55 shows a depiction of this model."
+  ],
+  "child_pages": [
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8
+  ],
+  "child_sections": [
+    "Experiments ::: Baselines",
+    "Experiments ::: Baselines",
+    "Experiments ::: Baselines",
+    "Experiments ::: Baselines",
+    "Experiments ::: Baselines",
+    "Experiments ::: Baselines",
+    "Experiments ::: Baselines",
+    "Experiments ::: Baselines"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Experiments ::: Baselines",
+      0
+    ],
+    [
+      "Experiments ::: Baselines",
+      1
+    ],
+    [
+      "Experiments ::: Baselines",
+      2
+    ],
+    [
+      "Experiments ::: Baselines",
+      3
+    ],
+    [
+      "Experiments ::: Baselines",
+      4
+    ],
+    [
+      "Experiments ::: Baselines",
+      5
+    ],
+    [
+      "Experiments ::: Baselines",
+      6
+    ],
+    [
+      "Experiments ::: Baselines",
+      7
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_8",
+  "section_id": "Experiments ::: Baselines",
+  "section": "Experiments ::: Baselines",
+  "title_path": "Experiments ::: Baselines",
+  "block_type": "long_unit"
+}

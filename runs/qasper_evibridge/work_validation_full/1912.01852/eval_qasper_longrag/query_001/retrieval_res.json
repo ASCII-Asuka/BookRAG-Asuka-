@@ -1,0 +1,520 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Singing voice conversion is to convert a singer's voice to another one's voice without changing singing content. Recent work shows that unsupervised singing voice conversion can be achieved with an autoencoder-based approach [1]. However, the converted singing voice can be easily out of key, showing that the existing approach can not model the pitch information precisely. In this paper, we propose to advance the existing unsupervised singing voice conversion method proposed in [1] to achieve more accurate pitch translation and flexible pitch manipulation. Specifically, the proposed PitchNet added an adversarially trained pitch regression network to enforce the encoder network to learn pitch invariant phoneme representation, and a separate module to feed pitch extracted from the source audio to the decoder network. Our evaluation shows that the proposed method can greatly improve the quality of the converted singing voice (2.92 vs 3.75 in MOS). We also demonstrate that the pitch of converted singing can be easily controlled during generation by changing the levels of extracted pitch before passing it to the decoder network.",
+      "score": 10.749640374214179,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Singing voice conversion is to convert a singer's voice to another one's voice without changing singing content. Recent work shows that unsupervised singing voice conversion can be achieved with an autoencoder-based approach [1]. However, the converted singing voice can be easily out of key, showing that the existing approach can not model the pitch information precisely. In this paper, we propose to advance the existing unsupervised singing voice conversion method proposed in [1] to achieve more accurate pitch translation and flexible pitch manipulation. Specifically, the proposed PitchNet added an adversarially trained pitch regression network to enforce the encoder network to learn pitch invariant phoneme representation, and a separate module to feed pitch extracted from the source audio to the decoder network. Our evaluation shows that the proposed method can greatly improve the quality of the converted singing voice (2.92 vs 3.75 in MOS). We also demonstrate that the pitch of converted singing can be easily controlled during generation by changing the levels of extracted pitch before passing it to the decoder network."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Singing is an important way of human expression and the techniques of singing synthesis have broad applications in different prospects including virtual human, movie dubbing and so on. Traditional singing synthesize systems are based on concatenative BIBREF1 or HMM BIBREF2 based approaches. With the success of deep learning in Text-to-Speech, some neural singing synthesis methods have also been proposed recently. For example, BIBREF3 introduces a singing synthesis method using an architecture similar to WaveNet BIBREF4. It adopts lyrics and notes as input and generates vocoder features autoregressively for final singing voice synthesis.\n[source_id=5] Singing voice conversion is another way of singing synthesis which extracts musical expression within existing singing and reproduced them with another singer's voice. It is very similar to speech based voice conversion BIBREF5, BIBREF6, BIBREF7, BIBREF8, but compared with speech voice conversion, singing voice conversion needs to deal with a wider range of frequency variations as well as the sharper change of volume and pitch within singing voice. The performance of singing conversion is highly dependent on the musical expression of converted singing and the similarity of the converted voice timbre compared to target singer's voice. There are several singing voice conversion methods to convert one's singing voice to another BIBREF9, BIBREF10, BIBREF11. They generally require parallel data to train the conversion model. To overcome the limitation of the parallel training data for singing voice conversion, an unsupervised method BIBREF0 has been proposed to utilize non-parallel data. This method employs an autoencoder architecture composed of a WaveNet-like encoder, a WaveNet BIBREF4 autoregressive decoder, and a learnable singer embedding table. Voice waveform is passed into the encoder and the output of the encoder will be concatenated with the embedding vector associated with the singer. The concatenated features will be used to condition the WaveNet decoder to reconstruct the input audio. A confusion loss BIBREF12 is also introduced to force the encoder to learn a singer-invariant representation. By switching between embeddings of different singers during generation, the singing voice conversion can be achieved. While this approach could generates singing voice perceptually similar to target singer, the quality of generated singing often suffers due to the difficulty on learning joint representation of phonetic and pitch representation.\n[source_id=6] To address the difficulty of learning join phonetic and pitch representation in BIBREF0, we propose to use adversarially trained pitch regression network to encourage the encoder network to learn not only singer-invariant but also pitch-invariant representation, at the same time extract the pitch from source audio to be used as an additional input to the decoder. The proposed method can greatly improve the quality of the converted voice and achieve flexible pitch manipulation at the same time.\n[source_id=7] In the following sections, we will introduce our proposed method in section SECREF2. And then section SECREF3 will show that our method is effective by quantitative and qualitative experiments. Finally, we will conclude in section SECREF4 and acknowledgements are in SECREF5.",
+      "score": 6.497113443594958,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "child_qasper_evidence_texts": [
+        "Singing is an important way of human expression and the techniques of singing synthesis have broad applications in different prospects including virtual human, movie dubbing and so on. Traditional singing synthesize systems are based on concatenative BIBREF1 or HMM BIBREF2 based approaches. With the success of deep learning in Text-to-Speech, some neural singing synthesis methods have also been proposed recently. For example, BIBREF3 introduces a singing synthesis method using an architecture similar to WaveNet BIBREF4. It adopts lyrics and notes as input and generates vocoder features autoregressively for final singing voice synthesis.",
+        "Singing voice conversion is another way of singing synthesis which extracts musical expression within existing singing and reproduced them with another singer's voice. It is very similar to speech based voice conversion BIBREF5, BIBREF6, BIBREF7, BIBREF8, but compared with speech voice conversion, singing voice conversion needs to deal with a wider range of frequency variations as well as the sharper change of volume and pitch within singing voice. The performance of singing conversion is highly dependent on the musical expression of converted singing and the similarity of the converted voice timbre compared to target singer's voice. There are several singing voice conversion methods to convert one's singing voice to another BIBREF9, BIBREF10, BIBREF11. They generally require parallel data to train the conversion model. To overcome the limitation of the parallel training data for singing voice conversion, an unsupervised method BIBREF0 has been proposed to utilize non-parallel data. This method employs an autoencoder architecture composed of a WaveNet-like encoder, a WaveNet BIBREF4 autoregressive decoder, and a learnable singer embedding table. Voice waveform is passed into the encoder and the output of the encoder will be concatenated with the embedding vector associated with the singer. The concatenated features will be used to condition the WaveNet decoder to reconstruct the input audio. A confusion loss BIBREF12 is also introduced to force the encoder to learn a singer-invariant representation. By switching between embeddings of different singers during generation, the singing voice conversion can be achieved. While this approach could generates singing voice perceptually similar to target singer, the quality of generated singing often suffers due to the difficulty on learning joint representation of phonetic and pitch representation.",
+        "To address the difficulty of learning join phonetic and pitch representation in BIBREF0, we propose to use adversarially trained pitch regression network to encourage the encoder network to learn not only singer-invariant but also pitch-invariant representation, at the same time extract the pitch from source audio to be used as an additional input to the decoder. The proposed method can greatly improve the quality of the converted voice and achieve flexible pitch manipulation at the same time.",
+        "In the following sections, we will introduce our proposed method in section SECREF2. And then section SECREF3 will show that our method is effective by quantitative and qualitative experiments. Finally, we will conclude in section SECREF4 and acknowledgements are in SECREF5."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Experiments ::: Evaluation\n[source_id=36] To compare the conversions between USVC and PitchNet, we employed an automatic evaluation score and a human evaluation score.\n[source_id=37] The automatic score roughly followed the design in BIBREF13. The pitch tracker of librosa package BIBREF18 was employed to extract pitch information of the input and output audio. Then the output pitch was compared to the input pitch using the normalized cross correlation (NCC) which would give a score between 0 and 1. The higher the score is, the better the output pitch matches the input pitch. We conducted the evaluation on USVC (our) and PitchNet. The evaluated automatic scores on conversion and reconstruction tasks are shown in Tab. TABREF14. Our method performed better both on conversion and reconstruction. The scores of reconstruction are higher than conversion since both models were trained using a reconstruction loss. However, the score of our method on conversion is even higher than the score of USVC (Our) on reconstruction.\n[source_id=38] Mean Opinion Score (MOS) was used as a subjective metric to evaluate the quality of the converted audio. Two questions were asked: (1) what is quality of the audio? (naturalness) (2) How well does the converted version match the original? (similarity) A score of 1-5 would be given to answer the questions. The evaluation was conducted on USVC (Our) and PitchNet. Besides, the converted samples provided by BIBREF0 was also included to give a more convincing evaluation. As shown by Tab. TABREF15, the naturalness and similarity of our method are both higher than the other two ones. Our implementation of USVC performed slightly lower than the original author's because we cannot fully reproduce the results of them.\n[source_id=39] Next we qualitatively analyze the influence of input pitch in our method. We used different pitch as input to observe how the output pitch would change along with the input pitch. The input pitch was multiplied by 0.7, 1.0 and 1.3 respectively. And the output pitch was also extracted by the pitch tracker of the librosa package. Fig. FIGREF16 plots the pitch of input audio and output audio with different pitch as input while keeping the target singer the same. As shown by Fig. FIGREF16, the output pitch changes significantly along with the input pitch. The examples are also presented at our website.",
+      "score": 6.270004346127978,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        36,
+        37,
+        38,
+        39
+      ],
+      "child_qasper_evidence_texts": [
+        "To compare the conversions between USVC and PitchNet, we employed an automatic evaluation score and a human evaluation score.",
+        "The automatic score roughly followed the design in BIBREF13. The pitch tracker of librosa package BIBREF18 was employed to extract pitch information of the input and output audio. Then the output pitch was compared to the input pitch using the normalized cross correlation (NCC) which would give a score between 0 and 1. The higher the score is, the better the output pitch matches the input pitch. We conducted the evaluation on USVC (our) and PitchNet. The evaluated automatic scores on conversion and reconstruction tasks are shown in Tab. TABREF14. Our method performed better both on conversion and reconstruction. The scores of reconstruction are higher than conversion since both models were trained using a reconstruction loss. However, the score of our method on conversion is even higher than the score of USVC (Our) on reconstruction.",
+        "Mean Opinion Score (MOS) was used as a subjective metric to evaluate the quality of the converted audio. Two questions were asked: (1) what is quality of the audio? (naturalness) (2) How well does the converted version match the original? (similarity) A score of 1-5 would be given to answer the questions. The evaluation was conducted on USVC (Our) and PitchNet. Besides, the converted samples provided by BIBREF0 was also included to give a more convincing evaluation. As shown by Tab. TABREF15, the naturalness and similarity of our method are both higher than the other two ones. Our implementation of USVC performed slightly lower than the original author's because we cannot fully reproduce the results of them.",
+        "Next we qualitatively analyze the influence of input pitch in our method. We used different pitch as input to observe how the output pitch would change along with the input pitch. The input pitch was multiplied by 0.7, 1.0 and 1.3 respectively. And the output pitch was also extracted by the pitch tracker of the librosa package. Fig. FIGREF16 plots the pitch of input audio and output audio with different pitch as input while keeping the target singer the same. As shown by Fig. FIGREF16, the output pitch changes significantly along with the input pitch. The examples are also presented at our website."
+      ],
+      "child_pages": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "child_sections": [
+        "Experiments ::: Evaluation",
+        "Experiments ::: Evaluation",
+        "Experiments ::: Evaluation",
+        "Experiments ::: Evaluation"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments ::: Evaluation",
+          0
+        ],
+        [
+          "Experiments ::: Evaluation",
+          1
+        ],
+        [
+          "Experiments ::: Evaluation",
+          2
+        ],
+        [
+          "Experiments ::: Evaluation",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Experiments ::: Evaluation",
+      "section": "Experiments ::: Evaluation",
+      "title_path": "Experiments ::: Evaluation",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Method ::: Training Loss\n[source_id=13] To formally describe the model, let $E$ be the encoder network, $D$ be the decoder network, $C_s$ be the singer classification network and $C_p$ be the pitch regression network. Let $v_j$ denote the embedding vector of singer $j$, $s^j$ denote an input audio of singer $j$ and $p(s^j)$ denote the extracted pitch of $s^j$. Now given an input audio sequence $s^j$ and a target singer $k$ where $j,k = 1,2,...,N$ and $N$ is the number of singers, the output of the model is\n[source_id=14] Note that $D$ is an autoregressive model which would feed the output back to itself. The reconstruction loss is\n[source_id=15] where $\\mathcal {L}_{ce}(o, y)$ is the cross entropy loss applied to each element of $o$ and $y$. However, only reconstruction loss is not enough to train the model to learn to convert singing voice between different singers because it just forces the model to reconstruct the input voice. Therefore, a singer classification loss(also named domain confusion loss BIBREF0) is applied to make the encoder to learn a singer invariant representation\n[source_id=16] Furthermore, a pitch regression loss is introduced to force the encoder to learn a pitch-independent representation and make the whole model obtain the pitch information from $p(s^j)$ rather than directly from the input audio\n[source_id=17] where $\\mathcal {L}_{mse}(a, b)$ is the mean square error function $\\frac{1}{m}||a-b||_2^2$ and m is the number of elements in $a$. The overall loss we minimize to train the model is\n[source_id=18] where $\\lambda $ and $\\mu $ are two weight factors. Furthermore, the adversarial loss used to train the singer classifier and pitch regression network is\n[source_id=19] In the training process, we minimize $\\mathcal {L}_{ad}$ and $\\mathcal {L}_{total}$ alternately, that is\n[source_id=20] Optimize $C_s$ and $C_p$ one step using $\\mathcal {L}_{ad}$ as the objective function.\n[source_id=21] Optimize the whole model one step using $\\mathcal {L}_{total}$ as the objective function.\n[source_id=22] Go back to step 1.\n[source_id=23] Furthermore, backtranslation and mixup techniques BIBREF0 are also used to improve the quality of the converted singing voice.",
+      "score": 6.119311915714445,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "child_qasper_evidence_texts": [
+        "To formally describe the model, let $E$ be the encoder network, $D$ be the decoder network, $C_s$ be the singer classification network and $C_p$ be the pitch regression network. Let $v_j$ denote the embedding vector of singer $j$, $s^j$ denote an input audio of singer $j$ and $p(s^j)$ denote the extracted pitch of $s^j$. Now given an input audio sequence $s^j$ and a target singer $k$ where $j,k = 1,2,...,N$ and $N$ is the number of singers, the output of the model is",
+        "Note that $D$ is an autoregressive model which would feed the output back to itself. The reconstruction loss is",
+        "where $\\mathcal {L}_{ce}(o, y)$ is the cross entropy loss applied to each element of $o$ and $y$. However, only reconstruction loss is not enough to train the model to learn to convert singing voice between different singers because it just forces the model to reconstruct the input voice. Therefore, a singer classification loss(also named domain confusion loss BIBREF0) is applied to make the encoder to learn a singer invariant representation",
+        "Furthermore, a pitch regression loss is introduced to force the encoder to learn a pitch-independent representation and make the whole model obtain the pitch information from $p(s^j)$ rather than directly from the input audio",
+        "where $\\mathcal {L}_{mse}(a, b)$ is the mean square error function $\\frac{1}{m}||a-b||_2^2$ and m is the number of elements in $a$. The overall loss we minimize to train the model is",
+        "where $\\lambda $ and $\\mu $ are two weight factors. Furthermore, the adversarial loss used to train the singer classifier and pitch regression network is",
+        "In the training process, we minimize $\\mathcal {L}_{ad}$ and $\\mathcal {L}_{total}$ alternately, that is",
+        "Optimize $C_s$ and $C_p$ one step using $\\mathcal {L}_{ad}$ as the objective function.",
+        "Optimize the whole model one step using $\\mathcal {L}_{total}$ as the objective function.",
+        "Go back to step 1.",
+        "Furthermore, backtranslation and mixup techniques BIBREF0 are also used to improve the quality of the converted singing voice."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Method ::: Training Loss",
+        "Method ::: Training Loss",
+        "Method ::: Training Loss",
+        "Method ::: Training Loss",
+        "Method ::: Training Loss",
+        "Method ::: Training Loss",
+        "Method ::: Training Loss",
+        "Method ::: Training Loss",
+        "Method ::: Training Loss",
+        "Method ::: Training Loss",
+        "Method ::: Training Loss"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Method ::: Training Loss",
+          0
+        ],
+        [
+          "Method ::: Training Loss",
+          1
+        ],
+        [
+          "Method ::: Training Loss",
+          2
+        ],
+        [
+          "Method ::: Training Loss",
+          3
+        ],
+        [
+          "Method ::: Training Loss",
+          4
+        ],
+        [
+          "Method ::: Training Loss",
+          5
+        ],
+        [
+          "Method ::: Training Loss",
+          6
+        ],
+        [
+          "Method ::: Training Loss",
+          7
+        ],
+        [
+          "Method ::: Training Loss",
+          8
+        ],
+        [
+          "Method ::: Training Loss",
+          9
+        ],
+        [
+          "Method ::: Training Loss",
+          10
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Method ::: Training Loss",
+      "section": "Method ::: Training Loss",
+      "title_path": "Method ::: Training Loss",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_5",
+      "content": "[Section] Experiments\n[source_id=28] Here we compare the audio quality between our method and BIBREF0's method (Below we call USVC), and show that the input pitch can affect the output singing voice by qualitative analysis. Since the authors of BIBREF0 do not release their source code and only provide part of the converted results at their website, we implemented USVC by ourselves, denoted by USVC(our) below, to give a more comprehensive comparison. Audio samples are available at our website .",
+      "score": 5.607602756399841,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_5",
+      "child_source_node_ids": [
+        28
+      ],
+      "child_qasper_evidence_texts": [
+        "Here we compare the audio quality between our method and BIBREF0's method (Below we call USVC), and show that the input pitch can affect the output singing voice by qualitative analysis. Since the authors of BIBREF0 do not release their source code and only provide part of the converted results at their website, we implemented USVC by ourselves, denoted by USVC(our) below, to give a more comprehensive comparison. Audio samples are available at our website ."
+      ],
+      "child_pages": [
+        5
+      ],
+      "child_sections": [
+        "Experiments"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_5",
+      "section_id": "Experiments",
+      "section": "Experiments",
+      "title_path": "Experiments",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Method\n[source_id=9] Our method follows the autoencoder architecture in BIBREF0 except that there is an additional pitch regression network to separate pitch information out of the latent space. The architecture of PitchNet is illustrated in Fig. FIGREF1. It consists of five parts, an encoder, a decoder, a Look Up Table (LUT) of speaker embedding vectors, a singer classification network, and a pitch regression network.\n[source_id=10] First, the input waveform is passed through the encoder to extract high-level semantic features. An average pooling of stride 800 is then applied to the features, forming a bottleneck to limit the information passing through the encoder. After that, a singer id is used to retrieve the target singer's embedding vector from LUT, and concatenated with the output of the encoder at each time step to be a sequence of condition vectors. The pitch of the input audio, extracted separately from the network, is fed into the decoder after a linear interpolation as a compensation signal together with the condition vector. Finally, the decoder is conditioned on the condition vector and pitch to generate audio samples. Since the decoder is an autoregressive model, the output will be fed back to the decoder at the next time step. The model is trained on a softmax-based loss to minimize the reconstruction error with teacher-forcing.\n[source_id=11] In order to project the output features of the encoder into a singer and pitch invariant latent space, a singer classification network and a pitch regression network are employed to force the encoder not to encode singer and pitch information. The singer classification loss and pitch regression loss are added adversarially to the reconstruction loss to train the entire model end to end.",
+      "score": 5.219106615085085,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        9,
+        10,
+        11
+      ],
+      "child_qasper_evidence_texts": [
+        "Our method follows the autoencoder architecture in BIBREF0 except that there is an additional pitch regression network to separate pitch information out of the latent space. The architecture of PitchNet is illustrated in Fig. FIGREF1. It consists of five parts, an encoder, a decoder, a Look Up Table (LUT) of speaker embedding vectors, a singer classification network, and a pitch regression network.",
+        "First, the input waveform is passed through the encoder to extract high-level semantic features. An average pooling of stride 800 is then applied to the features, forming a bottleneck to limit the information passing through the encoder. After that, a singer id is used to retrieve the target singer's embedding vector from LUT, and concatenated with the output of the encoder at each time step to be a sequence of condition vectors. The pitch of the input audio, extracted separately from the network, is fed into the decoder after a linear interpolation as a compensation signal together with the condition vector. Finally, the decoder is conditioned on the condition vector and pitch to generate audio samples. Since the decoder is an autoregressive model, the output will be fed back to the decoder at the next time step. The model is trained on a softmax-based loss to minimize the reconstruction error with teacher-forcing.",
+        "In order to project the output features of the encoder into a singer and pitch invariant latent space, a singer classification network and a pitch regression network are employed to force the encoder not to encode singer and pitch information. The singer classification loss and pitch regression loss are added adversarially to the reconstruction loss to train the entire model end to end."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Method",
+        "Method",
+        "Method"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Method",
+          0
+        ],
+        [
+          "Method",
+          1
+        ],
+        [
+          "Method",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Method",
+      "section": "Method",
+      "title_path": "Method",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Experiments ::: Dataset and Preprocessing\n[source_id=30] NUS-48E BIBREF14 dataset, sung by 6 male singers and 6 female singers, was used to train the models. It contains 48 songs each with length of several minutes. Every singer provided 4 songs. The male part of the dataset was selected to train the models. During testing, We converted each one's singing voice to the other five singer's voice. Before training, We converted the songs to monophonic audio of 16kHz sample rate and PCM-16 bit format. Besides, 8-bit mu-law encoding was employed to reduce the input space to speed up the training process, although it will degrade the audio quality. Kaldi toolkit BIBREF15 was used to extract pitch from the songs with hop length of 100 which means that we could get 1600 pitch samples in an audio segment of one second. Before feeding them into the model, we normalized the value of pitch between 0 and 1.",
+      "score": 4.53727445603496,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        30
+      ],
+      "child_qasper_evidence_texts": [
+        "NUS-48E BIBREF14 dataset, sung by 6 male singers and 6 female singers, was used to train the models. It contains 48 songs each with length of several minutes. Every singer provided 4 songs. The male part of the dataset was selected to train the models. During testing, We converted each one's singing voice to the other five singer's voice. Before training, We converted the songs to monophonic audio of 16kHz sample rate and PCM-16 bit format. Besides, 8-bit mu-law encoding was employed to reduce the input space to speed up the training process, although it will degrade the audio quality. Kaldi toolkit BIBREF15 was used to extract pitch from the songs with hop length of 100 which means that we could get 1600 pitch samples in an audio segment of one second. Before feeding them into the model, we normalized the value of pitch between 0 and 1."
+      ],
+      "child_pages": [
+        6
+      ],
+      "child_sections": [
+        "Experiments ::: Dataset and Preprocessing"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experiments ::: Dataset and Preprocessing",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Experiments ::: Dataset and Preprocessing",
+      "section": "Experiments ::: Dataset and Preprocessing",
+      "title_path": "Experiments ::: Dataset and Preprocessing",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Method ::: The architecture of the Sub-Networks\n[source_id=25] The encoder and decoder networks follow the design in BIBREF13. The encoder is a fully convolutional network with three blocks of ten residual-layers which consists of a ReLU activation, a dilated convolution, a ReLU activation, a 1x1 convolution, and a residual summation in order. After three residual blocks, a 1x1 convolution and an average pooling with a kernel size of 800 are applied to get the final output. The decoder is a WaveNet BIBREF4 vocoder which consists of four blocks of ten residual layers. The linear interpolation and nearest-neighbor interpolation are applied to the input pitch and encoder output respectively, upsampling them to be of the same sample rate as the input audio waveform.\n[source_id=26] As shown by Fig. FIGREF2, the singer classification network and pitch regression network have the same architecture of a stack of two convolutional neural networks with a kernel size of 3 and channels of 100. Except that the pitch regression network does not average the output of the two convolution networks before passing it into the final fully connected network. A dropout layer is also employed at the beginning of the network to make the training process more stable.",
+      "score": 2.3512870380974222,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        25,
+        26
+      ],
+      "child_qasper_evidence_texts": [
+        "The encoder and decoder networks follow the design in BIBREF13. The encoder is a fully convolutional network with three blocks of ten residual-layers which consists of a ReLU activation, a dilated convolution, a ReLU activation, a 1x1 convolution, and a residual summation in order. After three residual blocks, a 1x1 convolution and an average pooling with a kernel size of 800 are applied to get the final output. The decoder is a WaveNet BIBREF4 vocoder which consists of four blocks of ten residual layers. The linear interpolation and nearest-neighbor interpolation are applied to the input pitch and encoder output respectively, upsampling them to be of the same sample rate as the input audio waveform.",
+        "As shown by Fig. FIGREF2, the singer classification network and pitch regression network have the same architecture of a stack of two convolutional neural networks with a kernel size of 3 and channels of 100. Except that the pitch regression network does not average the output of the two convolution networks before passing it into the final fully connected network. A dropout layer is also employed at the beginning of the network to make the training process more stable."
+      ],
+      "child_pages": [
+        4,
+        4
+      ],
+      "child_sections": [
+        "Method ::: The architecture of the Sub-Networks",
+        "Method ::: The architecture of the Sub-Networks"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Method ::: The architecture of the Sub-Networks",
+          0
+        ],
+        [
+          "Method ::: The architecture of the Sub-Networks",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Method ::: The architecture of the Sub-Networks",
+      "section": "Method ::: The architecture of the Sub-Networks",
+      "title_path": "Method ::: The architecture of the Sub-Networks",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 5,
+      "content": "Singing voice conversion is another way of singing synthesis which extracts musical expression within existing singing and reproduced them with another singer's voice. It is very similar to speech based voice conversion BIBREF5, BIBREF6, BIBREF7, BIBREF8, but compared with speech voice conversion, singing voice conversion needs to deal with a wider range of frequency variations as well as the sharper change of volume and pitch within singing voice. The performance of singing conversion is highly dependent on the musical expression of converted singing and the similarity of the converted voice timbre compared to target singer's voice. There are several singing voice conversion methods to convert one's singing voice to another BIBREF9, BIBREF10, BIBREF11. They generally require parallel data to train the conversion model. To overcome the limitation of the parallel training data for singing voice conversion, an unsupervised method BIBREF0 has been proposed to utilize non-parallel data. This method employs an autoencoder architecture composed of a WaveNet-like encoder, a WaveNet BIBREF4 autoregressive decoder, and a learnable singer embedding table. Voice waveform is passed into the encoder and the output of the encoder will be concatenated with the embedding vector associated with the singer. The concatenated features will be used to condition the WaveNet decoder to reconstruct the input audio. A confusion loss BIBREF12 is also introduced to force the encoder to learn a singer-invariant representation. By switching between embeddings of different singers during generation, the singing voice conversion can be achieved. While this approach could generates singing voice perceptually similar to target singer, the quality of generated singing often suffers due to the difficulty on learning joint representation of phonetic and pitch representation.",
+      "qasper_evidence_text": "Singing voice conversion is another way of singing synthesis which extracts musical expression within existing singing and reproduced them with another singer's voice. It is very similar to speech based voice conversion BIBREF5, BIBREF6, BIBREF7, BIBREF8, but compared with speech voice conversion, singing voice conversion needs to deal with a wider range of frequency variations as well as the sharper change of volume and pitch within singing voice. The performance of singing conversion is highly dependent on the musical expression of converted singing and the similarity of the converted voice timbre compared to target singer's voice. There are several singing voice conversion methods to convert one's singing voice to another BIBREF9, BIBREF10, BIBREF11. They generally require parallel data to train the conversion model. To overcome the limitation of the parallel training data for singing voice conversion, an unsupervised method BIBREF0 has been proposed to utilize non-parallel data. This method employs an autoencoder architecture composed of a WaveNet-like encoder, a WaveNet BIBREF4 autoregressive decoder, and a learnable singer embedding table. Voice waveform is passed into the encoder and the output of the encoder will be concatenated with the embedding vector associated with the singer. The concatenated features will be used to condition the WaveNet decoder to reconstruct the input audio. A confusion loss BIBREF12 is also introduced to force the encoder to learn a singer-invariant representation. By switching between embeddings of different singers during generation, the singing voice conversion can be achieved. While this approach could generates singing voice perceptually similar to target singer, the quality of generated singing often suffers due to the difficulty on learning joint representation of phonetic and pitch representation.",
+      "source_node_id": 5,
+      "node_id": 5,
+      "paragraph_id": 5,
+      "evidence_id": 5,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 2,
+      "score": 6.497113443594958,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 2
+    },
+    {
+      "id": 6,
+      "content": "To address the difficulty of learning join phonetic and pitch representation in BIBREF0, we propose to use adversarially trained pitch regression network to encourage the encoder network to learn not only singer-invariant but also pitch-invariant representation, at the same time extract the pitch from source audio to be used as an additional input to the decoder. The proposed method can greatly improve the quality of the converted voice and achieve flexible pitch manipulation at the same time.",
+      "qasper_evidence_text": "To address the difficulty of learning join phonetic and pitch representation in BIBREF0, we propose to use adversarially trained pitch regression network to encourage the encoder network to learn not only singer-invariant but also pitch-invariant representation, at the same time extract the pitch from source audio to be used as an additional input to the decoder. The proposed method can greatly improve the quality of the converted voice and achieve flexible pitch manipulation at the same time.",
+      "source_node_id": 6,
+      "node_id": 6,
+      "paragraph_id": 6,
+      "evidence_id": 6,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 2,
+      "score": 6.497113443594958,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 2,
+      "hotpot_sent_id": 2,
+      "supporting_rank": 3
+    },
+    {
+      "id": 16,
+      "content": "Furthermore, a pitch regression loss is introduced to force the encoder to learn a pitch-independent representation and make the whole model obtain the pitch information from $p(s^j)$ rather than directly from the input audio",
+      "qasper_evidence_text": "Furthermore, a pitch regression loss is introduced to force the encoder to learn a pitch-independent representation and make the whole model obtain the pitch information from $p(s^j)$ rather than directly from the input audio",
+      "source_node_id": 16,
+      "node_id": 16,
+      "paragraph_id": 16,
+      "evidence_id": 16,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_3",
+      "rank": 4,
+      "score": 6.119311915714445,
+      "block_type": "paragraph",
+      "page": 3,
+      "section_id": "Method ::: Training Loss",
+      "section": "Method ::: Training Loss",
+      "title": "Method ::: Training Loss",
+      "hotpot_title": "Method ::: Training Loss",
+      "sent_id": 3,
+      "hotpot_sent_id": 3,
+      "supporting_rank": 4
+    }
+  ],
+  "supporting_block_ids": [
+    5,
+    6,
+    16
+  ]
+}

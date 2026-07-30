@@ -1,0 +1,169 @@
+{
+  "id": "longrag_10",
+  "content": "[Section] Re-implementation of units with BERT\n[source_id=63] As we mentioned before, there are many cases, especially in the industry, where the labeled and structured data is not directly available. Collecting and labeling such data is often a tedious and time-consuming task. Thus, algorithms that enable training of the systems with less or even a minimal amount of data are highly required. Such algorithms can transfer the knowledge obtained during the training on existing data to the unseen domain. They are, therefore, one of the potential solutions for industrial problems.\n[source_id=64] Once we assembled a dataset of structured data via our rule-based system, we re-implemented two out of three central dialogue components in our conversational assistant with deep learning methods. Since the available data was collected in a trial-run and thus the obtained dataset was rather small to train a machine learning model from scratch, we utilized the Transfer Learning approach, and fine-tuned the existing pre-trained model (i.e., BERT) for our target domain and data.\n[source_id=65] For the experiments, we defined two tasks:\n[source_id=66] First, we studied the Named Entity Recognition problem in a custom domain setting. We defined a sequence labeling task and employed the BERT model BIBREF4. We applied the model to our dataset and fine-tuned it for six (6) domain-specific (i.e., e-learning) entities and one (1) “unknown” label.\n[source_id=67] Second, we investigated the effectiveness of BERT for the dialogue manager core. For that experiment, we defined a classification task and applied the model to predict the system's Next Action for every given user utterance in a conversation. We then computed the macro F-score for 13 possible actions and an average dialogue accuracy.\n[source_id=68] Finally, we verified that the applied model performed well on both tasks: We achieved the performance of $0.93$ macro F1 points for Named Entity Recognition (NER) and $0.75$ macro F1 points for the Next Action Prediction (NAP) task. We, therefore, conclude that both NER and NAP components could be employed to substitute or extend the existing rule-based modules.\n[source_id=69] Data & Descriptive Statistics: The dataset that we collected during the trial-run consists of 300 structured dialogues with the average length of a dialogue being six (6) utterances. Communication with students was performed in the German language. Detailed general statistics can be found in Table TABREF41.\n[source_id=70] Named Entity Recognition: We defined a sequence labeling task to extract custom entities from user input. We assumed seven (7) possible entities (see Table TABREF43) to be recognized by the model: topic, subtopic, examination mode and level, question number, intent, as well as the entity other for remaining words in the utterance. Since the data obtained from the rule-based system already contains information on the entities extracted from each user query (i.e., by means of Elasticsearch), we could use it to train a domain-specific NER unit. However, since the user-input was informal, the same information could be provided in different writing styles. That means that a single entity could have different surface forms (e.g., synonyms, writing styles) (although entities that we extracted from the rule-based system were all converted to a universal standard, e.g., official chapter names). To consider all of the variable entity forms while post-labeling the original dataset, we defined generic entity names (e.g., chapter, question nr.) and mapped variations of entities from the user input (e.g., Chapter = [Elementary Calculus, Chapter $I$, ...]) to them.\n[source_id=71] Next Action Prediction: We defined a classification problem to predict the system's next action according to the given user input. We assumed 13 custom actions (see Table TABREF42) that we considered being our labels. In the conversational dataset, each input was automatically labeled by the rule-based system with the corresponding next action and the dialogue-id. Thus, no additional post-labeling was required. We investigated two settings:\n[source_id=72] Default Setting: Using only a user input and the corresponding label (i.e., next action) without additional context. By default, we run all of our experiments in this setting.\n[source_id=73] Extended Setting: Using a user input, a corresponding next action, and a previous system action as a source of additional context. For this setting, we run an experiment with the best performing model from the default setting.\n[source_id=74] The overall dataset consists of 300 labeled dialogues, where 200 (with 1161 utterances) of them were employed for training, and 100 for evaluation and test sets (50 dialogues with about 300 utterances for each set respectively).\n[source_id=75] Model Settings: For the NER task we conducted experiments with German and multilingual BERT implementations. Since in the German language the capitalization of words plays a significant role, we run our tests on the capitalized input, while keeping the original punctuation. Hence, we employed the available base model for both multilingual and German BERT implementations in the cased version. We set the learning rate for both models to $1e-4$ and the maximum length of the tokenized input was set to 128 tokens. We run the experiments multiple times with different seeds for a maximum of 50 epochs with the training batch size set to 32. We utilized AdamW as the optimizer and employed early stopping, if the performance did not change significantly after 5 epochs.\n[source_id=76] For the NAP task we conducted experiments with German and multilingual BERT implementations as well. Here, we investigated the performance of both capitalized and lowercased input, as well as plain and preprocessed data. For the multilingual BERT, we employed the base model in both cased and uncased variations. For the German BERT, we utilized the base model in the cased variation only. For both models, we set the learning rate to $4e-5$, and the maximum length of the tokenized input was set to 128 tokens. We run the experiments multiple times with different seeds for a maximum of 300 epochs with the training batch size set to 32. We utilized AdamW as the optimizer and employed early stopping, if the performance did not change significantly after 15 epochs.\n[source_id=77] Evaluation and Discussion: For the evaluation, we computed word-level macro F1 score for the NER task and utterance-level macro F1 score for the NAP task. The word-level F1 is estimated as the average of the F1 scores per class, each computed from all words in the evaluation and test sets. The results for the NER task are depicted in Table TABREF49. For utterance-level F1, a single label (i.e., next action) is obtained for the whole utterance. The results for the NAP task are presented in Table TABREF48. We additionally computed average dialogue accuracy for the best performing NAP models. This score denotes how well the predicted next actions match the gold next actions and thus form the dialogue flow within each conversation. The average dialogue accuracy was computed for 50 dialogues in the evaluation and test sets respectively. The results are displayed in Table TABREF50.\n[source_id=78] The obtained results for the NER task revealed that German BERT performed significantly better than the multilingual BERT model. The performance of the custom NER unit is at $0.93$ macro F1 points for all possible named entities (see Table TABREF49). In contrast, for the NAP task, the multilingual BERT model obtained better performance than the German BERT model. Here, the best performing system in the default setting achieved a macro F1 of $0.677$ points for 14 possible labels, whereas the model in the extended setting performed better – its highest macro F1 score is $0.752$ for the same amount of labels (see Table TABREF48). Considering the dialogue accuracy, the extended system trained with multilingual BERT achieved better results than the default one with $0.801$ accuracy points compared to $0.724$ accuracy points for the test set (see Table TABREF50). The overall observation for the NAP is that the capitalized setting improved the performance of the model, whereas the inclusion of punctuation has not positively influenced the results.",
+  "score": 6.90084321370701,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_10",
+  "child_source_node_ids": [
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78
+  ],
+  "child_qasper_evidence_texts": [
+    "As we mentioned before, there are many cases, especially in the industry, where the labeled and structured data is not directly available. Collecting and labeling such data is often a tedious and time-consuming task. Thus, algorithms that enable training of the systems with less or even a minimal amount of data are highly required. Such algorithms can transfer the knowledge obtained during the training on existing data to the unseen domain. They are, therefore, one of the potential solutions for industrial problems.",
+    "Once we assembled a dataset of structured data via our rule-based system, we re-implemented two out of three central dialogue components in our conversational assistant with deep learning methods. Since the available data was collected in a trial-run and thus the obtained dataset was rather small to train a machine learning model from scratch, we utilized the Transfer Learning approach, and fine-tuned the existing pre-trained model (i.e., BERT) for our target domain and data.",
+    "For the experiments, we defined two tasks:",
+    "First, we studied the Named Entity Recognition problem in a custom domain setting. We defined a sequence labeling task and employed the BERT model BIBREF4. We applied the model to our dataset and fine-tuned it for six (6) domain-specific (i.e., e-learning) entities and one (1) “unknown” label.",
+    "Second, we investigated the effectiveness of BERT for the dialogue manager core. For that experiment, we defined a classification task and applied the model to predict the system's Next Action for every given user utterance in a conversation. We then computed the macro F-score for 13 possible actions and an average dialogue accuracy.",
+    "Finally, we verified that the applied model performed well on both tasks: We achieved the performance of $0.93$ macro F1 points for Named Entity Recognition (NER) and $0.75$ macro F1 points for the Next Action Prediction (NAP) task. We, therefore, conclude that both NER and NAP components could be employed to substitute or extend the existing rule-based modules.",
+    "Data & Descriptive Statistics: The dataset that we collected during the trial-run consists of 300 structured dialogues with the average length of a dialogue being six (6) utterances. Communication with students was performed in the German language. Detailed general statistics can be found in Table TABREF41.",
+    "Named Entity Recognition: We defined a sequence labeling task to extract custom entities from user input. We assumed seven (7) possible entities (see Table TABREF43) to be recognized by the model: topic, subtopic, examination mode and level, question number, intent, as well as the entity other for remaining words in the utterance. Since the data obtained from the rule-based system already contains information on the entities extracted from each user query (i.e., by means of Elasticsearch), we could use it to train a domain-specific NER unit. However, since the user-input was informal, the same information could be provided in different writing styles. That means that a single entity could have different surface forms (e.g., synonyms, writing styles) (although entities that we extracted from the rule-based system were all converted to a universal standard, e.g., official chapter names). To consider all of the variable entity forms while post-labeling the original dataset, we defined generic entity names (e.g., chapter, question nr.) and mapped variations of entities from the user input (e.g., Chapter = [Elementary Calculus, Chapter $I$, ...]) to them.",
+    "Next Action Prediction: We defined a classification problem to predict the system's next action according to the given user input. We assumed 13 custom actions (see Table TABREF42) that we considered being our labels. In the conversational dataset, each input was automatically labeled by the rule-based system with the corresponding next action and the dialogue-id. Thus, no additional post-labeling was required. We investigated two settings:",
+    "Default Setting: Using only a user input and the corresponding label (i.e., next action) without additional context. By default, we run all of our experiments in this setting.",
+    "Extended Setting: Using a user input, a corresponding next action, and a previous system action as a source of additional context. For this setting, we run an experiment with the best performing model from the default setting.",
+    "The overall dataset consists of 300 labeled dialogues, where 200 (with 1161 utterances) of them were employed for training, and 100 for evaluation and test sets (50 dialogues with about 300 utterances for each set respectively).",
+    "Model Settings: For the NER task we conducted experiments with German and multilingual BERT implementations. Since in the German language the capitalization of words plays a significant role, we run our tests on the capitalized input, while keeping the original punctuation. Hence, we employed the available base model for both multilingual and German BERT implementations in the cased version. We set the learning rate for both models to $1e-4$ and the maximum length of the tokenized input was set to 128 tokens. We run the experiments multiple times with different seeds for a maximum of 50 epochs with the training batch size set to 32. We utilized AdamW as the optimizer and employed early stopping, if the performance did not change significantly after 5 epochs.",
+    "For the NAP task we conducted experiments with German and multilingual BERT implementations as well. Here, we investigated the performance of both capitalized and lowercased input, as well as plain and preprocessed data. For the multilingual BERT, we employed the base model in both cased and uncased variations. For the German BERT, we utilized the base model in the cased variation only. For both models, we set the learning rate to $4e-5$, and the maximum length of the tokenized input was set to 128 tokens. We run the experiments multiple times with different seeds for a maximum of 300 epochs with the training batch size set to 32. We utilized AdamW as the optimizer and employed early stopping, if the performance did not change significantly after 15 epochs.",
+    "Evaluation and Discussion: For the evaluation, we computed word-level macro F1 score for the NER task and utterance-level macro F1 score for the NAP task. The word-level F1 is estimated as the average of the F1 scores per class, each computed from all words in the evaluation and test sets. The results for the NER task are depicted in Table TABREF49. For utterance-level F1, a single label (i.e., next action) is obtained for the whole utterance. The results for the NAP task are presented in Table TABREF48. We additionally computed average dialogue accuracy for the best performing NAP models. This score denotes how well the predicted next actions match the gold next actions and thus form the dialogue flow within each conversation. The average dialogue accuracy was computed for 50 dialogues in the evaluation and test sets respectively. The results are displayed in Table TABREF50.",
+    "The obtained results for the NER task revealed that German BERT performed significantly better than the multilingual BERT model. The performance of the custom NER unit is at $0.93$ macro F1 points for all possible named entities (see Table TABREF49). In contrast, for the NAP task, the multilingual BERT model obtained better performance than the German BERT model. Here, the best performing system in the default setting achieved a macro F1 of $0.677$ points for 14 possible labels, whereas the model in the extended setting performed better – its highest macro F1 score is $0.752$ for the same amount of labels (see Table TABREF48). Considering the dialogue accuracy, the extended system trained with multilingual BERT achieved better results than the default one with $0.801$ accuracy points compared to $0.724$ accuracy points for the test set (see Table TABREF50). The overall observation for the NAP is that the capitalized setting improved the performance of the model, whereas the inclusion of punctuation has not positively influenced the results."
+  ],
+  "child_pages": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "child_sections": [
+    "Re-implementation of units with BERT",
+    "Re-implementation of units with BERT",
+    "Re-implementation of units with BERT",
+    "Re-implementation of units with BERT",
+    "Re-implementation of units with BERT",
+    "Re-implementation of units with BERT",
+    "Re-implementation of units with BERT",
+    "Re-implementation of units with BERT",
+    "Re-implementation of units with BERT",
+    "Re-implementation of units with BERT",
+    "Re-implementation of units with BERT",
+    "Re-implementation of units with BERT",
+    "Re-implementation of units with BERT",
+    "Re-implementation of units with BERT",
+    "Re-implementation of units with BERT",
+    "Re-implementation of units with BERT"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Re-implementation of units with BERT",
+      0
+    ],
+    [
+      "Re-implementation of units with BERT",
+      1
+    ],
+    [
+      "Re-implementation of units with BERT",
+      2
+    ],
+    [
+      "Re-implementation of units with BERT",
+      3
+    ],
+    [
+      "Re-implementation of units with BERT",
+      4
+    ],
+    [
+      "Re-implementation of units with BERT",
+      5
+    ],
+    [
+      "Re-implementation of units with BERT",
+      6
+    ],
+    [
+      "Re-implementation of units with BERT",
+      7
+    ],
+    [
+      "Re-implementation of units with BERT",
+      8
+    ],
+    [
+      "Re-implementation of units with BERT",
+      9
+    ],
+    [
+      "Re-implementation of units with BERT",
+      10
+    ],
+    [
+      "Re-implementation of units with BERT",
+      11
+    ],
+    [
+      "Re-implementation of units with BERT",
+      12
+    ],
+    [
+      "Re-implementation of units with BERT",
+      13
+    ],
+    [
+      "Re-implementation of units with BERT",
+      14
+    ],
+    [
+      "Re-implementation of units with BERT",
+      15
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_10",
+  "section_id": "Re-implementation of units with BERT",
+  "section": "Re-implementation of units with BERT",
+  "title_path": "Re-implementation of units with BERT",
+  "block_type": "long_unit"
+}

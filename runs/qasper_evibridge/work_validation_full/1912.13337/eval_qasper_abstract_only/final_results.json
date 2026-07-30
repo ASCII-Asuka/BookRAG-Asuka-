@@ -1,0 +1,388 @@
+[
+  {
+    "question": "Are the automatically constructed datasets subject to quality control?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": false,
+        "evidence": [
+          "Dataset Probes and Construction",
+          "Our probing methodology starts by constructing challenge datasets (Figure FIGREF1, yellow box) from a target set of knowledge resources. Each of our probing datasets consists of multiple-choice questions that include a question $\\textbf {q}$ and a set of answer choices or candidates $\\lbrace a_{1},...a_{N}\\rbrace $. This section describes in detail the 5 different datasets we build, which are drawn from two sources of expert knowledge, namely WordNet BIBREF35 and the GNU Collaborative International Dictionary of English (GCIDE). We describe each resource in turn, and explain how the resulting dataset probes, which we call WordNetQA and DictionaryQA, are constructed.",
+          "For convenience, we will describe each source of expert knowledge as a directed, edge-labeled graph $G$. The nodes of this graph are $\\mathcal {V} = \\mathcal {C} \\cup \\mathcal {W} \\cup \\mathcal {S} \\cup \\mathcal {D}$, where $\\mathcal {C}$ is a set of atomic concepts, $\\mathcal {W}$ a set of words, $\\mathcal {S}$ a set of sentences, and $\\mathcal {D}$ a set of definitions (see Table TABREF4 for details for WordNet and GCIDE). Each edge of $G$ is directed from an atomic concept in $\\mathcal {C}$ to another node in $V$, and is labeled with a relation, such as hypernym or isa$^\\uparrow $, from a set of relations $\\mathcal {R}$ (see Table TABREF4).",
+          "When defining our probe question templates, it will be useful to view $G$ as a set of (relation, source, target) triples $\\mathcal {T} \\subseteq \\mathcal {R} \\times \\mathcal {C} \\times \\mathcal {V}$. Due to their origin in an expert knowledge source, such triples preserve semantic consistency. For instance, when the relation in a triple is def, the corresponding edge maps a concept in $\\mathcal {C}$ to a definition in $\\mathcal {D}$.",
+          "To construct probe datasets, we rely on two heuristic functions, defined below for each individual probe: $\\textsc {gen}_{\\mathcal {Q}}(\\tau )$, which generates gold question-answer pairs $(\\textbf {q},\\textbf {a})$ from a set of triples $\\tau \\subseteq \\mathcal {T}$ and question templates $\\mathcal {Q}$, and $\\textsc {distr}(\\tau ^{\\prime })$, which generates distractor answers choices $\\lbrace a^{\\prime }_{1},...a^{\\prime }_{N-1} \\rbrace $ based on another set of triples $\\tau ^{\\prime }$ (where usually $\\tau \\subset \\tau ^{\\prime }$). For brevity, we will use $\\textsc {gen}(\\tau )$ to denote $\\textsc {gen}_{\\mathcal {Q}}(\\tau )$, leaving question templates $\\mathcal {Q}$ implicit.",
+          "Dataset Probes and Construction ::: WordNetQA",
+          "WordNet is an English lexical database consisting of around 117k concepts, which are organized into groups of synsets that each contain a gloss (i.e., a definition of the target concept), a set of representative English words (called lemmas), and, in around 33k synsets, example sentences. In addition, many synsets have ISA links to other synsets that express complex taxonomic relations. Figure FIGREF6 shows an example and Table TABREF4 summarizes how we formulate WordNet as a set of triples $\\mathcal {T}$ of various types. These triples together represent a directed, edge-labeled graph $G$. Our main motivation for using WordNet, as opposed to a resource such as ConceptNet BIBREF36, is the availability of glosses ($\\mathcal {D}$) and example sentences ($\\mathcal {S}$), which allows us to construct natural language questions that contextualize the types of concepts we want to probe.",
+          "Dataset Probes and Construction ::: WordNetQA ::: Example Generation @!START@$\\textsc {gen}(\\tau )$@!END@.",
+          "We build 4 individual datasets based on semantic relations native to WordNet (see BIBREF37): hypernymy (i.e., generalization or ISA reasoning up a taxonomy, ISA$^\\uparrow $), hyponymy (ISA$^{\\downarrow }$), synonymy, and definitions. To generate a set of questions in each case, we employ a number of rule templates $\\mathcal {Q}$ that operate over tuples. A subset of such templates is shown in Table TABREF8. The templates were designed to mimic naturalistic questions we observed in our science benchmarks.",
+          "For example, suppose we wish to create a question $\\textbf {q}$ about the definition of a target concept $c \\in \\mathcal {C}$. We first select a question template from $\\mathcal {Q}$ that first introduces the concept $c$ and its lemma $l \\in \\mathcal {W}$ in context using the example sentence $s \\in \\mathcal {S}$, and then asks to identify the corresponding WordNet gloss $d \\in \\mathcal {D}$, which serves as the gold answer $\\textbf {a}$. The same is done for ISA reasoning; each question about a hypernym/hyponym relation between two concepts $c \\rightarrow ^{\\uparrow /\\downarrow } c^{\\prime } \\in \\mathcal {T}_{i}$ (e.g., $\\texttt {dog} \\rightarrow ^{\\uparrow /\\downarrow } \\texttt {animal/terrier}$) first introduces a context for $c$ and then asks for an answer that identifies $c^{\\prime }$ (which is also provided with a gloss so as to contain all available context).",
+          "In the latter case, the rules $(\\texttt {isa}^{r},c,c^{\\prime }) \\in \\mathcal {T}_i$ in Table TABREF8 cover only direct ISA links from $c$ in direction $r \\in \\lbrace \\uparrow ,\\downarrow \\rbrace $. In practice, for each $c$ and direction $r$, we construct tests that cover the set HOPS$(c,r)$ of all direct as well as derived ISA relations of $c$:",
+          "This allows us to evaluate the extent to which models are able to handle complex forms of reasoning that require several inferential steps or hops.",
+          "Dataset Probes and Construction ::: WordNetQA ::: Distractor Generation: @!START@$\\textsc {distr}(\\tau ^{\\prime })$@!END@.",
+          "An example of how distractors are generated is shown in Figure FIGREF6, which relies on similar principles as above. For each concept $c$, we choose 4 distractor answers that are close in the WordNet semantic space. For example, when constructing hypernymy tests for $c$ from the set hops$(c,\\uparrow )$, we build distractors by drawing from $\\textsc {hops}(c,\\downarrow )$ (and vice versa), as well as from the $\\ell $-deep sister family of $c$, defined as follows. The 1-deep sister family is simply $c$'s siblings or sisters, i.e., the other children $\\tilde{c} \\ne c$ of the parent node $c^{\\prime }$ of $c$. For $\\ell > 1$, the $\\ell $-deep sister family also includes all descendants of each $\\tilde{c}$ up to $\\ell -1$ levels deep, denoted $\\textsc {hops}_{\\ell -1}(\\tilde{c},\\downarrow )$. Formally:",
+          "For definitions and synonyms we build distractors from all of these sets (with a similar restriction on the depth of sister distractors as noted above). In doing this, we can systematically investigate model performance on a wide range of distractor sets.",
+          "Dataset Probes and Construction ::: WordNetQA ::: Perturbations and Semantic Clusters",
+          "Based on how we generate data, for each concept $c$ (i.e., atomic WordNet synset) and probe type (i.e., definitions, hypernymy, etc.), we have a wide variety of questions related to $c$ that manipulate 1) the complexity of reasoning that is involved (e.g., the number of inferential hops) and; 2) the types of distractors (or distractor perturbations) that are employed. We call such sets semantic clusters. As we describe in the next section, semantic clusters allow us to devise new types of evaluation that reveal whether models have comprehensive and consistent knowledge of target concepts (e.g., evaluating whether a model can correctly answer several questions associated with a concept, as opposed to a few disjoint instances).",
+          "Details of the individual datasets are shown in Table TABREF12. From these sets, we follow BIBREF22 in allocating a maximum of 3k examples for training and reserve the rest for development and testing. Since we are interested in probing, having large held-out sets allows us to do detailed analysis and cluster-based evaluation.",
+          "Dataset Probes and Construction ::: DictionaryQA",
+          "The DictionaryQA dataset is created from the GCIDE dictionary, which is a comprehensive open-source English dictionary built largely from the Webster's Revised Unabridged Dictionary BIBREF38. Each entry consists of a word, its part-of-speech, its definition, and an optional example sentence (see Table TABREF14). Overall, 33k entries (out of a total of 155k) contain example sentences/usages. As with the WordNet probes, we focus on this subset so as to contextualize each word being probed. In contrast to WordNet, GCIDE does not have ISA relations or explicit synsets, so we take each unique entry to be a distinct sense. We then use the dictionary entries to create a probe that centers around word-sense disambiguation, as described below.",
+          "Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+          "To generate gold questions and answers, we use the same generation templates for definitions exemplified in Figure TABREF8 for WordNetQA. To generate distractors, we simply take alternative definitions for the target words that represent a different word sense (e.g., the alternative definitions of gift shown in Table TABREF14), as well as randomly chosen definitions if needed to create a 5-way multiple choice question. As above, we reserve a maximum of 3k examples for training. Since we have only 9k examples in total in this dataset (see WordSense in Table TABREF12), we also reserve 3k each for development and testing.",
+          "We note that initial attempts to build this dataset through standard random splitting gave rise to certain systematic biases that were exploited by the choice-only baseline models described in the next section, and hence inflated overall model scores. After several efforts at filtering we found that, among other factors, using definitions from entries without example sentences as distractors (e.g., the first two entries in Table TABREF14) had a surprising correlation with such biases. This suggests that possible biases involving differences between dictionary entries with and without examples can taint the resulting automatically generated MCQA dataset (for more discussion on the pitfalls involved with automatic dataset construction, see Section SECREF5)."
+        ],
+        "evidence_block_ids": [
+          18,
+          19,
+          20,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          30,
+          31,
+          33,
+          34,
+          36,
+          38,
+          39
+        ],
+        "evidence_paragraph_ids": [
+          18,
+          19,
+          20,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          30,
+          31,
+          33,
+          34,
+          36,
+          38,
+          39
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": false,
+        "evidence": [
+          "We emphasize that using synthetic versus naturalistic QA data comes with important trade-offs. While we are able to generate large amounts of systematically controlled data at virtually no cost or need for manual annotation, it is much harder to validate the quality of such data at such a scale and such varying levels of complexity. Conversely, with benchmark QA datasets, it is much harder to perform the type of careful manipulations and cluster-based analyses we report here. While we assume that the expert knowledge we employ, in virtue of being hand-curated by human experts, is generally correct, we know that such resources are fallible and error-prone. Initial crowd-sourcing experiments that look at validating samples of our data show high agreement across probes and that human scores correlate with the model trends across the probe categories. More details of these studies are left for future work."
+        ],
+        "evidence_block_ids": [
+          90
+        ],
+        "evidence_paragraph_ids": [
+          90
+        ]
+      }
+    ],
+    "doc_uuid": "1912.13337",
+    "doc_path": "qasper://1912.13337",
+    "qasper_question_id": "e97186c51d4af490dba6faaf833d269c8256426c",
+    "title": "What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge",
+    "evidence_block_ids": [
+      18,
+      19,
+      20,
+      21,
+      23,
+      25,
+      26,
+      27,
+      28,
+      30,
+      31,
+      33,
+      34,
+      36,
+      38,
+      39,
+      90
+    ],
+    "evidence_paragraph_ids": [
+      18,
+      19,
+      20,
+      21,
+      23,
+      25,
+      26,
+      27,
+      28,
+      30,
+      31,
+      33,
+      34,
+      36,
+      38,
+      39,
+      90
+    ],
+    "output": "{\n  \"answer_short\": \"Yes\",\n  \"answer_rationale\": \"The document states that the methodology for automatically building datasets allows for \\\"systematic control over the resulting probes\\\" and that \\\"we carefully control for\\\" annotation artifacts, indicating that quality control is applied.\"\n}",
+    "retrieved_node_ids": [
+      2
+    ],
+    "answer_short": "Yes",
+    "answer_rationale": "The document states that the methodology for automatically building datasets allows for \"systematic control over the resulting probes\" and that \"we carefully control for\" annotation artifacts, indicating that quality control is applied.",
+    "supporting_block_ids": [
+      2
+    ]
+  },
+  {
+    "question": "Do they focus on Reading Comprehension or multiple choice question answering?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "MULTIPLE CHOICE QUESTION ANSWERING",
+        "yes_no": null,
+        "evidence": [
+          "Automatically answering questions, especially in the open-domain setting (i.e., where minimal or no contextual knowledge is explicitly provided), requires bringing to bear considerable amount of background knowledge and reasoning abilities. For example, knowing the answers to the two questions in Figure FIGREF1 requires identifying a specific ISA relation (i.e., that cooking is a type of learned behavior) as well as recalling the definition of a concept (i.e., that global warming is defined as a worldwide increase in temperature). In the multiple-choice setting, which is the variety of question-answering (QA) that we focus on in this paper, there is also pragmatic reasoning involved in selecting optimal answer choices (e.g., while greenhouse effect might in some other context be a reasonable answer to the second question in Figure FIGREF1, global warming is a preferable candidate)."
+        ],
+        "evidence_block_ids": [
+          4
+        ],
+        "evidence_paragraph_ids": [
+          4
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "multiple-choice"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Our probing methodology starts by constructing challenge datasets (Figure FIGREF1, yellow box) from a target set of knowledge resources. Each of our probing datasets consists of multiple-choice questions that include a question $\\textbf {q}$ and a set of answer choices or candidates $\\lbrace a_{1},...a_{N}\\rbrace $. This section describes in detail the 5 different datasets we build, which are drawn from two sources of expert knowledge, namely WordNet BIBREF35 and the GNU Collaborative International Dictionary of English (GCIDE). We describe each resource in turn, and explain how the resulting dataset probes, which we call WordNetQA and DictionaryQA, are constructed."
+        ],
+        "evidence_block_ids": [
+          18
+        ],
+        "evidence_paragraph_ids": [
+          18
+        ]
+      }
+    ],
+    "doc_uuid": "1912.13337",
+    "doc_path": "qasper://1912.13337",
+    "qasper_question_id": "5bb3c27606c59d73fd6944ba7382096de4fa58d8",
+    "title": "What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge",
+    "evidence_block_ids": [
+      4,
+      18
+    ],
+    "evidence_paragraph_ids": [
+      4,
+      18
+    ],
+    "output": "{\n  \"answer_short\": \"multiple choice question answering\",\n  \"answer_rationale\": \"The document discusses open-domain question answering (QA) and evaluates models' performance on tasks that involve recognizing lexical knowledge and taxonomic reasoning, which are typically assessed through multiple-choice-style probes. The focus is on how models handle structured knowledge in QA tasks, not explicitly on reading comprehension.\"\n}",
+    "retrieved_node_ids": [
+      2
+    ],
+    "answer_short": "multiple choice question answering",
+    "answer_rationale": "The document discusses open-domain question answering (QA) and evaluates models' performance on tasks that involve recognizing lexical knowledge and taxonomic reasoning, which are typically assessed through multiple-choice-style probes. The focus is on how models handle structured knowledge in QA tasks, not explicitly on reading comprehension.",
+    "supporting_block_ids": [
+      2
+    ]
+  },
+  {
+    "question": "After how many hops does accuracy decrease?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "1-hop links to 2-hops"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Our comprehensive assessment reveals several interesting nuances to the overall positive trend. For example, the performance of even the best QA models degrades substantially on our hyponym probes (by 8-15%) when going from 1-hop links to 2-hops. Further, the accuracy of even our best models on the WordNetQA probe drops by 14-44% under our cluster-based analysis, which assesses whether a model knows several facts about each individual concept, rather than just being good at answering isolated questions. State-of-the-art QA models thus have much room to improve even in some fundamental building blocks, namely definitions and taxonomic hierarchies, of more complex forms of reasoning."
+        ],
+        "evidence_block_ids": [
+          12
+        ],
+        "evidence_paragraph_ids": [
+          12
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "one additional hop",
+        "yes_no": null,
+        "evidence": [
+          "Our comprehensive assessment reveals several interesting nuances to the overall positive trend. For example, the performance of even the best QA models degrades substantially on our hyponym probes (by 8-15%) when going from 1-hop links to 2-hops. Further, the accuracy of even our best models on the WordNetQA probe drops by 14-44% under our cluster-based analysis, which assesses whether a model knows several facts about each individual concept, rather than just being good at answering isolated questions. State-of-the-art QA models thus have much room to improve even in some fundamental building blocks, namely definitions and taxonomic hierarchies, of more complex forms of reasoning."
+        ],
+        "evidence_block_ids": [
+          12
+        ],
+        "evidence_paragraph_ids": [
+          12
+        ]
+      }
+    ],
+    "doc_uuid": "1912.13337",
+    "doc_path": "qasper://1912.13337",
+    "qasper_question_id": "8de9f14c7c4f37ab103bc8a639d6d80ade1bc27b",
+    "title": "What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge",
+    "evidence_block_ids": [
+      12
+    ],
+    "evidence_paragraph_ids": [
+      12
+    ],
+    "output": "{\n  \"answer_short\": \"even a slight increase\",\n  \"answer_rationale\": \"The document states that performance degrades substantially with 'even a slight increase in the number of hops in the underlying taxonomic hierarchy', indicating that accuracy decreases after even a small number of hops.\"\n}",
+    "retrieved_node_ids": [
+      2
+    ],
+    "answer_short": "even a slight increase",
+    "answer_rationale": "The document states that performance degrades substantially with 'even a slight increase in the number of hops in the underlying taxonomic hierarchy', indicating that accuracy decreases after even a small number of hops.",
+    "supporting_block_ids": [
+      2
+    ]
+  },
+  {
+    "question": "How do they control for annotation artificats?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          " we use several of the MCQA baseline models first introduced in BIBREF0"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+          "When creating synthetic datasets, it is important to ensure that systematic biases, or annotation artifacts BIBREF41, are not introduced into the resulting probes and that the target datasets are sufficiently challenging (or good, in the sense of BIBREF42). To test for this, we use several of the MCQA baseline models first introduced in BIBREF0, which take inspiration from the LSTM-based models used in BIBREF43 for NLI and various partial-input baselines based on these models."
+        ],
+        "evidence_block_ids": [
+          50
+        ],
+        "evidence_paragraph_ids": [
+          50
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Choice-Only model, which is a variant of the well-known hypothesis-only baseline",
+          "Choice-to-choice model, tries to single out a given answer choice relative to other choices",
+          "Question-to-choice model, in contrast, uses the contextual representations for each question and individual choice and an attention model Att model to get a score"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "When creating synthetic datasets, it is important to ensure that systematic biases, or annotation artifacts BIBREF41, are not introduced into the resulting probes and that the target datasets are sufficiently challenging (or good, in the sense of BIBREF42). To test for this, we use several of the MCQA baseline models first introduced in BIBREF0, which take inspiration from the LSTM-based models used in BIBREF43 for NLI and various partial-input baselines based on these models.",
+          "Following the notation from BIBREF0, for any given sequence $s$ of tokens in $\\lbrace q^{(j)}, a_{1}^{(j)},...,a_{N}^{(j)}\\rbrace $ in $D$, an encoding of $s$ is given as $h_{s}^{(j)} = \\textbf {BiLSTM}(\\textsc {embed}(s)) \\in \\mathbb {R}^{|s| \\times 2h}$ (where $h$ is the dimension of the hidden state in each directional network, and embed$(\\cdot )$ is an embedding function that assigns token-level embeddings to each token in $s$). A contextual representation for each $s$ is then built by applying an element-wise max operation over $h_{s}$ as follows:",
+          "With these contextual representations, different baseline models can be constructed. For example, a Choice-Only model, which is a variant of the well-known hypothesis-only baseline used in NLI BIBREF46, scores each choice $c_{i}$ in the following way:",
+          "for $\\textbf {W}^{T} \\in \\mathbb {R}^{2h}$ independently of the question and assigns a probability to each answer $p_{i}^{(j)} \\propto e^{\\alpha _{i}^{(j)}}$.",
+          "A slight variant of this model, the Choice-to-choice model, tries to single out a given answer choice relative to other choices by scoring all choice pairs $\\alpha _{i,i^{\\prime }}^{(j)} = \\textsc {Att}(r^{(j)}_{c_{i}},r^{(j)}_{c_{i^{\\prime }}}) \\in \\mathbb {R}$ using a learned attention mechanism Att and finding the choice with the minimal similarity to other options (for full details, see their original paper). In using these partial-input baselines, which we train directly on each target probe, we can check whether systematic biases related to answer choices were introduced into the data creation process.",
+          "A Question-to-choice model, in contrast, uses the contextual representations for each question and individual choice and an attention model Att model to get a score $\\alpha ^{(j)}_{q,i} = \\textsc {Att}(r^{(j)}_{q},r^{(j)}_{c_{i}}) \\in \\mathbb {R}$ as above. Here we also experiment with using ESIM BIBREF47 to generate the contextual representations $r$, as well as a simpler VecSimilarity model that measures the average vector similarity between question and answer tokens: $\\alpha ^{(j)}_{q,i} = \\textsc {Sim}(\\textsc {embed}(q^{(j)}),\\textsc {embed}(c^{(j)}_{i}))$. In contrast to the models above, these sets of baselines are used to check for artifacts between questions and answers that are not captured in the partial-input baselines (see discussion in BIBREF49) and ensure that the overall MCQA tasks are sufficiently difficult for our transformer models."
+        ],
+        "evidence_block_ids": [
+          50,
+          51,
+          52,
+          53,
+          54,
+          55
+        ],
+        "evidence_paragraph_ids": [
+          50,
+          51,
+          52,
+          53,
+          54,
+          55
+        ]
+      }
+    ],
+    "doc_uuid": "1912.13337",
+    "doc_path": "qasper://1912.13337",
+    "qasper_question_id": "85590bb26fed01a802241bc537d85ba5ef1c6dc2",
+    "title": "What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge",
+    "evidence_block_ids": [
+      50,
+      51,
+      52,
+      53,
+      54,
+      55
+    ],
+    "evidence_paragraph_ids": [
+      50,
+      51,
+      52,
+      53,
+      54,
+      55
+    ],
+    "output": "{\n  \"answer_short\": \"by carefully controlling for them\",\n  \"answer_rationale\": \"The document states that 'we find automatically constructing probes to be vulnerable to annotation artifacts, which we carefully control for,' indicating that the method used to control for annotation artifacts is careful control.\"\n}",
+    "retrieved_node_ids": [
+      2
+    ],
+    "answer_short": "by carefully controlling for them",
+    "answer_rationale": "The document states that 'we find automatically constructing probes to be vulnerable to annotation artifacts, which we carefully control for,' indicating that the method used to control for annotation artifacts is careful control.",
+    "supporting_block_ids": [
+      2
+    ]
+  },
+  {
+    "question": "Is WordNet useful for taxonomic reasoning for this task?",
+    "answer": [
+      {
+        "unanswerable": true,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": true,
+        "evidence": [
+          "While our methodology is amenable to any knowledge source and set of models/benchmark tasks, we focus on probing state-of-the-art transformer models BIBREF7, BIBREF9 in the domain of science MCQA. For sources of expert knowledge, we use WordNet, a comprehensive lexical ontology, and other publicly available dictionary resources. We devise probes that measure model competence in definition and taxonomic knowledge in different settings (including hypernymy, hyponymy, and synonymy detection, and word sense disambiguation). This choice is motivated by fact that the science domain is considered particularly challenging for QA BIBREF10, BIBREF11, BIBREF12, and existing science benchmarks are known to involve widespread use of such knowledge (see BIBREF1, BIBREF13 for analysis), which is also arguably fundamental to more complex forms of reasoning."
+        ],
+        "evidence_block_ids": [
+          9
+        ],
+        "evidence_paragraph_ids": [
+          9
+        ]
+      }
+    ],
+    "doc_uuid": "1912.13337",
+    "doc_path": "qasper://1912.13337",
+    "qasper_question_id": "75ff6e425ce304a35f18c0230c0d13d3913a31a9",
+    "title": "What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge",
+    "evidence_block_ids": [
+      9
+    ],
+    "evidence_paragraph_ids": [
+      9
+    ],
+    "output": "{\n  \"answer_short\": \"Yes\",\n  \"answer_rationale\": \"The document states that WordNet, as a lexical taxonomy, is used as an alternative to crowd-sourcing for building datasets that probe taxonomic reasoning, indicating its usefulness for this task.\"\n}",
+    "retrieved_node_ids": [
+      2
+    ],
+    "answer_short": "Yes",
+    "answer_rationale": "The document states that WordNet, as a lexical taxonomy, is used as an alternative to crowd-sourcing for building datasets that probe taxonomic reasoning, indicating its usefulness for this task.",
+    "supporting_block_ids": [
+      2
+    ]
+  }
+]

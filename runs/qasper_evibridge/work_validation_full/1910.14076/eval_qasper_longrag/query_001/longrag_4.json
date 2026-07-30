@@ -1,0 +1,70 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Topic-attention Model\n[source_id=14] ELMo ELMo is a new type of word representation introduced by BIBREF16 which considers contextual information captured by pre-trained BiLSTM language models. Similar works like BERT BIBREF23 and BioBERT BIBREF24 also consider context but with deeper structures. Compared with those models, ELMo has less parameters and not easy to be overfitting. We trained our ELMo model on the MIMIC-III corpus. Since some sentences also appear in the test set, one may raise the concern of performance inflation in testing. However, we pre-trained ELMo using the whole corpus of MIMIC in an unsupervised way, so the classification labels were not visible during training. To train the ELMo model, we adapted code from AllenNLP, we set the word embedding dimension to 64 and applied two BiLSTM layers. For all of our experiments that involved with ELMo, we initialized the word embeddings from the last layer of ELMo.\n[source_id=15] Topic-attention We propose a neural topic-attention model for text classification. Our assumption is that the topic information plays an important role in doing the disambiguation given a sentence. For example, the abbreviation of the medical term FISH has two potential senses: general English fish as seafood and the sense of fluorescent in situ hybridization BIBREF17. The former case always goes with the topic of food, allergies while the other one appears in the topic of some examination test reports. In our model, a topic-attention module is applied to add topic information into the final sentence representation. This module calculates the distribution of topic-attention weights on a list of topic vectors. As shown in Figure SECREF5, we took the content vector $c_i$ (from soft-attention BIBREF22) and a topic matrix $T_{topic}=[t_1,t_2,..,t_j]$ (where each $t_i$ is a column vector in the figure and we illustrate four topics) as the inputs to the topic-attention module, and then calculated a weighted summation of the topic vectors. The final sentence representation $r_i$ for the sentence $i$ was calculated as the following:\n[source_id=16] where $W_{topic}$ and $b _ { topic }$ are trainable parameters, $\\beta _{it}$ represents the topic-attention weights. The final sentence representation is denoted as $r_i$, and $[\\cdot ,\\cdot ]$ means concatenation. Here $s_i$ is the representation of the sentence which includes the topic information. The final sentence representation $r_i$ is the concatenation of $c_i$ and $s_i$, now we have both context-aware sentence representation and topic-related representation. Then we added a fully-connected layer, followed by a Softmax to do classification with cross-entropy loss function.\n[source_id=17] Topic Matrix To generate the topic matrix $T_{topic}$ as in Equation DISPLAY_FORM9, we propose a convolution-based method to generate topic vectors. We first pre-trained a topic model using the Latent Dirichlet Allocation (LDA) BIBREF25 model on MIMIC-III notes as used by the ELMo model. We set the number of topics to be 50 and ran for 30 iterations. Then we were able to get a list of top $k$ words (we set $k=100$) for each topic. To get the topic vector $t$ for a specific topic:\n[source_id=18] where $e_j$ (column vector) is the pre-trained Doc2vec word embedding for the top word $j$ from the current topic, and $Conv(\\cdot )$ indicates a convolutional layer; $maxpool(\\cdot )$ is a max pooling layer. We finally reshaped the output $t$ into a 1-dimension vector. Eventually we collected all topic vectors as the topic matrix $T_{topic}$ in Figure SECREF5.",
+  "score": 7.215405911255127,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "child_qasper_evidence_texts": [
+    "ELMo ELMo is a new type of word representation introduced by BIBREF16 which considers contextual information captured by pre-trained BiLSTM language models. Similar works like BERT BIBREF23 and BioBERT BIBREF24 also consider context but with deeper structures. Compared with those models, ELMo has less parameters and not easy to be overfitting. We trained our ELMo model on the MIMIC-III corpus. Since some sentences also appear in the test set, one may raise the concern of performance inflation in testing. However, we pre-trained ELMo using the whole corpus of MIMIC in an unsupervised way, so the classification labels were not visible during training. To train the ELMo model, we adapted code from AllenNLP, we set the word embedding dimension to 64 and applied two BiLSTM layers. For all of our experiments that involved with ELMo, we initialized the word embeddings from the last layer of ELMo.",
+    "Topic-attention We propose a neural topic-attention model for text classification. Our assumption is that the topic information plays an important role in doing the disambiguation given a sentence. For example, the abbreviation of the medical term FISH has two potential senses: general English fish as seafood and the sense of fluorescent in situ hybridization BIBREF17. The former case always goes with the topic of food, allergies while the other one appears in the topic of some examination test reports. In our model, a topic-attention module is applied to add topic information into the final sentence representation. This module calculates the distribution of topic-attention weights on a list of topic vectors. As shown in Figure SECREF5, we took the content vector $c_i$ (from soft-attention BIBREF22) and a topic matrix $T_{topic}=[t_1,t_2,..,t_j]$ (where each $t_i$ is a column vector in the figure and we illustrate four topics) as the inputs to the topic-attention module, and then calculated a weighted summation of the topic vectors. The final sentence representation $r_i$ for the sentence $i$ was calculated as the following:",
+    "where $W_{topic}$ and $b _ { topic }$ are trainable parameters, $\\beta _{it}$ represents the topic-attention weights. The final sentence representation is denoted as $r_i$, and $[\\cdot ,\\cdot ]$ means concatenation. Here $s_i$ is the representation of the sentence which includes the topic information. The final sentence representation $r_i$ is the concatenation of $c_i$ and $s_i$, now we have both context-aware sentence representation and topic-related representation. Then we added a fully-connected layer, followed by a Softmax to do classification with cross-entropy loss function.",
+    "Topic Matrix To generate the topic matrix $T_{topic}$ as in Equation DISPLAY_FORM9, we propose a convolution-based method to generate topic vectors. We first pre-trained a topic model using the Latent Dirichlet Allocation (LDA) BIBREF25 model on MIMIC-III notes as used by the ELMo model. We set the number of topics to be 50 and ran for 30 iterations. Then we were able to get a list of top $k$ words (we set $k=100$) for each topic. To get the topic vector $t$ for a specific topic:",
+    "where $e_j$ (column vector) is the pre-trained Doc2vec word embedding for the top word $j$ from the current topic, and $Conv(\\cdot )$ indicates a convolutional layer; $maxpool(\\cdot )$ is a max pooling layer. We finally reshaped the output $t$ into a 1-dimension vector. Eventually we collected all topic vectors as the topic matrix $T_{topic}$ in Figure SECREF5."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Topic-attention Model",
+    "Topic-attention Model",
+    "Topic-attention Model",
+    "Topic-attention Model",
+    "Topic-attention Model"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Topic-attention Model",
+      0
+    ],
+    [
+      "Topic-attention Model",
+      1
+    ],
+    [
+      "Topic-attention Model",
+      2
+    ],
+    [
+      "Topic-attention Model",
+      3
+    ],
+    [
+      "Topic-attention Model",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Topic-attention Model",
+  "section": "Topic-attention Model",
+  "title_path": "Topic-attention Model",
+  "block_type": "long_unit"
+}

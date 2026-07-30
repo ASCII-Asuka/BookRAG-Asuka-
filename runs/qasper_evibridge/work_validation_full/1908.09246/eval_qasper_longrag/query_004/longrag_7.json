@@ -1,0 +1,133 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Network Architecture\n[source_id=28] The generator network INLINEFORM0 is designed to learn the projection function between the document-event distribution INLINEFORM1 and the four document-level word distributions (entity distribution, location distribution, keyword distribution and date distribution).\n[source_id=29] More concretely, INLINEFORM0 consists of a INLINEFORM1 -dimensional document-event distribution layer, INLINEFORM2 -dimensional hidden layer and INLINEFORM3 -dimensional event-related word distribution layer. Here, INLINEFORM4 denotes the event number, INLINEFORM5 is the number of units in the hidden layer, INLINEFORM6 is the vocabulary size and equals to INLINEFORM7 + INLINEFORM8 + INLINEFORM9 + INLINEFORM10 . As shown in Figure FIGREF4 , INLINEFORM11 firstly employs a random document-event distribution INLINEFORM12 as an input. To model the multinomial property of the document-event distribution, INLINEFORM13 is drawn from a Dirichlet distribution parameterized with INLINEFORM14 which is formulated as: DISPLAYFORM0\n[source_id=30] where INLINEFORM0 is the hyper-parameter of the dirichlet distribution, INLINEFORM1 is the number of events which should be set in AEM, INLINEFORM2 , INLINEFORM3 represents the proportion of event INLINEFORM4 in the document and INLINEFORM5 .\n[source_id=31] Subsequently, INLINEFORM0 transforms INLINEFORM1 into a INLINEFORM2 -dimensional hidden space using a linear layer followed by layer normalization, and the transformation is defined as: DISPLAYFORM0\n[source_id=32] where INLINEFORM0 represents the weight matrix of hidden layer, and INLINEFORM1 denotes the bias term, INLINEFORM2 is the parameter of LeakyReLU activation and is set to 0.1, INLINEFORM3 and INLINEFORM4 denote the normalized hidden states and the outputs of the hidden layer, and INLINEFORM5 represents the layer normalization.\n[source_id=33] Then, to project INLINEFORM0 into four document-level event related word distributions ( INLINEFORM1 , INLINEFORM2 , INLINEFORM3 and INLINEFORM4 shown in Figure FIGREF4 ), four subnets (each contains a linear layer, a batch normalization layer and a softmax layer) are employed in INLINEFORM5 . And the exact transformation is based on the formulas below: DISPLAYFORM0\n[source_id=34] where INLINEFORM0 means softmax layer, INLINEFORM1 , INLINEFORM2 , INLINEFORM3 and INLINEFORM4 denote the weight matrices of the linear layers in subnets, INLINEFORM5 , INLINEFORM6 , INLINEFORM7 and INLINEFORM8 represent the corresponding bias terms, INLINEFORM9 , INLINEFORM10 , INLINEFORM11 and INLINEFORM12 are state vectors. INLINEFORM13 , INLINEFORM14 , INLINEFORM15 and INLINEFORM16 denote the generated entity distribution, location distribution, keyword distribution and date distribution, respectively, that correspond to the given event distribution INLINEFORM17 . And each dimension represents the relevance between corresponding entity/location/keyword/date term and the input event distribution.\n[source_id=35] Finally, four generated distributions are concatenated to represent the generated document INLINEFORM0 corresponding to the input INLINEFORM1 : DISPLAYFORM0\n[source_id=36] The discriminator network INLINEFORM0 is designed as a fully-connected network which contains an input layer, a discriminative feature layer (discriminative features are employed for event visualization) and an output layer. In AEM, INLINEFORM1 uses fake document INLINEFORM2 and real document INLINEFORM3 as input and outputs the signal INLINEFORM4 to indicate the source of the input data (lower value denotes that INLINEFORM5 is prone to predict the input data as a fake document and vice versa).\n[source_id=37] As have previously been discussed in BIBREF7 , BIBREF8 , lipschitz continuity of INLINEFORM0 network is crucial to the training of the GAN-based approaches. To ensure the lipschitz continuity of INLINEFORM1 , we employ the spectral normalization technique BIBREF9 . More concretely, for each linear layer INLINEFORM2 (bias term is omitted for simplicity) in INLINEFORM3 , the weight matrix INLINEFORM4 is normalized by INLINEFORM5 . Here, INLINEFORM6 is the spectral norm of the weight matrix INLINEFORM7 with the definition below: DISPLAYFORM0\n[source_id=38] which is equivalent to the largest singular value of INLINEFORM0 . The weight matrix INLINEFORM1 is then normalized using: DISPLAYFORM0\n[source_id=39] Obviously, the normalized weight matrix INLINEFORM0 satisfies that INLINEFORM1 and further ensures the lipschitz continuity of the INLINEFORM2 network BIBREF9 . To reduce the high cost of computing spectral norm INLINEFORM3 using singular value decomposition at each iteration, we follow BIBREF10 and employ the power iteration method to estimate INLINEFORM4 instead. With this substitution, the spectral norm can be estimated with very small additional computational time.",
+  "score": 1.0666977446200785,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "child_qasper_evidence_texts": [
+    "The generator network INLINEFORM0 is designed to learn the projection function between the document-event distribution INLINEFORM1 and the four document-level word distributions (entity distribution, location distribution, keyword distribution and date distribution).",
+    "More concretely, INLINEFORM0 consists of a INLINEFORM1 -dimensional document-event distribution layer, INLINEFORM2 -dimensional hidden layer and INLINEFORM3 -dimensional event-related word distribution layer. Here, INLINEFORM4 denotes the event number, INLINEFORM5 is the number of units in the hidden layer, INLINEFORM6 is the vocabulary size and equals to INLINEFORM7 + INLINEFORM8 + INLINEFORM9 + INLINEFORM10 . As shown in Figure FIGREF4 , INLINEFORM11 firstly employs a random document-event distribution INLINEFORM12 as an input. To model the multinomial property of the document-event distribution, INLINEFORM13 is drawn from a Dirichlet distribution parameterized with INLINEFORM14 which is formulated as: DISPLAYFORM0",
+    "where INLINEFORM0 is the hyper-parameter of the dirichlet distribution, INLINEFORM1 is the number of events which should be set in AEM, INLINEFORM2 , INLINEFORM3 represents the proportion of event INLINEFORM4 in the document and INLINEFORM5 .",
+    "Subsequently, INLINEFORM0 transforms INLINEFORM1 into a INLINEFORM2 -dimensional hidden space using a linear layer followed by layer normalization, and the transformation is defined as: DISPLAYFORM0",
+    "where INLINEFORM0 represents the weight matrix of hidden layer, and INLINEFORM1 denotes the bias term, INLINEFORM2 is the parameter of LeakyReLU activation and is set to 0.1, INLINEFORM3 and INLINEFORM4 denote the normalized hidden states and the outputs of the hidden layer, and INLINEFORM5 represents the layer normalization.",
+    "Then, to project INLINEFORM0 into four document-level event related word distributions ( INLINEFORM1 , INLINEFORM2 , INLINEFORM3 and INLINEFORM4 shown in Figure FIGREF4 ), four subnets (each contains a linear layer, a batch normalization layer and a softmax layer) are employed in INLINEFORM5 . And the exact transformation is based on the formulas below: DISPLAYFORM0",
+    "where INLINEFORM0 means softmax layer, INLINEFORM1 , INLINEFORM2 , INLINEFORM3 and INLINEFORM4 denote the weight matrices of the linear layers in subnets, INLINEFORM5 , INLINEFORM6 , INLINEFORM7 and INLINEFORM8 represent the corresponding bias terms, INLINEFORM9 , INLINEFORM10 , INLINEFORM11 and INLINEFORM12 are state vectors. INLINEFORM13 , INLINEFORM14 , INLINEFORM15 and INLINEFORM16 denote the generated entity distribution, location distribution, keyword distribution and date distribution, respectively, that correspond to the given event distribution INLINEFORM17 . And each dimension represents the relevance between corresponding entity/location/keyword/date term and the input event distribution.",
+    "Finally, four generated distributions are concatenated to represent the generated document INLINEFORM0 corresponding to the input INLINEFORM1 : DISPLAYFORM0",
+    "The discriminator network INLINEFORM0 is designed as a fully-connected network which contains an input layer, a discriminative feature layer (discriminative features are employed for event visualization) and an output layer. In AEM, INLINEFORM1 uses fake document INLINEFORM2 and real document INLINEFORM3 as input and outputs the signal INLINEFORM4 to indicate the source of the input data (lower value denotes that INLINEFORM5 is prone to predict the input data as a fake document and vice versa).",
+    "As have previously been discussed in BIBREF7 , BIBREF8 , lipschitz continuity of INLINEFORM0 network is crucial to the training of the GAN-based approaches. To ensure the lipschitz continuity of INLINEFORM1 , we employ the spectral normalization technique BIBREF9 . More concretely, for each linear layer INLINEFORM2 (bias term is omitted for simplicity) in INLINEFORM3 , the weight matrix INLINEFORM4 is normalized by INLINEFORM5 . Here, INLINEFORM6 is the spectral norm of the weight matrix INLINEFORM7 with the definition below: DISPLAYFORM0",
+    "which is equivalent to the largest singular value of INLINEFORM0 . The weight matrix INLINEFORM1 is then normalized using: DISPLAYFORM0",
+    "Obviously, the normalized weight matrix INLINEFORM0 satisfies that INLINEFORM1 and further ensures the lipschitz continuity of the INLINEFORM2 network BIBREF9 . To reduce the high cost of computing spectral norm INLINEFORM3 using singular value decomposition at each iteration, we follow BIBREF10 and employ the power iteration method to estimate INLINEFORM4 instead. With this substitution, the spectral norm can be estimated with very small additional computational time."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Network Architecture",
+    "Network Architecture",
+    "Network Architecture",
+    "Network Architecture",
+    "Network Architecture",
+    "Network Architecture",
+    "Network Architecture",
+    "Network Architecture",
+    "Network Architecture",
+    "Network Architecture",
+    "Network Architecture",
+    "Network Architecture"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Network Architecture",
+      0
+    ],
+    [
+      "Network Architecture",
+      1
+    ],
+    [
+      "Network Architecture",
+      2
+    ],
+    [
+      "Network Architecture",
+      3
+    ],
+    [
+      "Network Architecture",
+      4
+    ],
+    [
+      "Network Architecture",
+      5
+    ],
+    [
+      "Network Architecture",
+      6
+    ],
+    [
+      "Network Architecture",
+      7
+    ],
+    [
+      "Network Architecture",
+      8
+    ],
+    [
+      "Network Architecture",
+      9
+    ],
+    [
+      "Network Architecture",
+      10
+    ],
+    [
+      "Network Architecture",
+      11
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Network Architecture",
+  "section": "Network Architecture",
+  "title_path": "Network Architecture",
+  "block_type": "long_unit"
+}

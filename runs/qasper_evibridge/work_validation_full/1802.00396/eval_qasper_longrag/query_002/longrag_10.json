@@ -1,0 +1,160 @@
+{
+  "id": "longrag_10",
+  "content": "[Section] Network Analysis\n[source_id=72] Although we present a novel approach for leveraging position similarity information found in political text, it is not immediately obvious that this approach is useful for the task of political analysis. We posit that for this approach to be considered useful, it should be capable of providing information useful for the performance of inference on observed state behavior. We choose violent conflict onset because this is one of the enduring methodological challenges faced by the discipline. For this task, we aim to see whether or not these embedded speeches provide information on state preferences which improve upon current out-of-sample predictions relative to current models which employ UN roll call data. We choose to compare our approach to the recently published models of BIBREF8 , because their goal and applications which use UN roll call data closely parallel our research motivations. This section provides further information on the graph partitioning approach, the new Multilayer Extraction algorithm, and model performance assessments.\n[source_id=73] For clusters based on speeches alone, we follow Pauls and Cranmer's ( BIBREF8 ) approach through the performance of 5-nearest neighbor clustering on the matrix of RWMD state-state similarities, which yields candidates for membership in an affinity community. As we are dealing with textual data, and in contrast to their sign-test approach, we assign ties between affinity candidate state pairs INLINEFORM0 based on relatively strict similarity thresholds between 0.50 and 0.60. The result is a square INLINEFORM1 adjacency matrix INLINEFORM2 of unweighted ties for each year which contains all states who voted and delivered a GD statement. To locate multiplex blocs, we use the voting clusters found by Pauls and Cranmer ( BIBREF8 ) as one layer, and the speech clusters just described as a second layer. The Multilayer Extraction algorithm (described below) is then applied to these two layers, which returns community membership labels in vectors. These are transformed into adjacency matrices of unweighted ties for each year. This is a strong test for our hypothesized effects because multilayer communities must be detectable after individual layers have already been clustered.\n[source_id=74] The intuition of employing a threshold is that every node is connected to every other node in the network through a given text similarity, but this computationally becomes infeasible and unnecessary as many of the ties are low valued. Further, in order to be compatible with the TERGMs, this binarization is necessary, and so we follow thresholding guidelines outlined in the network science literature, see BIBREF40 , BIBREF41 , BIBREF42 , BIBREF43 . Because the choice of threshold is case dependent and must take into account the type of data under scrutiny, we turn to the NLP literature, which suggests that a threshold of INLINEFORM0 is considered to be a relatively common benchmark for discarding low-information similarity scores BIBREF44 , BIBREF45 , BIBREF46 . As different thresholds result in different graphs, we check and confirm the robustness of our results at different levels and report these results below.\n[source_id=75] Clusters based on speeches or votes in isolation provide one slice of information about state preferences, but we are motivated to locate an approach which exploits both sources of information in tandem. This is broadly aligned with other work in political science which aims to combine votes and speeches in statistical models. Specifically, we posit that valuable and perhaps different information might be garnered from the voting behavior and speeches made by states and we consider these as two elementary layers of a multilayer network. A two-layer network illustration is presented in Figure FIGREF32 . Extracting communities based on this multilayer network provides one strategy of holistically exploiting both sources of preference information in tandem and is one of the current forefronts of network science research BIBREF26 .\n[source_id=76] At present, most multilayer community detection heuristics require the community structure to be homogenous at each layer, but as displayed above, speech and voting patterns often diverge. A recently proposed solution to this problem is the Multilayer Extraction procedure BIBREF27 . The algorithm identifies densely connected vertex-layers in multilayer networks through a significance-based score that quantifies the connectivity of an observed vertex-layer set by comparison with a multilayer fixed degree random graph model. For our analysis, the clusters from voting data comprise the first layer and the text-based clusters comprise the second layer of the graph for each year.\n[source_id=77] This unique approach to community detection allows us to exploit preference similarity information across speeches and voting habits without requiring states to be similar on both dimensions. Formally, our vote-speech layered network is a node-aligned INLINEFORM0 undirected multilayer network INLINEFORM1 with no self-edges INLINEFORM2 . The multilayer network is node aligned because we add extraneous nodes such that INLINEFORM3 where typically the INLINEFORM4 . Such an approach is shown in the literature to yield mathematically desirable properties for the task of multilayer community detection BIBREF26 and is also required for the TERGM estimations.\n[source_id=78] The Multilayer Extraction procedure locates communities across the two network layers and provides a resulting membership identification vector which can be used to construct a one-mode representation of the cross-layer communities for a given year where an edge between INLINEFORM0 and INLINEFORM1 exists if the extraction procedure identifies INLINEFORM2 and INLINEFORM3 as belonging to the same community. If the extraction procedure fails to locate multilayer communities, we can conclude that no information is lost by using the more common aggregation procedure of considering the union of edges in the two layers INLINEFORM4 and consider an edge to exist between INLINEFORM5 and INLINEFORM6 if an edge exists in either of the two layers, see BIBREF26 . The result is a one mode network for each year based on the two sources of preference information. These multiplex blocs are employed as a substitute for votes- and text-based clusters in Model 4, and the results are reported in [table:tergm]Table 1 of the main paper.\n[source_id=79] For the results reported in the paper's main body, we found that Multilayer Extraction detected heterogenous community structure in the two layers of speeches and votes for 12 of the years. For the other 18 years, no multilayer communities were detected and therefore could be aggregated into a single network without the risk of ignoring multilayer community structure in the analysis. This helps to explain why some findings using UN roll call data alone come up with varying conclusions. Roll call data would perform better in years where complex speech-vote dependencies did not exist (i.e. when a given state's votes and speeches are both “similar\" and therefore considering one source of information alone is analytically sufficient). However, in years where a given state's voting behavior and speeches diverge (e.g. a NATO member voting with the bloc but delivering a speech which contains position information which diverges from the rest of the bloc), then favoring one source of information over the other will likely yield misleading estimates of preference polarization. This multilayer community detection approach allows us to capture these potentially complex structures at both levels of preference information.\n[source_id=80] In the body of the main paper, we present the results of the original model and date-adjusted models of BIBREF8 , as well as our textual and multiplex cluster results. The readers can refer to the original paper of BIBREF8 for complete details on variable operationalization and model specification. We focus here on the performance of the models.\n[source_id=81] Increasing attention is devoted to the appropriate role of unsupervised methods in political science research, because they require human interpretation and lack well-defined criteria for accuracy and performance assessment. Both the word embeddings and multilayer community detection procedure are unsupervised methods, and so we posit that in order to validate that these located affinity blocs really do capture meaningful preference similarity in international politics, they should be able to improve upon our current ability to predict conflict onset out-of-sample. This would enable us to more adequately explain observed state behavior and provides a rigorous criteria for performance assessment. As reported in the main paper, clusters based on partitions of our speech graph and our speech-vote multiplex graph are both statistically significant predictors of conflict onset. Here, we assess the goodness-of-fit of our models, the out-of-sample predictive accuracy of the models, and robustness checks of our results at different tie similarity thresholds.\n[source_id=82] To assess the in-sample goodness-of-fit (GOF) of exponential random graph models, it is common to simulate network statistics which were not specified in the model to see how well the fitted model can simulate statistics on the outcome network. In our case, the outcome network is the conflict onset network, and we perform 50 simulations over each of the 30 time steps for 1,500 total simulations for each of the four models. The in-sample areas under the ROC and PR curves for the three models of primary concern are presented in Figure FIGREF36 and Figure FIGREF37 , respectively. Furthermore, the dyad-wise and edge-wise shared partners and modularities are presented for all four models in Figure FIGREF38 and Figure FIGREF39 . Although the original models from BIBREF8 and our textual and multiplex models all exhibit impressive GOFs, the multiplex model exhibits the best in-sample GOF as measured by areas under the ROC and PR curves. This increases our confidence in the model specifications, but it is necessary to assess out-of-sample predictive capability since all four models fit quite well.\n[source_id=83] To assess whether or not the inclusion of textual or multiplex clusters improves upon the existing models with roll call-based clusters alone, we follow BIBREF8 in training on five-year windows and attempt to predict the next year of conflict onset. The multiplex model exhibits a 20.5% increase in area under the precision recall curve compared to the original date-adjusted model (1.156 vs. 0.959). In contrast, the model with textual clusters alone underperforms the original date-adjusted model (0.081 vs. 0.959). We plot these out-of-sample performance results for the multiplex models alongside other tie thresholds as checks on the stability of the results in Figure FIGREF40 which displays the sum of the areas under the precision recall curves at various thresholds compared to the baseline (date-adjusted) model presented in BIBREF8 .\n[source_id=84] We find that several of the thresholds provide reliable and statistically significant estimates of conflict onset. In order to choose the final model, we select the model with the lowest variance in out-of-sample prediction capability (i.e. the area under the precision recall curve), that is, we select the model which yields the most consistent predictions over time. Because out-of-sample predictions on sparse networks (such as the conflict onset network) is a challenging task, this selection approach helps to eliminate models with predictions that vary widely from one year to the next. As previously mentioned, a threshold of .50 is common in the NLP literature and so we report every threshold between [0.50,0.60] at .01 increments. We select the .58 tie threshold because this model exhibits the lowest variance in predictions.\n[source_id=85] To ensure that we are not selecting a single model which vastly outperforms all other thresholds (i.e. to ensure that our results are robust), we consider the out-of-sample predictive accuracy for the models in which the multiplex clusters yielded a statistically significant relationship with conflict onset. This was the case for 7 out of the 11 thresholds tested. The sums of the areas under the precision recall curve for these models are plotted in Figure FIGREF41 . These box plots make clear that our multiplex models do indeed display increased out-of-sample predictive capability relative to the baseline model across various thresholds.\n[source_id=86] The above amounts to a toolkit for the exploitation of multidimensional information on positions and preferences in political research. We show how the information in textual data can be usefully exploited beyond simple word counts and weighted frequencies. We show how this information can in its own right be useful, but also how it can be exploited in tandem with other existing sources of preference information like votes through a multilayer network approach. Finally, we show that these measures are not only substantively reasonable, but can be used to extend current state-of-the-art network models which infer the impact of preferences on international conflict.",
+  "score": 3.6818136581718695,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_10",
+  "child_source_node_ids": [
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86
+  ],
+  "child_qasper_evidence_texts": [
+    "Although we present a novel approach for leveraging position similarity information found in political text, it is not immediately obvious that this approach is useful for the task of political analysis. We posit that for this approach to be considered useful, it should be capable of providing information useful for the performance of inference on observed state behavior. We choose violent conflict onset because this is one of the enduring methodological challenges faced by the discipline. For this task, we aim to see whether or not these embedded speeches provide information on state preferences which improve upon current out-of-sample predictions relative to current models which employ UN roll call data. We choose to compare our approach to the recently published models of BIBREF8 , because their goal and applications which use UN roll call data closely parallel our research motivations. This section provides further information on the graph partitioning approach, the new Multilayer Extraction algorithm, and model performance assessments.",
+    "For clusters based on speeches alone, we follow Pauls and Cranmer's ( BIBREF8 ) approach through the performance of 5-nearest neighbor clustering on the matrix of RWMD state-state similarities, which yields candidates for membership in an affinity community. As we are dealing with textual data, and in contrast to their sign-test approach, we assign ties between affinity candidate state pairs INLINEFORM0 based on relatively strict similarity thresholds between 0.50 and 0.60. The result is a square INLINEFORM1 adjacency matrix INLINEFORM2 of unweighted ties for each year which contains all states who voted and delivered a GD statement. To locate multiplex blocs, we use the voting clusters found by Pauls and Cranmer ( BIBREF8 ) as one layer, and the speech clusters just described as a second layer. The Multilayer Extraction algorithm (described below) is then applied to these two layers, which returns community membership labels in vectors. These are transformed into adjacency matrices of unweighted ties for each year. This is a strong test for our hypothesized effects because multilayer communities must be detectable after individual layers have already been clustered.",
+    "The intuition of employing a threshold is that every node is connected to every other node in the network through a given text similarity, but this computationally becomes infeasible and unnecessary as many of the ties are low valued. Further, in order to be compatible with the TERGMs, this binarization is necessary, and so we follow thresholding guidelines outlined in the network science literature, see BIBREF40 , BIBREF41 , BIBREF42 , BIBREF43 . Because the choice of threshold is case dependent and must take into account the type of data under scrutiny, we turn to the NLP literature, which suggests that a threshold of INLINEFORM0 is considered to be a relatively common benchmark for discarding low-information similarity scores BIBREF44 , BIBREF45 , BIBREF46 . As different thresholds result in different graphs, we check and confirm the robustness of our results at different levels and report these results below.",
+    "Clusters based on speeches or votes in isolation provide one slice of information about state preferences, but we are motivated to locate an approach which exploits both sources of information in tandem. This is broadly aligned with other work in political science which aims to combine votes and speeches in statistical models. Specifically, we posit that valuable and perhaps different information might be garnered from the voting behavior and speeches made by states and we consider these as two elementary layers of a multilayer network. A two-layer network illustration is presented in Figure FIGREF32 . Extracting communities based on this multilayer network provides one strategy of holistically exploiting both sources of preference information in tandem and is one of the current forefronts of network science research BIBREF26 .",
+    "At present, most multilayer community detection heuristics require the community structure to be homogenous at each layer, but as displayed above, speech and voting patterns often diverge. A recently proposed solution to this problem is the Multilayer Extraction procedure BIBREF27 . The algorithm identifies densely connected vertex-layers in multilayer networks through a significance-based score that quantifies the connectivity of an observed vertex-layer set by comparison with a multilayer fixed degree random graph model. For our analysis, the clusters from voting data comprise the first layer and the text-based clusters comprise the second layer of the graph for each year.",
+    "This unique approach to community detection allows us to exploit preference similarity information across speeches and voting habits without requiring states to be similar on both dimensions. Formally, our vote-speech layered network is a node-aligned INLINEFORM0 undirected multilayer network INLINEFORM1 with no self-edges INLINEFORM2 . The multilayer network is node aligned because we add extraneous nodes such that INLINEFORM3 where typically the INLINEFORM4 . Such an approach is shown in the literature to yield mathematically desirable properties for the task of multilayer community detection BIBREF26 and is also required for the TERGM estimations.",
+    "The Multilayer Extraction procedure locates communities across the two network layers and provides a resulting membership identification vector which can be used to construct a one-mode representation of the cross-layer communities for a given year where an edge between INLINEFORM0 and INLINEFORM1 exists if the extraction procedure identifies INLINEFORM2 and INLINEFORM3 as belonging to the same community. If the extraction procedure fails to locate multilayer communities, we can conclude that no information is lost by using the more common aggregation procedure of considering the union of edges in the two layers INLINEFORM4 and consider an edge to exist between INLINEFORM5 and INLINEFORM6 if an edge exists in either of the two layers, see BIBREF26 . The result is a one mode network for each year based on the two sources of preference information. These multiplex blocs are employed as a substitute for votes- and text-based clusters in Model 4, and the results are reported in [table:tergm]Table 1 of the main paper.",
+    "For the results reported in the paper's main body, we found that Multilayer Extraction detected heterogenous community structure in the two layers of speeches and votes for 12 of the years. For the other 18 years, no multilayer communities were detected and therefore could be aggregated into a single network without the risk of ignoring multilayer community structure in the analysis. This helps to explain why some findings using UN roll call data alone come up with varying conclusions. Roll call data would perform better in years where complex speech-vote dependencies did not exist (i.e. when a given state's votes and speeches are both “similar\" and therefore considering one source of information alone is analytically sufficient). However, in years where a given state's voting behavior and speeches diverge (e.g. a NATO member voting with the bloc but delivering a speech which contains position information which diverges from the rest of the bloc), then favoring one source of information over the other will likely yield misleading estimates of preference polarization. This multilayer community detection approach allows us to capture these potentially complex structures at both levels of preference information.",
+    "In the body of the main paper, we present the results of the original model and date-adjusted models of BIBREF8 , as well as our textual and multiplex cluster results. The readers can refer to the original paper of BIBREF8 for complete details on variable operationalization and model specification. We focus here on the performance of the models.",
+    "Increasing attention is devoted to the appropriate role of unsupervised methods in political science research, because they require human interpretation and lack well-defined criteria for accuracy and performance assessment. Both the word embeddings and multilayer community detection procedure are unsupervised methods, and so we posit that in order to validate that these located affinity blocs really do capture meaningful preference similarity in international politics, they should be able to improve upon our current ability to predict conflict onset out-of-sample. This would enable us to more adequately explain observed state behavior and provides a rigorous criteria for performance assessment. As reported in the main paper, clusters based on partitions of our speech graph and our speech-vote multiplex graph are both statistically significant predictors of conflict onset. Here, we assess the goodness-of-fit of our models, the out-of-sample predictive accuracy of the models, and robustness checks of our results at different tie similarity thresholds.",
+    "To assess the in-sample goodness-of-fit (GOF) of exponential random graph models, it is common to simulate network statistics which were not specified in the model to see how well the fitted model can simulate statistics on the outcome network. In our case, the outcome network is the conflict onset network, and we perform 50 simulations over each of the 30 time steps for 1,500 total simulations for each of the four models. The in-sample areas under the ROC and PR curves for the three models of primary concern are presented in Figure FIGREF36 and Figure FIGREF37 , respectively. Furthermore, the dyad-wise and edge-wise shared partners and modularities are presented for all four models in Figure FIGREF38 and Figure FIGREF39 . Although the original models from BIBREF8 and our textual and multiplex models all exhibit impressive GOFs, the multiplex model exhibits the best in-sample GOF as measured by areas under the ROC and PR curves. This increases our confidence in the model specifications, but it is necessary to assess out-of-sample predictive capability since all four models fit quite well.",
+    "To assess whether or not the inclusion of textual or multiplex clusters improves upon the existing models with roll call-based clusters alone, we follow BIBREF8 in training on five-year windows and attempt to predict the next year of conflict onset. The multiplex model exhibits a 20.5% increase in area under the precision recall curve compared to the original date-adjusted model (1.156 vs. 0.959). In contrast, the model with textual clusters alone underperforms the original date-adjusted model (0.081 vs. 0.959). We plot these out-of-sample performance results for the multiplex models alongside other tie thresholds as checks on the stability of the results in Figure FIGREF40 which displays the sum of the areas under the precision recall curves at various thresholds compared to the baseline (date-adjusted) model presented in BIBREF8 .",
+    "We find that several of the thresholds provide reliable and statistically significant estimates of conflict onset. In order to choose the final model, we select the model with the lowest variance in out-of-sample prediction capability (i.e. the area under the precision recall curve), that is, we select the model which yields the most consistent predictions over time. Because out-of-sample predictions on sparse networks (such as the conflict onset network) is a challenging task, this selection approach helps to eliminate models with predictions that vary widely from one year to the next. As previously mentioned, a threshold of .50 is common in the NLP literature and so we report every threshold between [0.50,0.60] at .01 increments. We select the .58 tie threshold because this model exhibits the lowest variance in predictions.",
+    "To ensure that we are not selecting a single model which vastly outperforms all other thresholds (i.e. to ensure that our results are robust), we consider the out-of-sample predictive accuracy for the models in which the multiplex clusters yielded a statistically significant relationship with conflict onset. This was the case for 7 out of the 11 thresholds tested. The sums of the areas under the precision recall curve for these models are plotted in Figure FIGREF41 . These box plots make clear that our multiplex models do indeed display increased out-of-sample predictive capability relative to the baseline model across various thresholds.",
+    "The above amounts to a toolkit for the exploitation of multidimensional information on positions and preferences in political research. We show how the information in textual data can be usefully exploited beyond simple word counts and weighted frequencies. We show how this information can in its own right be useful, but also how it can be exploited in tandem with other existing sources of preference information like votes through a multilayer network approach. Finally, we show that these measures are not only substantively reasonable, but can be used to extend current state-of-the-art network models which infer the impact of preferences on international conflict."
+  ],
+  "child_pages": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "child_sections": [
+    "Network Analysis",
+    "Network Analysis",
+    "Network Analysis",
+    "Network Analysis",
+    "Network Analysis",
+    "Network Analysis",
+    "Network Analysis",
+    "Network Analysis",
+    "Network Analysis",
+    "Network Analysis",
+    "Network Analysis",
+    "Network Analysis",
+    "Network Analysis",
+    "Network Analysis",
+    "Network Analysis"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Network Analysis",
+      0
+    ],
+    [
+      "Network Analysis",
+      1
+    ],
+    [
+      "Network Analysis",
+      2
+    ],
+    [
+      "Network Analysis",
+      3
+    ],
+    [
+      "Network Analysis",
+      4
+    ],
+    [
+      "Network Analysis",
+      5
+    ],
+    [
+      "Network Analysis",
+      6
+    ],
+    [
+      "Network Analysis",
+      7
+    ],
+    [
+      "Network Analysis",
+      8
+    ],
+    [
+      "Network Analysis",
+      9
+    ],
+    [
+      "Network Analysis",
+      10
+    ],
+    [
+      "Network Analysis",
+      11
+    ],
+    [
+      "Network Analysis",
+      12
+    ],
+    [
+      "Network Analysis",
+      13
+    ],
+    [
+      "Network Analysis",
+      14
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_10",
+  "section_id": "Network Analysis",
+  "section": "Network Analysis",
+  "title_path": "Network Analysis",
+  "block_type": "long_unit"
+}

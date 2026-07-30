@@ -1,0 +1,142 @@
+{
+  "id": "longrag_3",
+  "content": "[Section] Approach\n[source_id=16] Our model's input specification consists of: the recipe name as a sequence of tokens, a partial list of ingredients, and a caloric level (high, medium, low). It outputs the recipe instructions as a token sequence: $\\mathcal {W}_r=\\lbrace w_{r,0}, \\dots , w_{r,T}\\rbrace $ for a recipe $r$ of length $T$. To personalize output, we use historical recipe interactions of a user $u \\in \\mathcal {U}$.\n[source_id=17] Encoder: Our encoder has three embedding layers: vocabulary embedding $\\mathcal {V}$, ingredient embedding $\\mathcal {I}$, and caloric-level embedding $\\mathcal {C}$. Each token in the (length $L_n$) recipe name is embedded via $\\mathcal {V}$; the embedded token sequence is passed to a two-layered bidirectional GRU (BiGRU) BIBREF17, which outputs hidden states for names $\\lbrace \\mathbf {n}_{\\text{enc},j} \\in \\mathbb {R}^{2d_h}\\rbrace $, with hidden size $d_h$. Similarly each of the $L_i$ input ingredients is embedded via $\\mathcal {I}$, and the embedded ingredient sequence is passed to another two-layered BiGRU to output ingredient hidden states as $\\lbrace \\mathbf {i}_{\\text{enc},j} \\in \\mathbb {R}^{2d_h}\\rbrace $. The caloric level is embedded via $\\mathcal {C}$ and passed through a projection layer with weights $W_c$ to generate calorie hidden representation $\\mathbf {c}_{\\text{enc}} \\in \\mathbb {R}^{2d_h}$.\n[source_id=18] Ingredient Attention: We apply attention BIBREF18 over the encoded ingredients to use encoder outputs at each decoding time step. We define an attention-score function $\\alpha $ with key $K$ and query $Q$:\n[source_id=19] with trainable weights $W_{\\alpha }$, bias $\\mathbf {b}_{\\alpha }$, and normalization term $Z$. At decoding time $t$, we calculate the ingredient context $\\mathbf {a}_{t}^{i} \\in \\mathbb {R}^{d_h}$ as:\n[source_id=20] Decoder: The decoder is a two-layer GRU with hidden state $h_t$ conditioned on previous hidden state $h_{t-1}$ and input token $w_{r, t}$ from the original recipe text. We project the concatenated encoder outputs as the initial decoder hidden state:\n[source_id=21] To bias generation toward user preferences, we attend over a user's previously reviewed recipes to jointly determine the final output token distribution. We consider two different schemes to model preferences from user histories: (1) recipe interactions, and (2) techniques seen therein (defined in data). BIBREF19, BIBREF20, BIBREF21 explore similar schemes for personalized recommendation.\n[source_id=22] Prior Recipe Attention: We obtain the set of prior recipes for a user $u$: $R^+_u$, where each recipe can be represented by an embedding from a recipe embedding layer $\\mathcal {R}$ or an average of the name tokens embedded by $\\mathcal {V}$. We attend over the $k$-most recent prior recipes, $R^{k+}_u$, to account for temporal drift of user preferences BIBREF22. These embeddings are used in the `Prior Recipe' and `Prior Name' models, respectively.\n[source_id=23] Given a recipe representation $\\mathbf {r} \\in \\mathbb {R}^{d_r}$ (where $d_r$ is recipe- or vocabulary-embedding size depending on the recipe representation) the prior recipe attention context $\\mathbf {a}_{t}^{r_u}$ is calculated as\n[source_id=24] Prior Technique Attention: We calculate prior technique preference (used in the `Prior Tech` model) by normalizing co-occurrence between users and techniques seen in $R^+_u$, to obtain a preference vector $\\rho _{u}$. Each technique $x$ is embedded via a technique embedding layer $\\mathcal {X}$ to $\\mathbf {x}\\in \\mathbb {R}^{d_x}$. Prior technique attention is calculated as\n[source_id=25] where, inspired by copy mechanisms BIBREF23, BIBREF24, we add $\\rho _{u,x}$ for technique $x$ to emphasize the attention by the user's prior technique preference.\n[source_id=26] Attention Fusion Layer: We fuse all contexts calculated at time $t$, concatenating them with decoder GRU output and previous token embedding:\n[source_id=27] We then calculate the token probability:\n[source_id=28] and maximize the log-likelihood of the generated sequence conditioned on input specifications and user preferences. fig:ex shows a case where the Prior Name model attends strongly on previously consumed savory recipes to suggest the usage of an additional ingredient (`cilantro').",
+  "score": 2.7727831662339364,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_3",
+  "child_source_node_ids": [
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+  ],
+  "child_qasper_evidence_texts": [
+    "Our model's input specification consists of: the recipe name as a sequence of tokens, a partial list of ingredients, and a caloric level (high, medium, low). It outputs the recipe instructions as a token sequence: $\\mathcal {W}_r=\\lbrace w_{r,0}, \\dots , w_{r,T}\\rbrace $ for a recipe $r$ of length $T$. To personalize output, we use historical recipe interactions of a user $u \\in \\mathcal {U}$.",
+    "Encoder: Our encoder has three embedding layers: vocabulary embedding $\\mathcal {V}$, ingredient embedding $\\mathcal {I}$, and caloric-level embedding $\\mathcal {C}$. Each token in the (length $L_n$) recipe name is embedded via $\\mathcal {V}$; the embedded token sequence is passed to a two-layered bidirectional GRU (BiGRU) BIBREF17, which outputs hidden states for names $\\lbrace \\mathbf {n}_{\\text{enc},j} \\in \\mathbb {R}^{2d_h}\\rbrace $, with hidden size $d_h$. Similarly each of the $L_i$ input ingredients is embedded via $\\mathcal {I}$, and the embedded ingredient sequence is passed to another two-layered BiGRU to output ingredient hidden states as $\\lbrace \\mathbf {i}_{\\text{enc},j} \\in \\mathbb {R}^{2d_h}\\rbrace $. The caloric level is embedded via $\\mathcal {C}$ and passed through a projection layer with weights $W_c$ to generate calorie hidden representation $\\mathbf {c}_{\\text{enc}} \\in \\mathbb {R}^{2d_h}$.",
+    "Ingredient Attention: We apply attention BIBREF18 over the encoded ingredients to use encoder outputs at each decoding time step. We define an attention-score function $\\alpha $ with key $K$ and query $Q$:",
+    "with trainable weights $W_{\\alpha }$, bias $\\mathbf {b}_{\\alpha }$, and normalization term $Z$. At decoding time $t$, we calculate the ingredient context $\\mathbf {a}_{t}^{i} \\in \\mathbb {R}^{d_h}$ as:",
+    "Decoder: The decoder is a two-layer GRU with hidden state $h_t$ conditioned on previous hidden state $h_{t-1}$ and input token $w_{r, t}$ from the original recipe text. We project the concatenated encoder outputs as the initial decoder hidden state:",
+    "To bias generation toward user preferences, we attend over a user's previously reviewed recipes to jointly determine the final output token distribution. We consider two different schemes to model preferences from user histories: (1) recipe interactions, and (2) techniques seen therein (defined in data). BIBREF19, BIBREF20, BIBREF21 explore similar schemes for personalized recommendation.",
+    "Prior Recipe Attention: We obtain the set of prior recipes for a user $u$: $R^+_u$, where each recipe can be represented by an embedding from a recipe embedding layer $\\mathcal {R}$ or an average of the name tokens embedded by $\\mathcal {V}$. We attend over the $k$-most recent prior recipes, $R^{k+}_u$, to account for temporal drift of user preferences BIBREF22. These embeddings are used in the `Prior Recipe' and `Prior Name' models, respectively.",
+    "Given a recipe representation $\\mathbf {r} \\in \\mathbb {R}^{d_r}$ (where $d_r$ is recipe- or vocabulary-embedding size depending on the recipe representation) the prior recipe attention context $\\mathbf {a}_{t}^{r_u}$ is calculated as",
+    "Prior Technique Attention: We calculate prior technique preference (used in the `Prior Tech` model) by normalizing co-occurrence between users and techniques seen in $R^+_u$, to obtain a preference vector $\\rho _{u}$. Each technique $x$ is embedded via a technique embedding layer $\\mathcal {X}$ to $\\mathbf {x}\\in \\mathbb {R}^{d_x}$. Prior technique attention is calculated as",
+    "where, inspired by copy mechanisms BIBREF23, BIBREF24, we add $\\rho _{u,x}$ for technique $x$ to emphasize the attention by the user's prior technique preference.",
+    "Attention Fusion Layer: We fuse all contexts calculated at time $t$, concatenating them with decoder GRU output and previous token embedding:",
+    "We then calculate the token probability:",
+    "and maximize the log-likelihood of the generated sequence conditioned on input specifications and user preferences. fig:ex shows a case where the Prior Name model attends strongly on previously consumed savory recipes to suggest the usage of an additional ingredient (`cilantro')."
+  ],
+  "child_pages": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "child_sections": [
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach",
+    "Approach"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Approach",
+      0
+    ],
+    [
+      "Approach",
+      1
+    ],
+    [
+      "Approach",
+      2
+    ],
+    [
+      "Approach",
+      3
+    ],
+    [
+      "Approach",
+      4
+    ],
+    [
+      "Approach",
+      5
+    ],
+    [
+      "Approach",
+      6
+    ],
+    [
+      "Approach",
+      7
+    ],
+    [
+      "Approach",
+      8
+    ],
+    [
+      "Approach",
+      9
+    ],
+    [
+      "Approach",
+      10
+    ],
+    [
+      "Approach",
+      11
+    ],
+    [
+      "Approach",
+      12
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_3",
+  "section_id": "Approach",
+  "section": "Approach",
+  "title_path": "Approach",
+  "block_type": "long_unit"
+}

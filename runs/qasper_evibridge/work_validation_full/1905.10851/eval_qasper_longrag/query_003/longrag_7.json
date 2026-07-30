@@ -1,0 +1,124 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Contextual Attention Models\n[source_id=27] When they intervene, instructors either pay attention to a specific post or a series of posts, which trigger their reply. However, instructors rarely explicitly indicate to which post(s) their intervention is in relation to. This is the case in our corpus, party due to Coursera's user interface which only allows for single level comments (see Figure FIGREF2 ). Based solely on the binary, thread-level intervention signal, our secondary objective seeks to infer the appropriate context – represented by a sequence of posts – as the basis for the intervention.\n[source_id=28] We only consider linear contiguous series of posts starting with the thread's original post to constitute to a context; e.g., INLINEFORM0 . This is a reasonable as MOOC forum posts always reply to the original post or to a subsequent post, which in turn replies to the original post. This is in contrast to forums such as Reddit that have a tree or graph-like structure that require forum structure to be modelled explicitly, such as in BIBREF5 .\n[source_id=29] We propose three neural attention BIBREF11 variants based on how an instructor might attend and reply to a context in a thread: the ultimate, penultimate and any post attention models. We review each of these in turn.\n[source_id=30] Ultimate Post Attention (UPA) Model. In this model we attend to the context represented by hidden state of the INLINEFORM0 . We use the post prior to the instructor's reply as a query over the contexts INLINEFORM1 to compute attention weights INLINEFORM2 , which are then used to compute the attended context representation INLINEFORM3 (recall again that the intervention text itself is not available for this purpose). This attention formulation makes an equivalence between the final INLINEFORM4 post and the prospective intervention, using Post INLINEFORM5 as the query for finding the appropriate context INLINEFORM6 , inclusive of itself INLINEFORM7 . Said in another way, UPA uses the most recent content in the thread as the attentional query for context.\n[source_id=31] For example, if post INLINEFORM0 is the instructor's reply, post INLINEFORM1 will query over the contexts INLINEFORM2 and INLINEFORM3 . The model schematic is shown in Figure FIGREF12 .\n[source_id=32] The attended context representations are computed as: DISPLAYFORM0\n[source_id=33] The INLINEFORM0 representation is then passed through a fully connected softmax layer to yield the binary prediction.\n[source_id=34] Penultimate Post Attention (PPA) Model. While the UPA model uses the most recent text and makes the ultimate post itself available as potential context, our the ultimate post may be better modeled as having any of its prior posts as potential context. Penultimate Post Attention (PPA) variant does this. The schematic and the equations for the PPA model are obtained by summing over contexts INLINEFORM0 in Equation EQREF10 and Figure FIGREF12 . While we could properly model such a context inference decision with any post INLINEFORM1 and prospective contexts INLINEFORM2 (where INLINEFORM3 is a random post), it makes sense to use the penultimate post, as we can make the most information available to the model for the context inference.\n[source_id=35] The attended context representations are computed as: DISPLAYFORM0\n[source_id=36] Any Post Attention (APA) Model. APA further relaxes both UPA and PPA, allowing APA to generalize and hypothesize that the prospective instructor intervention is based on the context that any previous post INLINEFORM0 replied to. In this model, each post INLINEFORM1 is set as a query to attend to its previous context INLINEFORM2 . For example, INLINEFORM3 will attend to INLINEFORM4 . Different from standard attention mechanisms, APA attention weights INLINEFORM5 are obtained by normalising interaction matrix over the different queries.\n[source_id=37] In APA, the attention context INLINEFORM0 is computed via: DISPLAYFORM0",
+  "score": 3.2241143633342513,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37
+  ],
+  "child_qasper_evidence_texts": [
+    "When they intervene, instructors either pay attention to a specific post or a series of posts, which trigger their reply. However, instructors rarely explicitly indicate to which post(s) their intervention is in relation to. This is the case in our corpus, party due to Coursera's user interface which only allows for single level comments (see Figure FIGREF2 ). Based solely on the binary, thread-level intervention signal, our secondary objective seeks to infer the appropriate context – represented by a sequence of posts – as the basis for the intervention.",
+    "We only consider linear contiguous series of posts starting with the thread's original post to constitute to a context; e.g., INLINEFORM0 . This is a reasonable as MOOC forum posts always reply to the original post or to a subsequent post, which in turn replies to the original post. This is in contrast to forums such as Reddit that have a tree or graph-like structure that require forum structure to be modelled explicitly, such as in BIBREF5 .",
+    "We propose three neural attention BIBREF11 variants based on how an instructor might attend and reply to a context in a thread: the ultimate, penultimate and any post attention models. We review each of these in turn.",
+    "Ultimate Post Attention (UPA) Model. In this model we attend to the context represented by hidden state of the INLINEFORM0 . We use the post prior to the instructor's reply as a query over the contexts INLINEFORM1 to compute attention weights INLINEFORM2 , which are then used to compute the attended context representation INLINEFORM3 (recall again that the intervention text itself is not available for this purpose). This attention formulation makes an equivalence between the final INLINEFORM4 post and the prospective intervention, using Post INLINEFORM5 as the query for finding the appropriate context INLINEFORM6 , inclusive of itself INLINEFORM7 . Said in another way, UPA uses the most recent content in the thread as the attentional query for context.",
+    "For example, if post INLINEFORM0 is the instructor's reply, post INLINEFORM1 will query over the contexts INLINEFORM2 and INLINEFORM3 . The model schematic is shown in Figure FIGREF12 .",
+    "The attended context representations are computed as: DISPLAYFORM0",
+    "The INLINEFORM0 representation is then passed through a fully connected softmax layer to yield the binary prediction.",
+    "Penultimate Post Attention (PPA) Model. While the UPA model uses the most recent text and makes the ultimate post itself available as potential context, our the ultimate post may be better modeled as having any of its prior posts as potential context. Penultimate Post Attention (PPA) variant does this. The schematic and the equations for the PPA model are obtained by summing over contexts INLINEFORM0 in Equation EQREF10 and Figure FIGREF12 . While we could properly model such a context inference decision with any post INLINEFORM1 and prospective contexts INLINEFORM2 (where INLINEFORM3 is a random post), it makes sense to use the penultimate post, as we can make the most information available to the model for the context inference.",
+    "The attended context representations are computed as: DISPLAYFORM0",
+    "Any Post Attention (APA) Model. APA further relaxes both UPA and PPA, allowing APA to generalize and hypothesize that the prospective instructor intervention is based on the context that any previous post INLINEFORM0 replied to. In this model, each post INLINEFORM1 is set as a query to attend to its previous context INLINEFORM2 . For example, INLINEFORM3 will attend to INLINEFORM4 . Different from standard attention mechanisms, APA attention weights INLINEFORM5 are obtained by normalising interaction matrix over the different queries.",
+    "In APA, the attention context INLINEFORM0 is computed via: DISPLAYFORM0"
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Contextual Attention Models",
+    "Contextual Attention Models",
+    "Contextual Attention Models",
+    "Contextual Attention Models",
+    "Contextual Attention Models",
+    "Contextual Attention Models",
+    "Contextual Attention Models",
+    "Contextual Attention Models",
+    "Contextual Attention Models",
+    "Contextual Attention Models",
+    "Contextual Attention Models"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Contextual Attention Models",
+      0
+    ],
+    [
+      "Contextual Attention Models",
+      1
+    ],
+    [
+      "Contextual Attention Models",
+      2
+    ],
+    [
+      "Contextual Attention Models",
+      3
+    ],
+    [
+      "Contextual Attention Models",
+      4
+    ],
+    [
+      "Contextual Attention Models",
+      5
+    ],
+    [
+      "Contextual Attention Models",
+      6
+    ],
+    [
+      "Contextual Attention Models",
+      7
+    ],
+    [
+      "Contextual Attention Models",
+      8
+    ],
+    [
+      "Contextual Attention Models",
+      9
+    ],
+    [
+      "Contextual Attention Models",
+      10
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Contextual Attention Models",
+  "section": "Contextual Attention Models",
+  "title_path": "Contextual Attention Models",
+  "block_type": "long_unit"
+}

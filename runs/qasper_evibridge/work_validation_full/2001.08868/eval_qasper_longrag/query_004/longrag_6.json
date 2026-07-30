@@ -1,0 +1,61 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Methodology ::: Phase 2: Generalization\n[source_id=19] Phase 2 of Go-Explore uses the trajectories found in phase 1 and trains a policy based on those trajectories. The goal of this phase in the original Go-Explore algorithm is to turn the fragile policy of playing a trajectory of actions in sequence into a more robust, state-conditioned policy that can thus deal with environmental stochasticity. In our variant of the algorithm the purpose of the second phase is generalization: although in our environment there is no stochasticity, our goal is to learn a general policy that can be applied across different games and generalize to unseen games. In the original Go-Explore implementation, the authors used the backward Proximal Policy Optimization algorithm (PPO) BIBREF32, BIBREF33 to train this policy. In this work we opt for a simple but effective Seq2Seq imitation learning approach that does not use the reward directly in the loss. More specifically, given the trajectory $\\mathcal {T}_g$, we train a Seq2Seq model to minimize the negative log-likelihood of the action $a_t$ given the observation $o_t$. In other words, consider a word embedding matrix $E \\in \\mathbb {R}^{d \\times |V|}$ where $d$ is the embedding size and $|V|$ is the cardinality of the vocabulary, which maps the input token to an embedded vector. Then, we define an encoder LSTM$_{enc}$ and a decoder LSTM$_{dec}$. Every token $o_t$ from the trajectory $\\mathcal {T}_g$ is converted to its embedded representation using the embedding matrix $E$ and the sequence of these embedding vectors is passed through LSTM$_{enc}$:\n[source_id=20] The last hidden state $h_{|o_t|}^{enc}$ is used as the initial hidden state of the decoder which generates the action $a_t$ token by token. Specifically, given the sequence of hidden states $H \\in \\mathbb {R}^{d \\times |o_t|}$ of the encoder, tokens $a_t^j$ are generated as follows:\n[source_id=21] where $W \\in \\mathbb {R}^{2d \\times |V|}$ is a matrix that maps the decoder hidden state, concatenated with the context vector, into a vocabulary size vector. During training, the parameters of the model are trained by minimizing:\n[source_id=22] which is the sum of the negative log likelihood of each token in $a_t$ (using teacher forcing BIBREF34). However, at test time the model produces the sequence in an auto-regressive way BIBREF35 using greedy search.",
+  "score": 5.864115050360534,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    19,
+    20,
+    21,
+    22
+  ],
+  "child_qasper_evidence_texts": [
+    "Phase 2 of Go-Explore uses the trajectories found in phase 1 and trains a policy based on those trajectories. The goal of this phase in the original Go-Explore algorithm is to turn the fragile policy of playing a trajectory of actions in sequence into a more robust, state-conditioned policy that can thus deal with environmental stochasticity. In our variant of the algorithm the purpose of the second phase is generalization: although in our environment there is no stochasticity, our goal is to learn a general policy that can be applied across different games and generalize to unseen games. In the original Go-Explore implementation, the authors used the backward Proximal Policy Optimization algorithm (PPO) BIBREF32, BIBREF33 to train this policy. In this work we opt for a simple but effective Seq2Seq imitation learning approach that does not use the reward directly in the loss. More specifically, given the trajectory $\\mathcal {T}_g$, we train a Seq2Seq model to minimize the negative log-likelihood of the action $a_t$ given the observation $o_t$. In other words, consider a word embedding matrix $E \\in \\mathbb {R}^{d \\times |V|}$ where $d$ is the embedding size and $|V|$ is the cardinality of the vocabulary, which maps the input token to an embedded vector. Then, we define an encoder LSTM$_{enc}$ and a decoder LSTM$_{dec}$. Every token $o_t$ from the trajectory $\\mathcal {T}_g$ is converted to its embedded representation using the embedding matrix $E$ and the sequence of these embedding vectors is passed through LSTM$_{enc}$:",
+    "The last hidden state $h_{|o_t|}^{enc}$ is used as the initial hidden state of the decoder which generates the action $a_t$ token by token. Specifically, given the sequence of hidden states $H \\in \\mathbb {R}^{d \\times |o_t|}$ of the encoder, tokens $a_t^j$ are generated as follows:",
+    "where $W \\in \\mathbb {R}^{2d \\times |V|}$ is a matrix that maps the decoder hidden state, concatenated with the context vector, into a vocabulary size vector. During training, the parameters of the model are trained by minimizing:",
+    "which is the sum of the negative log likelihood of each token in $a_t$ (using teacher forcing BIBREF34). However, at test time the model produces the sequence in an auto-regressive way BIBREF35 using greedy search."
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Methodology ::: Phase 2: Generalization",
+    "Methodology ::: Phase 2: Generalization",
+    "Methodology ::: Phase 2: Generalization",
+    "Methodology ::: Phase 2: Generalization"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Methodology ::: Phase 2: Generalization",
+      0
+    ],
+    [
+      "Methodology ::: Phase 2: Generalization",
+      1
+    ],
+    [
+      "Methodology ::: Phase 2: Generalization",
+      2
+    ],
+    [
+      "Methodology ::: Phase 2: Generalization",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Methodology ::: Phase 2: Generalization",
+  "section": "Methodology ::: Phase 2: Generalization",
+  "title_path": "Methodology ::: Phase 2: Generalization",
+  "block_type": "long_unit"
+}

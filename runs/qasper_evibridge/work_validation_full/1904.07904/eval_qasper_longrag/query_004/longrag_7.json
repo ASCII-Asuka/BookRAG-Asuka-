@@ -1,0 +1,79 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Results\n[source_id=31] First, we highlight the domain mismatch phenomenon in our experiments shown in Table TABREF9 . Row (a) is when QANet is trained on Text-SQuAD, row (b) is when QANet is trained on Spoken-SQuAD, and row (c) is when QANet is trained on Text-SQuAD and then finetuned on Spoken-SQuAD. The columns show the evaluation on the testing sets of Text-SQuAD and Spoken-SQuAD.\n[source_id=32] It is clear that the performance drops a lot when the training and testing data mismatch, indicating that model training on ASR hypotheses can not generalize well on reference transcriptions. The performance gap is nearly 20% F1 score (72% to 55%). The row (c) shows the improved performance when testing on S-SQuAD due to the transfer learning via fine-tuning.\n[source_id=33] To better demonstrate the effectiveness of the proposed model, we compare with baselines and show the results in Table TABREF12 . The baselines are: (a) trained on S-SQuAD, (b) trained on T-SQuAD and then fine-tuned on S-SQuAD, and (c) previous best model trained on S-SQuAD BIBREF5 by using Dr.QA BIBREF20 . We also compare to the approach proposed by Lan et al. BIBREF16 in the row (d). This approach is originally proposed for spoken language understanding, and we adopt the same approach on the setting here. The approach models domain-specific features from the source and target domains separately by two different embedding encoders with a shared embedding encoder for modeling domain-general features. The domain-general parameters are adversarially trained by domain discriminator.\n[source_id=34] Row (e) is the model that the weights of all layers are tied between the source domain and the target domain. Row (f) uses the same architecture as row (e) with an additional domain discriminator applied to the embedding encoder. It can be found that row (f) outperforms row (e), indicating that the proposed domain adversarial learning is helpful. Therefore, our following experiments contain domain adversarial learning. The proposed approach (row (f)) outperforms previous best model (row (c)) by 2% EM score and over 1.5% F1 score. We also show the results of applying the domain discriminator to the top of context query attention layer in row (g), which obtains poor performance. To sum it up, incorporating adversarial learning by applying the domain discriminator on top of the embedding encoder layer is effective.\n[source_id=35] Layer weight tying or untying within the model indicates different levels of symmetric mapping between the source and target domains. Different combinations are investigated and shown in Table TABREF14 . The row (a) in which all layers are tied is the row (e) of Table TABREF12 . The results show that untying context-query attention layer L2 (rows (c, f, g)) or model encoder layer L3 (rows (d, f, h)) lead to degenerated solutions in comparison to row (a) where all layers are tied. Untying both of them simultaneously leads to the worst performance which is even worse than the finetuning (row (g) v.s. (c) from Table TABREF12 ). These results imply that sharing the context-query attention layer and the model encoder layer are important for domain adaptation on SQA. We conjecture that these two layers benefit from training on source domain data where there are no ASR errors, so the QA model learns to conduct attention or further reason well on target domain data with ASR errors.\n[source_id=36] Overall, it is not beneficial to untie any layer, because no information can be shared across different domains. Untying the embedding encoder L1 and the output layer L4 leads to the least degradation in comparison to row (a).",
+  "score": 1.8259864965600787,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    31,
+    32,
+    33,
+    34,
+    35,
+    36
+  ],
+  "child_qasper_evidence_texts": [
+    "First, we highlight the domain mismatch phenomenon in our experiments shown in Table TABREF9 . Row (a) is when QANet is trained on Text-SQuAD, row (b) is when QANet is trained on Spoken-SQuAD, and row (c) is when QANet is trained on Text-SQuAD and then finetuned on Spoken-SQuAD. The columns show the evaluation on the testing sets of Text-SQuAD and Spoken-SQuAD.",
+    "It is clear that the performance drops a lot when the training and testing data mismatch, indicating that model training on ASR hypotheses can not generalize well on reference transcriptions. The performance gap is nearly 20% F1 score (72% to 55%). The row (c) shows the improved performance when testing on S-SQuAD due to the transfer learning via fine-tuning.",
+    "To better demonstrate the effectiveness of the proposed model, we compare with baselines and show the results in Table TABREF12 . The baselines are: (a) trained on S-SQuAD, (b) trained on T-SQuAD and then fine-tuned on S-SQuAD, and (c) previous best model trained on S-SQuAD BIBREF5 by using Dr.QA BIBREF20 . We also compare to the approach proposed by Lan et al. BIBREF16 in the row (d). This approach is originally proposed for spoken language understanding, and we adopt the same approach on the setting here. The approach models domain-specific features from the source and target domains separately by two different embedding encoders with a shared embedding encoder for modeling domain-general features. The domain-general parameters are adversarially trained by domain discriminator.",
+    "Row (e) is the model that the weights of all layers are tied between the source domain and the target domain. Row (f) uses the same architecture as row (e) with an additional domain discriminator applied to the embedding encoder. It can be found that row (f) outperforms row (e), indicating that the proposed domain adversarial learning is helpful. Therefore, our following experiments contain domain adversarial learning. The proposed approach (row (f)) outperforms previous best model (row (c)) by 2% EM score and over 1.5% F1 score. We also show the results of applying the domain discriminator to the top of context query attention layer in row (g), which obtains poor performance. To sum it up, incorporating adversarial learning by applying the domain discriminator on top of the embedding encoder layer is effective.",
+    "Layer weight tying or untying within the model indicates different levels of symmetric mapping between the source and target domains. Different combinations are investigated and shown in Table TABREF14 . The row (a) in which all layers are tied is the row (e) of Table TABREF12 . The results show that untying context-query attention layer L2 (rows (c, f, g)) or model encoder layer L3 (rows (d, f, h)) lead to degenerated solutions in comparison to row (a) where all layers are tied. Untying both of them simultaneously leads to the worst performance which is even worse than the finetuning (row (g) v.s. (c) from Table TABREF12 ). These results imply that sharing the context-query attention layer and the model encoder layer are important for domain adaptation on SQA. We conjecture that these two layers benefit from training on source domain data where there are no ASR errors, so the QA model learns to conduct attention or further reason well on target domain data with ASR errors.",
+    "Overall, it is not beneficial to untie any layer, because no information can be shared across different domains. Untying the embedding encoder L1 and the output layer L4 leads to the least degradation in comparison to row (a)."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Results",
+    "Results",
+    "Results",
+    "Results",
+    "Results",
+    "Results"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Results",
+      0
+    ],
+    [
+      "Results",
+      1
+    ],
+    [
+      "Results",
+      2
+    ],
+    [
+      "Results",
+      3
+    ],
+    [
+      "Results",
+      4
+    ],
+    [
+      "Results",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Results",
+  "section": "Results",
+  "title_path": "Results",
+  "block_type": "long_unit"
+}

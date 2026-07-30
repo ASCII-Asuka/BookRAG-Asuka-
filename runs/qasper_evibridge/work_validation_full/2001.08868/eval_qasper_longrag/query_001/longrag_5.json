@@ -1,0 +1,43 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Methodology ::: Phase 1: Exploration\n[source_id=16] In phase 1, Go-Explore builds an archive of cells, where a cell is defined as a set of observations that are mapped to the same, discrete representation by some mapping function $f(x)$. Each cell is associated with meta-data including the trajectory towards that cell, the length of that trajectory, and the cumulative reward of that trajectory. New cells are added to the archive when they are encountered in the environment, and existing cells are updated with new meta-data when the trajectory towards that cells is higher scoring or equal scoring but shorter.\n[source_id=17] At each iteration the algorithm selects a cell from this archive based on meta-data of the cell (e.g. the accumulated reward, etc.) and starts to randomly explore from the end of the trajectory associated with the selected cell. Phase 1 requires three components: the way that observations are embedded into cell representations, the cell selection, and the way actions are randomly selected when exploring from a selected cell. In our variant of the algorithm, $f(x)$ is defined as follows: given an observation, we compute the word embedding for each token in this observation, sum these embeddings, and then concatenate this sum with the current cumulative reward to construct the cell representation. The resulting vectors are subsequently compressed and discretized by binning them in order to map similar observations to the same cell. This way, the cell representation, which is the key of the archive, incorporates information about the current observation of the game. Adding the current cumulative reward to the cell representation is new to our Go-Explore variant as in the original algorithm only down-scaled image pixels were used. It turned out to be a very very effective to increase the speed at which high reward trajectories are discovered. In phase 1, we restrict the action space to the set of admissible actions $\\mathcal {A}_t$ that are provided by the game at every step of the game . This too is particularly important for the random search to find a high reward trajectory faster. Finally, we denote the trajectory found in phase 1 for game $g$ as $\\mathcal {T}_g= [(o_0, a_0, r_0), \\cdots , (o_t,a_t,r_t)]$.",
+  "score": 3.654866600095179,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    16,
+    17
+  ],
+  "child_qasper_evidence_texts": [
+    "In phase 1, Go-Explore builds an archive of cells, where a cell is defined as a set of observations that are mapped to the same, discrete representation by some mapping function $f(x)$. Each cell is associated with meta-data including the trajectory towards that cell, the length of that trajectory, and the cumulative reward of that trajectory. New cells are added to the archive when they are encountered in the environment, and existing cells are updated with new meta-data when the trajectory towards that cells is higher scoring or equal scoring but shorter.",
+    "At each iteration the algorithm selects a cell from this archive based on meta-data of the cell (e.g. the accumulated reward, etc.) and starts to randomly explore from the end of the trajectory associated with the selected cell. Phase 1 requires three components: the way that observations are embedded into cell representations, the cell selection, and the way actions are randomly selected when exploring from a selected cell. In our variant of the algorithm, $f(x)$ is defined as follows: given an observation, we compute the word embedding for each token in this observation, sum these embeddings, and then concatenate this sum with the current cumulative reward to construct the cell representation. The resulting vectors are subsequently compressed and discretized by binning them in order to map similar observations to the same cell. This way, the cell representation, which is the key of the archive, incorporates information about the current observation of the game. Adding the current cumulative reward to the cell representation is new to our Go-Explore variant as in the original algorithm only down-scaled image pixels were used. It turned out to be a very very effective to increase the speed at which high reward trajectories are discovered. In phase 1, we restrict the action space to the set of admissible actions $\\mathcal {A}_t$ that are provided by the game at every step of the game . This too is particularly important for the random search to find a high reward trajectory faster. Finally, we denote the trajectory found in phase 1 for game $g$ as $\\mathcal {T}_g= [(o_0, a_0, r_0), \\cdots , (o_t,a_t,r_t)]$."
+  ],
+  "child_pages": [
+    5,
+    5
+  ],
+  "child_sections": [
+    "Methodology ::: Phase 1: Exploration",
+    "Methodology ::: Phase 1: Exploration"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Methodology ::: Phase 1: Exploration",
+      0
+    ],
+    [
+      "Methodology ::: Phase 1: Exploration",
+      1
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Methodology ::: Phase 1: Exploration",
+  "section": "Methodology ::: Phase 1: Exploration",
+  "title_path": "Methodology ::: Phase 1: Exploration",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,79 @@
+{
+  "id": "longrag_10",
+  "content": "[Section] Discussion\n[source_id=46] In order to further understand the models' ability to infer the context and its effect on intervention prediction, we further investigate the following research questions.\n[source_id=47] RQ1. Does context inference help intervention prediction?\n[source_id=48] In order to understand if context inference is useful to intervention prediction, we ablate the attention components and experiment with the vanilla hierarchical LSTM model. Row 3 of Table TABREF17 shows the macro averaged result from this experiment. The UPA and PPA attention models better the vanilla hLSTM by 5% and 2% on average in INLINEFORM0 respectively. Recall that the vanilla hLSTM already has access to a context consisting of all posts (from INLINEFORM1 through INLINEFORM2 ). In contrast, the UPA and PPA models selectively infers a context for INLINEFORM3 and INLINEFORM4 posts, respectively, and use it to predict intervention. The improved performance of our attention models that actively select their optimal context, over a model with the complete thread as context, hLSTM, shows that the context inference improves intervention prediction over using the default full context.\n[source_id=49] RQ2. How well do the models perform across threads of different lengths? To understand the models' prediction performance across threads of different lengths, we bin threads by length and study the models' recall. We choose three courses, ml-5, rprog-3 and calc-1, from our corpus of 12 with the highest number of positive instances ( INLINEFORM0 100 threads). We limit our analysis to these since binning renders courses with fewer positive instances sparse. Figure FIGREF18 shows performance across thread lengths from 1 through 7 posts and INLINEFORM1 posts. Clearly, the UPA model performs much better on shorter threads than on longer threads while PPA and APA works better on longer threads. Although, UPA is the best performing model in terms of overall INLINEFORM2 its performance drops steeply on threads of length INLINEFORM3 . UPA's overall best performance is because most of the interventions in the corpus happen after one post. To highlight the performance of APA we show an example from smac-1 in Figure FIGREF22 with nine posts which was predicted correctly as intervened by APA but not by other models. Threads shows students confused over a missing figure in a homework. The instructor finally shows up, though late, to resolve the confusion.\n[source_id=50] RQ3. Do models trained with different context lengths perform better than when trained on a single context length?\n[source_id=51] We find that context length has a regularising effect on the model's performance at test time. This is not surprising since models trained with threads of single context length will not generalise to infer different context lengths. Row 4 of Table TABREF17 shows a steep performance drop in training by classifier with all threads truncated to a context of just one post, INLINEFORM0 , the post immediately preceding the intervened post. We also conducted an experiment with a multi-objective loss function with an additive cross-entropy term where each term computes loss from a model with context limited to a length of 3. We chose 3 since intervened threads in all the courses had a median length between 3 and 4. We achieved an INLINEFORM1 of 0.45 with a precision of 0.47 and recall of 0.43. This achieves a performance comparable to that of the BIBREF7 with context length set to only to 3. This approach of using infinitely many loss terms for each context length from 1 through the maximum thread length in a course is naive and not practical. We only use this model to show the importance of training the model with loss from threads of different lengths to prevent models overfitting to threads of specific context lengths.",
+  "score": 2.6609553841557574,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_10",
+  "child_source_node_ids": [
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "child_qasper_evidence_texts": [
+    "In order to further understand the models' ability to infer the context and its effect on intervention prediction, we further investigate the following research questions.",
+    "RQ1. Does context inference help intervention prediction?",
+    "In order to understand if context inference is useful to intervention prediction, we ablate the attention components and experiment with the vanilla hierarchical LSTM model. Row 3 of Table TABREF17 shows the macro averaged result from this experiment. The UPA and PPA attention models better the vanilla hLSTM by 5% and 2% on average in INLINEFORM0 respectively. Recall that the vanilla hLSTM already has access to a context consisting of all posts (from INLINEFORM1 through INLINEFORM2 ). In contrast, the UPA and PPA models selectively infers a context for INLINEFORM3 and INLINEFORM4 posts, respectively, and use it to predict intervention. The improved performance of our attention models that actively select their optimal context, over a model with the complete thread as context, hLSTM, shows that the context inference improves intervention prediction over using the default full context.",
+    "RQ2. How well do the models perform across threads of different lengths? To understand the models' prediction performance across threads of different lengths, we bin threads by length and study the models' recall. We choose three courses, ml-5, rprog-3 and calc-1, from our corpus of 12 with the highest number of positive instances ( INLINEFORM0 100 threads). We limit our analysis to these since binning renders courses with fewer positive instances sparse. Figure FIGREF18 shows performance across thread lengths from 1 through 7 posts and INLINEFORM1 posts. Clearly, the UPA model performs much better on shorter threads than on longer threads while PPA and APA works better on longer threads. Although, UPA is the best performing model in terms of overall INLINEFORM2 its performance drops steeply on threads of length INLINEFORM3 . UPA's overall best performance is because most of the interventions in the corpus happen after one post. To highlight the performance of APA we show an example from smac-1 in Figure FIGREF22 with nine posts which was predicted correctly as intervened by APA but not by other models. Threads shows students confused over a missing figure in a homework. The instructor finally shows up, though late, to resolve the confusion.",
+    "RQ3. Do models trained with different context lengths perform better than when trained on a single context length?",
+    "We find that context length has a regularising effect on the model's performance at test time. This is not surprising since models trained with threads of single context length will not generalise to infer different context lengths. Row 4 of Table TABREF17 shows a steep performance drop in training by classifier with all threads truncated to a context of just one post, INLINEFORM0 , the post immediately preceding the intervened post. We also conducted an experiment with a multi-objective loss function with an additive cross-entropy term where each term computes loss from a model with context limited to a length of 3. We chose 3 since intervened threads in all the courses had a median length between 3 and 4. We achieved an INLINEFORM1 of 0.45 with a precision of 0.47 and recall of 0.43. This achieves a performance comparable to that of the BIBREF7 with context length set to only to 3. This approach of using infinitely many loss terms for each context length from 1 through the maximum thread length in a course is naive and not practical. We only use this model to show the importance of training the model with loss from threads of different lengths to prevent models overfitting to threads of specific context lengths."
+  ],
+  "child_pages": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "child_sections": [
+    "Discussion",
+    "Discussion",
+    "Discussion",
+    "Discussion",
+    "Discussion",
+    "Discussion"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Discussion",
+      0
+    ],
+    [
+      "Discussion",
+      1
+    ],
+    [
+      "Discussion",
+      2
+    ],
+    [
+      "Discussion",
+      3
+    ],
+    [
+      "Discussion",
+      4
+    ],
+    [
+      "Discussion",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_10",
+  "section_id": "Discussion",
+  "section": "Discussion",
+  "title_path": "Discussion",
+  "block_type": "long_unit"
+}

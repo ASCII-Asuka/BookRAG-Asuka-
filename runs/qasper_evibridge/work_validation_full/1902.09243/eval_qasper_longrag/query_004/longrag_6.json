@@ -1,0 +1,178 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Summary Draft Generation\n[source_id=32] The summary draft is based on the sequence-to-sequence model. On the encoder side the input document $X$ is encoded into representation vectors $H = \\lbrace h_1, \\ldots , h_m\\rbrace $ , and then fed to the decoder to generate the summary draft $A = \\lbrace a_1, \\ldots , a_{|a|}\\rbrace $ .\n[source_id=33] We simply use BERT as the encoder. It first maps the input sequence to word embeddings and then computes document embeddings as the encoder's output, denoted by following equation.\n[source_id=34] $$H = BERT(x_1, \\ldots , x_m)$$   (Eq. 10)\n[source_id=35] In the draft decoder, we first introduce BERT's word embedding matrix to map the previous summary draft outputs $\\lbrace y_1, \\ldots , y_{t-1}\\rbrace $ into embeddings vectors $\\lbrace q_1, \\ldots , q_{t-1}\\rbrace $ at t-th time step. Note that as the input sequence of the decoder is not complete, we do not use the BERT network to predict the context vectors here.\n[source_id=36] Then we introduce an $N$ layer Transformer decoder to learn the conditional probability $P(A|H)$ . Transformer's decoder-encoder multi-head attention helps the decoder learn soft alignments between summary and source document. At the t-th time step, the draft decoder predicts output probability conditioned on previous outputs and encoder hidden representations as Eq. ( 13 ) shows, in which $q_{<t} = \\lbrace q_1, \\ldots , q_{t-1}\\rbrace $ . Each generated sequence will be truncated in the first position of a special token '[PAD]'.\n[source_id=37] $$&P^{vocab}_t(w) = f_{dec}(q_{<t}, H)  \\\\\n&L_{dec} = \\sum _{i=1}^{|a|} -\\log P(a_i = y_i^*|a_{< i}, H) $$   (Eq. 13)\n[source_id=38] As Eq. () shows, the decoder's learning objective is to minimize negative likelihood of conditional probability, in which $y_i^*$ is the i-th ground truth word of summary.\n[source_id=39] However a decoder with this structure is not sufficient enough: if we use the BERT network in this decoder, then during training and inference, in-complete context(part of sentence) is fed into the BERT module, and although we can fine-tune BERT's parameters, the input distribution is quite different from the pre-train process, and thus harms the quality of generated context representations.\n[source_id=40] If we just use the embedding matrix here, it will be more difficult for the decoder with fresh parameters to learn to model representations as well as vocabulary probabilities, from a relative small corpus compared to BERT's huge pre-training corpus. In a word, the decoder cannot utilize BERT's ability to generate high quality context vectors, which will also harm performance.\n[source_id=41] This issue exists when using any other contextualized word representations, so we design a refine process to mitigate it in our approach which will be described in the next sub-section.\n[source_id=42] As some summary tokens are out-of-vocabulary words and occurs in input document, we incorporate copy mechanism BIBREF6 based on the Transformer decoder, we will describe it briefly.\n[source_id=43] At decoder time step $t$ , we first calculate the attention probability distribution over source document $X$ using the bi-linear dot product of the last layer decoder output of Transformer $o_t$ and the encoder output $h_j$ , as Eq. ( 15 ) () shows.\n[source_id=44] $$u_t^j =& o_t W_c h_j \\\\\n\\alpha _t^j =& \\cfrac{\\exp {u_t^j}}{\\sum _{k=1}^N\\exp {u_t^k}} $$   (Eq. 15)\n[source_id=45] We then calculate copying gate $g_t\\in [0, 1]$ , which makes a soft choice between selecting from source and generating from vocabulary, $W_c, W_g, b_g$ are parameters:\n[source_id=46] $$g_t = sigmoid(W_g \\cdot [o_t, h] + b_g) $$   (Eq. 16)\n[source_id=47] Using $g_t$ we calculate the weighted sum of copy probability and generation probability to get the final predicted probability of extended vocabulary $\\mathcal {V} + \\mathcal {X}$ , where $\\mathcal {X}$ is the set of out of vocabulary words from the source document. The final probability is calculated as follow:\n[source_id=48] $$P_t(w) = (1-g_t)P_t^{vocab}(w) + g_t\\sum _{i:w_i=w} \\alpha _t^i$$   (Eq. 17)",
+  "score": 1.1886294328761813,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48
+  ],
+  "child_qasper_evidence_texts": [
+    "The summary draft is based on the sequence-to-sequence model. On the encoder side the input document $X$ is encoded into representation vectors $H = \\lbrace h_1, \\ldots , h_m\\rbrace $ , and then fed to the decoder to generate the summary draft $A = \\lbrace a_1, \\ldots , a_{|a|}\\rbrace $ .",
+    "We simply use BERT as the encoder. It first maps the input sequence to word embeddings and then computes document embeddings as the encoder's output, denoted by following equation.",
+    "$$H = BERT(x_1, \\ldots , x_m)$$   (Eq. 10)",
+    "In the draft decoder, we first introduce BERT's word embedding matrix to map the previous summary draft outputs $\\lbrace y_1, \\ldots , y_{t-1}\\rbrace $ into embeddings vectors $\\lbrace q_1, \\ldots , q_{t-1}\\rbrace $ at t-th time step. Note that as the input sequence of the decoder is not complete, we do not use the BERT network to predict the context vectors here.",
+    "Then we introduce an $N$ layer Transformer decoder to learn the conditional probability $P(A|H)$ . Transformer's decoder-encoder multi-head attention helps the decoder learn soft alignments between summary and source document. At the t-th time step, the draft decoder predicts output probability conditioned on previous outputs and encoder hidden representations as Eq. ( 13 ) shows, in which $q_{<t} = \\lbrace q_1, \\ldots , q_{t-1}\\rbrace $ . Each generated sequence will be truncated in the first position of a special token '[PAD]'.",
+    "$$&P^{vocab}_t(w) = f_{dec}(q_{<t}, H)  \\\\\n&L_{dec} = \\sum _{i=1}^{|a|} -\\log P(a_i = y_i^*|a_{< i}, H) $$   (Eq. 13)",
+    "As Eq. () shows, the decoder's learning objective is to minimize negative likelihood of conditional probability, in which $y_i^*$ is the i-th ground truth word of summary.",
+    "However a decoder with this structure is not sufficient enough: if we use the BERT network in this decoder, then during training and inference, in-complete context(part of sentence) is fed into the BERT module, and although we can fine-tune BERT's parameters, the input distribution is quite different from the pre-train process, and thus harms the quality of generated context representations.",
+    "If we just use the embedding matrix here, it will be more difficult for the decoder with fresh parameters to learn to model representations as well as vocabulary probabilities, from a relative small corpus compared to BERT's huge pre-training corpus. In a word, the decoder cannot utilize BERT's ability to generate high quality context vectors, which will also harm performance.",
+    "This issue exists when using any other contextualized word representations, so we design a refine process to mitigate it in our approach which will be described in the next sub-section.",
+    "As some summary tokens are out-of-vocabulary words and occurs in input document, we incorporate copy mechanism BIBREF6 based on the Transformer decoder, we will describe it briefly.",
+    "At decoder time step $t$ , we first calculate the attention probability distribution over source document $X$ using the bi-linear dot product of the last layer decoder output of Transformer $o_t$ and the encoder output $h_j$ , as Eq. ( 15 ) () shows.",
+    "$$u_t^j =& o_t W_c h_j \\\\\n\\alpha _t^j =& \\cfrac{\\exp {u_t^j}}{\\sum _{k=1}^N\\exp {u_t^k}} $$   (Eq. 15)",
+    "We then calculate copying gate $g_t\\in [0, 1]$ , which makes a soft choice between selecting from source and generating from vocabulary, $W_c, W_g, b_g$ are parameters:",
+    "$$g_t = sigmoid(W_g \\cdot [o_t, h] + b_g) $$   (Eq. 16)",
+    "Using $g_t$ we calculate the weighted sum of copy probability and generation probability to get the final predicted probability of extended vocabulary $\\mathcal {V} + \\mathcal {X}$ , where $\\mathcal {X}$ is the set of out of vocabulary words from the source document. The final probability is calculated as follow:",
+    "$$P_t(w) = (1-g_t)P_t^{vocab}(w) + g_t\\sum _{i:w_i=w} \\alpha _t^i$$   (Eq. 17)"
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Summary Draft Generation",
+    "Summary Draft Generation",
+    "Summary Draft Generation",
+    "Summary Draft Generation",
+    "Summary Draft Generation",
+    "Summary Draft Generation",
+    "Summary Draft Generation",
+    "Summary Draft Generation",
+    "Summary Draft Generation",
+    "Summary Draft Generation",
+    "Summary Draft Generation",
+    "Summary Draft Generation",
+    "Summary Draft Generation",
+    "Summary Draft Generation",
+    "Summary Draft Generation",
+    "Summary Draft Generation",
+    "Summary Draft Generation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Summary Draft Generation",
+      0
+    ],
+    [
+      "Summary Draft Generation",
+      1
+    ],
+    [
+      "Summary Draft Generation",
+      2
+    ],
+    [
+      "Summary Draft Generation",
+      3
+    ],
+    [
+      "Summary Draft Generation",
+      4
+    ],
+    [
+      "Summary Draft Generation",
+      5
+    ],
+    [
+      "Summary Draft Generation",
+      6
+    ],
+    [
+      "Summary Draft Generation",
+      7
+    ],
+    [
+      "Summary Draft Generation",
+      8
+    ],
+    [
+      "Summary Draft Generation",
+      9
+    ],
+    [
+      "Summary Draft Generation",
+      10
+    ],
+    [
+      "Summary Draft Generation",
+      11
+    ],
+    [
+      "Summary Draft Generation",
+      12
+    ],
+    [
+      "Summary Draft Generation",
+      13
+    ],
+    [
+      "Summary Draft Generation",
+      14
+    ],
+    [
+      "Summary Draft Generation",
+      15
+    ],
+    [
+      "Summary Draft Generation",
+      16
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Summary Draft Generation",
+  "section": "Summary Draft Generation",
+  "title_path": "Summary Draft Generation",
+  "block_type": "long_unit"
+}

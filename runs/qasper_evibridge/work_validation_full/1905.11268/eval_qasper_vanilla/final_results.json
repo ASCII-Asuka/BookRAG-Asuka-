@@ -1,0 +1,510 @@
+[
+  {
+    "question": "What does the \"sensitivity\" quantity denote?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "the number of distinct word recognition outputs that an attacker can induce"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "In NLP, we often get such invariance for free, e.g., for a word-level model, most of the perturbations produced by our character-level adversary lead to an UNK at its input. If the model is robust to the presence of these UNK tokens, there is little room for an adversary to manipulate it. Character-level models, on the other hand, despite their superior performance in many tasks, do not enjoy such invariance. This characteristic invariance could be exploited by an attacker. Thus, to limit the number of different inputs to the classifier, we wish to reduce the number of distinct word recognition outputs that an attacker can induce, not just the number of words on which the model is “fooled”. We denote this property of a model as its sensitivity."
+        ],
+        "evidence_block_ids": [
+          28
+        ],
+        "evidence_paragraph_ids": [
+          28
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "The expected number of unique outputs a word recognition system assigns to a set of adversarial perturbations ",
+        "yes_no": null,
+        "evidence": [
+          "In NLP, we often get such invariance for free, e.g., for a word-level model, most of the perturbations produced by our character-level adversary lead to an UNK at its input. If the model is robust to the presence of these UNK tokens, there is little room for an adversary to manipulate it. Character-level models, on the other hand, despite their superior performance in many tasks, do not enjoy such invariance. This characteristic invariance could be exploited by an attacker. Thus, to limit the number of different inputs to the classifier, we wish to reduce the number of distinct word recognition outputs that an attacker can induce, not just the number of words on which the model is “fooled”. We denote this property of a model as its sensitivity.",
+          "We can quantify this notion for a word recognition system $W$ as the expected number of unique outputs it assigns to a set of adversarial perturbations. Given a sentence $s$ from the set of sentences $\\mathcal {S}$ , let $A(s) = {s_1}^{\\prime } , {s_2}^{\\prime }, \\dots , {s_n}^{\\prime }$ denote the set of $n$ perturbations to it under attack type $A$ , and let $V$ be the function that maps strings to an input representation for the downstream classifier. For a word level model, $V$ would transform sentences to a sequence of word ids, mapping OOV words to the same UNK ID. Whereas, for a char (or word+char, word-piece) model, $V$ would map inputs to a sequence of character IDs. Formally, sensitivity is defined as"
+        ],
+        "evidence_block_ids": [
+          28,
+          29
+        ],
+        "evidence_paragraph_ids": [
+          28,
+          29
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "the number of distinct word recognition outputs that an attacker can induce, not just the number of words on which the model is “fooled”"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "In NLP, we often get such invariance for free, e.g., for a word-level model, most of the perturbations produced by our character-level adversary lead to an UNK at its input. If the model is robust to the presence of these UNK tokens, there is little room for an adversary to manipulate it. Character-level models, on the other hand, despite their superior performance in many tasks, do not enjoy such invariance. This characteristic invariance could be exploited by an attacker. Thus, to limit the number of different inputs to the classifier, we wish to reduce the number of distinct word recognition outputs that an attacker can induce, not just the number of words on which the model is “fooled”. We denote this property of a model as its sensitivity."
+        ],
+        "evidence_block_ids": [
+          28
+        ],
+        "evidence_paragraph_ids": [
+          28
+        ]
+      }
+    ],
+    "doc_uuid": "1905.11268",
+    "doc_path": "qasper://1905.11268",
+    "qasper_question_id": "0d9fcc715dee0ec85132b3f4a730d7687b6a06f4",
+    "title": "Combating Adversarial Misspellings with Robust Word Recognition",
+    "evidence_block_ids": [
+      28,
+      29
+    ],
+    "evidence_paragraph_ids": [
+      28,
+      29
+    ],
+    "output": "{\n  \"answer_short\": \"the expected number of unique outputs it assigns to a set of adversarial perturbations\",\n  \"answer_rationale\": \"Text 3 provides the formal definition of sensitivity as 'the expected number of unique outputs it assigns to a set of adversarial perturbations'. This is the precise quantitative measure described in the document.\"\n}",
+    "retrieved_node_ids": [
+      63,
+      32,
+      29,
+      61,
+      10,
+      58,
+      28,
+      62,
+      17,
+      57
+    ],
+    "answer_short": "the expected number of unique outputs it assigns to a set of adversarial perturbations",
+    "answer_rationale": "Text 3 provides the formal definition of sensitivity as 'the expected number of unique outputs it assigns to a set of adversarial perturbations'. This is the precise quantitative measure described in the document.",
+    "supporting_block_ids": [
+      63,
+      32,
+      29,
+      61,
+      10,
+      58,
+      28,
+      62,
+      17,
+      57
+    ]
+  },
+  {
+    "question": "What end tasks do they evaluate on?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "Sentiment analysis and paraphrase detection under adversarial attacks",
+        "yes_no": null,
+        "evidence": [
+          "For sentiment classification, we systematically study the effect of character-level adversarial attacks on two architectures and four different input formats. The first architecture encodes the input sentence into a sequence of embeddings, which are then sequentially processed by a BiLSTM. The first and last states of the BiLSTM are then used by the softmax layer to predict the sentiment of the input. We consider three input formats for this architecture: (1) Word-only: where the input words are encoded using a lookup table; (2) Char-only: where the input words are encoded using a separate single-layered BiLSTM over their characters; and (3) Word $+$ Char: where the input words are encoded using a concatenation of (1) and (2) .",
+          "We also consider the task of paraphrase detection. Here too, we make use of the fine-tuned BERT BIBREF26 , which is trained and evaluated on the Microsoft Research Paraphrase Corpus (MRPC) BIBREF27 ."
+        ],
+        "evidence_block_ids": [
+          49,
+          51
+        ],
+        "evidence_paragraph_ids": [
+          49,
+          51
+        ]
+      }
+    ],
+    "doc_uuid": "1905.11268",
+    "doc_path": "qasper://1905.11268",
+    "qasper_question_id": "8910ee2236a497c92324bbbc77c596dba39efe46",
+    "title": "Combating Adversarial Misspellings with Robust Word Recognition",
+    "evidence_block_ids": [
+      49,
+      51
+    ],
+    "evidence_paragraph_ids": [
+      49,
+      51
+    ],
+    "output": "{\n  \"answer_short\": \"sentiment analysis, paraphrase detection, word error correction\",\n  \"answer_rationale\": \"Text 1 mentions sentiment analysis and paraphrase detection as downstream tasks. Text 6 describes evaluating spell correctors on word error correction using movie reviews. These are the end tasks evaluated on.\"\n}",
+    "retrieved_node_ids": [
+      48,
+      64,
+      22,
+      51,
+      37,
+      43,
+      23,
+      44,
+      24,
+      63
+    ],
+    "answer_short": "sentiment analysis, paraphrase detection, word error correction",
+    "answer_rationale": "Text 1 mentions sentiment analysis and paraphrase detection as downstream tasks. Text 6 describes evaluating spell correctors on word error correction using movie reviews. These are the end tasks evaluated on.",
+    "supporting_block_ids": [
+      48,
+      64,
+      22,
+      51,
+      37,
+      43,
+      23,
+      44,
+      24,
+      63
+    ]
+  },
+  {
+    "question": "What is a semicharacter architecture?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "A semi-character based RNN (ScRNN) treats the first and last characters individually, and is agnostic to the ordering of the internal characters",
+        "yes_no": null,
+        "evidence": [
+          "Inspired by the psycholinguistic studies BIBREF5 , BIBREF4 , BIBREF7 proposed a semi-character based RNN (ScRNN) that processes a sentence of words with misspelled characters, predicting the correct words at each step. Let $s = \\lbrace w_1, w_2, \\dots , w_n\\rbrace $ denote the input sentence, a sequence of constituent words $w_i$ . Each input word ( $w_i$ ) is represented by concatenating (i) a one hot vector of the first character ( $\\mathbf {w_{i1}}$ ); (ii) a one hot representation of the last character ( $\\mathbf {w_{il}}$ , where $l$ is the length of word $w_i$ ); and (iii) a bag of characters representation of the internal characters ( $\\sum _{j=2}^{l-1}\\mathbf {w_{ij}})$ . ScRNN treats the first and the last characters individually, and is agnostic to the ordering of the internal characters. Each word, represented accordingly, is then fed into a BiLSTM cell. At each sequence step, the training target is the correct corresponding word (output dimension equal to vocabulary size), and the model is optimized with cross-entropy loss."
+        ],
+        "evidence_block_ids": [
+          20
+        ],
+        "evidence_paragraph_ids": [
+          20
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "processes a sentence of words with misspelled characters, predicting the correct words at each step"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Third (our primary contribution), we propose a task-agnostic defense, attaching a word recognition model that predicts each word in a sentence given a full sequence of (possibly misspelled) inputs. The word recognition model's outputs form the input to a downstream classification model. Our word recognition models build upon the RNN-based semi-character word recognition model due to BIBREF7 . While our word recognizers are trained on domain-specific text from the task at hand, they often predict UNK at test time, owing to the small domain-specific vocabulary. To handle unobserved and rare words, we propose several backoff strategies including falling back on a generic word recognizer trained on a larger corpus. Incorporating our defenses, BERT models subject to 1-character attacks are restored to $88.3$ , $81.1$ , $78.0$ accuracy for swap, drop, add attacks respectively, as compared to $69.2$ , $63.6$ , and $50.0$ for adversarial training",
+          "Inspired by the psycholinguistic studies BIBREF5 , BIBREF4 , BIBREF7 proposed a semi-character based RNN (ScRNN) that processes a sentence of words with misspelled characters, predicting the correct words at each step. Let $s = \\lbrace w_1, w_2, \\dots , w_n\\rbrace $ denote the input sentence, a sequence of constituent words $w_i$ . Each input word ( $w_i$ ) is represented by concatenating (i) a one hot vector of the first character ( $\\mathbf {w_{i1}}$ ); (ii) a one hot representation of the last character ( $\\mathbf {w_{il}}$ , where $l$ is the length of word $w_i$ ); and (iii) a bag of characters representation of the internal characters ( $\\sum _{j=2}^{l-1}\\mathbf {w_{ij}})$ . ScRNN treats the first and the last characters individually, and is agnostic to the ordering of the internal characters. Each word, represented accordingly, is then fed into a BiLSTM cell. At each sequence step, the training target is the correct corresponding word (output dimension equal to vocabulary size), and the model is optimized with cross-entropy loss."
+        ],
+        "evidence_block_ids": [
+          9,
+          20
+        ],
+        "evidence_paragraph_ids": [
+          9,
+          20
+        ]
+      }
+    ],
+    "doc_uuid": "1905.11268",
+    "doc_path": "qasper://1905.11268",
+    "qasper_question_id": "2c59528b6bc5b5dc28a7b69b33594b274908cca6",
+    "title": "Combating Adversarial Misspellings with Robust Word Recognition",
+    "evidence_block_ids": [
+      20,
+      9
+    ],
+    "evidence_paragraph_ids": [
+      20,
+      9
+    ],
+    "output": "{\n  \"answer_short\": \"a semi-character based RNN that processes a sentence of words with misspelled characters, predicting the correct words at each step by concatenating a one hot vector of the first character, a one hot representation of the last character, and a bag of characters representation of the internal characters\",\n  \"answer_rationale\": \"Text 5 (page=5, section=ScRNN with Backoff) explicitly describes the semicharacter architecture as a semi-character based RNN that processes sentences with misspelled characters by concatenating representations of the first character, last character, and internal characters. This matches the definition provided in the retrieved document.\"\n}",
+    "retrieved_node_ids": [
+      19,
+      49,
+      54,
+      64,
+      20,
+      48,
+      28,
+      37,
+      62,
+      22
+    ],
+    "answer_short": "a semi-character based RNN that processes a sentence of words with misspelled characters, predicting the correct words at each step by concatenating a one hot vector of the first character, a one hot representation of the last character, and a bag of characters representation of the internal characters",
+    "answer_rationale": "Text 5 (page=5, section=ScRNN with Backoff) explicitly describes the semicharacter architecture as a semi-character based RNN that processes sentences with misspelled characters by concatenating representations of the first character, last character, and internal characters. This matches the definition provided in the retrieved document.",
+    "supporting_block_ids": [
+      19,
+      49,
+      54,
+      64,
+      20,
+      48,
+      28,
+      37,
+      62,
+      22
+    ]
+  },
+  {
+    "question": "Do they experiment with offering multiple candidate corrections and voting on the model output, since this seems highly likely to outperform a one-best correction?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": false,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      }
+    ],
+    "doc_uuid": "1905.11268",
+    "doc_path": "qasper://1905.11268",
+    "qasper_question_id": "6b367775a081f4d2423dc756c9b65b6eef350345",
+    "title": "Combating Adversarial Misspellings with Robust Word Recognition",
+    "evidence_block_ids": [],
+    "evidence_paragraph_ids": [],
+    "output": "{\n  \"answer_short\": \"Not answerable\",\n  \"answer_rationale\": \"The retrieved documents discuss spell correction models, adversarial attacks, model sensitivity, and backoff strategies, but none mention experimenting with multiple candidate corrections or voting on model outputs to improve performance. Therefore, the question cannot be answered based on the provided documents.\"\n}",
+    "retrieved_node_ids": [
+      44,
+      61,
+      14,
+      24,
+      43,
+      55,
+      58,
+      56,
+      23,
+      17
+    ],
+    "answer_short": "Not answerable",
+    "answer_rationale": "The retrieved documents discuss spell correction models, adversarial attacks, model sensitivity, and backoff strategies, but none mention experimenting with multiple candidate corrections or voting on model outputs to improve performance. Therefore, the question cannot be answered based on the provided documents.",
+    "supporting_block_ids": [
+      44,
+      61,
+      14,
+      24,
+      43,
+      55,
+      58,
+      56,
+      23,
+      17
+    ]
+  },
+  {
+    "question": "Why is the adversarial setting appropriate for misspelling recognition?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "Adversarial misspellings are a real-world problem",
+        "yes_no": null,
+        "evidence": [
+          "For all the interest in adversarial computer vision, these attacks are rarely encountered outside of academic research. However, adversarial misspellings constitute a longstanding real-world problem. Spammers continually bombard email servers, subtly misspelling words in efforts to evade spam detection while preserving the emails' intended meaning BIBREF1 , BIBREF2 . As another example, programmatic censorship on the Internet has spurred communities to adopt similar methods to communicate surreptitiously BIBREF3 ."
+        ],
+        "evidence_block_ids": [
+          5
+        ],
+        "evidence_paragraph_ids": [
+          5
+        ]
+      }
+    ],
+    "doc_uuid": "1905.11268",
+    "doc_path": "qasper://1905.11268",
+    "qasper_question_id": "bc01853512eb3c11528e33003ceb233d7c1d7038",
+    "title": "Combating Adversarial Misspellings with Robust Word Recognition",
+    "evidence_block_ids": [
+      5
+    ],
+    "evidence_paragraph_ids": [
+      5
+    ],
+    "output": "{\n  \"answer_short\": \"Not answerable\",\n  \"answer_rationale\": \"The retrieved documents discuss adversarial settings in the context of misspelling recognition, including adversarial attacks, defenses, and model robustness, but none explicitly state why the adversarial setting is appropriate for misspelling recognition. While it is implied that adversarial misspellings are a real-world problem (Text 5), the documents do not directly address the appropriateness of the adversarial setting for this task.\"\n}",
+    "retrieved_node_ids": [
+      6,
+      2,
+      44,
+      7,
+      5,
+      17,
+      43,
+      55,
+      21,
+      16
+    ],
+    "answer_short": "Not answerable",
+    "answer_rationale": "The retrieved documents discuss adversarial settings in the context of misspelling recognition, including adversarial attacks, defenses, and model robustness, but none explicitly state why the adversarial setting is appropriate for misspelling recognition. While it is implied that adversarial misspellings are a real-world problem (Text 5), the documents do not directly address the appropriateness of the adversarial setting for this task.",
+    "supporting_block_ids": [
+      6,
+      2,
+      44,
+      7,
+      5,
+      17,
+      43,
+      55,
+      21,
+      16
+    ]
+  },
+  {
+    "question": "Why do they experiment with RNNs instead of transformers for this task?",
+    "answer": [
+      {
+        "unanswerable": true,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      }
+    ],
+    "doc_uuid": "1905.11268",
+    "doc_path": "qasper://1905.11268",
+    "qasper_question_id": "67ec8ef85844e01746c13627090dc2706bb2a4f3",
+    "title": "Combating Adversarial Misspellings with Robust Word Recognition",
+    "evidence_block_ids": [],
+    "evidence_paragraph_ids": [],
+    "output": "{\n  \"answer_short\": \"Not answerable\",\n  \"answer_rationale\": \"The retrieved documents discuss the use of RNNs (specifically ScRNN with Bi-LSTM) for word recognition and adversarial attack mitigation, but they do not explain why RNNs were chosen over transformers for this task. There is no comparison or rationale provided for preferring RNNs over transformers in the context of this specific task.\"\n}",
+    "retrieved_node_ids": [
+      19,
+      45,
+      20,
+      23,
+      44,
+      56,
+      46,
+      21,
+      9,
+      50
+    ],
+    "answer_short": "Not answerable",
+    "answer_rationale": "The retrieved documents discuss the use of RNNs (specifically ScRNN with Bi-LSTM) for word recognition and adversarial attack mitigation, but they do not explain why RNNs were chosen over transformers for this task. There is no comparison or rationale provided for preferring RNNs over transformers in the context of this specific task.",
+    "supporting_block_ids": [
+      19,
+      45,
+      20,
+      23,
+      44,
+      56,
+      46,
+      21,
+      9,
+      50
+    ]
+  },
+  {
+    "question": "How do the backoff strategies work?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "In pass-through, the recognizer passes on the possibly misspelled word, backoff to neutral word backs off to a word with similar distribution across classes and backoff to background model backs off to a more generic word recognition model trained with larger and less specialized corpus.",
+        "yes_no": null,
+        "evidence": [
+          "While BIBREF7 demonstrate strong word recognition performance, a drawback of their evaluation setup is that they only attack and evaluate on the subset of words that are a part of their training vocabulary. In such a setting, the word recognition performance is unreasonably dependent on the chosen vocabulary size. In principle, one can design models to predict (correctly) only a few chosen words, and ignore the remaining majority and still reach 100% accuracy. For the adversarial setting, rare and unseen words in the wild are particularly critical, as they provide opportunities for the attackers. A reliable word-recognizer should handle these cases gracefully. Below, we explore different ways to back off when the ScRNN predicts UNK (a frequent outcome for rare and unseen words):",
+          "Pass-through: word-recognizer passes on the (possibly misspelled) word as is.",
+          "Backoff to neutral word: Alternatively, noting that passing $\\colorbox {gray!20}{\\texttt {UNK}}$ -predicted words through unchanged exposes the downstream model to potentially corrupted text, we consider backing off to a neutral word like `a', which has a similar distribution across classes.",
+          "Backoff to background model: We also consider falling back upon a more generic word recognition model trained upon a larger, less-specialized corpus whenever the foreground word recognition model predicts UNK. Figure 1 depicts this scenario pictorially."
+        ],
+        "evidence_block_ids": [
+          21,
+          22,
+          23,
+          24
+        ],
+        "evidence_paragraph_ids": [
+          21,
+          22,
+          23,
+          24
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "Pass-through passes the possibly misspelled word as is, backoff to neutral word backs off to a word with similar distribution across classes and backoff to background model backs off to a more generic word recognition model trained with larger and less specialized corpus.",
+        "yes_no": null,
+        "evidence": [
+          "While BIBREF7 demonstrate strong word recognition performance, a drawback of their evaluation setup is that they only attack and evaluate on the subset of words that are a part of their training vocabulary. In such a setting, the word recognition performance is unreasonably dependent on the chosen vocabulary size. In principle, one can design models to predict (correctly) only a few chosen words, and ignore the remaining majority and still reach 100% accuracy. For the adversarial setting, rare and unseen words in the wild are particularly critical, as they provide opportunities for the attackers. A reliable word-recognizer should handle these cases gracefully. Below, we explore different ways to back off when the ScRNN predicts UNK (a frequent outcome for rare and unseen words):",
+          "Pass-through: word-recognizer passes on the (possibly misspelled) word as is.",
+          "Backoff to neutral word: Alternatively, noting that passing $\\colorbox {gray!20}{\\texttt {UNK}}$ -predicted words through unchanged exposes the downstream model to potentially corrupted text, we consider backing off to a neutral word like `a', which has a similar distribution across classes.",
+          "Backoff to background model: We also consider falling back upon a more generic word recognition model trained upon a larger, less-specialized corpus whenever the foreground word recognition model predicts UNK. Figure 1 depicts this scenario pictorially."
+        ],
+        "evidence_block_ids": [
+          21,
+          22,
+          23,
+          24
+        ],
+        "evidence_paragraph_ids": [
+          21,
+          22,
+          23,
+          24
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "Backoff to \"a\" when an UNK-predicted word is encountered, backoff to a more generic word recognition model when the model predicts UNK",
+        "yes_no": null,
+        "evidence": [
+          "While BIBREF7 demonstrate strong word recognition performance, a drawback of their evaluation setup is that they only attack and evaluate on the subset of words that are a part of their training vocabulary. In such a setting, the word recognition performance is unreasonably dependent on the chosen vocabulary size. In principle, one can design models to predict (correctly) only a few chosen words, and ignore the remaining majority and still reach 100% accuracy. For the adversarial setting, rare and unseen words in the wild are particularly critical, as they provide opportunities for the attackers. A reliable word-recognizer should handle these cases gracefully. Below, we explore different ways to back off when the ScRNN predicts UNK (a frequent outcome for rare and unseen words):",
+          "Pass-through: word-recognizer passes on the (possibly misspelled) word as is.",
+          "Backoff to neutral word: Alternatively, noting that passing $\\colorbox {gray!20}{\\texttt {UNK}}$ -predicted words through unchanged exposes the downstream model to potentially corrupted text, we consider backing off to a neutral word like `a', which has a similar distribution across classes.",
+          "Backoff to background model: We also consider falling back upon a more generic word recognition model trained upon a larger, less-specialized corpus whenever the foreground word recognition model predicts UNK. Figure 1 depicts this scenario pictorially."
+        ],
+        "evidence_block_ids": [
+          21,
+          22,
+          23,
+          24
+        ],
+        "evidence_paragraph_ids": [
+          21,
+          22,
+          23,
+          24
+        ]
+      }
+    ],
+    "doc_uuid": "1905.11268",
+    "doc_path": "qasper://1905.11268",
+    "qasper_question_id": "ba539cab80d25c3e20f39644415ed48b9e4e4185",
+    "title": "Combating Adversarial Misspellings with Robust Word Recognition",
+    "evidence_block_ids": [
+      21,
+      22,
+      23,
+      24
+    ],
+    "evidence_paragraph_ids": [
+      21,
+      22,
+      23,
+      24
+    ],
+    "output": "{\n  \"answer_short\": \"Backoff strategies involve falling back to a neutral word, background model, or passing through UNK predictions to improve robustness and reduce sensitivity or error rate.\",\n  \"answer_rationale\": \"The backoff strategies are described in multiple documents: backoff to a neutral word (e.g., 'a') reduces sensitivity by returning a fixed word (Text 2, Text 7); backoff to a background model improves error rate by leveraging a larger corpus (Text 3, Text 8); and pass-through allows the model to handle UNK predictions directly (Text 6). These strategies aim to balance sensitivity and error rate for improved robustness (Text 1, Text 4, Text 10).\"\n}",
+    "retrieved_node_ids": [
+      63,
+      58,
+      24,
+      57,
+      23,
+      22,
+      62,
+      46,
+      19,
+      32
+    ],
+    "answer_short": "Backoff strategies involve falling back to a neutral word, background model, or passing through UNK predictions to improve robustness and reduce sensitivity or error rate.",
+    "answer_rationale": "The backoff strategies are described in multiple documents: backoff to a neutral word (e.g., 'a') reduces sensitivity by returning a fixed word (Text 2, Text 7); backoff to a background model improves error rate by leveraging a larger corpus (Text 3, Text 8); and pass-through allows the model to handle UNK predictions directly (Text 6). These strategies aim to balance sensitivity and error rate for improved robustness (Text 1, Text 4, Text 10).",
+    "supporting_block_ids": [
+      63,
+      58,
+      24,
+      57,
+      23,
+      22,
+      62,
+      46,
+      19,
+      32
+    ]
+  }
+]

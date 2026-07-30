@@ -1,0 +1,89 @@
+{
+  "strategy": "ircot",
+  "thoughts": [
+    "The GM_KL model uses KL divergence for learning Gaussian mixture distributions and outperforms previous models like w2g and w2gm, suggesting advantages in handling polysemy through better distribution modeling.",
+    "The GM_KL model's use of KL divergence for Gaussian mixture modeling improves performance over w2g and w2gm by better capturing polysemy and distribution similarity, as shown in experiments on benchmark datasets."
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "retrieval_query": "How does this approach compare to other WSD approaches employing word embeddings?",
+      "thought": "The GM_KL model uses KL divergence for learning Gaussian mixture distributions and outperforms previous models like w2g and w2gm, suggesting advantages in handling polysemy through better distribution modeling.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 6,
+          "score": 8.508501511859917,
+          "content": "BIBREF6 proposes a neural network approach considering both local and global contexts in learning word embeddings (point estimates). Their multiple prototype model handles polysemous words by providing apriori heuristics about word senses in the dataset. BIBREF7 proposes an alternative to handle polysemous words by a modified skip-gram model and EM algorithm. BIBREF8 presents a non-parametric based alternative to handle polysemies. However, these approaches fail to consider entailment relations among the words. BIBREF9 learn a Gaussian distribution per word using the expected likelihood kernel. However, for polysemous words, this may lead to word distributions with larger variances as it may have to cover various senses.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "BIBREF6 proposes a neural network approach considering both local and global contexts in learning word embeddings (point estimates). Their multiple prototype model handles polysemous words by providing apriori heuristics about word senses in the dataset. BIBREF7 proposes an alternative to handle polysemous words by a modified skip-gram model and EM algorithm. BIBREF8 presents a non-parametric based alternative to handle polysemies. However, these approaches fail to consider entailment relations among the words. BIBREF9 learn a Gaussian distribution per word using the expected likelihood kernel. However, for polysemous words, this may lead to word distributions with larger variances as it may have to cover various senses.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 25,
+          "score": 7.55542872770936,
+          "content": "We train our proposed model GM$\\_$KL (Gaussian Mixture using KL Divergence) on the Text8 dataset BIBREF14 which is a pre-processed data of $17M$ words from wikipedia. Of which, 71290 unique and frequent words are chosen using the subsampling trick in BIBREF15. We compare GM$\\_$KL with the previous approaches w2g BIBREF9 ( single Gaussian model) and w2gm BIBREF10 (mixture of Gaussian model with expected likelihood kernel). For all the models used for experimentation, the embedding size ($D$) was set to 50, number of mixtures to 2, context window length to 10, batch size to 128. The word embeddings were initialized using a uniform distribution in the range of $[-\\sqrt{\\frac{3}{D}}$, $\\sqrt{\\frac{3}{D}}]$ such that the expectation of variance is 1 and mean 0 BIBREF16. One could also consider initializing the word embeddings using other contextual representations such as BERT BIBREF17 and ELMo BIBREF18 in the proposed approach. In order to purely analyze the performance of $\\emph {GM\\_KL}$ over the other models, we have chosen initialization using uniform distribution for experiments. For computational benefits, diagonal covariance is used similar to BIBREF10. Each mixture probability is constrained in the range $[0,1]$, summing to 1 by optimizing over unconstrained scores in the range $(-\\infty ,\\infty )$ and converting scores to probability using softmax function. The mixture scores are initialized to 0 to ensure fairness among all the components. The threshold for negative sampling was set to $10^{-5}$, as recommended in BIBREF3. Mini-batch gradient descent with Adagrad optimizer BIBREF19 was used with initial learning rate set to $0.05$.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "We train our proposed model GM$\\_$KL (Gaussian Mixture using KL Divergence) on the Text8 dataset BIBREF14 which is a pre-processed data of $17M$ words from wikipedia. Of which, 71290 unique and frequent words are chosen using the subsampling trick in BIBREF15. We compare GM$\\_$KL with the previous approaches w2g BIBREF9 ( single Gaussian model) and w2gm BIBREF10 (mixture of Gaussian model with expected likelihood kernel). For all the models used for experimentation, the embedding size ($D$) was set to 50, number of mixtures to 2, context window length to 10, batch size to 128. The word embeddings were initialized using a uniform distribution in the range of $[-\\sqrt{\\frac{3}{D}}$, $\\sqrt{\\frac{3}{D}}]$ such that the expectation of variance is 1 and mean 0 BIBREF16. One could also consider initializing the word embeddings using other contextual representations such as BERT BIBREF17 and ELMo BIBREF18 in the proposed approach. In order to purely analyze the performance of $\\emph {GM\\_KL}$ over the other models, we have chosen initialization using uniform distribution for experiments. For computational benefits, diagonal covariance is used similar to BIBREF10. Each mixture probability is constrained in the range $[0,1]$, summing to 1 by optimizing over unconstrained scores in the range $(-\\infty ,\\infty )$ and converting scores to probability using softmax function. The mixture scores are initialized to 0 to ensure fairness among all the components. The threshold for negative sampling was set to $10^{-5}$, as recommended in BIBREF3. Mini-batch gradient descent with Adagrad optimizer BIBREF19 was used with initial learning rate set to $0.05$.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 36,
+          "score": 6.634099110142682,
+          "content": "We proposed a KL divergence based energy function for learning multi-sense word embedding distributions modelled as Gaussian mixtures. Due to the intractability of the Gaussian mixtures for the KL divergence measure, we use an approximate KL divergence function. We also demonstrated that the proposed GM$\\_$KL approaches performed better than other approaches on the benchmark word similarity and entailment datasets.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "We proposed a KL divergence based energy function for learning multi-sense word embedding distributions modelled as Gaussian mixtures. Due to the intractability of the Gaussian mixtures for the KL divergence measure, we use an approximate KL divergence function. We also demonstrated that the proposed GM$\\_$KL approaches performed better than other approaches on the benchmark word similarity and entailment datasets.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "retrieval_query": "How does this approach compare to other WSD approaches employing word embeddings?\nThought 1: The GM_KL model uses KL divergence for learning Gaussian mixture distributions and outperforms previous models like w2g and w2gm, suggesting advantages in handling polysemy through better distribution modeling.",
+      "thought": "The GM_KL model's use of KL divergence for Gaussian mixture modeling improves performance over w2g and w2gm by better capturing polysemy and distribution similarity, as shown in experiments on benchmark datasets.",
+      "stop": true,
+      "retrieved": [
+        {
+          "id": 25,
+          "score": 26.31726582020765,
+          "content": "We train our proposed model GM$\\_$KL (Gaussian Mixture using KL Divergence) on the Text8 dataset BIBREF14 which is a pre-processed data of $17M$ words from wikipedia. Of which, 71290 unique and frequent words are chosen using the subsampling trick in BIBREF15. We compare GM$\\_$KL with the previous approaches w2g BIBREF9 ( single Gaussian model) and w2gm BIBREF10 (mixture of Gaussian model with expected likelihood kernel). For all the models used for experimentation, the embedding size ($D$) was set to 50, number of mixtures to 2, context window length to 10, batch size to 128. The word embeddings were initialized using a uniform distribution in the range of $[-\\sqrt{\\frac{3}{D}}$, $\\sqrt{\\frac{3}{D}}]$ such that the expectation of variance is 1 and mean 0 BIBREF16. One could also consider initializing the word embeddings using other contextual representations such as BERT BIBREF17 and ELMo BIBREF18 in the proposed approach. In order to purely analyze the performance of $\\emph {GM\\_KL}$ over the other models, we have chosen initialization using uniform distribution for experiments. For computational benefits, diagonal covariance is used similar to BIBREF10. Each mixture probability is constrained in the range $[0,1]$, summing to 1 by optimizing over unconstrained scores in the range $(-\\infty ,\\infty )$ and converting scores to probability using softmax function. The mixture scores are initialized to 0 to ensure fairness among all the components. The threshold for negative sampling was set to $10^{-5}$, as recommended in BIBREF3. Mini-batch gradient descent with Adagrad optimizer BIBREF19 was used with initial learning rate set to $0.05$.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "We train our proposed model GM$\\_$KL (Gaussian Mixture using KL Divergence) on the Text8 dataset BIBREF14 which is a pre-processed data of $17M$ words from wikipedia. Of which, 71290 unique and frequent words are chosen using the subsampling trick in BIBREF15. We compare GM$\\_$KL with the previous approaches w2g BIBREF9 ( single Gaussian model) and w2gm BIBREF10 (mixture of Gaussian model with expected likelihood kernel). For all the models used for experimentation, the embedding size ($D$) was set to 50, number of mixtures to 2, context window length to 10, batch size to 128. The word embeddings were initialized using a uniform distribution in the range of $[-\\sqrt{\\frac{3}{D}}$, $\\sqrt{\\frac{3}{D}}]$ such that the expectation of variance is 1 and mean 0 BIBREF16. One could also consider initializing the word embeddings using other contextual representations such as BERT BIBREF17 and ELMo BIBREF18 in the proposed approach. In order to purely analyze the performance of $\\emph {GM\\_KL}$ over the other models, we have chosen initialization using uniform distribution for experiments. For computational benefits, diagonal covariance is used similar to BIBREF10. Each mixture probability is constrained in the range $[0,1]$, summing to 1 by optimizing over unconstrained scores in the range $(-\\infty ,\\infty )$ and converting scores to probability using softmax function. The mixture scores are initialized to 0 to ensure fairness among all the components. The threshold for negative sampling was set to $10^{-5}$, as recommended in BIBREF3. Mini-batch gradient descent with Adagrad optimizer BIBREF19 was used with initial learning rate set to $0.05$.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 36,
+          "score": 20.94297361186845,
+          "content": "We proposed a KL divergence based energy function for learning multi-sense word embedding distributions modelled as Gaussian mixtures. Due to the intractability of the Gaussian mixtures for the KL divergence measure, we use an approximate KL divergence function. We also demonstrated that the proposed GM$\\_$KL approaches performed better than other approaches on the benchmark word similarity and entailment datasets.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "We proposed a KL divergence based energy function for learning multi-sense word embedding distributions modelled as Gaussian mixtures. Due to the intractability of the Gaussian mixtures for the KL divergence measure, we use an approximate KL divergence function. We also demonstrated that the proposed GM$\\_$KL approaches performed better than other approaches on the benchmark word similarity and entailment datasets.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 2,
+          "score": 20.769169261720112,
+          "content": "Learning word representations has garnered greater attention in the recent past due to its diverse text applications. Word embeddings encapsulate the syntactic and semantic regularities of sentences. Modelling word embedding as multi-sense gaussian mixture distributions, will additionally capture uncertainty and polysemy of words. We propose to learn the Gaussian mixture representation of words using a Kullback-Leibler (KL) divergence based objective function. The KL divergence based energy function provides a better distance metric which can effectively capture entailment and distribution similarity among the words. Due to the intractability of KL divergence for Gaussian mixture, we go for a KL approximation between Gaussian mixtures. We perform qualitative and quantitative experiments on benchmark word similarity and entailment datasets which demonstrate the effectiveness of the proposed approach.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "Learning word representations has garnered greater attention in the recent past due to its diverse text applications. Word embeddings encapsulate the syntactic and semantic regularities of sentences. Modelling word embedding as multi-sense gaussian mixture distributions, will additionally capture uncertainty and polysemy of words. We propose to learn the Gaussian mixture representation of words using a Kullback-Leibler (KL) divergence based objective function. The KL divergence based energy function provides a better distance metric which can effectively capture entailment and distribution similarity among the words. Due to the intractability of KL divergence for Gaussian mixture, we go for a KL approximation between Gaussian mixtures. We perform qualitative and quantitative experiments on benchmark word similarity and entailment datasets which demonstrate the effectiveness of the proposed approach.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    }
+  ],
+  "retrieved_block_ids": [
+    6,
+    25,
+    36,
+    2
+  ],
+  "supporting_block_ids": [
+    25,
+    36
+  ]
+}

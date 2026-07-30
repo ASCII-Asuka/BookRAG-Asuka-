@@ -1,0 +1,71 @@
+{
+  "question": "How is the sequential nature of the story captured?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "we provide the decoder with the context of the whole sequence and the content of the current image (i.e. global and local information) to generate the corresponding text that will contribute to the overall story"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "The decoder is the second LSTM network that uses the information obtained from the encoder to generate the sequence's story. The first input $x_0$ to the decoder is the image for which the text is being generated. The last hidden state from the encoder $h_e^{(t)}$ is used to initialize the first hidden state of the decoder $h_d^{(0)}$ . With this strategy, we provide the decoder with the context of the whole sequence and the content of the current image (i.e. global and local information) to generate the corresponding text that will contribute to the overall story."
+      ],
+      "evidence_block_ids": [
+        15
+      ],
+      "evidence_paragraph_ids": [
+        15
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "The encoder takes the images in order, one at every timestep $t$ . At time $t=5$ , we obtain the context vector through $h_e^{(t)}$ (represented by $\\mathbf {Z}$ ). This vector is used to initialize each decoder's hidden state while the first input to each decoder is its corresponding image embedding $e(I_i)$ . Each decoder generates a sequence of words $\\lbrace p_1,...,p_{n}\\rbrace $ for each image in the sequence. "
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "Our proposed architecture is presented in Figure 3 . For each image in the sequence, we obtain its representation $\\lbrace e(I_1),...,e(I_5)\\rbrace $ using Inception v3. The encoder takes the images in order, one at every timestep $t$ . At time $t=5$ , we obtain the context vector through $h_e^{(t)}$ (represented by $\\mathbf {Z}$ ). This vector is used to initialize each decoder's hidden state while the first input to each decoder is its corresponding image embedding $e(I_i)$ . Each decoder generates a sequence of words $\\lbrace p_1,...,p_{n}\\rbrace $ for each image in the sequence. The final story is the concatenation of the output of the 5 decoders."
+      ],
+      "evidence_block_ids": [
+        17
+      ],
+      "evidence_paragraph_ids": [
+        17
+      ]
+    }
+  ],
+  "doc_uuid": "1806.00738",
+  "doc_path": "qasper://1806.00738",
+  "qasper_question_id": "584af673429c7f8621c6bf83362a37048daa0e5d",
+  "title": "Contextualize, Show and Tell: A Neural Visual Storyteller",
+  "evidence_block_ids": [
+    15,
+    17
+  ],
+  "evidence_paragraph_ids": [
+    15,
+    17
+  ],
+  "output": "{\n  \"answer_short\": \"The sequential nature is captured by the LSTM decoder generating text word by word and by having separate decoders for each image, each initialized with the encoder's context and generating text specific to its position in the sequence.\",\n  \"answer_rationale\": \"The sequential nature of the story is captured through two key mechanisms: (1) the LSTM decoder generates text word by word, using context from the encoder and previous hidden states (Text 1, Text 3), and (2) separate decoders are used for each image in the sequence, each initialized with the encoder's context and generating text specific to its position (Text 4). This allows the model to learn distinct language models for each position in the sequence, such as opening or closing sentences (Text 4).\",\n  \"supporting_block_ids\": [11, 15, 16]\n}",
+  "retrieved_node_ids": [
+    11,
+    20,
+    15,
+    16
+  ],
+  "retrieved_block_ids": [
+    11,
+    20,
+    15,
+    16
+  ],
+  "answer_short": "The sequential nature is captured by the LSTM decoder generating text word by word and by having separate decoders for each image, each initialized with the encoder's context and generating text specific to its position in the sequence.",
+  "answer_rationale": "The sequential nature of the story is captured through two key mechanisms: (1) the LSTM decoder generates text word by word, using context from the encoder and previous hidden states (Text 1, Text 3), and (2) separate decoders are used for each image in the sequence, each initialized with the encoder's context and generating text specific to its position (Text 4). This allows the model to learn distinct language models for each position in the sequence, such as opening or closing sentences (Text 4).",
+  "supporting_block_ids": [
+    11,
+    15,
+    16
+  ]
+}

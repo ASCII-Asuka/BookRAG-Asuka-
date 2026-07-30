@@ -1,0 +1,61 @@
+{
+  "id": "longrag_8",
+  "content": "[Section] Evaluation ::: Human Evaluation and Error Analysis\n[source_id=51] To evaluate our system on irregular examples, we conducted experiments with human tutors from the OMB+ platform. The tutors are experienced regarding rare or complex questions, ambiguous answers, misspellings and other infrequent but still very relevant problems, which occur during a dialogue. In the following, we investigate some common errors and make additional observations.\n[source_id=52] Misspellings and confusable spellings occur quite often in the user-generated text, and since we attempt to let the conversation remain very natural from the user side and thus, cannot require formal writing, we have to deal with various writing issues. One of the most frequent problems is misspellings. German words are generally long and can be complicated, and since users type quickly, this often leads to the wrong order of characters within words. To tackle this challenge, we used fuzzy match within ES. However, the maximum allowed edit distance in Elasticsearch is set to 2 characters. This means, that all the misspellings beyond this threshold could not be accurately recognized by ES (e.g., Differentialrechnung vs Differnezialrechnung). Another characteristic example would be the writing of the section or question number. The equivalent information can be written in several distinct ways, which has to be considered in our RegEx unit (e.g., Exercise 5 a, Exercise V a, Exercise 5 (a)). A similar problem occurs with confusable spelling (i.e.: Differentialrechnung vs Differentialgleichung). We analyzed the cases mentioned above and added some of the most common issues to the ES database or handled them with RegEx during the preprocessing step.\n[source_id=53] Elasticsearch Threshold: In some cases, the system failed to extract information, although the user provided it. In other cases, ES extracts information that was not mentioned in a user query at all. That occurs due to the relevancy scoring algorithm of Elasticsearch, where a document's score is a combination of textual similarity and other metadata based scores. Our analysis revealed that ES mostly fails to extract the information if the sentence (i.e., user message) is quite short (e.g., 5 words). To overcome this difficulty, we combined the current input $u_{t}$ with the dialog history. This step eliminated the problem and improved the retrieval quality. To solve the case where Elasticsearch extracts incorrect information (or information that was not mentioned in a query) is more challenging. We discovered that the problem comes from short words or sub-words (e.g., suffixes, prefixes), which ES considers to be credible enough. The Elasticsearch documentation suggests getting rid of stop words to eliminate this behavior. However, this did not improve the search in our case. Also, fine-tuning of ES parameters such as the relevance threshold, prefix length and minimum should match parameter did not bring significant improvements. To cope with this problem, we implemented a verification step, where a user is given a chance to correct the erroneously retrieved information.\n[source_id=54] The overall feedback from the tutors included reduced repetitive activities as well as reduced waiting times for students until their questions were processed. Also, tutors reported that the rate of cancelled sessions (switching to a human tutor) is rather low.",
+  "score": 3.6756304420649766,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_8",
+  "child_source_node_ids": [
+    51,
+    52,
+    53,
+    54
+  ],
+  "child_qasper_evidence_texts": [
+    "To evaluate our system on irregular examples, we conducted experiments with human tutors from the OMB+ platform. The tutors are experienced regarding rare or complex questions, ambiguous answers, misspellings and other infrequent but still very relevant problems, which occur during a dialogue. In the following, we investigate some common errors and make additional observations.",
+    "Misspellings and confusable spellings occur quite often in the user-generated text, and since we attempt to let the conversation remain very natural from the user side and thus, cannot require formal writing, we have to deal with various writing issues. One of the most frequent problems is misspellings. German words are generally long and can be complicated, and since users type quickly, this often leads to the wrong order of characters within words. To tackle this challenge, we used fuzzy match within ES. However, the maximum allowed edit distance in Elasticsearch is set to 2 characters. This means, that all the misspellings beyond this threshold could not be accurately recognized by ES (e.g., Differentialrechnung vs Differnezialrechnung). Another characteristic example would be the writing of the section or question number. The equivalent information can be written in several distinct ways, which has to be considered in our RegEx unit (e.g., Exercise 5 a, Exercise V a, Exercise 5 (a)). A similar problem occurs with confusable spelling (i.e.: Differentialrechnung vs Differentialgleichung). We analyzed the cases mentioned above and added some of the most common issues to the ES database or handled them with RegEx during the preprocessing step.",
+    "Elasticsearch Threshold: In some cases, the system failed to extract information, although the user provided it. In other cases, ES extracts information that was not mentioned in a user query at all. That occurs due to the relevancy scoring algorithm of Elasticsearch, where a document's score is a combination of textual similarity and other metadata based scores. Our analysis revealed that ES mostly fails to extract the information if the sentence (i.e., user message) is quite short (e.g., 5 words). To overcome this difficulty, we combined the current input $u_{t}$ with the dialog history. This step eliminated the problem and improved the retrieval quality. To solve the case where Elasticsearch extracts incorrect information (or information that was not mentioned in a query) is more challenging. We discovered that the problem comes from short words or sub-words (e.g., suffixes, prefixes), which ES considers to be credible enough. The Elasticsearch documentation suggests getting rid of stop words to eliminate this behavior. However, this did not improve the search in our case. Also, fine-tuning of ES parameters such as the relevance threshold, prefix length and minimum should match parameter did not bring significant improvements. To cope with this problem, we implemented a verification step, where a user is given a chance to correct the erroneously retrieved information.",
+    "The overall feedback from the tutors included reduced repetitive activities as well as reduced waiting times for students until their questions were processed. Also, tutors reported that the rate of cancelled sessions (switching to a human tutor) is rather low."
+  ],
+  "child_pages": [
+    8,
+    8,
+    8,
+    8
+  ],
+  "child_sections": [
+    "Evaluation ::: Human Evaluation and Error Analysis",
+    "Evaluation ::: Human Evaluation and Error Analysis",
+    "Evaluation ::: Human Evaluation and Error Analysis",
+    "Evaluation ::: Human Evaluation and Error Analysis"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Evaluation ::: Human Evaluation and Error Analysis",
+      0
+    ],
+    [
+      "Evaluation ::: Human Evaluation and Error Analysis",
+      1
+    ],
+    [
+      "Evaluation ::: Human Evaluation and Error Analysis",
+      2
+    ],
+    [
+      "Evaluation ::: Human Evaluation and Error Analysis",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_8",
+  "section_id": "Evaluation ::: Human Evaluation and Error Analysis",
+  "section": "Evaluation ::: Human Evaluation and Error Analysis",
+  "title_path": "Evaluation ::: Human Evaluation and Error Analysis",
+  "block_type": "long_unit"
+}

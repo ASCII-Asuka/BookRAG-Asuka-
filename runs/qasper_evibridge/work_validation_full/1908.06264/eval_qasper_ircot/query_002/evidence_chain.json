@@ -1,0 +1,92 @@
+{
+  "strategy": "ircot",
+  "thoughts": [
+    "The Twitter dataset was used for pre-training ChatBERT due to its informal text style matching chat data.",
+    "The Twitter dataset was used for pre-training ChatBERT, and the Twitter emotion dataset (with emotion hashtags) was used for fine-tuning. Additionally, the FriendsBERT and ChatBERT models were adapted using the Friends and EmotionPush datasets respectively."
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "retrieval_query": "what datasets were used?",
+      "thought": "The Twitter dataset was used for pre-training ChatBERT due to its informal text style matching chat data.",
+      "stop": false,
+      "retrieved": [
+        {
+          "id": 37,
+          "score": 3.9412536507938465,
+          "content": "For pre-training ChatBERT, we pre-train our model on the Twitter dataset, since the text and writing style on Twitter are close to the chat text where both may involved with many informal words or emoticons as well. The Twitter emotion dataset, 8 basic emotions from emotion wheel BIBREF1, was collected by twitter streaming API with specific emotion-related hashtags, such as #anger, #joy, #cry, #sad and etc. The hashtags in tweets are treated as emotion label for model fine-tuning. The tweets were fine-grined processing followed the rules in BIBREF9, BIBREF4, including duplicate tweets removing, the emotion hashtags must appearing in the last position of a tweet, and etc. The statis of tweets were summarized in Table TABREF17. Each tweet and corresponding emotion label composes an emotion classification dataset for pre-training.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "For pre-training ChatBERT, we pre-train our model on the Twitter dataset, since the text and writing style on Twitter are close to the chat text where both may involved with many informal words or emoticons as well. The Twitter emotion dataset, 8 basic emotions from emotion wheel BIBREF1, was collected by twitter streaming API with specific emotion-related hashtags, such as #anger, #joy, #cry, #sad and etc. The hashtags in tweets are treated as emotion label for model fine-tuning. The tweets were fine-grined processing followed the rules in BIBREF9, BIBREF4, including duplicate tweets removing, the emotion hashtags must appearing in the last position of a tweet, and etc. The statis of tweets were summarized in Table TABREF17. Each tweet and corresponding emotion label composes an emotion classification dataset for pre-training.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 23,
+          "score": 3.7753096017060765,
+          "content": "The source of the two datasets are different. Friends is speech-based dialogues and EmotionPush is chat-based dialogues. It makes datasets possess different characteristics.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "The source of the two datasets are different. Friends is speech-based dialogues and EmotionPush is chat-based dialogues. It makes datasets possess different characteristics.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 34,
+          "score": 3.424683189390528,
+          "content": "Since the size of both datasets are not large enough for complex neural-based model training as well as BERT model is only pre-train on formal text datasets, the issues of overfitting and domain bias are important considerations for design the pre-training process.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "Since the size of both datasets are not large enough for complex neural-based model training as well as BERT model is only pre-train on formal text datasets, the issues of overfitting and domain bias are important considerations for design the pre-training process.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "retrieval_query": "what datasets were used?\nThought 1: The Twitter dataset was used for pre-training ChatBERT due to its informal text style matching chat data.",
+      "thought": "The Twitter dataset was used for pre-training ChatBERT, and the Twitter emotion dataset (with emotion hashtags) was used for fine-tuning. Additionally, the FriendsBERT and ChatBERT models were adapted using the Friends and EmotionPush datasets respectively.",
+      "stop": true,
+      "retrieved": [
+        {
+          "id": 37,
+          "score": 26.95818544526815,
+          "content": "For pre-training ChatBERT, we pre-train our model on the Twitter dataset, since the text and writing style on Twitter are close to the chat text where both may involved with many informal words or emoticons as well. The Twitter emotion dataset, 8 basic emotions from emotion wheel BIBREF1, was collected by twitter streaming API with specific emotion-related hashtags, such as #anger, #joy, #cry, #sad and etc. The hashtags in tweets are treated as emotion label for model fine-tuning. The tweets were fine-grined processing followed the rules in BIBREF9, BIBREF4, including duplicate tweets removing, the emotion hashtags must appearing in the last position of a tweet, and etc. The statis of tweets were summarized in Table TABREF17. Each tweet and corresponding emotion label composes an emotion classification dataset for pre-training.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "For pre-training ChatBERT, we pre-train our model on the Twitter dataset, since the text and writing style on Twitter are close to the chat text where both may involved with many informal words or emoticons as well. The Twitter emotion dataset, 8 basic emotions from emotion wheel BIBREF1, was collected by twitter streaming API with specific emotion-related hashtags, such as #anger, #joy, #cry, #sad and etc. The hashtags in tweets are treated as emotion label for model fine-tuning. The tweets were fine-grined processing followed the rules in BIBREF9, BIBREF4, including duplicate tweets removing, the emotion hashtags must appearing in the last position of a tweet, and etc. The statis of tweets were summarized in Table TABREF17. Each tweet and corresponding emotion label composes an emotion classification dataset for pre-training.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 35,
+          "score": 16.16334226117454,
+          "content": "To avoid our model overfitting on the training data and increase the understanding of informal text, we adapted BERT and derived two models, namely FriendsBERT and ChatBERT, with different pre-training tasks before the formal training process for Friends and EmotionPush dataset, respectively. The pre-training strategies are described below.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "To avoid our model overfitting on the training data and increase the understanding of informal text, we adapted BERT and derived two models, namely FriendsBERT and ChatBERT, with different pre-training tasks before the formal training process for Friends and EmotionPush dataset, respectively. The pre-training strategies are described below.",
+          "hotpot_title": null,
+          "sent_id": null
+        },
+        {
+          "id": 9,
+          "score": 10.720921389625225,
+          "content": "For the datasets, there are properties worth additional mentioning. Although Friends and EmotionPush share the same data format, they are quite different in nature. Friends is a speech-based dataset which is annotated dialogues from the TV sitcom. It means most of the utterances are generated by the a few main characters. The personality of a character often affects the way of speaking, and therefore “who is the speaker\" might provide extra clues for emotion prediction. In contrast, EmotionPush does not have this trait due to the anonymous mechanism. In addition, features such as typo, hyperlink, and emoji that only appear in chat-based data will need some domain-specific techniques to process.",
+          "source": "qasper_paragraph",
+          "qasper_evidence_text": "For the datasets, there are properties worth additional mentioning. Although Friends and EmotionPush share the same data format, they are quite different in nature. Friends is a speech-based dataset which is annotated dialogues from the TV sitcom. It means most of the utterances are generated by the a few main characters. The personality of a character often affects the way of speaking, and therefore “who is the speaker\" might provide extra clues for emotion prediction. In contrast, EmotionPush does not have this trait due to the anonymous mechanism. In addition, features such as typo, hyperlink, and emoji that only appear in chat-based data will need some domain-specific techniques to process.",
+          "hotpot_title": null,
+          "sent_id": null
+        }
+      ]
+    }
+  ],
+  "retrieved_block_ids": [
+    37,
+    23,
+    34,
+    35,
+    9
+  ],
+  "supporting_block_ids": [
+    37,
+    23,
+    34,
+    35
+  ]
+}

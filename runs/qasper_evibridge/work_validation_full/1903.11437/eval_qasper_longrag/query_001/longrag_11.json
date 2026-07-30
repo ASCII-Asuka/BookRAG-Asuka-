@@ -1,0 +1,79 @@
+{
+  "id": "longrag_11",
+  "content": "[Section] GAN setups\n[source_id=48] In our setups, we use a marked target copy, viewed as a fake source, which a generator encodes so as to fool a discriminator trained to distinguish a fake from a natural source. Our architecture contains two distinct encoders, one for the natural source and one for the pseudo-source. The latter acts as the generator ( INLINEFORM0 ) in the GAN framework, computing a representation of the pseudo-source that is then input to a discriminator ( INLINEFORM1 ), which has to sort natural from artificial encodings. INLINEFORM2 assigns a probability of a sentence being natural.\n[source_id=49] During training, the cost of the discriminator is computed over two batches, one with natural (out-of-domain) sentences INLINEFORM0 and one with (in-domain) pseudo-sentences INLINEFORM1 . The discriminator is a bidirectional-Recurrent Neural Network (RNN) of dimension 1024. Averaged states are passed to a single feed-forward layer, to which a sigmoid is applied. It inputs encodings of natural ( INLINEFORM2 ) and pseudo-sentences ( INLINEFORM3 ) and is trained to optimize:\n[source_id=50] INLINEFORM0\n[source_id=51] INLINEFORM0 's parameters are updated to maximally fool INLINEFORM1 , thus the loss INLINEFORM2 : INLINEFORM3\n[source_id=52] Finally, we keep the usual MT objective. ( INLINEFORM0 is a real or pseudo-sentence): INLINEFORM1\n[source_id=53] We thus need to train three sets of parameters: INLINEFORM0 and INLINEFORM1 (MT parameters), with INLINEFORM2 . The pseudo-source encoder and embeddings are updated wrt. both INLINEFORM3 and INLINEFORM4 . Following BIBREF28 , INLINEFORM5 is updated only when INLINEFORM6 's accuracy exceeds INLINEFORM7 . On the other hand, INLINEFORM8 is not updated when its accuracy exceeds INLINEFORM9 . At each update, two batches are generated for each type of data, which are encoded with the real or pseudo-encoder. The encoder outputs serve to compute INLINEFORM10 and INLINEFORM11 . Finally, the pseudo-source is encoded again (once INLINEFORM12 is updated), both encoders are plugged into the translation model and the MT cost is back-propagated down to the real and pseudo-word embeddings. Pseudo-encoder and discriminator parameters are pre-trained for 10k updates. At test time, the pseudo-encoder is ignored and inference is run as usual.",
+  "score": 0.7974913008599949,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_11",
+  "child_source_node_ids": [
+    48,
+    49,
+    50,
+    51,
+    52,
+    53
+  ],
+  "child_qasper_evidence_texts": [
+    "In our setups, we use a marked target copy, viewed as a fake source, which a generator encodes so as to fool a discriminator trained to distinguish a fake from a natural source. Our architecture contains two distinct encoders, one for the natural source and one for the pseudo-source. The latter acts as the generator ( INLINEFORM0 ) in the GAN framework, computing a representation of the pseudo-source that is then input to a discriminator ( INLINEFORM1 ), which has to sort natural from artificial encodings. INLINEFORM2 assigns a probability of a sentence being natural.",
+    "During training, the cost of the discriminator is computed over two batches, one with natural (out-of-domain) sentences INLINEFORM0 and one with (in-domain) pseudo-sentences INLINEFORM1 . The discriminator is a bidirectional-Recurrent Neural Network (RNN) of dimension 1024. Averaged states are passed to a single feed-forward layer, to which a sigmoid is applied. It inputs encodings of natural ( INLINEFORM2 ) and pseudo-sentences ( INLINEFORM3 ) and is trained to optimize:",
+    "INLINEFORM0",
+    "INLINEFORM0 's parameters are updated to maximally fool INLINEFORM1 , thus the loss INLINEFORM2 : INLINEFORM3",
+    "Finally, we keep the usual MT objective. ( INLINEFORM0 is a real or pseudo-sentence): INLINEFORM1",
+    "We thus need to train three sets of parameters: INLINEFORM0 and INLINEFORM1 (MT parameters), with INLINEFORM2 . The pseudo-source encoder and embeddings are updated wrt. both INLINEFORM3 and INLINEFORM4 . Following BIBREF28 , INLINEFORM5 is updated only when INLINEFORM6 's accuracy exceeds INLINEFORM7 . On the other hand, INLINEFORM8 is not updated when its accuracy exceeds INLINEFORM9 . At each update, two batches are generated for each type of data, which are encoded with the real or pseudo-encoder. The encoder outputs serve to compute INLINEFORM10 and INLINEFORM11 . Finally, the pseudo-source is encoded again (once INLINEFORM12 is updated), both encoders are plugged into the translation model and the MT cost is back-propagated down to the real and pseudo-word embeddings. Pseudo-encoder and discriminator parameters are pre-trained for 10k updates. At test time, the pseudo-encoder is ignored and inference is run as usual."
+  ],
+  "child_pages": [
+    11,
+    11,
+    11,
+    11,
+    11,
+    11
+  ],
+  "child_sections": [
+    "GAN setups",
+    "GAN setups",
+    "GAN setups",
+    "GAN setups",
+    "GAN setups",
+    "GAN setups"
+  ],
+  "child_hotpot_facts": [
+    [
+      "GAN setups",
+      0
+    ],
+    [
+      "GAN setups",
+      1
+    ],
+    [
+      "GAN setups",
+      2
+    ],
+    [
+      "GAN setups",
+      3
+    ],
+    [
+      "GAN setups",
+      4
+    ],
+    [
+      "GAN setups",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_11",
+  "section_id": "GAN setups",
+  "section": "GAN setups",
+  "title_path": "GAN setups",
+  "block_type": "long_unit"
+}

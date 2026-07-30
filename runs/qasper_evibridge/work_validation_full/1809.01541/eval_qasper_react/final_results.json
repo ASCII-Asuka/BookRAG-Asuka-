@@ -1,0 +1,443 @@
+[
+  {
+    "question": "How do they perform multilingual training?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Multilingual training is performed by randomly alternating between languages for every new minibatch"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "The parameters of the entire MSD (auxiliary-task) decoder are shared across languages.",
+          "Since a grouping of the languages based on language family would have left several languages in single-member groups (e.g. Russian is the sole representative of the Slavic family), we experiment with random groupings of two to three languages. Multilingual training is performed by randomly alternating between languages for every new minibatch. We do not pass any information to the auxiliary decoder as to the source language of the signal it is receiving, as we assume abstract morpho-syntactic features are shared across languages."
+        ],
+        "evidence_block_ids": [
+          29,
+          30
+        ],
+        "evidence_paragraph_ids": [
+          29,
+          30
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "by randomly alternating between languages for every new minibatch"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Since a grouping of the languages based on language family would have left several languages in single-member groups (e.g. Russian is the sole representative of the Slavic family), we experiment with random groupings of two to three languages. Multilingual training is performed by randomly alternating between languages for every new minibatch. We do not pass any information to the auxiliary decoder as to the source language of the signal it is receiving, as we assume abstract morpho-syntactic features are shared across languages."
+        ],
+        "evidence_block_ids": [
+          30
+        ],
+        "evidence_paragraph_ids": [
+          30
+        ]
+      }
+    ],
+    "doc_uuid": "1809.01541",
+    "doc_path": "qasper://1809.01541",
+    "qasper_question_id": "5cb610d3d5d7d447b4cd5736d6a7d8262140af58",
+    "title": "Copenhagen at CoNLL--SIGMORPHON 2018: Multilingual Inflection in Context with Explicit Morphosyntactic Decoding",
+    "evidence_block_ids": [
+      29,
+      30
+    ],
+    "evidence_paragraph_ids": [
+      29,
+      30
+    ],
+    "output": "{\"answer_short\": \"by training the auxiliary component in a multilingual fashion over sets of two to three languages\", \"answer_rationale\": \"\", \"supporting_block_ids\": [4, 5, 6, 7, 8]}",
+    "retrieved_node_ids": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "retrieved_block_ids": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "answer_short": "by training the auxiliary component in a multilingual fashion over sets of two to three languages",
+    "supporting_block_ids": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "question": "What languages are evaluated?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "German, English, Spanish, Finnish, French, Russian,  Swedish.",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      },
+      {
+        "unanswerable": true,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      }
+    ],
+    "doc_uuid": "1809.01541",
+    "doc_path": "qasper://1809.01541",
+    "qasper_question_id": "c32adef59efcb9d1a5b10e1d7c999a825c9e6d9a",
+    "title": "Copenhagen at CoNLL--SIGMORPHON 2018: Multilingual Inflection in Context with Explicit Morphosyntactic Decoding",
+    "evidence_block_ids": [],
+    "evidence_paragraph_ids": [],
+    "output": "{\"answer_short\": \"1) Use an LSTM to encode the entire available context; 2) Employ a multi-task learning approach with the auxiliary objective of MSD prediction; 3) Train the auxiliary component in a multilingual fashion over sets of two to three languages\", \"answer_rationale\": \"\", \"supporting_block_ids\": [4, 5, 6, 7, 8]}",
+    "retrieved_node_ids": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "retrieved_block_ids": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "answer_short": "1) Use an LSTM to encode the entire available context; 2) Employ a multi-task learning approach with the auxiliary objective of MSD prediction; 3) Train the auxiliary component in a multilingual fashion over sets of two to three languages",
+    "supporting_block_ids": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "question": "Does the model have attention?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": true,
+        "evidence": [
+          "The system is an encoder-decoder on character sequences. It takes a lemma as input and generates a word form. The process is conditioned on the context of the lemma [...] The baseline treats the lemma, word form and MSD of the previous and following word as context in track 1. In track 2, the baseline only considers the word forms of the previous and next word. [...] The baseline system concatenates embeddings for context word forms, lemmas and MSDs into a context vector. The baseline then computes character embeddings for each character in the input lemma. Each of these is concatenated with a copy of the context vector. The resulting sequence of vectors is encoded using an LSTM encoder. Subsequently, an LSTM decoder generates the characters in the output word form using encoder states and an attention mechanism."
+        ],
+        "evidence_block_ids": [
+          13
+        ],
+        "evidence_paragraph_ids": [
+          13
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": true,
+        "evidence": [
+          "The baseline provided by the shared task organisers is a seq2seq model with attention (similar to the winning system for reinflection in CoNLL–SIGMORPHON 2016, BIBREF1 ), which receives information about context through an embedding of the two words immediately adjacent to the target form. We use this baseline implementation as a starting point and achieve the best overall accuracy of 49.87 on Task 2 by introducing three augmentations to the provided baseline system: (1) We use an LSTM to encode the entire available context; (2) We employ a multi-task learning approach with the auxiliary objective of MSD prediction; and (3) We train the auxiliary component in a multilingual fashion, over sets of two to three languages."
+        ],
+        "evidence_block_ids": [
+          7
+        ],
+        "evidence_paragraph_ids": [
+          7
+        ]
+      }
+    ],
+    "doc_uuid": "1809.01541",
+    "doc_path": "qasper://1809.01541",
+    "qasper_question_id": "b9d168da5321a7d7b812c52bb102a05210fe45bd",
+    "title": "Copenhagen at CoNLL--SIGMORPHON 2018: Multilingual Inflection in Context with Explicit Morphosyntactic Decoding",
+    "evidence_block_ids": [
+      13,
+      7
+    ],
+    "evidence_paragraph_ids": [
+      13,
+      7
+    ],
+    "output": "{\"answer_short\": \"Yes\", \"answer_rationale\": \"\", \"supporting_block_ids\": [4, 5, 6, 7, 8]}",
+    "retrieved_node_ids": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "retrieved_block_ids": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "answer_short": "Yes",
+    "supporting_block_ids": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "question": "What architecture does the decoder have?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "LSTM"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "The system is an encoder-decoder on character sequences. It takes a lemma as input and generates a word form. The process is conditioned on the context of the lemma [...] The baseline treats the lemma, word form and MSD of the previous and following word as context in track 1. In track 2, the baseline only considers the word forms of the previous and next word. [...] The baseline system concatenates embeddings for context word forms, lemmas and MSDs into a context vector. The baseline then computes character embeddings for each character in the input lemma. Each of these is concatenated with a copy of the context vector. The resulting sequence of vectors is encoded using an LSTM encoder. Subsequently, an LSTM decoder generates the characters in the output word form using encoder states and an attention mechanism."
+        ],
+        "evidence_block_ids": [
+          13
+        ],
+        "evidence_paragraph_ids": [
+          13
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "LSTM"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "The system is an encoder-decoder on character sequences. It takes a lemma as input and generates a word form. The process is conditioned on the context of the lemma [...] The baseline treats the lemma, word form and MSD of the previous and following word as context in track 1. In track 2, the baseline only considers the word forms of the previous and next word. [...] The baseline system concatenates embeddings for context word forms, lemmas and MSDs into a context vector. The baseline then computes character embeddings for each character in the input lemma. Each of these is concatenated with a copy of the context vector. The resulting sequence of vectors is encoded using an LSTM encoder. Subsequently, an LSTM decoder generates the characters in the output word form using encoder states and an attention mechanism."
+        ],
+        "evidence_block_ids": [
+          13
+        ],
+        "evidence_paragraph_ids": [
+          13
+        ]
+      }
+    ],
+    "doc_uuid": "1809.01541",
+    "doc_path": "qasper://1809.01541",
+    "qasper_question_id": "0c234db3b380c27c4c70579a5d6948e1e3b24ff1",
+    "title": "Copenhagen at CoNLL--SIGMORPHON 2018: Multilingual Inflection in Context with Explicit Morphosyntactic Decoding",
+    "evidence_block_ids": [
+      13
+    ],
+    "evidence_paragraph_ids": [
+      13
+    ],
+    "output": "{\"answer_short\": \"one layer of LSTM with embedding size, LSTM layer size, and attention layer size of 100\", \"answer_rationale\": \"\", \"supporting_block_ids\": [12, 13, 14, 15, 16]}",
+    "retrieved_node_ids": [
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "retrieved_block_ids": [
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "answer_short": "one layer of LSTM with embedding size, LSTM layer size, and attention layer size of 100",
+    "supporting_block_ids": [
+      12,
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  {
+    "question": "What architecture does the encoder have?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "LSTM"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "The system is an encoder-decoder on character sequences. It takes a lemma as input and generates a word form. The process is conditioned on the context of the lemma [...] The baseline treats the lemma, word form and MSD of the previous and following word as context in track 1. In track 2, the baseline only considers the word forms of the previous and next word. [...] The baseline system concatenates embeddings for context word forms, lemmas and MSDs into a context vector. The baseline then computes character embeddings for each character in the input lemma. Each of these is concatenated with a copy of the context vector. The resulting sequence of vectors is encoded using an LSTM encoder. Subsequently, an LSTM decoder generates the characters in the output word form using encoder states and an attention mechanism."
+        ],
+        "evidence_block_ids": [
+          13
+        ],
+        "evidence_paragraph_ids": [
+          13
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "LSTM"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "The system is an encoder-decoder on character sequences. It takes a lemma as input and generates a word form. The process is conditioned on the context of the lemma [...] The baseline treats the lemma, word form and MSD of the previous and following word as context in track 1. In track 2, the baseline only considers the word forms of the previous and next word. [...] The baseline system concatenates embeddings for context word forms, lemmas and MSDs into a context vector. The baseline then computes character embeddings for each character in the input lemma. Each of these is concatenated with a copy of the context vector. The resulting sequence of vectors is encoded using an LSTM encoder. Subsequently, an LSTM decoder generates the characters in the output word form using encoder states and an attention mechanism."
+        ],
+        "evidence_block_ids": [
+          13
+        ],
+        "evidence_paragraph_ids": [
+          13
+        ]
+      }
+    ],
+    "doc_uuid": "1809.01541",
+    "doc_path": "qasper://1809.01541",
+    "qasper_question_id": "fa527becb8e2551f4fd2ae840dbd4a68971349e0",
+    "title": "Copenhagen at CoNLL--SIGMORPHON 2018: Multilingual Inflection in Context with Explicit Morphosyntactic Decoding",
+    "evidence_block_ids": [
+      13
+    ],
+    "evidence_paragraph_ids": [
+      13
+    ],
+    "output": "{\"answer_short\": \"a single-layer LSTM encoder with 100-dimensional embeddings and hidden states\", \"answer_rationale\": \"\", \"supporting_block_ids\": [12, 13, 14, 15, 16]}",
+    "retrieved_node_ids": [
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "retrieved_block_ids": [
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "answer_short": "a single-layer LSTM encoder with 100-dimensional embeddings and hidden states",
+    "supporting_block_ids": [
+      12,
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  {
+    "question": "What is MSD prediction?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "The task of predicting MSD tags: V, PST, V.PCTP, PASS.",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "morphosyntactic descriptions (MSD)"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "There are two tracks of Task 2 of CoNLL–SIGMORPHON 2018: in Track 1 the context is given in terms of word forms, lemmas and morphosyntactic descriptions (MSD); in Track 2 only word forms are available. See Table TABREF1 for an example. Task 2 is additionally split in three settings based on data size: high, medium and low, with high-resource datasets consisting of up to 70K instances per language, and low-resource datasets consisting of only about 1K instances."
+        ],
+        "evidence_block_ids": [
+          6
+        ],
+        "evidence_paragraph_ids": [
+          6
+        ]
+      }
+    ],
+    "doc_uuid": "1809.01541",
+    "doc_path": "qasper://1809.01541",
+    "qasper_question_id": "32a3c248b928d4066ce00bbb0053534ee62596e7",
+    "title": "Copenhagen at CoNLL--SIGMORPHON 2018: Multilingual Inflection in Context with Explicit Morphosyntactic Decoding",
+    "evidence_block_ids": [
+      6
+    ],
+    "evidence_paragraph_ids": [
+      6
+    ],
+    "output": "{\"answer_short\": \"the task of predicting morphological features of words, such as part-of-speech tags, number, case, and gender, based on their context\", \"answer_rationale\": \"\", \"supporting_block_ids\": [49, 50]}",
+    "retrieved_node_ids": [
+      49,
+      50
+    ],
+    "retrieved_block_ids": [
+      49,
+      50
+    ],
+    "answer_short": "the task of predicting morphological features of words, such as part-of-speech tags, number, case, and gender, based on their context",
+    "supporting_block_ids": [
+      49,
+      50
+    ]
+  },
+  {
+    "question": "What type of inflections are considered?",
+    "answer": [
+      {
+        "unanswerable": true,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      },
+      {
+        "unanswerable": true,
+        "extractive_spans": [],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      }
+    ],
+    "doc_uuid": "1809.01541",
+    "doc_path": "qasper://1809.01541",
+    "qasper_question_id": "c9b8d3858c112859eabee54248b874331c48f71b",
+    "title": "Copenhagen at CoNLL--SIGMORPHON 2018: Multilingual Inflection in Context with Explicit Morphosyntactic Decoding",
+    "evidence_block_ids": [],
+    "evidence_paragraph_ids": [],
+    "output": "{\"answer_short\": \"low resource setting\", \"answer_rationale\": \"\", \"supporting_block_ids\": [35, 36]}",
+    "retrieved_node_ids": [
+      35,
+      36
+    ],
+    "retrieved_block_ids": [
+      35,
+      36
+    ],
+    "answer_short": "low resource setting",
+    "supporting_block_ids": [
+      35,
+      36
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+{
+  "id": "longrag_8",
+  "content": "[Section] Classification and Regression Fitting\n[source_id=48] Again, following the play-book from Howard and Ruder BIBREF3 , we change the pre-trained network head to a softmax or linear output layer (as appropriate for the transfer task) and then load the LM weights for the layers below. We train just the new head from random initialization, then unfreeze the entire network and train with differential learning rates. We layout our training parameters in Table TABREF25 .\n[source_id=49] With the same learning rate and weight decay we apply a 5-fold cross-validation on the outputs and take the mean across the folds as our ensemble. We sample 20 random seeds (see more in section SECREF26 ) to find the best initialization for our gradient descent search. From these samples, we select the best validation F1 metric or Mean Squared Error (MSE) for use in our test submission.\n[source_id=50] For the classifier, we have a hidden layer and softmax head. We over-sample the minority class to balance the outcomes for better training using Synthetic Minority Oversampling Technique (SMOTE, described in Chawla et al. BIBREF9 ). Our loss is label smoothing as described in Pereyra et al. BIBREF10 of the flattened cross-entropy loss. In ULMFiT, gradual unfreezing allows us to avoid catastropic forgetting, focus each stage of training and preventing over-fitting of the parameters to the training cases. We take an alternative approach to regularization and in our experiments found that we got similar results with label smoothing but without the separate steps and learning rate refinement required of gradual unfreezing.\n[source_id=51] For the regression task, we fill all #N/A labels with scores of 0. We add a hidden layer and linear output head and MSE loss function.",
+  "score": 2.433920162138077,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_8",
+  "child_source_node_ids": [
+    48,
+    49,
+    50,
+    51
+  ],
+  "child_qasper_evidence_texts": [
+    "Again, following the play-book from Howard and Ruder BIBREF3 , we change the pre-trained network head to a softmax or linear output layer (as appropriate for the transfer task) and then load the LM weights for the layers below. We train just the new head from random initialization, then unfreeze the entire network and train with differential learning rates. We layout our training parameters in Table TABREF25 .",
+    "With the same learning rate and weight decay we apply a 5-fold cross-validation on the outputs and take the mean across the folds as our ensemble. We sample 20 random seeds (see more in section SECREF26 ) to find the best initialization for our gradient descent search. From these samples, we select the best validation F1 metric or Mean Squared Error (MSE) for use in our test submission.",
+    "For the classifier, we have a hidden layer and softmax head. We over-sample the minority class to balance the outcomes for better training using Synthetic Minority Oversampling Technique (SMOTE, described in Chawla et al. BIBREF9 ). Our loss is label smoothing as described in Pereyra et al. BIBREF10 of the flattened cross-entropy loss. In ULMFiT, gradual unfreezing allows us to avoid catastropic forgetting, focus each stage of training and preventing over-fitting of the parameters to the training cases. We take an alternative approach to regularization and in our experiments found that we got similar results with label smoothing but without the separate steps and learning rate refinement required of gradual unfreezing.",
+    "For the regression task, we fill all #N/A labels with scores of 0. We add a hidden layer and linear output head and MSE loss function."
+  ],
+  "child_pages": [
+    8,
+    8,
+    8,
+    8
+  ],
+  "child_sections": [
+    "Classification and Regression Fitting",
+    "Classification and Regression Fitting",
+    "Classification and Regression Fitting",
+    "Classification and Regression Fitting"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Classification and Regression Fitting",
+      0
+    ],
+    [
+      "Classification and Regression Fitting",
+      1
+    ],
+    [
+      "Classification and Regression Fitting",
+      2
+    ],
+    [
+      "Classification and Regression Fitting",
+      3
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_8",
+  "section_id": "Classification and Regression Fitting",
+  "section": "Classification and Regression Fitting",
+  "title_path": "Classification and Regression Fitting",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,52 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Decoder\n[source_id=15] The decoder is the second LSTM network that uses the information obtained from the encoder to generate the sequence's story. The first input $x_0$ to the decoder is the image for which the text is being generated. The last hidden state from the encoder $h_e^{(t)}$ is used to initialize the first hidden state of the decoder $h_d^{(0)}$ . With this strategy, we provide the decoder with the context of the whole sequence and the content of the current image (i.e. global and local information) to generate the corresponding text that will contribute to the overall story.\n[source_id=16] Our model contains five independent decoders, one for each image in the sequence. All the 5 decoders use the last hidden state of the encoder (i.e. the context) as its first hidden state and take the corresponding image embedding as its first input. In this way, the first decoder generates the sequence of words for the first image in the sequence, the second decoder for the second image in the sequence, and so on. This allows each decoder to learn a specific language model for each position of the sequence. For instance, the first decoder will learn the opening sentences of the story while the last decoder the closing sentences. The word embeddings were computed using word2vec BIBREF8 .\n[source_id=17] Our proposed architecture is presented in Figure 3 . For each image in the sequence, we obtain its representation $\\lbrace e(I_1),...,e(I_5)\\rbrace $ using Inception v3. The encoder takes the images in order, one at every timestep $t$ . At time $t=5$ , we obtain the context vector through $h_e^{(t)}$ (represented by $\\mathbf {Z}$ ). This vector is used to initialize each decoder's hidden state while the first input to each decoder is its corresponding image embedding $e(I_i)$ . Each decoder generates a sequence of words $\\lbrace p_1,...,p_{n}\\rbrace $ for each image in the sequence. The final story is the concatenation of the output of the 5 decoders.",
+  "score": 1.7437251665285545,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    15,
+    16,
+    17
+  ],
+  "child_qasper_evidence_texts": [
+    "The decoder is the second LSTM network that uses the information obtained from the encoder to generate the sequence's story. The first input $x_0$ to the decoder is the image for which the text is being generated. The last hidden state from the encoder $h_e^{(t)}$ is used to initialize the first hidden state of the decoder $h_d^{(0)}$ . With this strategy, we provide the decoder with the context of the whole sequence and the content of the current image (i.e. global and local information) to generate the corresponding text that will contribute to the overall story.",
+    "Our model contains five independent decoders, one for each image in the sequence. All the 5 decoders use the last hidden state of the encoder (i.e. the context) as its first hidden state and take the corresponding image embedding as its first input. In this way, the first decoder generates the sequence of words for the first image in the sequence, the second decoder for the second image in the sequence, and so on. This allows each decoder to learn a specific language model for each position of the sequence. For instance, the first decoder will learn the opening sentences of the story while the last decoder the closing sentences. The word embeddings were computed using word2vec BIBREF8 .",
+    "Our proposed architecture is presented in Figure 3 . For each image in the sequence, we obtain its representation $\\lbrace e(I_1),...,e(I_5)\\rbrace $ using Inception v3. The encoder takes the images in order, one at every timestep $t$ . At time $t=5$ , we obtain the context vector through $h_e^{(t)}$ (represented by $\\mathbf {Z}$ ). This vector is used to initialize each decoder's hidden state while the first input to each decoder is its corresponding image embedding $e(I_i)$ . Each decoder generates a sequence of words $\\lbrace p_1,...,p_{n}\\rbrace $ for each image in the sequence. The final story is the concatenation of the output of the 5 decoders."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Decoder",
+    "Decoder",
+    "Decoder"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Decoder",
+      0
+    ],
+    [
+      "Decoder",
+      1
+    ],
+    [
+      "Decoder",
+      2
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Decoder",
+  "section": "Decoder",
+  "title_path": "Decoder",
+  "block_type": "long_unit"
+}

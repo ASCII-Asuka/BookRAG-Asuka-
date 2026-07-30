@@ -1,0 +1,112 @@
+{
+  "question": "How are the siamese networks trained?",
+  "answer": [
+    {
+      "unanswerable": true,
+      "extractive_spans": [],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [],
+      "evidence_block_ids": [],
+      "evidence_paragraph_ids": []
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "update the weights such that the produced sentence embeddings are semantically meaningful and can be compared with cosine-similarity.",
+        "Classification Objective Function",
+        "Regression Objective Function",
+        "Triplet Objective Function"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "SBERT adds a pooling operation to the output of BERT / RoBERTa to derive a fixed sized sentence embedding. We experiment with three pooling strategies: Using the output of the CLS-token, computing the mean of all output vectors (MEAN-strategy), and computing a max-over-time of the output vectors (MAX-strategy). The default configuration is MEAN.",
+        "In order to fine-tune BERT / RoBERTa, we create siamese and triplet networks BIBREF15 to update the weights such that the produced sentence embeddings are semantically meaningful and can be compared with cosine-similarity.",
+        "The network structure depends on the available training data. We experiment with the following structures and objective functions.",
+        "Classification Objective Function. We concatenate the sentence embeddings $u$ and $v$ with the element-wise difference $|u-v|$ and multiply it with the trainable weight $W_t \\in \\mathbb {R}^{3n \\times k}$:",
+        "where $n$ is the dimension of the sentence embeddings and $k$ the number of labels. We optimize cross-entropy loss. This structure is depicted in Figure FIGREF4.",
+        "Regression Objective Function. The cosine-similarity between the two sentence embeddings $u$ and $v$ is computed (Figure FIGREF5). We use mean-squared-error loss as the objective function.",
+        "Triplet Objective Function. Given an anchor sentence $a$, a positive sentence $p$, and a negative sentence $n$, triplet loss tunes the network such that the distance between $a$ and $p$ is smaller than the distance between $a$ and $n$. Mathematically, we minimize the following loss function:",
+        "with $s_x$ the sentence embedding for $a$/$n$/$p$, $||\\cdot ||$ a distance metric and margin $\\epsilon $. Margin $\\epsilon $ ensures that $s_p$ is at least $\\epsilon $ closer to $s_a$ than $s_n$. As metric we use Euclidean distance and we set $\\epsilon =1$ in our experiments."
+      ],
+      "evidence_block_ids": [
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "evidence_paragraph_ids": [
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ]
+    }
+  ],
+  "doc_uuid": "1908.10084",
+  "doc_path": "qasper://1908.10084",
+  "qasper_question_id": "2e89ebd2e4008c67bb2413699589ee55f59c4f36",
+  "title": "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+  "evidence_block_ids": [
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26
+  ],
+  "evidence_paragraph_ids": [
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26
+  ],
+  "output": "{\n  \"answer_short\": \"by fine-tuning BERT/RoBERTa using siamese and triplet networks to update weights for semantically meaningful sentence embeddings\",\n  \"answer_rationale\": \"The siamese networks are trained by fine-tuning BERT/RoBERTa using siamese and triplet network structures to update weights, ensuring the produced sentence embeddings are semantically meaningful and comparable via cosine-similarity, as stated in block 5 and supported by context in blocks 2, 3, and 7.\",\n  \"supporting_block_ids\": [5, 2, 3, 7]\n}",
+  "retrieved_node_ids": [
+    15,
+    34,
+    20,
+    4,
+    2,
+    72,
+    51,
+    38,
+    77,
+    7
+  ],
+  "retrieved_block_ids": [
+    15,
+    34,
+    20,
+    4,
+    2,
+    72,
+    51,
+    38,
+    77,
+    7
+  ],
+  "answer_short": "by fine-tuning BERT/RoBERTa using siamese and triplet networks to update weights for semantically meaningful sentence embeddings",
+  "answer_rationale": "The siamese networks are trained by fine-tuning BERT/RoBERTa using siamese and triplet network structures to update weights, ensuring the produced sentence embeddings are semantically meaningful and comparable via cosine-similarity, as stated in block 5 and supported by context in blocks 2, 3, and 7.",
+  "supporting_block_ids": [
+    15,
+    34,
+    7,
+    20
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Gated Orthogonalization for Modeling Stay-On and Never Look Back behaviour\n[source_id=25] We now describe a series of choices made to model stay-on and never look back behavior. We first begin with the stay-on property which essentially implies that if we have paid attention to the field INLINEFORM0 at timestep INLINEFORM1 then we are likely to pay attention to the same field for a few more time steps. For example, if we are focusing on the occupation field at this timestep then we are likely to focus on it for the next few timesteps till all relevant values in this field have been included in the generated description. In other words, we want to remember the field context vector INLINEFORM2 for a few timesteps. One way of ensuring this is to use a remember (or forget) gate as given below which remembers the previous context vector when required and forgets it when it is time to move on from that field. DISPLAYFORM0\n[source_id=26] where INLINEFORM0 are parameters to be learned. The job of the forget gate is to ensure that INLINEFORM1 is similar to INLINEFORM2 when required (i.e., by learning INLINEFORM3 when we want to continue focusing on the same field) and different when it is time to move on (by learning that INLINEFORM4 ).\n[source_id=27] Next, the never look back property implies that once we have moved away from a field we are unlikely to pay attention to it again. For example, once we have rendered all the occupations in the generated description there is no need to return back to the occupation field. In other words, once we have moved on ( INLINEFORM0 ), we want the successive field context vectors INLINEFORM1 to be very different from the previous field vectors INLINEFORM2 . One way of ensuring this is to orthogonalize successive field vectors using DISPLAYFORM0\n[source_id=28] where INLINEFORM0 is the dot product between vectors INLINEFORM1 and INLINEFORM2 . The above equation essentially subtracts the component of INLINEFORM3 along INLINEFORM4 . INLINEFORM5 is a learned parameter which controls the degree of orthogonalization thereby allowing a soft orthogonalization (i.e., the entire component along INLINEFORM6 is not subtracted but only a fraction of it). The above equation only ensures that INLINEFORM7 is soft-orthogonal to INLINEFORM8 . Alternately, we could pass the sequence of context vectors, INLINEFORM9 generated so far through a GRU cell. The state of this GRU cell at each time step would thus be aware of the history of the field vectors till that timestep. Now instead of orthogonalizing INLINEFORM10 to INLINEFORM11 we could orthogonalize INLINEFORM12 to the hidden state of this GRU at time-step INLINEFORM13 . In practice, we found this to work better as it accounts for all the field vectors in the history instead of only the previous field vector.\n[source_id=29] In summary, Equation provides a mechanism for remembering the current field vector when appropriate (thus capturing stay-on behavior) using a remember gate. On the other hand, Equation EQREF10 explicitly ensures that the field vector is very different (soft-orthogonal) from the previous field vectors once it is time to move on (thus capturing never look back behavior). The value of INLINEFORM0 computed in Equation EQREF10 is then used in Equation . The INLINEFORM1 (macro) thus obtained is then concatenated with INLINEFORM2 (micro) and fed to the decoder (see Fig. FIGREF3 )",
+  "score": 1.960542939791068,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "child_qasper_evidence_texts": [
+    "We now describe a series of choices made to model stay-on and never look back behavior. We first begin with the stay-on property which essentially implies that if we have paid attention to the field INLINEFORM0 at timestep INLINEFORM1 then we are likely to pay attention to the same field for a few more time steps. For example, if we are focusing on the occupation field at this timestep then we are likely to focus on it for the next few timesteps till all relevant values in this field have been included in the generated description. In other words, we want to remember the field context vector INLINEFORM2 for a few timesteps. One way of ensuring this is to use a remember (or forget) gate as given below which remembers the previous context vector when required and forgets it when it is time to move on from that field. DISPLAYFORM0",
+    "where INLINEFORM0 are parameters to be learned. The job of the forget gate is to ensure that INLINEFORM1 is similar to INLINEFORM2 when required (i.e., by learning INLINEFORM3 when we want to continue focusing on the same field) and different when it is time to move on (by learning that INLINEFORM4 ).",
+    "Next, the never look back property implies that once we have moved away from a field we are unlikely to pay attention to it again. For example, once we have rendered all the occupations in the generated description there is no need to return back to the occupation field. In other words, once we have moved on ( INLINEFORM0 ), we want the successive field context vectors INLINEFORM1 to be very different from the previous field vectors INLINEFORM2 . One way of ensuring this is to orthogonalize successive field vectors using DISPLAYFORM0",
+    "where INLINEFORM0 is the dot product between vectors INLINEFORM1 and INLINEFORM2 . The above equation essentially subtracts the component of INLINEFORM3 along INLINEFORM4 . INLINEFORM5 is a learned parameter which controls the degree of orthogonalization thereby allowing a soft orthogonalization (i.e., the entire component along INLINEFORM6 is not subtracted but only a fraction of it). The above equation only ensures that INLINEFORM7 is soft-orthogonal to INLINEFORM8 . Alternately, we could pass the sequence of context vectors, INLINEFORM9 generated so far through a GRU cell. The state of this GRU cell at each time step would thus be aware of the history of the field vectors till that timestep. Now instead of orthogonalizing INLINEFORM10 to INLINEFORM11 we could orthogonalize INLINEFORM12 to the hidden state of this GRU at time-step INLINEFORM13 . In practice, we found this to work better as it accounts for all the field vectors in the history instead of only the previous field vector.",
+    "In summary, Equation provides a mechanism for remembering the current field vector when appropriate (thus capturing stay-on behavior) using a remember gate. On the other hand, Equation EQREF10 explicitly ensures that the field vector is very different (soft-orthogonal) from the previous field vectors once it is time to move on (thus capturing never look back behavior). The value of INLINEFORM0 computed in Equation EQREF10 is then used in Equation . The INLINEFORM1 (macro) thus obtained is then concatenated with INLINEFORM2 (micro) and fed to the decoder (see Fig. FIGREF3 )"
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Gated Orthogonalization for Modeling Stay-On and Never Look Back behaviour",
+    "Gated Orthogonalization for Modeling Stay-On and Never Look Back behaviour",
+    "Gated Orthogonalization for Modeling Stay-On and Never Look Back behaviour",
+    "Gated Orthogonalization for Modeling Stay-On and Never Look Back behaviour",
+    "Gated Orthogonalization for Modeling Stay-On and Never Look Back behaviour"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Gated Orthogonalization for Modeling Stay-On and Never Look Back behaviour",
+      0
+    ],
+    [
+      "Gated Orthogonalization for Modeling Stay-On and Never Look Back behaviour",
+      1
+    ],
+    [
+      "Gated Orthogonalization for Modeling Stay-On and Never Look Back behaviour",
+      2
+    ],
+    [
+      "Gated Orthogonalization for Modeling Stay-On and Never Look Back behaviour",
+      3
+    ],
+    [
+      "Gated Orthogonalization for Modeling Stay-On and Never Look Back behaviour",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Gated Orthogonalization for Modeling Stay-On and Never Look Back behaviour",
+  "section": "Gated Orthogonalization for Modeling Stay-On and Never Look Back behaviour",
+  "title_path": "Gated Orthogonalization for Modeling Stay-On and Never Look Back behaviour",
+  "block_type": "long_unit"
+}

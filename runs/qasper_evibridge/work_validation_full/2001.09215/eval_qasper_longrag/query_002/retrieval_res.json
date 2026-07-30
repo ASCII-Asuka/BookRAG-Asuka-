@@ -1,0 +1,342 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Twitter is a social media platform where users express opinions over a variety of issues. Posts offering grievances or complaints can be utilized by private/ public organizations to improve their service and promptly gauge a low-cost assessment. In this paper, we propose an iterative methodology which aims to identify complaint based posts pertaining to the transport domain. We perform comprehensive evaluations along with releasing a novel dataset for the research purposes.",
+      "score": 2.9127924547885997,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Twitter is a social media platform where users express opinions over a variety of issues. Posts offering grievances or complaints can be utilized by private/ public organizations to improve their service and promptly gauge a low-cost assessment. In this paper, we propose an iterative methodology which aims to identify complaint based posts pertaining to the transport domain. We perform comprehensive evaluations along with releasing a novel dataset for the research purposes."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Conclusion and Future Work\n[source_id=18] In this paper, we presented a novel semi-supervised pipeline along with a novel dataset for identification of complaint based posts in the transport domain. The proposed methodology can be expanded for other fields by altering the lexicons used for the creation of information cues. There are limitations to this analysis; we do not use neural networks which mandate a large volume of data. In the future, we aim to identify demographic features for identification of complaint based posts on social media platforms.",
+      "score": 2.3293587473813595,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        18
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper, we presented a novel semi-supervised pipeline along with a novel dataset for identification of complaint based posts in the transport domain. The proposed methodology can be expanded for other fields by altering the lexicons used for the creation of information cues. There are limitations to this analysis; we do not use neural networks which mandate a large volume of data. In the future, we aim to identify demographic features for identification of complaint based posts on social media platforms."
+      ],
+      "child_pages": [
+        4
+      ],
+      "child_sections": [
+        "Conclusion and Future Work"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion and Future Work",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Conclusion and Future Work",
+      "section": "Conclusion and Future Work",
+      "title_path": "Conclusion and Future Work",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Proposed Methodology\n[source_id=7] We aimed to mimic the presence of sparse/noisy content distribution, mandating the need to curate a novel dataset via specific lexicons. We scraped 500 random posts from recognized transport forum. A pool of 50 uni/bi-grams was created based on tf-idf representations, extracted from the posts, which was further pruned by annotators. Querying posts on Twitter with extracted lexicons led to a collection of $19,300$ tweets. In order to have lexical diversity, we added 2500 randomly sampled tweets to our dataset. In spite of the sparse nature of these posts, the lexical characteristics act as information cues.\n[source_id=8] Figure FIGREF4 pictorially represents our methodology. Our approach required an initial set of informative tweets for which we employed two human annotators annotating a random sub-sample of the original dataset. From the 1500 samples, 326 were marked as informative and 1174 as non informative ($\\kappa =0.81$), discriminated on this criteria: Is the tweet addressing any complaint or raising grievances about modes of transport or services/ events associated with transportation such as traffic; public or private transport?. An example tweet marked as informative: No, metro fares will be reduced ???, but proper fare structure needs to presented right, it's bad !!!.\n[source_id=9] We utilized tf-idf for the identification of initial seed phrases from the curated set of informative tweets. 50 terms having the highest tf-idf scores were passed through the complete dataset and based on sub-string match, the transport relevant tweets were identified. The redundant tweets were filtered based on the cosine similarity score. Implicit information indicators were identified based on domain relevance score, a metric used to gauge the coverage of n-gram (1,2,3) when evaluated against a randomly created pool of posts.\n[source_id=10] We collected a pool of 5000 randomly sampled tweets different from the data collection period. The rationale behind having such a metric was to discard commonly occurring n-grams normalized by random noise and include ones which are of lexical importance. We used terms associated with high domain relevance score (threshold determined experimentally) as seed phrases for the next set of iterations. The growing dictionary augments the collection process. The process ran for 4 iterations providing us 7200 transport relevant tweets as no new lexicons were identified. In order to identify linguistic signals associated with the complaint posts, we randomly sampled a set of 2000 tweets which was used as training set, manually annotated into distinct labels: complaint relevant (702) and complaint non-relevant (1298) ($\\kappa =0.79$). We employed these features on our dataset.\n[source_id=11] Linguistic markers. To capture linguistic aspects of complaints, we utilized Bag of Words, count of POS tags and Word2vec clusters.\n[source_id=12] Sentiment markers. We used quantified score based on the ratio of tokens mentioned in the following lexicons: MPQA, NRC, VADER and Stanford.\n[source_id=13] Information specific markers. These account for a set of handcrafted features associated with complaint, we used the stated markers (a) Text-Meta Data, this includes the count of URL's, hashtags, user mentions, special symbols and user mentions, used to enhance retweet impact; (b) Request Identification, we employed the model presented in BIBREF3 to identify if a specific tweet assertion is a request; (c) Intensifiers, we make use of feature set derived from the number of words starting with capital letters and the repetition of special symbols (exclamation, questions marks) within the same post; (d) Politeness Markers, we utilize the politeness score of the tweet extracted from the model presented in BIBREF3; (e) Pronoun Variation, these have the ability to reveal the personal involvement or intensify involvement. We utilize the frequency of pronoun types $\\lbrace \\textit {first, second, third, demonstrative and indefinite}$} using pre-defined dictionaries.\n[source_id=14] From the pool of 7200 transport relevant tweets, we sampled 3500 tweets which were used as the testing set. The results are reported in TableTABREF5 with 10 fold cross-validation. With increasing the number of iterations, the pool of seed phrases gets refined and augments the selection of transport relevant tweets. The proposed pipeline is tailored to identify complaint relevant tweets in a noisy scenario.",
+      "score": 1.203829028490931,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "child_qasper_evidence_texts": [
+        "We aimed to mimic the presence of sparse/noisy content distribution, mandating the need to curate a novel dataset via specific lexicons. We scraped 500 random posts from recognized transport forum. A pool of 50 uni/bi-grams was created based on tf-idf representations, extracted from the posts, which was further pruned by annotators. Querying posts on Twitter with extracted lexicons led to a collection of $19,300$ tweets. In order to have lexical diversity, we added 2500 randomly sampled tweets to our dataset. In spite of the sparse nature of these posts, the lexical characteristics act as information cues.",
+        "Figure FIGREF4 pictorially represents our methodology. Our approach required an initial set of informative tweets for which we employed two human annotators annotating a random sub-sample of the original dataset. From the 1500 samples, 326 were marked as informative and 1174 as non informative ($\\kappa =0.81$), discriminated on this criteria: Is the tweet addressing any complaint or raising grievances about modes of transport or services/ events associated with transportation such as traffic; public or private transport?. An example tweet marked as informative: No, metro fares will be reduced ???, but proper fare structure needs to presented right, it's bad !!!.",
+        "We utilized tf-idf for the identification of initial seed phrases from the curated set of informative tweets. 50 terms having the highest tf-idf scores were passed through the complete dataset and based on sub-string match, the transport relevant tweets were identified. The redundant tweets were filtered based on the cosine similarity score. Implicit information indicators were identified based on domain relevance score, a metric used to gauge the coverage of n-gram (1,2,3) when evaluated against a randomly created pool of posts.",
+        "We collected a pool of 5000 randomly sampled tweets different from the data collection period. The rationale behind having such a metric was to discard commonly occurring n-grams normalized by random noise and include ones which are of lexical importance. We used terms associated with high domain relevance score (threshold determined experimentally) as seed phrases for the next set of iterations. The growing dictionary augments the collection process. The process ran for 4 iterations providing us 7200 transport relevant tweets as no new lexicons were identified. In order to identify linguistic signals associated with the complaint posts, we randomly sampled a set of 2000 tweets which was used as training set, manually annotated into distinct labels: complaint relevant (702) and complaint non-relevant (1298) ($\\kappa =0.79$). We employed these features on our dataset.",
+        "Linguistic markers. To capture linguistic aspects of complaints, we utilized Bag of Words, count of POS tags and Word2vec clusters.",
+        "Sentiment markers. We used quantified score based on the ratio of tokens mentioned in the following lexicons: MPQA, NRC, VADER and Stanford.",
+        "Information specific markers. These account for a set of handcrafted features associated with complaint, we used the stated markers (a) Text-Meta Data, this includes the count of URL's, hashtags, user mentions, special symbols and user mentions, used to enhance retweet impact; (b) Request Identification, we employed the model presented in BIBREF3 to identify if a specific tweet assertion is a request; (c) Intensifiers, we make use of feature set derived from the number of words starting with capital letters and the repetition of special symbols (exclamation, questions marks) within the same post; (d) Politeness Markers, we utilize the politeness score of the tweet extracted from the model presented in BIBREF3; (e) Pronoun Variation, these have the ability to reveal the personal involvement or intensify involvement. We utilize the frequency of pronoun types $\\lbrace \\textit {first, second, third, demonstrative and indefinite}$} using pre-defined dictionaries.",
+        "From the pool of 7200 transport relevant tweets, we sampled 3500 tweets which were used as the testing set. The results are reported in TableTABREF5 with 10 fold cross-validation. With increasing the number of iterations, the pool of seed phrases gets refined and augments the selection of transport relevant tweets. The proposed pipeline is tailored to identify complaint relevant tweets in a noisy scenario."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Proposed Methodology",
+        "Proposed Methodology",
+        "Proposed Methodology",
+        "Proposed Methodology",
+        "Proposed Methodology",
+        "Proposed Methodology",
+        "Proposed Methodology",
+        "Proposed Methodology"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Proposed Methodology",
+          0
+        ],
+        [
+          "Proposed Methodology",
+          1
+        ],
+        [
+          "Proposed Methodology",
+          2
+        ],
+        [
+          "Proposed Methodology",
+          3
+        ],
+        [
+          "Proposed Methodology",
+          4
+        ],
+        [
+          "Proposed Methodology",
+          5
+        ],
+        [
+          "Proposed Methodology",
+          6
+        ],
+        [
+          "Proposed Methodology",
+          7
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Proposed Methodology",
+      "section": "Proposed Methodology",
+      "title_path": "Proposed Methodology",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] With the advent of social media platforms, increasing user base address their grievances over these platforms, in the form of complaints. According to BIBREF0, complaint is considered to be a basic speech act used to express negative mismatch between the expectation and reality. Transportation and its related logistics industries are the backbones of every economy. Many transport organizations rely on complaints gathered via these platforms to improve their services, hence understanding these are important for: (1) linguists to identify human expressions of criticism and (2) organizations to improve their query response time and address concerns effectively.\n[source_id=5] Presence of inevitable noise, sparse content along with rephrased and structurally morphed instances of posts, make the task at hand difficult BIBREF1. Previous works BIBREF2 in the domain of complaint extraction have focused on static datasets only. These are not robust to changes in the trends reflected, information flow and linguistic variations. We propose an iterative, semi-supervised approach for identification of complaint based tweets, having the ability to be replicated for stream of information flow. The preference of a semi-supervised approach over supervised ones is due to the stated reasons: (a) the task of isolating the training set, make supervised tasks less attractive and impractical and (b) imbalance between the subjective and objective classes lead to poor performance.",
+      "score": 0.9227211450652288,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5
+      ],
+      "child_qasper_evidence_texts": [
+        "With the advent of social media platforms, increasing user base address their grievances over these platforms, in the form of complaints. According to BIBREF0, complaint is considered to be a basic speech act used to express negative mismatch between the expectation and reality. Transportation and its related logistics industries are the backbones of every economy. Many transport organizations rely on complaints gathered via these platforms to improve their services, hence understanding these are important for: (1) linguists to identify human expressions of criticism and (2) organizations to improve their query response time and address concerns effectively.",
+        "Presence of inevitable noise, sparse content along with rephrased and structurally morphed instances of posts, make the task at hand difficult BIBREF1. Previous works BIBREF2 in the domain of complaint extraction have focused on static datasets only. These are not robust to changes in the trends reflected, information flow and linguistic variations. We propose an iterative, semi-supervised approach for identification of complaint based tweets, having the ability to be replicated for stream of information flow. The preference of a semi-supervised approach over supervised ones is due to the stated reasons: (a) the task of isolating the training set, make supervised tasks less attractive and impractical and (b) imbalance between the subjective and objective classes lead to poor performance."
+      ],
+      "child_pages": [
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Results\n[source_id=16] Table TABREF5 reflects that the BOW model provided the best results, both in terms of accuracy and F1-score. The best result achieved by a sentiment model was the Stanford Sentiment ($0.63$ F1-score), with others within the same range and linguistic-based features collectively giving the best performance.",
+      "score": 0.13233363493005254,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        16
+      ],
+      "child_qasper_evidence_texts": [
+        "Table TABREF5 reflects that the BOW model provided the best results, both in terms of accuracy and F1-score. The best result achieved by a sentiment model was the Stanford Sentiment ($0.63$ F1-score), with others within the same range and linguistic-based features collectively giving the best performance."
+      ],
+      "child_pages": [
+        3
+      ],
+      "child_sections": [
+        "Results"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Results",
+      "section": "Results",
+      "title_path": "Results",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 2,
+      "content": "Twitter is a social media platform where users express opinions over a variety of issues. Posts offering grievances or complaints can be utilized by private/ public organizations to improve their service and promptly gauge a low-cost assessment. In this paper, we propose an iterative methodology which aims to identify complaint based posts pertaining to the transport domain. We perform comprehensive evaluations along with releasing a novel dataset for the research purposes.",
+      "qasper_evidence_text": "Twitter is a social media platform where users express opinions over a variety of issues. Posts offering grievances or complaints can be utilized by private/ public organizations to improve their service and promptly gauge a low-cost assessment. In this paper, we propose an iterative methodology which aims to identify complaint based posts pertaining to the transport domain. We perform comprehensive evaluations along with releasing a novel dataset for the research purposes.",
+      "source_node_id": 2,
+      "node_id": 2,
+      "paragraph_id": 2,
+      "evidence_id": 2,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_0",
+      "rank": 1,
+      "score": 2.9127924547885997,
+      "block_type": "paragraph",
+      "page": 0,
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title": "Abstract",
+      "hotpot_title": "Abstract",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 7,
+      "content": "We aimed to mimic the presence of sparse/noisy content distribution, mandating the need to curate a novel dataset via specific lexicons. We scraped 500 random posts from recognized transport forum. A pool of 50 uni/bi-grams was created based on tf-idf representations, extracted from the posts, which was further pruned by annotators. Querying posts on Twitter with extracted lexicons led to a collection of $19,300$ tweets. In order to have lexical diversity, we added 2500 randomly sampled tweets to our dataset. In spite of the sparse nature of these posts, the lexical characteristics act as information cues.",
+      "qasper_evidence_text": "We aimed to mimic the presence of sparse/noisy content distribution, mandating the need to curate a novel dataset via specific lexicons. We scraped 500 random posts from recognized transport forum. A pool of 50 uni/bi-grams was created based on tf-idf representations, extracted from the posts, which was further pruned by annotators. Querying posts on Twitter with extracted lexicons led to a collection of $19,300$ tweets. In order to have lexical diversity, we added 2500 randomly sampled tweets to our dataset. In spite of the sparse nature of these posts, the lexical characteristics act as information cues.",
+      "source_node_id": 7,
+      "node_id": 7,
+      "paragraph_id": 7,
+      "evidence_id": 7,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_2",
+      "rank": 3,
+      "score": 1.203829028490931,
+      "block_type": "paragraph",
+      "page": 2,
+      "section_id": "Proposed Methodology",
+      "section": "Proposed Methodology",
+      "title": "Proposed Methodology",
+      "hotpot_title": "Proposed Methodology",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 2
+    },
+    {
+      "id": 8,
+      "content": "Figure FIGREF4 pictorially represents our methodology. Our approach required an initial set of informative tweets for which we employed two human annotators annotating a random sub-sample of the original dataset. From the 1500 samples, 326 were marked as informative and 1174 as non informative ($\\kappa =0.81$), discriminated on this criteria: Is the tweet addressing any complaint or raising grievances about modes of transport or services/ events associated with transportation such as traffic; public or private transport?. An example tweet marked as informative: No, metro fares will be reduced ???, but proper fare structure needs to presented right, it's bad !!!.",
+      "qasper_evidence_text": "Figure FIGREF4 pictorially represents our methodology. Our approach required an initial set of informative tweets for which we employed two human annotators annotating a random sub-sample of the original dataset. From the 1500 samples, 326 were marked as informative and 1174 as non informative ($\\kappa =0.81$), discriminated on this criteria: Is the tweet addressing any complaint or raising grievances about modes of transport or services/ events associated with transportation such as traffic; public or private transport?. An example tweet marked as informative: No, metro fares will be reduced ???, but proper fare structure needs to presented right, it's bad !!!.",
+      "source_node_id": 8,
+      "node_id": 8,
+      "paragraph_id": 8,
+      "evidence_id": 8,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_2",
+      "rank": 3,
+      "score": 1.203829028490931,
+      "block_type": "paragraph",
+      "page": 2,
+      "section_id": "Proposed Methodology",
+      "section": "Proposed Methodology",
+      "title": "Proposed Methodology",
+      "hotpot_title": "Proposed Methodology",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 3
+    },
+    {
+      "id": 14,
+      "content": "From the pool of 7200 transport relevant tweets, we sampled 3500 tweets which were used as the testing set. The results are reported in TableTABREF5 with 10 fold cross-validation. With increasing the number of iterations, the pool of seed phrases gets refined and augments the selection of transport relevant tweets. The proposed pipeline is tailored to identify complaint relevant tweets in a noisy scenario.",
+      "qasper_evidence_text": "From the pool of 7200 transport relevant tweets, we sampled 3500 tweets which were used as the testing set. The results are reported in TableTABREF5 with 10 fold cross-validation. With increasing the number of iterations, the pool of seed phrases gets refined and augments the selection of transport relevant tweets. The proposed pipeline is tailored to identify complaint relevant tweets in a noisy scenario.",
+      "source_node_id": 14,
+      "node_id": 14,
+      "paragraph_id": 14,
+      "evidence_id": 14,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_2",
+      "rank": 3,
+      "score": 1.203829028490931,
+      "block_type": "paragraph",
+      "page": 2,
+      "section_id": "Proposed Methodology",
+      "section": "Proposed Methodology",
+      "title": "Proposed Methodology",
+      "hotpot_title": "Proposed Methodology",
+      "sent_id": 7,
+      "hotpot_sent_id": 7,
+      "supporting_rank": 4
+    }
+  ],
+  "supporting_block_ids": [
+    2,
+    7,
+    8,
+    14
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "id": "longrag_10",
+  "content": "[Section] Methodology ::: Class Imbalance in Sentence Level Classification\n[source_id=48] The sentence level classification task is an imbalanced binary classification problem that we address using BERT BIBREF0. We use BERTBASE, uncased, which consists of 12 self-attention layers, and returns a 768-dimension vector that representation a sentence. So as to make use of BERT for sentence classification, we include a fully connected layer on top of the BERT self-attention layers, which classifies the sentence embedding provided by BERT into the two classes of interest (propaganda or non-propaganda).\n[source_id=49] We attempt to exploit various data augmentation techniques to address the problem of class imbalance. Table TABREF17 shows the results of our experiments for different data augmentation techniques when, after shuffling the training data, we train the model on 75% of the training data and test it on the remaining 25% of the training data and the development data.\n[source_id=50] We observe that BERT without augmentation consistently outperforms BERT with augmentation in the experiments when the model is trained on 75% of the training data and evaluated on the rest, i.e trained and evaluated on similar data, coming from the same distribution. This is consistent with observations by Wei et al. wei2019eda that contextual word embeddings do not gain from data augmentation. The fact that we shuffle the training data prior to splitting it into training and testing subsets could imply that the model is learning to associate topic words, such as `Mueller', as propaganda. However, when we perform model evaluation using the development set, which is dissimilar to the training, we observe that synonym insertion and word dropping techniques also do not bring performance gains, while random oversampling increases performance over base BERT by 4%. Synonym insertion provides results very similar to base BERT, while random deletion harms model performance producing lower scores. We believe that this could be attributed to the fact that synonym insertion and random word dropping involve the introduction of noise to the data, while oversampling does not. As we are working with natural language data, this type of noise can in fact change the meaning of the sentence. Oversampling on the other hand purely increases the importance of the minority class by repeating training on the unchanged instances.\n[source_id=51] So as to better understand the aspects of oversampling that contribute to these gains, we perform a class-wise performance analysis of BERT with/without oversampling. The results of these experiments (Table TABREF18) show that oversampling increases the overall recall while maintaining precision. This is achieved by significantly improving the recall of the minority class (propaganda) at the cost of the recall of the majority class.\n[source_id=52] So far we have been able to establish that a) the training and test sets are dissimilar, thus requiring us to generalise our model, b) oversampling provides a method of generalisation, and c) oversampling does this while maintaining recall on the minority (and thus more interesting) class.\n[source_id=53] Given this we explore alternative methods of increasing minority class recall without a significant drop in precision. One such method is cost-sensitive classification, which differs from random oversampling in that it provides a more continuous-valued and consistent method of weighting samples of imbalanced training data; for example, random oversampling will inevitably emphasise some training instances at the expense of others. We detail our methods of using cost-sensitive classification in the next section. Further experiments with oversampling might have provided insights into the relationships between these methods, which we leave for future exploration.",
+  "score": 3.415944705332136,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_10",
+  "child_source_node_ids": [
+    48,
+    49,
+    50,
+    51,
+    52,
+    53
+  ],
+  "child_qasper_evidence_texts": [
+    "The sentence level classification task is an imbalanced binary classification problem that we address using BERT BIBREF0. We use BERTBASE, uncased, which consists of 12 self-attention layers, and returns a 768-dimension vector that representation a sentence. So as to make use of BERT for sentence classification, we include a fully connected layer on top of the BERT self-attention layers, which classifies the sentence embedding provided by BERT into the two classes of interest (propaganda or non-propaganda).",
+    "We attempt to exploit various data augmentation techniques to address the problem of class imbalance. Table TABREF17 shows the results of our experiments for different data augmentation techniques when, after shuffling the training data, we train the model on 75% of the training data and test it on the remaining 25% of the training data and the development data.",
+    "We observe that BERT without augmentation consistently outperforms BERT with augmentation in the experiments when the model is trained on 75% of the training data and evaluated on the rest, i.e trained and evaluated on similar data, coming from the same distribution. This is consistent with observations by Wei et al. wei2019eda that contextual word embeddings do not gain from data augmentation. The fact that we shuffle the training data prior to splitting it into training and testing subsets could imply that the model is learning to associate topic words, such as `Mueller', as propaganda. However, when we perform model evaluation using the development set, which is dissimilar to the training, we observe that synonym insertion and word dropping techniques also do not bring performance gains, while random oversampling increases performance over base BERT by 4%. Synonym insertion provides results very similar to base BERT, while random deletion harms model performance producing lower scores. We believe that this could be attributed to the fact that synonym insertion and random word dropping involve the introduction of noise to the data, while oversampling does not. As we are working with natural language data, this type of noise can in fact change the meaning of the sentence. Oversampling on the other hand purely increases the importance of the minority class by repeating training on the unchanged instances.",
+    "So as to better understand the aspects of oversampling that contribute to these gains, we perform a class-wise performance analysis of BERT with/without oversampling. The results of these experiments (Table TABREF18) show that oversampling increases the overall recall while maintaining precision. This is achieved by significantly improving the recall of the minority class (propaganda) at the cost of the recall of the majority class.",
+    "So far we have been able to establish that a) the training and test sets are dissimilar, thus requiring us to generalise our model, b) oversampling provides a method of generalisation, and c) oversampling does this while maintaining recall on the minority (and thus more interesting) class.",
+    "Given this we explore alternative methods of increasing minority class recall without a significant drop in precision. One such method is cost-sensitive classification, which differs from random oversampling in that it provides a more continuous-valued and consistent method of weighting samples of imbalanced training data; for example, random oversampling will inevitably emphasise some training instances at the expense of others. We detail our methods of using cost-sensitive classification in the next section. Further experiments with oversampling might have provided insights into the relationships between these methods, which we leave for future exploration."
+  ],
+  "child_pages": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+  ],
+  "child_sections": [
+    "Methodology ::: Class Imbalance in Sentence Level Classification",
+    "Methodology ::: Class Imbalance in Sentence Level Classification",
+    "Methodology ::: Class Imbalance in Sentence Level Classification",
+    "Methodology ::: Class Imbalance in Sentence Level Classification",
+    "Methodology ::: Class Imbalance in Sentence Level Classification",
+    "Methodology ::: Class Imbalance in Sentence Level Classification"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Methodology ::: Class Imbalance in Sentence Level Classification",
+      0
+    ],
+    [
+      "Methodology ::: Class Imbalance in Sentence Level Classification",
+      1
+    ],
+    [
+      "Methodology ::: Class Imbalance in Sentence Level Classification",
+      2
+    ],
+    [
+      "Methodology ::: Class Imbalance in Sentence Level Classification",
+      3
+    ],
+    [
+      "Methodology ::: Class Imbalance in Sentence Level Classification",
+      4
+    ],
+    [
+      "Methodology ::: Class Imbalance in Sentence Level Classification",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_10",
+  "section_id": "Methodology ::: Class Imbalance in Sentence Level Classification",
+  "section": "Methodology ::: Class Imbalance in Sentence Level Classification",
+  "title_path": "Methodology ::: Class Imbalance in Sentence Level Classification",
+  "block_type": "long_unit"
+}

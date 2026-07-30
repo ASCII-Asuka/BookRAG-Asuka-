@@ -1,0 +1,88 @@
+{
+  "id": "longrag_11",
+  "content": "[Section] Data pre-processing\n[source_id=56] Preparing the data can be a complex and time-consuming process, often involving working with partially or wholly unstructured data. The pre-processing steps have a big impact on the operationalizations, subsequent analyses and reproducibility efforts BIBREF30 , and they are usually tightly linked to what we intend to measure. Unfortunately, these steps tend to be underreported, but documenting the pre-processing choices made is essential and is analogous to recording the decisions taken during the production of a scholarly edition or protocols in biomedical research. Data may also vary enormously in quality, depending on how it has been generated. Many historians, for example, work with text produced from an analogue original using Optical Character Recognition (OCR). Often, there will be limited information available regarding the accuracy of the OCR, and the degree of accuracy may even vary within a single corpus (e.g. where digitized text has been produced over a period of years, and the software has gradually improved). The first step, then, is to try to correct for common OCR errors. These will vary depending on the type of text, the date at which the `original' was produced, and the nature of the font and typesetting.\n[source_id=57] One step that almost everyone takes is to tokenize the original character sequence into the words and word-like units. Tokenization is a more subtle and more powerful process than people expect. It is often done using regular expressions or scripts that have been circulating within the NLP community. Tokenization heuristics, however, can be badly confused by emoticons, creative orthography (e.g., U$A, sh!t), and missing whitespace. Multi-word terms are also challenging. Treating them as a single unit can dramatically alter the patterns in text. Many words that are individually ambiguous have clear, unmistakable meanings as terms, like “black hole\" or “European Union\". However, deciding what constitutes a multi-word term is a difficult problem. In writing systems like Chinese, tokenization is a research problem in its own right.\n[source_id=58] Beyond tokenization, common steps include lowercasing, removing punctuation, stemming (removing suffixes), lemmatization (converting inflections to a base lemma), and normalization, which has never been clearly defined, but often includes grouping abbreviations like “U.S.A.\" and “USA\", ordinals like “1st\" and “first\", and variant spellings like “noooooo\". The main goal of these steps is to improve the ratio of tokens (individual occurrences) to types (the distinct things in a corpus). Each step requires making additional assumptions about which distinctions are relevant: is “apple” different from “Apple”? Is “burnt” different from “burned”? Is “cool\" different from “coooool\"? Sometimes these steps can actively hide useful patterns, like social meaning BIBREF32 . Some of us therefore try do as little modification as possible.\n[source_id=59] From a multilingual perspective, English and Chinese have an unusually simple inflectional system, and so it is statistically reasonable to treat each inflection as a unique word type. Romance languages have considerably more inflections than English; many indigenous North American languages have still more. For these languages, unseen data is far more likely to include previously-unseen inflections, and therefore, dealing with inflections is more important. On the other hand, the resources for handling inflections vary greatly by language, with European languages dominating the attention of the computational linguistics community thus far.\n[source_id=60] We sometimes also remove words that are not relevant to our goals, for example by calculating vocabulary frequencies. We construct a “stoplist” of words that we are not interested in. If we are looking for semantic themes we might remove function words like determiners and prepositions. If we are looking for author-specific styles, we might remove all words except function words. Some words are generally meaningful but too frequent to be useful within a specific collection. We sometimes also remove very infrequent words. Their occurrences are too low for robust patterns and removing them helps reducing the vocabulary size.\n[source_id=61] The choice of processing steps can be guided by theory or knowledge about the domain as well as experimental investigation. When we have labels, predictive accuracy of a model is a way to assess the effect of the processing steps. In unsupervised settings, it is more challenging to understand the effects of different steps. Inferences drawn from unsupervised settings can be sensitive to pre-processing choices BIBREF33 . Stemming has been found to provide little measurable benefits for topic modeling and can sometimes even be harmful BIBREF34 . All in all, this again highlights the need to document these steps.\n[source_id=62] Finally, we can also mark up the data, e.g., by identifying entities (people, places, organizations, etc.) or parts of speech. Although many NLP tools are available for such tasks, they are often challenged by linguistic variation, such as orthographic variation in historical texts BIBREF35 and social media BIBREF32 . Moreover, the performance of NLP tools often drops when applying them outside the training domain, such as applying tools developed on newswire texts to texts written by younger authors BIBREF36 . Problems (e.g., disambiguation in named entity recognition) are sometimes resolved using considerable manual intervention. This combination of the automated and the manual, however, becomes more difficult as the scale of the data increases, and the `certainty' brought by the latter may have to be abandoned.",
+  "score": 2.4767659509823874,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_11",
+  "child_source_node_ids": [
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62
+  ],
+  "child_qasper_evidence_texts": [
+    "Preparing the data can be a complex and time-consuming process, often involving working with partially or wholly unstructured data. The pre-processing steps have a big impact on the operationalizations, subsequent analyses and reproducibility efforts BIBREF30 , and they are usually tightly linked to what we intend to measure. Unfortunately, these steps tend to be underreported, but documenting the pre-processing choices made is essential and is analogous to recording the decisions taken during the production of a scholarly edition or protocols in biomedical research. Data may also vary enormously in quality, depending on how it has been generated. Many historians, for example, work with text produced from an analogue original using Optical Character Recognition (OCR). Often, there will be limited information available regarding the accuracy of the OCR, and the degree of accuracy may even vary within a single corpus (e.g. where digitized text has been produced over a period of years, and the software has gradually improved). The first step, then, is to try to correct for common OCR errors. These will vary depending on the type of text, the date at which the `original' was produced, and the nature of the font and typesetting.",
+    "One step that almost everyone takes is to tokenize the original character sequence into the words and word-like units. Tokenization is a more subtle and more powerful process than people expect. It is often done using regular expressions or scripts that have been circulating within the NLP community. Tokenization heuristics, however, can be badly confused by emoticons, creative orthography (e.g., U$A, sh!t), and missing whitespace. Multi-word terms are also challenging. Treating them as a single unit can dramatically alter the patterns in text. Many words that are individually ambiguous have clear, unmistakable meanings as terms, like “black hole\" or “European Union\". However, deciding what constitutes a multi-word term is a difficult problem. In writing systems like Chinese, tokenization is a research problem in its own right.",
+    "Beyond tokenization, common steps include lowercasing, removing punctuation, stemming (removing suffixes), lemmatization (converting inflections to a base lemma), and normalization, which has never been clearly defined, but often includes grouping abbreviations like “U.S.A.\" and “USA\", ordinals like “1st\" and “first\", and variant spellings like “noooooo\". The main goal of these steps is to improve the ratio of tokens (individual occurrences) to types (the distinct things in a corpus). Each step requires making additional assumptions about which distinctions are relevant: is “apple” different from “Apple”? Is “burnt” different from “burned”? Is “cool\" different from “coooool\"? Sometimes these steps can actively hide useful patterns, like social meaning BIBREF32 . Some of us therefore try do as little modification as possible.",
+    "From a multilingual perspective, English and Chinese have an unusually simple inflectional system, and so it is statistically reasonable to treat each inflection as a unique word type. Romance languages have considerably more inflections than English; many indigenous North American languages have still more. For these languages, unseen data is far more likely to include previously-unseen inflections, and therefore, dealing with inflections is more important. On the other hand, the resources for handling inflections vary greatly by language, with European languages dominating the attention of the computational linguistics community thus far.",
+    "We sometimes also remove words that are not relevant to our goals, for example by calculating vocabulary frequencies. We construct a “stoplist” of words that we are not interested in. If we are looking for semantic themes we might remove function words like determiners and prepositions. If we are looking for author-specific styles, we might remove all words except function words. Some words are generally meaningful but too frequent to be useful within a specific collection. We sometimes also remove very infrequent words. Their occurrences are too low for robust patterns and removing them helps reducing the vocabulary size.",
+    "The choice of processing steps can be guided by theory or knowledge about the domain as well as experimental investigation. When we have labels, predictive accuracy of a model is a way to assess the effect of the processing steps. In unsupervised settings, it is more challenging to understand the effects of different steps. Inferences drawn from unsupervised settings can be sensitive to pre-processing choices BIBREF33 . Stemming has been found to provide little measurable benefits for topic modeling and can sometimes even be harmful BIBREF34 . All in all, this again highlights the need to document these steps.",
+    "Finally, we can also mark up the data, e.g., by identifying entities (people, places, organizations, etc.) or parts of speech. Although many NLP tools are available for such tasks, they are often challenged by linguistic variation, such as orthographic variation in historical texts BIBREF35 and social media BIBREF32 . Moreover, the performance of NLP tools often drops when applying them outside the training domain, such as applying tools developed on newswire texts to texts written by younger authors BIBREF36 . Problems (e.g., disambiguation in named entity recognition) are sometimes resolved using considerable manual intervention. This combination of the automated and the manual, however, becomes more difficult as the scale of the data increases, and the `certainty' brought by the latter may have to be abandoned."
+  ],
+  "child_pages": [
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11
+  ],
+  "child_sections": [
+    "Data pre-processing",
+    "Data pre-processing",
+    "Data pre-processing",
+    "Data pre-processing",
+    "Data pre-processing",
+    "Data pre-processing",
+    "Data pre-processing"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Data pre-processing",
+      0
+    ],
+    [
+      "Data pre-processing",
+      1
+    ],
+    [
+      "Data pre-processing",
+      2
+    ],
+    [
+      "Data pre-processing",
+      3
+    ],
+    [
+      "Data pre-processing",
+      4
+    ],
+    [
+      "Data pre-processing",
+      5
+    ],
+    [
+      "Data pre-processing",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_11",
+  "section_id": "Data pre-processing",
+  "section": "Data pre-processing",
+  "title_path": "Data pre-processing",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,115 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] Our system\n[source_id=24] Here we compare and contrast our system to the baseline system. A diagram of our system is shown in Figure FIGREF4 .\n[source_id=25] The idea behind this modification is to provide the encoder with access to all morpho-syntactic cues present in the sentence. In contrast to the baseline, which only encodes the immediately adjacent context of a target word, we encode the entire context. All context word forms, lemmas, and MSD tags (in Track 1) are embedded in their respective high-dimensional spaces as before, and their embeddings are concatenated. However, we now reduce the entire past context to a fixed-size vector by encoding it with a forward LSTM, and we similarly represent the future context by encoding it with a backwards LSTM.\n[source_id=26] We introduce an auxiliary objective that is meant to increase the morpho-syntactic awareness of the encoder and to regularise the learning process—the task is to predict the MSD tag of the target form. MSD tag predictions are conditioned on the context encoding, as described in UID15 . Tags are generated with an LSTM one component at a time, e.g. the tag PRO;NOM;SG;1 is predicted as a sequence of four components, INLINEFORM0 PRO, NOM, SG, 1 INLINEFORM1 .\n[source_id=27] For every training instance, we backpropagate the sum of the main loss and the auxiliary loss without any weighting.\n[source_id=28] As MSD tags are only available in Track 1, this augmentation only applies to this track.\n[source_id=29] The parameters of the entire MSD (auxiliary-task) decoder are shared across languages.\n[source_id=30] Since a grouping of the languages based on language family would have left several languages in single-member groups (e.g. Russian is the sole representative of the Slavic family), we experiment with random groupings of two to three languages. Multilingual training is performed by randomly alternating between languages for every new minibatch. We do not pass any information to the auxiliary decoder as to the source language of the signal it is receiving, as we assume abstract morpho-syntactic features are shared across languages.\n[source_id=31] After 20 epochs of multilingual training, we perform 5 epochs of monolingual finetuning for each language. For this phase, we reduce the learning rate to a tenth of the original learning rate, i.e. 0.0001, to ensure that the models are indeed being finetuned rather than retrained.\n[source_id=32] We keep all hyperparameters the same as in the baseline. Training data is split 90:10 for training and validation. We train our models for 50 epochs, adding early stopping with a tolerance of five epochs of no improvement in the validation loss. We do not subsample from the training data.\n[source_id=33] We train models for 50 different random combinations of two to three languages in Track 1, and 50 monolingual models for each language in Track 2. Instead of picking the single model that performs best on the development set and thus risking to select a model that highly overfits that data, we use an ensemble of the five best models, and make the final prediction for a given target form with a majority vote over the five predictions.",
+  "score": 1.3190735174931056,
+  "rank": 1,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33
+  ],
+  "child_qasper_evidence_texts": [
+    "Here we compare and contrast our system to the baseline system. A diagram of our system is shown in Figure FIGREF4 .",
+    "The idea behind this modification is to provide the encoder with access to all morpho-syntactic cues present in the sentence. In contrast to the baseline, which only encodes the immediately adjacent context of a target word, we encode the entire context. All context word forms, lemmas, and MSD tags (in Track 1) are embedded in their respective high-dimensional spaces as before, and their embeddings are concatenated. However, we now reduce the entire past context to a fixed-size vector by encoding it with a forward LSTM, and we similarly represent the future context by encoding it with a backwards LSTM.",
+    "We introduce an auxiliary objective that is meant to increase the morpho-syntactic awareness of the encoder and to regularise the learning process—the task is to predict the MSD tag of the target form. MSD tag predictions are conditioned on the context encoding, as described in UID15 . Tags are generated with an LSTM one component at a time, e.g. the tag PRO;NOM;SG;1 is predicted as a sequence of four components, INLINEFORM0 PRO, NOM, SG, 1 INLINEFORM1 .",
+    "For every training instance, we backpropagate the sum of the main loss and the auxiliary loss without any weighting.",
+    "As MSD tags are only available in Track 1, this augmentation only applies to this track.",
+    "The parameters of the entire MSD (auxiliary-task) decoder are shared across languages.",
+    "Since a grouping of the languages based on language family would have left several languages in single-member groups (e.g. Russian is the sole representative of the Slavic family), we experiment with random groupings of two to three languages. Multilingual training is performed by randomly alternating between languages for every new minibatch. We do not pass any information to the auxiliary decoder as to the source language of the signal it is receiving, as we assume abstract morpho-syntactic features are shared across languages.",
+    "After 20 epochs of multilingual training, we perform 5 epochs of monolingual finetuning for each language. For this phase, we reduce the learning rate to a tenth of the original learning rate, i.e. 0.0001, to ensure that the models are indeed being finetuned rather than retrained.",
+    "We keep all hyperparameters the same as in the baseline. Training data is split 90:10 for training and validation. We train our models for 50 epochs, adding early stopping with a tolerance of five epochs of no improvement in the validation loss. We do not subsample from the training data.",
+    "We train models for 50 different random combinations of two to three languages in Track 1, and 50 monolingual models for each language in Track 2. Instead of picking the single model that performs best on the development set and thus risking to select a model that highly overfits that data, we use an ensemble of the five best models, and make the final prediction for a given target form with a majority vote over the five predictions."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "Our system",
+    "Our system",
+    "Our system",
+    "Our system",
+    "Our system",
+    "Our system",
+    "Our system",
+    "Our system",
+    "Our system",
+    "Our system"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Our system",
+      0
+    ],
+    [
+      "Our system",
+      1
+    ],
+    [
+      "Our system",
+      2
+    ],
+    [
+      "Our system",
+      3
+    ],
+    [
+      "Our system",
+      4
+    ],
+    [
+      "Our system",
+      5
+    ],
+    [
+      "Our system",
+      6
+    ],
+    [
+      "Our system",
+      7
+    ],
+    [
+      "Our system",
+      8
+    ],
+    [
+      "Our system",
+      9
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "Our system",
+  "section": "Our system",
+  "title_path": "Our system",
+  "block_type": "long_unit"
+}

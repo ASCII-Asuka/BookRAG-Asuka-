@@ -1,0 +1,52 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] The Pairwise Word Interaction Model (PWIM)\n[source_id=21] In the Pairwise Word Interaction model BIBREF1 , each word vector $\\mathbf {w}_{i}$ is encoded with context through forward and backward LSTMs: $\\overrightarrow{\\mathbf {h}}_{i} = LSTM^{f}(\\mathbf {w}_{i}, \\overrightarrow{\\mathbf {h}}_{i-1})$ and $\\overleftarrow{\\mathbf {h}}_{i} = LSTM^{b}(\\mathbf {w}_{i}, \\overleftarrow{\\mathbf {h}}_{i+1})$ . For every word pair $(\\mathbf {w}^a_{i}, \\mathbf {w}^b_{j})$ across sentences, the model directly calculates word pair interactions using cosine similarity, Euclidean distance, and dot product over the outputs of the encoding layer:\n[source_id=22] $$D(\\overrightarrow{\\mathbf {h}}_{i}, \\overrightarrow{\\mathbf {h}}_{j}) & = [cos(\\overrightarrow{\\mathbf {h}}_{i}, \\overrightarrow{\\mathbf {h}}_{j}), \\Vert \\overrightarrow{\\mathbf {h}}_{i} - \\overrightarrow{\\mathbf {h}}_{j}\\Vert , \\overrightarrow{\\mathbf {h}}_{i} \\cdot \\overrightarrow{\\mathbf {h}}_{j}]$$   (Eq. 21)\n[source_id=23] The above equation not only applies to forward hidden state $\\overrightarrow{\\mathbf {h}}_{i}$ and backward hidden state $\\overleftarrow{\\mathbf {h}}_{i}$ , but also to the concatenation $\\overleftrightarrow{\\mathbf {h}}_{i}= [\\overrightarrow{\\mathbf {h}}_{i}, \\overleftarrow{\\mathbf {h}}_{i}]$ and summation $\\mathbf {h}^{+}_{i}= \\overrightarrow{\\mathbf {h}}_{i} + \\overleftarrow{\\mathbf {h}}_{i}$ , resulting in a tensor $\\mathbf {D}^{13 \\times |sent1| \\times |sent2|}$ after padding one extra bias term. A “hard” attention is applied to the interaction tensor to build word alignment: selecting the most related word pairs and increasing the corresponding weights by 10 times. Then a 19-layer deep CNN is applied to aggregate the word interaction features for final classification.",
+  "score": 1.94983062597335,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    21,
+    22,
+    23
+  ],
+  "child_qasper_evidence_texts": [
+    "In the Pairwise Word Interaction model BIBREF1 , each word vector $\\mathbf {w}_{i}$ is encoded with context through forward and backward LSTMs: $\\overrightarrow{\\mathbf {h}}_{i} = LSTM^{f}(\\mathbf {w}_{i}, \\overrightarrow{\\mathbf {h}}_{i-1})$ and $\\overleftarrow{\\mathbf {h}}_{i} = LSTM^{b}(\\mathbf {w}_{i}, \\overleftarrow{\\mathbf {h}}_{i+1})$ . For every word pair $(\\mathbf {w}^a_{i}, \\mathbf {w}^b_{j})$ across sentences, the model directly calculates word pair interactions using cosine similarity, Euclidean distance, and dot product over the outputs of the encoding layer:",
+    "$$D(\\overrightarrow{\\mathbf {h}}_{i}, \\overrightarrow{\\mathbf {h}}_{j}) & = [cos(\\overrightarrow{\\mathbf {h}}_{i}, \\overrightarrow{\\mathbf {h}}_{j}), \\Vert \\overrightarrow{\\mathbf {h}}_{i} - \\overrightarrow{\\mathbf {h}}_{j}\\Vert , \\overrightarrow{\\mathbf {h}}_{i} \\cdot \\overrightarrow{\\mathbf {h}}_{j}]$$   (Eq. 21)",
+    "The above equation not only applies to forward hidden state $\\overrightarrow{\\mathbf {h}}_{i}$ and backward hidden state $\\overleftarrow{\\mathbf {h}}_{i}$ , but also to the concatenation $\\overleftrightarrow{\\mathbf {h}}_{i}= [\\overrightarrow{\\mathbf {h}}_{i}, \\overleftarrow{\\mathbf {h}}_{i}]$ and summation $\\mathbf {h}^{+}_{i}= \\overrightarrow{\\mathbf {h}}_{i} + \\overleftarrow{\\mathbf {h}}_{i}$ , resulting in a tensor $\\mathbf {D}^{13 \\times |sent1| \\times |sent2|}$ after padding one extra bias term. A “hard” attention is applied to the interaction tensor to build word alignment: selecting the most related word pairs and increasing the corresponding weights by 10 times. Then a 19-layer deep CNN is applied to aggregate the word interaction features for final classification."
+  ],
+  "child_pages": [
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "The Pairwise Word Interaction Model (PWIM)",
+    "The Pairwise Word Interaction Model (PWIM)",
+    "The Pairwise Word Interaction Model (PWIM)"
+  ],
+  "child_hotpot_facts": [
+    [
+      "The Pairwise Word Interaction Model (PWIM)",
+      0
+    ],
+    [
+      "The Pairwise Word Interaction Model (PWIM)",
+      1
+    ],
+    [
+      "The Pairwise Word Interaction Model (PWIM)",
+      2
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "The Pairwise Word Interaction Model (PWIM)",
+  "section": "The Pairwise Word Interaction Model (PWIM)",
+  "title_path": "The Pairwise Word Interaction Model (PWIM)",
+  "block_type": "long_unit"
+}

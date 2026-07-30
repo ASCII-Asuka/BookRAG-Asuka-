@@ -1,0 +1,160 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Dolores: Learner\n[source_id=26] Having generated a set of paths on knowledge graphs representing local contexts of entities and relations, we are now ready to utilize the machinery of language modeling using deep neural networks to learn Dolores embeddings.\n[source_id=27] While traditional language models model a sentence as a sequence of words, we adopt the same machinery to model knowledge graph embeddings as follows: (a) A word is an (entity, relation) tuple, (b) we model a sentence as a path consisting of (entity, relation) tuples. Note that we have already established how to generate such paths from the knowledge graph using the path generator component.\n[source_id=28] Given such paths, we would like to model the probability of an entity-relation pair given the history and future context by a Bi-Directional Long Short-Term Memory network. In particular, the forward direction LSTM models: $\n\\text{Pr}([e_1,r_1], [e_2,r_2], \\cdots , [e_N, r_N]) =\n$\n[source_id=29] $$\\prod _{t=1}^{N} \\text{Pr}( [e_t, r_t] \\mid [e_1, r_1], [e_2, r_2], \\cdots , [e_{t-1}, r_{t-1}] ).$$   (Eq. 17)\n[source_id=30] Similarly, the backward direction LSTM models: $\n\\text{Pr}([e_1,r_1], [e_2,r_2], \\cdots , [e_N, r_N]) =\n$\n[source_id=31] $$\\prod _{t=1}^{N} \\text{Pr}( [e_t, r_t] \\mid [e_{t+1}, r_{t+1}], \\cdots , [e_{N}, r_{N}] ).$$   (Eq. 18)\n[source_id=32] Figure 2 illustrates this succinctly. At each time-step t, we deal with an entity-relation pair [ $e_t$ , $r_t$ ]. We first map one-hot vectors of the $e_t$ and $r_t$ to an embedding layer, concatenate them to obtain context-independent representations which are then passed through L layers of a Bi-Directional LSTM. Each layer of LSTM outputs the pair's context-dependent representation $\\overrightarrow{h_{t,i}}$ , $\\overleftarrow{h_{t,i}}$ , where i=1, 2, $\\cdots $ , L. Finally, the output of the top layer of LSTM, $\\overrightarrow{h_{t,L}}$ , $\\overleftarrow{h_{t,L}}$ , is used to predict the next pair [ $e_{t+1}$ , $r_t$0 ] and [ $r_t$1 , $r_t$2 ] respectively using a softmax layer. Formally, we jointly maximize the log likelihood of the forward and backward directions:\n[source_id=33] $$\\begin{split}\n\\sum _{t=1}^{N}\\log \\text{Pr}([e_t, r_t]\\mid [e_1, r_1],\\cdots ,[e_{t-1}, r_{t-1}];\\mathbf {\\Theta _{F}})+\\\\\n\\sum _{t=1}^{N}\\log \\text{Pr}([e_t, r_t]\\mid [e_{t+1}, r_{t+1}],\\cdots ,[e_{N}, r_{N}];\\mathbf {\\Theta _{B}}),\n\\end{split}$$   (Eq. 19)\n[source_id=34] where $\\mathbf {\\Theta _{F}}$ = $(\\theta _x, \\overrightarrow{\\theta _{LSTM}}, \\theta _s)$ corresponds to the parameters of the embedding layer, forward-direction LSTM and the softmax layer respectively. Similarly $\\mathbf {\\Theta _{B}}$ = $(\\theta _x, \\overleftarrow{\\theta _{LSTM}}, \\theta _s)$ corresponds to the similar set of parameters for the backward direction. Specifically, note that we share the parameters for the embedding and softmax layer across both directions. We maximize Equation 19 by training the Bi-directional LSTMs using back-propagation through time.\n[source_id=35] After having estimated the parameters of the Dolores learner, we now extract the context-independent and context-dependent representations for each entity and relation and combine them to obtain Dolores embeddings. More specifically, Dolores embeddings are task specific combination of the context-dependent and context-independent representations learned by our learner. Note that our learner (which is an $L$ -layer Bi-Directional LSTM) computes a set of $2L + 1$ representations for each entity-relation pair which we denote by: $\nR_t = [ x_t, \\overrightarrow{h_{t,i}}, \\overleftarrow{h_{t,i}} \\mid i = 1, 2, \\cdots , \\textit {L} ],\n$\n[source_id=36] where $x_t$ is the context-independent embedding and $\\overrightarrow{h_{t,i}}, \\overleftarrow{h_{t,i}}$ correspond to the context-dependent embeddings from layer $i$ .\n[source_id=37] Given a downstream model, Dolores learns a weighted linear combination of the components of $R_t$ to yield a single vector for use in the embedding layer of the downstream model. In particular\n[source_id=38] $$\\texttt {\\textsc {Dolores}}_t = [ x_t , \\sum _{i=1}^{L} \\lambda _i h_{t,i} ],$$   (Eq. 23)\n[source_id=39] where we denote $h_{t,i}$ = [ $\\overrightarrow{h_{t,i}}$ , $\\overleftarrow{h_{t,i}}$ ] and $\\lambda _{i}$ denote task specific learnable weights of the linear combination.\n[source_id=40] While it is obvious that our embeddings can be used as features for new predictive models, it is also very easy to incorporate our learned Dolores embeddings into existing predictive models on knowledge graphs. The only requirement is that the model accepts as input, an embedding layer (for entities and relations). If a model fulfills this requirement (which a large number of neural models on knowledge graphs do), we can just use Dolores embeddings as a drop-in replacement. We just initialize the corresponding embedding layer with Dolores embeddings. In our evaluation below, we show how to improve several state-of-the-art models on various tasks simply by incorporating Dolores as a drop-in replacement to the original embedding layer.",
+  "score": 2.7048255304557505,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40
+  ],
+  "child_qasper_evidence_texts": [
+    "Having generated a set of paths on knowledge graphs representing local contexts of entities and relations, we are now ready to utilize the machinery of language modeling using deep neural networks to learn Dolores embeddings.",
+    "While traditional language models model a sentence as a sequence of words, we adopt the same machinery to model knowledge graph embeddings as follows: (a) A word is an (entity, relation) tuple, (b) we model a sentence as a path consisting of (entity, relation) tuples. Note that we have already established how to generate such paths from the knowledge graph using the path generator component.",
+    "Given such paths, we would like to model the probability of an entity-relation pair given the history and future context by a Bi-Directional Long Short-Term Memory network. In particular, the forward direction LSTM models: $\n\\text{Pr}([e_1,r_1], [e_2,r_2], \\cdots , [e_N, r_N]) =\n$",
+    "$$\\prod _{t=1}^{N} \\text{Pr}( [e_t, r_t] \\mid [e_1, r_1], [e_2, r_2], \\cdots , [e_{t-1}, r_{t-1}] ).$$   (Eq. 17)",
+    "Similarly, the backward direction LSTM models: $\n\\text{Pr}([e_1,r_1], [e_2,r_2], \\cdots , [e_N, r_N]) =\n$",
+    "$$\\prod _{t=1}^{N} \\text{Pr}( [e_t, r_t] \\mid [e_{t+1}, r_{t+1}], \\cdots , [e_{N}, r_{N}] ).$$   (Eq. 18)",
+    "Figure 2 illustrates this succinctly. At each time-step t, we deal with an entity-relation pair [ $e_t$ , $r_t$ ]. We first map one-hot vectors of the $e_t$ and $r_t$ to an embedding layer, concatenate them to obtain context-independent representations which are then passed through L layers of a Bi-Directional LSTM. Each layer of LSTM outputs the pair's context-dependent representation $\\overrightarrow{h_{t,i}}$ , $\\overleftarrow{h_{t,i}}$ , where i=1, 2, $\\cdots $ , L. Finally, the output of the top layer of LSTM, $\\overrightarrow{h_{t,L}}$ , $\\overleftarrow{h_{t,L}}$ , is used to predict the next pair [ $e_{t+1}$ , $r_t$0 ] and [ $r_t$1 , $r_t$2 ] respectively using a softmax layer. Formally, we jointly maximize the log likelihood of the forward and backward directions:",
+    "$$\\begin{split}\n\\sum _{t=1}^{N}\\log \\text{Pr}([e_t, r_t]\\mid [e_1, r_1],\\cdots ,[e_{t-1}, r_{t-1}];\\mathbf {\\Theta _{F}})+\\\\\n\\sum _{t=1}^{N}\\log \\text{Pr}([e_t, r_t]\\mid [e_{t+1}, r_{t+1}],\\cdots ,[e_{N}, r_{N}];\\mathbf {\\Theta _{B}}),\n\\end{split}$$   (Eq. 19)",
+    "where $\\mathbf {\\Theta _{F}}$ = $(\\theta _x, \\overrightarrow{\\theta _{LSTM}}, \\theta _s)$ corresponds to the parameters of the embedding layer, forward-direction LSTM and the softmax layer respectively. Similarly $\\mathbf {\\Theta _{B}}$ = $(\\theta _x, \\overleftarrow{\\theta _{LSTM}}, \\theta _s)$ corresponds to the similar set of parameters for the backward direction. Specifically, note that we share the parameters for the embedding and softmax layer across both directions. We maximize Equation 19 by training the Bi-directional LSTMs using back-propagation through time.",
+    "After having estimated the parameters of the Dolores learner, we now extract the context-independent and context-dependent representations for each entity and relation and combine them to obtain Dolores embeddings. More specifically, Dolores embeddings are task specific combination of the context-dependent and context-independent representations learned by our learner. Note that our learner (which is an $L$ -layer Bi-Directional LSTM) computes a set of $2L + 1$ representations for each entity-relation pair which we denote by: $\nR_t = [ x_t, \\overrightarrow{h_{t,i}}, \\overleftarrow{h_{t,i}} \\mid i = 1, 2, \\cdots , \\textit {L} ],\n$",
+    "where $x_t$ is the context-independent embedding and $\\overrightarrow{h_{t,i}}, \\overleftarrow{h_{t,i}}$ correspond to the context-dependent embeddings from layer $i$ .",
+    "Given a downstream model, Dolores learns a weighted linear combination of the components of $R_t$ to yield a single vector for use in the embedding layer of the downstream model. In particular",
+    "$$\\texttt {\\textsc {Dolores}}_t = [ x_t , \\sum _{i=1}^{L} \\lambda _i h_{t,i} ],$$   (Eq. 23)",
+    "where we denote $h_{t,i}$ = [ $\\overrightarrow{h_{t,i}}$ , $\\overleftarrow{h_{t,i}}$ ] and $\\lambda _{i}$ denote task specific learnable weights of the linear combination.",
+    "While it is obvious that our embeddings can be used as features for new predictive models, it is also very easy to incorporate our learned Dolores embeddings into existing predictive models on knowledge graphs. The only requirement is that the model accepts as input, an embedding layer (for entities and relations). If a model fulfills this requirement (which a large number of neural models on knowledge graphs do), we can just use Dolores embeddings as a drop-in replacement. We just initialize the corresponding embedding layer with Dolores embeddings. In our evaluation below, we show how to improve several state-of-the-art models on various tasks simply by incorporating Dolores as a drop-in replacement to the original embedding layer."
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Dolores: Learner",
+    "Dolores: Learner",
+    "Dolores: Learner",
+    "Dolores: Learner",
+    "Dolores: Learner",
+    "Dolores: Learner",
+    "Dolores: Learner",
+    "Dolores: Learner",
+    "Dolores: Learner",
+    "Dolores: Learner",
+    "Dolores: Learner",
+    "Dolores: Learner",
+    "Dolores: Learner",
+    "Dolores: Learner",
+    "Dolores: Learner"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Dolores: Learner",
+      0
+    ],
+    [
+      "Dolores: Learner",
+      1
+    ],
+    [
+      "Dolores: Learner",
+      2
+    ],
+    [
+      "Dolores: Learner",
+      3
+    ],
+    [
+      "Dolores: Learner",
+      4
+    ],
+    [
+      "Dolores: Learner",
+      5
+    ],
+    [
+      "Dolores: Learner",
+      6
+    ],
+    [
+      "Dolores: Learner",
+      7
+    ],
+    [
+      "Dolores: Learner",
+      8
+    ],
+    [
+      "Dolores: Learner",
+      9
+    ],
+    [
+      "Dolores: Learner",
+      10
+    ],
+    [
+      "Dolores: Learner",
+      11
+    ],
+    [
+      "Dolores: Learner",
+      12
+    ],
+    [
+      "Dolores: Learner",
+      13
+    ],
+    [
+      "Dolores: Learner",
+      14
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Dolores: Learner",
+  "section": "Dolores: Learner",
+  "title_path": "Dolores: Learner",
+  "block_type": "long_unit"
+}

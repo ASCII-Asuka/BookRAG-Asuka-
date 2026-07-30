@@ -1,0 +1,70 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Related work\n[source_id=9] Previous work in BIBREF12 incorporates sections of the “Form 10-K” to predict the volatility twelve months after the report is released. They train a Support Vector Regression model on top of sparse representation (bag-of-words) with standard term weighting (e.g. Term-Frequency). This work was extended in BIBREF13 , BIBREF14 , BIBREF15 , BIBREF16 by employing the Loughran-McDonald Sentiment Word Lists BIBREF20 , which contain three lists where words are grouped by their sentiments (positive, negative and neutral). In all these works, the textual representation is engineered using the following steps: 1) For each sentiment group, the list is expanded by retrieving 20 most similar words for each word using Word2Vec word embeddings BIBREF21 . 2) Finally, each 10-K document is represented using the expanded lists of words. The weight of each word in this sparse representation is defined using Information Retrieval (IR) methods such as term-frequency (tf) and term-frequency with inverted document frequency (tfidf). Particularly, BIBREF16 shows that results can be improved using enhanced IR methods and projecting each sparse feature into a dense space using Principal Component Analysis (PCA).\n[source_id=10] The works described above ( BIBREF13 , BIBREF14 , BIBREF15 , BIBREF16 ) target long-horizon volatility predictions (one year or quarterly BIBREF16 ). In particular, BIBREF16 and BIBREF15 uses market data (price) features along with the textual representation of the 10-K reports. These existing works that employ multi-modal learning BIBREF22 are based on a late fusion approach. For example, stacking ensembles to take into account the price and text predictions BIBREF16 . In contrast, our end-to-end trained model can learn the joint distribution of both price and text.\n[source_id=11] Predicting the price direction rather than the volatility was the focus in BIBREF23 . They extracted sentiment words from Twitter posts to build a time series of collective Profile of Mood States (POMS). Their results show that collective mood accurately predicts the direction of Down Jones stock index (86.7% accuracy). In BIBREF24 handcrafted text representations including term count, noun-phrase tags and extracted named entities are employed for predicting stock market direction using Support Vector Machine (SVM). An extension of Latent Dirichlet Allocation (LDA) is proposed in BIBREF25 to learn a joint latent space of topics and sentiments.\n[source_id=12] Our deep learning models bear a close resemblance to works focused on directional price forecasting BIBREF26 , BIBREF27 . In BIBREF26 , headline news are processed using Stanford OpenIE to generate triples that are fed into a Neural Tensor Network to create the final headline representation. In BIBREF27 , a character-level embedding is pre-trained in an unsupervised manner. The character embedding is used as input to a sequence model to learn the headline representation. Particularly, both works average all headline representations in a given day, rather than attempting to weight the most relevant ones. In this work, we propose a neural attention mechanism to capture the News Relevance and provide experimental evidence that it is a key component of the end-to-end learning process. Our attention extends the previous deep learning methods from BIBREF26 , BIBREF27 .\n[source_id=13] Despite the fact that end-to-end deep learning models have attained state-of-the-art performance, the large number of parameters make them prone to overfitting. Additionally, end-to-end models are trained from scratch requiring large datasets and computational resources. Transfer learning (TL) alleviates this problem by adapting representations learnt from a different and potentially weakly related source domain to the new target domain. For example, in computer vision tasks the convolutional features learnt from ImageNet BIBREF28 dataset (source domain) have been successfully transferred to multiple domain target tasks with much smaller datasets such as object classification and scene recognition BIBREF29 . In this work, we consider TL in our experiments for two main reasons. First, it address the question whether our proposed dataset is suitable for end-to-end training since the performance of the transferred representations can be compared with end-to-end learning. Second, it is still to be investigated which dataset transfers better to the forecasting problem. Recently, the NLP community has focused on universal representations of sentences BIBREF17 , BIBREF19 , which are dense representations that carry the meaning of a full sentence. BIBREF17 found that transferring the sentence representation trained on the Stanford Natural Language Inference (SNLI) BIBREF30 dataset achieves state-of-the-art sentence representations to multiple NLP tasks (e.g. sentiment analysis, question-type and opinion polarity). Following BIBREF17 , in this work, we investigate the suitability of SNLI and Reuters RCV1 BIBREF31 datasets to transfer learning to the volatility forecasting task. To the best of our knowledge, the hierarchical attention mechanism at headline level, proposed in our work, has not being applied to volatility prediction so far; neither has been investigated the ability to transfer sentence encoders from source datasets to the target forecasting problem (Transfer Learning).",
+  "score": 3.8845120264316564,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "child_qasper_evidence_texts": [
+    "Previous work in BIBREF12 incorporates sections of the “Form 10-K” to predict the volatility twelve months after the report is released. They train a Support Vector Regression model on top of sparse representation (bag-of-words) with standard term weighting (e.g. Term-Frequency). This work was extended in BIBREF13 , BIBREF14 , BIBREF15 , BIBREF16 by employing the Loughran-McDonald Sentiment Word Lists BIBREF20 , which contain three lists where words are grouped by their sentiments (positive, negative and neutral). In all these works, the textual representation is engineered using the following steps: 1) For each sentiment group, the list is expanded by retrieving 20 most similar words for each word using Word2Vec word embeddings BIBREF21 . 2) Finally, each 10-K document is represented using the expanded lists of words. The weight of each word in this sparse representation is defined using Information Retrieval (IR) methods such as term-frequency (tf) and term-frequency with inverted document frequency (tfidf). Particularly, BIBREF16 shows that results can be improved using enhanced IR methods and projecting each sparse feature into a dense space using Principal Component Analysis (PCA).",
+    "The works described above ( BIBREF13 , BIBREF14 , BIBREF15 , BIBREF16 ) target long-horizon volatility predictions (one year or quarterly BIBREF16 ). In particular, BIBREF16 and BIBREF15 uses market data (price) features along with the textual representation of the 10-K reports. These existing works that employ multi-modal learning BIBREF22 are based on a late fusion approach. For example, stacking ensembles to take into account the price and text predictions BIBREF16 . In contrast, our end-to-end trained model can learn the joint distribution of both price and text.",
+    "Predicting the price direction rather than the volatility was the focus in BIBREF23 . They extracted sentiment words from Twitter posts to build a time series of collective Profile of Mood States (POMS). Their results show that collective mood accurately predicts the direction of Down Jones stock index (86.7% accuracy). In BIBREF24 handcrafted text representations including term count, noun-phrase tags and extracted named entities are employed for predicting stock market direction using Support Vector Machine (SVM). An extension of Latent Dirichlet Allocation (LDA) is proposed in BIBREF25 to learn a joint latent space of topics and sentiments.",
+    "Our deep learning models bear a close resemblance to works focused on directional price forecasting BIBREF26 , BIBREF27 . In BIBREF26 , headline news are processed using Stanford OpenIE to generate triples that are fed into a Neural Tensor Network to create the final headline representation. In BIBREF27 , a character-level embedding is pre-trained in an unsupervised manner. The character embedding is used as input to a sequence model to learn the headline representation. Particularly, both works average all headline representations in a given day, rather than attempting to weight the most relevant ones. In this work, we propose a neural attention mechanism to capture the News Relevance and provide experimental evidence that it is a key component of the end-to-end learning process. Our attention extends the previous deep learning methods from BIBREF26 , BIBREF27 .",
+    "Despite the fact that end-to-end deep learning models have attained state-of-the-art performance, the large number of parameters make them prone to overfitting. Additionally, end-to-end models are trained from scratch requiring large datasets and computational resources. Transfer learning (TL) alleviates this problem by adapting representations learnt from a different and potentially weakly related source domain to the new target domain. For example, in computer vision tasks the convolutional features learnt from ImageNet BIBREF28 dataset (source domain) have been successfully transferred to multiple domain target tasks with much smaller datasets such as object classification and scene recognition BIBREF29 . In this work, we consider TL in our experiments for two main reasons. First, it address the question whether our proposed dataset is suitable for end-to-end training since the performance of the transferred representations can be compared with end-to-end learning. Second, it is still to be investigated which dataset transfers better to the forecasting problem. Recently, the NLP community has focused on universal representations of sentences BIBREF17 , BIBREF19 , which are dense representations that carry the meaning of a full sentence. BIBREF17 found that transferring the sentence representation trained on the Stanford Natural Language Inference (SNLI) BIBREF30 dataset achieves state-of-the-art sentence representations to multiple NLP tasks (e.g. sentiment analysis, question-type and opinion polarity). Following BIBREF17 , in this work, we investigate the suitability of SNLI and Reuters RCV1 BIBREF31 datasets to transfer learning to the volatility forecasting task. To the best of our knowledge, the hierarchical attention mechanism at headline level, proposed in our work, has not being applied to volatility prediction so far; neither has been investigated the ability to transfer sentence encoders from source datasets to the target forecasting problem (Transfer Learning)."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Related work",
+    "Related work",
+    "Related work",
+    "Related work",
+    "Related work"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Related work",
+      0
+    ],
+    [
+      "Related work",
+      1
+    ],
+    [
+      "Related work",
+      2
+    ],
+    [
+      "Related work",
+      3
+    ],
+    [
+      "Related work",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Related work",
+  "section": "Related work",
+  "title_path": "Related work",
+  "block_type": "long_unit"
+}

@@ -1,0 +1,110 @@
+{
+  "question": "What metrics are used for evaluation?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [],
+      "free_form_answer": "Byte-Pair Encoding perplexity  (BPE PPL),\nBLEU-1,\nBLEU-4,\nROUGE-L,\npercentage of distinct unigram (D-1),\npercentage of distinct bigrams(D-2),\nuser matching accuracy(UMA),\nMean Reciprocal Rank(MRR)\nPairwise preference over baseline(PP)",
+      "yes_no": null,
+      "evidence": [
+        "In this work, we investigate how leveraging historical user preferences can improve generation quality over strong baselines in our setting. We compare our personalized models against two baselines. The first is a name-based Nearest-Neighbor model (NN). We initially adapted the Neural Checklist Model of BIBREF0 as a baseline; however, we ultimately use a simple Encoder-Decoder baseline with ingredient attention (Enc-Dec), which provides comparable performance and lower complexity. All personalized models outperform baseline in BPE perplexity (tab:metricsontest) with Prior Name performing the best. While our models exhibit comparable performance to baseline in BLEU-1/4 and ROUGE-L, we generate more diverse (Distinct-1/2: percentage of distinct unigrams and bigrams) and acceptable recipes. BLEU and ROUGE are not the most appropriate metrics for generation quality. A `correct' recipe can be written in many ways with the same main entities (ingredients). As BLEU-1/4 capture structural information via n-gram matching, they are not correlated with subjective recipe quality. This mirrors observations from BIBREF31, BIBREF8.",
+        "We observe that personalized models make more diverse recipes than baseline. They thus perform better in BLEU-1 with more key entities (ingredient mentions) present, but worse in BLEU-4, as these recipes are written in a personalized way and deviate from gold on the phrasal level. Similarly, the `Prior Name' model generates more unigram-diverse recipes than other personalized models and obtains a correspondingly lower BLEU-1 score.",
+        "Our model must learn to generate from a diverse recipe space: in our training data, the average recipe length is 117 tokens with a maximum of 256. There are 13K unique ingredients across all recipes. Rare words dominate the vocabulary: 95% of words appear $<$100 times, accounting for only 1.65% of all word usage. As such, we perform Byte-Pair Encoding (BPE) tokenization BIBREF25, BIBREF26, giving a training vocabulary of 15K tokens across 19M total mentions. User profiles are similarly diverse: 50% of users have consumed $\\le $6 recipes, while 10% of users have consumed $>$45 recipes.",
+        "Personalization: To measure personalization, we evaluate how closely the generated text corresponds to a particular user profile. We compute the likelihood of generated recipes using identical input specifications but conditioned on ten different user profiles—one `gold' user who consumed the original recipe, and nine randomly generated user profiles. Following BIBREF8, we expect the highest likelihood for the recipe conditioned on the gold user. We measure user matching accuracy (UMA)—the proportion where the gold user is ranked highest—and Mean Reciprocal Rank (MRR) BIBREF32 of the gold user. All personalized models beat baselines in both metrics, showing our models personalize generated recipes to the given user profiles. The Prior Name model achieves the best UMA and MRR by a large margin, revealing that prior recipe names are strong signals for personalization. Moreover, the addition of attention mechanisms to capture these signals improves language modeling performance over a strong non-personalized baseline."
+      ],
+      "evidence_block_ids": [
+        36,
+        37,
+        31,
+        39
+      ],
+      "evidence_paragraph_ids": [
+        36,
+        37,
+        31,
+        39
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [
+        "BLEU-1/4 and ROUGE-L",
+        "likelihood of generated recipes using identical input specifications but conditioned on ten different user profiles",
+        "user matching accuracy (UMA)",
+        "Mean Reciprocal Rank (MRR)",
+        "neural scoring model from BIBREF33 to measure recipe-level coherence"
+      ],
+      "free_form_answer": "",
+      "yes_no": null,
+      "evidence": [
+        "In this work, we investigate how leveraging historical user preferences can improve generation quality over strong baselines in our setting. We compare our personalized models against two baselines. The first is a name-based Nearest-Neighbor model (NN). We initially adapted the Neural Checklist Model of BIBREF0 as a baseline; however, we ultimately use a simple Encoder-Decoder baseline with ingredient attention (Enc-Dec), which provides comparable performance and lower complexity. All personalized models outperform baseline in BPE perplexity (tab:metricsontest) with Prior Name performing the best. While our models exhibit comparable performance to baseline in BLEU-1/4 and ROUGE-L, we generate more diverse (Distinct-1/2: percentage of distinct unigrams and bigrams) and acceptable recipes. BLEU and ROUGE are not the most appropriate metrics for generation quality. A `correct' recipe can be written in many ways with the same main entities (ingredients). As BLEU-1/4 capture structural information via n-gram matching, they are not correlated with subjective recipe quality. This mirrors observations from BIBREF31, BIBREF8.",
+        "Personalization: To measure personalization, we evaluate how closely the generated text corresponds to a particular user profile. We compute the likelihood of generated recipes using identical input specifications but conditioned on ten different user profiles—one `gold' user who consumed the original recipe, and nine randomly generated user profiles. Following BIBREF8, we expect the highest likelihood for the recipe conditioned on the gold user. We measure user matching accuracy (UMA)—the proportion where the gold user is ranked highest—and Mean Reciprocal Rank (MRR) BIBREF32 of the gold user. All personalized models beat baselines in both metrics, showing our models personalize generated recipes to the given user profiles. The Prior Name model achieves the best UMA and MRR by a large margin, revealing that prior recipe names are strong signals for personalization. Moreover, the addition of attention mechanisms to capture these signals improves language modeling performance over a strong non-personalized baseline.",
+        "Recipe Level Coherence: A plausible recipe should possess a coherent step order, and we evaluate this via a metric for recipe-level coherence. We use the neural scoring model from BIBREF33 to measure recipe-level coherence for each generated recipe. Each recipe step is encoded by BERT BIBREF34. Our scoring model is a GRU network that learns the overall recipe step ordering structure by minimizing the cosine similarity of recipe step hidden representations presented in the correct and reverse orders. Once pretrained, our scorer calculates the similarity of a generated recipe to the forward and backwards ordering of its corresponding gold label, giving a score equal to the difference between the former and latter. A higher score indicates better step ordering (with a maximum score of 2). tab:coherencemetrics shows that our personalized models achieve average recipe-level coherence scores of 1.78-1.82, surpassing the baseline at 1.77."
+      ],
+      "evidence_block_ids": [
+        36,
+        39,
+        40
+      ],
+      "evidence_paragraph_ids": [
+        36,
+        39,
+        40
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [],
+      "free_form_answer": " Distinct-1/2, UMA = User Matching Accuracy, MRR\n= Mean Reciprocal Rank, PP = Pairwise preference over baseline (evaluated for 310 recipe pairs per model)",
+      "yes_no": null,
+      "evidence": [],
+      "evidence_block_ids": [],
+      "evidence_paragraph_ids": []
+    }
+  ],
+  "doc_uuid": "1909.00105",
+  "doc_path": "qasper://1909.00105",
+  "qasper_question_id": "5b551ba47d582f2e6467b1b91a8d4d6a30c343ec",
+  "title": "Generating Personalized Recipes from Historical User Preferences",
+  "evidence_block_ids": [
+    36,
+    37,
+    31,
+    39,
+    40
+  ],
+  "evidence_paragraph_ids": [
+    36,
+    37,
+    31,
+    39,
+    40
+  ],
+  "output": "{\n  \"answer_short\": \"BPE perplexity, BLEU-1/4, ROUGE-L, Distinct-1/2, UMA, MRR\",\n  \"answer_rationale\": \"Text 3 lists BPE perplexity, BLEU-1/4, ROUGE-L, and Distinct-1/2 as metrics used for evaluation. Text 7 mentions UMA and MRR as metrics for measuring personalization. These are the metrics explicitly referenced in the documents for evaluation purposes.\"\n}",
+  "retrieved_node_ids": [
+    32,
+    10,
+    36,
+    51,
+    42,
+    35,
+    39,
+    9,
+    22,
+    6
+  ],
+  "answer_short": "BPE perplexity, BLEU-1/4, ROUGE-L, Distinct-1/2, UMA, MRR",
+  "answer_rationale": "Text 3 lists BPE perplexity, BLEU-1/4, ROUGE-L, and Distinct-1/2 as metrics used for evaluation. Text 7 mentions UMA and MRR as metrics for measuring personalization. These are the metrics explicitly referenced in the documents for evaluation purposes.",
+  "supporting_block_ids": [
+    32,
+    10,
+    36,
+    51,
+    42,
+    35,
+    39,
+    9,
+    22,
+    6
+  ]
+}

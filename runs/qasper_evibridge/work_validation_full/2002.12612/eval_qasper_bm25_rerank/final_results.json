@@ -1,0 +1,365 @@
+[
+  {
+    "question": "Which two news domains are country-independent?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "mainstream news and disinformation",
+        "yes_no": null,
+        "evidence": [
+          "We collected tweets associated to a dozen US mainstream news websites, i.e. most trusted sources described in BIBREF18, with the Streaming API, and we referred to Hoaxy API BIBREF16 for what concerns tweets containing links to 100+ US disinformation outlets. We filtered out articles associated to less than 50 tweets. The resulting dataset contains overall $\\sim $1.7 million tweets for mainstream news, collected in a period of three weeks (February 25th, 2019-March 18th, 2019), which are associated to 6,978 news articles, and $\\sim $1.6 million tweets for disinformation, collected in a period of three months (January 1st, 2019-March 18th, 2019) for sake of balance of the two classes, which hold 5,775 distinct articles. Diffusion censoring effects BIBREF14 were correctly taken into account in both collection procedures. We provide in Figure FIGREF4 the distribution of articles by source and political bias for both news domains.",
+          "For what concerns the Italian scenario we first collected tweets with the Streaming API in a 3-week period (April 19th, 2019-May 5th, 2019), filtering those containing URLs pointing to Italian official newspapers websites as described in BIBREF22; these correspond to the list provided by the association for the verification of newspaper circulation in Italy (Accertamenti Diffusione Stampa). We instead referred to the dataset provided by BIBREF23 to obtain a set of tweets, collected continuously since January 2019 using the same Twitter endpoint, which contain URLs to 60+ Italian disinformation websites. In order to get balanced classes (April 5th, 2019-May 5th, 2019), we retained data collected in a longer period w.r.t to mainstream news. In both cases we filtered out articles with less than 50 tweets; overall this dataset contains $\\sim $160k mainstream tweets, corresponding to 227 news articles, and $\\sim $100k disinformation tweets, corresponding to 237 news articles. We provide in Figure FIGREF5 the distribution of articles according to distinct sources for both news domains. As in the US dataset, we took into account censoring effects BIBREF14 by excluding tweets published before (left-censoring) or after two weeks (right-censoring) from the beginning of the collection process."
+        ],
+        "evidence_block_ids": [
+          19,
+          22
+        ],
+        "evidence_paragraph_ids": [
+          19,
+          22
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "mainstream and disinformation news"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Sharing patterns in the two news domains exhibit discrepancies which might be country-independent and due to the content that is being shared.",
+          "In this work we tackled the problem of the automatic classification of news articles in two domains, namely mainstream and disinformation news, with a language-independent approach which is based solely on the diffusion of news items on Twitter social platform. We disentangled different types of interactions on Twitter to accordingly build a multi-layer representation of news diffusion networks, and we computed a set of global network properties–separately for each layer–in order to encode each network with a tuple of features. Our goal was to investigate whether a multi-layer representation performs better than one layer BIBREF11, and to understand which of the features, observed at given layers, are most effective in the classification task."
+        ],
+        "evidence_block_ids": [
+          72,
+          80
+        ],
+        "evidence_paragraph_ids": [
+          72,
+          80
+        ]
+      }
+    ],
+    "doc_uuid": "2002.12612",
+    "doc_path": "qasper://2002.12612",
+    "qasper_question_id": "dd20d93166c14f1e57644cd7fa7b5e5738025cd0",
+    "title": "A multi-layer approach to disinformation detection on Twitter",
+    "evidence_block_ids": [
+      19,
+      22,
+      72,
+      80
+    ],
+    "evidence_paragraph_ids": [
+      19,
+      22,
+      72,
+      80
+    ],
+    "output": "{\n  \"answer_short\": \"mainstream and disinformation\",\n  \"answer_rationale\": \"The documents repeatedly refer to classifying news into two domains: mainstream and disinformation. Text 1, Text 2, Text 3, Text 5, and Text 10 all explicitly mention these two domains and state that differences in their sharing patterns appear to be country-independent, implying these domains are the two being referred to.\"\n}",
+    "retrieved_node_ids": [
+      2,
+      82,
+      72,
+      80,
+      11,
+      64,
+      78,
+      19,
+      22,
+      81
+    ],
+    "answer_short": "mainstream and disinformation",
+    "answer_rationale": "The documents repeatedly refer to classifying news into two domains: mainstream and disinformation. Text 1, Text 2, Text 3, Text 5, and Text 10 all explicitly mention these two domains and state that differences in their sharing patterns appear to be country-independent, implying these domains are the two being referred to.",
+    "supporting_block_ids": [
+      2,
+      82,
+      72,
+      80,
+      11,
+      64,
+      78,
+      19,
+      22,
+      81
+    ]
+  },
+  {
+    "question": "How is the political bias of different sources included in the model?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "By assigning a political bias label to each news article and training only on left-biased or right-biased outlets of both disinformation and mainstream domains",
+        "yes_no": null,
+        "evidence": [
+          "As it is reported that conservatives and liberals exhibit different behaviors on online social platforms BIBREF19BIBREF20BIBREF21, we further assigned a political bias label to different US outlets (and therefore news articles) following the procedure described in BIBREF2. In order to assess the robustness of our method, we performed classification experiments by training only on left-biased (or right-biased) outlets of both disinformation and mainstream domains and testing on the entire set of sources, as well as excluding particular sources that outweigh the others in terms of samples to avoid over-fitting."
+        ],
+        "evidence_block_ids": [
+          20
+        ],
+        "evidence_paragraph_ids": [
+          20
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "we also account for political biases inherent to different news sources, referring to the procedure proposed in BIBREF2 to label different outlets. Overall we show that we are able to classify credible vs non-credible diffusion networks (and consequently news articles) with high accuracy (AUROC up to 94%), even when accounting for the political bias of sources (and training only on left-biased or right-biased articles). We observe that the layer of mentions alone conveys useful information for the classification, denoting a different usage of this functionality when sharing news belonging to the two news domains. We also show that most discriminative features, which are relative to the breadth and depth of largest cascades in different layers, are the same across the two countries."
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "We perform classification experiments with an off-the-shelf Logistic Regression model on two different datasets of mainstream and disinformation news shared on Twitter respectively in the United States and in Italy during 2019. In the former case we also account for political biases inherent to different news sources, referring to the procedure proposed in BIBREF2 to label different outlets. Overall we show that we are able to classify credible vs non-credible diffusion networks (and consequently news articles) with high accuracy (AUROC up to 94%), even when accounting for the political bias of sources (and training only on left-biased or right-biased articles). We observe that the layer of mentions alone conveys useful information for the classification, denoting a different usage of this functionality when sharing news belonging to the two news domains. We also show that most discriminative features, which are relative to the breadth and depth of largest cascades in different layers, are the same across the two countries."
+        ],
+        "evidence_block_ids": [
+          11
+        ],
+        "evidence_paragraph_ids": [
+          11
+        ]
+      }
+    ],
+    "doc_uuid": "2002.12612",
+    "doc_path": "qasper://2002.12612",
+    "qasper_question_id": "dc2a2c177cd5df6da5d03e6e74262bf424850ec9",
+    "title": "A multi-layer approach to disinformation detection on Twitter",
+    "evidence_block_ids": [
+      20,
+      11
+    ],
+    "evidence_paragraph_ids": [
+      20,
+      11
+    ],
+    "output": "{\n  \"answer_short\": \"We account for political bias of sources by labeling different outlets following the procedure proposed in BIBREF2 and training only on left-biased or right-biased articles.\",\n  \"answer_rationale\": \"The model incorporates political bias by assigning political bias labels to news sources using the procedure from BIBREF2, and then training classification models exclusively on left-biased or right-biased articles to assess robustness, as stated in Text 1 and Text 3. This approach allows the model to classify credible vs non-credible news while accounting for political bias, as noted in Text 2 and Text 4.\"\n}",
+    "retrieved_node_ids": [
+      11,
+      2,
+      20,
+      81,
+      58,
+      19,
+      55,
+      22,
+      5,
+      9
+    ],
+    "answer_short": "We account for political bias of sources by labeling different outlets following the procedure proposed in BIBREF2 and training only on left-biased or right-biased articles.",
+    "answer_rationale": "The model incorporates political bias by assigning political bias labels to news sources using the procedure from BIBREF2, and then training classification models exclusively on left-biased or right-biased articles to assess robustness, as stated in Text 1 and Text 3. This approach allows the model to classify credible vs non-credible news while accounting for political bias, as noted in Text 2 and Text 4.",
+    "supporting_block_ids": [
+      11,
+      2,
+      20,
+      81,
+      58,
+      19,
+      55,
+      22,
+      5,
+      9
+    ]
+  },
+  {
+    "question": "What are the two large-scale datasets used?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "US dataset",
+          "Italian dataset"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Methodology ::: US dataset",
+          "We collected tweets associated to a dozen US mainstream news websites, i.e. most trusted sources described in BIBREF18, with the Streaming API, and we referred to Hoaxy API BIBREF16 for what concerns tweets containing links to 100+ US disinformation outlets. We filtered out articles associated to less than 50 tweets. The resulting dataset contains overall $\\sim $1.7 million tweets for mainstream news, collected in a period of three weeks (February 25th, 2019-March 18th, 2019), which are associated to 6,978 news articles, and $\\sim $1.6 million tweets for disinformation, collected in a period of three months (January 1st, 2019-March 18th, 2019) for sake of balance of the two classes, which hold 5,775 distinct articles. Diffusion censoring effects BIBREF14 were correctly taken into account in both collection procedures. We provide in Figure FIGREF4 the distribution of articles by source and political bias for both news domains.",
+          "Methodology ::: Italian dataset",
+          "For what concerns the Italian scenario we first collected tweets with the Streaming API in a 3-week period (April 19th, 2019-May 5th, 2019), filtering those containing URLs pointing to Italian official newspapers websites as described in BIBREF22; these correspond to the list provided by the association for the verification of newspaper circulation in Italy (Accertamenti Diffusione Stampa). We instead referred to the dataset provided by BIBREF23 to obtain a set of tweets, collected continuously since January 2019 using the same Twitter endpoint, which contain URLs to 60+ Italian disinformation websites. In order to get balanced classes (April 5th, 2019-May 5th, 2019), we retained data collected in a longer period w.r.t to mainstream news. In both cases we filtered out articles with less than 50 tweets; overall this dataset contains $\\sim $160k mainstream tweets, corresponding to 227 news articles, and $\\sim $100k disinformation tweets, corresponding to 237 news articles. We provide in Figure FIGREF5 the distribution of articles according to distinct sources for both news domains. As in the US dataset, we took into account censoring effects BIBREF14 by excluding tweets published before (left-censoring) or after two weeks (right-censoring) from the beginning of the collection process."
+        ],
+        "evidence_block_ids": [
+          19,
+          22
+        ],
+        "evidence_paragraph_ids": [
+          19,
+          22
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "US dataset",
+          "Italian dataset"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "Methodology ::: US dataset",
+          "We collected tweets associated to a dozen US mainstream news websites, i.e. most trusted sources described in BIBREF18, with the Streaming API, and we referred to Hoaxy API BIBREF16 for what concerns tweets containing links to 100+ US disinformation outlets. We filtered out articles associated to less than 50 tweets. The resulting dataset contains overall $\\sim $1.7 million tweets for mainstream news, collected in a period of three weeks (February 25th, 2019-March 18th, 2019), which are associated to 6,978 news articles, and $\\sim $1.6 million tweets for disinformation, collected in a period of three months (January 1st, 2019-March 18th, 2019) for sake of balance of the two classes, which hold 5,775 distinct articles. Diffusion censoring effects BIBREF14 were correctly taken into account in both collection procedures. We provide in Figure FIGREF4 the distribution of articles by source and political bias for both news domains.",
+          "Methodology ::: Italian dataset",
+          "For what concerns the Italian scenario we first collected tweets with the Streaming API in a 3-week period (April 19th, 2019-May 5th, 2019), filtering those containing URLs pointing to Italian official newspapers websites as described in BIBREF22; these correspond to the list provided by the association for the verification of newspaper circulation in Italy (Accertamenti Diffusione Stampa). We instead referred to the dataset provided by BIBREF23 to obtain a set of tweets, collected continuously since January 2019 using the same Twitter endpoint, which contain URLs to 60+ Italian disinformation websites. In order to get balanced classes (April 5th, 2019-May 5th, 2019), we retained data collected in a longer period w.r.t to mainstream news. In both cases we filtered out articles with less than 50 tweets; overall this dataset contains $\\sim $160k mainstream tweets, corresponding to 227 news articles, and $\\sim $100k disinformation tweets, corresponding to 237 news articles. We provide in Figure FIGREF5 the distribution of articles according to distinct sources for both news domains. As in the US dataset, we took into account censoring effects BIBREF14 by excluding tweets published before (left-censoring) or after two weeks (right-censoring) from the beginning of the collection process."
+        ],
+        "evidence_block_ids": [
+          19,
+          22
+        ],
+        "evidence_paragraph_ids": [
+          19,
+          22
+        ]
+      }
+    ],
+    "doc_uuid": "2002.12612",
+    "doc_path": "qasper://2002.12612",
+    "qasper_question_id": "ae90c5567746fe25af2fcea0cc5f355751e05c71",
+    "title": "A multi-layer approach to disinformation detection on Twitter",
+    "evidence_block_ids": [
+      19,
+      22
+    ],
+    "evidence_paragraph_ids": [
+      19,
+      22
+    ],
+    "output": "{\n  \"answer_short\": \"United States and Italy\",\n  \"answer_rationale\": \"Text 1 and Text 2 explicitly mention the use of two large-scale datasets corresponding to diffusion cascades of news shared in the United States and Italy. Text 5 also confirms that both datasets are analyzed in the work, and Text 10 refers to the Italian dataset, reinforcing the two-country context.\"\n}",
+    "retrieved_node_ids": [
+      2,
+      11,
+      55,
+      81,
+      23,
+      60,
+      6,
+      64,
+      77,
+      59
+    ],
+    "answer_short": "United States and Italy",
+    "answer_rationale": "Text 1 and Text 2 explicitly mention the use of two large-scale datasets corresponding to diffusion cascades of news shared in the United States and Italy. Text 5 also confirms that both datasets are analyzed in the work, and Text 10 refers to the Italian dataset, reinforcing the two-country context.",
+    "supporting_block_ids": [
+      2,
+      11,
+      55,
+      81,
+      23,
+      60,
+      6,
+      64,
+      77,
+      59
+    ]
+  },
+  {
+    "question": "What are the global network features which quantify different aspects of the sharing process?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          "Number of Strongly Connected Components (SCC)",
+          "Size of the Largest Strongly Connected Component (LSCC)",
+          "Number of Weakly Connected Components (WCC)",
+          "Size of the Largest Weakly Connected Component (LWCC)",
+          "Diameter of the Largest Weakly Connected Component (DWCC)",
+          "Average Clustering Coefficient (CC)",
+          "Main K-core Number (KC)",
+          "Density (d)"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "We used a set of global network indicators which allow us to encode each network layer by a tuple of features. Then we simply concatenated tuples as to represent each multi-layer network with a single feature vector. We used the following global network properties:",
+          "Number of Strongly Connected Components (SCC): a Strongly Connected Component of a directed graph is a maximal (sub)graph where for each pair of vertices $u,v$ there is a path in each direction ($u\\rightarrow v$, $v\\rightarrow u$).",
+          "Size of the Largest Strongly Connected Component (LSCC): the number of nodes in the largest strongly connected component of a given graph.",
+          "Number of Weakly Connected Components (WCC): a Weakly Connected Component of a directed graph is a maximal (sub)graph where for each pair of vertices $(u, v)$ there is a path $u \\leftrightarrow v$ ignoring edge directions.",
+          "Size of the Largest Weakly Connected Component (LWCC): the number of nodes in the largest weakly connected component of a given graph.",
+          "Diameter of the Largest Weakly Connected Component (DWCC): the largest distance (length of the shortest path) between two nodes in the (undirected version of) largest weakly connected component of a graph.",
+          "Average Clustering Coefficient (CC): the average of the local clustering coefficients of all nodes in a graph; the local clustering coefficient of a node quantifies how close its neighbours are to being a complete graph (or a clique). It is computed according to BIBREF28.",
+          "Main K-core Number (KC): a K-core BIBREF13 of a graph is a maximal sub-graph that contains nodes of internal degree $k$ or more; the main K-core number is the highest value of $k$ (in directed graphs the total degree is considered).",
+          "Density (d): the density for directed graphs is $d=\\frac{|E|}{|V||V-1|}$, where $|E|$ is the number of edges and $|N|$ is the number of vertices in the graph; the density equals 0 for a graph without edges and 1 for a complete graph.",
+          "Structural virality of the largest weakly connected component (SV): this measure is defined in BIBREF14 as the average distance between all pairs of nodes in a cascade tree or, equivalently, as the average depth of nodes, averaged over all nodes in turn acting as a root; for $|V| > 1$ vertices, $SV=\\frac{1}{|V||V-1|}\\sum _i\\sum _j d_{ij}$ where $d_{ij}$ denotes the length of the shortest path between nodes $i$ and $j$. This is equivalent to compute the Wiener's index BIBREF29 of the graph and multiply it by a factor $\\frac{1}{|V||V-1|}$. In our case we computed it for the undirected equivalent graph of the largest weakly connected component, setting it to 0 whenever $V=1$."
+        ],
+        "evidence_block_ids": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40
+        ],
+        "evidence_paragraph_ids": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40
+        ]
+      }
+    ],
+    "doc_uuid": "2002.12612",
+    "doc_path": "qasper://2002.12612",
+    "qasper_question_id": "d7644c674887ca9708eb12107acd964ae53b216d",
+    "title": "A multi-layer approach to disinformation detection on Twitter",
+    "evidence_block_ids": [
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "evidence_paragraph_ids": [
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "output": "{\n  \"answer_short\": \"network density, number of strong/weak connected components and diameter, main K-core number, structural virality\",\n  \"answer_rationale\": \"Text 2 explicitly lists global network properties used to quantify different aspects of the sharing process, including traditional indicators like network density, number of strong/weak connected components and diameter, and more elaborated ones such as main K-core number and structural virality.\"\n}",
+    "retrieved_node_ids": [
+      2,
+      10,
+      85,
+      27,
+      68,
+      31,
+      80,
+      26,
+      55,
+      9
+    ],
+    "answer_short": "network density, number of strong/weak connected components and diameter, main K-core number, structural virality",
+    "answer_rationale": "Text 2 explicitly lists global network properties used to quantify different aspects of the sharing process, including traditional indicators like network density, number of strong/weak connected components and diameter, and more elaborated ones such as main K-core number and structural virality.",
+    "supporting_block_ids": [
+      2,
+      10,
+      85,
+      27,
+      68,
+      31,
+      80,
+      26,
+      55,
+      9
+    ]
+  }
+]

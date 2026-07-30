@@ -1,0 +1,120 @@
+{
+  "question": "How do the backoff strategies work?",
+  "answer": [
+    {
+      "unanswerable": false,
+      "extractive_spans": [],
+      "free_form_answer": "In pass-through, the recognizer passes on the possibly misspelled word, backoff to neutral word backs off to a word with similar distribution across classes and backoff to background model backs off to a more generic word recognition model trained with larger and less specialized corpus.",
+      "yes_no": null,
+      "evidence": [
+        "While BIBREF7 demonstrate strong word recognition performance, a drawback of their evaluation setup is that they only attack and evaluate on the subset of words that are a part of their training vocabulary. In such a setting, the word recognition performance is unreasonably dependent on the chosen vocabulary size. In principle, one can design models to predict (correctly) only a few chosen words, and ignore the remaining majority and still reach 100% accuracy. For the adversarial setting, rare and unseen words in the wild are particularly critical, as they provide opportunities for the attackers. A reliable word-recognizer should handle these cases gracefully. Below, we explore different ways to back off when the ScRNN predicts UNK (a frequent outcome for rare and unseen words):",
+        "Pass-through: word-recognizer passes on the (possibly misspelled) word as is.",
+        "Backoff to neutral word: Alternatively, noting that passing $\\colorbox {gray!20}{\\texttt {UNK}}$ -predicted words through unchanged exposes the downstream model to potentially corrupted text, we consider backing off to a neutral word like `a', which has a similar distribution across classes.",
+        "Backoff to background model: We also consider falling back upon a more generic word recognition model trained upon a larger, less-specialized corpus whenever the foreground word recognition model predicts UNK. Figure 1 depicts this scenario pictorially."
+      ],
+      "evidence_block_ids": [
+        21,
+        22,
+        23,
+        24
+      ],
+      "evidence_paragraph_ids": [
+        21,
+        22,
+        23,
+        24
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [],
+      "free_form_answer": "Pass-through passes the possibly misspelled word as is, backoff to neutral word backs off to a word with similar distribution across classes and backoff to background model backs off to a more generic word recognition model trained with larger and less specialized corpus.",
+      "yes_no": null,
+      "evidence": [
+        "While BIBREF7 demonstrate strong word recognition performance, a drawback of their evaluation setup is that they only attack and evaluate on the subset of words that are a part of their training vocabulary. In such a setting, the word recognition performance is unreasonably dependent on the chosen vocabulary size. In principle, one can design models to predict (correctly) only a few chosen words, and ignore the remaining majority and still reach 100% accuracy. For the adversarial setting, rare and unseen words in the wild are particularly critical, as they provide opportunities for the attackers. A reliable word-recognizer should handle these cases gracefully. Below, we explore different ways to back off when the ScRNN predicts UNK (a frequent outcome for rare and unseen words):",
+        "Pass-through: word-recognizer passes on the (possibly misspelled) word as is.",
+        "Backoff to neutral word: Alternatively, noting that passing $\\colorbox {gray!20}{\\texttt {UNK}}$ -predicted words through unchanged exposes the downstream model to potentially corrupted text, we consider backing off to a neutral word like `a', which has a similar distribution across classes.",
+        "Backoff to background model: We also consider falling back upon a more generic word recognition model trained upon a larger, less-specialized corpus whenever the foreground word recognition model predicts UNK. Figure 1 depicts this scenario pictorially."
+      ],
+      "evidence_block_ids": [
+        21,
+        22,
+        23,
+        24
+      ],
+      "evidence_paragraph_ids": [
+        21,
+        22,
+        23,
+        24
+      ]
+    },
+    {
+      "unanswerable": false,
+      "extractive_spans": [],
+      "free_form_answer": "Backoff to \"a\" when an UNK-predicted word is encountered, backoff to a more generic word recognition model when the model predicts UNK",
+      "yes_no": null,
+      "evidence": [
+        "While BIBREF7 demonstrate strong word recognition performance, a drawback of their evaluation setup is that they only attack and evaluate on the subset of words that are a part of their training vocabulary. In such a setting, the word recognition performance is unreasonably dependent on the chosen vocabulary size. In principle, one can design models to predict (correctly) only a few chosen words, and ignore the remaining majority and still reach 100% accuracy. For the adversarial setting, rare and unseen words in the wild are particularly critical, as they provide opportunities for the attackers. A reliable word-recognizer should handle these cases gracefully. Below, we explore different ways to back off when the ScRNN predicts UNK (a frequent outcome for rare and unseen words):",
+        "Pass-through: word-recognizer passes on the (possibly misspelled) word as is.",
+        "Backoff to neutral word: Alternatively, noting that passing $\\colorbox {gray!20}{\\texttt {UNK}}$ -predicted words through unchanged exposes the downstream model to potentially corrupted text, we consider backing off to a neutral word like `a', which has a similar distribution across classes.",
+        "Backoff to background model: We also consider falling back upon a more generic word recognition model trained upon a larger, less-specialized corpus whenever the foreground word recognition model predicts UNK. Figure 1 depicts this scenario pictorially."
+      ],
+      "evidence_block_ids": [
+        21,
+        22,
+        23,
+        24
+      ],
+      "evidence_paragraph_ids": [
+        21,
+        22,
+        23,
+        24
+      ]
+    }
+  ],
+  "doc_uuid": "1905.11268",
+  "doc_path": "qasper://1905.11268",
+  "qasper_question_id": "ba539cab80d25c3e20f39644415ed48b9e4e4185",
+  "title": "Combating Adversarial Misspellings with Robust Word Recognition",
+  "evidence_block_ids": [
+    21,
+    22,
+    23,
+    24
+  ],
+  "evidence_paragraph_ids": [
+    21,
+    22,
+    23,
+    24
+  ],
+  "output": "{\n  \"answer_short\": \"Backoff strategies involve falling back to a neutral word, background model, or passing through UNK predictions to improve robustness and reduce sensitivity or error rate.\",\n  \"answer_rationale\": \"The backoff strategies are described in multiple documents: backoff to a neutral word (e.g., 'a') reduces sensitivity by returning a fixed word (Text 2, Text 7); backoff to a background model improves error rate by leveraging a larger corpus (Text 3, Text 8); and pass-through allows the model to handle UNK predictions directly (Text 6). These strategies aim to balance sensitivity and error rate for improved robustness (Text 1, Text 4, Text 10).\"\n}",
+  "retrieved_node_ids": [
+    63,
+    58,
+    24,
+    57,
+    23,
+    22,
+    62,
+    46,
+    19,
+    32
+  ],
+  "answer_short": "Backoff strategies involve falling back to a neutral word, background model, or passing through UNK predictions to improve robustness and reduce sensitivity or error rate.",
+  "answer_rationale": "The backoff strategies are described in multiple documents: backoff to a neutral word (e.g., 'a') reduces sensitivity by returning a fixed word (Text 2, Text 7); backoff to a background model improves error rate by leveraging a larger corpus (Text 3, Text 8); and pass-through allows the model to handle UNK predictions directly (Text 6). These strategies aim to balance sensitivity and error rate for improved robustness (Text 1, Text 4, Text 10).",
+  "supporting_block_ids": [
+    63,
+    58,
+    24,
+    57,
+    23,
+    22,
+    62,
+    46,
+    19,
+    32
+  ]
+}

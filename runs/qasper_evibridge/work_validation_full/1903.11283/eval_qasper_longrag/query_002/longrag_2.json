@@ -1,0 +1,88 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Method\n[source_id=10] As mentioned in the introduction, our approach is based on the idea of zero-shot MT BIBREF11 . There the authors show that after training a single model to translate from Portuguese to English as well as from English to Spanish, it can also translate Portuguese into Spanish, without seeing any translation examples for this language pair. We use the zero-shot effect to achieve monolingual translation by training the model on bilingual examples in both directions, and then doing translation into the same language as the input: illustrated on Figure FIGREF1 .\n[source_id=11] With regular sentences monolingual translation does not seem useful, as its behaviour mainly consists of copying. However, when the input sentence has characteristics unseen or rarely seen by the model at training time (like grammatical errors or different stylistic choices) – the decoder still generates the more regular version of the sentence (thus fixing the errors or adapting the style). Furthermore, in case of multilingual multi-domain NMT BIBREF12 , it is possible to switch between different domains or styles at runtime, thus performing “monolingual domain adaptation” or style transfer.\n[source_id=12] To create a multilingual multi-domain NMT system we use the self-attention architecture BIBREF13 . Instead of specifying the output language with a token inside the input sequence, as BIBREF11 did, we follow BIBREF12 and use word features (or factors). On one hand, this provides a stronger signal for the model, and on the other – allows for additional parametrization, which in our case is the text domain/style of the corpus.\n[source_id=13] As a result, a pre-processed English-Latvian training set sentence pair “Hello!”–“Sveiki!” looks like:\n[source_id=14] Here 2lv and 2os specify Latvian and OpenSubtitles as the output language and domain; the output text has no factors to predict. At application time we simply use the same input and output languages, for example the grammatically incorrect input “we is” looks like the following, after pre-processing:\n[source_id=15] The intuition behind our approach is that a multilingual shared encoder produces semantically rich latent sentence representations BIBREF14 , which provide a solid ground for the effective style transfer on top.\n[source_id=16] Next we present the technical details, the experiment setup and the data we used for training the model used in the experiments.",
+  "score": 5.140138029643985,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "child_qasper_evidence_texts": [
+    "As mentioned in the introduction, our approach is based on the idea of zero-shot MT BIBREF11 . There the authors show that after training a single model to translate from Portuguese to English as well as from English to Spanish, it can also translate Portuguese into Spanish, without seeing any translation examples for this language pair. We use the zero-shot effect to achieve monolingual translation by training the model on bilingual examples in both directions, and then doing translation into the same language as the input: illustrated on Figure FIGREF1 .",
+    "With regular sentences monolingual translation does not seem useful, as its behaviour mainly consists of copying. However, when the input sentence has characteristics unseen or rarely seen by the model at training time (like grammatical errors or different stylistic choices) – the decoder still generates the more regular version of the sentence (thus fixing the errors or adapting the style). Furthermore, in case of multilingual multi-domain NMT BIBREF12 , it is possible to switch between different domains or styles at runtime, thus performing “monolingual domain adaptation” or style transfer.",
+    "To create a multilingual multi-domain NMT system we use the self-attention architecture BIBREF13 . Instead of specifying the output language with a token inside the input sequence, as BIBREF11 did, we follow BIBREF12 and use word features (or factors). On one hand, this provides a stronger signal for the model, and on the other – allows for additional parametrization, which in our case is the text domain/style of the corpus.",
+    "As a result, a pre-processed English-Latvian training set sentence pair “Hello!”–“Sveiki!” looks like:",
+    "Here 2lv and 2os specify Latvian and OpenSubtitles as the output language and domain; the output text has no factors to predict. At application time we simply use the same input and output languages, for example the grammatically incorrect input “we is” looks like the following, after pre-processing:",
+    "The intuition behind our approach is that a multilingual shared encoder produces semantically rich latent sentence representations BIBREF14 , which provide a solid ground for the effective style transfer on top.",
+    "Next we present the technical details, the experiment setup and the data we used for training the model used in the experiments."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Method",
+    "Method",
+    "Method",
+    "Method",
+    "Method",
+    "Method",
+    "Method"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Method",
+      0
+    ],
+    [
+      "Method",
+      1
+    ],
+    [
+      "Method",
+      2
+    ],
+    [
+      "Method",
+      3
+    ],
+    [
+      "Method",
+      4
+    ],
+    [
+      "Method",
+      5
+    ],
+    [
+      "Method",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Method",
+  "section": "Method",
+  "title_path": "Method",
+  "block_type": "long_unit"
+}

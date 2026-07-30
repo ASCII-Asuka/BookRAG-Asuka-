@@ -1,0 +1,124 @@
+{
+  "id": "longrag_6",
+  "content": "[Section] Modality Attention\n[source_id=40] The modality attention module learns a unified representation space for multiple available modalities (words, characters, images, etc.), and produces a single vector representation with aggregated knowledge among multiple modalities, based on their weighted importance. We motivate this module from the following observations.\n[source_id=41] A majority of the previous literature combine the word and character-level contexts by simply concatenating the word and character embeddings at each decoding step, e.g. INLINEFORM0 in Eq. SECREF4 . However, this naive concatenation of two modalities (word and characters) results in inaccurate decoding, specifically for unknown word token embeddings (an all-zero vector INLINEFORM1 or a random vector INLINEFORM2 is assigned for any unknown token INLINEFORM3 , thus INLINEFORM4 or INLINEFORM5 ). While this concatenation approach does not cause significant errors for well-formatted text, we observe that it induces performance degradation for our social media post datasets which contain a significant number of missing tokens.\n[source_id=42] Similarly, naive merging of textual and visual information ( INLINEFORM0 ) yields suboptimal results as each modality is treated equally informative, whereas in our datasets some of the images may contain irrelevant contexts to textual modalities. Hence, ideally there needs a mechanism in which the model can effectively turn the switch on and off the modalities adaptive to each sample.\n[source_id=43] To this end, we propose a general modality attention module, which adaptively attenuates or emphasizes each modality as a whole at each decoding step INLINEFORM0 , and produces a soft-attended context vector INLINEFORM1 as an input token for the entity LSTM. [at(w),at(c),at(v)] = (Wm[xt(w); xt(c); xt(v)] + bm )\n[source_id=44] t(m) = (at(m))m'{w,c,v}(at(m')) m {w,c,v}\n[source_id=45] xt = m{w,c,v} t(m)xt(m)\n[source_id=46] where INLINEFORM0 is an attention vector at each decoding step INLINEFORM1 , and INLINEFORM2 is a final context vector at INLINEFORM3 that maximizes information gain for INLINEFORM4 . Note that the optimization of the objective function (Eq. SECREF4 ) with modality attention (Eq. SECREF5 ) requires each modality to have the same dimension ( INLINEFORM5 ), and that the transformation via INLINEFORM6 essentially enforces each modality to be mapped into the same unified subspace, where the weighted average of which encodes discrimitive features for recognition of named entities.\n[source_id=47] When visual context is not provided with each token (as in the traditional NER task), we can define the modality attention for word and character embeddings only in a similar way: [at(w),at(c)] = (Wm[xt(w); xt(c)] + bm )\n[source_id=48] t(m) = (at(m))m'{w,c}(at(m')) m {w,c}\n[source_id=49] xt = m{w,c} t(m)xt(m)\n[source_id=50] Note that while we apply this modality attention module to the Bi-LSTM+CRF architecture (Section SECREF4 ) for its empirical superiority, the module itself is flexible and thus can work with other NER architectures or for other multimodal applications.",
+  "score": 2.5496852773694414,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_6",
+  "child_source_node_ids": [
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50
+  ],
+  "child_qasper_evidence_texts": [
+    "The modality attention module learns a unified representation space for multiple available modalities (words, characters, images, etc.), and produces a single vector representation with aggregated knowledge among multiple modalities, based on their weighted importance. We motivate this module from the following observations.",
+    "A majority of the previous literature combine the word and character-level contexts by simply concatenating the word and character embeddings at each decoding step, e.g. INLINEFORM0 in Eq. SECREF4 . However, this naive concatenation of two modalities (word and characters) results in inaccurate decoding, specifically for unknown word token embeddings (an all-zero vector INLINEFORM1 or a random vector INLINEFORM2 is assigned for any unknown token INLINEFORM3 , thus INLINEFORM4 or INLINEFORM5 ). While this concatenation approach does not cause significant errors for well-formatted text, we observe that it induces performance degradation for our social media post datasets which contain a significant number of missing tokens.",
+    "Similarly, naive merging of textual and visual information ( INLINEFORM0 ) yields suboptimal results as each modality is treated equally informative, whereas in our datasets some of the images may contain irrelevant contexts to textual modalities. Hence, ideally there needs a mechanism in which the model can effectively turn the switch on and off the modalities adaptive to each sample.",
+    "To this end, we propose a general modality attention module, which adaptively attenuates or emphasizes each modality as a whole at each decoding step INLINEFORM0 , and produces a soft-attended context vector INLINEFORM1 as an input token for the entity LSTM. [at(w),at(c),at(v)] = (Wm[xt(w); xt(c); xt(v)] + bm )",
+    "t(m) = (at(m))m'{w,c,v}(at(m')) m {w,c,v}",
+    "xt = m{w,c,v} t(m)xt(m)",
+    "where INLINEFORM0 is an attention vector at each decoding step INLINEFORM1 , and INLINEFORM2 is a final context vector at INLINEFORM3 that maximizes information gain for INLINEFORM4 . Note that the optimization of the objective function (Eq. SECREF4 ) with modality attention (Eq. SECREF5 ) requires each modality to have the same dimension ( INLINEFORM5 ), and that the transformation via INLINEFORM6 essentially enforces each modality to be mapped into the same unified subspace, where the weighted average of which encodes discrimitive features for recognition of named entities.",
+    "When visual context is not provided with each token (as in the traditional NER task), we can define the modality attention for word and character embeddings only in a similar way: [at(w),at(c)] = (Wm[xt(w); xt(c)] + bm )",
+    "t(m) = (at(m))m'{w,c}(at(m')) m {w,c}",
+    "xt = m{w,c} t(m)xt(m)",
+    "Note that while we apply this modality attention module to the Bi-LSTM+CRF architecture (Section SECREF4 ) for its empirical superiority, the module itself is flexible and thus can work with other NER architectures or for other multimodal applications."
+  ],
+  "child_pages": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "child_sections": [
+    "Modality Attention",
+    "Modality Attention",
+    "Modality Attention",
+    "Modality Attention",
+    "Modality Attention",
+    "Modality Attention",
+    "Modality Attention",
+    "Modality Attention",
+    "Modality Attention",
+    "Modality Attention",
+    "Modality Attention"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Modality Attention",
+      0
+    ],
+    [
+      "Modality Attention",
+      1
+    ],
+    [
+      "Modality Attention",
+      2
+    ],
+    [
+      "Modality Attention",
+      3
+    ],
+    [
+      "Modality Attention",
+      4
+    ],
+    [
+      "Modality Attention",
+      5
+    ],
+    [
+      "Modality Attention",
+      6
+    ],
+    [
+      "Modality Attention",
+      7
+    ],
+    [
+      "Modality Attention",
+      8
+    ],
+    [
+      "Modality Attention",
+      9
+    ],
+    [
+      "Modality Attention",
+      10
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_6",
+  "section_id": "Modality Attention",
+  "section": "Modality Attention",
+  "title_path": "Modality Attention",
+  "block_type": "long_unit"
+}

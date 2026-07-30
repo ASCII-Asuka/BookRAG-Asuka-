@@ -1,0 +1,106 @@
+{
+  "id": "longrag_7",
+  "content": "[Section] Multiscale Graph Partitioning\n[source_id=31] The area of community detection encompasses a variety of graph partitioning approaches which aim to find `good' partitions into subgraphs (or communities) according to different cost functions, without imposing the number of communities a priori BIBREF31 . The notion of community thus depends on the choice of cost function. Commonly, communities are taken to be subgraphs whose nodes are connected strongly within the community with relatively weak inter-community edges. Such structural notion is related to balanced cuts. Other cost functions are posed in terms of transitions inside and outside of the communities, usually as one-step processes BIBREF4 . When transition paths of random walks of all lengths are considered, the concept of community becomes intrinsically multi-scale, i.e., different partitions can be found to be relevant at different time scales leading to a multi-level description dictated by the transition dynamics BIBREF9 , BIBREF32 , BIBREF10 . This leads to the framework of Markov Stability, a dynamics-based, multi-scale community detection methodology, which can be shown to recover seamlessly several well-known heuristics as particular cases BIBREF9 , BIBREF11 , BIBREF12 .\n[source_id=32] Here, we apply MS to find partitions of the similarity graph $A$ at different levels of resolution. The subgraphs detected correspond to clusters of documents with similar content. MS is an unsupervised community detection method that finds robust and stable partitions under the evolution of a continuous-time diffusion process without a priori choice of the number or type of communities or their organisation BIBREF9 , BIBREF32 , BIBREF10 , BIBREF33 The code for Markov Stability is open and accessible at https://github.com/michaelschaub/PartitionStability and http://wwwf.imperial.ac.uk/~mpbara/Partition_Stability/, last accessed on March 24, 2018. In simple terms, MS can be understood by analogy to a drop of ink diffusing on the graph under a diffusive Markov process. The ink diffuses homogeneously unless the graph has some intrinsic structural organisation, in which case the ink gets transiently contained, over particular time scales, within groups of nodes (i.e., subgraphs or communities). The existence of this transient containment signals the presence of a natural partition of the graph. As the process evolves, the ink diffuses out of those initial communities but might get transiently contained in other, larger subgraphs. By analysing this Markov dynamics over time, MS detects the structure of the graph across scales. The Markov time $t$ thus acts as a resolution parameter that allows us to extract robust partitions that persist over particular time scales, in an unsupervised manner.\n[source_id=33] Given the adjacency matrix $A_{N \\times N}$ of the graph obtained as described previously, let us define the diagonal matrix $D=\\text{diag}(\\mathbf {d})$ , where $\\mathbf {d}=A \\mathbf {1}$ is the degree vector. The random walk Laplacian matrix is defined as $L_\\text{RW}=I_N-D^{-1}A$ where $I_N$ is the identity matrix of size $N$ , and the transition matrix (or kernel) of the associated continuous-time Markov process is $P(t)=e^{-t L_\\text{RW}}, \\, t>0$ BIBREF10 . For each partition, a binary membership matrix $H_{N \\times C}$ maps the $N$ nodes into $C$ clusters. We can then define the $D=\\text{diag}(\\mathbf {d})$0 clustered autocovariance matrix:\n[source_id=34] $$R(t,H) = H^T[\\Pi P(t)-\\pi \\pi ^T]H $$   (Eq. 4)\n[source_id=35] where $\\pi $ is the steady-state distribution of the process and $\\Pi =\\text{diag}(\\pi )$ . The element $[R(t,H)]_{\\alpha \\beta }$ quantifies the probability that a random walker starting from community $\\alpha $ will end in community $\\beta $ at time $t$ , subtracting the probability that the same event occurs by chance at stationarity.\n[source_id=36] We then define our cost function measuring the goodness of a partition over time $t$ , termed the Markov Stability of partition $H$ :\n[source_id=37] $$r(t,H) = \\text{trace} \\left[R(t,H)\\right]. $$   (Eq. 5)\n[source_id=38] A partition $H$ that maximises $r(t,H)$ is comprised of communities that preserve the flow within themselves over time $t$ , since in that case the diagonal elements of $R(t,H)$ will be large and the off-diagonal elements will be small. For details, see BIBREF9 , BIBREF32 , BIBREF10 , BIBREF34 .\n[source_id=39] MS searches for partitions at each Markov time that maximise $r(t,H)$ . Although the maximisation of ( 5 ) is an NP-hard problem (hence with no guarantees for global optimality), there are efficient optimisation methods that work well in practice. Our implementation here uses the Louvain Algorithm BIBREF35 , BIBREF12 which is efficient and known to give good results when applied to benchmarks BIBREF36 . To obtain robust partitions, we run the Louvain algorithm 500 times with different initialisations at each Markov time and pick the best 50 with the highest Markov Stability value $r(t,H)$ . We then compute the variation of information BIBREF37 of this ensemble of solutions $VI(t)$ . as a measure of the reproducibility of the result under the optimisation. In addition, the relevant partitions are required to be persistent across time, as given by low values of the variation of information between optimised partitions across time $VI(t,t^{\\prime })$ . Robust partitions are thus indicated by Markov times where $VI(t)$ shows a dip and $VI(t,t^{\\prime })$ has an extended plateau, indicating consistent results from different Louvain runs and validity over extended scales BIBREF34 , BIBREF10 .",
+  "score": 2.9030010955770282,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_7",
+  "child_source_node_ids": [
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "child_qasper_evidence_texts": [
+    "The area of community detection encompasses a variety of graph partitioning approaches which aim to find `good' partitions into subgraphs (or communities) according to different cost functions, without imposing the number of communities a priori BIBREF31 . The notion of community thus depends on the choice of cost function. Commonly, communities are taken to be subgraphs whose nodes are connected strongly within the community with relatively weak inter-community edges. Such structural notion is related to balanced cuts. Other cost functions are posed in terms of transitions inside and outside of the communities, usually as one-step processes BIBREF4 . When transition paths of random walks of all lengths are considered, the concept of community becomes intrinsically multi-scale, i.e., different partitions can be found to be relevant at different time scales leading to a multi-level description dictated by the transition dynamics BIBREF9 , BIBREF32 , BIBREF10 . This leads to the framework of Markov Stability, a dynamics-based, multi-scale community detection methodology, which can be shown to recover seamlessly several well-known heuristics as particular cases BIBREF9 , BIBREF11 , BIBREF12 .",
+    "Here, we apply MS to find partitions of the similarity graph $A$ at different levels of resolution. The subgraphs detected correspond to clusters of documents with similar content. MS is an unsupervised community detection method that finds robust and stable partitions under the evolution of a continuous-time diffusion process without a priori choice of the number or type of communities or their organisation BIBREF9 , BIBREF32 , BIBREF10 , BIBREF33 The code for Markov Stability is open and accessible at https://github.com/michaelschaub/PartitionStability and http://wwwf.imperial.ac.uk/~mpbara/Partition_Stability/, last accessed on March 24, 2018. In simple terms, MS can be understood by analogy to a drop of ink diffusing on the graph under a diffusive Markov process. The ink diffuses homogeneously unless the graph has some intrinsic structural organisation, in which case the ink gets transiently contained, over particular time scales, within groups of nodes (i.e., subgraphs or communities). The existence of this transient containment signals the presence of a natural partition of the graph. As the process evolves, the ink diffuses out of those initial communities but might get transiently contained in other, larger subgraphs. By analysing this Markov dynamics over time, MS detects the structure of the graph across scales. The Markov time $t$ thus acts as a resolution parameter that allows us to extract robust partitions that persist over particular time scales, in an unsupervised manner.",
+    "Given the adjacency matrix $A_{N \\times N}$ of the graph obtained as described previously, let us define the diagonal matrix $D=\\text{diag}(\\mathbf {d})$ , where $\\mathbf {d}=A \\mathbf {1}$ is the degree vector. The random walk Laplacian matrix is defined as $L_\\text{RW}=I_N-D^{-1}A$ where $I_N$ is the identity matrix of size $N$ , and the transition matrix (or kernel) of the associated continuous-time Markov process is $P(t)=e^{-t L_\\text{RW}}, \\, t>0$ BIBREF10 . For each partition, a binary membership matrix $H_{N \\times C}$ maps the $N$ nodes into $C$ clusters. We can then define the $D=\\text{diag}(\\mathbf {d})$0 clustered autocovariance matrix:",
+    "$$R(t,H) = H^T[\\Pi P(t)-\\pi \\pi ^T]H $$   (Eq. 4)",
+    "where $\\pi $ is the steady-state distribution of the process and $\\Pi =\\text{diag}(\\pi )$ . The element $[R(t,H)]_{\\alpha \\beta }$ quantifies the probability that a random walker starting from community $\\alpha $ will end in community $\\beta $ at time $t$ , subtracting the probability that the same event occurs by chance at stationarity.",
+    "We then define our cost function measuring the goodness of a partition over time $t$ , termed the Markov Stability of partition $H$ :",
+    "$$r(t,H) = \\text{trace} \\left[R(t,H)\\right]. $$   (Eq. 5)",
+    "A partition $H$ that maximises $r(t,H)$ is comprised of communities that preserve the flow within themselves over time $t$ , since in that case the diagonal elements of $R(t,H)$ will be large and the off-diagonal elements will be small. For details, see BIBREF9 , BIBREF32 , BIBREF10 , BIBREF34 .",
+    "MS searches for partitions at each Markov time that maximise $r(t,H)$ . Although the maximisation of ( 5 ) is an NP-hard problem (hence with no guarantees for global optimality), there are efficient optimisation methods that work well in practice. Our implementation here uses the Louvain Algorithm BIBREF35 , BIBREF12 which is efficient and known to give good results when applied to benchmarks BIBREF36 . To obtain robust partitions, we run the Louvain algorithm 500 times with different initialisations at each Markov time and pick the best 50 with the highest Markov Stability value $r(t,H)$ . We then compute the variation of information BIBREF37 of this ensemble of solutions $VI(t)$ . as a measure of the reproducibility of the result under the optimisation. In addition, the relevant partitions are required to be persistent across time, as given by low values of the variation of information between optimised partitions across time $VI(t,t^{\\prime })$ . Robust partitions are thus indicated by Markov times where $VI(t)$ shows a dip and $VI(t,t^{\\prime })$ has an extended plateau, indicating consistent results from different Louvain runs and validity over extended scales BIBREF34 , BIBREF10 ."
+  ],
+  "child_pages": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+  ],
+  "child_sections": [
+    "Multiscale Graph Partitioning",
+    "Multiscale Graph Partitioning",
+    "Multiscale Graph Partitioning",
+    "Multiscale Graph Partitioning",
+    "Multiscale Graph Partitioning",
+    "Multiscale Graph Partitioning",
+    "Multiscale Graph Partitioning",
+    "Multiscale Graph Partitioning",
+    "Multiscale Graph Partitioning"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Multiscale Graph Partitioning",
+      0
+    ],
+    [
+      "Multiscale Graph Partitioning",
+      1
+    ],
+    [
+      "Multiscale Graph Partitioning",
+      2
+    ],
+    [
+      "Multiscale Graph Partitioning",
+      3
+    ],
+    [
+      "Multiscale Graph Partitioning",
+      4
+    ],
+    [
+      "Multiscale Graph Partitioning",
+      5
+    ],
+    [
+      "Multiscale Graph Partitioning",
+      6
+    ],
+    [
+      "Multiscale Graph Partitioning",
+      7
+    ],
+    [
+      "Multiscale Graph Partitioning",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_7",
+  "section_id": "Multiscale Graph Partitioning",
+  "section": "Multiscale Graph Partitioning",
+  "title_path": "Multiscale Graph Partitioning",
+  "block_type": "long_unit"
+}

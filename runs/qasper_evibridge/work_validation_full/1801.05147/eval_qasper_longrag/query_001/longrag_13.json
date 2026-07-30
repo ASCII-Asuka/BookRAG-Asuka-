@@ -1,0 +1,133 @@
+{
+  "id": "longrag_13",
+  "content": "[Section] Adversarial Training\n[source_id=69] The training objective with adversarial neural network is different from the baseline model, as it includes the extra worker discriminator. Thus the new objective includes two parts, one being the negative log-likelihood from NER which is the same as the baseline, and the other being the negative the log-likelihood from the worker discriminator.\n[source_id=70] In order to obtain the negative log-likelihood of the worker discriminator, we use softmax to compute the probability of the actual worker $\\bar{z}$ as well, which is defined by:\n[source_id=71] $$p(\\bar{z}|\\mathbf {X}, \\mathbf {\\bar{y}}) = \\frac{\\exp (\\mathbf {o}^{\\text{worker}}_{\\bar{z}})}{\\sum _{z} \\exp (\\mathbf {o}^{\\text{worker}}_z)},$$   (Eq. 22)\n[source_id=72] where $z$ should enumerate all workers.\n[source_id=73] Based on the above definition of probability, our new objective is defined as follows:\n[source_id=74] $$\\begin{split}\n\\text{R}(\\Theta , \\Theta ^{\\prime }, \\mathbf {X}, \\mathbf {\\bar{y}}, \\bar{z}) &= \\text{loss}(\\Theta , \\mathbf {X}, \\mathbf {\\bar{y}}) - \\text{loss}(\\Theta , \\Theta ^{\\prime }, \\mathbf {X}) \\\\\n\\text{~~~~~~} &= -\\log p(\\mathbf {\\bar{y}}|\\mathbf {X}) + \\log p(\\bar{z}|\\mathbf {X}, \\mathbf {\\bar{y}}),\n\\end{split}$$   (Eq. 23)\n[source_id=75] where $\\Theta $ is the set of all model parameters related to NER, and $\\Theta ^{\\prime }$ is the set of the remaining parameters which are only related to the worker discriminator, $\\mathbf {X}$ , $\\mathbf {\\bar{y}}$ and $\\bar{z}$ are the input sentence, the crowd-annotated NE labels and the corresponding annotator for this annotation, respectively. It is worth noting that the parameters of the common Bi-LSTM are included in the set of $\\Theta $ by definition.\n[source_id=76] In particular, our goal is not to simply minimize the new objective. Actually, we aim for a saddle point, finding the parameters $\\Theta $ and $\\Theta ^{\\prime }$ satisfying the following conditions:\n[source_id=77] $$\\begin{split}\n\\hat{\\Theta } &= \\mathop {arg~min}_{\\Theta }\\text{R}(\\Theta , \\Theta ^{\\prime }, \\mathbf {X}, \\mathbf {\\bar{y}}, \\bar{z}) \\\\\n\\hat{\\Theta }^{\\prime } &= \\mathop {arg~max}_{\\Theta ^{\\prime }}\\text{R}(\\hat{\\Theta }, \\Theta ^{\\prime }, \\mathbf {X}, \\mathbf {\\bar{y}}, \\bar{z}) \\\\\n\\end{split}$$   (Eq. 24)\n[source_id=78] where the first equation aims to find one $\\Theta $ that minimizes our new objective $\\text{R}(\\cdot )$ , and the second equation aims to find one $\\Theta ^{\\prime }$ maximizing the same objective.\n[source_id=79] Intuitively, the first equation of Formula 24 tries to minimize the NER loss, but at the same time maximize the worker discriminator loss by the shared parameters of the common Bi-LSTM. Thus the resulting features of common Bi-LSTM actually attempt to hurt the worker discriminator, which makes these features worker independent since they are unable to distinguish different workers. The second equation tries to minimize the worker discriminator loss by its own parameter $\\Theta ^{\\prime }$ .\n[source_id=80] We use the standard back-propagation method to train the model parameters, the same as the baseline model. In order to incorporate the term of the argmax part of Formula 24 , we follow the previous work of adversarial training BIBREF13 , BIBREF15 , BIBREF17 , by introducing a gradient reverse layer between the common Bi-LSTM and the CNN module, whose forward does nothing but the backward simply negates the gradients.",
+  "score": 1.987927977121893,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_13",
+  "child_source_node_ids": [
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80
+  ],
+  "child_qasper_evidence_texts": [
+    "The training objective with adversarial neural network is different from the baseline model, as it includes the extra worker discriminator. Thus the new objective includes two parts, one being the negative log-likelihood from NER which is the same as the baseline, and the other being the negative the log-likelihood from the worker discriminator.",
+    "In order to obtain the negative log-likelihood of the worker discriminator, we use softmax to compute the probability of the actual worker $\\bar{z}$ as well, which is defined by:",
+    "$$p(\\bar{z}|\\mathbf {X}, \\mathbf {\\bar{y}}) = \\frac{\\exp (\\mathbf {o}^{\\text{worker}}_{\\bar{z}})}{\\sum _{z} \\exp (\\mathbf {o}^{\\text{worker}}_z)},$$   (Eq. 22)",
+    "where $z$ should enumerate all workers.",
+    "Based on the above definition of probability, our new objective is defined as follows:",
+    "$$\\begin{split}\n\\text{R}(\\Theta , \\Theta ^{\\prime }, \\mathbf {X}, \\mathbf {\\bar{y}}, \\bar{z}) &= \\text{loss}(\\Theta , \\mathbf {X}, \\mathbf {\\bar{y}}) - \\text{loss}(\\Theta , \\Theta ^{\\prime }, \\mathbf {X}) \\\\\n\\text{~~~~~~} &= -\\log p(\\mathbf {\\bar{y}}|\\mathbf {X}) + \\log p(\\bar{z}|\\mathbf {X}, \\mathbf {\\bar{y}}),\n\\end{split}$$   (Eq. 23)",
+    "where $\\Theta $ is the set of all model parameters related to NER, and $\\Theta ^{\\prime }$ is the set of the remaining parameters which are only related to the worker discriminator, $\\mathbf {X}$ , $\\mathbf {\\bar{y}}$ and $\\bar{z}$ are the input sentence, the crowd-annotated NE labels and the corresponding annotator for this annotation, respectively. It is worth noting that the parameters of the common Bi-LSTM are included in the set of $\\Theta $ by definition.",
+    "In particular, our goal is not to simply minimize the new objective. Actually, we aim for a saddle point, finding the parameters $\\Theta $ and $\\Theta ^{\\prime }$ satisfying the following conditions:",
+    "$$\\begin{split}\n\\hat{\\Theta } &= \\mathop {arg~min}_{\\Theta }\\text{R}(\\Theta , \\Theta ^{\\prime }, \\mathbf {X}, \\mathbf {\\bar{y}}, \\bar{z}) \\\\\n\\hat{\\Theta }^{\\prime } &= \\mathop {arg~max}_{\\Theta ^{\\prime }}\\text{R}(\\hat{\\Theta }, \\Theta ^{\\prime }, \\mathbf {X}, \\mathbf {\\bar{y}}, \\bar{z}) \\\\\n\\end{split}$$   (Eq. 24)",
+    "where the first equation aims to find one $\\Theta $ that minimizes our new objective $\\text{R}(\\cdot )$ , and the second equation aims to find one $\\Theta ^{\\prime }$ maximizing the same objective.",
+    "Intuitively, the first equation of Formula 24 tries to minimize the NER loss, but at the same time maximize the worker discriminator loss by the shared parameters of the common Bi-LSTM. Thus the resulting features of common Bi-LSTM actually attempt to hurt the worker discriminator, which makes these features worker independent since they are unable to distinguish different workers. The second equation tries to minimize the worker discriminator loss by its own parameter $\\Theta ^{\\prime }$ .",
+    "We use the standard back-propagation method to train the model parameters, the same as the baseline model. In order to incorporate the term of the argmax part of Formula 24 , we follow the previous work of adversarial training BIBREF13 , BIBREF15 , BIBREF17 , by introducing a gradient reverse layer between the common Bi-LSTM and the CNN module, whose forward does nothing but the backward simply negates the gradients."
+  ],
+  "child_pages": [
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13,
+    13
+  ],
+  "child_sections": [
+    "Adversarial Training",
+    "Adversarial Training",
+    "Adversarial Training",
+    "Adversarial Training",
+    "Adversarial Training",
+    "Adversarial Training",
+    "Adversarial Training",
+    "Adversarial Training",
+    "Adversarial Training",
+    "Adversarial Training",
+    "Adversarial Training",
+    "Adversarial Training"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Adversarial Training",
+      0
+    ],
+    [
+      "Adversarial Training",
+      1
+    ],
+    [
+      "Adversarial Training",
+      2
+    ],
+    [
+      "Adversarial Training",
+      3
+    ],
+    [
+      "Adversarial Training",
+      4
+    ],
+    [
+      "Adversarial Training",
+      5
+    ],
+    [
+      "Adversarial Training",
+      6
+    ],
+    [
+      "Adversarial Training",
+      7
+    ],
+    [
+      "Adversarial Training",
+      8
+    ],
+    [
+      "Adversarial Training",
+      9
+    ],
+    [
+      "Adversarial Training",
+      10
+    ],
+    [
+      "Adversarial Training",
+      11
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_13",
+  "section_id": "Adversarial Training",
+  "section": "Adversarial Training",
+  "title_path": "Adversarial Training",
+  "block_type": "long_unit"
+}

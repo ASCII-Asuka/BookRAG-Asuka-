@@ -1,0 +1,97 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] The RUN Task and Dataset\n[source_id=10] In this work we address the task of following a sequence of NL navigation instructions given in colloquial language based on a dense urban map.\n[source_id=11] The input to the RUN task we define is as follows: (i) a map with rich details divided into tiles, (ii) an explicit starting point, and (iii) a sequence of navigation instructions we henceforth refer to as a navigation paragraph . We refer to each sentence as an instruction, and we assume that following the individual instructions in the paragraph one by one will lead the agent to the intended end-point. The output of RUN is the entire route described by the paragraph, i.e., all coordinates up to and including its end-point, pinned on the map.\n[source_id=12] In order to address RUN we designed and collected a novel dataset, henceforth the RUN dataset, which is based on OpenStreetMap (OSM). The map contains rich layers and an abundance of entities of different types. Each entity is complex and can contain (at least) four labels: name, type, is_building=y/n, and house number. An entity can spread over several tiles. As the maps do not overlap, only very few entities are shared among them. The RUN dataset aligns NL navigation instructions to coordinates of their corresponding route on the OSM map.\n[source_id=13] We collected the RUN dataset using Amazon Mechanical Turk (MTurk), allowing only native English speakers to perform the task. We collected instructions based on three different areas, all in urban, dense parts of Manhattan. The size of each map is $0.5$ $km^{2}$. The dataset contains 2515 navigation instructions (equal to 389 complete paragraphs) paired with their routes. The paragraphs are crowd-sourced from 389 different instructors, of which style and language vary BIBREF18.\n[source_id=14] Our data collection protocol is as follows. First, we asked the MTurk worker to describe a route between two landmarks of their choice. After having described the complete route in NL, the same worker was instructed to pin their described route on the map. This was moderated by showing them the paragraph they narrated, sentence by sentence, so that they have to pin on the map each instruction separately. A worker could only pin routes on street paths. Furthermore, on every turn the worker had to mark an explicit point on the map which marked the direction in which the worker needs to move next. An example of simple individual instructions and their respective route is given in Figure FIGREF5.\n[source_id=15] We then asked a disjoint set of workers (testers) to verify the routes by displaying the starting point of the route, and displaying the instructions in the paragraph sentence-by-sentence. The tester had to pin the final point of the sentence. Each route was tested by three different workers. Testing the routes allowed us to find incorrect routes (paragraphs that don't match an actual path) and discard them. They also provide an estimate of the human performance on the task (Reported in Section SECREF4, Experiments).\n[source_id=16] Having collected the data, we divided the map into tiles, each tile is 11.132 m X 11.132 m. Each tile contains the labels of the entities it displays on the map, such as restaurants, traffic-lights, etc., and the walkable streets in it. Each walkable street is composed of an ordered list of tiles, including a starting tile and an end tile. Table TABREF1 shows statistics over the dataset. Table TABREF2 characterize linguistic phenomena in RUN, categorized according to the catalogue of BIBREF16. Table TABREF3 shows a quantitative comparison of the RUN dataset to previous datasets of map-based navigation. The table underscores some key features of RUN, relative to the previous tasks. RUN contains longer paths and many more entities that are unique, thus appearing for the first time during testing; the size of the map is on a different scale than previous tasks, thus, amplifying the grounding challenge; the number of tiles moved is accordingly larger than in previous datasets, hence increasing the vulnerability to error propagation.\n[source_id=17] Overall, RUN contains challenging linguistic phenomena, at least as in previous work, and a rich environment, with more realistic paths than in previous tasks.",
+  "score": 0.9572534531998016,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "child_qasper_evidence_texts": [
+    "In this work we address the task of following a sequence of NL navigation instructions given in colloquial language based on a dense urban map.",
+    "The input to the RUN task we define is as follows: (i) a map with rich details divided into tiles, (ii) an explicit starting point, and (iii) a sequence of navigation instructions we henceforth refer to as a navigation paragraph . We refer to each sentence as an instruction, and we assume that following the individual instructions in the paragraph one by one will lead the agent to the intended end-point. The output of RUN is the entire route described by the paragraph, i.e., all coordinates up to and including its end-point, pinned on the map.",
+    "In order to address RUN we designed and collected a novel dataset, henceforth the RUN dataset, which is based on OpenStreetMap (OSM). The map contains rich layers and an abundance of entities of different types. Each entity is complex and can contain (at least) four labels: name, type, is_building=y/n, and house number. An entity can spread over several tiles. As the maps do not overlap, only very few entities are shared among them. The RUN dataset aligns NL navigation instructions to coordinates of their corresponding route on the OSM map.",
+    "We collected the RUN dataset using Amazon Mechanical Turk (MTurk), allowing only native English speakers to perform the task. We collected instructions based on three different areas, all in urban, dense parts of Manhattan. The size of each map is $0.5$ $km^{2}$. The dataset contains 2515 navigation instructions (equal to 389 complete paragraphs) paired with their routes. The paragraphs are crowd-sourced from 389 different instructors, of which style and language vary BIBREF18.",
+    "Our data collection protocol is as follows. First, we asked the MTurk worker to describe a route between two landmarks of their choice. After having described the complete route in NL, the same worker was instructed to pin their described route on the map. This was moderated by showing them the paragraph they narrated, sentence by sentence, so that they have to pin on the map each instruction separately. A worker could only pin routes on street paths. Furthermore, on every turn the worker had to mark an explicit point on the map which marked the direction in which the worker needs to move next. An example of simple individual instructions and their respective route is given in Figure FIGREF5.",
+    "We then asked a disjoint set of workers (testers) to verify the routes by displaying the starting point of the route, and displaying the instructions in the paragraph sentence-by-sentence. The tester had to pin the final point of the sentence. Each route was tested by three different workers. Testing the routes allowed us to find incorrect routes (paragraphs that don't match an actual path) and discard them. They also provide an estimate of the human performance on the task (Reported in Section SECREF4, Experiments).",
+    "Having collected the data, we divided the map into tiles, each tile is 11.132 m X 11.132 m. Each tile contains the labels of the entities it displays on the map, such as restaurants, traffic-lights, etc., and the walkable streets in it. Each walkable street is composed of an ordered list of tiles, including a starting tile and an end tile. Table TABREF1 shows statistics over the dataset. Table TABREF2 characterize linguistic phenomena in RUN, categorized according to the catalogue of BIBREF16. Table TABREF3 shows a quantitative comparison of the RUN dataset to previous datasets of map-based navigation. The table underscores some key features of RUN, relative to the previous tasks. RUN contains longer paths and many more entities that are unique, thus appearing for the first time during testing; the size of the map is on a different scale than previous tasks, thus, amplifying the grounding challenge; the number of tiles moved is accordingly larger than in previous datasets, hence increasing the vulnerability to error propagation.",
+    "Overall, RUN contains challenging linguistic phenomena, at least as in previous work, and a rich environment, with more realistic paths than in previous tasks."
+  ],
+  "child_pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "The RUN Task and Dataset",
+    "The RUN Task and Dataset",
+    "The RUN Task and Dataset",
+    "The RUN Task and Dataset",
+    "The RUN Task and Dataset",
+    "The RUN Task and Dataset",
+    "The RUN Task and Dataset",
+    "The RUN Task and Dataset"
+  ],
+  "child_hotpot_facts": [
+    [
+      "The RUN Task and Dataset",
+      0
+    ],
+    [
+      "The RUN Task and Dataset",
+      1
+    ],
+    [
+      "The RUN Task and Dataset",
+      2
+    ],
+    [
+      "The RUN Task and Dataset",
+      3
+    ],
+    [
+      "The RUN Task and Dataset",
+      4
+    ],
+    [
+      "The RUN Task and Dataset",
+      5
+    ],
+    [
+      "The RUN Task and Dataset",
+      6
+    ],
+    [
+      "The RUN Task and Dataset",
+      7
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "The RUN Task and Dataset",
+  "section": "The RUN Task and Dataset",
+  "title_path": "The RUN Task and Dataset",
+  "block_type": "long_unit"
+}

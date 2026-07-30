@@ -1,0 +1,70 @@
+{
+  "id": "longrag_9",
+  "content": "[Section] Learning Data Manipulation ::: Instantiations: Augmentation & Weighting ::: Fine-tuning Text Augmentation\n[source_id=42] The recent work BIBREF18, BIBREF19 developed a novel contextual augmentation approach for text data, in which a powerful pretrained language model (LM), such as BERT BIBREF8, is used to generate substitutions of words in a sentence. Specifically, given an observed sentence $\\mathbf {x}^*$, the method first randomly masks out a few words. The masked sentence is then fed to BERT which fills the masked positions with new words. To preserve the original sentence class, the BERT LM is retrofitted as a label-conditional model, and trained on the task training examples. The resulting model is then fixed and used to augment data during the training of target model. We denote the augmentation distribution as $g_{\\phi _0}(\\mathbf {x}|\\mathbf {x}^*, \\mathbf {y}^*)$, where $\\mathbf {\\phi }_0$ is the fixed BERT LM parameters.\n[source_id=43] The above process has two drawbacks. First, the LM is fixed after fitting to the task data. In the subsequent phase of training the target model, the LM augments data without knowing the state of the target model, which can lead to sub-optimal results. Second, in the cases where the task dataset is small, the LM can be insufficiently trained for preserving the labels faithfully, resulting in noisy augmented samples.\n[source_id=44] To address the difficulties, it is beneficial to apply the proposed learning data manipulation algorithm to additionally fine-tune the LM jointly with target model training. As discussed in section SECREF4, this reduces to properly parameterizing the data reward function:\n[source_id=45] That is, a sample $(\\mathbf {x}, y)$ receives a unit reward when $y$ is the true label and $\\mathbf {x}$ is the augmented sample by the LM (instead of the exact original data $\\mathbf {x}^*$). Plugging the reward into Eq.(DISPLAY_FORM13), we obtain the data-augmented update for the model parameters:\n[source_id=46] That is, we pick an example from the training set, and use the LM to create augmented samples, which are then used to update the target model. Regarding the update of augmentation parameters $\\mathbf {\\phi }$ (Eq.DISPLAY_FORM14), since text samples are discrete, to enable efficient gradient propagation through $\\mathbf {\\theta }^{\\prime }$ to $\\mathbf {\\phi }$, we use a gumbel-softmax approximation BIBREF39 to $\\mathbf {x}$ when sampling substitution words from the LM.",
+  "score": 6.041301643801448,
+  "rank": 8,
+  "source": "longrag",
+  "node_id": "longrag_9",
+  "child_source_node_ids": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "child_qasper_evidence_texts": [
+    "The recent work BIBREF18, BIBREF19 developed a novel contextual augmentation approach for text data, in which a powerful pretrained language model (LM), such as BERT BIBREF8, is used to generate substitutions of words in a sentence. Specifically, given an observed sentence $\\mathbf {x}^*$, the method first randomly masks out a few words. The masked sentence is then fed to BERT which fills the masked positions with new words. To preserve the original sentence class, the BERT LM is retrofitted as a label-conditional model, and trained on the task training examples. The resulting model is then fixed and used to augment data during the training of target model. We denote the augmentation distribution as $g_{\\phi _0}(\\mathbf {x}|\\mathbf {x}^*, \\mathbf {y}^*)$, where $\\mathbf {\\phi }_0$ is the fixed BERT LM parameters.",
+    "The above process has two drawbacks. First, the LM is fixed after fitting to the task data. In the subsequent phase of training the target model, the LM augments data without knowing the state of the target model, which can lead to sub-optimal results. Second, in the cases where the task dataset is small, the LM can be insufficiently trained for preserving the labels faithfully, resulting in noisy augmented samples.",
+    "To address the difficulties, it is beneficial to apply the proposed learning data manipulation algorithm to additionally fine-tune the LM jointly with target model training. As discussed in section SECREF4, this reduces to properly parameterizing the data reward function:",
+    "That is, a sample $(\\mathbf {x}, y)$ receives a unit reward when $y$ is the true label and $\\mathbf {x}$ is the augmented sample by the LM (instead of the exact original data $\\mathbf {x}^*$). Plugging the reward into Eq.(DISPLAY_FORM13), we obtain the data-augmented update for the model parameters:",
+    "That is, we pick an example from the training set, and use the LM to create augmented samples, which are then used to update the target model. Regarding the update of augmentation parameters $\\mathbf {\\phi }$ (Eq.DISPLAY_FORM14), since text samples are discrete, to enable efficient gradient propagation through $\\mathbf {\\theta }^{\\prime }$ to $\\mathbf {\\phi }$, we use a gumbel-softmax approximation BIBREF39 to $\\mathbf {x}$ when sampling substitution words from the LM."
+  ],
+  "child_pages": [
+    9,
+    9,
+    9,
+    9,
+    9
+  ],
+  "child_sections": [
+    "Learning Data Manipulation ::: Instantiations: Augmentation & Weighting ::: Fine-tuning Text Augmentation",
+    "Learning Data Manipulation ::: Instantiations: Augmentation & Weighting ::: Fine-tuning Text Augmentation",
+    "Learning Data Manipulation ::: Instantiations: Augmentation & Weighting ::: Fine-tuning Text Augmentation",
+    "Learning Data Manipulation ::: Instantiations: Augmentation & Weighting ::: Fine-tuning Text Augmentation",
+    "Learning Data Manipulation ::: Instantiations: Augmentation & Weighting ::: Fine-tuning Text Augmentation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Learning Data Manipulation ::: Instantiations: Augmentation & Weighting ::: Fine-tuning Text Augmentation",
+      0
+    ],
+    [
+      "Learning Data Manipulation ::: Instantiations: Augmentation & Weighting ::: Fine-tuning Text Augmentation",
+      1
+    ],
+    [
+      "Learning Data Manipulation ::: Instantiations: Augmentation & Weighting ::: Fine-tuning Text Augmentation",
+      2
+    ],
+    [
+      "Learning Data Manipulation ::: Instantiations: Augmentation & Weighting ::: Fine-tuning Text Augmentation",
+      3
+    ],
+    [
+      "Learning Data Manipulation ::: Instantiations: Augmentation & Weighting ::: Fine-tuning Text Augmentation",
+      4
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_9",
+  "section_id": "Learning Data Manipulation ::: Instantiations: Augmentation & Weighting ::: Fine-tuning Text Augmentation",
+  "section": "Learning Data Manipulation ::: Instantiations: Augmentation & Weighting ::: Fine-tuning Text Augmentation",
+  "title_path": "Learning Data Manipulation ::: Instantiations: Augmentation & Weighting ::: Fine-tuning Text Augmentation",
+  "block_type": "long_unit"
+}

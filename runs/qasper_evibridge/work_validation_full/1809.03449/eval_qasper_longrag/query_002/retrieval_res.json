@@ -1,0 +1,430 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] To bridge the gap between Machine Reading Comprehension (MRC) models and human beings, which is mainly reflected in the hunger for data and the robustness to noise, in this paper, we explore how to integrate the neural networks of MRC models with the general knowledge of human beings. On the one hand, we propose a data enrichment method, which uses WordNet to extract inter-word semantic connections as general knowledge from each given passage-question pair. On the other hand, we propose an end-to-end MRC model named as Knowledge Aided Reader (KAR), which explicitly uses the above extracted general knowledge to assist its attention mechanisms. Based on the data enrichment method, KAR is comparable in performance with the state-of-the-art MRC models, and significantly more robust to noise than them. When only a subset (20%-80%) of the training examples are available, KAR outperforms the state-of-the-art MRC models by a large margin, and is still reasonably robust to noise.",
+      "score": 8.150492313526911,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "To bridge the gap between Machine Reading Comprehension (MRC) models and human beings, which is mainly reflected in the hunger for data and the robustness to noise, in this paper, we explore how to integrate the neural networks of MRC models with the general knowledge of human beings. On the one hand, we propose a data enrichment method, which uses WordNet to extract inter-word semantic connections as general knowledge from each given passage-question pair. On the other hand, we propose an end-to-end MRC model named as Knowledge Aided Reader (KAR), which explicitly uses the above extracted general knowledge to assist its attention mechanisms. Based on the data enrichment method, KAR is comparable in performance with the state-of-the-art MRC models, and significantly more robust to noise than them. When only a subset (20%-80%) of the training examples are available, KAR outperforms the state-of-the-art MRC models by a large margin, and is still reasonably robust to noise."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_13",
+      "content": "[Section] Model Comparison in both Performance and the Robustness to Noise\n[source_id=49] We compare KAR with other MRC models in both performance and the robustness to noise. Specifically, we not only evaluate the performance of KAR on the development set and the test set, but also do this on the adversarial sets. As for the comparative objects, we only consider the single MRC models that rank in the top 20 on the SQuAD 1.1 leader board and have reported their performance on the adversarial sets. There are totally five such comparative objects, which can be considered as representatives of the state-of-the-art MRC models. As shown in Table TABREF12 , on the development set and the test set, the performance of KAR is on par with that of the state-of-the-art MRC models; on the adversarial sets, KAR outperforms the state-of-the-art MRC models by a large margin. That is to say, KAR is comparable in performance with the state-of-the-art MRC models, and significantly more robust to noise than them.\n[source_id=50] To verify the effectiveness of general knowledge, we first study the relationship between the amount of general knowledge and the performance of KAR. As shown in Table TABREF13 , by increasing INLINEFORM0 from 0 to 5 in the data enrichment method, the amount of general knowledge rises monotonically, but the performance of KAR first rises until INLINEFORM1 reaches 3 and then drops down. Then we conduct an ablation study by replacing the knowledge aided attention mechanisms with the mutual attention proposed by BIBREF3 and the self attention proposed by BIBREF4 separately, and find that the F1 score of KAR drops by INLINEFORM2 on the development set, INLINEFORM3 on AddSent, and INLINEFORM4 on AddOneSent. Finally we find that after only one epoch of training, KAR already achieves an EM of INLINEFORM5 and an F1 score of INLINEFORM6 on the development set, which is even better than the final performance of several strong baselines, such as DCN (EM / F1: INLINEFORM7 / INLINEFORM8 ) BIBREF36 and BiDAF (EM / F1: INLINEFORM9 / INLINEFORM10 ) BIBREF3 . The above empirical findings imply that general knowledge indeed plays an effective role in KAR.\n[source_id=51] To demonstrate the advantage of our explicit way to utilize general knowledge over the existing implicit way, we compare the performance of KAR with that reported by BIBREF10 , which used an encoding-based method to utilize the general knowledge dynamically retrieved from Wikipedia and ConceptNet. Since their best model only achieved an EM of INLINEFORM0 and an F1 score of INLINEFORM1 on the development set, which is much lower than the performance of KAR, we have good reason to believe that our explicit way works better than the existing implicit way.",
+      "score": 5.722651492004541,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_13",
+      "child_source_node_ids": [
+        49,
+        50,
+        51
+      ],
+      "child_qasper_evidence_texts": [
+        "We compare KAR with other MRC models in both performance and the robustness to noise. Specifically, we not only evaluate the performance of KAR on the development set and the test set, but also do this on the adversarial sets. As for the comparative objects, we only consider the single MRC models that rank in the top 20 on the SQuAD 1.1 leader board and have reported their performance on the adversarial sets. There are totally five such comparative objects, which can be considered as representatives of the state-of-the-art MRC models. As shown in Table TABREF12 , on the development set and the test set, the performance of KAR is on par with that of the state-of-the-art MRC models; on the adversarial sets, KAR outperforms the state-of-the-art MRC models by a large margin. That is to say, KAR is comparable in performance with the state-of-the-art MRC models, and significantly more robust to noise than them.",
+        "To verify the effectiveness of general knowledge, we first study the relationship between the amount of general knowledge and the performance of KAR. As shown in Table TABREF13 , by increasing INLINEFORM0 from 0 to 5 in the data enrichment method, the amount of general knowledge rises monotonically, but the performance of KAR first rises until INLINEFORM1 reaches 3 and then drops down. Then we conduct an ablation study by replacing the knowledge aided attention mechanisms with the mutual attention proposed by BIBREF3 and the self attention proposed by BIBREF4 separately, and find that the F1 score of KAR drops by INLINEFORM2 on the development set, INLINEFORM3 on AddSent, and INLINEFORM4 on AddOneSent. Finally we find that after only one epoch of training, KAR already achieves an EM of INLINEFORM5 and an F1 score of INLINEFORM6 on the development set, which is even better than the final performance of several strong baselines, such as DCN (EM / F1: INLINEFORM7 / INLINEFORM8 ) BIBREF36 and BiDAF (EM / F1: INLINEFORM9 / INLINEFORM10 ) BIBREF3 . The above empirical findings imply that general knowledge indeed plays an effective role in KAR.",
+        "To demonstrate the advantage of our explicit way to utilize general knowledge over the existing implicit way, we compare the performance of KAR with that reported by BIBREF10 , which used an encoding-based method to utilize the general knowledge dynamically retrieved from Wikipedia and ConceptNet. Since their best model only achieved an EM of INLINEFORM0 and an F1 score of INLINEFORM1 on the development set, which is much lower than the performance of KAR, we have good reason to believe that our explicit way works better than the existing implicit way."
+      ],
+      "child_pages": [
+        13,
+        13,
+        13
+      ],
+      "child_sections": [
+        "Model Comparison in both Performance and the Robustness to Noise",
+        "Model Comparison in both Performance and the Robustness to Noise",
+        "Model Comparison in both Performance and the Robustness to Noise"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Model Comparison in both Performance and the Robustness to Noise",
+          0
+        ],
+        [
+          "Model Comparison in both Performance and the Robustness to Noise",
+          1
+        ],
+        [
+          "Model Comparison in both Performance and the Robustness to Noise",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_13",
+      "section_id": "Model Comparison in both Performance and the Robustness to Noise",
+      "section": "Model Comparison in both Performance and the Robustness to Noise",
+      "title_path": "Model Comparison in both Performance and the Robustness to Noise",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Machine Reading Comprehension (MRC), as the name suggests, requires a machine to read a passage and answer its relevant questions. Since the answer to each question is supposed to stem from the corresponding passage, a common MRC solution is to develop a neural-network-based MRC model that predicts an answer span (i.e. the answer start position and the answer end position) from the passage of each given passage-question pair. To facilitate the explorations and innovations in this area, many MRC datasets have been established, such as SQuAD BIBREF0 , MS MARCO BIBREF1 , and TriviaQA BIBREF2 . Consequently, many pioneering MRC models have been proposed, such as BiDAF BIBREF3 , R-NET BIBREF4 , and QANet BIBREF5 . According to the leader board of SQuAD, the state-of-the-art MRC models have achieved the same performance as human beings. However, does this imply that they have possessed the same reading comprehension ability as human beings?\n[source_id=5] OF COURSE NOT. There is a huge gap between MRC models and human beings, which is mainly reflected in the hunger for data and the robustness to noise. On the one hand, developing MRC models requires a large amount of training examples (i.e. the passage-question pairs labeled with answer spans), while human beings can achieve good performance on evaluation examples (i.e. the passage-question pairs to address) without training examples. On the other hand, BIBREF6 revealed that intentionally injected noise (e.g. misleading sentences) in evaluation examples causes the performance of MRC models to drop significantly, while human beings are far less likely to suffer from this. The reason for these phenomena, we believe, is that MRC models can only utilize the knowledge contained in each given passage-question pair, but in addition to this, human beings can also utilize general knowledge. A typical category of general knowledge is inter-word semantic connections. As shown in Table TABREF1 , such general knowledge is essential to the reading comprehension ability of human beings.\n[source_id=6] A promising strategy to bridge the gap mentioned above is to integrate the neural networks of MRC models with the general knowledge of human beings. To this end, it is necessary to solve two problems: extracting general knowledge from passage-question pairs and utilizing the extracted general knowledge in the prediction of answer spans. The first problem can be solved with knowledge bases, which store general knowledge in structured forms. A broad variety of knowledge bases are available, such as WordNet BIBREF7 storing semantic knowledge, ConceptNet BIBREF8 storing commonsense knowledge, and Freebase BIBREF9 storing factoid knowledge. In this paper, we limit the scope of general knowledge to inter-word semantic connections, and thus use WordNet as our knowledge base. The existing way to solve the second problem is to encode general knowledge in vector space so that the encoding results can be used to enhance the lexical or contextual representations of words BIBREF10 , BIBREF11 . However, this is an implicit way to utilize general knowledge, since in this way we can neither understand nor control the functioning of general knowledge. In this paper, we discard the existing implicit way and instead explore an explicit (i.e. understandable and controllable) way to utilize general knowledge.\n[source_id=7] The contribution of this paper is two-fold. On the one hand, we propose a data enrichment method, which uses WordNet to extract inter-word semantic connections as general knowledge from each given passage-question pair. On the other hand, we propose an end-to-end MRC model named as Knowledge Aided Reader (KAR), which explicitly uses the above extracted general knowledge to assist its attention mechanisms. Based on the data enrichment method, KAR is comparable in performance with the state-of-the-art MRC models, and significantly more robust to noise than them. When only a subset ( INLINEFORM0 – INLINEFORM1 ) of the training examples are available, KAR outperforms the state-of-the-art MRC models by a large margin, and is still reasonably robust to noise.",
+      "score": 5.381529973213217,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "child_qasper_evidence_texts": [
+        "Machine Reading Comprehension (MRC), as the name suggests, requires a machine to read a passage and answer its relevant questions. Since the answer to each question is supposed to stem from the corresponding passage, a common MRC solution is to develop a neural-network-based MRC model that predicts an answer span (i.e. the answer start position and the answer end position) from the passage of each given passage-question pair. To facilitate the explorations and innovations in this area, many MRC datasets have been established, such as SQuAD BIBREF0 , MS MARCO BIBREF1 , and TriviaQA BIBREF2 . Consequently, many pioneering MRC models have been proposed, such as BiDAF BIBREF3 , R-NET BIBREF4 , and QANet BIBREF5 . According to the leader board of SQuAD, the state-of-the-art MRC models have achieved the same performance as human beings. However, does this imply that they have possessed the same reading comprehension ability as human beings?",
+        "OF COURSE NOT. There is a huge gap between MRC models and human beings, which is mainly reflected in the hunger for data and the robustness to noise. On the one hand, developing MRC models requires a large amount of training examples (i.e. the passage-question pairs labeled with answer spans), while human beings can achieve good performance on evaluation examples (i.e. the passage-question pairs to address) without training examples. On the other hand, BIBREF6 revealed that intentionally injected noise (e.g. misleading sentences) in evaluation examples causes the performance of MRC models to drop significantly, while human beings are far less likely to suffer from this. The reason for these phenomena, we believe, is that MRC models can only utilize the knowledge contained in each given passage-question pair, but in addition to this, human beings can also utilize general knowledge. A typical category of general knowledge is inter-word semantic connections. As shown in Table TABREF1 , such general knowledge is essential to the reading comprehension ability of human beings.",
+        "A promising strategy to bridge the gap mentioned above is to integrate the neural networks of MRC models with the general knowledge of human beings. To this end, it is necessary to solve two problems: extracting general knowledge from passage-question pairs and utilizing the extracted general knowledge in the prediction of answer spans. The first problem can be solved with knowledge bases, which store general knowledge in structured forms. A broad variety of knowledge bases are available, such as WordNet BIBREF7 storing semantic knowledge, ConceptNet BIBREF8 storing commonsense knowledge, and Freebase BIBREF9 storing factoid knowledge. In this paper, we limit the scope of general knowledge to inter-word semantic connections, and thus use WordNet as our knowledge base. The existing way to solve the second problem is to encode general knowledge in vector space so that the encoding results can be used to enhance the lexical or contextual representations of words BIBREF10 , BIBREF11 . However, this is an implicit way to utilize general knowledge, since in this way we can neither understand nor control the functioning of general knowledge. In this paper, we discard the existing implicit way and instead explore an explicit (i.e. understandable and controllable) way to utilize general knowledge.",
+        "The contribution of this paper is two-fold. On the one hand, we propose a data enrichment method, which uses WordNet to extract inter-word semantic connections as general knowledge from each given passage-question pair. On the other hand, we propose an end-to-end MRC model named as Knowledge Aided Reader (KAR), which explicitly uses the above extracted general knowledge to assist its attention mechanisms. Based on the data enrichment method, KAR is comparable in performance with the state-of-the-art MRC models, and significantly more robust to noise than them. When only a subset ( INLINEFORM0 – INLINEFORM1 ) of the training examples are available, KAR outperforms the state-of-the-art MRC models by a large margin, and is still reasonably robust to noise."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Inter-word Semantic Connection\n[source_id=13] The key problem in the data enrichment method is determining whether a word is semantically connected to another word. If so, we say that there exists an inter-word semantic connection between them. To solve this problem, we define another new concept: the extended synsets of a word. Given a word INLINEFORM0 , whose synsets are represented as a set INLINEFORM1 , we use another set INLINEFORM2 to represent its extended synsets, which includes all the synsets that are in INLINEFORM3 or that can be linked to from INLINEFORM4 through semantic relation chains. Theoretically, if there is no limitation on semantic relation chains, INLINEFORM5 will include all the synsets in WordNet, which is meaningless in most situations. Therefore, we use a hyper-parameter INLINEFORM6 to represent the permitted maximum hop count of semantic relation chains. That is to say, only the chains having no more than INLINEFORM7 hops can be used to construct INLINEFORM8 so that INLINEFORM9 becomes a function of INLINEFORM10 : INLINEFORM11 (if INLINEFORM12 , we will have INLINEFORM13 ). Based on the above statements, we formulate a heuristic rule for determining inter-word semantic connections: a word INLINEFORM14 is semantically connected to another word INLINEFORM15 if and only if INLINEFORM16 .",
+      "score": 5.271295360944882,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        13
+      ],
+      "child_qasper_evidence_texts": [
+        "The key problem in the data enrichment method is determining whether a word is semantically connected to another word. If so, we say that there exists an inter-word semantic connection between them. To solve this problem, we define another new concept: the extended synsets of a word. Given a word INLINEFORM0 , whose synsets are represented as a set INLINEFORM1 , we use another set INLINEFORM2 to represent its extended synsets, which includes all the synsets that are in INLINEFORM3 or that can be linked to from INLINEFORM4 through semantic relation chains. Theoretically, if there is no limitation on semantic relation chains, INLINEFORM5 will include all the synsets in WordNet, which is meaningless in most situations. Therefore, we use a hyper-parameter INLINEFORM6 to represent the permitted maximum hop count of semantic relation chains. That is to say, only the chains having no more than INLINEFORM7 hops can be used to construct INLINEFORM8 so that INLINEFORM9 becomes a function of INLINEFORM10 : INLINEFORM11 (if INLINEFORM12 , we will have INLINEFORM13 ). Based on the above statements, we formulate a heuristic rule for determining inter-word semantic connections: a word INLINEFORM14 is semantically connected to another word INLINEFORM15 if and only if INLINEFORM16 ."
+      ],
+      "child_pages": [
+        4
+      ],
+      "child_sections": [
+        "Inter-word Semantic Connection"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Inter-word Semantic Connection",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Inter-word Semantic Connection",
+      "section": "Inter-word Semantic Connection",
+      "title_path": "Inter-word Semantic Connection",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_16",
+      "content": "[Section] Conclusion\n[source_id=57] In this paper, we innovatively integrate the neural networks of MRC models with the general knowledge of human beings. Specifically, inter-word semantic connections are first extracted from each given passage-question pair by a WordNet-based data enrichment method, and then provided as general knowledge to an end-to-end MRC model named as Knowledge Aided Reader (KAR), which explicitly uses the general knowledge to assist its attention mechanisms. Experimental results show that KAR is not only comparable in performance with the state-of-the-art MRC models, but also superior to them in terms of both the hunger for data and the robustness to noise. In the future, we plan to use some larger knowledge bases, such as ConceptNet and Freebase, to improve the quality and scope of the general knowledge.",
+      "score": 3.902289284314439,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_16",
+      "child_source_node_ids": [
+        57
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper, we innovatively integrate the neural networks of MRC models with the general knowledge of human beings. Specifically, inter-word semantic connections are first extracted from each given passage-question pair by a WordNet-based data enrichment method, and then provided as general knowledge to an end-to-end MRC model named as Knowledge Aided Reader (KAR), which explicitly uses the general knowledge to assist its attention mechanisms. Experimental results show that KAR is not only comparable in performance with the state-of-the-art MRC models, but also superior to them in terms of both the hunger for data and the robustness to noise. In the future, we plan to use some larger knowledge bases, such as ConceptNet and Freebase, to improve the quality and scope of the general knowledge."
+      ],
+      "child_pages": [
+        16
+      ],
+      "child_sections": [
+        "Conclusion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusion",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_16",
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title_path": "Conclusion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_15",
+      "content": "[Section] Analysis\n[source_id=55] According to the experimental results, KAR is not only comparable in performance with the state-of-the-art MRC models, but also superior to them in terms of both the hunger for data and the robustness to noise. The reasons for these achievements, we believe, are as follows:",
+      "score": 3.7500679250581097,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_15",
+      "child_source_node_ids": [
+        55
+      ],
+      "child_qasper_evidence_texts": [
+        "According to the experimental results, KAR is not only comparable in performance with the state-of-the-art MRC models, but also superior to them in terms of both the hunger for data and the robustness to noise. The reasons for these achievements, we believe, are as follows:"
+      ],
+      "child_pages": [
+        15
+      ],
+      "child_sections": [
+        "Analysis"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Analysis",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_15",
+      "section_id": "Analysis",
+      "section": "Analysis",
+      "title_path": "Analysis",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Related Works\n[source_id=40] Attention Mechanisms. Besides those mentioned above, other interesting attention mechanisms include performing multi-round alignment to avoid the problems of attention redundancy and attention deficiency BIBREF20 , and using mutual attention as a skip-connector to densely connect pairwise layers BIBREF21 .\n[source_id=41] Data Augmentation. It is proved that properly augmenting training examples can improve the performance of MRC models. For example, BIBREF22 trained a generative model to generate questions based on unlabeled text, which substantially boosted their performance; BIBREF5 trained a back-and-forth translation model to paraphrase training examples, which brought them a significant performance gain.\n[source_id=42] Multi-step Reasoning. Inspired by the fact that human beings are capable of understanding complex documents by reading them over and over again, multi-step reasoning was proposed to better deal with difficult MRC tasks. For example, BIBREF23 used reinforcement learning to dynamically determine the number of reasoning steps; BIBREF19 fixed the number of reasoning steps, but used stochastic dropout in the output layer to avoid step bias.\n[source_id=43] Linguistic Embeddings. It is both easy and effective to incorporate linguistic embeddings into the input layer of MRC models. For example, BIBREF24 and BIBREF19 used POS embeddings and NER embeddings to construct their input embeddings; BIBREF25 used structural embeddings based on parsing trees to constructed their input embeddings.\n[source_id=44] Transfer Learning. Several recent breakthroughs in MRC benefit from feature-based transfer learning BIBREF26 , BIBREF27 and fine-tuning-based transfer learning BIBREF28 , BIBREF29 , which are based on certain word-level or sentence-level models pre-trained on large external corpora in certain supervised or unsupervised manners.",
+      "score": 3.647808751999251,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        40,
+        41,
+        42,
+        43,
+        44
+      ],
+      "child_qasper_evidence_texts": [
+        "Attention Mechanisms. Besides those mentioned above, other interesting attention mechanisms include performing multi-round alignment to avoid the problems of attention redundancy and attention deficiency BIBREF20 , and using mutual attention as a skip-connector to densely connect pairwise layers BIBREF21 .",
+        "Data Augmentation. It is proved that properly augmenting training examples can improve the performance of MRC models. For example, BIBREF22 trained a generative model to generate questions based on unlabeled text, which substantially boosted their performance; BIBREF5 trained a back-and-forth translation model to paraphrase training examples, which brought them a significant performance gain.",
+        "Multi-step Reasoning. Inspired by the fact that human beings are capable of understanding complex documents by reading them over and over again, multi-step reasoning was proposed to better deal with difficult MRC tasks. For example, BIBREF23 used reinforcement learning to dynamically determine the number of reasoning steps; BIBREF19 fixed the number of reasoning steps, but used stochastic dropout in the output layer to avoid step bias.",
+        "Linguistic Embeddings. It is both easy and effective to incorporate linguistic embeddings into the input layer of MRC models. For example, BIBREF24 and BIBREF19 used POS embeddings and NER embeddings to construct their input embeddings; BIBREF25 used structural embeddings based on parsing trees to constructed their input embeddings.",
+        "Transfer Learning. Several recent breakthroughs in MRC benefit from feature-based transfer learning BIBREF26 , BIBREF27 and fine-tuning-based transfer learning BIBREF28 , BIBREF29 , which are based on certain word-level or sentence-level models pre-trained on large external corpora in certain supervised or unsupervised manners."
+      ],
+      "child_pages": [
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "child_sections": [
+        "Related Works",
+        "Related Works",
+        "Related Works",
+        "Related Works",
+        "Related Works"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Related Works",
+          0
+        ],
+        [
+          "Related Works",
+          1
+        ],
+        [
+          "Related Works",
+          2
+        ],
+        [
+          "Related Works",
+          3
+        ],
+        [
+          "Related Works",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Related Works",
+      "section": "Related Works",
+      "title_path": "Related Works",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_14",
+      "content": "[Section] Model Comparison in the Hunger for Data\n[source_id=53] We compare KAR with other MRC models in the hunger for data. Specifically, instead of using all the training examples, we produce several training subsets (i.e. subsets of the training examples) so as to study the relationship between the proportion of the available training examples and the performance. We produce each training subset by sampling a specific number of questions from all the questions relevant to each passage. By separately sampling 1, 2, 3, and 4 questions on each passage, we obtain four training subsets, which separately contain INLINEFORM0 , INLINEFORM1 , INLINEFORM2 , and INLINEFORM3 of the training examples. As shown in Figure FIGREF15 , with KAR, SAN (re-implemented), and QANet (re-implemented without data augmentation) trained on these training subsets, we evaluate their performance on the development set, and find that KAR performs much better than SAN and QANet. As shown in Figure FIGREF16 and Figure FIGREF17 , with the above KAR, SAN, and QANet trained on the same training subsets, we also evaluate their performance on the adversarial sets, and still find that KAR performs much better than SAN and QANet. That is to say, when only a subset of the training examples are available, KAR outperforms the state-of-the-art MRC models by a large margin, and is still reasonably robust to noise.",
+      "score": 3.5992752526434777,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_14",
+      "child_source_node_ids": [
+        53
+      ],
+      "child_qasper_evidence_texts": [
+        "We compare KAR with other MRC models in the hunger for data. Specifically, instead of using all the training examples, we produce several training subsets (i.e. subsets of the training examples) so as to study the relationship between the proportion of the available training examples and the performance. We produce each training subset by sampling a specific number of questions from all the questions relevant to each passage. By separately sampling 1, 2, 3, and 4 questions on each passage, we obtain four training subsets, which separately contain INLINEFORM0 , INLINEFORM1 , INLINEFORM2 , and INLINEFORM3 of the training examples. As shown in Figure FIGREF15 , with KAR, SAN (re-implemented), and QANet (re-implemented without data augmentation) trained on these training subsets, we evaluate their performance on the development set, and find that KAR performs much better than SAN and QANet. As shown in Figure FIGREF16 and Figure FIGREF17 , with the above KAR, SAN, and QANet trained on the same training subsets, we also evaluate their performance on the adversarial sets, and still find that KAR performs much better than SAN and QANet. That is to say, when only a subset of the training examples are available, KAR outperforms the state-of-the-art MRC models by a large margin, and is still reasonably robust to noise."
+      ],
+      "child_pages": [
+        14
+      ],
+      "child_sections": [
+        "Model Comparison in the Hunger for Data"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Model Comparison in the Hunger for Data",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_14",
+      "section_id": "Model Comparison in the Hunger for Data",
+      "section": "Model Comparison in the Hunger for Data",
+      "title_path": "Model Comparison in the Hunger for Data",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 2,
+      "content": "To bridge the gap between Machine Reading Comprehension (MRC) models and human beings, which is mainly reflected in the hunger for data and the robustness to noise, in this paper, we explore how to integrate the neural networks of MRC models with the general knowledge of human beings. On the one hand, we propose a data enrichment method, which uses WordNet to extract inter-word semantic connections as general knowledge from each given passage-question pair. On the other hand, we propose an end-to-end MRC model named as Knowledge Aided Reader (KAR), which explicitly uses the above extracted general knowledge to assist its attention mechanisms. Based on the data enrichment method, KAR is comparable in performance with the state-of-the-art MRC models, and significantly more robust to noise than them. When only a subset (20%-80%) of the training examples are available, KAR outperforms the state-of-the-art MRC models by a large margin, and is still reasonably robust to noise.",
+      "qasper_evidence_text": "To bridge the gap between Machine Reading Comprehension (MRC) models and human beings, which is mainly reflected in the hunger for data and the robustness to noise, in this paper, we explore how to integrate the neural networks of MRC models with the general knowledge of human beings. On the one hand, we propose a data enrichment method, which uses WordNet to extract inter-word semantic connections as general knowledge from each given passage-question pair. On the other hand, we propose an end-to-end MRC model named as Knowledge Aided Reader (KAR), which explicitly uses the above extracted general knowledge to assist its attention mechanisms. Based on the data enrichment method, KAR is comparable in performance with the state-of-the-art MRC models, and significantly more robust to noise than them. When only a subset (20%-80%) of the training examples are available, KAR outperforms the state-of-the-art MRC models by a large margin, and is still reasonably robust to noise.",
+      "source_node_id": 2,
+      "node_id": 2,
+      "paragraph_id": 2,
+      "evidence_id": 2,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_0",
+      "rank": 1,
+      "score": 8.150492313526911,
+      "block_type": "paragraph",
+      "page": 0,
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title": "Abstract",
+      "hotpot_title": "Abstract",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 1
+    },
+    {
+      "id": 49,
+      "content": "We compare KAR with other MRC models in both performance and the robustness to noise. Specifically, we not only evaluate the performance of KAR on the development set and the test set, but also do this on the adversarial sets. As for the comparative objects, we only consider the single MRC models that rank in the top 20 on the SQuAD 1.1 leader board and have reported their performance on the adversarial sets. There are totally five such comparative objects, which can be considered as representatives of the state-of-the-art MRC models. As shown in Table TABREF12 , on the development set and the test set, the performance of KAR is on par with that of the state-of-the-art MRC models; on the adversarial sets, KAR outperforms the state-of-the-art MRC models by a large margin. That is to say, KAR is comparable in performance with the state-of-the-art MRC models, and significantly more robust to noise than them.",
+      "qasper_evidence_text": "We compare KAR with other MRC models in both performance and the robustness to noise. Specifically, we not only evaluate the performance of KAR on the development set and the test set, but also do this on the adversarial sets. As for the comparative objects, we only consider the single MRC models that rank in the top 20 on the SQuAD 1.1 leader board and have reported their performance on the adversarial sets. There are totally five such comparative objects, which can be considered as representatives of the state-of-the-art MRC models. As shown in Table TABREF12 , on the development set and the test set, the performance of KAR is on par with that of the state-of-the-art MRC models; on the adversarial sets, KAR outperforms the state-of-the-art MRC models by a large margin. That is to say, KAR is comparable in performance with the state-of-the-art MRC models, and significantly more robust to noise than them.",
+      "source_node_id": 49,
+      "node_id": 49,
+      "paragraph_id": 49,
+      "evidence_id": 49,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_13",
+      "rank": 2,
+      "score": 5.722651492004541,
+      "block_type": "paragraph",
+      "page": 13,
+      "section_id": "Model Comparison in both Performance and the Robustness to Noise",
+      "section": "Model Comparison in both Performance and the Robustness to Noise",
+      "title": "Model Comparison in both Performance and the Robustness to Noise",
+      "hotpot_title": "Model Comparison in both Performance and the Robustness to Noise",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 2
+    },
+    {
+      "id": 57,
+      "content": "In this paper, we innovatively integrate the neural networks of MRC models with the general knowledge of human beings. Specifically, inter-word semantic connections are first extracted from each given passage-question pair by a WordNet-based data enrichment method, and then provided as general knowledge to an end-to-end MRC model named as Knowledge Aided Reader (KAR), which explicitly uses the general knowledge to assist its attention mechanisms. Experimental results show that KAR is not only comparable in performance with the state-of-the-art MRC models, but also superior to them in terms of both the hunger for data and the robustness to noise. In the future, we plan to use some larger knowledge bases, such as ConceptNet and Freebase, to improve the quality and scope of the general knowledge.",
+      "qasper_evidence_text": "In this paper, we innovatively integrate the neural networks of MRC models with the general knowledge of human beings. Specifically, inter-word semantic connections are first extracted from each given passage-question pair by a WordNet-based data enrichment method, and then provided as general knowledge to an end-to-end MRC model named as Knowledge Aided Reader (KAR), which explicitly uses the general knowledge to assist its attention mechanisms. Experimental results show that KAR is not only comparable in performance with the state-of-the-art MRC models, but also superior to them in terms of both the hunger for data and the robustness to noise. In the future, we plan to use some larger knowledge bases, such as ConceptNet and Freebase, to improve the quality and scope of the general knowledge.",
+      "source_node_id": 57,
+      "node_id": 57,
+      "paragraph_id": 57,
+      "evidence_id": 57,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_16",
+      "rank": 5,
+      "score": 3.902289284314439,
+      "block_type": "paragraph",
+      "page": 16,
+      "section_id": "Conclusion",
+      "section": "Conclusion",
+      "title": "Conclusion",
+      "hotpot_title": "Conclusion",
+      "sent_id": 0,
+      "hotpot_sent_id": 0,
+      "supporting_rank": 3
+    }
+  ],
+  "supporting_block_ids": [
+    2,
+    49,
+    57
+  ]
+}

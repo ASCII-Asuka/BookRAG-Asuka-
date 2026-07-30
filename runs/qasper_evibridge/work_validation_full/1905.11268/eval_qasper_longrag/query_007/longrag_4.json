@@ -1,0 +1,88 @@
+{
+  "id": "longrag_4",
+  "content": "[Section] ScRNN with Backoff\n[source_id=19] We now describe semi-character RNNs for word recognition, explain their limitations, and suggest techniques to improve them.\n[source_id=20] Inspired by the psycholinguistic studies BIBREF5 , BIBREF4 , BIBREF7 proposed a semi-character based RNN (ScRNN) that processes a sentence of words with misspelled characters, predicting the correct words at each step. Let $s = \\lbrace w_1, w_2, \\dots , w_n\\rbrace $ denote the input sentence, a sequence of constituent words $w_i$ . Each input word ( $w_i$ ) is represented by concatenating (i) a one hot vector of the first character ( $\\mathbf {w_{i1}}$ ); (ii) a one hot representation of the last character ( $\\mathbf {w_{il}}$ , where $l$ is the length of word $w_i$ ); and (iii) a bag of characters representation of the internal characters ( $\\sum _{j=2}^{l-1}\\mathbf {w_{ij}})$ . ScRNN treats the first and the last characters individually, and is agnostic to the ordering of the internal characters. Each word, represented accordingly, is then fed into a BiLSTM cell. At each sequence step, the training target is the correct corresponding word (output dimension equal to vocabulary size), and the model is optimized with cross-entropy loss.\n[source_id=21] While BIBREF7 demonstrate strong word recognition performance, a drawback of their evaluation setup is that they only attack and evaluate on the subset of words that are a part of their training vocabulary. In such a setting, the word recognition performance is unreasonably dependent on the chosen vocabulary size. In principle, one can design models to predict (correctly) only a few chosen words, and ignore the remaining majority and still reach 100% accuracy. For the adversarial setting, rare and unseen words in the wild are particularly critical, as they provide opportunities for the attackers. A reliable word-recognizer should handle these cases gracefully. Below, we explore different ways to back off when the ScRNN predicts UNK (a frequent outcome for rare and unseen words):\n[source_id=22] Pass-through: word-recognizer passes on the (possibly misspelled) word as is.\n[source_id=23] Backoff to neutral word: Alternatively, noting that passing $\\colorbox {gray!20}{\\texttt {UNK}}$ -predicted words through unchanged exposes the downstream model to potentially corrupted text, we consider backing off to a neutral word like `a', which has a similar distribution across classes.\n[source_id=24] Backoff to background model: We also consider falling back upon a more generic word recognition model trained upon a larger, less-specialized corpus whenever the foreground word recognition model predicts UNK. Figure 1 depicts this scenario pictorially.\n[source_id=25] Empirically, we find that the background model (by itself) is less accurate, because of the large number of words it is trained to predict. Thus, it is best to train a precise foreground model on an in-domain corpus and focus on frequent words, and then to resort to a general-purpose background model for rare and unobserved words. Next, we delineate our second consideration for building robust word-recognizers.",
+  "score": 1.242445269538642,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_4",
+  "child_source_node_ids": [
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+  ],
+  "child_qasper_evidence_texts": [
+    "We now describe semi-character RNNs for word recognition, explain their limitations, and suggest techniques to improve them.",
+    "Inspired by the psycholinguistic studies BIBREF5 , BIBREF4 , BIBREF7 proposed a semi-character based RNN (ScRNN) that processes a sentence of words with misspelled characters, predicting the correct words at each step. Let $s = \\lbrace w_1, w_2, \\dots , w_n\\rbrace $ denote the input sentence, a sequence of constituent words $w_i$ . Each input word ( $w_i$ ) is represented by concatenating (i) a one hot vector of the first character ( $\\mathbf {w_{i1}}$ ); (ii) a one hot representation of the last character ( $\\mathbf {w_{il}}$ , where $l$ is the length of word $w_i$ ); and (iii) a bag of characters representation of the internal characters ( $\\sum _{j=2}^{l-1}\\mathbf {w_{ij}})$ . ScRNN treats the first and the last characters individually, and is agnostic to the ordering of the internal characters. Each word, represented accordingly, is then fed into a BiLSTM cell. At each sequence step, the training target is the correct corresponding word (output dimension equal to vocabulary size), and the model is optimized with cross-entropy loss.",
+    "While BIBREF7 demonstrate strong word recognition performance, a drawback of their evaluation setup is that they only attack and evaluate on the subset of words that are a part of their training vocabulary. In such a setting, the word recognition performance is unreasonably dependent on the chosen vocabulary size. In principle, one can design models to predict (correctly) only a few chosen words, and ignore the remaining majority and still reach 100% accuracy. For the adversarial setting, rare and unseen words in the wild are particularly critical, as they provide opportunities for the attackers. A reliable word-recognizer should handle these cases gracefully. Below, we explore different ways to back off when the ScRNN predicts UNK (a frequent outcome for rare and unseen words):",
+    "Pass-through: word-recognizer passes on the (possibly misspelled) word as is.",
+    "Backoff to neutral word: Alternatively, noting that passing $\\colorbox {gray!20}{\\texttt {UNK}}$ -predicted words through unchanged exposes the downstream model to potentially corrupted text, we consider backing off to a neutral word like `a', which has a similar distribution across classes.",
+    "Backoff to background model: We also consider falling back upon a more generic word recognition model trained upon a larger, less-specialized corpus whenever the foreground word recognition model predicts UNK. Figure 1 depicts this scenario pictorially.",
+    "Empirically, we find that the background model (by itself) is less accurate, because of the large number of words it is trained to predict. Thus, it is best to train a precise foreground model on an in-domain corpus and focus on frequent words, and then to resort to a general-purpose background model for rare and unobserved words. Next, we delineate our second consideration for building robust word-recognizers."
+  ],
+  "child_pages": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "child_sections": [
+    "ScRNN with Backoff",
+    "ScRNN with Backoff",
+    "ScRNN with Backoff",
+    "ScRNN with Backoff",
+    "ScRNN with Backoff",
+    "ScRNN with Backoff",
+    "ScRNN with Backoff"
+  ],
+  "child_hotpot_facts": [
+    [
+      "ScRNN with Backoff",
+      0
+    ],
+    [
+      "ScRNN with Backoff",
+      1
+    ],
+    [
+      "ScRNN with Backoff",
+      2
+    ],
+    [
+      "ScRNN with Backoff",
+      3
+    ],
+    [
+      "ScRNN with Backoff",
+      4
+    ],
+    [
+      "ScRNN with Backoff",
+      5
+    ],
+    [
+      "ScRNN with Backoff",
+      6
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_4",
+  "section_id": "ScRNN with Backoff",
+  "section": "ScRNN with Backoff",
+  "title_path": "ScRNN with Backoff",
+  "block_type": "long_unit"
+}

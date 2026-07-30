@@ -1,0 +1,357 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Both human and machine translation play a central role in cross-lingual transfer learning: many multilingual datasets have been created through professional translation services, and using machine translation to translate either the test set or the training set is a widely used transfer technique. In this paper, we show that such translation process can introduce subtle artifacts that have a notable impact in existing cross-lingual models. For instance, in natural language inference, translating the premise and the hypothesis independently can reduce the lexical overlap between them, which current models are highly sensitive to. We show that some previous findings in cross-lingual transfer learning need to be reconsidered in the light of this phenomenon. Based on the gained insights, we also improve the state-of-the-art in XNLI for the translate-test and zero-shot approaches by 4.3 and 2.8 points, respectively.",
+      "score": 9.923744963943939,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Both human and machine translation play a central role in cross-lingual transfer learning: many multilingual datasets have been created through professional translation services, and using machine translation to translate either the test set or the training set is a widely used transfer technique. In this paper, we show that such translation process can introduce subtle artifacts that have a notable impact in existing cross-lingual models. For instance, in natural language inference, translating the premise and the hypothesis independently can reduce the lexical overlap between them, which current models are highly sensitive to. We show that some previous findings in cross-lingual transfer learning need to be reconsidered in the light of this phenomenon. Based on the gained insights, we also improve the state-of-the-art in XNLI for the translate-test and zero-shot approaches by 4.3 and 2.8 points, respectively."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_25",
+      "content": "[Section] Discussion ::: Future evaluation should better account for translation artifacts.\n[source_id=61] The evaluation issues raised by our analysis do not have a simple solution. In fact, while we use the term translation artifacts to highlight that they are an unintended effect of translation that impacts final evaluation, one could also argue that it is the original datasets that contain the artifacts, which translation simply alters or even mitigates. In any case, this is a more general issue that falls beyond the scope of cross-lingual transfer learning, so we argue that it should be carefully controlled when evaluating cross-lingual models. In the absence of more robust datasets, we recommend that future multilingual benchmarks should at least provide consistent test sets for English and the rest of languages. This can be achieved by (i) using original annotations in all languages, (ii) using original annotations in a non-English language and translating them into English and other languages, or (iii) if translating from English, doing so at the document level to minimize translation inconsistencies.",
+      "score": 6.160543500740836,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_25",
+      "child_source_node_ids": [
+        61
+      ],
+      "child_qasper_evidence_texts": [
+        "The evaluation issues raised by our analysis do not have a simple solution. In fact, while we use the term translation artifacts to highlight that they are an unintended effect of translation that impacts final evaluation, one could also argue that it is the original datasets that contain the artifacts, which translation simply alters or even mitigates. In any case, this is a more general issue that falls beyond the scope of cross-lingual transfer learning, so we argue that it should be carefully controlled when evaluating cross-lingual models. In the absence of more robust datasets, we recommend that future multilingual benchmarks should at least provide consistent test sets for English and the rest of languages. This can be achieved by (i) using original annotations in all languages, (ii) using original annotations in a non-English language and translating them into English and other languages, or (iii) if translating from English, doing so at the document level to minimize translation inconsistencies."
+      ],
+      "child_pages": [
+        25
+      ],
+      "child_sections": [
+        "Discussion ::: Future evaluation should better account for translation artifacts."
+      ],
+      "child_hotpot_facts": [
+        [
+          "Discussion ::: Future evaluation should better account for translation artifacts.",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_25",
+      "section_id": "Discussion ::: Future evaluation should better account for translation artifacts.",
+      "section": "Discussion ::: Future evaluation should better account for translation artifacts.",
+      "title_path": "Discussion ::: Future evaluation should better account for translation artifacts.",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] While most NLP resources are English-specific, there have been several recent efforts to build multilingual benchmarks. One possibility is to collect and annotate data in multiple languages separately BIBREF0, but most existing datasets have been created through translation BIBREF1, BIBREF2. This approach has two desirable properties: it relies on existing professional translation services rather than requiring expertise in multiple languages, and it results in parallel evaluation sets that offer a meaningful measure of the cross-lingual transfer gap of different models. The resulting multilingual datasets are generally used for evaluation only, relying on existing English datasets for training.\n[source_id=5] Closely related to that, cross-lingual transfer learning aims to leverage large datasets available in one language—typically English—to build multilingual models that can generalize to other languages. Previous work has explored 3 main approaches to that end: machine translating the test set into English and using a monolingual English model (Translate-Test), machine translating the training set into each target language and training the models on their respective languages (Translate-Train), or using English data to fine-tune a multilingual model that is then transferred to the rest of languages (Zero-Shot).\n[source_id=6] The dataset creation and transfer procedures described above result in a mixture of original, human translated and machine translated data when dealing with cross-lingual models. In fact, the type of text a system is trained on does not typically match the type of text it is exposed to at test time: Translate-Test systems are trained on original data and evaluated on machine translated test sets, Zero-Shot systems are trained on original data and evaluated on human translated test sets, and Translate-Train systems are trained on machine translated data and evaluated on human translated test sets.\n[source_id=7] Despite overlooked to date, we show that such mismatch has a notable impact in the performance of existing cross-lingual models. By using back-translation BIBREF3 to paraphrase each training instance, we obtain another English version of the training set that better resembles the test set, obtaining substantial improvements for the Translate-Test and Zero-Shot approaches in cross-lingual Natural Language Inference (NLI). While improvements brought by machine translation have previously been attributed to data augmentation BIBREF4, we reject this hypothesis and show that the phenomenon is only present in translated test sets, but not in original ones. Instead, our analysis reveals that this behavior is caused by subtle artifacts arising from the translation process itself. In particular, we show that translating different parts of each instance separately (e.g. the premise and the hypothesis in NLI) can alter superficial patterns in the data (e.g. the degree of lexical overlap between them), which severely affects the generalization ability of current models. Based on the gained insights, we improve the state-of-the-art in XNLI, and show that some previous findings need to be reconsidered in the light of this phenomenon.",
+      "score": 6.074242069820648,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "child_qasper_evidence_texts": [
+        "While most NLP resources are English-specific, there have been several recent efforts to build multilingual benchmarks. One possibility is to collect and annotate data in multiple languages separately BIBREF0, but most existing datasets have been created through translation BIBREF1, BIBREF2. This approach has two desirable properties: it relies on existing professional translation services rather than requiring expertise in multiple languages, and it results in parallel evaluation sets that offer a meaningful measure of the cross-lingual transfer gap of different models. The resulting multilingual datasets are generally used for evaluation only, relying on existing English datasets for training.",
+        "Closely related to that, cross-lingual transfer learning aims to leverage large datasets available in one language—typically English—to build multilingual models that can generalize to other languages. Previous work has explored 3 main approaches to that end: machine translating the test set into English and using a monolingual English model (Translate-Test), machine translating the training set into each target language and training the models on their respective languages (Translate-Train), or using English data to fine-tune a multilingual model that is then transferred to the rest of languages (Zero-Shot).",
+        "The dataset creation and transfer procedures described above result in a mixture of original, human translated and machine translated data when dealing with cross-lingual models. In fact, the type of text a system is trained on does not typically match the type of text it is exposed to at test time: Translate-Test systems are trained on original data and evaluated on machine translated test sets, Zero-Shot systems are trained on original data and evaluated on human translated test sets, and Translate-Train systems are trained on machine translated data and evaluated on human translated test sets.",
+        "Despite overlooked to date, we show that such mismatch has a notable impact in the performance of existing cross-lingual models. By using back-translation BIBREF3 to paraphrase each training instance, we obtain another English version of the training set that better resembles the test set, obtaining substantial improvements for the Translate-Test and Zero-Shot approaches in cross-lingual Natural Language Inference (NLI). While improvements brought by machine translation have previously been attributed to data augmentation BIBREF4, we reject this hypothesis and show that the phenomenon is only present in translated test sets, but not in original ones. Instead, our analysis reveals that this behavior is caused by subtle artifacts arising from the translation process itself. In particular, we show that translating different parts of each instance separately (e.g. the premise and the hypothesis in NLI) can alter superficial patterns in the data (e.g. the degree of lexical overlap between them), which severely affects the generalization ability of current models. Based on the gained insights, we improve the state-of-the-art in XNLI, and show that some previous findings need to be reconsidered in the light of this phenomenon."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_15",
+      "content": "[Section] NLI experiments ::: Original vs. translated test sets\n[source_id=37] So as to understand whether the improvements observed so far are limited to translated test sets or apply more generally, we conduct additional experiments comparing translated test sets to original ones. However, to the best of our knowledge, all existing non-English NLI benchmarks were created through translation. For that reason, we build a new test set that mimics XNLI, but is annotated in Spanish rather than English. We first collect the premises from a filtered version of CommonCrawl BIBREF42, taking a subset of 5 websites that represent a diverse set of genres: a newspaper, an economy forum, a celebrity magazine, a literature blog, and a consumer magazine. We then ask native Spanish annotators to generate an entailment, a neutral and a contradiction hypothesis for each premise. We collect a total of 2490 examples using this procedure, which is the same size as the XNLI development set. Finally, we create a human translated and a machine translated English version of the dataset using professional translators from Gengo and our machine translation system described in §SECREF8, respectively. We report results for the best epoch checkpoint on each set.\n[source_id=38] As shown in Table TABREF18, both BT-XX and MT-XX clearly outperform Orig in all test sets created through translation, which is consistent with our previous results. In contrast, the best results on the original English set are obtained by Orig, and neither BT-XX nor MT-XX obtain any clear improvement on the one in Spanish either. This confirms that the underlying phenomenon is limited to translated test sets. In addition, it is worth mentioning that the results for the machine translated test set in English are slightly better than those for the human translated one, which suggests that the difficulty of the task does not only depend on the translation quality. Finally, it is also interesting that MT-ES is only marginally better than MT-FI in both Spanish test sets, even if it corresponds to the Translate-Train approach, whereas MT-FI needs to Zero-Shot transfer from Finnish into Spanish. This reinforces the idea that it is training on translated data rather than training on the target language that is key in Translate-Train.",
+      "score": 5.803248477283913,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_15",
+      "child_source_node_ids": [
+        37,
+        38
+      ],
+      "child_qasper_evidence_texts": [
+        "So as to understand whether the improvements observed so far are limited to translated test sets or apply more generally, we conduct additional experiments comparing translated test sets to original ones. However, to the best of our knowledge, all existing non-English NLI benchmarks were created through translation. For that reason, we build a new test set that mimics XNLI, but is annotated in Spanish rather than English. We first collect the premises from a filtered version of CommonCrawl BIBREF42, taking a subset of 5 websites that represent a diverse set of genres: a newspaper, an economy forum, a celebrity magazine, a literature blog, and a consumer magazine. We then ask native Spanish annotators to generate an entailment, a neutral and a contradiction hypothesis for each premise. We collect a total of 2490 examples using this procedure, which is the same size as the XNLI development set. Finally, we create a human translated and a machine translated English version of the dataset using professional translators from Gengo and our machine translation system described in §SECREF8, respectively. We report results for the best epoch checkpoint on each set.",
+        "As shown in Table TABREF18, both BT-XX and MT-XX clearly outperform Orig in all test sets created through translation, which is consistent with our previous results. In contrast, the best results on the original English set are obtained by Orig, and neither BT-XX nor MT-XX obtain any clear improvement on the one in Spanish either. This confirms that the underlying phenomenon is limited to translated test sets. In addition, it is worth mentioning that the results for the machine translated test set in English are slightly better than those for the human translated one, which suggests that the difficulty of the task does not only depend on the translation quality. Finally, it is also interesting that MT-ES is only marginally better than MT-FI in both Spanish test sets, even if it corresponds to the Translate-Train approach, whereas MT-FI needs to Zero-Shot transfer from Finnish into Spanish. This reinforces the idea that it is training on translated data rather than training on the target language that is key in Translate-Train."
+      ],
+      "child_pages": [
+        15,
+        15
+      ],
+      "child_sections": [
+        "NLI experiments ::: Original vs. translated test sets",
+        "NLI experiments ::: Original vs. translated test sets"
+      ],
+      "child_hotpot_facts": [
+        [
+          "NLI experiments ::: Original vs. translated test sets",
+          0
+        ],
+        [
+          "NLI experiments ::: Original vs. translated test sets",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_15",
+      "section_id": "NLI experiments ::: Original vs. translated test sets",
+      "section": "NLI experiments ::: Original vs. translated test sets",
+      "title_path": "NLI experiments ::: Original vs. translated test sets",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_19",
+      "content": "[Section] QA experiments\n[source_id=48] So as to understand whether our previous findings apply to other tasks besides NLI, we run additional experiments on QA. As shown in Table TABREF32, BT-FI and BT-ES do indeed outperform Orig for the Translate-Test approach on MLQA. The improvement is modest, but very consistent across different languages, models and runs. The results for MT-ES and MT-FI are less conclusive, presumably because mapping the answer spans across languages might introduce some noise. In contrast, we do not observe any clear improvement for the Zero-Shot approach on this dataset. Our XQuAD results in Table TABREF33 are more positive, but still inconclusive.\n[source_id=49] These results can partly be explained by the translation procedure used to create the different benchmarks: the premises and hypotheses of XNLI were translated independently, whereas the questions and context paragraphs of XQuAD were translated together. Similarly, MLQA made use of parallel contexts, and translators were shown the sentence containing each answer when translating the corresponding question. As a result, one can expect both QA benchmarks to have more consistent translations than XNLI, which would in turn diminish this phenomenon. In contrast, the questions and context paragraphs are independently translated when using machine translation, which explains why BT-ES and BT-FI outperform Orig for the Translate-Test approach. We conclude that the translation artifacts revealed by our analysis are not exclusive to NLI, as they also show up on QA for the Translate-Test approach, but their actual impact can be highly dependent on the translation procedure used and the nature of the task.",
+      "score": 5.319548816537808,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_19",
+      "child_source_node_ids": [
+        48,
+        49
+      ],
+      "child_qasper_evidence_texts": [
+        "So as to understand whether our previous findings apply to other tasks besides NLI, we run additional experiments on QA. As shown in Table TABREF32, BT-FI and BT-ES do indeed outperform Orig for the Translate-Test approach on MLQA. The improvement is modest, but very consistent across different languages, models and runs. The results for MT-ES and MT-FI are less conclusive, presumably because mapping the answer spans across languages might introduce some noise. In contrast, we do not observe any clear improvement for the Zero-Shot approach on this dataset. Our XQuAD results in Table TABREF33 are more positive, but still inconclusive.",
+        "These results can partly be explained by the translation procedure used to create the different benchmarks: the premises and hypotheses of XNLI were translated independently, whereas the questions and context paragraphs of XQuAD were translated together. Similarly, MLQA made use of parallel contexts, and translators were shown the sentence containing each answer when translating the corresponding question. As a result, one can expect both QA benchmarks to have more consistent translations than XNLI, which would in turn diminish this phenomenon. In contrast, the questions and context paragraphs are independently translated when using machine translation, which explains why BT-ES and BT-FI outperform Orig for the Translate-Test approach. We conclude that the translation artifacts revealed by our analysis are not exclusive to NLI, as they also show up on QA for the Translate-Test approach, but their actual impact can be highly dependent on the translation procedure used and the nature of the task."
+      ],
+      "child_pages": [
+        19,
+        19
+      ],
+      "child_sections": [
+        "QA experiments",
+        "QA experiments"
+      ],
+      "child_hotpot_facts": [
+        [
+          "QA experiments",
+          0
+        ],
+        [
+          "QA experiments",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_19",
+      "section_id": "QA experiments",
+      "section": "QA experiments",
+      "title_path": "QA experiments",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_6",
+      "content": "[Section] Experimental design\n[source_id=17] Our goal is to analyze the effect of both human and machine translation in cross-lingual models. For that purpose, the core idea of our work is to (i) use machine translation to either translate the training set into other languages, or generate English paraphrases of it through back-translation, and (ii) evaluate the resulting systems on original, human translated and machine translated test sets in comparison with systems trained on original data. We next describe the models used in our experiments (§SECREF6), the specific training variants explored (§SECREF8), and the evaluation procedure followed (§SECREF10).",
+      "score": 4.7146965938530645,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_6",
+      "child_source_node_ids": [
+        17
+      ],
+      "child_qasper_evidence_texts": [
+        "Our goal is to analyze the effect of both human and machine translation in cross-lingual models. For that purpose, the core idea of our work is to (i) use machine translation to either translate the training set into other languages, or generate English paraphrases of it through back-translation, and (ii) evaluate the resulting systems on original, human translated and machine translated test sets in comparison with systems trained on original data. We next describe the models used in our experiments (§SECREF6), the specific training variants explored (§SECREF8), and the evaluation procedure followed (§SECREF10)."
+      ],
+      "child_pages": [
+        6
+      ],
+      "child_sections": [
+        "Experimental design"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experimental design",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_6",
+      "section_id": "Experimental design",
+      "section": "Experimental design",
+      "title_path": "Experimental design",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_24",
+      "content": "[Section] Discussion ::: The potential of Translate-Test was underestimated.\n[source_id=59] The previous best results for Translate-Test on XNLI lagged behind the state-of-the-art by 4.6 points. Our work reduces this gap to only 0.8 points by addressing the underlying translation artifacts. The reason why Translate-Test is more severely affected by this phenomenon is twofold: (i) the effect is doubled by first using human translation to create the test set and then machine translation to translate it back to English, and (ii) Translate-Train was inadvertently mitigating this issue (see above), but equivalent techniques were never applied to Translate-Test.",
+      "score": 4.4463351691713076,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_24",
+      "child_source_node_ids": [
+        59
+      ],
+      "child_qasper_evidence_texts": [
+        "The previous best results for Translate-Test on XNLI lagged behind the state-of-the-art by 4.6 points. Our work reduces this gap to only 0.8 points by addressing the underlying translation artifacts. The reason why Translate-Test is more severely affected by this phenomenon is twofold: (i) the effect is doubled by first using human translation to create the test set and then machine translation to translate it back to English, and (ii) Translate-Train was inadvertently mitigating this issue (see above), but equivalent techniques were never applied to Translate-Test."
+      ],
+      "child_pages": [
+        24
+      ],
+      "child_sections": [
+        "Discussion ::: The potential of Translate-Test was underestimated."
+      ],
+      "child_hotpot_facts": [
+        [
+          "Discussion ::: The potential of Translate-Test was underestimated.",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_24",
+      "section_id": "Discussion ::: The potential of Translate-Test was underestimated.",
+      "section": "Discussion ::: The potential of Translate-Test was underestimated.",
+      "title_path": "Discussion ::: The potential of Translate-Test was underestimated.",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_8",
+      "content": "[Section] Experimental design ::: Training variants\n[source_id=21] We try 3 variants of each training set to fine-tune our models: (i) the original one in English (Orig), (ii) an English paraphrase of it generated through back-translation using Spanish or Finnish as pivot (BT-ES and BT-FI), and (iii) a machine translated version in Spanish or Finnish (MT-ES and MT-FI). For sentences occurring multiple times in the training set (e.g. premises repeated for multiple hypotheses), we use the exact same translation for all occurrences, as our goal is to understand the inherent effect of translation rather than its potential application as a data augmentation method.\n[source_id=22] In order to train the machine translation systems for MT-XX and BT-XX, we use the big Transformer model BIBREF29 with the same settings as BIBREF30 and SentencePiece tokenization BIBREF31 with a joint vocabulary of 32k subwords. For English-Spanish, we train for 10 epochs on all parallel data from WMT 2013 BIBREF32 and ParaCrawl v5.0 BIBREF33. For English-Finnish, we train for 40 epochs on Europarl and Wiki Titles from WMT 2019 BIBREF34, ParaCrawl v5.0, and DGT, EUbookshop and TildeMODEL from OPUS BIBREF35. In both cases, we remove sentences longer than 250 tokens, with a source/target ratio exceeding 1.5, or for which langid.py BIBREF36 predicts a different language, resulting in a final corpus size of 48M and 7M sentence pairs, respectively. We use sampling decoding with a temperature of 0.5 for inference, which produces more diverse translations than beam search BIBREF37 and performed better in our preliminary experiments.",
+      "score": 4.333663365077679,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        21,
+        22
+      ],
+      "child_qasper_evidence_texts": [
+        "We try 3 variants of each training set to fine-tune our models: (i) the original one in English (Orig), (ii) an English paraphrase of it generated through back-translation using Spanish or Finnish as pivot (BT-ES and BT-FI), and (iii) a machine translated version in Spanish or Finnish (MT-ES and MT-FI). For sentences occurring multiple times in the training set (e.g. premises repeated for multiple hypotheses), we use the exact same translation for all occurrences, as our goal is to understand the inherent effect of translation rather than its potential application as a data augmentation method.",
+        "In order to train the machine translation systems for MT-XX and BT-XX, we use the big Transformer model BIBREF29 with the same settings as BIBREF30 and SentencePiece tokenization BIBREF31 with a joint vocabulary of 32k subwords. For English-Spanish, we train for 10 epochs on all parallel data from WMT 2013 BIBREF32 and ParaCrawl v5.0 BIBREF33. For English-Finnish, we train for 40 epochs on Europarl and Wiki Titles from WMT 2019 BIBREF34, ParaCrawl v5.0, and DGT, EUbookshop and TildeMODEL from OPUS BIBREF35. In both cases, we remove sentences longer than 250 tokens, with a source/target ratio exceeding 1.5, or for which langid.py BIBREF36 predicts a different language, resulting in a final corpus size of 48M and 7M sentence pairs, respectively. We use sampling decoding with a temperature of 0.5 for inference, which produces more diverse translations than beam search BIBREF37 and performed better in our preliminary experiments."
+      ],
+      "child_pages": [
+        8,
+        8
+      ],
+      "child_sections": [
+        "Experimental design ::: Training variants",
+        "Experimental design ::: Training variants"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Experimental design ::: Training variants",
+          0
+        ],
+        [
+          "Experimental design ::: Training variants",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Experimental design ::: Training variants",
+      "section": "Experimental design ::: Training variants",
+      "title_path": "Experimental design ::: Training variants",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 7,
+      "content": "Despite overlooked to date, we show that such mismatch has a notable impact in the performance of existing cross-lingual models. By using back-translation BIBREF3 to paraphrase each training instance, we obtain another English version of the training set that better resembles the test set, obtaining substantial improvements for the Translate-Test and Zero-Shot approaches in cross-lingual Natural Language Inference (NLI). While improvements brought by machine translation have previously been attributed to data augmentation BIBREF4, we reject this hypothesis and show that the phenomenon is only present in translated test sets, but not in original ones. Instead, our analysis reveals that this behavior is caused by subtle artifacts arising from the translation process itself. In particular, we show that translating different parts of each instance separately (e.g. the premise and the hypothesis in NLI) can alter superficial patterns in the data (e.g. the degree of lexical overlap between them), which severely affects the generalization ability of current models. Based on the gained insights, we improve the state-of-the-art in XNLI, and show that some previous findings need to be reconsidered in the light of this phenomenon.",
+      "qasper_evidence_text": "Despite overlooked to date, we show that such mismatch has a notable impact in the performance of existing cross-lingual models. By using back-translation BIBREF3 to paraphrase each training instance, we obtain another English version of the training set that better resembles the test set, obtaining substantial improvements for the Translate-Test and Zero-Shot approaches in cross-lingual Natural Language Inference (NLI). While improvements brought by machine translation have previously been attributed to data augmentation BIBREF4, we reject this hypothesis and show that the phenomenon is only present in translated test sets, but not in original ones. Instead, our analysis reveals that this behavior is caused by subtle artifacts arising from the translation process itself. In particular, we show that translating different parts of each instance separately (e.g. the premise and the hypothesis in NLI) can alter superficial patterns in the data (e.g. the degree of lexical overlap between them), which severely affects the generalization ability of current models. Based on the gained insights, we improve the state-of-the-art in XNLI, and show that some previous findings need to be reconsidered in the light of this phenomenon.",
+      "source_node_id": 7,
+      "node_id": 7,
+      "paragraph_id": 7,
+      "evidence_id": 7,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_1",
+      "rank": 3,
+      "score": 6.074242069820648,
+      "block_type": "paragraph",
+      "page": 1,
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title": "Introduction",
+      "hotpot_title": "Introduction",
+      "sent_id": 3,
+      "hotpot_sent_id": 3,
+      "supporting_rank": 2
+    }
+  ],
+  "supporting_block_ids": [
+    7
+  ]
+}

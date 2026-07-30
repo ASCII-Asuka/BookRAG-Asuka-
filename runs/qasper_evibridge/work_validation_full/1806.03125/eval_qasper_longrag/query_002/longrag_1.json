@@ -1,0 +1,124 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Text classification has become an indispensable task due to the rapid growth in the number of texts in digital form available online. It aims to classify different texts, also called documents, into a fixed number of predefined categories, helping to organize data, and making easier for users to find the desired information. Over the past three decades, many methods based on machine learning and statistical models have been applied to perform this task, such as latent semantic analysis (LSA), support vector machines (SVM), and multinomial naive Bayes (MNB).\n[source_id=5] The first step in utilizing such methods to categorize textual data is to convert the texts into a vector representation. One of the most popular text representation models is the bag-of-words model BIBREF0 , which represents each document in a collection as a vector in a vector space. Each dimension of the vectors represents a term (e.g., a word, a sequence of words), and its value encodes a weight, which can be how many times the term occurs in the document.\n[source_id=6] Despite showing positive results in tasks such as language modeling and classification BIBREF1 , BIBREF2 , BIBREF3 , the BOW representation has limitations: first, feature vectors are commonly very high-dimensional, resulting in sparse document representations, which are hard to model due to space and time complexity. Second, BOW does not consider the proximity of words and their position in the text and consequently cannot encode the words semantic meanings.\n[source_id=7] To solve these problems, neural networks have been employed to learn vector representations of words BIBREF4 , BIBREF5 , BIBREF6 , BIBREF7 . In particular, the word2vec representation BIBREF8 has gained attention. Given a training corpus, word2vec can generate a vector for each word in the corpus that encodes its semantic information. These word vectors are distributed in such a way that words from similar contexts are represented by word vectors with high correlation, while words from different contexts are represented by word vectors with low correlation.\n[source_id=8] One crucial aspect of the word2vec representation is that arithmetic and distance calculation between two word vectors can be performed, giving information about their semantic relationship. However, rather than looking at pairs of word vectors, we are interested in studying the relationship between sets of vectors as a whole and, therefore, it is desirable to have a text representation based on a set of these word vectors.\n[source_id=9] To tackle this problem, we introduce the novel concept of word subspace. It is mathematically defined as a low dimensional linear subspace in a word vector space with high dimensionality. Given that words from texts of the same class belong to the same context, it is possible to model word vectors of each class as word subspaces and efficiently compare them in terms of similarity by using canonical angles between the word subspaces. Through this representation, most of the variability of the class is retained. Consequently, a word subspace can effectively and compactly represent the context of the corresponding text. We achieve this framework through the mutual subspace method (MSM) BIBREF9 .\n[source_id=10] The word subspace of each text class is modeled by applying PCA without data centering to the set of word vectors of the class. When modeling the word subspaces, we assume only one occurrence of each word inside the class.\n[source_id=11] However, as seen in the BOW approach, the frequency of words inside a text is an informative feature that should be considered. In order to introduce this feature in the word subspace modeling and enhance its performance, we further extend the concept of word subspace to the term-frequency (TF) weighted word subspace.\n[source_id=12] In this extension, we consider a set of weights, which encodes the words frequencies, when performing the PCA. Text classification with TF weighted word subspace can also be performed under the framework of MSM. We show the validity of our modeling through experiments on the Reuters database, an established database for natural language processing tasks. We demonstrate the effectiveness of the word subspace formulation and its extension, comparing our methods' performance to various state-of-art methods.\n[source_id=13] The main contributions of our work are:\n[source_id=14] The remainder of this paper is organized as follows. In Section \"Related Work\" , we describe the main works related to text classification. In Section \"Word subspace\" , we present the formulation of our proposed word subspace. In Section \"Conventional text classification methods\" , we explain how text classification with word subspaces is performed under the MSM framework. Then, we present the TF weighted word subspace extension in Section \"TF weighted word subspace\" . Evaluation experiments and their results are described in Section \"Experimental Evaluation\" . Further discussion is then presented in Section \"Discussion\" , and our conclusions are described in Section \"Conclusions and Future Work\" .",
+  "score": 2.1160910989198833,
+  "rank": 5,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "child_qasper_evidence_texts": [
+    "Text classification has become an indispensable task due to the rapid growth in the number of texts in digital form available online. It aims to classify different texts, also called documents, into a fixed number of predefined categories, helping to organize data, and making easier for users to find the desired information. Over the past three decades, many methods based on machine learning and statistical models have been applied to perform this task, such as latent semantic analysis (LSA), support vector machines (SVM), and multinomial naive Bayes (MNB).",
+    "The first step in utilizing such methods to categorize textual data is to convert the texts into a vector representation. One of the most popular text representation models is the bag-of-words model BIBREF0 , which represents each document in a collection as a vector in a vector space. Each dimension of the vectors represents a term (e.g., a word, a sequence of words), and its value encodes a weight, which can be how many times the term occurs in the document.",
+    "Despite showing positive results in tasks such as language modeling and classification BIBREF1 , BIBREF2 , BIBREF3 , the BOW representation has limitations: first, feature vectors are commonly very high-dimensional, resulting in sparse document representations, which are hard to model due to space and time complexity. Second, BOW does not consider the proximity of words and their position in the text and consequently cannot encode the words semantic meanings.",
+    "To solve these problems, neural networks have been employed to learn vector representations of words BIBREF4 , BIBREF5 , BIBREF6 , BIBREF7 . In particular, the word2vec representation BIBREF8 has gained attention. Given a training corpus, word2vec can generate a vector for each word in the corpus that encodes its semantic information. These word vectors are distributed in such a way that words from similar contexts are represented by word vectors with high correlation, while words from different contexts are represented by word vectors with low correlation.",
+    "One crucial aspect of the word2vec representation is that arithmetic and distance calculation between two word vectors can be performed, giving information about their semantic relationship. However, rather than looking at pairs of word vectors, we are interested in studying the relationship between sets of vectors as a whole and, therefore, it is desirable to have a text representation based on a set of these word vectors.",
+    "To tackle this problem, we introduce the novel concept of word subspace. It is mathematically defined as a low dimensional linear subspace in a word vector space with high dimensionality. Given that words from texts of the same class belong to the same context, it is possible to model word vectors of each class as word subspaces and efficiently compare them in terms of similarity by using canonical angles between the word subspaces. Through this representation, most of the variability of the class is retained. Consequently, a word subspace can effectively and compactly represent the context of the corresponding text. We achieve this framework through the mutual subspace method (MSM) BIBREF9 .",
+    "The word subspace of each text class is modeled by applying PCA without data centering to the set of word vectors of the class. When modeling the word subspaces, we assume only one occurrence of each word inside the class.",
+    "However, as seen in the BOW approach, the frequency of words inside a text is an informative feature that should be considered. In order to introduce this feature in the word subspace modeling and enhance its performance, we further extend the concept of word subspace to the term-frequency (TF) weighted word subspace.",
+    "In this extension, we consider a set of weights, which encodes the words frequencies, when performing the PCA. Text classification with TF weighted word subspace can also be performed under the framework of MSM. We show the validity of our modeling through experiments on the Reuters database, an established database for natural language processing tasks. We demonstrate the effectiveness of the word subspace formulation and its extension, comparing our methods' performance to various state-of-art methods.",
+    "The main contributions of our work are:",
+    "The remainder of this paper is organized as follows. In Section \"Related Work\" , we describe the main works related to text classification. In Section \"Word subspace\" , we present the formulation of our proposed word subspace. In Section \"Conventional text classification methods\" , we explain how text classification with word subspaces is performed under the MSM framework. Then, we present the TF weighted word subspace extension in Section \"TF weighted word subspace\" . Evaluation experiments and their results are described in Section \"Experimental Evaluation\" . Further discussion is then presented in Section \"Discussion\" , and our conclusions are described in Section \"Conclusions and Future Work\" ."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ],
+    [
+      "Introduction",
+      7
+    ],
+    [
+      "Introduction",
+      8
+    ],
+    [
+      "Introduction",
+      9
+    ],
+    [
+      "Introduction",
+      10
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

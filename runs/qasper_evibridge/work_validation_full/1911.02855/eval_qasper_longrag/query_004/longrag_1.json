@@ -1,0 +1,79 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Data imbalance is a common issue in a variety of NLP tasks such as tagging and machine reading comprehension. Table TABREF3 gives concrete examples: for the Named Entity Recognition (NER) task BIBREF2, BIBREF3, most tokens are backgrounds with tagging class $O$. Specifically, the number of tokens tagging class $O$ is 5 times as many as those with entity labels for the CoNLL03 dataset and 8 times for the OntoNotes5.0 dataset; Data-imbalanced issue is more severe for MRC tasks BIBREF4, BIBREF5, BIBREF6, BIBREF7, BIBREF8 with the value of negative-positive ratio being 50-200.\n[source_id=5] Data imbalance results in the following two issues: (1) the training-test discrepancy: Without balancing the labels, the learning process tends to converge to a point that strongly biases towards class with the majority label. This actually creates a discrepancy between training and test: at training time, each training instance contributes equally to the objective function while at test time, F1 score concerns more about positive examples; (2) the overwhelming effect of easy-negative examples. As pointed out by meng2019dsreg, significantly large number of negative examples also means that the number of easy-negative example is large. The huge number of easy examples tends to overwhelm the training, making the model not sufficiently learned to distinguish between positive examples and hard-negative examples. The cross-entropy objective (CE for short) or maximum likelihood (MLE) objective, which is widely adopted as the training objective for data-imbalanced NLP tasks BIBREF9, BIBREF10, BIBREF11, BIBREF12, BIBREF13, BIBREF14, BIBREF15, handles neither of the issues.\n[source_id=6] To handle the first issue, we propose to replace CE or MLE with losses based on the Sørensen–Dice coefficient BIBREF0 or Tversky index BIBREF1. The Sørensen–Dice coefficient, dice loss for short, is the harmonic mean of precision and recall. It attaches equal importance to false positives (FPs) and false negatives (FNs) and is thus more immune to data-imbalanced datasets. Tversky index extends dice loss by using a weight that trades precision and recall, which can be thought as the approximation of the $F_{\\beta }$ score, and thus comes with more flexibility. Therefore, We use dice loss or Tversky index to replace CE loss to address the first issue.\n[source_id=7] Only using dice loss or Tversky index is not enough since they are unable to address the dominating influence of easy-negative examples. This is intrinsically because dice loss is actually a hard version of the F1 score. Taking the binary classification task as an example, at test time, an example will be classified as negative as long as its probability is smaller than 0.5, but training will push the value to 0 as much as possible. This gap isn't a big issue for balanced datasets, but is extremely detrimental if a big proportion of training examples are easy-negative ones: easy-negative examples can easily dominate training since their probabilities can be pushed to 0 fairly easily. Meanwhile, the model can hardly distinguish between hard-negative examples and positive ones. Inspired by the idea of focal loss BIBREF16 in computer vision, we propose a dynamic weight adjusting strategy, which associates each training example with a weight in proportion to $(1-p)$, and this weight dynamically changes as training proceeds. This strategy helps to deemphasize confident examples during training as their $p$ approaches the value of 1, makes the model attentive to hard-negative examples, and thus alleviates the dominating effect of easy-negative examples.\n[source_id=8] Combing both strategies, we observe significant performance boosts on a wide range of data imbalanced NLP tasks. Notably, we are able to achieve SOTA results on CTB5 (97.92, +1.86), CTB6 (96.57, +1.80) and UD1.4 (96.98, +2.19) for the POS task; SOTA results on CoNLL03 (93.33, +0.29), OntoNotes5.0 (92.07, +0.96)), MSRA 96.72(+0.97) and OntoNotes4.0 (84.47,+2.36) for the NER task; along with competitive results on the tasks of machine reading comprehension and paraphrase identification.\n[source_id=9] The rest of this paper is organized as follows: related work is presented in Section 2. We describe different training objectives in Section 3. Experimental results are presented in Section 4. We perform ablation studies in Section 5, followed by a brief conclusion in Section 6.",
+  "score": 1.4129645093568435,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "child_qasper_evidence_texts": [
+    "Data imbalance is a common issue in a variety of NLP tasks such as tagging and machine reading comprehension. Table TABREF3 gives concrete examples: for the Named Entity Recognition (NER) task BIBREF2, BIBREF3, most tokens are backgrounds with tagging class $O$. Specifically, the number of tokens tagging class $O$ is 5 times as many as those with entity labels for the CoNLL03 dataset and 8 times for the OntoNotes5.0 dataset; Data-imbalanced issue is more severe for MRC tasks BIBREF4, BIBREF5, BIBREF6, BIBREF7, BIBREF8 with the value of negative-positive ratio being 50-200.",
+    "Data imbalance results in the following two issues: (1) the training-test discrepancy: Without balancing the labels, the learning process tends to converge to a point that strongly biases towards class with the majority label. This actually creates a discrepancy between training and test: at training time, each training instance contributes equally to the objective function while at test time, F1 score concerns more about positive examples; (2) the overwhelming effect of easy-negative examples. As pointed out by meng2019dsreg, significantly large number of negative examples also means that the number of easy-negative example is large. The huge number of easy examples tends to overwhelm the training, making the model not sufficiently learned to distinguish between positive examples and hard-negative examples. The cross-entropy objective (CE for short) or maximum likelihood (MLE) objective, which is widely adopted as the training objective for data-imbalanced NLP tasks BIBREF9, BIBREF10, BIBREF11, BIBREF12, BIBREF13, BIBREF14, BIBREF15, handles neither of the issues.",
+    "To handle the first issue, we propose to replace CE or MLE with losses based on the Sørensen–Dice coefficient BIBREF0 or Tversky index BIBREF1. The Sørensen–Dice coefficient, dice loss for short, is the harmonic mean of precision and recall. It attaches equal importance to false positives (FPs) and false negatives (FNs) and is thus more immune to data-imbalanced datasets. Tversky index extends dice loss by using a weight that trades precision and recall, which can be thought as the approximation of the $F_{\\beta }$ score, and thus comes with more flexibility. Therefore, We use dice loss or Tversky index to replace CE loss to address the first issue.",
+    "Only using dice loss or Tversky index is not enough since they are unable to address the dominating influence of easy-negative examples. This is intrinsically because dice loss is actually a hard version of the F1 score. Taking the binary classification task as an example, at test time, an example will be classified as negative as long as its probability is smaller than 0.5, but training will push the value to 0 as much as possible. This gap isn't a big issue for balanced datasets, but is extremely detrimental if a big proportion of training examples are easy-negative ones: easy-negative examples can easily dominate training since their probabilities can be pushed to 0 fairly easily. Meanwhile, the model can hardly distinguish between hard-negative examples and positive ones. Inspired by the idea of focal loss BIBREF16 in computer vision, we propose a dynamic weight adjusting strategy, which associates each training example with a weight in proportion to $(1-p)$, and this weight dynamically changes as training proceeds. This strategy helps to deemphasize confident examples during training as their $p$ approaches the value of 1, makes the model attentive to hard-negative examples, and thus alleviates the dominating effect of easy-negative examples.",
+    "Combing both strategies, we observe significant performance boosts on a wide range of data imbalanced NLP tasks. Notably, we are able to achieve SOTA results on CTB5 (97.92, +1.86), CTB6 (96.57, +1.80) and UD1.4 (96.98, +2.19) for the POS task; SOTA results on CoNLL03 (93.33, +0.29), OntoNotes5.0 (92.07, +0.96)), MSRA 96.72(+0.97) and OntoNotes4.0 (84.47,+2.36) for the NER task; along with competitive results on the tasks of machine reading comprehension and paraphrase identification.",
+    "The rest of this paper is organized as follows: related work is presented in Section 2. We describe different training objectives in Section 3. Experimental results are presented in Section 4. We perform ablation studies in Section 5, followed by a brief conclusion in Section 6."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

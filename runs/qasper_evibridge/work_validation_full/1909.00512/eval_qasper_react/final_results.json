@@ -1,0 +1,133 @@
+[
+  {
+    "question": "What experiments are proposed to test that upper layers produce context-specific embeddings?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "They measure self-similarity, intra-sentence similarity and maximum explainable variance of the embeddings in the upper layers.",
+        "yes_no": null,
+        "evidence": [
+          "We measure how contextual a word representation is using three different metrics: self-similarity, intra-sentence similarity, and maximum explainable variance."
+        ],
+        "evidence_block_ids": [
+          24
+        ],
+        "evidence_paragraph_ids": [
+          24
+        ]
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "They plot the average cosine similarity between uniformly random words increases exponentially from layers 8 through 12.  \nThey plot the average self-similarity of uniformly randomly sampled words in each layer of BERT, ELMo, and GPT-2 and shown that the higher layer produces more context-specific embeddings.\nThey plot that word representations in a sentence become more context-specific in upper layers, they drift away from one another.",
+        "yes_no": null,
+        "evidence": [
+          "Recall from Definition 1 that the self-similarity of a word, in a given layer of a given model, is the average cosine similarity between its representations in different contexts, adjusted for anisotropy. If the self-similarity is 1, then the representations are not context-specific at all; if the self-similarity is 0, that the representations are maximally context-specific. In Figure FIGREF24, we plot the average self-similarity of uniformly randomly sampled words in each layer of BERT, ELMo, and GPT-2. For example, the self-similarity is 1.0 in ELMo's input layer because representations in that layer are static character-level embeddings.",
+          "In all three models, the higher the layer, the lower the self-similarity is on average. In other words, the higher the layer, the more context-specific the contextualized representations. This finding makes intuitive sense. In image classification models, lower layers recognize more generic features such as edges while upper layers recognize more class-specific features BIBREF19. Similarly, upper layers of LSTMs trained on NLP tasks learn more task-specific representations BIBREF4. Therefore, it follows that upper layers of neural language models learn more context-specific representations, so as to predict the next word for a given context more accurately. Of all three models, representations in GPT-2 are the most context-specific, with those in GPT-2's last layer being almost maximally context-specific.",
+          "As seen in Figure FIGREF20, for GPT-2, the average cosine similarity between uniformly randomly words is roughly 0.6 in layers 2 through 8 but increases exponentially from layers 8 through 12. In fact, word representations in GPT-2's last layer are so anisotropic that any two words have on average an almost perfect cosine similarity! This pattern holds for BERT and ELMo as well, though there are exceptions: for example, the anisotropy in BERT's penultimate layer is much higher than in its final layer.",
+          "As word representations in a sentence become more context-specific in upper layers, they drift away from one another, although there are exceptions (see layer 12 in Figure FIGREF25). However, in all layers, the average similarity between words in the same sentence is still greater than the average similarity between randomly chosen words (i.e., the anisotropy baseline). This suggests a more nuanced contextualization than in ELMo, with BERT recognizing that although the surrounding sentence informs a word's meaning, two words in the same sentence do not necessarily have a similar meaning because they share the same context."
+        ],
+        "evidence_block_ids": [
+          45,
+          46,
+          42,
+          54
+        ],
+        "evidence_paragraph_ids": [
+          45,
+          46,
+          42,
+          54
+        ]
+      }
+    ],
+    "doc_uuid": "1909.00512",
+    "doc_path": "qasper://1909.00512",
+    "qasper_question_id": "1ec152119cf756b16191b236c85522afeed11f59",
+    "title": "How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings",
+    "evidence_block_ids": [
+      24,
+      45,
+      46,
+      42,
+      54
+    ],
+    "evidence_paragraph_ids": [
+      24,
+      45,
+      46,
+      42,
+      54
+    ],
+    "output": "{\"answer_short\": \"Three experiments: (1) layer-wise analysis of embedding similarity, (2) cross-context transferability tests, and (3) perturbation analysis of context-sensitive representations\", \"answer_rationale\": \"\", \"supporting_block_ids\": [62, 63]}",
+    "retrieved_node_ids": [
+      62,
+      63
+    ],
+    "retrieved_block_ids": [
+      62,
+      63
+    ],
+    "answer_short": "Three experiments: (1) layer-wise analysis of embedding similarity, (2) cross-context transferability tests, and (3) perturbation analysis of context-sensitive representations",
+    "supporting_block_ids": [
+      62,
+      63
+    ]
+  },
+  {
+    "question": "How do they calculate a static embedding for each word?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "They use the first principal component of a word's contextualized representation in a given layer as its static embedding.",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [
+          " by taking the first principal component (PC) of its contextualized representations in a given layer"
+        ],
+        "free_form_answer": "",
+        "yes_no": null,
+        "evidence": [
+          "As noted earlier, we can create static embeddings for each word by taking the first principal component (PC) of its contextualized representations in a given layer. In Table TABREF34, we plot the performance of these PC static embeddings on several benchmark tasks. These tasks cover semantic similarity, analogy solving, and concept categorization: SimLex999 BIBREF21, MEN BIBREF22, WS353 BIBREF23, RW BIBREF24, SemEval-2012 BIBREF25, Google analogy solving BIBREF0 MSR analogy solving BIBREF26, BLESS BIBREF27 and AP BIBREF28. We leave out layers 3 - 10 in Table TABREF34 because their performance is between those of Layers 2 and 11."
+        ],
+        "evidence_block_ids": [
+          62
+        ],
+        "evidence_paragraph_ids": [
+          62
+        ]
+      }
+    ],
+    "doc_uuid": "1909.00512",
+    "doc_path": "qasper://1909.00512",
+    "qasper_question_id": "891c2001d6baaaf0da4e65b647402acac621a7d2",
+    "title": "How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings",
+    "evidence_block_ids": [
+      62
+    ],
+    "evidence_paragraph_ids": [
+      62
+    ],
+    "output": "{\"answer_short\": \"by averaging its context vectors across all sentences in the corpus\", \"answer_rationale\": \"\", \"supporting_block_ids\": [59, 60]}",
+    "retrieved_node_ids": [
+      59,
+      60
+    ],
+    "retrieved_block_ids": [
+      59,
+      60
+    ],
+    "answer_short": "by averaging its context vectors across all sentences in the corpus",
+    "supporting_block_ids": [
+      59,
+      60
+    ]
+  }
+]

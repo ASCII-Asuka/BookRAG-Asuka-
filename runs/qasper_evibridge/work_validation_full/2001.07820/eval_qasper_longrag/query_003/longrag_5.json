@@ -1,0 +1,97 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Methodology ::: Model-based Attacking Method\n[source_id=27] The benchmark methods we test (Section SECREF9) are gradient-based and optimisation-based attacks (Section SECREF2). We propose an alternative model-based method to train a seperate generative model to generate text adversarial examples. Denoting the generative model as $\\mathcal {G}$, we train it to generate an adversarial example $X^{\\prime }$ given an input example $X$ such that $X^{\\prime }$ is similar to $X$ but that it changes the prediction of the target classifier $\\mathcal {D}$, i.e. $X^{\\prime } \\sim X$ and $\\mathcal {D}(X^{\\prime }) \\ne \\mathcal {D}(X)$.\n[source_id=28] For images, it is straightforward to combine $\\mathcal {G}$ and $\\mathcal {D}$ in the same network and use the loss of $\\mathcal {D}$ to update $\\mathcal {G}$ because $X^{\\prime }$ is continuous and can be fed to $\\mathcal {D}$ while keeping the whole network differentiable. For texts, $X^{\\prime }$ are discrete symbols (typically decoded with argmax or beam-search) and so the network is not fully differentiable. To create a fully differentiable network with $\\mathcal {G}+\\mathcal {D}$, we propose to use Gumbel-Softmax to imitate the categorical distribution BIBREF19. As the temperature ($\\tau $) of Gumbel-Softmax sampling approaches 0, the distribution of the sampled output $X^*$ is identical to $X^{\\prime }$. We illustrate this in Figure FIGREF12, where $X^*$ is fed to $\\mathcal {D}$ during training while $X^{\\prime }$ is generated as the output (i.e. the adversarial example) at test time.\n[source_id=29] $\\mathcal {G}$ is designed as an auto-encoder to reconstruct the input (denoted as AutoEncoder), with the following objectives to capture the evaluation criteria described in Section SECREF1:\n[source_id=30] $L_{adv}$, the adversarial loss that maximises the cross-entropy of $\\mathcal {D}$;\n[source_id=31] $L_{seq}$, the auto-encoder loss to reconstruct $X^{\\prime }$ from $X^{\\prime }$;\n[source_id=32] $L_{sem}$, the cosine distance between the mean embeddings of $X$ and $X^*$.\n[source_id=33] $L_{adv}$ ensures that the adversarial examples are fooling the classifier (criterion (a)); $L_{seq}$ regulates the adversarial example so that it isn't too different from the original input and has a reasonable language (criteria (b) and (c)); and $L_{sem}$ constrains the underlying semantic content of the original and adversarial sentences to be similar (criterion (b)); so reduces the likelihood of a sentiment flip (indirectly for criteria (d)). Note that criteria (d) is the perhaps the most difficult aspect to handle, as its interpretation is ultimately a human judgement.\n[source_id=34] We use two scaling hyper-parameters $\\lambda _{ae}$ and $\\lambda _{seq}$ to weigh the three objectives: $\\lambda _{ae}(\\lambda _{seq} * L_{seq} + (1-\\lambda _{seq})*L_{sem}) + (1-\\lambda _{ae})*L_{adv}$. We introduce attention layers to AutoEncoder and test both greedy and beam search decoding to improve the quality of generated adversarial examples. During training we alternate between positive-to-negative and negative-to-positive attack for different mini-batches.",
+  "score": 1.5729633838723027,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34
+  ],
+  "child_qasper_evidence_texts": [
+    "The benchmark methods we test (Section SECREF9) are gradient-based and optimisation-based attacks (Section SECREF2). We propose an alternative model-based method to train a seperate generative model to generate text adversarial examples. Denoting the generative model as $\\mathcal {G}$, we train it to generate an adversarial example $X^{\\prime }$ given an input example $X$ such that $X^{\\prime }$ is similar to $X$ but that it changes the prediction of the target classifier $\\mathcal {D}$, i.e. $X^{\\prime } \\sim X$ and $\\mathcal {D}(X^{\\prime }) \\ne \\mathcal {D}(X)$.",
+    "For images, it is straightforward to combine $\\mathcal {G}$ and $\\mathcal {D}$ in the same network and use the loss of $\\mathcal {D}$ to update $\\mathcal {G}$ because $X^{\\prime }$ is continuous and can be fed to $\\mathcal {D}$ while keeping the whole network differentiable. For texts, $X^{\\prime }$ are discrete symbols (typically decoded with argmax or beam-search) and so the network is not fully differentiable. To create a fully differentiable network with $\\mathcal {G}+\\mathcal {D}$, we propose to use Gumbel-Softmax to imitate the categorical distribution BIBREF19. As the temperature ($\\tau $) of Gumbel-Softmax sampling approaches 0, the distribution of the sampled output $X^*$ is identical to $X^{\\prime }$. We illustrate this in Figure FIGREF12, where $X^*$ is fed to $\\mathcal {D}$ during training while $X^{\\prime }$ is generated as the output (i.e. the adversarial example) at test time.",
+    "$\\mathcal {G}$ is designed as an auto-encoder to reconstruct the input (denoted as AutoEncoder), with the following objectives to capture the evaluation criteria described in Section SECREF1:",
+    "$L_{adv}$, the adversarial loss that maximises the cross-entropy of $\\mathcal {D}$;",
+    "$L_{seq}$, the auto-encoder loss to reconstruct $X^{\\prime }$ from $X^{\\prime }$;",
+    "$L_{sem}$, the cosine distance between the mean embeddings of $X$ and $X^*$.",
+    "$L_{adv}$ ensures that the adversarial examples are fooling the classifier (criterion (a)); $L_{seq}$ regulates the adversarial example so that it isn't too different from the original input and has a reasonable language (criteria (b) and (c)); and $L_{sem}$ constrains the underlying semantic content of the original and adversarial sentences to be similar (criterion (b)); so reduces the likelihood of a sentiment flip (indirectly for criteria (d)). Note that criteria (d) is the perhaps the most difficult aspect to handle, as its interpretation is ultimately a human judgement.",
+    "We use two scaling hyper-parameters $\\lambda _{ae}$ and $\\lambda _{seq}$ to weigh the three objectives: $\\lambda _{ae}(\\lambda _{seq} * L_{seq} + (1-\\lambda _{seq})*L_{sem}) + (1-\\lambda _{ae})*L_{adv}$. We introduce attention layers to AutoEncoder and test both greedy and beam search decoding to improve the quality of generated adversarial examples. During training we alternate between positive-to-negative and negative-to-positive attack for different mini-batches."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Methodology ::: Model-based Attacking Method",
+    "Methodology ::: Model-based Attacking Method",
+    "Methodology ::: Model-based Attacking Method",
+    "Methodology ::: Model-based Attacking Method",
+    "Methodology ::: Model-based Attacking Method",
+    "Methodology ::: Model-based Attacking Method",
+    "Methodology ::: Model-based Attacking Method",
+    "Methodology ::: Model-based Attacking Method"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Methodology ::: Model-based Attacking Method",
+      0
+    ],
+    [
+      "Methodology ::: Model-based Attacking Method",
+      1
+    ],
+    [
+      "Methodology ::: Model-based Attacking Method",
+      2
+    ],
+    [
+      "Methodology ::: Model-based Attacking Method",
+      3
+    ],
+    [
+      "Methodology ::: Model-based Attacking Method",
+      4
+    ],
+    [
+      "Methodology ::: Model-based Attacking Method",
+      5
+    ],
+    [
+      "Methodology ::: Model-based Attacking Method",
+      6
+    ],
+    [
+      "Methodology ::: Model-based Attacking Method",
+      7
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Methodology ::: Model-based Attacking Method",
+  "section": "Methodology ::: Model-based Attacking Method",
+  "title_path": "Methodology ::: Model-based Attacking Method",
+  "block_type": "long_unit"
+}

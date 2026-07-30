@@ -1,0 +1,106 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Chatbots such as dialog and question-answering systems have a long history in AI and natural language processing. Early such systems were mostly built using markup languages such as AIML, handcrafted conversation generation rules, and/or information retrieval techniques BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 . Recent neural conversation models BIBREF4 , BIBREF5 , BIBREF6 are even able to perform open-ended conversations. However, since they do not use explicit knowledge bases and do not perform inference, they often suffer from generic and dull responses BIBREF5 , BIBREF7 . More recently, BIBREF8 and BIBREF9 proposed to use knowledge bases (KBs) to help generate responses for knowledge-grounded conversation. However, one major weakness of all existing chat systems is that they do not explicitly or implicitly learn new knowledge in the conversation process. This seriously limits the scope of their applications. In contrast, we humans constantly learn new knowledge in our conversations. Even if some existing systems can use very large knowledge bases either harvested from a large data source such as the Web or built manually, these KBs still miss a large number of facts (knowledge) BIBREF10 . It is thus important for a chatbot to continuously learn new knowledge in the conversation process to expand its KB and to improve its conversation ability.\n[source_id=5] In recent years, researchers have studied the problem of KB completion, i.e., inferring new facts (knowledge) automatically from existing facts in a KB. KB completion (KBC) is defined as a binary classification problem: Given a query triple, ( INLINEFORM0 , INLINEFORM1 , INLINEFORM2 ), we want to predict whether the source entity INLINEFORM3 and target entity INLINEFORM4 can be linked by the relation INLINEFORM5 . However, existing approaches BIBREF11 , BIBREF12 , BIBREF13 , BIBREF14 , BIBREF15 , BIBREF16 solve this problem under the closed-world assumption, i.e., INLINEFORM6 , INLINEFORM7 and INLINEFORM8 are all known to exist in the KB. This is a major weakness because it means that no new knowledge or facts may contain unknown entities or relations. Due to this limitation, KBC is clearly not sufficient for knowledge learning in conversations because in a conversation, the user can say anything, which may contain entities and relations that are not already in the KB.\n[source_id=6] In this paper, we remove this assumption of KBC, and allow all INLINEFORM0 , INLINEFORM1 and INLINEFORM2 to be unknown. We call the new problem open-world knowledge base completion (OKBC). OKBC generalizes KBC. Below, we show that solving OKBC naturally provides the ground for knowledge learning and inference in conversations. In essence, we formulate an abstract problem of knowledge learning and inference in conversations as a well-defined OKBC problem in the interactive setting.\n[source_id=7] From the perspective of knowledge learning in conversations, essentially we can extract two key types of information, true facts and queries, from the user utterances. Queries are facts whose truth values need to be determined. Note that we do not study fact or relation extraction in this paper as there is an extensive work on the topic. (1) For a true fact, we will incorporate it into the KB. Here we need to make sure that it is not already in the KB, which involves relation resolution and entity linking. After a fact is added to the KB, we may predict that some related facts involving some existing relations in the KB may also be true (not logical implications as they can be automatically inferred). For example, if the user says “Obama was born in USA,” the system may guess that (Obama, CitizenOf, USA) (meaning that Obama is a citizen of USA) could also be true based on the current KB. To verify this fact, it needs to solve a KBC problem by treating (Obama, CitizenOf, USA) as a query. This is a KBC problem because the fact (Obama, BornIn, USA) extracted from the original sentence has been added to the KB. Then Obama and USA are in the KB. If the KBC problem is solved, it learns a new fact (Obama, CitizenOf, USA) in addition to the extracted fact (Obama, BornIn, USA). (2) For a query fact, e.g., (Obama, BornIn, USA) extracted from the user question “Was Obama born in USA?” we need to solve the OKBC problem if any of “Obama, “BornIn”, or “USA\" is not already in the KB.\n[source_id=8] We can see that OKBC is the core of a knowledge learning engine for conversation. Thus, in this paper, we focus on solving it. We assume that other tasks such as fact/relation extraction and resolution and guessing of related facts of an extracted fact are solved by other sub-systems.\n[source_id=9] We solve the OKBC problem by mimicking how humans acquire knowledge and perform reasoning in an interactive conversation. Whenever we encounter an unknown concept or relation while answering a query, we perform inference using our existing knowledge. If our knowledge does not allow us to draw a conclusion, we typically ask questions to others to acquire related knowledge and use it in inference. The process typically involves an inference strategy (a sequence of actions), which interleaves a sequence of processing and interactive actions. A processing action can be the selection of related facts, deriving inference chain, etc., that advances the inference process. An interactive action can be deciding what to ask, formulating a suitable question, etc., that enable us to interact. The process helps grow the knowledge over time and the gained knowledge enables us to communicate better in the future. We call this lifelong interactive learning and inference (LiLi). Lifelong learning is reflected by the facts that the newly acquired facts are retained in the KB and used in inference for future queries, and that the accumulated knowledge in addition to the updated KB including past inference performances are leveraged to guide future interaction and learning. LiLi should have the following capabilities:\n[source_id=10] This setting is ideal for many NLP applications like dialog and question-answering systems that naturally provide the scope for human interaction and demand real-time inference.\n[source_id=11] LiLi starts with the closed-world KBC approach path-ranking (PR) BIBREF11 , BIBREF17 and extends KBC in a major way to open-world knowledge base completion (OKBC). For a relation INLINEFORM0 , PR works by enumerating paths (except single-link path INLINEFORM1 ) between entity-pairs linked by INLINEFORM2 in the KB and use them as features to train a binary classifier to predict whether a query INLINEFORM3 should be in the KB. Here, a path between two entities is a sequence of relations linking them. In our work, we adopt the latest PR method, C-PR BIBREF16 and extend it to make it work in the open-world setting. C-PR enumerates paths by performing bidirectional random walks over the KB graph while leveraging the context of the source-target entity-pair. We also adopt and extend the compositional vector space model BIBREF20 , BIBREF21 with continual learning capability for prediction.\n[source_id=12] Given an OKBC query ( INLINEFORM0 , INLINEFORM1 , INLINEFORM2 ) (e.g., “(Obama, CitizenOf, USA), which means whether Obama a citizen of USA), LiLi interacts with the user (if needed) by dynamically formulating questions (see the interaction example in Figure 1, which will be further explained in §3) and leverages the interactively acquired knowledge (supporting facts (SFs) in the figure) for continued inference. To do so, LiLi formulates a query-specific inference strategy and executes it. We design LiLi in a Reinforcement Learning (RL) setting that performs sub-tasks like formulating and executing strategy, training a prediction model for inference, and knowledge retention for future use. To the best of our knowledge, our work is the first to address the OKBC problem and to propose an interactive learning mechanism to solve it in a continuous or lifelong manner. We empirically verify the effectiveness of LiLi on two standard real-world KBs: Freebase and WordNet. Experimental results show that LiLi is highly effective in terms of its predictive performance and strategy formulation ability.",
+  "score": 5.2568974717950585,
+  "rank": 2,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "child_qasper_evidence_texts": [
+    "Chatbots such as dialog and question-answering systems have a long history in AI and natural language processing. Early such systems were mostly built using markup languages such as AIML, handcrafted conversation generation rules, and/or information retrieval techniques BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 . Recent neural conversation models BIBREF4 , BIBREF5 , BIBREF6 are even able to perform open-ended conversations. However, since they do not use explicit knowledge bases and do not perform inference, they often suffer from generic and dull responses BIBREF5 , BIBREF7 . More recently, BIBREF8 and BIBREF9 proposed to use knowledge bases (KBs) to help generate responses for knowledge-grounded conversation. However, one major weakness of all existing chat systems is that they do not explicitly or implicitly learn new knowledge in the conversation process. This seriously limits the scope of their applications. In contrast, we humans constantly learn new knowledge in our conversations. Even if some existing systems can use very large knowledge bases either harvested from a large data source such as the Web or built manually, these KBs still miss a large number of facts (knowledge) BIBREF10 . It is thus important for a chatbot to continuously learn new knowledge in the conversation process to expand its KB and to improve its conversation ability.",
+    "In recent years, researchers have studied the problem of KB completion, i.e., inferring new facts (knowledge) automatically from existing facts in a KB. KB completion (KBC) is defined as a binary classification problem: Given a query triple, ( INLINEFORM0 , INLINEFORM1 , INLINEFORM2 ), we want to predict whether the source entity INLINEFORM3 and target entity INLINEFORM4 can be linked by the relation INLINEFORM5 . However, existing approaches BIBREF11 , BIBREF12 , BIBREF13 , BIBREF14 , BIBREF15 , BIBREF16 solve this problem under the closed-world assumption, i.e., INLINEFORM6 , INLINEFORM7 and INLINEFORM8 are all known to exist in the KB. This is a major weakness because it means that no new knowledge or facts may contain unknown entities or relations. Due to this limitation, KBC is clearly not sufficient for knowledge learning in conversations because in a conversation, the user can say anything, which may contain entities and relations that are not already in the KB.",
+    "In this paper, we remove this assumption of KBC, and allow all INLINEFORM0 , INLINEFORM1 and INLINEFORM2 to be unknown. We call the new problem open-world knowledge base completion (OKBC). OKBC generalizes KBC. Below, we show that solving OKBC naturally provides the ground for knowledge learning and inference in conversations. In essence, we formulate an abstract problem of knowledge learning and inference in conversations as a well-defined OKBC problem in the interactive setting.",
+    "From the perspective of knowledge learning in conversations, essentially we can extract two key types of information, true facts and queries, from the user utterances. Queries are facts whose truth values need to be determined. Note that we do not study fact or relation extraction in this paper as there is an extensive work on the topic. (1) For a true fact, we will incorporate it into the KB. Here we need to make sure that it is not already in the KB, which involves relation resolution and entity linking. After a fact is added to the KB, we may predict that some related facts involving some existing relations in the KB may also be true (not logical implications as they can be automatically inferred). For example, if the user says “Obama was born in USA,” the system may guess that (Obama, CitizenOf, USA) (meaning that Obama is a citizen of USA) could also be true based on the current KB. To verify this fact, it needs to solve a KBC problem by treating (Obama, CitizenOf, USA) as a query. This is a KBC problem because the fact (Obama, BornIn, USA) extracted from the original sentence has been added to the KB. Then Obama and USA are in the KB. If the KBC problem is solved, it learns a new fact (Obama, CitizenOf, USA) in addition to the extracted fact (Obama, BornIn, USA). (2) For a query fact, e.g., (Obama, BornIn, USA) extracted from the user question “Was Obama born in USA?” we need to solve the OKBC problem if any of “Obama, “BornIn”, or “USA\" is not already in the KB.",
+    "We can see that OKBC is the core of a knowledge learning engine for conversation. Thus, in this paper, we focus on solving it. We assume that other tasks such as fact/relation extraction and resolution and guessing of related facts of an extracted fact are solved by other sub-systems.",
+    "We solve the OKBC problem by mimicking how humans acquire knowledge and perform reasoning in an interactive conversation. Whenever we encounter an unknown concept or relation while answering a query, we perform inference using our existing knowledge. If our knowledge does not allow us to draw a conclusion, we typically ask questions to others to acquire related knowledge and use it in inference. The process typically involves an inference strategy (a sequence of actions), which interleaves a sequence of processing and interactive actions. A processing action can be the selection of related facts, deriving inference chain, etc., that advances the inference process. An interactive action can be deciding what to ask, formulating a suitable question, etc., that enable us to interact. The process helps grow the knowledge over time and the gained knowledge enables us to communicate better in the future. We call this lifelong interactive learning and inference (LiLi). Lifelong learning is reflected by the facts that the newly acquired facts are retained in the KB and used in inference for future queries, and that the accumulated knowledge in addition to the updated KB including past inference performances are leveraged to guide future interaction and learning. LiLi should have the following capabilities:",
+    "This setting is ideal for many NLP applications like dialog and question-answering systems that naturally provide the scope for human interaction and demand real-time inference.",
+    "LiLi starts with the closed-world KBC approach path-ranking (PR) BIBREF11 , BIBREF17 and extends KBC in a major way to open-world knowledge base completion (OKBC). For a relation INLINEFORM0 , PR works by enumerating paths (except single-link path INLINEFORM1 ) between entity-pairs linked by INLINEFORM2 in the KB and use them as features to train a binary classifier to predict whether a query INLINEFORM3 should be in the KB. Here, a path between two entities is a sequence of relations linking them. In our work, we adopt the latest PR method, C-PR BIBREF16 and extend it to make it work in the open-world setting. C-PR enumerates paths by performing bidirectional random walks over the KB graph while leveraging the context of the source-target entity-pair. We also adopt and extend the compositional vector space model BIBREF20 , BIBREF21 with continual learning capability for prediction.",
+    "Given an OKBC query ( INLINEFORM0 , INLINEFORM1 , INLINEFORM2 ) (e.g., “(Obama, CitizenOf, USA), which means whether Obama a citizen of USA), LiLi interacts with the user (if needed) by dynamically formulating questions (see the interaction example in Figure 1, which will be further explained in §3) and leverages the interactively acquired knowledge (supporting facts (SFs) in the figure) for continued inference. To do so, LiLi formulates a query-specific inference strategy and executes it. We design LiLi in a Reinforcement Learning (RL) setting that performs sub-tasks like formulating and executing strategy, training a prediction model for inference, and knowledge retention for future use. To the best of our knowledge, our work is the first to address the OKBC problem and to propose an interactive learning mechanism to solve it in a continuous or lifelong manner. We empirically verify the effectiveness of LiLi on two standard real-world KBs: Freebase and WordNet. Experimental results show that LiLi is highly effective in terms of its predictive performance and strategy formulation ability."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ],
+    [
+      "Introduction",
+      6
+    ],
+    [
+      "Introduction",
+      7
+    ],
+    [
+      "Introduction",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

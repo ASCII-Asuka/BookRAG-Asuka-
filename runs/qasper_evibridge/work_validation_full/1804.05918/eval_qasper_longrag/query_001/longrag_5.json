@@ -1,0 +1,79 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)\n[source_id=29] Previous work BIBREF1 , BIBREF2 , BIBREF10 has revealed that recognizing explicit vs. implicit discourse relations requires different strategies. Note that in the PDTB dataset, explicit discourse relations were distinguished from implicit ones, depending on whether a discourse connective exists between two discourse units. Therefore, explicit discourse relation detection can be simplified as a discourse connective phrase disambiguation problem BIBREF1 , BIBREF2 . On the contrary, predicting an implicit discourse relation should rely on understanding the overall contents of its two discourse units BIBREF2 , BIBREF10 .\n[source_id=30] Considering the different natures of explicit vs. implicit discourse relation prediction, we decide to untie parameters at the final discourse relation prediction layer and train two softmax classifiers, as illustrated in Figure 2 . The two classifiers have different sets of parameters, with one classifier for only implicit discourse relations and the other for only explicit discourse relations.\n[source_id=31] $$y_{t-1} =\n{\\left\\lbrace \\begin{array}{ll}\nsoftmax(W_{exp}[hDU_{t-1},hDU_t]+b_{exp}),&exp\\\\\nsoftmax(W_{imp}[hDU_{t-1},hDU_t]+b_{imp}),&imp\n\\end{array}\\right.}$$   (Eq. 12)\n[source_id=32] The loss function used for the neural network training considers loss induced by both implicit relation prediction and explicit relation prediction:\n[source_id=33] $$Loss = Loss_{imp} + \\alpha *Loss_{exp}$$   (Eq. 13)\n[source_id=34] The $\\alpha $ , in the full system, is set to be 1, which means that minimizing the loss in predicting either type of discourse relations is equally important. In the evaluation, we will also evaluate a system variant, where we will set $\\alpha = 0$ , which means that the neural network will not attempt to predict explicit discourse relations and implicit discourse relation prediction will not be influenced by predicting neighboring explicit discourse relations.",
+  "score": 2.3821735271388333,
+  "rank": 6,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    29,
+    30,
+    31,
+    32,
+    33,
+    34
+  ],
+  "child_qasper_evidence_texts": [
+    "Previous work BIBREF1 , BIBREF2 , BIBREF10 has revealed that recognizing explicit vs. implicit discourse relations requires different strategies. Note that in the PDTB dataset, explicit discourse relations were distinguished from implicit ones, depending on whether a discourse connective exists between two discourse units. Therefore, explicit discourse relation detection can be simplified as a discourse connective phrase disambiguation problem BIBREF1 , BIBREF2 . On the contrary, predicting an implicit discourse relation should rely on understanding the overall contents of its two discourse units BIBREF2 , BIBREF10 .",
+    "Considering the different natures of explicit vs. implicit discourse relation prediction, we decide to untie parameters at the final discourse relation prediction layer and train two softmax classifiers, as illustrated in Figure 2 . The two classifiers have different sets of parameters, with one classifier for only implicit discourse relations and the other for only explicit discourse relations.",
+    "$$y_{t-1} =\n{\\left\\lbrace \\begin{array}{ll}\nsoftmax(W_{exp}[hDU_{t-1},hDU_t]+b_{exp}),&exp\\\\\nsoftmax(W_{imp}[hDU_{t-1},hDU_t]+b_{imp}),&imp\n\\end{array}\\right.}$$   (Eq. 12)",
+    "The loss function used for the neural network training considers loss induced by both implicit relation prediction and explicit relation prediction:",
+    "$$Loss = Loss_{imp} + \\alpha *Loss_{exp}$$   (Eq. 13)",
+    "The $\\alpha $ , in the full system, is set to be 1, which means that minimizing the loss in predicting either type of discourse relations is equally important. In the evaluation, we will also evaluate a system variant, where we will set $\\alpha = 0$ , which means that the neural network will not attempt to predict explicit discourse relations and implicit discourse relation prediction will not be influenced by predicting neighboring explicit discourse relations."
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)",
+    "Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)",
+    "Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)",
+    "Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)",
+    "Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)",
+    "Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)",
+      0
+    ],
+    [
+      "Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)",
+      1
+    ],
+    [
+      "Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)",
+      2
+    ],
+    [
+      "Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)",
+      3
+    ],
+    [
+      "Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)",
+      4
+    ],
+    [
+      "Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)",
+  "section": "Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)",
+  "title_path": "Untie Parameters in the Softmax Prediction Layer (Implicit vs. Explicit)",
+  "block_type": "long_unit"
+}

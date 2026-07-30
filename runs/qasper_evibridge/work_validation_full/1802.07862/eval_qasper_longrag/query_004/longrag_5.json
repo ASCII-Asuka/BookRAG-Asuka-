@@ -1,0 +1,142 @@
+{
+  "id": "longrag_5",
+  "content": "[Section] Bi-LSTM + CRF for Multimodal NER\n[source_id=26] Our MNER model is built on a Bi-LSTM and CRF hybrid model. We use the following implementation for the entity Bi-LSTM.\n[source_id=27] it = (Wxiht-1 + Wcict-1)\n[source_id=28] ct = (1-it) ct-1\n[source_id=29] + it tanh(Wxcxt + Whcht-1)\n[source_id=30] ot = (Wxoxt + Whoht-1 + Wcoct)\n[source_id=31] ht = LSTM(xt)\n[source_id=32] = ot tanh(ct)\n[source_id=33] where INLINEFORM0 is a weighted average of three modalities INLINEFORM1 via the modality attention module, which will be defined in Section SECREF5 . Bias terms for gates are omitted here for simplicity of notation.\n[source_id=34] We then obtain bi-directional entity token representations INLINEFORM0 by concatenating its left and right context representations. To enforce structural correlations between labels in sequence decoding, INLINEFORM1 is then passed to a conditional random field (CRF) to produce a label for each token maximizing the following objective. y* = y p(y|h; WCRF)\n[source_id=35] p(y|h; WCRF) = t t (yt-1,yt;h) y' t t (y't-1,y't;h)\n[source_id=36] where INLINEFORM0 is a potential function, INLINEFORM1 is a set of parameters that defines the potential functions and weight vectors for label pairs ( INLINEFORM2 ). Bias terms are omitted for brevity of formulation.\n[source_id=37] The model can be trained via log-likelihood maximization for the training set INLINEFORM0 :\n[source_id=38] L(WCRF) = i p(y|h; W)",
+  "score": 2.0486343135743272,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_5",
+  "child_source_node_ids": [
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38
+  ],
+  "child_qasper_evidence_texts": [
+    "Our MNER model is built on a Bi-LSTM and CRF hybrid model. We use the following implementation for the entity Bi-LSTM.",
+    "it = (Wxiht-1 + Wcict-1)",
+    "ct = (1-it) ct-1",
+    "+ it tanh(Wxcxt + Whcht-1)",
+    "ot = (Wxoxt + Whoht-1 + Wcoct)",
+    "ht = LSTM(xt)",
+    "= ot tanh(ct)",
+    "where INLINEFORM0 is a weighted average of three modalities INLINEFORM1 via the modality attention module, which will be defined in Section SECREF5 . Bias terms for gates are omitted here for simplicity of notation.",
+    "We then obtain bi-directional entity token representations INLINEFORM0 by concatenating its left and right context representations. To enforce structural correlations between labels in sequence decoding, INLINEFORM1 is then passed to a conditional random field (CRF) to produce a label for each token maximizing the following objective. y* = y p(y|h; WCRF)",
+    "p(y|h; WCRF) = t t (yt-1,yt;h) y' t t (y't-1,y't;h)",
+    "where INLINEFORM0 is a potential function, INLINEFORM1 is a set of parameters that defines the potential functions and weight vectors for label pairs ( INLINEFORM2 ). Bias terms are omitted for brevity of formulation.",
+    "The model can be trained via log-likelihood maximization for the training set INLINEFORM0 :",
+    "L(WCRF) = i p(y|h; W)"
+  ],
+  "child_pages": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "child_sections": [
+    "Bi-LSTM + CRF for Multimodal NER",
+    "Bi-LSTM + CRF for Multimodal NER",
+    "Bi-LSTM + CRF for Multimodal NER",
+    "Bi-LSTM + CRF for Multimodal NER",
+    "Bi-LSTM + CRF for Multimodal NER",
+    "Bi-LSTM + CRF for Multimodal NER",
+    "Bi-LSTM + CRF for Multimodal NER",
+    "Bi-LSTM + CRF for Multimodal NER",
+    "Bi-LSTM + CRF for Multimodal NER",
+    "Bi-LSTM + CRF for Multimodal NER",
+    "Bi-LSTM + CRF for Multimodal NER",
+    "Bi-LSTM + CRF for Multimodal NER",
+    "Bi-LSTM + CRF for Multimodal NER"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Bi-LSTM + CRF for Multimodal NER",
+      0
+    ],
+    [
+      "Bi-LSTM + CRF for Multimodal NER",
+      1
+    ],
+    [
+      "Bi-LSTM + CRF for Multimodal NER",
+      2
+    ],
+    [
+      "Bi-LSTM + CRF for Multimodal NER",
+      3
+    ],
+    [
+      "Bi-LSTM + CRF for Multimodal NER",
+      4
+    ],
+    [
+      "Bi-LSTM + CRF for Multimodal NER",
+      5
+    ],
+    [
+      "Bi-LSTM + CRF for Multimodal NER",
+      6
+    ],
+    [
+      "Bi-LSTM + CRF for Multimodal NER",
+      7
+    ],
+    [
+      "Bi-LSTM + CRF for Multimodal NER",
+      8
+    ],
+    [
+      "Bi-LSTM + CRF for Multimodal NER",
+      9
+    ],
+    [
+      "Bi-LSTM + CRF for Multimodal NER",
+      10
+    ],
+    [
+      "Bi-LSTM + CRF for Multimodal NER",
+      11
+    ],
+    [
+      "Bi-LSTM + CRF for Multimodal NER",
+      12
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_5",
+  "section_id": "Bi-LSTM + CRF for Multimodal NER",
+  "section": "Bi-LSTM + CRF for Multimodal NER",
+  "title_path": "Bi-LSTM + CRF for Multimodal NER",
+  "block_type": "long_unit"
+}

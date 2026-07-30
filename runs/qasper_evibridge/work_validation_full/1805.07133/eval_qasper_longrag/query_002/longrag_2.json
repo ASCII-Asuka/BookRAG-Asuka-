@@ -1,0 +1,106 @@
+{
+  "id": "longrag_2",
+  "content": "[Section] Neural Machine Translation\n[source_id=10] In this section, we will describe the general architecture of NMT as a kind of sequence-to-sequence modeling framework. In this kind of sequence-to-sequence modeling framework, often there is an encoder trying to encode context information from the input sequence and a decoder to generate one item of the output sequence at a time based on the context of both input and output sequences. Besides, an additional component, named attention, exists in between, deciding which parts of the input sequence the decoder should pay attention in order to choose which to output next. In other words, this attention component calculates the context relevant to the decision of the decoder at the considering time. Those components as a whole constitute a large trainable neural architecture called the famous attention-based encoder-decoder framework. This framework becomes popular in many sequence-to-sequence tasks.\n[source_id=11] In the field of machine translation, using the attention-based encoder-decoder framework is referred to as Neural Machine Translation approach. First presented in BIBREF0 , the encoder and decoder in NMT are recurrent-based, which each hidden unit in those components is a recurrent unit like Long Short-term Memory (LSTM) BIBREF5 or Gated Recurrent Unit(GRU) BIBREF6 . Later, the encoder or decoder can also be a convolutional architecture, as in BIBREF7 . Recently, BIBREF8 introduces transformer architecture, in which both the encoder and decoder are a special variant of attention mechanism, called self attention. In this paper, we will briefly explain the Recurrent NMT as we utilize it in our experiments.\n[source_id=12] The Recurrent NMT model follows the attention-based architecture proposed by BIBREF0 . The bidirectional recurrent encoder reads every words INLINEFORM0 of a source sentence INLINEFORM1 and encodes a representation INLINEFORM2 of the sentence into a fixed-length vector INLINEFORM3 concatenated from those of the forward and backward directions: INLINEFORM4\n[source_id=13] Here INLINEFORM0 is the one-hot vector of the word INLINEFORM1 and INLINEFORM2 is the word embedding matrix which is shared across the source words. INLINEFORM3 is the recurrent unit computing the current hidden state of the encoder based on the previous hidden state. INLINEFORM4 is then called an annotation vector, which represent the information of the source sentence up to the time INLINEFORM5 from both forward and backward directions.\n[source_id=14] Those annotation vectors of the source sentences are combined in the attention layers in a way that the resulted vector encodes the source context relevant to the considering target word the decoder should produce. Intuitively, a relevance between the previous target word INLINEFORM0 and the annotation vectors INLINEFORM1 corresponding to the source words INLINEFORM2 can be used to form some attention scenario: DISPLAYFORM0\n[source_id=15] This specific attention mechanism, originally called alignment model in BIBREF0 , has been employed as a simple feedforward network with the first layer is a learnable layer via adaptation factors INLINEFORM0 , INLINEFORM1 and INLINEFORM2 . The relevance scores INLINEFORM3 are then normalized into attention weights INLINEFORM4 and the context vector INLINEFORM5 is calculated as the weighted sum of all annotation vectors INLINEFORM6 . Depending on how much attention the target word at time INLINEFORM7 put on the source states INLINEFORM8 , a soft alignment is learned and a source context INLINEFORM9 at time INLINEFORM10 is calculated prior to the prediction of the decoder.\n[source_id=16] Similar to the encoder, the recurrent decoder recursively generates one target word INLINEFORM0 to form a translated target sentence INLINEFORM1 in the end. At time INLINEFORM2 , it takes the previous hidden state of the decoder INLINEFORM3 , the previous embedded word representation INLINEFORM4 and the time-specific context vector INLINEFORM5 as inputs to calculate the current hidden state INLINEFORM6 : INLINEFORM7\n[source_id=17] Again, INLINEFORM0 is the recurrent activation function of the decoder and INLINEFORM1 is the shared word embedding matrix of the target sentences.\n[source_id=18] Given the parallel corpus consisting of INLINEFORM0 training examples INLINEFORM1 , the objective is to maximize the conditional log-probability of the correct translation given a source sentence with respect to the parameters INLINEFORM2 of the whole model: INLINEFORM3",
+  "score": 0.07137054547667195,
+  "rank": 3,
+  "source": "longrag",
+  "node_id": "longrag_2",
+  "child_source_node_ids": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "child_qasper_evidence_texts": [
+    "In this section, we will describe the general architecture of NMT as a kind of sequence-to-sequence modeling framework. In this kind of sequence-to-sequence modeling framework, often there is an encoder trying to encode context information from the input sequence and a decoder to generate one item of the output sequence at a time based on the context of both input and output sequences. Besides, an additional component, named attention, exists in between, deciding which parts of the input sequence the decoder should pay attention in order to choose which to output next. In other words, this attention component calculates the context relevant to the decision of the decoder at the considering time. Those components as a whole constitute a large trainable neural architecture called the famous attention-based encoder-decoder framework. This framework becomes popular in many sequence-to-sequence tasks.",
+    "In the field of machine translation, using the attention-based encoder-decoder framework is referred to as Neural Machine Translation approach. First presented in BIBREF0 , the encoder and decoder in NMT are recurrent-based, which each hidden unit in those components is a recurrent unit like Long Short-term Memory (LSTM) BIBREF5 or Gated Recurrent Unit(GRU) BIBREF6 . Later, the encoder or decoder can also be a convolutional architecture, as in BIBREF7 . Recently, BIBREF8 introduces transformer architecture, in which both the encoder and decoder are a special variant of attention mechanism, called self attention. In this paper, we will briefly explain the Recurrent NMT as we utilize it in our experiments.",
+    "The Recurrent NMT model follows the attention-based architecture proposed by BIBREF0 . The bidirectional recurrent encoder reads every words INLINEFORM0 of a source sentence INLINEFORM1 and encodes a representation INLINEFORM2 of the sentence into a fixed-length vector INLINEFORM3 concatenated from those of the forward and backward directions: INLINEFORM4",
+    "Here INLINEFORM0 is the one-hot vector of the word INLINEFORM1 and INLINEFORM2 is the word embedding matrix which is shared across the source words. INLINEFORM3 is the recurrent unit computing the current hidden state of the encoder based on the previous hidden state. INLINEFORM4 is then called an annotation vector, which represent the information of the source sentence up to the time INLINEFORM5 from both forward and backward directions.",
+    "Those annotation vectors of the source sentences are combined in the attention layers in a way that the resulted vector encodes the source context relevant to the considering target word the decoder should produce. Intuitively, a relevance between the previous target word INLINEFORM0 and the annotation vectors INLINEFORM1 corresponding to the source words INLINEFORM2 can be used to form some attention scenario: DISPLAYFORM0",
+    "This specific attention mechanism, originally called alignment model in BIBREF0 , has been employed as a simple feedforward network with the first layer is a learnable layer via adaptation factors INLINEFORM0 , INLINEFORM1 and INLINEFORM2 . The relevance scores INLINEFORM3 are then normalized into attention weights INLINEFORM4 and the context vector INLINEFORM5 is calculated as the weighted sum of all annotation vectors INLINEFORM6 . Depending on how much attention the target word at time INLINEFORM7 put on the source states INLINEFORM8 , a soft alignment is learned and a source context INLINEFORM9 at time INLINEFORM10 is calculated prior to the prediction of the decoder.",
+    "Similar to the encoder, the recurrent decoder recursively generates one target word INLINEFORM0 to form a translated target sentence INLINEFORM1 in the end. At time INLINEFORM2 , it takes the previous hidden state of the decoder INLINEFORM3 , the previous embedded word representation INLINEFORM4 and the time-specific context vector INLINEFORM5 as inputs to calculate the current hidden state INLINEFORM6 : INLINEFORM7",
+    "Again, INLINEFORM0 is the recurrent activation function of the decoder and INLINEFORM1 is the shared word embedding matrix of the target sentences.",
+    "Given the parallel corpus consisting of INLINEFORM0 training examples INLINEFORM1 , the objective is to maximize the conditional log-probability of the correct translation given a source sentence with respect to the parameters INLINEFORM2 of the whole model: INLINEFORM3"
+  ],
+  "child_pages": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "child_sections": [
+    "Neural Machine Translation",
+    "Neural Machine Translation",
+    "Neural Machine Translation",
+    "Neural Machine Translation",
+    "Neural Machine Translation",
+    "Neural Machine Translation",
+    "Neural Machine Translation",
+    "Neural Machine Translation",
+    "Neural Machine Translation"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Neural Machine Translation",
+      0
+    ],
+    [
+      "Neural Machine Translation",
+      1
+    ],
+    [
+      "Neural Machine Translation",
+      2
+    ],
+    [
+      "Neural Machine Translation",
+      3
+    ],
+    [
+      "Neural Machine Translation",
+      4
+    ],
+    [
+      "Neural Machine Translation",
+      5
+    ],
+    [
+      "Neural Machine Translation",
+      6
+    ],
+    [
+      "Neural Machine Translation",
+      7
+    ],
+    [
+      "Neural Machine Translation",
+      8
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_2",
+  "section_id": "Neural Machine Translation",
+  "section": "Neural Machine Translation",
+  "title_path": "Neural Machine Translation",
+  "block_type": "long_unit"
+}

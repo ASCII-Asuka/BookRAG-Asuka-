@@ -1,0 +1,97 @@
+{
+  "id": "longrag_12",
+  "content": "[Section] Experimental Results\n[source_id=63] To evaluate the performance of the proposed approach, we use the evaluation metrics such as precision, recall and F-measure. Precision is defined as the proportion of the correctly identified events out of the model generated events. Recall is defined as the proportion of correctly identified true events. For calculating the precision of the 4-tuple, we use following criteria:\n[source_id=64] (1) Do the entity/organization, location, date/person and keyword that we have extracted refer to the same event?\n[source_id=65] (2) If the extracted representation contains keywords, are they informative enough to tell us what happened?\n[source_id=66] Table TABREF35 shows the event extraction results on the three datasets. The statistics are obtained with the default parameter setting that INLINEFORM0 is set to 5, number of hidden units INLINEFORM1 is set to 200, and INLINEFORM2 contains three fully-connected layers. The event number INLINEFORM3 for three datasets are set to 25, 25 and 35, respectively. The examples of extracted events are shown in Table. TABREF36 .\n[source_id=67] It can be observed that K-means performs the worst over all three datasets. On the social media datasets, AEM outpoerforms both LEM and DPEMM by 6.5% and 1.7% respectively in F-measure on the FSD dataset, and 4.4% and 3.7% in F-measure on the Twitter dataset. We can also observe that apart from K-means, all the approaches perform worse on the Twitter dataset compared to FSD, possibly due to the limited size of the Twitter dataset. Moreover, on the Google dataset, the proposed AEM performs significantly better than LEM and DPEMM. It improves upon LEM by 15.5% and upon DPEMM by more than 30% in F-measure. This is because: (1) the assumption made by LEM and DPEMM that all words in a document are generated from a single event is not suitable for long text such as news articles; (2) DPEMM generates too many irrelevant events which leads to a very low precision score. Overall, we see the superior performance of AEM across all datasets, with more significant improvement on the for Google datasets (long text).\n[source_id=68] We next visualize the detected events based on the discriminative features learned by the trained INLINEFORM0 network in AEM. The t-SNE BIBREF16 visualization results on the datasets are shown in Figure FIGREF19 . For clarity, each subplot is plotted on a subset of the dataset containing ten randomly selected events. It can be observed that documents describing the same event have been grouped into the same cluster.\n[source_id=69] To further evaluate if a variation of the parameters INLINEFORM0 (the number of discriminator iterations per generator iteration), INLINEFORM1 (the number of units in hidden layer) and the structure of generator INLINEFORM2 will impact the extraction performance, additional experiments have been conducted on the Google dataset, with INLINEFORM3 set to 5, 7 and 10, INLINEFORM4 set to 100, 150 and 200, and three INLINEFORM5 structures (3, 4 and 5 layers). The comparison results on precision, recall and F-measure are shown in Figure FIGREF20 . From the results, it could be observed that AEM with the 5-layer generator performs the best and achieves 96.7% in F-measure, and the worst F-measure obtained by AEM is 85.7%. Overall, the AEM outperforms all compared approaches acorss various parameter settings, showing relatively stable performance.\n[source_id=70] Finally, we compare in Figure FIGREF37 the training time required for each model, excluding the constant time required by each model to load the data. We could observe that K-means runs fastest among all four approaches. Both LEM and DPEMM need to sample the event allocation for each document and update the relevant counts during Gibbs sampling which are time consuming. AEM only requires a fraction of the training time compared to LEM and DPEMM. Moreover, on a larger dataset such as the Google dataset, AEM appears to be far more efficient compared to LEM and DPEMM.",
+  "score": 3.6704564245922615,
+  "rank": 4,
+  "source": "longrag",
+  "node_id": "longrag_12",
+  "child_source_node_ids": [
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70
+  ],
+  "child_qasper_evidence_texts": [
+    "To evaluate the performance of the proposed approach, we use the evaluation metrics such as precision, recall and F-measure. Precision is defined as the proportion of the correctly identified events out of the model generated events. Recall is defined as the proportion of correctly identified true events. For calculating the precision of the 4-tuple, we use following criteria:",
+    "(1) Do the entity/organization, location, date/person and keyword that we have extracted refer to the same event?",
+    "(2) If the extracted representation contains keywords, are they informative enough to tell us what happened?",
+    "Table TABREF35 shows the event extraction results on the three datasets. The statistics are obtained with the default parameter setting that INLINEFORM0 is set to 5, number of hidden units INLINEFORM1 is set to 200, and INLINEFORM2 contains three fully-connected layers. The event number INLINEFORM3 for three datasets are set to 25, 25 and 35, respectively. The examples of extracted events are shown in Table. TABREF36 .",
+    "It can be observed that K-means performs the worst over all three datasets. On the social media datasets, AEM outpoerforms both LEM and DPEMM by 6.5% and 1.7% respectively in F-measure on the FSD dataset, and 4.4% and 3.7% in F-measure on the Twitter dataset. We can also observe that apart from K-means, all the approaches perform worse on the Twitter dataset compared to FSD, possibly due to the limited size of the Twitter dataset. Moreover, on the Google dataset, the proposed AEM performs significantly better than LEM and DPEMM. It improves upon LEM by 15.5% and upon DPEMM by more than 30% in F-measure. This is because: (1) the assumption made by LEM and DPEMM that all words in a document are generated from a single event is not suitable for long text such as news articles; (2) DPEMM generates too many irrelevant events which leads to a very low precision score. Overall, we see the superior performance of AEM across all datasets, with more significant improvement on the for Google datasets (long text).",
+    "We next visualize the detected events based on the discriminative features learned by the trained INLINEFORM0 network in AEM. The t-SNE BIBREF16 visualization results on the datasets are shown in Figure FIGREF19 . For clarity, each subplot is plotted on a subset of the dataset containing ten randomly selected events. It can be observed that documents describing the same event have been grouped into the same cluster.",
+    "To further evaluate if a variation of the parameters INLINEFORM0 (the number of discriminator iterations per generator iteration), INLINEFORM1 (the number of units in hidden layer) and the structure of generator INLINEFORM2 will impact the extraction performance, additional experiments have been conducted on the Google dataset, with INLINEFORM3 set to 5, 7 and 10, INLINEFORM4 set to 100, 150 and 200, and three INLINEFORM5 structures (3, 4 and 5 layers). The comparison results on precision, recall and F-measure are shown in Figure FIGREF20 . From the results, it could be observed that AEM with the 5-layer generator performs the best and achieves 96.7% in F-measure, and the worst F-measure obtained by AEM is 85.7%. Overall, the AEM outperforms all compared approaches acorss various parameter settings, showing relatively stable performance.",
+    "Finally, we compare in Figure FIGREF37 the training time required for each model, excluding the constant time required by each model to load the data. We could observe that K-means runs fastest among all four approaches. Both LEM and DPEMM need to sample the event allocation for each document and update the relevant counts during Gibbs sampling which are time consuming. AEM only requires a fraction of the training time compared to LEM and DPEMM. Moreover, on a larger dataset such as the Google dataset, AEM appears to be far more efficient compared to LEM and DPEMM."
+  ],
+  "child_pages": [
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12
+  ],
+  "child_sections": [
+    "Experimental Results",
+    "Experimental Results",
+    "Experimental Results",
+    "Experimental Results",
+    "Experimental Results",
+    "Experimental Results",
+    "Experimental Results",
+    "Experimental Results"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Experimental Results",
+      0
+    ],
+    [
+      "Experimental Results",
+      1
+    ],
+    [
+      "Experimental Results",
+      2
+    ],
+    [
+      "Experimental Results",
+      3
+    ],
+    [
+      "Experimental Results",
+      4
+    ],
+    [
+      "Experimental Results",
+      5
+    ],
+    [
+      "Experimental Results",
+      6
+    ],
+    [
+      "Experimental Results",
+      7
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_12",
+  "section_id": "Experimental Results",
+  "section": "Experimental Results",
+  "title_path": "Experimental Results",
+  "block_type": "long_unit"
+}

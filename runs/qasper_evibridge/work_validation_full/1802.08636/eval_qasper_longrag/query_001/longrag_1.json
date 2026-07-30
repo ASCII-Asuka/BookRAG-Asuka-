@@ -1,0 +1,79 @@
+{
+  "id": "longrag_1",
+  "content": "[Section] Introduction\n[source_id=4] Automatic summarization has enjoyed wide popularity in natural language processing due to its potential for various information access applications. Examples include tools which aid users navigate and digest web content (e.g., news, social media, product reviews), question answering, and personalized recommendation engines. Single document summarization — the task of producing a shorter version of a document while preserving its information content — is perhaps the most basic of summarization tasks that have been identified over the years (see BIBREF0 , BIBREF0 for a comprehensive overview).\n[source_id=5] Modern approaches to single document summarization are data-driven, taking advantage of the success of neural network architectures and their ability to learn continuous features without recourse to preprocessing tools or linguistic annotations. Abstractive summarization involves various text rewriting operations (e.g., substitution, deletion, reordering) and has been recently framed as a sequence-to-sequence problem BIBREF1 . Central in most approaches BIBREF2 , BIBREF3 , BIBREF4 , BIBREF5 , BIBREF6 , BIBREF7 is an encoder-decoder architecture modeled by recurrent neural networks. The encoder reads the source sequence into a list of continuous-space representations from which the decoder generates the target sequence. An attention mechanism BIBREF8 is often used to locate the region of focus during decoding.\n[source_id=6] Extractive systems create a summary by identifying (and subsequently concatenating) the most important sentences in a document. A few recent approaches BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 conceptualize extractive summarization as a sequence labeling task in which each label specifies whether each document sentence should be included in the summary. Existing models rely on recurrent neural networks to derive a meaning representation of the document which is then used to label each sentence, taking the previously labeled sentences into account. These models are typically trained using cross-entropy loss in order to maximize the likelihood of the ground-truth labels and do not necessarily learn to rank sentences based on their importance due to the absence of a ranking-based objective. Another discrepancy comes from the mismatch between the learning objective and the evaluation criterion, namely ROUGE BIBREF13 , which takes the entire summary into account.\n[source_id=7] In this paper we argue that cross-entropy training is not optimal for extractive summarization. Models trained this way are prone to generating verbose summaries with unnecessarily long sentences and redundant information. We propose to overcome these difficulties by globally optimizing the ROUGE evaluation metric and learning to rank sentences for summary generation through a reinforcement learning objective. Similar to previous work BIBREF9 , BIBREF11 , BIBREF10 , our neural summarization model consists of a hierarchical document encoder and a hierarchical sentence extractor. During training, it combines the maximum-likelihood cross-entropy loss with rewards from policy gradient reinforcement learning to directly optimize the evaluation metric relevant for the summarization task. We show that this global optimization framework renders extractive models better at discriminating among sentences for the final summary; a sentence is ranked high for selection if it often occurs in high scoring summaries.\n[source_id=8] We report results on the CNN and DailyMail news highlights datasets BIBREF14 which have been recently used as testbeds for the evaluation of neural summarization systems. Experimental results show that when evaluated automatically (in terms of ROUGE), our model outperforms state-of-the-art extractive and abstractive systems. We also conduct two human evaluations in order to assess (a) which type of summary participants prefer (we compare extractive and abstractive systems) and (b) how much key information from the document is preserved in the summary (we ask participants to answer questions pertaining to the content in the document by reading system summaries). Both evaluations overwhelmingly show that human subjects find our summaries more informative and complete.\n[source_id=9] Our contributions in this work are three-fold: a novel application of reinforcement learning to sentence ranking for extractive summarization; corroborated by analysis and empirical results showing that cross-entropy training is not well-suited to the summarization task; and large scale user studies following two evaluation paradigms which demonstrate that state-of-the-art abstractive systems lag behind extractive ones when the latter are globally trained.",
+  "score": 2.0650950399760526,
+  "rank": 7,
+  "source": "longrag",
+  "node_id": "longrag_1",
+  "child_source_node_ids": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "child_qasper_evidence_texts": [
+    "Automatic summarization has enjoyed wide popularity in natural language processing due to its potential for various information access applications. Examples include tools which aid users navigate and digest web content (e.g., news, social media, product reviews), question answering, and personalized recommendation engines. Single document summarization — the task of producing a shorter version of a document while preserving its information content — is perhaps the most basic of summarization tasks that have been identified over the years (see BIBREF0 , BIBREF0 for a comprehensive overview).",
+    "Modern approaches to single document summarization are data-driven, taking advantage of the success of neural network architectures and their ability to learn continuous features without recourse to preprocessing tools or linguistic annotations. Abstractive summarization involves various text rewriting operations (e.g., substitution, deletion, reordering) and has been recently framed as a sequence-to-sequence problem BIBREF1 . Central in most approaches BIBREF2 , BIBREF3 , BIBREF4 , BIBREF5 , BIBREF6 , BIBREF7 is an encoder-decoder architecture modeled by recurrent neural networks. The encoder reads the source sequence into a list of continuous-space representations from which the decoder generates the target sequence. An attention mechanism BIBREF8 is often used to locate the region of focus during decoding.",
+    "Extractive systems create a summary by identifying (and subsequently concatenating) the most important sentences in a document. A few recent approaches BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 conceptualize extractive summarization as a sequence labeling task in which each label specifies whether each document sentence should be included in the summary. Existing models rely on recurrent neural networks to derive a meaning representation of the document which is then used to label each sentence, taking the previously labeled sentences into account. These models are typically trained using cross-entropy loss in order to maximize the likelihood of the ground-truth labels and do not necessarily learn to rank sentences based on their importance due to the absence of a ranking-based objective. Another discrepancy comes from the mismatch between the learning objective and the evaluation criterion, namely ROUGE BIBREF13 , which takes the entire summary into account.",
+    "In this paper we argue that cross-entropy training is not optimal for extractive summarization. Models trained this way are prone to generating verbose summaries with unnecessarily long sentences and redundant information. We propose to overcome these difficulties by globally optimizing the ROUGE evaluation metric and learning to rank sentences for summary generation through a reinforcement learning objective. Similar to previous work BIBREF9 , BIBREF11 , BIBREF10 , our neural summarization model consists of a hierarchical document encoder and a hierarchical sentence extractor. During training, it combines the maximum-likelihood cross-entropy loss with rewards from policy gradient reinforcement learning to directly optimize the evaluation metric relevant for the summarization task. We show that this global optimization framework renders extractive models better at discriminating among sentences for the final summary; a sentence is ranked high for selection if it often occurs in high scoring summaries.",
+    "We report results on the CNN and DailyMail news highlights datasets BIBREF14 which have been recently used as testbeds for the evaluation of neural summarization systems. Experimental results show that when evaluated automatically (in terms of ROUGE), our model outperforms state-of-the-art extractive and abstractive systems. We also conduct two human evaluations in order to assess (a) which type of summary participants prefer (we compare extractive and abstractive systems) and (b) how much key information from the document is preserved in the summary (we ask participants to answer questions pertaining to the content in the document by reading system summaries). Both evaluations overwhelmingly show that human subjects find our summaries more informative and complete.",
+    "Our contributions in this work are three-fold: a novel application of reinforcement learning to sentence ranking for extractive summarization; corroborated by analysis and empirical results showing that cross-entropy training is not well-suited to the summarization task; and large scale user studies following two evaluation paradigms which demonstrate that state-of-the-art abstractive systems lag behind extractive ones when the latter are globally trained."
+  ],
+  "child_pages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "child_sections": [
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction",
+    "Introduction"
+  ],
+  "child_hotpot_facts": [
+    [
+      "Introduction",
+      0
+    ],
+    [
+      "Introduction",
+      1
+    ],
+    [
+      "Introduction",
+      2
+    ],
+    [
+      "Introduction",
+      3
+    ],
+    [
+      "Introduction",
+      4
+    ],
+    [
+      "Introduction",
+      5
+    ]
+  ],
+  "child_block_types": [
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph",
+    "paragraph"
+  ],
+  "longrag_unit_id": "longrag_1",
+  "section_id": "Introduction",
+  "section": "Introduction",
+  "title_path": "Introduction",
+  "block_type": "long_unit"
+}

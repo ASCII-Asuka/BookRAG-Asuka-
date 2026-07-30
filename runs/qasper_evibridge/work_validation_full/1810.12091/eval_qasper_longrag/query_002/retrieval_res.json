@@ -1,0 +1,534 @@
+{
+  "ranked_results": [
+    {
+      "id": "longrag_8",
+      "content": "[Section] Evaluation Tasks\n[source_id=42] We will use the method from BIBREF7 as our main baseline. This will allow us to directly evaluate the effectiveness of embeddings for the considered problem, since we have used the same structured datasets and same tag weighting scheme. For this reason, we will also follow their evaluation methodology. In particular, we will consider three evaluation tasks:\n[source_id=43] Predicting the distribution of 100 species across Europe, using the European network of nature protected sites Natura 2000 dataset as ground truth. For each of these species, a binary classification problem is considered. The set of locations INLINEFORM0 is defined as the 26,425 distinct sites occurring in the dataset.\n[source_id=44] Predicting soil type, again each time treating the task as a binary classification problem, using the same set of locations INLINEFORM0 as in the species distribution experiments. For these experiments, none of the soil type features are used for generating the embeddings.\n[source_id=45] Predicting CORINE land cover classes at levels 1, 2 and level 3, each time treating the task as a binary classification problem, using the same set of locations INLINEFORM0 as in the species distribution experiments. For these experiments, none of the CORINE features are used for generating the embeddings.\n[source_id=46] In addition, we will also consider the following regression tasks:\n[source_id=47] Predicting 5 climate related features: the average precipitation, temperature, solar radiation, water vapor pressure, and wind speed. We again use the same set of locations INLINEFORM0 as for species distribution in this experiment. None of the climate features is used for constructing the embeddings for this experiment.\n[source_id=48] Predicting people's subjective opinions of landscape beauty in Britain, using the crowdsourced dataset from the ScenicOrNot website as ground truth. The set INLINEFORM0 is chosen as the set of locations of 191 605 rated locations from the ScenicOrNot dataset for which at least one georeferenced Flickr photo exists within a 1 km radius.",
+      "score": 6.118749203367676,
+      "rank": 1,
+      "source": "longrag",
+      "node_id": "longrag_8",
+      "child_source_node_ids": [
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48
+      ],
+      "child_qasper_evidence_texts": [
+        "We will use the method from BIBREF7 as our main baseline. This will allow us to directly evaluate the effectiveness of embeddings for the considered problem, since we have used the same structured datasets and same tag weighting scheme. For this reason, we will also follow their evaluation methodology. In particular, we will consider three evaluation tasks:",
+        "Predicting the distribution of 100 species across Europe, using the European network of nature protected sites Natura 2000 dataset as ground truth. For each of these species, a binary classification problem is considered. The set of locations INLINEFORM0 is defined as the 26,425 distinct sites occurring in the dataset.",
+        "Predicting soil type, again each time treating the task as a binary classification problem, using the same set of locations INLINEFORM0 as in the species distribution experiments. For these experiments, none of the soil type features are used for generating the embeddings.",
+        "Predicting CORINE land cover classes at levels 1, 2 and level 3, each time treating the task as a binary classification problem, using the same set of locations INLINEFORM0 as in the species distribution experiments. For these experiments, none of the CORINE features are used for generating the embeddings.",
+        "In addition, we will also consider the following regression tasks:",
+        "Predicting 5 climate related features: the average precipitation, temperature, solar radiation, water vapor pressure, and wind speed. We again use the same set of locations INLINEFORM0 as for species distribution in this experiment. None of the climate features is used for constructing the embeddings for this experiment.",
+        "Predicting people's subjective opinions of landscape beauty in Britain, using the crowdsourced dataset from the ScenicOrNot website as ground truth. The set INLINEFORM0 is chosen as the set of locations of 191 605 rated locations from the ScenicOrNot dataset for which at least one georeferenced Flickr photo exists within a 1 km radius."
+      ],
+      "child_pages": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      "child_sections": [
+        "Evaluation Tasks",
+        "Evaluation Tasks",
+        "Evaluation Tasks",
+        "Evaluation Tasks",
+        "Evaluation Tasks",
+        "Evaluation Tasks",
+        "Evaluation Tasks"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Evaluation Tasks",
+          0
+        ],
+        [
+          "Evaluation Tasks",
+          1
+        ],
+        [
+          "Evaluation Tasks",
+          2
+        ],
+        [
+          "Evaluation Tasks",
+          3
+        ],
+        [
+          "Evaluation Tasks",
+          4
+        ],
+        [
+          "Evaluation Tasks",
+          5
+        ],
+        [
+          "Evaluation Tasks",
+          6
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_8",
+      "section_id": "Evaluation Tasks",
+      "section": "Evaluation Tasks",
+      "title_path": "Evaluation Tasks",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_11",
+      "content": "[Section] Results and Discussion\n[source_id=54] We present our results for the binary classification tasks in Tables TABREF23 – TABREF24 in terms of average precision, average recall and macro average F1 score. The results of the regression tasks are reported in Tables TABREF25 and TABREF29 in terms of the mean absolute error between the predicted and actual scores, as well as the Spearman INLINEFORM0 correlation between the rankings induced by both sets of scores. It can be clearly seen from the results that our proposed method (EGEL-All) can effectively integrate Flickr tags with the available structured information. It outperforms the baselines for all the considered tasks. Furthermore, note that the PPMI-based weighting in EGEL-Tags consistently outperforms GloVe and that both the addition of negative examples and term selection lead to further improvements. The use of term selection leads to particularly substantial improvements for the regression problems.\n[source_id=55] While our experimental results confirm the usefulness of embeddings for predicting environmental features, this is only consistently the case for the variants that use both the tags and the structured datasets. In particular, comparing BOW-Tags with EGEL-Tags, we sometimes see that the former achieves the best results. While this might seem surprising, it is in accordance with the findings in BIBREF54 , BIBREF38 , among others, where it was also found that bag-of-words representations can sometimes lead to surprisingly effective baselines. Interestingly, we note that in all cases where EGEL-KL(Tags+NS) performs worse than BOW-Tags, we also find that BOW-KL(Tags) performs worse than BOW-Tags. This suggests that for these tasks there is a very large variation in the kind of tags that can inform the prediction model, possibly including e.g. user-specific tags. Some of the information captured by such highly specific but rare tags is likely to be lost in the embedding.\n[source_id=56] To further analyze the difference in performance between BoW representations and embeddings, Figure TABREF29 compares the performance of the GloVe model with the bag-of-words model for predicting place scenicness, as a function of the number of tag occurrences at the considered locations. What is clearly noticeable in Figure TABREF29 is that GloVe performs better than the bag-of-words model for large corpora and worse for smaller corpora. This issue has been alleviated in our embedding method by the addition of negative examples.",
+      "score": 3.2459055664641707,
+      "rank": 2,
+      "source": "longrag",
+      "node_id": "longrag_11",
+      "child_source_node_ids": [
+        54,
+        55,
+        56
+      ],
+      "child_qasper_evidence_texts": [
+        "We present our results for the binary classification tasks in Tables TABREF23 – TABREF24 in terms of average precision, average recall and macro average F1 score. The results of the regression tasks are reported in Tables TABREF25 and TABREF29 in terms of the mean absolute error between the predicted and actual scores, as well as the Spearman INLINEFORM0 correlation between the rankings induced by both sets of scores. It can be clearly seen from the results that our proposed method (EGEL-All) can effectively integrate Flickr tags with the available structured information. It outperforms the baselines for all the considered tasks. Furthermore, note that the PPMI-based weighting in EGEL-Tags consistently outperforms GloVe and that both the addition of negative examples and term selection lead to further improvements. The use of term selection leads to particularly substantial improvements for the regression problems.",
+        "While our experimental results confirm the usefulness of embeddings for predicting environmental features, this is only consistently the case for the variants that use both the tags and the structured datasets. In particular, comparing BOW-Tags with EGEL-Tags, we sometimes see that the former achieves the best results. While this might seem surprising, it is in accordance with the findings in BIBREF54 , BIBREF38 , among others, where it was also found that bag-of-words representations can sometimes lead to surprisingly effective baselines. Interestingly, we note that in all cases where EGEL-KL(Tags+NS) performs worse than BOW-Tags, we also find that BOW-KL(Tags) performs worse than BOW-Tags. This suggests that for these tasks there is a very large variation in the kind of tags that can inform the prediction model, possibly including e.g. user-specific tags. Some of the information captured by such highly specific but rare tags is likely to be lost in the embedding.",
+        "To further analyze the difference in performance between BoW representations and embeddings, Figure TABREF29 compares the performance of the GloVe model with the bag-of-words model for predicting place scenicness, as a function of the number of tag occurrences at the considered locations. What is clearly noticeable in Figure TABREF29 is that GloVe performs better than the bag-of-words model for large corpora and worse for smaller corpora. This issue has been alleviated in our embedding method by the addition of negative examples."
+      ],
+      "child_pages": [
+        11,
+        11,
+        11
+      ],
+      "child_sections": [
+        "Results and Discussion",
+        "Results and Discussion",
+        "Results and Discussion"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Results and Discussion",
+          0
+        ],
+        [
+          "Results and Discussion",
+          1
+        ],
+        [
+          "Results and Discussion",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_11",
+      "section_id": "Results and Discussion",
+      "section": "Results and Discussion",
+      "title_path": "Results and Discussion",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_0",
+      "content": "[Section] Abstract\n[source_id=2] Meta-data from photo-sharing websites such as Flickr can be used to obtain rich bag-of-words descriptions of geographic locations, which have proven valuable, among others, for modelling and predicting ecological features. One important insight from previous work is that the descriptions obtained from Flickr tend to be complementary to the structured information that is available from traditional scientific resources. To better integrate these two diverse sources of information, in this paper we consider a method for learning vector space embeddings of geographic locations. We show experimentally that this method improves on existing approaches, especially in cases where structured information is available.",
+      "score": 2.940588147186856,
+      "rank": 3,
+      "source": "longrag",
+      "node_id": "longrag_0",
+      "child_source_node_ids": [
+        2
+      ],
+      "child_qasper_evidence_texts": [
+        "Meta-data from photo-sharing websites such as Flickr can be used to obtain rich bag-of-words descriptions of geographic locations, which have proven valuable, among others, for modelling and predicting ecological features. One important insight from previous work is that the descriptions obtained from Flickr tend to be complementary to the structured information that is available from traditional scientific resources. To better integrate these two diverse sources of information, in this paper we consider a method for learning vector space embeddings of geographic locations. We show experimentally that this method improves on existing approaches, especially in cases where structured information is available."
+      ],
+      "child_pages": [
+        0
+      ],
+      "child_sections": [
+        "Abstract"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Abstract",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_0",
+      "section_id": "Abstract",
+      "section": "Abstract",
+      "title_path": "Abstract",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_1",
+      "content": "[Section] Introduction\n[source_id=4] Users of photo-sharing websites such as Flickr often provide short textual descriptions in the form of tags to help others find the images. With the availability of GPS systems in current electronic devices such as smartphones, latitude and longitude coordinates are nowadays commonly made available as well. The tags associated with such georeferenced photos often describe the location where these photos were taken, and Flickr can thus be regarded as a source of environmental information. The use of Flickr for modelling urban environments has already received considerable attention. For instance, various approaches have been proposed for modelling urban regions BIBREF0 , and for identifying points-of-interest BIBREF1 and itineraries BIBREF2 , BIBREF3 . However, the usefulness of Flickr for characterizing the natural environment, which is the focus of this paper, is less well-understood.\n[source_id=5] Many recent studies have highlighted that Flickr tags capture valuable ecological information, which can be used as a complementary source to more traditional sources. To date, however, ecologists have mostly used social media to conduct manual evaluations of image content with little automated exploitation of the associated tags BIBREF4 , BIBREF5 , BIBREF6 . One recent exception is BIBREF7 , where bag-of-words representations derived from Flickr tags were found to give promising result for predicting a range of different environemental phenomena.\n[source_id=6] Our main hypothesis in this paper is that by using vector space embeddings instead of bag-of-words representations, the ecological information which is implicitly captured by Flickr tags can be utilized in a more effective way. Vector space embeddings are representations in which the objects from a given domain are encoded using relatively low-dimensional vectors. They have proven useful in natural language processing, especially for encoding word meaning BIBREF8 , BIBREF9 , and in machine learning more generally. In this paper, we are interested in the use of such representations for modelling geographic locations. Our main motivation for using vector space embeddings is that they allow us to integrate the textual information we get from Flickr with available structured information in a very natural way. To this end, we rely on an adaptation of the GloVe word embedding model BIBREF9 , but rather than learning word vectors, we learn vectors representing locations. Similar to how the representation of a word in GloVe is determined by the context words surrounding it, the representation of a location in our model is determined by the tags of the photos that have been taken near that location. To incorporate numerical features from structured environmental datasets (e.g. average temperature), we associate with each such feature a linear mapping that can be used to predict that feature from a given location vector. This is inspired by the fact that salient properties of a given domain can often be modelled as directions in vector space embeddings BIBREF10 , BIBREF11 , BIBREF12 . Finally, evidence from categorical datasets (e.g. land cover types) is taken into account by requiring that locations belonging to the same category are represented using similar vectors, similar to how semantic types are sometimes modelled in the context of knowledge graph embedding BIBREF13 .\n[source_id=7] While our point-of-departure is a standard word embedding model, we found that the off-the-shelf GloVe model performed surprisingly poorly, meaning that a number of modifications are needed to achieve good results. Our main findings are as follows. First, given that the number of tags associated with a given location can be quite small, it is important to apply some kind of spatial smoothing, i.e. the importance of a given tag for a given location should not only depend on the occurrences of the tag at that location, but also on its occurrences at nearby locations. To this end, we use a formulation which is based on spatially smoothed version of pointwise mutual information. Second, given the wide diversity in the kind of information that is covered by Flickr tags, we find that term selection is in some cases critical to obtain vector spaces that capture the relevant aspects of geographic locations. For instance, many tags on Flickr refer to photography related terms, which we would normally not want to affect the vector representation of a given location. Finally, even with these modifications, vector space embeddings learned from Flickr tags alone are sometimes outperformed by bag-of-words representations. However, our vector space embeddings lead to substantially better predictions in cases where structured (scientific) information is also taken into account. In this sense, the main value of using vector space embeddings in this context is not so much about abstracting away from specific tag usages, but rather about the fact that such representations allow us to integrate numerical and categorical features in a much more natural way than is possible with bag-of-words representations.\n[source_id=8] The remainder of this paper is organized as follows. In the next section, we provide a discussion of existing work. Section SECREF3 then presents our model for embedding geographic locations from Flickr tags and structured data. Next, in Section SECREF4 we provide a detailed discussion about the experimental results. Finally, Section SECREF5 summarizes our conclusions.",
+      "score": 2.8765183157372665,
+      "rank": 4,
+      "source": "longrag",
+      "node_id": "longrag_1",
+      "child_source_node_ids": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "child_qasper_evidence_texts": [
+        "Users of photo-sharing websites such as Flickr often provide short textual descriptions in the form of tags to help others find the images. With the availability of GPS systems in current electronic devices such as smartphones, latitude and longitude coordinates are nowadays commonly made available as well. The tags associated with such georeferenced photos often describe the location where these photos were taken, and Flickr can thus be regarded as a source of environmental information. The use of Flickr for modelling urban environments has already received considerable attention. For instance, various approaches have been proposed for modelling urban regions BIBREF0 , and for identifying points-of-interest BIBREF1 and itineraries BIBREF2 , BIBREF3 . However, the usefulness of Flickr for characterizing the natural environment, which is the focus of this paper, is less well-understood.",
+        "Many recent studies have highlighted that Flickr tags capture valuable ecological information, which can be used as a complementary source to more traditional sources. To date, however, ecologists have mostly used social media to conduct manual evaluations of image content with little automated exploitation of the associated tags BIBREF4 , BIBREF5 , BIBREF6 . One recent exception is BIBREF7 , where bag-of-words representations derived from Flickr tags were found to give promising result for predicting a range of different environemental phenomena.",
+        "Our main hypothesis in this paper is that by using vector space embeddings instead of bag-of-words representations, the ecological information which is implicitly captured by Flickr tags can be utilized in a more effective way. Vector space embeddings are representations in which the objects from a given domain are encoded using relatively low-dimensional vectors. They have proven useful in natural language processing, especially for encoding word meaning BIBREF8 , BIBREF9 , and in machine learning more generally. In this paper, we are interested in the use of such representations for modelling geographic locations. Our main motivation for using vector space embeddings is that they allow us to integrate the textual information we get from Flickr with available structured information in a very natural way. To this end, we rely on an adaptation of the GloVe word embedding model BIBREF9 , but rather than learning word vectors, we learn vectors representing locations. Similar to how the representation of a word in GloVe is determined by the context words surrounding it, the representation of a location in our model is determined by the tags of the photos that have been taken near that location. To incorporate numerical features from structured environmental datasets (e.g. average temperature), we associate with each such feature a linear mapping that can be used to predict that feature from a given location vector. This is inspired by the fact that salient properties of a given domain can often be modelled as directions in vector space embeddings BIBREF10 , BIBREF11 , BIBREF12 . Finally, evidence from categorical datasets (e.g. land cover types) is taken into account by requiring that locations belonging to the same category are represented using similar vectors, similar to how semantic types are sometimes modelled in the context of knowledge graph embedding BIBREF13 .",
+        "While our point-of-departure is a standard word embedding model, we found that the off-the-shelf GloVe model performed surprisingly poorly, meaning that a number of modifications are needed to achieve good results. Our main findings are as follows. First, given that the number of tags associated with a given location can be quite small, it is important to apply some kind of spatial smoothing, i.e. the importance of a given tag for a given location should not only depend on the occurrences of the tag at that location, but also on its occurrences at nearby locations. To this end, we use a formulation which is based on spatially smoothed version of pointwise mutual information. Second, given the wide diversity in the kind of information that is covered by Flickr tags, we find that term selection is in some cases critical to obtain vector spaces that capture the relevant aspects of geographic locations. For instance, many tags on Flickr refer to photography related terms, which we would normally not want to affect the vector representation of a given location. Finally, even with these modifications, vector space embeddings learned from Flickr tags alone are sometimes outperformed by bag-of-words representations. However, our vector space embeddings lead to substantially better predictions in cases where structured (scientific) information is also taken into account. In this sense, the main value of using vector space embeddings in this context is not so much about abstracting away from specific tag usages, but rather about the fact that such representations allow us to integrate numerical and categorical features in a much more natural way than is possible with bag-of-words representations.",
+        "The remainder of this paper is organized as follows. In the next section, we provide a discussion of existing work. Section SECREF3 then presents our model for embedding geographic locations from Flickr tags and structured data. Next, in Section SECREF4 we provide a detailed discussion about the experimental results. Finally, Section SECREF5 summarizes our conclusions."
+      ],
+      "child_pages": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "child_sections": [
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction",
+        "Introduction"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Introduction",
+          0
+        ],
+        [
+          "Introduction",
+          1
+        ],
+        [
+          "Introduction",
+          2
+        ],
+        [
+          "Introduction",
+          3
+        ],
+        [
+          "Introduction",
+          4
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_1",
+      "section_id": "Introduction",
+      "section": "Introduction",
+      "title_path": "Introduction",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_2",
+      "content": "[Section] Vector space embeddings\n[source_id=10] The use of low-dimensional vector space embeddings for representing objects has already proven effective in a large number of applications, including natural language processing (NLP), image processing, and pattern recognition. In the context of NLP, the most prominent example is that of word embeddings, which represent word meaning using vectors of typically around 300 dimensions. A large number of different methods for learning such word embeddings have already been proposed, including Skip-gram and the Continuous Bag-of-Words (CBOW) model BIBREF8 , GloVe BIBREF9 , and fastText BIBREF14 . They have been applied effectively in many downstream NLP tasks such as sentiment analysis BIBREF15 , part of speech tagging BIBREF16 , BIBREF17 , and text classification BIBREF18 , BIBREF19 . The model we consider in this paper builds on GloVe, which was designed to capture linear regularities of word-word co-occurrence. In GloVe, there are two word vectors INLINEFORM0 and INLINEFORM1 for each word in the vocabulary, which are learned by minimizing the following objective: DISPLAYFORM0\n[source_id=11] where INLINEFORM0 is the number of times that word INLINEFORM1 appears in the context of word INLINEFORM2 , INLINEFORM3 is the vocabulary size, INLINEFORM4 is the target word bias, INLINEFORM5 is the context word bias. The weighting function INLINEFORM6 is used to limit the impact of rare terms. It is defined as 1 if INLINEFORM7 and as INLINEFORM8 otherwise, where INLINEFORM9 is usually fixed to 100 and INLINEFORM10 to 0.75. Intuitively, the target word vectors INLINEFORM11 correspond to the actual word representations which we would like to find, while the context word vectors INLINEFORM12 model how occurrences of INLINEFORM13 in the context of a given word INLINEFORM14 affect the representation of this latter word. In this paper we will use a similar model, which will however be aimed at learning location vectors instead of the target word vectors.\n[source_id=12] Beyond word embeddings, various methods have been proposed for learning vector space representations from structured data such as knowledge graphs BIBREF20 , BIBREF21 , BIBREF22 , social networks BIBREF23 , BIBREF24 and taxonomies BIBREF25 , BIBREF26 . The idea of combining a word embedding model with structured information has also been explored by several authors, for example to improve the word embeddings based on information coming from knowledge graphs BIBREF27 , BIBREF28 . Along similar lines, various lexicons have been used to obtain word embeddings that are better suited at modelling sentiment BIBREF15 and antonymy BIBREF29 , among others. The method proposed by BIBREF30 imposes the condition that words that belong to the same semantic category are closer together than words from different categories, which is somewhat similar in spirit to how we will model categorical datasets in our model.",
+      "score": 2.77388732064346,
+      "rank": 5,
+      "source": "longrag",
+      "node_id": "longrag_2",
+      "child_source_node_ids": [
+        10,
+        11,
+        12
+      ],
+      "child_qasper_evidence_texts": [
+        "The use of low-dimensional vector space embeddings for representing objects has already proven effective in a large number of applications, including natural language processing (NLP), image processing, and pattern recognition. In the context of NLP, the most prominent example is that of word embeddings, which represent word meaning using vectors of typically around 300 dimensions. A large number of different methods for learning such word embeddings have already been proposed, including Skip-gram and the Continuous Bag-of-Words (CBOW) model BIBREF8 , GloVe BIBREF9 , and fastText BIBREF14 . They have been applied effectively in many downstream NLP tasks such as sentiment analysis BIBREF15 , part of speech tagging BIBREF16 , BIBREF17 , and text classification BIBREF18 , BIBREF19 . The model we consider in this paper builds on GloVe, which was designed to capture linear regularities of word-word co-occurrence. In GloVe, there are two word vectors INLINEFORM0 and INLINEFORM1 for each word in the vocabulary, which are learned by minimizing the following objective: DISPLAYFORM0",
+        "where INLINEFORM0 is the number of times that word INLINEFORM1 appears in the context of word INLINEFORM2 , INLINEFORM3 is the vocabulary size, INLINEFORM4 is the target word bias, INLINEFORM5 is the context word bias. The weighting function INLINEFORM6 is used to limit the impact of rare terms. It is defined as 1 if INLINEFORM7 and as INLINEFORM8 otherwise, where INLINEFORM9 is usually fixed to 100 and INLINEFORM10 to 0.75. Intuitively, the target word vectors INLINEFORM11 correspond to the actual word representations which we would like to find, while the context word vectors INLINEFORM12 model how occurrences of INLINEFORM13 in the context of a given word INLINEFORM14 affect the representation of this latter word. In this paper we will use a similar model, which will however be aimed at learning location vectors instead of the target word vectors.",
+        "Beyond word embeddings, various methods have been proposed for learning vector space representations from structured data such as knowledge graphs BIBREF20 , BIBREF21 , BIBREF22 , social networks BIBREF23 , BIBREF24 and taxonomies BIBREF25 , BIBREF26 . The idea of combining a word embedding model with structured information has also been explored by several authors, for example to improve the word embeddings based on information coming from knowledge graphs BIBREF27 , BIBREF28 . Along similar lines, various lexicons have been used to obtain word embeddings that are better suited at modelling sentiment BIBREF15 and antonymy BIBREF29 , among others. The method proposed by BIBREF30 imposes the condition that words that belong to the same semantic category are closer together than words from different categories, which is somewhat similar in spirit to how we will model categorical datasets in our model."
+      ],
+      "child_pages": [
+        2,
+        2,
+        2
+      ],
+      "child_sections": [
+        "Vector space embeddings",
+        "Vector space embeddings",
+        "Vector space embeddings"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Vector space embeddings",
+          0
+        ],
+        [
+          "Vector space embeddings",
+          1
+        ],
+        [
+          "Vector space embeddings",
+          2
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_2",
+      "section_id": "Vector space embeddings",
+      "section": "Vector space embeddings",
+      "title_path": "Vector space embeddings",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_3",
+      "content": "[Section] Embeddings for geographic information\n[source_id=14] The problem of representing geographic locations using embeddings has also attracted some attention. An early example is BIBREF31 , which used principal component analysis and stacked autoencoders to learn low-dimensional vector representations of city neighbourhoods based on census data. They use these representations to predict attributes such as crime, which is not included in the given census data, and find that in most of the considered evaluation tasks, the low-dimensional vector representations lead to more faithful predictions than the original high-dimensional census data.\n[source_id=15] Some existing works combine word embedding models with geographic coordinates. For example, in BIBREF32 an approach is proposed to learn word embeddings based on the assumption that words which tend to be used in the same geographic locations are likely to be similar. Note that their aim is dual to our aim in this paper: while they use geographic location to learn word vectors, we use textual descriptions to learn vectors representing geographic locations.\n[source_id=16] Several methods also use word embedding models to learn representations of Points-of-Interest (POIs) that can be used for predicting user visits BIBREF33 , BIBREF34 , BIBREF35 . These works use the machinery of existing word embedding models to learn POI representations, intuitively by letting sequences of POI visits by a user play the role of sequences of words in a sentence. In other words, despite the use of word embedding models, many of these approaches do not actually consider any textual information. For example, in BIBREF34 the Skip-gram model is utilized to create a global pattern of users' POIs. Each location was treated as a word and the other locations visited before or after were treated as context words. They then use a pair-wise ranking loss BIBREF36 which takes into account the user's location visit frequency to personalize the location recommendations. The methods of BIBREF34 were extended in BIBREF35 to use a temporal embedding and to take more account of geographic context, in particular the distances between preferred and non-preferred neighboring POIs, to create a “geographically hierarchical pairwise preference ranking model”. Similarly, in BIBREF37 the CBOW model was trained with POI data. They ordered POIs spatially within the traffic-based zones of urban areas. The ordering was used to generate characteristic vectors of POI types. Zone vectors represented by averaging the vectors of the POIs contained in them, were then used as features to predict land use types. In the CrossMap method BIBREF38 they learned embeddings for spatio-temporal hotspots obtained from social media data of locations, times and text. In one form of embedding, intended to enable reconstruction of records, neighbourhood relations in space and time were encoded by averaging hotspots in a target location's spatial and temporal neighborhoods. They also proposed a graph-based embedding method with nodes of location, time and text. The concatenation of the location, time and text vectors were then used as features to predict peoples' activities in urban environments. Finally, in BIBREF39 , a method is proposed that uses the Skip-gram model to represent POI types, based on the intuition that the vector representing a given POI type should be predictive of the POI types that found near places of that type.\n[source_id=17] Our work is different from these studies, as our focus is on representing locations based on a given text description of that location (in the form of Flickr tags), along with numerical and categorical features from scientific datasets.",
+      "score": 2.369810668194506,
+      "rank": 6,
+      "source": "longrag",
+      "node_id": "longrag_3",
+      "child_source_node_ids": [
+        14,
+        15,
+        16,
+        17
+      ],
+      "child_qasper_evidence_texts": [
+        "The problem of representing geographic locations using embeddings has also attracted some attention. An early example is BIBREF31 , which used principal component analysis and stacked autoencoders to learn low-dimensional vector representations of city neighbourhoods based on census data. They use these representations to predict attributes such as crime, which is not included in the given census data, and find that in most of the considered evaluation tasks, the low-dimensional vector representations lead to more faithful predictions than the original high-dimensional census data.",
+        "Some existing works combine word embedding models with geographic coordinates. For example, in BIBREF32 an approach is proposed to learn word embeddings based on the assumption that words which tend to be used in the same geographic locations are likely to be similar. Note that their aim is dual to our aim in this paper: while they use geographic location to learn word vectors, we use textual descriptions to learn vectors representing geographic locations.",
+        "Several methods also use word embedding models to learn representations of Points-of-Interest (POIs) that can be used for predicting user visits BIBREF33 , BIBREF34 , BIBREF35 . These works use the machinery of existing word embedding models to learn POI representations, intuitively by letting sequences of POI visits by a user play the role of sequences of words in a sentence. In other words, despite the use of word embedding models, many of these approaches do not actually consider any textual information. For example, in BIBREF34 the Skip-gram model is utilized to create a global pattern of users' POIs. Each location was treated as a word and the other locations visited before or after were treated as context words. They then use a pair-wise ranking loss BIBREF36 which takes into account the user's location visit frequency to personalize the location recommendations. The methods of BIBREF34 were extended in BIBREF35 to use a temporal embedding and to take more account of geographic context, in particular the distances between preferred and non-preferred neighboring POIs, to create a “geographically hierarchical pairwise preference ranking model”. Similarly, in BIBREF37 the CBOW model was trained with POI data. They ordered POIs spatially within the traffic-based zones of urban areas. The ordering was used to generate characteristic vectors of POI types. Zone vectors represented by averaging the vectors of the POIs contained in them, were then used as features to predict land use types. In the CrossMap method BIBREF38 they learned embeddings for spatio-temporal hotspots obtained from social media data of locations, times and text. In one form of embedding, intended to enable reconstruction of records, neighbourhood relations in space and time were encoded by averaging hotspots in a target location's spatial and temporal neighborhoods. They also proposed a graph-based embedding method with nodes of location, time and text. The concatenation of the location, time and text vectors were then used as features to predict peoples' activities in urban environments. Finally, in BIBREF39 , a method is proposed that uses the Skip-gram model to represent POI types, based on the intuition that the vector representing a given POI type should be predictive of the POI types that found near places of that type.",
+        "Our work is different from these studies, as our focus is on representing locations based on a given text description of that location (in the form of Flickr tags), along with numerical and categorical features from scientific datasets."
+      ],
+      "child_pages": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "child_sections": [
+        "Embeddings for geographic information",
+        "Embeddings for geographic information",
+        "Embeddings for geographic information",
+        "Embeddings for geographic information"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Embeddings for geographic information",
+          0
+        ],
+        [
+          "Embeddings for geographic information",
+          1
+        ],
+        [
+          "Embeddings for geographic information",
+          2
+        ],
+        [
+          "Embeddings for geographic information",
+          3
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph",
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_3",
+      "section_id": "Embeddings for geographic information",
+      "section": "Embeddings for geographic information",
+      "title_path": "Embeddings for geographic information",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_4",
+      "content": "[Section] Analyzing Flickr tags\n[source_id=19] Many studies have focused on analyzing Flickr tags to extract useful information in domains such as linguistics BIBREF40 , geography BIBREF0 , BIBREF41 , and ecology BIBREF42 , BIBREF7 , BIBREF43 . Most closely related to our work, BIBREF7 found that the tags of georeferenced Flickr photos can effectively supplement traditional scientific environmental data in tasks such as predicting climate features, land cover, species occurrence, and human assessments of scenicness. To encode locations, they simply combine a bag-of-words representation of geographically nearby tags with a feature vector that encodes associated structured scientific data. They found that the predictive value of Flickr tags is roughly on a par with that of the scientific datasets, and that combining both types of information leads to significantly better results than using either of them alone. As we show in this paper, however, their straightforward way of combining both information sources, by concatenating the two types of feature vectors, is far from optimal.\n[source_id=20] Despite the proven importance of Flickr tags, the problem of embedding Flickr tags has so far received very limited attention. To the best of our knowledge, BIBREF44 is the only work that generated embeddings for Flickr tags. However, their focus was on learning embeddings that capture word meaning (being evaluated on word similarity tasks), whereas we use such embeddings as part of our method for representing locations.",
+      "score": 1.8831930228321543,
+      "rank": 7,
+      "source": "longrag",
+      "node_id": "longrag_4",
+      "child_source_node_ids": [
+        19,
+        20
+      ],
+      "child_qasper_evidence_texts": [
+        "Many studies have focused on analyzing Flickr tags to extract useful information in domains such as linguistics BIBREF40 , geography BIBREF0 , BIBREF41 , and ecology BIBREF42 , BIBREF7 , BIBREF43 . Most closely related to our work, BIBREF7 found that the tags of georeferenced Flickr photos can effectively supplement traditional scientific environmental data in tasks such as predicting climate features, land cover, species occurrence, and human assessments of scenicness. To encode locations, they simply combine a bag-of-words representation of geographically nearby tags with a feature vector that encodes associated structured scientific data. They found that the predictive value of Flickr tags is roughly on a par with that of the scientific datasets, and that combining both types of information leads to significantly better results than using either of them alone. As we show in this paper, however, their straightforward way of combining both information sources, by concatenating the two types of feature vectors, is far from optimal.",
+        "Despite the proven importance of Flickr tags, the problem of embedding Flickr tags has so far received very limited attention. To the best of our knowledge, BIBREF44 is the only work that generated embeddings for Flickr tags. However, their focus was on learning embeddings that capture word meaning (being evaluated on word similarity tasks), whereas we use such embeddings as part of our method for representing locations."
+      ],
+      "child_pages": [
+        4,
+        4
+      ],
+      "child_sections": [
+        "Analyzing Flickr tags",
+        "Analyzing Flickr tags"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Analyzing Flickr tags",
+          0
+        ],
+        [
+          "Analyzing Flickr tags",
+          1
+        ]
+      ],
+      "child_block_types": [
+        "paragraph",
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_4",
+      "section_id": "Analyzing Flickr tags",
+      "section": "Analyzing Flickr tags",
+      "title_path": "Analyzing Flickr tags",
+      "block_type": "long_unit"
+    },
+    {
+      "id": "longrag_12",
+      "content": "[Section] Conclusions\n[source_id=58] In this paper, we have proposed a model to learn geographic location embeddings using Flickr tags, numerical environmental features, and categorical information. The experimental results show that our model can integrate Flickr tags with structured information in a more effective way than existing methods, leading to substantial improvements over baseline methods on various prediction tasks about the natural environment.",
+      "score": 1.8170304604602125,
+      "rank": 8,
+      "source": "longrag",
+      "node_id": "longrag_12",
+      "child_source_node_ids": [
+        58
+      ],
+      "child_qasper_evidence_texts": [
+        "In this paper, we have proposed a model to learn geographic location embeddings using Flickr tags, numerical environmental features, and categorical information. The experimental results show that our model can integrate Flickr tags with structured information in a more effective way than existing methods, leading to substantial improvements over baseline methods on various prediction tasks about the natural environment."
+      ],
+      "child_pages": [
+        12
+      ],
+      "child_sections": [
+        "Conclusions"
+      ],
+      "child_hotpot_facts": [
+        [
+          "Conclusions",
+          0
+        ]
+      ],
+      "child_block_types": [
+        "paragraph"
+      ],
+      "longrag_unit_id": "longrag_12",
+      "section_id": "Conclusions",
+      "section": "Conclusions",
+      "title_path": "Conclusions",
+      "block_type": "long_unit"
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "id": 43,
+      "content": "Predicting the distribution of 100 species across Europe, using the European network of nature protected sites Natura 2000 dataset as ground truth. For each of these species, a binary classification problem is considered. The set of locations INLINEFORM0 is defined as the 26,425 distinct sites occurring in the dataset.",
+      "qasper_evidence_text": "Predicting the distribution of 100 species across Europe, using the European network of nature protected sites Natura 2000 dataset as ground truth. For each of these species, a binary classification problem is considered. The set of locations INLINEFORM0 is defined as the 26,425 distinct sites occurring in the dataset.",
+      "source_node_id": 43,
+      "node_id": 43,
+      "paragraph_id": 43,
+      "evidence_id": 43,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_8",
+      "rank": 1,
+      "score": 6.118749203367676,
+      "block_type": "paragraph",
+      "page": 8,
+      "section_id": "Evaluation Tasks",
+      "section": "Evaluation Tasks",
+      "title": "Evaluation Tasks",
+      "hotpot_title": "Evaluation Tasks",
+      "sent_id": 1,
+      "hotpot_sent_id": 1,
+      "supporting_rank": 1
+    },
+    {
+      "id": 44,
+      "content": "Predicting soil type, again each time treating the task as a binary classification problem, using the same set of locations INLINEFORM0 as in the species distribution experiments. For these experiments, none of the soil type features are used for generating the embeddings.",
+      "qasper_evidence_text": "Predicting soil type, again each time treating the task as a binary classification problem, using the same set of locations INLINEFORM0 as in the species distribution experiments. For these experiments, none of the soil type features are used for generating the embeddings.",
+      "source_node_id": 44,
+      "node_id": 44,
+      "paragraph_id": 44,
+      "evidence_id": 44,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_8",
+      "rank": 1,
+      "score": 6.118749203367676,
+      "block_type": "paragraph",
+      "page": 8,
+      "section_id": "Evaluation Tasks",
+      "section": "Evaluation Tasks",
+      "title": "Evaluation Tasks",
+      "hotpot_title": "Evaluation Tasks",
+      "sent_id": 2,
+      "hotpot_sent_id": 2,
+      "supporting_rank": 2
+    },
+    {
+      "id": 45,
+      "content": "Predicting CORINE land cover classes at levels 1, 2 and level 3, each time treating the task as a binary classification problem, using the same set of locations INLINEFORM0 as in the species distribution experiments. For these experiments, none of the CORINE features are used for generating the embeddings.",
+      "qasper_evidence_text": "Predicting CORINE land cover classes at levels 1, 2 and level 3, each time treating the task as a binary classification problem, using the same set of locations INLINEFORM0 as in the species distribution experiments. For these experiments, none of the CORINE features are used for generating the embeddings.",
+      "source_node_id": 45,
+      "node_id": 45,
+      "paragraph_id": 45,
+      "evidence_id": 45,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_8",
+      "rank": 1,
+      "score": 6.118749203367676,
+      "block_type": "paragraph",
+      "page": 8,
+      "section_id": "Evaluation Tasks",
+      "section": "Evaluation Tasks",
+      "title": "Evaluation Tasks",
+      "hotpot_title": "Evaluation Tasks",
+      "sent_id": 3,
+      "hotpot_sent_id": 3,
+      "supporting_rank": 3
+    },
+    {
+      "id": 48,
+      "content": "Predicting people's subjective opinions of landscape beauty in Britain, using the crowdsourced dataset from the ScenicOrNot website as ground truth. The set INLINEFORM0 is chosen as the set of locations of 191 605 rated locations from the ScenicOrNot dataset for which at least one georeferenced Flickr photo exists within a 1 km radius.",
+      "qasper_evidence_text": "Predicting people's subjective opinions of landscape beauty in Britain, using the crowdsourced dataset from the ScenicOrNot website as ground truth. The set INLINEFORM0 is chosen as the set of locations of 191 605 rated locations from the ScenicOrNot dataset for which at least one georeferenced Flickr photo exists within a 1 km radius.",
+      "source_node_id": 48,
+      "node_id": 48,
+      "paragraph_id": 48,
+      "evidence_id": 48,
+      "source": "longrag_support",
+      "parent_longrag_unit_id": "longrag_8",
+      "rank": 1,
+      "score": 6.118749203367676,
+      "block_type": "paragraph",
+      "page": 8,
+      "section_id": "Evaluation Tasks",
+      "section": "Evaluation Tasks",
+      "title": "Evaluation Tasks",
+      "hotpot_title": "Evaluation Tasks",
+      "sent_id": 6,
+      "hotpot_sent_id": 6,
+      "supporting_rank": 4
+    }
+  ],
+  "supporting_block_ids": [
+    43,
+    44,
+    45,
+    48
+  ]
+}

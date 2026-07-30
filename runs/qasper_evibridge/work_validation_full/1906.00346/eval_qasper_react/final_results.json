@@ -1,0 +1,125 @@
+[
+  {
+    "question": "IS the graph representation supervised?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "The graph representation appears to be semi-supervised. It is included in the learning pipeline for the medical recommendation, where the attention model is learned. (There is some additional evidence that is unavailable in parsed text)",
+        "yes_no": null,
+        "evidence": [
+          "We adapted the original BERT model to be more suitable for our data and task. In particular, we pre-train the model on each EHR visit (within both single-visit EHR sequences and multi-visit EHR sequences). We modified the input and pre-training objectives of the BERT model: (1) For the input, we built the Transformer encoder on the GNN outputs, i.e. ontology embeddings, for visit embedding. For the original EHR sequence, it means essentially we combine the GNN model with a Transformer to become a new integrated encoder. In addition, we removed the position embedding as we explained before. (2) As for the pre-training procedures, we modified the original pre-training tasks i.e., Masked LM (language model) task and Next Sentence prediction task to self-prediction task and dual-prediction task. The idea to conduct these tasks is to make the visit embedding absorb enough information about what it is made of and what it is able to predict.",
+          "Thus, for the self-prediction task, we want the visit embedding $v^1_\\ast $ to recover what it is made of, i.e., the input medical codes $\\mathcal {C}_\\ast ^t$ for each visit as follows:",
+          "$$\\begin{aligned} &\\mathcal {L}_{se}(\\mathbf {v}^1_\\ast , \\mathcal {C}_\\ast ^1) = -\\log p(\\mathcal {C}_\\ast ^1 | \\mathbf {v}^1_\\ast ) \\\\ & = - \\sum _{c \\in \\mathcal {C}_\\ast ^1}\\log p(c_\\ast ^1 | \\mathbf {v}^1_\\ast ) + \\sum _{c \\in \\mathcal {C}_\\ast \\setminus \\mathcal {C}_\\ast ^1}\\log p(c_\\ast ^1 | \\mathbf {v}^1_\\ast ) \\end{aligned}$$ (Eq. 19)",
+          "Likewise, for the dual-prediction task, since the visit embedding $\\mathbf {v}_\\ast $ carries the information of medical codes of type $\\ast $ , we can further expect it has the ability to do more task-specific prediction as follows:",
+          "$$\\begin{aligned} \\mathcal {L}_{du} = -\\log p(\\mathcal {C}_d^1 | \\mathbf {v}_m^1) - \\log p(\\mathcal {C}_m^1 | \\mathbf {v}_d^1) \\end{aligned}$$ (Eq. 20)"
+        ],
+        "evidence_block_ids": [
+          46,
+          47,
+          48,
+          50,
+          51
+        ],
+        "evidence_paragraph_ids": [
+          46,
+          47,
+          48,
+          50,
+          51
+        ]
+      }
+    ],
+    "doc_uuid": "1906.00346",
+    "doc_path": "qasper://1906.00346",
+    "qasper_question_id": "d201b9992809142fe59ae74508bc576f8ca538ff",
+    "title": "Pre-training of Graph Augmented Transformers for Medication Recommendation",
+    "evidence_block_ids": [
+      46,
+      47,
+      48,
+      50,
+      51
+    ],
+    "evidence_paragraph_ids": [
+      46,
+      47,
+      48,
+      50,
+      51
+    ],
+    "output": "{\"answer_short\": \"No\", \"answer_rationale\": \"\", \"supporting_block_ids\": [8, 9, 10]}",
+    "retrieved_node_ids": [
+      8,
+      9,
+      10
+    ],
+    "retrieved_block_ids": [
+      8,
+      9,
+      10
+    ],
+    "answer_short": "No",
+    "supporting_block_ids": [
+      8,
+      9,
+      10
+    ]
+  },
+  {
+    "question": "Is the G-BERT model useful beyond the task considered?",
+    "answer": [
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "There is nothing specific about the approach that depends on medical recommendations. The approach combines graph data and text data into a single embedding.",
+        "yes_no": null,
+        "evidence": [],
+        "evidence_block_ids": [],
+        "evidence_paragraph_ids": []
+      },
+      {
+        "unanswerable": false,
+        "extractive_spans": [],
+        "free_form_answer": "It learns a representation of medical records. The learned representation (embeddings) can be used for other predictive tasks involving information from electronic health records.",
+        "yes_no": null,
+        "evidence": [
+          "In this paper we proposed a pre-training model named G-BERT for medical code representation and medication recommendation. To our best knowledge, G-BERT is the first that utilizes language model pre-training techniques in healthcare domain. It adapted BERT to the EHR data and integrated medical ontology information using graph neural networks. By additional pre-training on the EHR from patients who only have one hospital visit which are generally discarded before model training, G-BERT outperforms all baselines in prediction accuracy on medication recommendation task. One direction for the future work is to add more auxiliary and structural tasks to improve the ability of code representaion. Another direction may be to adapt our model to be suitable for even larger datasets with more heterogeneous modalities."
+        ],
+        "evidence_block_ids": [
+          75
+        ],
+        "evidence_paragraph_ids": [
+          75
+        ]
+      }
+    ],
+    "doc_uuid": "1906.00346",
+    "doc_path": "qasper://1906.00346",
+    "qasper_question_id": "c4628d965983934d7a2a9797a2de6a411629d5bc",
+    "title": "Pre-training of Graph Augmented Transformers for Medication Recommendation",
+    "evidence_block_ids": [
+      75
+    ],
+    "evidence_paragraph_ids": [
+      75
+    ],
+    "output": "{\"answer_short\": \"G-BERT outperforms GAMENet\", \"answer_rationale\": \"\", \"supporting_block_ids\": [71, 72, 73]}",
+    "retrieved_node_ids": [
+      71,
+      72,
+      73
+    ],
+    "retrieved_block_ids": [
+      71,
+      72,
+      73
+    ],
+    "answer_short": "G-BERT outperforms GAMENet",
+    "supporting_block_ids": [
+      71,
+      72,
+      73
+    ]
+  }
+]
