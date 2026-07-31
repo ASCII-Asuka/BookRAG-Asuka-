@@ -1,4 +1,6 @@
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -23,6 +25,26 @@ def make_row(question_id: str, question_type: str, valid: bool = True) -> dict:
 
 
 class HotpotQAFixedSampleTests(unittest.TestCase):
+    def test_fixed_sample_cli_runs_from_repo_root(self):
+        repo_root = Path(__file__).resolve().parents[1]
+        script = (
+            repo_root
+            / "Scripts"
+            / "preprocess"
+            / "hotpotqa_fixed_sample.py"
+        )
+
+        result = subprocess.run(
+            [sys.executable, str(script), "--help"],
+            cwd=repo_root,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--parquet", result.stdout)
+
     def test_fixed_sample_uses_proportional_hamilton_quotas(self):
         from Scripts.preprocess.hotpotqa_fixed_sample import select_fixed_rows
 
