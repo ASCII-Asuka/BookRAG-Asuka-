@@ -69,7 +69,13 @@ class EviBridgeWiringTests(unittest.TestCase):
         self.assertTrue(rag.enable_supporting_rerank)
         self.assertTrue(rag.trust_answer_supporting_ids)
         self.assertTrue(rag.dynamic_supporting_evidence_budget)
+        self.assertFalse(rag.enable_short_answer_extraction)
         self.assertEqual(rag.candidate_rerank_topk, 50)
+
+    def test_short_answer_extraction_is_opt_in(self):
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+
+        self.assertFalse(EviBridgeRAGConfig().enable_short_answer_extraction)
 
     def test_construct_evibridge_index_builds_tree_then_evibridge_index(self):
         _stub_runtime_imports()

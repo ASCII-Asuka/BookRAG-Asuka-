@@ -73,7 +73,7 @@ class EviBridgeRAGConfig(BaseRAGStrategyConfig):
     max_context_tokens: int = 4000
     max_iterations: int = 2
     enable_llm_verifier: bool = True
-    enable_short_answer_extraction: bool = True
+    enable_short_answer_extraction: bool = False
     enable_long_context_fallback: bool = False
     fallback_max_context_blocks: int = 30
     fallback_max_context_tokens: int = 12000

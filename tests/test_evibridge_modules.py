@@ -1634,6 +1634,7 @@ class EviBridgeModuleTests(unittest.TestCase):
                 max_context_blocks=1,
                 max_iterations=1,
                 enable_llm_verifier=False,
+                enable_short_answer_extraction=True,
                 enable_long_context_fallback=True,
                 fallback_max_context_blocks=8,
                 fallback_max_context_tokens=1000,
