@@ -909,11 +909,54 @@ class BM25BaselineTests(unittest.TestCase):
             payload = json.loads((Path(tmp) / "retrieval_res.json").read_text(encoding="utf-8"))
 
         self.assertIn(f"[source_id={para_id}]", llm.prompt)
+        self.assertNotIn("[source_id=longrag_", llm.prompt)
         self.assertEqual(retrieved_ids, [para_id])
         self.assertEqual(rag.last_answer_short, "zephyr bridge")
         self.assertEqual(payload["supporting_block_ids"], [para_id])
         self.assertEqual(payload["supporting_evidence"][0]["qasper_evidence_text"], "The final answer is zephyr bridge.")
         self.assertIn('"answer_short": "zephyr bridge"', answer)
+
+    def test_vanilla_longrag_fallback_expands_child_evidence(self):
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        rag = VanillaRAG.__new__(VanillaRAG)
+        rag.cfg = SimpleNamespace(
+            retrieval_method="longrag",
+            supporting_evidence_topk=4,
+        )
+        ranked = [
+            {
+                "id": "longrag_0",
+                "content": "[source_id=4] The final answer is zephyr bridge.",
+                "metadata": {
+                    "source": "longrag",
+                    "node_id": "longrag_0",
+                    "longrag_unit_id": "longrag_0",
+                    "child_source_node_ids": [4],
+                    "child_qasper_evidence_texts": ["The final answer is zephyr bridge."],
+                    "child_pages": [1],
+                    "child_sections": ["Results"],
+                    "child_block_types": ["paragraph"],
+                    "child_hotpot_facts": [["Results", 0]],
+                },
+            }
+        ]
+
+        with tempfile.TemporaryDirectory() as tmp:
+            retrieved_ids = rag._save_retrieval_res(
+                ranked,
+                Path(tmp),
+                supporting_ids=[],
+            )
+            payload = json.loads(
+                (Path(tmp) / "retrieval_res.json").read_text(encoding="utf-8")
+            )
+
+        self.assertEqual(retrieved_ids, [4])
+        self.assertEqual(payload["supporting_block_ids"], [4])
+        self.assertEqual(payload["supporting_evidence"][0]["hotpot_title"], "Results")
+        self.assertEqual(payload["supporting_evidence"][0]["hotpot_sent_id"], 0)
+        self.assertTrue(payload["citation_validation"]["fallback_used"])
 
     def test_abstract_only_resource_loader_does_not_require_modelscope(self):
         from Core.Index.Tree import DocumentTree, NodeType, TreeNode

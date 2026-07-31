@@ -441,7 +441,7 @@ class VanillaRAG(BaseRAG):
             source = self._format_source(doc)
             source_id = self._doc_node_id(doc)
             label = f"Text {i+1}"
-            if (long_context_reader or short_answer) and source_id is not None:
+            if (long_context_reader or short_answer) and source_id is not None and not longrag:
                 label += f" [source_id={source_id}]"
             if source:
                 context_text += f"{label} ({source}): {doc['content']}\n"
@@ -564,11 +564,9 @@ class VanillaRAG(BaseRAG):
             ranked_results,
             requested_ids[:support_budget],
         )
-        valid_ids = [
-            int(item["id"])
-            for item in supporting_evidence
-            if item.get("id") is not None
-        ]
+        valid_ids = self._parse_int_values(
+            [item.get("id") for item in supporting_evidence]
+        )
         invalid_ids = [
             node_id
             for node_id in requested_ids
@@ -576,12 +574,23 @@ class VanillaRAG(BaseRAG):
         ]
         fallback_used = not valid_ids and bool(ranked_results)
         if fallback_used:
-            supporting_evidence = ranked_results[:support_budget]
-            valid_ids = [
-                int(item["id"])
-                for item in supporting_evidence
-                if item.get("id") is not None
-            ]
+            if getattr(rag_config, "retrieval_method", "") == "longrag":
+                fallback_ids = []
+                for item in ranked_results:
+                    for child_id in self._parse_int_values(
+                        item.get("child_source_node_ids")
+                    ):
+                        if child_id not in fallback_ids:
+                            fallback_ids.append(child_id)
+                supporting_evidence = self._supporting_evidence_from_ranked(
+                    ranked_results,
+                    fallback_ids[:support_budget],
+                )
+            else:
+                supporting_evidence = ranked_results[:support_budget]
+            valid_ids = self._parse_int_values(
+                [item.get("id") for item in supporting_evidence]
+            )
 
         retrieval_payload = {
             "ranked_results": ranked_results,
