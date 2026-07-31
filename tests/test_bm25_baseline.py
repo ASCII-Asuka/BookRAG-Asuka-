@@ -558,6 +558,79 @@ class BM25BaselineTests(unittest.TestCase):
         self.assertTrue(payload["citation_validation"]["fallback_used"])
         self.assertEqual(rag.last_supporting_block_ids, [1, 2, 3, 4])
 
+    def test_vanilla_hotpot_supporting_ids_reject_non_sentence_nodes(self):
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        rag = VanillaRAG.__new__(VanillaRAG)
+        rag.cfg = SimpleNamespace(
+            retrieval_method="full_document",
+            supporting_evidence_topk=4,
+        )
+        ranked = [
+            {
+                "id": 1,
+                "content": "Article A",
+                "metadata": {"node_id": 1, "node_type": "title"},
+            },
+            {
+                "id": 2,
+                "content": "The supporting sentence.",
+                "metadata": {
+                    "node_id": 2,
+                    "node_type": "text",
+                    "hotpot_title": "Article A",
+                    "hotpot_sent_id": 0,
+                },
+            },
+        ]
+
+        with tempfile.TemporaryDirectory() as tmp:
+            rag._save_retrieval_res(ranked, Path(tmp), supporting_ids=[1, 2])
+            payload = json.loads(
+                (Path(tmp) / "retrieval_res.json").read_text(encoding="utf-8")
+            )
+
+        self.assertEqual(payload["supporting_block_ids"], [2])
+        self.assertEqual(payload["citation_validation"]["valid_ids"], [2])
+        self.assertEqual(payload["citation_validation"]["invalid_ids"], [1])
+
+    def test_vanilla_hotpot_fallback_skips_non_sentence_nodes(self):
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        rag = VanillaRAG.__new__(VanillaRAG)
+        rag.cfg = SimpleNamespace(
+            retrieval_method="full_document",
+            supporting_evidence_topk=4,
+        )
+        ranked = [
+            {
+                "id": 1,
+                "content": "Article A",
+                "metadata": {"node_id": 1, "node_type": "title"},
+            },
+            {
+                "id": 2,
+                "content": "The supporting sentence.",
+                "metadata": {
+                    "node_id": 2,
+                    "node_type": "text",
+                    "hotpot_title": "Article A",
+                    "hotpot_sent_id": 0,
+                },
+            },
+        ]
+
+        with tempfile.TemporaryDirectory() as tmp:
+            rag._save_retrieval_res(ranked, Path(tmp), supporting_ids=[])
+            payload = json.loads(
+                (Path(tmp) / "retrieval_res.json").read_text(encoding="utf-8")
+            )
+
+        self.assertEqual(payload["supporting_block_ids"], [2])
+        self.assertEqual(payload["supporting_evidence"][0]["hotpot_title"], "Article A")
+        self.assertEqual(payload["supporting_evidence"][0]["hotpot_sent_id"], 0)
+        self.assertTrue(payload["citation_validation"]["fallback_used"])
+
     def test_all_short_answer_rag_prompts_use_canonical_unanswerable_label(self):
         repo_root = Path(__file__).resolve().parents[1]
         for relative_path in [

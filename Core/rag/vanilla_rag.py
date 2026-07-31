@@ -564,6 +564,13 @@ class VanillaRAG(BaseRAG):
             ranked_results,
             requested_ids[:support_budget],
         )
+        hotpot_fact_mode = self._uses_hotpot_supporting_facts(ranked_results)
+        if hotpot_fact_mode:
+            supporting_evidence = [
+                item
+                for item in supporting_evidence
+                if self._has_hotpot_fact_metadata(item)
+            ]
         valid_ids = self._parse_int_values(
             [item.get("id") for item in supporting_evidence]
         )
@@ -586,6 +593,12 @@ class VanillaRAG(BaseRAG):
                     ranked_results,
                     fallback_ids[:support_budget],
                 )
+            elif hotpot_fact_mode:
+                supporting_evidence = [
+                    item
+                    for item in ranked_results
+                    if self._has_hotpot_fact_metadata(item)
+                ][:support_budget]
             else:
                 supporting_evidence = ranked_results[:support_budget]
             valid_ids = self._parse_int_values(
@@ -637,6 +650,34 @@ class VanillaRAG(BaseRAG):
         if node_type in {"table", "figure", "caption", "title", "summary", "entity", "patch"}:
             return node_type
         return ""
+
+    @staticmethod
+    def _has_hotpot_fact_metadata(item: Dict[str, Any]) -> bool:
+        if not isinstance(item, dict):
+            return False
+        title = item.get("hotpot_title")
+        sent_id = item.get("hotpot_sent_id")
+        if sent_id is None:
+            sent_id = item.get("sent_id")
+        return title is not None and sent_id is not None
+
+    @classmethod
+    def _uses_hotpot_supporting_facts(
+        cls,
+        ranked_results: List[Dict[str, Any]],
+    ) -> bool:
+        for item in ranked_results:
+            if cls._has_hotpot_fact_metadata(item):
+                return True
+            for fact in cls._list_value(item.get("child_hotpot_facts")):
+                if (
+                    isinstance(fact, (list, tuple))
+                    and len(fact) >= 2
+                    and fact[0] is not None
+                    and fact[1] is not None
+                ):
+                    return True
+        return False
 
     def generation(self, query: str, query_output_dir: str) -> tuple:
         """
