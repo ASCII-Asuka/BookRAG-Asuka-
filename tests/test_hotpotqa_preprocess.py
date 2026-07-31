@@ -210,6 +210,33 @@ class HotpotQAPreprocessTests(unittest.TestCase):
         self.assertIn("Selected questions: 2", report_text)
         self.assertIn("Excluded completed questions: 2", report_text)
 
+    def test_evidence_mapping_prefers_exact_title_over_normalized_collision(self):
+        from Scripts.preprocess.hotpotqa_evibridge import _evidence_node_ids
+
+        lookup = {
+            ("Popular Science", 0): 7,
+            ("Popular science", 0): 9,
+        }
+
+        self.assertEqual(
+            _evidence_node_ids([["Popular Science", 0]], lookup),
+            [7],
+        )
+
+    def test_evidence_mapping_rejects_ambiguous_normalized_title(self):
+        from Scripts.preprocess.hotpotqa_evibridge import _evidence_node_ids
+
+        lookup = {
+            ("Popular Science", 0): 7,
+            ("Popular science", 0): 9,
+        }
+
+        with self.assertRaisesRegex(
+            ValueError,
+            "ambiguous normalized HotpotQA title",
+        ):
+            _evidence_node_ids([["POPULAR SCIENCE", 0]], lookup)
+
 
 if __name__ == "__main__":
     unittest.main()

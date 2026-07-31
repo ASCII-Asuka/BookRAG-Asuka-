@@ -423,32 +423,50 @@ def _evidence_node_ids(
     node_lookup: Dict[Tuple[str, int], int],
 ) -> List[int]:
     ids = []
-    normalized_lookup = {
-        (_normalize_title(title), sent_id): node_id
-        for (title, sent_id), node_id in node_lookup.items()
-    }
     for title, sent_id in supporting_facts:
-        node_id = normalized_lookup.get((_normalize_title(title), int(sent_id)))
+        node_id = _resolve_fact_value(title, int(sent_id), node_lookup)
         if node_id is not None and node_id not in ids:
             ids.append(node_id)
     return ids
 
 
 def _evidence_texts(supporting_facts: Iterable[List[Any]], row: Dict[str, Any]) -> List[str]:
-    text_lookup = {}
+    text_lookup: Dict[Tuple[str, int], str] = {}
     context = row.get("context") or {}
     titles = _as_list(context.get("title", []))
     sentence_groups = _as_list(context.get("sentences", []))
     for idx, title in enumerate(titles):
         clean_title = _clean_title(title)
         for sent_id, sentence in enumerate(_sentences_from_value(_get_index(sentence_groups, idx, []))):
-            text_lookup[(_normalize_title(clean_title), sent_id)] = str(sentence).strip()
+            text_lookup[(clean_title, sent_id)] = str(sentence).strip()
     texts = []
     for title, sent_id in supporting_facts:
-        text = text_lookup.get((_normalize_title(title), int(sent_id)))
+        text = _resolve_fact_value(title, int(sent_id), text_lookup)
         if text:
             texts.append(text)
     return texts
+
+
+def _resolve_fact_value(
+    title: Any,
+    sent_id: int,
+    values: Dict[Tuple[str, int], Any],
+) -> Any:
+    exact_key = (_clean_title(title), int(sent_id))
+    if exact_key in values:
+        return values[exact_key]
+    normalized_title = _normalize_title(title)
+    matches = [
+        value
+        for (candidate_title, candidate_sent_id), value in values.items()
+        if candidate_sent_id == int(sent_id)
+        and _normalize_title(candidate_title) == normalized_title
+    ]
+    if len(matches) > 1:
+        raise ValueError(
+            f"ambiguous normalized HotpotQA title: {title!r}, sent_id={sent_id}"
+        )
+    return matches[0] if matches else None
 
 
 def _hotpotqa_doc_path(doc_uuid: str, split: str, subset: str) -> str:
