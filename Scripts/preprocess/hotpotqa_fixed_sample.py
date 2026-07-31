@@ -1,6 +1,9 @@
+import argparse
 import hashlib
+import json
 import math
 from collections import Counter, defaultdict
+from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 from Scripts.preprocess.hotpotqa_evibridge import (
@@ -11,6 +14,8 @@ from Scripts.preprocess.hotpotqa_evibridge import (
     _row_id,
     _sentences_from_value,
     _supporting_facts,
+    _write_unified_rows,
+    hotpotqa_row_to_tree,
 )
 
 
@@ -175,3 +180,143 @@ def select_fixed_rows(
         "selected_question_ids": [_row_id(row) for row in selected],
     }
     return selected, audit
+
+
+def load_parquet_rows(path: str | Path) -> List[Dict[str, Any]]:
+    import pyarrow.parquet as pq
+
+    return [
+        dict(row)
+        for row in pq.read_table(path).to_pylist()
+    ]
+
+
+def prepare_fixed_sample(
+    parquet_path: str | Path,
+    output_root: str | Path,
+    working_dir: str | Path,
+    sample_size: int = 1000,
+    seed: int = 42,
+) -> Dict[str, Any]:
+    source_path = Path(parquet_path).resolve()
+    output_dir = Path(output_root).resolve()
+    work_dir = Path(working_dir).resolve()
+    output_dir.mkdir(parents=True, exist_ok=True)
+    work_dir.mkdir(parents=True, exist_ok=True)
+
+    rows = load_parquet_rows(source_path)
+    selected, audit = select_fixed_rows(
+        rows,
+        sample_size=sample_size,
+        seed=seed,
+    )
+    base_name = (
+        f"hotpotqa_distractor_validation_fixed{len(selected)}_seed{seed}"
+    )
+    selected_raw_path = output_dir / f"{base_name}.raw.json"
+    unified_path = output_dir / f"{base_name}.json"
+    manifest_path = output_dir / f"{base_name}.manifest.json"
+    dataset_config_path = output_dir / f"{base_name}.yaml"
+
+    selected_raw_path.write_text(
+        json.dumps(selected, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    unified_rows = _write_unified_rows(
+        raw_rows=selected,
+        output_path=str(unified_path),
+        split="validation",
+        subset="distractor",
+    )
+
+    for row in selected:
+        question_id = _row_id(row)
+        tree, _ = hotpotqa_row_to_tree(
+            row=row,
+            save_dir=str(work_dir / question_id),
+            doc_path=f"hotpotqa://distractor/validation/{question_id}",
+        )
+        tree.save_to_file()
+
+    gold_fact_count = sum(
+        len(row.get("hotpot_supporting_facts") or [])
+        for row in unified_rows
+    )
+    mapped_fact_count = sum(
+        len(row.get("evidence_block_ids") or [])
+        for row in unified_rows
+    )
+    if mapped_fact_count != gold_fact_count:
+        raise ValueError(
+            "HotpotQA supporting-fact mapping is incomplete: "
+            f"mapped={mapped_fact_count}, gold={gold_fact_count}"
+        )
+    mapping_coverage = (
+        mapped_fact_count / gold_fact_count
+        if gold_fact_count
+        else 1.0
+    )
+
+    manifest = {
+        "schema_version": 1,
+        **audit,
+        "source_path": source_path.as_posix(),
+        "source_size": source_path.stat().st_size,
+        "source_sha256": _sha256_file(source_path),
+        "selected_raw_path": selected_raw_path.as_posix(),
+        "selected_raw_sha256": _sha256_file(selected_raw_path),
+        "unified_path": unified_path.as_posix(),
+        "unified_sha256": _sha256_file(unified_path),
+        "working_dir": work_dir.as_posix(),
+        "gold_fact_count": gold_fact_count,
+        "mapped_fact_count": mapped_fact_count,
+        "mapping_coverage": mapping_coverage,
+    }
+    manifest_path.write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    dataset_config_path.write_text(
+        f"dataset_path: {json.dumps(unified_path.as_posix())}\n"
+        f"working_dir: {json.dumps(work_dir.as_posix())}\n"
+        "dataset_name: hotpotqa\n"
+        f"manifest_path: {json.dumps(manifest_path.as_posix())}\n",
+        encoding="utf-8",
+    )
+    return {
+        **audit,
+        "mapping_coverage": mapping_coverage,
+        "manifest_path": str(manifest_path),
+        "dataset_path": str(unified_path),
+        "selected_raw_path": str(selected_raw_path),
+        "dataset_config_path": str(dataset_config_path),
+        "working_dir": str(work_dir),
+    }
+
+
+def _sha256_file(path: str | Path) -> str:
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Prepare a deterministic HotpotQA fixed validation sample."
+    )
+    parser.add_argument("--parquet", required=True)
+    parser.add_argument("--output-root", required=True)
+    parser.add_argument("--working-dir", required=True)
+    parser.add_argument("--sample-size", type=int, default=1000)
+    parser.add_argument("--seed", type=int, default=42)
+    args = parser.parse_args()
+    summary = prepare_fixed_sample(
+        parquet_path=args.parquet,
+        output_root=args.output_root,
+        working_dir=args.working_dir,
+        sample_size=args.sample_size,
+        seed=args.seed,
+    )
+    print(json.dumps(summary, ensure_ascii=False, indent=2))
+
+
+if __name__ == "__main__":
+    main()

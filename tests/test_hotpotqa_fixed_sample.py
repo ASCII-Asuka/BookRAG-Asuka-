@@ -1,4 +1,7 @@
+import json
+import tempfile
 import unittest
+from pathlib import Path
 
 
 def make_row(question_id: str, question_type: str, valid: bool = True) -> dict:
@@ -76,6 +79,52 @@ class HotpotQAFixedSampleTests(unittest.TestCase):
             {row["id"] for row in first},
             {row["id"] for row in second},
         )
+
+    def test_prepare_fixed_sample_writes_hashed_manifest_and_trees(self):
+        import pyarrow as pa
+        import pyarrow.parquet as pq
+
+        from Scripts.preprocess.hotpotqa_fixed_sample import prepare_fixed_sample
+
+        rows = [
+            make_row(f"b-{index}", "bridge") for index in range(8)
+        ] + [
+            make_row(f"c-{index}", "comparison") for index in range(2)
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            parquet_path = tmp_path / "validation.parquet"
+            pq.write_table(pa.Table.from_pylist(rows), parquet_path)
+
+            summary = prepare_fixed_sample(
+                parquet_path=parquet_path,
+                output_root=tmp_path / "fixed",
+                working_dir=tmp_path / "work",
+                sample_size=5,
+                seed=42,
+            )
+            manifest = json.loads(
+                Path(summary["manifest_path"]).read_text(encoding="utf-8")
+            )
+            first_id = manifest["selected_question_ids"][0]
+
+            self.assertEqual(manifest["question_count"], 5)
+            self.assertEqual(
+                manifest["selected_strata"],
+                {
+                    "bridge|hard": 4,
+                    "comparison|hard": 1,
+                },
+            )
+            self.assertEqual(len(manifest["selected_question_ids"]), 5)
+            self.assertEqual(len(manifest["source_sha256"]), 64)
+            self.assertEqual(len(manifest["selected_raw_sha256"]), 64)
+            self.assertEqual(len(manifest["unified_sha256"]), 64)
+            self.assertEqual(manifest["mapping_coverage"], 1.0)
+            self.assertTrue(Path(summary["dataset_config_path"]).exists())
+            self.assertTrue(
+                (Path(summary["working_dir"]) / first_id / "tree.pkl").exists()
+            )
 
 
 if __name__ == "__main__":
