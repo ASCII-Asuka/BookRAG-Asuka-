@@ -303,6 +303,7 @@ python Eval/evaluation.py -d <qasper_dataset_config.yaml> --method evibridge --m
 - 文件中存在少量历史乱码注释和日志字符串；非任务相关时不要做大规模机械清理，避免引入无关 diff。
 - `Scripts/example-*.sh` 是 Linux/bash 风格示例；在 Windows/PowerShell 环境运行时需要改写路径和后台执行方式。
 - 当前仓库可能存在未提交的本地实验产物和配置改动。修改文件前先看 `git status --short`，不要回滚不是自己造成的改动。
+- 不要新建worktree，直接在dev分支进行修改，修改后不要自动commit，等待用户自己操作。
 
 ## 代码变更原则
 
