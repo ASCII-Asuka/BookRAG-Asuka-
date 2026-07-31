@@ -72,6 +72,14 @@ class EviBridgeWiringTests(unittest.TestCase):
         self.assertFalse(rag.enable_short_answer_extraction)
         self.assertEqual(rag.candidate_rerank_topk, 50)
 
+    def test_hotpotqa_config_keeps_short_answer_extraction_disabled(self):
+        from Core.configs.system_config import load_system_config
+
+        repo_root = Path(__file__).resolve().parents[1]
+        cfg = load_system_config(str(repo_root / "config" / "evibridge_hotpotqa.yaml"))
+
+        self.assertFalse(cfg.rag.strategy_config.enable_short_answer_extraction)
+
     def test_short_answer_extraction_is_opt_in(self):
         from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
 
