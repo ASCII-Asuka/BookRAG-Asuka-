@@ -366,7 +366,7 @@ def build_other_vdb_index(cfg: SystemConfig):
         # test
         query = "quick"
         results = bm25.search(query, top_k=2)
-        log.info(f"BM25 search results for test query {query}: {results}")
+        log.info("BM25 smoke test completed with %s results", len(results))
 
         bm25.save(save_path)
         log.info(f"BM25 index saved to {save_path}")

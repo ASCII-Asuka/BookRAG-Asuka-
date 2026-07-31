@@ -6,9 +6,32 @@ import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 
 class BM25BaselineTests(unittest.TestCase):
+    def test_bm25_index_smoke_log_does_not_emit_document_text(self):
+        from Core.pipelines.vdb_index import build_other_vdb_index
+
+        with tempfile.TemporaryDirectory() as tmp:
+            cfg = SimpleNamespace(
+                save_path=tmp,
+                index_type="bm25",
+                vdb=SimpleNamespace(
+                    vdb_dir_name="bm25_vdb",
+                    force_rebuild=True,
+                ),
+            )
+            with patch(
+                "Core.pipelines.vdb_index.get_all_chunks",
+                return_value=(["Frøya supporting text"], [{"node_id": 7}]),
+            ), self.assertLogs("Core.pipelines.vdb_index", level="INFO") as captured:
+                build_other_vdb_index(cfg)
+
+        messages = "\n".join(captured.output)
+        self.assertNotIn("Frøya supporting text", messages)
+        self.assertIn("BM25 smoke test completed with 1 results", messages)
+
     def test_vdb_index_import_does_not_require_modelscope(self):
         sentinel = object()
         original_modelscope = sys.modules.get("modelscope", sentinel)
