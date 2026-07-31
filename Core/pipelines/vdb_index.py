@@ -221,11 +221,16 @@ def _get_tree_paragraphs(tree: DocumentTree) -> Tuple[List[str], List[Dict[str, 
         title_path = _title_path(tree, node)
         section_id = title_path[-1] if title_path else ""
         paragraph_id = node.index_id
+        source_metadata = (
+            node.meta_info.pdf_para_block
+            if isinstance(node.meta_info.pdf_para_block, dict)
+            else {}
+        )
         paragraphs.append(text)
         metadatas.append(
             _metadata_without_none(
                 {
-                    "source": "qasper_paragraph",
+                    "source": source_metadata.get("source") or "qasper_paragraph",
                     "chunk_id": chunk_id,
                     "source_chunk_index": 0,
                     "node_id": node.index_id,
@@ -239,6 +244,8 @@ def _get_tree_paragraphs(tree: DocumentTree) -> Tuple[List[str], List[Dict[str, 
                     "section": section_id,
                     "title_path": " > ".join(title_path),
                     "qasper_evidence_text": text,
+                    "hotpot_title": source_metadata.get("hotpot_title"),
+                    "hotpot_sent_id": source_metadata.get("hotpot_sent_id"),
                 }
             )
         )

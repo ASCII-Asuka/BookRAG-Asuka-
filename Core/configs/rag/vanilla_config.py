@@ -46,6 +46,11 @@ class VanillaConfig(BaseRAGStrategyConfig):
     rerank_topk: int = Field(default=50, description="BM25 candidate count before reranking.")
     rerank_batch_size: int = Field(default=50, description="Batch size for remote/local reranker calls.")
     reranker_config: RerankerConfig = Field(default_factory=RerankerConfig)
+    supporting_evidence_topk: int = Field(
+        default=4,
+        ge=1,
+        description="Maximum validated supporting evidence items submitted for short-answer evaluation.",
+    )
     full_document_max_context_tokens: int = Field(
         default=30000,
         description="Maximum prompt context tokens for the full-document long-context baseline.",

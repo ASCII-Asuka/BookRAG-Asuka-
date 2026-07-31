@@ -420,9 +420,11 @@ class VanillaRAG(BaseRAG):
         elif short_answer:
             context_text = (
                 "You answer Qasper-style document questions using only the provided retrieved documents.\n"
-                "Return only a JSON object with keys answer_short and answer_rationale.\n"
+                "Return only a JSON object with keys answer_short, answer_rationale, and supporting_block_ids.\n"
                 "answer_short must be concise: use exact spans when possible, answer Yes or No for boolean questions, "
-                "and use Unanswerable only when evidence is insufficient. Do not include evidence bullets or explanations in answer_short.\n\n"
+                "and use Unanswerable only when evidence is insufficient. Do not include evidence bullets or explanations in answer_short.\n"
+                "supporting_block_ids must be a list of 1 to 4 integer source ids from the inline [source_id=...] markers "
+                "that best support answer_short.\n\n"
                 "--- Background Information ---\n"
             )
         else:
@@ -439,7 +441,7 @@ class VanillaRAG(BaseRAG):
             source = self._format_source(doc)
             source_id = self._doc_node_id(doc)
             label = f"Text {i+1}"
-            if long_context_reader and source_id is not None:
+            if (long_context_reader or short_answer) and source_id is not None:
                 label += f" [source_id={source_id}]"
             if source:
                 context_text += f"{label} ({source}): {doc['content']}\n"
@@ -552,11 +554,54 @@ class VanillaRAG(BaseRAG):
                     allow_nan=False,
                 )
 
-        retrieval_payload = {"ranked_results": ranked_results}
-        supporting_evidence = self._supporting_evidence_from_ranked(ranked_results, supporting_ids)
-        if supporting_evidence:
-            retrieval_payload["supporting_evidence"] = supporting_evidence
-            retrieval_payload["supporting_block_ids"] = [item["id"] for item in supporting_evidence]
+        requested_ids = self._parse_int_values(supporting_ids)
+        rag_config = getattr(self, "cfg", None)
+        support_budget = max(
+            1,
+            int(getattr(rag_config, "supporting_evidence_topk", 4) or 4),
+        )
+        supporting_evidence = self._supporting_evidence_from_ranked(
+            ranked_results,
+            requested_ids[:support_budget],
+        )
+        valid_ids = [
+            int(item["id"])
+            for item in supporting_evidence
+            if item.get("id") is not None
+        ]
+        invalid_ids = [
+            node_id
+            for node_id in requested_ids
+            if node_id not in valid_ids
+        ]
+        fallback_used = not valid_ids and bool(ranked_results)
+        if fallback_used:
+            supporting_evidence = ranked_results[:support_budget]
+            valid_ids = [
+                int(item["id"])
+                for item in supporting_evidence
+                if item.get("id") is not None
+            ]
+
+        retrieval_payload = {
+            "ranked_results": ranked_results,
+            "supporting_evidence": supporting_evidence,
+            "supporting_block_ids": valid_ids,
+            "citation_validation": {
+                "enabled": True,
+                "requested_ids": requested_ids,
+                "valid_ids": [
+                    node_id
+                    for node_id in requested_ids
+                    if node_id in valid_ids
+                ],
+                "invalid_ids": invalid_ids,
+                "ignored_ids": invalid_ids,
+                "used_ids": valid_ids,
+                "fallback_used": fallback_used,
+            },
+        }
+        self.last_supporting_block_ids = valid_ids
         with open(query_output_dir / "retrieval_res.json", "w", encoding="utf-8") as f:
             json.dump(
                 make_json_safe(retrieval_payload),
@@ -620,7 +665,6 @@ class VanillaRAG(BaseRAG):
         self.last_answer_short = answer_short
         self.last_answer_rationale = answer_rationale
         self.last_retrieved_block_ids = retrieval_ids
-        self.last_supporting_block_ids = answer_supporting_ids or retrieval_ids
         return final_answer, retrieval_ids
 
     def _react_generation(self, query: str, query_output_dir: str) -> tuple:

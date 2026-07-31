@@ -203,6 +203,54 @@ class BM25BaselineTests(unittest.TestCase):
         self.assertEqual(metadatas[0]["source_node_id"], 2)
         self.assertEqual(metadatas[0]["qasper_evidence_text"], paragraph)
 
+    def test_hotpotqa_bm25_corpus_preserves_title_sentence_metadata(self):
+        from Core.Index.Tree import DocumentTree, NodeType, TreeNode
+        from Core.pipelines.vdb_index import get_tree_chunks
+
+        with tempfile.TemporaryDirectory() as tmp:
+            cfg = SimpleNamespace(
+                save_path=tmp,
+                pdf_path="hotpotqa://question-1",
+                index_type="bm25",
+                rag=SimpleNamespace(
+                    strategy_config=SimpleNamespace(bm25_corpus="paragraph")
+                ),
+            )
+            tree = DocumentTree(
+                meta_dict={
+                    "file_name": "question-1.json",
+                    "file_path": "hotpotqa://question-1",
+                },
+                cfg=cfg,
+            )
+            title = TreeNode({"content": "Popular Science", "page_idx": 0, "pdf_id": 1})
+            title.type = NodeType.TITLE
+            title.outline_node = True
+            tree.add_node(title)
+            tree.root_node.add_child(title)
+            sentence = TreeNode(
+                {
+                    "content": "The supporting sentence.",
+                    "page_idx": 0,
+                    "pdf_id": 2,
+                    "pdf_para_block": {
+                        "hotpot_title": "Popular Science",
+                        "hotpot_sent_id": 3,
+                        "source": "hotpotqa_sentence",
+                    },
+                }
+            )
+            sentence.type = NodeType.TEXT
+            tree.add_node(sentence)
+            title.add_child(sentence)
+            tree.save_to_file()
+
+            _, metadatas = get_tree_chunks(cfg)
+
+        self.assertEqual(metadatas[0]["source"], "hotpotqa_sentence")
+        self.assertEqual(metadatas[0]["hotpot_title"], "Popular Science")
+        self.assertEqual(metadatas[0]["hotpot_sent_id"], 3)
+
     def test_qasper_dense_paragraph_corpus_keeps_whole_paragraph_text(self):
         from Core.Index.Tree import DocumentTree, NodeType, TreeNode
         from Core.pipelines.vdb_index import get_tree_chunks
@@ -377,6 +425,138 @@ class BM25BaselineTests(unittest.TestCase):
 
         self.assertIn("use Unanswerable only", prompt)
         self.assertNotIn("use Not answerable only", prompt)
+
+    def test_vanilla_short_answer_prompt_requests_traceable_supporting_ids(self):
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        llm = SimpleNamespace(config=SimpleNamespace(max_tokens=4096))
+        cfg = SimpleNamespace(
+            retrieval_method="bm25_rerank",
+            topk=2,
+            answer_style="short",
+        )
+        rag = VanillaRAG(config=cfg, llm=llm)
+
+        prompt = rag._create_augmented_prompt(
+            "Which group is described?",
+            [
+                {
+                    "id": 7,
+                    "content": "The evidence.",
+                    "metadata": {"node_id": 7},
+                }
+            ],
+        )
+
+        self.assertIn(
+            "keys answer_short, answer_rationale, and supporting_block_ids",
+            prompt,
+        )
+        self.assertIn("[source_id=7]", prompt)
+        self.assertIn("1 to 4 integer source ids", prompt)
+
+    def test_vanilla_generation_validates_and_records_supporting_ids(self):
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        class FakeBM25:
+            def search(self, query_text, top_k):
+                return [
+                    {
+                        "id": 7,
+                        "score": 2.0,
+                        "content": "First evidence.",
+                        "metadata": {"node_id": 7},
+                    },
+                    {
+                        "id": 8,
+                        "score": 1.0,
+                        "content": "Second evidence.",
+                        "metadata": {"node_id": 8},
+                    },
+                ]
+
+        class FakeLLM:
+            config = SimpleNamespace(max_tokens=4096)
+
+            def get_completion(self, prompt, json_response=False):
+                return json.dumps(
+                    {
+                        "answer_short": "answer",
+                        "answer_rationale": "Second evidence supports it.",
+                        "supporting_block_ids": [8, 999],
+                    }
+                )
+
+        cfg = SimpleNamespace(
+            retrieval_method="bm25",
+            topk=2,
+            answer_style="short",
+            supporting_evidence_topk=4,
+        )
+        rag = VanillaRAG(config=cfg, llm=FakeLLM(), bm25=FakeBM25())
+        with tempfile.TemporaryDirectory() as tmp:
+            rag.generation("Question?", Path(tmp))
+            payload = json.loads(
+                (Path(tmp) / "retrieval_res.json").read_text(encoding="utf-8")
+            )
+
+        self.assertEqual(payload["supporting_block_ids"], [8])
+        self.assertEqual(
+            payload["citation_validation"],
+            {
+                "enabled": True,
+                "requested_ids": [8, 999],
+                "valid_ids": [8],
+                "invalid_ids": [999],
+                "ignored_ids": [999],
+                "used_ids": [8],
+                "fallback_used": False,
+            },
+        )
+        self.assertEqual(rag.last_supporting_block_ids, [8])
+
+    def test_vanilla_generation_caps_fallback_supporting_evidence(self):
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        class FakeBM25:
+            def search(self, query_text, top_k):
+                return [
+                    {
+                        "id": node_id,
+                        "score": float(10 - node_id),
+                        "content": f"Evidence {node_id}.",
+                        "metadata": {"node_id": node_id},
+                    }
+                    for node_id in range(1, 7)
+                ]
+
+        class FakeLLM:
+            config = SimpleNamespace(max_tokens=4096)
+
+            def get_completion(self, prompt, json_response=False):
+                return json.dumps(
+                    {
+                        "answer_short": "answer",
+                        "answer_rationale": "The evidence supports it.",
+                    }
+                )
+
+        cfg = SimpleNamespace(
+            retrieval_method="bm25",
+            topk=6,
+            answer_style="short",
+            supporting_evidence_topk=4,
+        )
+        rag = VanillaRAG(config=cfg, llm=FakeLLM(), bm25=FakeBM25())
+        with tempfile.TemporaryDirectory() as tmp:
+            rag.generation("Question?", Path(tmp))
+            payload = json.loads(
+                (Path(tmp) / "retrieval_res.json").read_text(encoding="utf-8")
+            )
+
+        self.assertEqual(payload["supporting_block_ids"], [1, 2, 3, 4])
+        self.assertTrue(payload["citation_validation"]["fallback_used"])
+        self.assertEqual(rag.last_supporting_block_ids, [1, 2, 3, 4])
 
     def test_all_short_answer_rag_prompts_use_canonical_unanswerable_label(self):
         repo_root = Path(__file__).resolve().parents[1]
