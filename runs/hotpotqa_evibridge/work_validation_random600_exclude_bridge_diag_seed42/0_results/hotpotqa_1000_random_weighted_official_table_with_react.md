@@ -1,5 +1,7 @@
 # HotpotQA validation 1000-question weighted comparison with reasoning baselines
 
+> **Historical / non-reproducible:** this weighted table does not have the fixed manifest, complete shard-level per-question artifacts, or corrected title/sentence evidence export required for the paper main table. Do not merge or compare it directly with the fixed1000 official table.
+
 Data: first200 + second200 + random600, weighted as first200 * 0.2 + second200 * 0.2 + random600 * 0.6.
 
 Metrics are official HotpotQA metrics. Strict Supporting Fact EM and Joint EM are omitted because they are nearly all zero in the current paragraph-title mapping and are not used in the main table.
