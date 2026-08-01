@@ -110,6 +110,61 @@ class IRCoTBaselineTests(unittest.TestCase):
         self.assertEqual(payload["supporting_evidence"][1]["hotpot_title"], "Ed Wood")
         self.assertIn('"answer_short": "Yes"', answer)
 
+    def test_ircot_generation_exports_validated_fallback_support_ids(self):
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        class FakeBM25:
+            def search(self, query_text, top_k):
+                return [
+                    {
+                        "id": 7,
+                        "content": "The supporting sentence.",
+                        "score": 3.0,
+                        "metadata": {
+                            "node_id": 7,
+                            "source_node_id": 7,
+                            "source": "hotpotqa_sentence",
+                            "node_type": "text",
+                            "hotpot_title": "Article",
+                            "sent_id": 0,
+                        },
+                    }
+                ][:top_k]
+
+        class FakeLLM:
+            config = SimpleNamespace(max_tokens=2000)
+
+            def get_completion(self, prompt, json_response=False):
+                if "Generate the next reasoning step" in prompt:
+                    return json.dumps({"thought": "Enough evidence.", "stop": True})
+                return json.dumps(
+                    {
+                        "answer_short": "Answer",
+                        "answer_rationale": "The answer cites an invalid source id.",
+                        "supporting_block_ids": [999],
+                    }
+                )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            cfg = SimpleNamespace(
+                retrieval_method="ircot",
+                topk=1,
+                answer_style="short",
+                ircot_max_steps=1,
+                ircot_step_topk=1,
+                ircot_final_topk=1,
+                supporting_evidence_topk=4,
+            )
+            rag = VanillaRAG(config=cfg, llm=FakeLLM(), bm25=FakeBM25())
+            rag.generation("Question?", Path(tmp))
+            payload = json.loads(
+                (Path(tmp) / "retrieval_res.json").read_text(encoding="utf-8")
+            )
+
+        self.assertTrue(payload["citation_validation"]["fallback_used"])
+        self.assertEqual(payload["supporting_block_ids"], [7])
+        self.assertEqual(rag.last_supporting_block_ids, [7])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -959,7 +959,6 @@ class VanillaRAG(BaseRAG):
         self.last_answer_short = answer_short
         self.last_answer_rationale = answer_rationale
         self.last_retrieved_block_ids = retrieval_ids
-        self.last_supporting_block_ids = answer_supporting_ids or retrieval_ids
         return final_answer, retrieval_ids
 
     @staticmethod
