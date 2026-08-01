@@ -56,6 +56,10 @@ class EviBridgeRAGConfig(BaseRAGStrategyConfig):
     enable_supporting_rerank: bool = False
     rerank_batch_size: int = 50
     trust_answer_supporting_ids: bool = True
+    support_completion_policy: Literal["always", "weak_only", "none"] = "always"
+    enable_answer_conditioned_support_rerank: bool = False
+    answer_conditioned_support_topk: int = 20
+    regenerate_on_support_expansion: bool = False
     ppr_topk: int = 30
     ppr_restart_alpha: float = 0.15
     ppr_max_iter: int = 50
@@ -97,4 +101,9 @@ class EviBridgeRAGConfig(BaseRAGStrategyConfig):
             suffix = f"{suffix}_{self.ablation_variant}"
         if self.enable_long_context_fallback:
             suffix = f"{suffix}_fallback"
+        if (
+            self.support_completion_policy != "always"
+            and self.ablation_variant == "full"
+        ):
+            suffix = f"{suffix}_support_controller"
         return suffix

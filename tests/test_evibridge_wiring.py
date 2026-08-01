@@ -69,8 +69,13 @@ class EviBridgeWiringTests(unittest.TestCase):
         self.assertTrue(rag.enable_supporting_rerank)
         self.assertTrue(rag.trust_answer_supporting_ids)
         self.assertTrue(rag.dynamic_supporting_evidence_budget)
+        self.assertEqual(rag.support_completion_policy, "weak_only")
+        self.assertTrue(rag.enable_answer_conditioned_support_rerank)
+        self.assertEqual(rag.answer_conditioned_support_topk, 20)
+        self.assertTrue(rag.regenerate_on_support_expansion)
         self.assertFalse(rag.enable_short_answer_extraction)
         self.assertEqual(rag.candidate_rerank_topk, 50)
+        self.assertEqual(rag.method_suffix, "evibridge_support_controller")
 
     def test_hotpotqa_config_keeps_short_answer_extraction_disabled(self):
         from Core.configs.system_config import load_system_config
@@ -191,6 +196,44 @@ class EviBridgeWiringTests(unittest.TestCase):
                 ),
             )
             with patch("Core.provider.rerank.TextRerankerProvider", return_value="reranker") as provider:
+                deps = prepare_rag_dependencies(cfg)
+
+        self.assertEqual(deps["reranker"], "reranker")
+        provider.assert_called_once()
+
+    def test_resource_loader_loads_reranker_for_answer_conditioned_support_only(self):
+        _stub_runtime_imports()
+        from Core.utils.resource_loader import prepare_rag_dependencies
+
+        with tempfile.TemporaryDirectory() as tmp:
+            index = EvidenceBridgeIndex(
+                save_dir=tmp,
+                blocks={
+                    1: EvidenceBlock(
+                        block_id=1,
+                        block_type="paragraph",
+                        text="retrieval evidence",
+                    )
+                },
+            )
+            bm25 = index.build_bm25()
+            index.save_to_dir()
+            index.save_bm25(bm25)
+            cfg = SimpleNamespace(
+                save_path=tmp,
+                rag=SimpleNamespace(
+                    strategy_config=EviBridgeRAGConfig(
+                        enable_vector_recall=False,
+                        enable_candidate_rerank=False,
+                        enable_supporting_rerank=False,
+                        enable_answer_conditioned_support_rerank=True,
+                    )
+                ),
+            )
+            with patch(
+                "Core.provider.rerank.TextRerankerProvider",
+                return_value="reranker",
+            ) as provider:
                 deps = prepare_rag_dependencies(cfg)
 
         self.assertEqual(deps["reranker"], "reranker")

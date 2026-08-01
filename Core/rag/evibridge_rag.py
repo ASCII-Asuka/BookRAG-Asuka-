@@ -389,11 +389,45 @@ class EviBridgeRAG(BaseRAG):
                 "extracted_answer": answer_short,
             }
         retrieval_info["answer_extraction"] = extraction_info
-        self._apply_answer_supporting_ids(
-            retrieval_info,
-            answer_supporting_ids,
-            answer_short=answer_short,
-        )
+        if self.config.support_completion_policy == "always":
+            self._apply_answer_supporting_ids(
+                retrieval_info,
+                answer_supporting_ids,
+                answer_short=answer_short,
+            )
+            retrieval_info["answer_context"] = list(answer_evidence)
+            retrieval_info["answer_context_block_ids"] = [
+                int(item["block_id"])
+                for item in answer_evidence
+                if item.get("block_id") is not None
+            ]
+            retrieval_info["support_controller"] = {
+                "enabled": False,
+                "policy": "always",
+                "triggered": False,
+                "trigger_reasons": [],
+            }
+            retrieval_info["answer_regeneration"] = {
+                "enabled": False,
+                "required": False,
+                "used": False,
+                "reason": "legacy_policy",
+                "error": None,
+            }
+        else:
+            self._control_supporting_evidence(
+                query=query,
+                retrieval_info=retrieval_info,
+                answer_short=answer_short,
+                supporting_ids=answer_supporting_ids,
+            )
+            answer, answer_short, answer_rationale = self._regenerate_controlled_answer(
+                query=query,
+                retrieval_info=retrieval_info,
+                draft_answer=answer,
+                draft_answer_short=answer_short,
+                draft_rationale=answer_rationale,
+            )
 
         output_dir = Path(query_output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -405,6 +439,115 @@ class EviBridgeRAG(BaseRAG):
         self.last_answer_rationale = answer_rationale
         self.last_supporting_block_ids = supporting_ids
         return answer, retrieved_ids
+
+    def _regenerate_controlled_answer(
+        self,
+        query: str,
+        retrieval_info: Dict[str, Any],
+        draft_answer: str,
+        draft_answer_short: str,
+        draft_rationale: str,
+    ) -> Tuple[str, str, str]:
+        regeneration = retrieval_info.get("answer_regeneration") or {}
+        if not regeneration.get("required"):
+            return draft_answer, draft_answer_short, draft_rationale
+        context = list(retrieval_info.get("answer_context") or [])
+        if not context:
+            regeneration.update(
+                {
+                    "used": False,
+                    "reason": "empty_answer_context",
+                    "error": None,
+                }
+            )
+            retrieval_info["answer_regeneration"] = regeneration
+            return draft_answer, draft_answer_short, draft_rationale
+
+        prompt = self._create_augmented_prompt(
+            query=query,
+            evidence_chain=self._answer_context_chain(context),
+            demand=retrieval_info.get("demand"),
+            verification=retrieval_info.get("verification"),
+        )
+        try:
+            try:
+                final_answer = self.llm.get_completion(
+                    prompt=prompt,
+                    json_response=False,
+                )
+            except TypeError:
+                final_answer = self.llm.get_completion(prompt)
+        except Exception as exc:
+            regeneration.update(
+                {
+                    "used": False,
+                    "reason": "generation_failed",
+                    "error": str(exc)[:300],
+                }
+            )
+            retrieval_info["answer_regeneration"] = regeneration
+            return draft_answer, draft_answer_short, draft_rationale
+
+        answer_short, rationale, requested_ids = self._parse_answer_payload(final_answer)
+        answer_short = self._normalize_answer_short(
+            answer_short,
+            retrieval_info.get("demand"),
+        )
+        context_by_id = {
+            int(item["block_id"]): item
+            for item in context
+            if self._is_support_eligible(item)
+        }
+        requested_ids = list(dict.fromkeys(int(block_id) for block_id in requested_ids))
+        valid_ids = [block_id for block_id in requested_ids if block_id in context_by_id]
+        invalid_ids = [block_id for block_id in requested_ids if block_id not in context_by_id]
+        if self._is_unanswerable(answer_short):
+            valid_ids = []
+            supporting_evidence: List[Dict[str, Any]] = []
+        elif valid_ids:
+            supporting_evidence = self._payload_for_ids(context_by_id, valid_ids)
+        else:
+            supporting_evidence = list(retrieval_info.get("supporting_evidence") or [])
+        for rank, item in enumerate(supporting_evidence, 1):
+            item["supporting_rank"] = rank
+        retrieval_info["supporting_evidence"] = supporting_evidence
+        retrieval_info["supporting_block_ids"] = [
+            int(item["block_id"]) for item in supporting_evidence
+        ]
+        draft_validation = dict(retrieval_info.get("citation_validation") or {})
+        retrieval_info["citation_validation"] = {
+            "enabled": True,
+            "stage": "final",
+            "requested_ids": requested_ids,
+            "valid_ids": valid_ids,
+            "invalid_ids": invalid_ids,
+            "ignored_ids": invalid_ids,
+            "used_ids": valid_ids,
+            "draft": draft_validation,
+        }
+        regeneration.update(
+            {
+                "used": True,
+                "reason": "support_outside_selected",
+                "error": None,
+                "final_requested_ids": requested_ids,
+                "final_valid_ids": valid_ids,
+                "final_invalid_ids": invalid_ids,
+            }
+        )
+        retrieval_info["answer_regeneration"] = regeneration
+        return final_answer, answer_short, rationale
+
+    @staticmethod
+    def _answer_context_chain(context: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        chain = []
+        for rank, item in enumerate(context, 1):
+            payload = dict(item)
+            payload.setdefault("rank", rank)
+            payload.setdefault("display_rank", rank)
+            payload.setdefault("section_path", payload.get("section_id") or "")
+            chain.append(payload)
+        return chain
 
     def _build_long_context_fallback(
         self,
@@ -1096,6 +1239,400 @@ class EviBridgeRAG(BaseRAG):
             )
         return payload
 
+    def _control_supporting_evidence(
+        self,
+        query: str,
+        retrieval_info: Dict[str, Any],
+        answer_short: str,
+        supporting_ids: List[int],
+    ) -> None:
+        selected_payload = list(retrieval_info.get("selected_payload") or [])
+        requested_ids = list(dict.fromkeys(int(block_id) for block_id in supporting_ids))
+        selected_by_id = {
+            int(item["block_id"]): item
+            for item in selected_payload
+            if self._is_support_eligible(item)
+        }
+        valid_ids = [block_id for block_id in requested_ids if block_id in selected_by_id]
+        invalid_ids = [block_id for block_id in requested_ids if block_id not in selected_by_id]
+        demand = retrieval_info.get("demand")
+        selected_ids = [
+            int(item["block_id"])
+            for item in selected_payload
+            if item.get("block_id") is not None
+        ]
+
+        if self._is_unanswerable(answer_short):
+            self._set_controlled_support(
+                retrieval_info=retrieval_info,
+                supporting_evidence=[],
+                budget=0,
+                requested_ids=requested_ids,
+                valid_ids=valid_ids,
+                invalid_ids=invalid_ids,
+                controller={
+                    "enabled": True,
+                    "policy": self.config.support_completion_policy,
+                    "triggered": False,
+                    "trigger_reasons": [],
+                    "short_circuit": "unanswerable",
+                    "candidate_block_ids": [],
+                    "anchored_block_ids": [],
+                    "added_block_ids": [],
+                    "outside_selected_block_ids": [],
+                    "rerank_attempted": False,
+                    "rerank_failed": False,
+                    "rerank_error": None,
+                },
+                answer_context=selected_payload,
+                regeneration_required=False,
+            )
+            return
+
+        trigger_reasons = self._weak_support_reasons(
+            valid_ids=valid_ids,
+            invalid_ids=invalid_ids,
+            demand=demand,
+            verification=retrieval_info.get("verification"),
+        )
+        weak = bool(trigger_reasons)
+        if not weak or self.config.support_completion_policy == "none":
+            supporting_evidence = self._payload_for_ids(selected_by_id, valid_ids)
+            self._set_controlled_support(
+                retrieval_info=retrieval_info,
+                supporting_evidence=supporting_evidence,
+                budget=len(supporting_evidence),
+                requested_ids=requested_ids,
+                valid_ids=valid_ids,
+                invalid_ids=invalid_ids,
+                controller={
+                    "enabled": True,
+                    "policy": self.config.support_completion_policy,
+                    "triggered": weak,
+                    "trigger_reasons": trigger_reasons,
+                    "short_circuit": None,
+                    "candidate_block_ids": [],
+                    "anchored_block_ids": valid_ids,
+                    "added_block_ids": [],
+                    "outside_selected_block_ids": [],
+                    "rerank_attempted": False,
+                    "rerank_failed": False,
+                    "rerank_error": None,
+                },
+                answer_context=selected_payload,
+                regeneration_required=False,
+            )
+            return
+
+        candidate_payload = self._answer_support_candidate_payload(retrieval_info)
+        candidate_by_id = {
+            int(item["block_id"]): item
+            for item in candidate_payload
+            if self._is_support_eligible(item)
+        }
+        anchored_ids = [block_id for block_id in valid_ids if block_id in candidate_by_id]
+        ranked_candidates = list(candidate_payload)
+        rerank_attempted = False
+        rerank_failed = False
+        rerank_error: Optional[str] = None
+        if self.config.enable_answer_conditioned_support_rerank and self.reranker is not None:
+            rerank_attempted = True
+            try:
+                ranked_candidates = self._answer_conditioned_support_rerank(
+                    query=query,
+                    answer_short=answer_short,
+                    demand=demand,
+                    candidates=candidate_payload,
+                )
+            except Exception as exc:
+                rerank_failed = True
+                rerank_error = str(exc)[:300]
+                log.warning(
+                    "EviBridge answer-conditioned support rerank failed; using query order: %s",
+                    exc,
+                )
+
+        budget = self._controlled_support_budget(answer_short=answer_short, demand=demand)
+        chosen_ids = list(anchored_ids[: max(int(self.config.supporting_evidence_topk or 4), 1)])
+        target = max(budget, len(chosen_ids))
+        for item in ranked_candidates:
+            if len(chosen_ids) >= target:
+                break
+            block_id = int(item["block_id"])
+            if block_id in chosen_ids:
+                continue
+            chosen_ids.append(block_id)
+        supporting_evidence = self._payload_for_ids(candidate_by_id, chosen_ids)
+        added_ids = [block_id for block_id in chosen_ids if block_id not in anchored_ids]
+        selected_id_set = set(selected_ids)
+        outside_selected_ids = [
+            block_id for block_id in added_ids if block_id not in selected_id_set
+        ]
+        answer_context = self._expanded_answer_context(
+            supporting_evidence=supporting_evidence,
+            selected_payload=selected_payload,
+        )
+        regeneration_required = bool(
+            outside_selected_ids and self.config.regenerate_on_support_expansion
+        )
+        self._set_controlled_support(
+            retrieval_info=retrieval_info,
+            supporting_evidence=supporting_evidence,
+            budget=target,
+            requested_ids=requested_ids,
+            valid_ids=valid_ids,
+            invalid_ids=invalid_ids,
+            controller={
+                "enabled": True,
+                "policy": self.config.support_completion_policy,
+                "triggered": True,
+                "trigger_reasons": trigger_reasons,
+                "short_circuit": None,
+                "candidate_block_ids": [
+                    int(item["block_id"]) for item in candidate_payload
+                ],
+                "anchored_block_ids": anchored_ids,
+                "added_block_ids": added_ids,
+                "outside_selected_block_ids": outside_selected_ids,
+                "rerank_attempted": rerank_attempted,
+                "rerank_failed": rerank_failed,
+                "rerank_error": rerank_error,
+            },
+            answer_context=answer_context,
+            regeneration_required=regeneration_required,
+        )
+
+    def _answer_support_candidate_payload(
+        self, retrieval_info: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
+        selected_payload = list(retrieval_info.get("selected_payload") or [])
+        selected_by_id = {
+            int(item["block_id"]): dict(item)
+            for item in selected_payload
+            if self._is_support_eligible(item)
+        }
+        raw_scores = retrieval_info.get("typed_ppr_scores") or {}
+        raw_parts = retrieval_info.get("typed_ppr_score_parts") or {}
+        candidate_ids = []
+        for raw_id, raw_score in raw_scores.items():
+            block_id = int(raw_id)
+            block = self.evibridge_index.get_block(block_id)
+            if block is None or block.block_type not in set(self.config.supporting_evidence_types):
+                continue
+            parts = raw_parts.get(block_id, raw_parts.get(str(block_id), {})) or {}
+            rerank_rank = parts.get("rerank_rank")
+            candidate_ids.append(
+                (
+                    block_id,
+                    int(rerank_rank) if rerank_rank is not None else 10**9,
+                    -float(raw_score),
+                )
+            )
+        candidate_ids.sort(key=lambda item: (item[1], item[2], item[0]))
+        ordered_ids = list(selected_by_id)
+        ordered_ids.extend(
+            block_id for block_id, _, _ in candidate_ids if block_id not in selected_by_id
+        )
+        topk = max(int(self.config.answer_conditioned_support_topk or 0), 0)
+        if topk > 0:
+            ordered_ids = ordered_ids[:topk]
+
+        payload = []
+        for block_id in ordered_ids:
+            if block_id in selected_by_id:
+                item = dict(selected_by_id[block_id])
+                item["score_parts"] = dict(item.get("score_parts") or {})
+            else:
+                block = self.evibridge_index.get_block(block_id)
+                if block is None:
+                    continue
+                parts = raw_parts.get(block_id, raw_parts.get(str(block_id), {})) or {}
+                item = {
+                    "block_id": block.block_id,
+                    "block_type": block.block_type,
+                    "page": block.page,
+                    "section_id": block.section_id,
+                    "metadata": dict(block.metadata or {}),
+                    "text": block.text,
+                    "score": float(raw_scores.get(block_id, raw_scores.get(str(block_id), 0.0))),
+                    "score_parts": dict(parts),
+                    "bridge_types": [],
+                    "evidence_role": "answer_evidence",
+                    "selection_rank": None,
+                }
+            if self._is_support_eligible(item):
+                payload.append(item)
+        return payload
+
+    def _answer_conditioned_support_rerank(
+        self,
+        query: str,
+        answer_short: str,
+        demand: Optional[EvidenceDemand],
+        candidates: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
+        rerank_query = (
+            f"Question: {query}\n"
+            f"Draft answer: {answer_short}\n"
+            f"Evidence intent: {demand.intent if demand is not None else 'fact'}"
+        )
+        documents = []
+        for item in candidates:
+            section = item.get("section_id") or ""
+            documents.append(
+                f"section={section}\ntype={item.get('block_type', 'unknown')}\n{item.get('text', '')}"
+            )
+        scores = self.reranker.rerank(
+            query=rerank_query,
+            documents=documents,
+            batch_size=max(int(self.config.rerank_batch_size or 1), 1),
+        )
+        if len(scores) != len(candidates):
+            raise ValueError(
+                f"score count mismatch: got {len(scores)}, expected {len(candidates)}"
+            )
+        ranked = []
+        for item, score in zip(candidates, scores):
+            payload = dict(item)
+            score_parts = dict(payload.get("score_parts") or {})
+            score_parts["answer_conditioned_rerank_score"] = round(float(score), 8)
+            payload["score_parts"] = score_parts
+            ranked.append(payload)
+        ranked.sort(
+            key=lambda item: (
+                -float(item["score_parts"]["answer_conditioned_rerank_score"]),
+                int(item["block_id"]),
+            )
+        )
+        for rank, item in enumerate(ranked, 1):
+            item["score_parts"]["answer_conditioned_rerank_rank"] = rank
+        return ranked
+
+    def _expanded_answer_context(
+        self,
+        supporting_evidence: List[Dict[str, Any]],
+        selected_payload: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
+        ordered = list(supporting_evidence)
+        seen = {int(item["block_id"]) for item in ordered}
+        ordered.extend(
+            item
+            for item in selected_payload
+            if int(item["block_id"]) not in seen
+        )
+        max_blocks = max(int(self._max_context_blocks() or 0), 0)
+        max_tokens = max(int(self.config.max_context_tokens or 0), 0)
+        context = []
+        token_count = 0
+        for item in ordered:
+            item_tokens = len(evidence_tokenize(item.get("text", "")))
+            if max_blocks and len(context) >= max_blocks:
+                break
+            if max_tokens and context and token_count + item_tokens > max_tokens:
+                continue
+            context.append(dict(item))
+            token_count += item_tokens
+        return context
+
+    def _set_controlled_support(
+        self,
+        retrieval_info: Dict[str, Any],
+        supporting_evidence: List[Dict[str, Any]],
+        budget: int,
+        requested_ids: List[int],
+        valid_ids: List[int],
+        invalid_ids: List[int],
+        controller: Dict[str, Any],
+        answer_context: List[Dict[str, Any]],
+        regeneration_required: bool,
+    ) -> None:
+        supporting = []
+        for rank, item in enumerate(supporting_evidence, 1):
+            payload = dict(item)
+            payload["supporting_rank"] = rank
+            supporting.append(payload)
+        retrieval_info["supporting_evidence"] = supporting
+        retrieval_info["supporting_block_ids"] = [
+            int(item["block_id"]) for item in supporting
+        ]
+        retrieval_info["supporting_evidence_budget"] = int(budget)
+        retrieval_info["citation_validation"] = {
+            "enabled": True,
+            "requested_ids": requested_ids,
+            "valid_ids": valid_ids,
+            "invalid_ids": invalid_ids,
+            "ignored_ids": invalid_ids,
+            "used_ids": valid_ids,
+        }
+        retrieval_info["support_controller"] = controller
+        retrieval_info["answer_context"] = list(answer_context)
+        retrieval_info["answer_context_block_ids"] = [
+            int(item["block_id"])
+            for item in answer_context
+            if item.get("block_id") is not None
+        ]
+        retrieval_info["answer_regeneration"] = {
+            "enabled": bool(self.config.regenerate_on_support_expansion),
+            "required": bool(regeneration_required),
+            "used": False,
+            "reason": "support_outside_selected" if regeneration_required else "not_required",
+            "error": None,
+        }
+
+    @staticmethod
+    def _payload_for_ids(
+        payload_by_id: Dict[int, Dict[str, Any]], block_ids: List[int]
+    ) -> List[Dict[str, Any]]:
+        return [dict(payload_by_id[block_id]) for block_id in block_ids if block_id in payload_by_id]
+
+    def _is_support_eligible(self, item: Dict[str, Any]) -> bool:
+        return bool(
+            item.get("block_id") is not None
+            and item.get("block_type") in set(self.config.supporting_evidence_types)
+            and item.get("evidence_role") != "bridge_auxiliary"
+        )
+
+    @staticmethod
+    def _weak_support_reasons(
+        valid_ids: List[int],
+        invalid_ids: List[int],
+        demand: Optional[EvidenceDemand],
+        verification: Optional[SufficiencyVerdict],
+    ) -> List[str]:
+        reasons = []
+        if not valid_ids:
+            reasons.append("no_valid_citations")
+        if invalid_ids:
+            reasons.append("invalid_citations")
+        intent = demand.intent if demand is not None else "fact"
+        if intent in {"comparison", "multi-hop"} and len(valid_ids) < 2:
+            reasons.append("insufficient_bridge_coverage")
+        if verification is not None and not verification.sufficient:
+            reasons.append("verifier_insufficient")
+        return reasons
+
+    def _controlled_support_budget(
+        self, answer_short: str, demand: Optional[EvidenceDemand]
+    ) -> int:
+        if self._is_unanswerable(answer_short):
+            return 0
+        maximum = max(int(self.config.supporting_evidence_topk or 4), 1)
+        intent = demand.intent if demand is not None else "fact"
+        target = 3 if intent in {"comparison", "multi-hop"} else 2
+        return min(maximum, target)
+
+    @staticmethod
+    def _is_unanswerable(answer_short: str) -> bool:
+        normalized = re.sub(r"[^a-z]+", " ", str(answer_short or "").lower()).strip()
+        return normalized in {
+            "unanswerable",
+            "not answerable",
+            "not enough information",
+            "cannot be answered",
+            "no answer",
+            "unknown",
+        }
+
     def _supporting_evidence_payload(
         self,
         selected_payload: List[Dict[str, Any]],
@@ -1236,6 +1773,11 @@ class EviBridgeRAG(BaseRAG):
             "citation_validation": retrieval_info.get("citation_validation", {}),
             "answer_extraction": retrieval_info.get("answer_extraction", {}),
             "fallback": retrieval_info.get("fallback", {}),
+            "support_controller": retrieval_info.get("support_controller", {}),
+            "answer_context_block_ids": retrieval_info.get(
+                "answer_context_block_ids", []
+            ),
+            "answer_regeneration": retrieval_info.get("answer_regeneration", {}),
             "selected": retrieval_info.get("selected_payload", []),
             "selected_bridges": self._bridge_payloads(retrieval_info.get("selected_bridges", [])),
             "verification": retrieval_info["verification"].model_dump()
@@ -1254,6 +1796,15 @@ class EviBridgeRAG(BaseRAG):
                         "connections": retrieval_payload["selected_bridges"],
                         "connector_paths": retrieval_info["connector_paths"],
                         "connector_edges": retrieval_info["connector_edges"],
+                        "answer_context_block_ids": retrieval_info.get(
+                            "answer_context_block_ids", []
+                        ),
+                        "support_controller": retrieval_info.get(
+                            "support_controller", {}
+                        ),
+                        "answer_regeneration": retrieval_info.get(
+                            "answer_regeneration", {}
+                        ),
                         "verification": retrieval_payload["verification"],
                         "iterations": retrieval_info["iterations"],
                     },

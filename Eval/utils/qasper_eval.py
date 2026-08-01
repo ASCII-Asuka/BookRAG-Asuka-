@@ -258,49 +258,58 @@ def _gold_evidence_ids(gold_answers: list[dict]) -> list[str]:
     return list(dict.fromkeys(ids))
 
 
-def _id_f1_score(predicted_ids: list[str], gold_ids: list[str]) -> tuple[float, float]:
+def _id_prf_score(
+    predicted_ids: list[str], gold_ids: list[str]
+) -> tuple[float, float, float]:
     pred_set = set(predicted_ids)
     gold_set = set(gold_ids)
     if not pred_set and not gold_set:
-        return 1.0, 1.0
+        return 1.0, 1.0, 1.0
     if not pred_set or not gold_set:
-        return 0.0, 0.0
+        return 0.0, 0.0, 0.0
     matched = pred_set & gold_set
     precision = len(matched) / len(pred_set)
     recall = len(matched) / len(gold_set)
     f1 = 0.0 if precision + recall == 0 else (2 * precision * recall) / (precision + recall)
-    return round(f1, 6), round(recall, 6)
+    return round(precision, 6), round(recall, 6), round(f1, 6)
 
 
 def _evidence_scores(
     predicted_texts: list[str],
     gold_answers: list[dict],
     predicted_ids: list[str] | None = None,
-) -> tuple[float, float]:
-    gold_ids = _gold_evidence_ids(gold_answers)
-    if gold_ids and predicted_ids:
-        return _id_f1_score(predicted_ids, gold_ids)
+) -> tuple[float, float, float]:
+    gold_id_sets = [_gold_evidence_ids([answer]) for answer in gold_answers]
+    if predicted_ids is not None and any(gold_id_sets):
+        scores = [_id_prf_score(predicted_ids, gold_ids) for gold_ids in gold_id_sets]
+        return max(enumerate(scores), key=lambda item: (item[1][2], -item[0]))[1]
 
-    gold_texts = []
-    for answer in gold_answers:
-        gold_texts.extend(answer.get("evidence") or [])
-    gold_norm = [_normalize_evidence_text(text) for text in gold_texts if _normalize_evidence_text(text)]
     pred_norm = [_normalize_evidence_text(text) for text in predicted_texts if _normalize_evidence_text(text)]
-    if not gold_norm and not pred_norm:
-        return 1.0, 1.0
-    if not gold_norm or not pred_norm:
-        return 0.0, 0.0
-    matched_gold = set()
-    matched_pred = set()
-    for pred_idx, pred in enumerate(pred_norm):
-        for gold_idx, gold in enumerate(gold_norm):
-            if gold in pred or pred in gold:
-                matched_gold.add(gold_idx)
-                matched_pred.add(pred_idx)
-    precision = len(matched_pred) / len(pred_norm) if pred_norm else 0.0
-    recall = len(matched_gold) / len(gold_norm) if gold_norm else 0.0
-    f1 = 0.0 if precision + recall == 0 else (2 * precision * recall) / (precision + recall)
-    return round(f1, 6), round(recall, 6)
+    scores = []
+    for answer in gold_answers or [{}]:
+        gold_norm = [
+            _normalize_evidence_text(text)
+            for text in answer.get("evidence") or []
+            if _normalize_evidence_text(text)
+        ]
+        if not gold_norm and not pred_norm:
+            scores.append((1.0, 1.0, 1.0))
+            continue
+        if not gold_norm or not pred_norm:
+            scores.append((0.0, 0.0, 0.0))
+            continue
+        matched_gold = set()
+        matched_pred = set()
+        for pred_idx, pred in enumerate(pred_norm):
+            for gold_idx, gold in enumerate(gold_norm):
+                if gold in pred or pred in gold:
+                    matched_gold.add(gold_idx)
+                    matched_pred.add(pred_idx)
+        precision = len(matched_pred) / len(pred_norm)
+        recall = len(matched_gold) / len(gold_norm)
+        f1 = 0.0 if precision + recall == 0 else (2 * precision * recall) / (precision + recall)
+        scores.append((round(precision, 6), round(recall, 6), round(f1, 6)))
+    return max(enumerate(scores), key=lambda item: (item[1][2], -item[0]))[1]
 
 
 def _load_evibridge_metrics(res_path: str, query_idx: int, gold_answers: list[dict]) -> dict:
@@ -313,12 +322,15 @@ def _load_evibridge_metrics(res_path: str, query_idx: int, gold_answers: list[di
     predicted_ids = _evidence_ids_from_payload(chain_payload)
     if not predicted_ids:
         predicted_ids = _evidence_ids_from_payload(retrieval_payload)
-    evidence_f1, evidence_recall = _evidence_scores(predicted_texts, gold_answers, predicted_ids)
+    evidence_precision, evidence_recall, evidence_f1 = _evidence_scores(
+        predicted_texts, gold_answers, predicted_ids
+    )
     verification = _verification_from_payload(chain_payload) or _verification_from_payload(retrieval_payload)
     bridge_types = _bridge_types_from_payload(chain_payload) | _bridge_types_from_payload(retrieval_payload)
     iterations = retrieval_payload.get("iterations", []) if isinstance(retrieval_payload, dict) else []
     return {
         "evidence_f1": evidence_f1,
+        "evidence_precision": evidence_precision,
         "evidence_recall": evidence_recall,
         "path_connectivity": round(float(verification.get("connectivity", 0.0)), 6)
         if verification
@@ -435,6 +447,7 @@ def eval_qasper(
     }
     evibridge_metric_keys = [
         "evidence_f1",
+        "evidence_precision",
         "evidence_recall",
         "path_connectivity",
         "noise_ratio",
@@ -485,6 +498,7 @@ def eval_qasper(
         "f1",
         "llm_score",
         "evidence_f1",
+        "evidence_precision",
         "evidence_recall",
         "path_connectivity",
         "noise_ratio",

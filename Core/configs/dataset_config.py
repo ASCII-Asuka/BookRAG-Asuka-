@@ -41,6 +41,7 @@ def _validate_manifest(data_cfg: DatasetConfig) -> None:
     actual_ids = [
         str(
             row.get("hotpotqa_question_id")
+            or row.get("qasper_question_id")
             or row.get("question_id")
             or row.get("doc_uuid")
             or ""

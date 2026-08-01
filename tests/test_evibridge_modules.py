@@ -1080,6 +1080,427 @@ class EviBridgeModuleTests(unittest.TestCase):
         self.assertEqual([item["block_id"] for item in supporting], [2, 3])
         self.assertEqual([item["supporting_rank"] for item in supporting], [1, 2])
 
+    def test_weak_only_support_controller_keeps_strong_citations_without_padding(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+        from Core.rag.evibridge_verifier import SufficiencyVerdict
+
+        reranker = FakeReranker()
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                support_completion_policy="weak_only",
+                enable_answer_conditioned_support_rerank=True,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+            reranker=reranker,
+        )
+        retrieval_info = {
+            "demand": EvidenceDemand(intent="fact"),
+            "verification": SufficiencyVerdict(sufficient=True, next_action="accept"),
+            "selected_payload": [
+                {
+                    "block_id": 1,
+                    "block_type": "paragraph",
+                    "selection_rank": 1,
+                    "evidence_role": "answer_evidence",
+                    "text": "Method A uses retrieval augmented generation.",
+                    "score_parts": {"rerank_rank": 1},
+                },
+                {
+                    "block_id": 2,
+                    "block_type": "paragraph",
+                    "selection_rank": 2,
+                    "evidence_role": "answer_evidence",
+                    "text": "Method B compares retrieval with graph reasoning.",
+                    "score_parts": {"rerank_rank": 2},
+                },
+            ],
+            "typed_ppr_scores": {1: 0.9, 2: 0.8},
+            "typed_ppr_score_parts": {1: {"rerank_rank": 1}, 2: {"rerank_rank": 2}},
+        }
+
+        rag._control_supporting_evidence(
+            query="What does Method A use?",
+            retrieval_info=retrieval_info,
+            answer_short="Retrieval augmented generation",
+            supporting_ids=[1],
+        )
+
+        self.assertEqual(retrieval_info["supporting_block_ids"], [1])
+        self.assertFalse(retrieval_info["support_controller"]["triggered"])
+        self.assertEqual(retrieval_info["support_controller"]["trigger_reasons"], [])
+        self.assertFalse(retrieval_info["answer_regeneration"]["required"])
+        self.assertEqual(reranker.calls, [])
+
+    def test_weak_support_controller_reranks_candidate_pool_and_requests_regeneration(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+        from Core.rag.evibridge_verifier import SufficiencyVerdict
+
+        reranker = FakeReranker(
+            {
+                "Table 1. Accuracy": 0.99,
+                "Method B compares": 0.8,
+                "Method A uses": 0.2,
+            }
+        )
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                support_completion_policy="weak_only",
+                enable_answer_conditioned_support_rerank=True,
+                answer_conditioned_support_topk=20,
+                regenerate_on_support_expansion=True,
+                supporting_evidence_topk=4,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+            reranker=reranker,
+        )
+        retrieval_info = {
+            "demand": EvidenceDemand(intent="comparison"),
+            "verification": SufficiencyVerdict(sufficient=True, next_action="accept"),
+            "selected_payload": [
+                {
+                    "block_id": 1,
+                    "block_type": "paragraph",
+                    "selection_rank": 1,
+                    "evidence_role": "answer_evidence",
+                    "text": "Method A uses retrieval augmented generation.",
+                    "score_parts": {"rerank_rank": 1},
+                },
+                {
+                    "block_id": 2,
+                    "block_type": "paragraph",
+                    "selection_rank": 2,
+                    "evidence_role": "answer_evidence",
+                    "text": "Method B compares retrieval with graph reasoning.",
+                    "score_parts": {"rerank_rank": 2},
+                },
+            ],
+            "typed_ppr_scores": {1: 0.9, 2: 0.8, 3: 0.7, 5: 1.0},
+            "typed_ppr_score_parts": {
+                1: {"rerank_rank": 1},
+                2: {"rerank_rank": 2},
+                3: {"rerank_rank": 3},
+                5: {"rerank_rank": 0},
+            },
+        }
+
+        rag._control_supporting_evidence(
+            query="Compare Method A and Method B.",
+            retrieval_info=retrieval_info,
+            answer_short="Method B performs better than Method A.",
+            supporting_ids=[1],
+        )
+
+        controller = retrieval_info["support_controller"]
+        self.assertEqual(retrieval_info["supporting_block_ids"], [1, 3, 2])
+        self.assertTrue(controller["triggered"])
+        self.assertIn("insufficient_bridge_coverage", controller["trigger_reasons"])
+        self.assertEqual(controller["added_block_ids"], [3, 2])
+        self.assertEqual(controller["outside_selected_block_ids"], [3])
+        self.assertTrue(retrieval_info["answer_regeneration"]["required"])
+        self.assertIn("Draft answer: Method B performs better", reranker.calls[0]["query"])
+        self.assertTrue(all("type=entity" not in doc for doc in reranker.calls[0]["documents"]))
+
+    def test_answer_support_candidate_pool_caps_total_valid_blocks_at_topk(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_rag import EviBridgeRAG
+
+        index = self._build_index()
+        for block_id in range(7, 31):
+            index.blocks[block_id] = EvidenceBlock(
+                block_id=block_id,
+                block_type="paragraph",
+                text=f"Candidate evidence {block_id}.",
+                title_path=["Candidates"],
+                page=block_id,
+            )
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                support_completion_policy="weak_only",
+                answer_conditioned_support_topk=20,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=index,
+            bm25=None,
+        )
+        selected_ids = list(range(21, 31))
+        retrieval_info = {
+            "selected_payload": [
+                {
+                    "block_id": block_id,
+                    "block_type": "paragraph",
+                    "selection_rank": rank,
+                    "evidence_role": "answer_evidence",
+                    "text": index.blocks[block_id].text,
+                    "score_parts": {"rerank_rank": 20 + rank},
+                }
+                for rank, block_id in enumerate(selected_ids, 1)
+            ],
+            "typed_ppr_scores": {
+                block_id: 1.0 / block_id for block_id in range(1, 31)
+            },
+            "typed_ppr_score_parts": {
+                block_id: {"rerank_rank": block_id} for block_id in range(1, 31)
+            },
+        }
+
+        candidates = rag._answer_support_candidate_payload(retrieval_info)
+
+        self.assertEqual(len(candidates), 20)
+        self.assertEqual(
+            [item["block_id"] for item in candidates[:10]],
+            selected_ids,
+        )
+
+    def test_weak_support_controller_does_not_fill_past_satisfied_budget(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+        from Core.rag.evibridge_verifier import SufficiencyVerdict
+
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                support_completion_policy="weak_only",
+                enable_answer_conditioned_support_rerank=True,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+            reranker=FakeReranker({"Table 1. Accuracy": 0.99}),
+        )
+        selected_payload = [
+            {
+                "block_id": block_id,
+                "block_type": "paragraph",
+                "selection_rank": block_id,
+                "evidence_role": "answer_evidence",
+                "text": rag.evibridge_index.blocks[block_id].text,
+                "score_parts": {"rerank_rank": block_id},
+            }
+            for block_id in (1, 2)
+        ]
+        retrieval_info = {
+            "demand": EvidenceDemand(intent="fact"),
+            "verification": SufficiencyVerdict(sufficient=True, next_action="accept"),
+            "selected_payload": selected_payload,
+            "typed_ppr_scores": {1: 0.9, 2: 0.8, 3: 0.7},
+            "typed_ppr_score_parts": {
+                1: {"rerank_rank": 1},
+                2: {"rerank_rank": 2},
+                3: {"rerank_rank": 3},
+            },
+        }
+
+        rag._control_supporting_evidence(
+            query="What methods are used?",
+            retrieval_info=retrieval_info,
+            answer_short="Method A and Method B.",
+            supporting_ids=[1, 2, 999],
+        )
+
+        self.assertEqual(retrieval_info["supporting_block_ids"], [1, 2])
+
+    def test_controlled_regeneration_uses_final_valid_citations_without_padding(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+        from Core.rag.evibridge_verifier import SufficiencyVerdict
+
+        class RegenerationLLM(FakeLLM):
+            def __init__(self):
+                super().__init__()
+                self.calls = []
+
+            def get_completion(self, prompt, json_response=False):
+                self.calls.append(prompt)
+                return json.dumps(
+                    {
+                        "answer_short": "Method B scores 84 while Method A scores 80.",
+                        "answer_rationale": "Table 1 directly compares both methods.",
+                        "supporting_block_ids": [3, 999],
+                    }
+                )
+
+        llm = RegenerationLLM()
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                support_completion_policy="weak_only",
+                regenerate_on_support_expansion=True,
+                enable_llm_verifier=False,
+            ),
+            llm=llm,
+            evibridge_index=self._build_index(),
+            bm25=None,
+        )
+        context = [
+            {
+                "block_id": 1,
+                "block_type": "paragraph",
+                "text": "Method A uses retrieval augmented generation.",
+                "section_id": "Methods",
+            },
+            {
+                "block_id": 3,
+                "block_type": "table",
+                "text": "Table 1. Accuracy results\nMethod A | 80\nMethod B | 84",
+                "section_id": "Experiments",
+            },
+        ]
+        retrieval_info = {
+            "demand": EvidenceDemand(intent="comparison"),
+            "verification": SufficiencyVerdict(sufficient=True, next_action="accept"),
+            "answer_context": context,
+            "answer_context_block_ids": [1, 3],
+            "supporting_evidence": [dict(context[0]), dict(context[1])],
+            "supporting_block_ids": [1, 3],
+            "answer_regeneration": {
+                "enabled": True,
+                "required": True,
+                "used": False,
+                "reason": "support_outside_selected",
+                "error": None,
+            },
+        }
+
+        answer, answer_short, rationale = rag._regenerate_controlled_answer(
+            query="Compare Method A and Method B.",
+            retrieval_info=retrieval_info,
+            draft_answer="draft",
+            draft_answer_short="Method B is better.",
+            draft_rationale="draft rationale",
+        )
+
+        self.assertIn("Method B scores 84", answer)
+        self.assertEqual(answer_short, "Method B scores 84 while Method A scores 80.")
+        self.assertEqual(rationale, "Table 1 directly compares both methods.")
+        self.assertEqual(retrieval_info["supporting_block_ids"], [3])
+        self.assertEqual(retrieval_info["answer_regeneration"]["final_valid_ids"], [3])
+        self.assertEqual(retrieval_info["answer_regeneration"]["final_invalid_ids"], [999])
+        self.assertTrue(retrieval_info["answer_regeneration"]["used"])
+        self.assertIn("[block_id=3]", llm.calls[0])
+
+    def test_generation_runs_weak_support_controller_and_persists_diagnostics(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+        from Core.rag.evibridge_verifier import SufficiencyVerdict
+
+        class SequencedLLM(FakeLLM):
+            def __init__(self):
+                super().__init__()
+                self.responses = [
+                    json.dumps(
+                        {
+                            "answer_short": "Method B is better.",
+                            "answer_rationale": "Draft comparison.",
+                            "supporting_block_ids": [1],
+                        }
+                    ),
+                    json.dumps(
+                        {
+                            "answer_short": "Method B scores 84 while Method A scores 80.",
+                            "answer_rationale": "Table 1 directly compares both methods.",
+                            "supporting_block_ids": [3],
+                        }
+                    ),
+                ]
+
+            def get_completion(self, prompt, json_response=False):
+                return self.responses.pop(0)
+
+        index = self._build_index()
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                support_completion_policy="weak_only",
+                enable_answer_conditioned_support_rerank=True,
+                regenerate_on_support_expansion=True,
+                enable_long_context_fallback=False,
+                enable_short_answer_extraction=False,
+                enable_llm_verifier=False,
+            ),
+            llm=SequencedLLM(),
+            evibridge_index=index,
+            bm25=None,
+            reranker=FakeReranker({"Table 1. Accuracy": 0.99, "Method B compares": 0.8}),
+        )
+        demand = EvidenceDemand(intent="comparison")
+        verdict = SufficiencyVerdict(sufficient=True, next_action="accept")
+        selected_payload = [
+            {
+                "block_id": 1,
+                "block_type": "paragraph",
+                "selection_rank": 1,
+                "evidence_role": "answer_evidence",
+                "text": index.blocks[1].text,
+                "score_parts": {"rerank_rank": 1},
+            },
+            {
+                "block_id": 2,
+                "block_type": "paragraph",
+                "selection_rank": 2,
+                "evidence_role": "answer_evidence",
+                "text": index.blocks[2].text,
+                "score_parts": {"rerank_rank": 2},
+            },
+        ]
+        retrieval_info = {
+            "query": "Compare Method A and Method B.",
+            "demand": demand,
+            "seed_results": [],
+            "typed_ppr_scores": {1: 0.9, 2: 0.8, 3: 0.7},
+            "typed_ppr_score_parts": {
+                1: {"rerank_rank": 1},
+                2: {"rerank_rank": 2},
+                3: {"rerank_rank": 3},
+            },
+            "connector_paths": [],
+            "connector_edges": [],
+            "selected_payload": selected_payload,
+            "selected_bridges": [],
+            "retrieved_block_ids": [1, 2],
+            "supporting_evidence": [],
+            "supporting_block_ids": [],
+            "evidence_chain": rag._answer_context_chain(selected_payload),
+            "verification": verdict,
+            "iterations": [],
+            "stopping_reason": "sufficient",
+        }
+        rag._retrieve = lambda query: retrieval_info
+
+        with tempfile.TemporaryDirectory() as tmp:
+            answer, retrieved_ids = rag.generation(
+                "Compare Method A and Method B.",
+                tmp,
+            )
+            saved = json.loads(
+                (Path(tmp) / "retrieval_res.json").read_text(encoding="utf-8")
+            )
+
+        self.assertIn("Method B scores 84", answer)
+        self.assertEqual(retrieved_ids, [1, 2])
+        self.assertEqual(rag.last_answer_short, "Method B scores 84 while Method A scores 80.")
+        self.assertEqual(rag.last_supporting_block_ids, [3])
+        self.assertTrue(saved["support_controller"]["triggered"])
+        self.assertTrue(saved["answer_regeneration"]["used"])
+        self.assertIn(3, saved["answer_context_block_ids"])
+
     def test_evibridge_can_ignore_llm_supporting_ids_for_reranked_supporting_evidence(self):
         _stub_rag_provider_imports()
         from Core.configs.rag.evibridge_config import EviBridgeRAGConfig

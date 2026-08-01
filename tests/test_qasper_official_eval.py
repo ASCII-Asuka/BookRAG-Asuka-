@@ -5,6 +5,67 @@ from pathlib import Path
 
 
 class QasperOfficialEvalTests(unittest.TestCase):
+    def test_official_eval_reports_precision_and_recall_from_first_best_f1_reference(self):
+        from Scripts.eval.qasper_official import evaluate_qasper_official
+
+        gold = {
+            "q1": [
+                {
+                    "answer": "answer",
+                    "type": "extractive",
+                    "evidence": ["p1"],
+                },
+                {
+                    "answer": "answer",
+                    "type": "extractive",
+                    "evidence": ["p1", "p2", "p3", "p4"],
+                },
+            ]
+        }
+        predicted = {
+            "q1": {
+                "answer": "answer",
+                "evidence": ["p1", "p2"],
+            }
+        }
+
+        scores = evaluate_qasper_official(gold, predicted)
+
+        self.assertEqual(scores["Evidence Precision"], 0.5)
+        self.assertEqual(scores["Evidence Recall"], 1.0)
+        self.assertEqual(scores["Evidence F1"], 0.666667)
+
+    def test_official_eval_details_expose_per_question_prf_for_bootstrap(self):
+        from Scripts.eval.qasper_official import evaluate_qasper_official_details
+
+        gold = {
+            "q1": [
+                {
+                    "answer": "answer",
+                    "type": "extractive",
+                    "evidence": ["p1"],
+                }
+            ]
+        }
+        predicted = {"q1": {"answer": "answer", "evidence": ["p1", "p2"]}}
+
+        details = evaluate_qasper_official_details(gold, predicted)
+
+        self.assertEqual(
+            details,
+            [
+                {
+                    "question_id": "q1",
+                    "answer_f1": 1.0,
+                    "answer_type": "extractive",
+                    "evidence_precision": 0.5,
+                    "evidence_recall": 1.0,
+                    "evidence_f1": 0.666667,
+                    "missing_prediction": False,
+                }
+            ],
+        )
+
     def _write_sample_outputs(self, tmp: str):
         root = Path(tmp)
         dataset_path = root / "dataset.json"
@@ -269,6 +330,60 @@ class QasperOfficialEvalTests(unittest.TestCase):
 
         self.assertEqual(predictions[0]["predicted_evidence"], ["p1", "p2", "p3"])
 
+    def test_dynamic_evidence_topk_preserves_explicit_controller_evidence(self):
+        from Scripts.eval.qasper_official import export_predictions
+
+        with tempfile.TemporaryDirectory() as tmp:
+            dataset_path, working_dir = self._write_sample_outputs(tmp)
+            result_dir = working_dir / "paper-1" / "eval_qasper_evibridge"
+            query_dir = result_dir / "query_001"
+            (result_dir / "final_results.json").write_text(
+                json.dumps(
+                    [
+                        {
+                            "question": "Is the model realistic?",
+                            "qasper_question_id": "q1",
+                            "output": "Yes",
+                            "answer_short": "Yes",
+                        }
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            (query_dir / "retrieval_res.json").write_text(
+                json.dumps(
+                    {
+                        "demand": {"intent": "boolean"},
+                        "support_controller": {"enabled": True, "triggered": False},
+                        "supporting_block_ids": [1, 2, 3, 4],
+                        "supporting_evidence": [
+                            {
+                                "block_id": block_id,
+                                "block_type": "paragraph",
+                                "text": f"p{block_id}",
+                                "supporting_rank": block_id,
+                            }
+                            for block_id in range(1, 5)
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            predictions = export_predictions(
+                dataset_path=str(dataset_path),
+                working_dir=str(working_dir),
+                dataset_name="qasper",
+                method="evibridge",
+                output_path=str(Path(tmp) / "official" / "predictions.jsonl"),
+                dynamic_evidence_topk=True,
+            )
+
+        self.assertEqual(
+            predictions[0]["predicted_evidence"],
+            ["p1", "p2", "p3", "p4"],
+        )
+
     def test_dynamic_evidence_topk_exports_empty_evidence_for_predicted_unanswerable(self):
         from Scripts.eval.qasper_official import export_predictions
 
@@ -504,6 +619,7 @@ class QasperOfficialEvalTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             dataset_path, working_dir = self._write_sample_outputs(tmp)
             predictions_path = Path(tmp) / "official" / "predictions.jsonl"
+            detail_path = Path(tmp) / "official" / "official_eval_detail.json"
             export_predictions(
                 dataset_path=str(dataset_path),
                 working_dir=str(working_dir),
@@ -517,13 +633,17 @@ class QasperOfficialEvalTests(unittest.TestCase):
                 dataset_path=str(dataset_path),
                 predictions_path=str(predictions_path),
                 output_path=str(Path(tmp) / "official" / "official_eval.json"),
+                detail_output_path=str(detail_path),
                 text_evidence_only=True,
             )
+            details = json.loads(detail_path.read_text(encoding="utf-8"))
 
         self.assertEqual(scores["Answer F1"], 1.0)
         self.assertEqual(scores["Evidence F1"], 1.0)
         self.assertEqual(scores["Missing predictions"], 0)
         self.assertEqual(scores["Answer F1 by type"]["extractive"], 1.0)
+        self.assertEqual(details[0]["question_id"], "q1")
+        self.assertEqual(details[0]["evidence_precision"], 1.0)
 
     def test_exports_gold_json_for_official_evaluator(self):
         from Scripts.eval.qasper_official import export_gold_for_official_evaluator

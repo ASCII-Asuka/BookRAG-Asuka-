@@ -53,6 +53,33 @@ def write_fixture(root: Path):
 
 
 class DatasetManifestTests(unittest.TestCase):
+    def test_dataset_config_uses_qasper_question_ids_for_manifest(self):
+        from Core.configs.dataset_config import load_dataset_config
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _, dataset_path, manifest_path, config_path = write_fixture(root)
+            rows = json.loads(dataset_path.read_text(encoding="utf-8"))
+            for index, row in enumerate(rows, 1):
+                row.pop("hotpotqa_question_id", None)
+                row.pop("question_id", None)
+                row["doc_uuid"] = "shared-paper"
+                row["qasper_question_id"] = f"qasper-{index}"
+            dataset_path.write_text(
+                json.dumps(rows, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["selected_question_ids"] = ["qasper-1", "qasper-2"]
+            manifest["unified_sha256"] = hashlib.sha256(
+                dataset_path.read_bytes()
+            ).hexdigest()
+            manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+
+            cfg = load_dataset_config(str(config_path))
+
+        self.assertEqual(cfg.dataset_name, "hotpotqa")
+
     def test_dataset_config_validates_ordered_ids_and_sha(self):
         from Core.configs.dataset_config import load_dataset_config
 

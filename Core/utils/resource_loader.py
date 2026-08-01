@@ -109,6 +109,10 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
             rag_config,
             "enable_supporting_rerank",
             False,
+        ) or getattr(
+            rag_config,
+            "enable_answer_conditioned_support_rerank",
+            False,
         ):
             from Core.provider.rerank import TextRerankerProvider
 

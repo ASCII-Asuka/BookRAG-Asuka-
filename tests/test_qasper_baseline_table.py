@@ -40,6 +40,8 @@ class QasperBaselineTableTests(unittest.TestCase):
                 json.dumps(
                     {
                         "Answer F1": 0.42,
+                        "Evidence Precision": 0.25,
+                        "Evidence Recall": 0.15,
                         "Evidence F1": 0.18,
                         "Missing predictions": 0,
                     }
@@ -52,6 +54,8 @@ class QasperBaselineTableTests(unittest.TestCase):
 
         self.assertEqual(rows[0]["Method"], "dense")
         self.assertEqual(rows[0]["Answer F1"], 0.42)
+        self.assertEqual(rows[0]["Evidence Precision"], 0.25)
+        self.assertEqual(rows[0]["Evidence Recall"], 0.15)
         self.assertEqual(rows[0]["Evidence F1"], 0.18)
         self.assertEqual(rows[0]["Missing"], 0)
 
@@ -136,13 +140,18 @@ class QasperBaselineTableTests(unittest.TestCase):
                 {
                     "Method": "EviBridge-RAG",
                     "Answer F1": 0.4298,
+                    "Evidence Precision": 0.25,
+                    "Evidence Recall": 0.15,
                     "Evidence F1": 0.182,
                     "Missing": 0,
                 }
             ]
         )
 
-        self.assertIn("| EviBridge-RAG | 0.4298 | 0.1820 | 0 |", table)
+        self.assertIn(
+            "| EviBridge-RAG | 0.4298 | 0.2500 | 0.1500 | 0.1820 | 0 |",
+            table,
+        )
 
 
 if __name__ == "__main__":

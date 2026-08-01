@@ -64,17 +64,24 @@ def token_f1_score(prediction: str, ground_truth: str) -> float:
     return 0.0 if precision + recall == 0 else (2 * precision * recall) / (precision + recall)
 
 
-def paragraph_f1_score(prediction: List[str], ground_truth: List[str]) -> float:
+def paragraph_prf_score(
+    prediction: List[str], ground_truth: List[str]
+) -> tuple[float, float, float]:
     if not ground_truth and not prediction:
-        return 1.0
+        return 1.0, 1.0, 1.0
     if not prediction or not ground_truth:
-        return 0.0
+        return 0.0, 0.0, 0.0
     num_same = len(set(ground_truth).intersection(set(prediction)))
     if num_same == 0:
-        return 0.0
+        return 0.0, 0.0, 0.0
     precision = num_same / len(prediction)
     recall = num_same / len(ground_truth)
-    return 0.0 if precision + recall == 0 else (2 * precision * recall) / (precision + recall)
+    f1 = 0.0 if precision + recall == 0 else (2 * precision * recall) / (precision + recall)
+    return precision, recall, f1
+
+
+def paragraph_f1_score(prediction: List[str], ground_truth: List[str]) -> float:
+    return paragraph_prf_score(prediction, ground_truth)[2]
 
 
 def export_predictions(
@@ -196,16 +203,25 @@ def evaluate_predictions_file(
     dataset_path: str,
     predictions_path: str,
     output_path: str = "",
+    detail_output_path: str = "",
     text_evidence_only: bool = False,
 ) -> Dict[str, Any]:
     rows = _load_json(dataset_path)
     gold = _gold_answers_and_evidence(rows, text_evidence_only=text_evidence_only)
     predicted = _load_predictions(predictions_path)
     scores = evaluate_qasper_official(gold, predicted)
+    details = evaluate_qasper_official_details(gold, predicted)
     if output_path:
         output = Path(output_path)
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(scores, ensure_ascii=False, indent=2), encoding="utf-8")
+    if detail_output_path:
+        detail_output = Path(detail_output_path)
+        detail_output.parent.mkdir(parents=True, exist_ok=True)
+        detail_output.write_text(
+            json.dumps(details, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
     return scores
 
 
@@ -287,11 +303,82 @@ def run_external_official_evaluator(
     return scores
 
 
+def evaluate_qasper_official_details(
+    gold: Dict[str, List[Dict[str, Any]]],
+    predicted: Dict[str, Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    details: List[Dict[str, Any]] = []
+    for question_id, references in gold.items():
+        if question_id not in predicted:
+            details.append(
+                {
+                    "question_id": question_id,
+                    "answer_f1": 0.0,
+                    "answer_type": "missing",
+                    "evidence_precision": 0.0,
+                    "evidence_recall": 0.0,
+                    "evidence_f1": 0.0,
+                    "missing_prediction": True,
+                }
+            )
+            continue
+
+        prediction = predicted[question_id]
+        answer_scores = [
+            (
+                token_f1_score(
+                    prediction.get("answer", ""),
+                    reference.get("answer", ""),
+                ),
+                reference.get("type", "none"),
+            )
+            for reference in references
+        ]
+        if answer_scores:
+            best_answer_f1, answer_type = answer_scores[0]
+            for answer_f1, candidate_type in answer_scores[1:]:
+                if answer_f1 > best_answer_f1:
+                    best_answer_f1, answer_type = answer_f1, candidate_type
+        else:
+            best_answer_f1, answer_type = 0.0, "none"
+
+        evidence_scores = [
+            paragraph_prf_score(
+                prediction.get("evidence", []),
+                reference.get("evidence", []),
+            )
+            for reference in references
+        ]
+        if evidence_scores:
+            precision, recall, evidence_f1 = evidence_scores[0]
+            for candidate_precision, candidate_recall, candidate_f1 in evidence_scores[1:]:
+                if candidate_f1 > evidence_f1:
+                    precision = candidate_precision
+                    recall = candidate_recall
+                    evidence_f1 = candidate_f1
+        else:
+            precision, recall, evidence_f1 = 0.0, 0.0, 0.0
+        details.append(
+            {
+                "question_id": question_id,
+                "answer_f1": round(best_answer_f1, 6),
+                "answer_type": answer_type,
+                "evidence_precision": round(precision, 6),
+                "evidence_recall": round(recall, 6),
+                "evidence_f1": round(evidence_f1, 6),
+                "missing_prediction": False,
+            }
+        )
+    return details
+
+
 def evaluate_qasper_official(
     gold: Dict[str, List[Dict[str, Any]]],
     predicted: Dict[str, Dict[str, Any]],
 ) -> Dict[str, Any]:
     max_answer_f1s = []
+    evidence_precisions = []
+    evidence_recalls = []
     max_evidence_f1s = []
     max_answer_f1s_by_type = {
         "extractive": [],
@@ -305,6 +392,8 @@ def evaluate_qasper_official(
         if question_id not in predicted:
             num_missing_predictions += 1
             max_answer_f1s.append(0.0)
+            evidence_precisions.append(0.0)
+            evidence_recalls.append(0.0)
             max_evidence_f1s.append(0.0)
             continue
 
@@ -323,14 +412,23 @@ def evaluate_qasper_official(
         )[0]
         max_answer_f1s.append(max_answer_f1)
         max_answer_f1s_by_type.setdefault(answer_type, []).append(max_answer_f1)
-        evidence_f1s = [
-            paragraph_f1_score(
+        evidence_prfs = [
+            paragraph_prf_score(
                 prediction.get("evidence", []),
                 reference.get("evidence", []),
             )
             for reference in references
         ]
-        max_evidence_f1s.append(max(evidence_f1s) if evidence_f1s else 0.0)
+        if evidence_prfs:
+            best_precision, best_recall, best_f1 = evidence_prfs[0]
+            for precision, recall, f1 in evidence_prfs[1:]:
+                if f1 > best_f1:
+                    best_precision, best_recall, best_f1 = precision, recall, f1
+        else:
+            best_precision, best_recall, best_f1 = 0.0, 0.0, 0.0
+        evidence_precisions.append(best_precision)
+        evidence_recalls.append(best_recall)
+        max_evidence_f1s.append(best_f1)
 
     def mean(values: List[float]) -> float:
         return sum(values) / len(values) if values else 0.0
@@ -341,6 +439,8 @@ def evaluate_qasper_official(
             key: round(mean(value), 6)
             for key, value in max_answer_f1s_by_type.items()
         },
+        "Evidence Precision": round(mean(evidence_precisions), 6),
+        "Evidence Recall": round(mean(evidence_recalls), 6),
         "Evidence F1": round(mean(max_evidence_f1s), 6),
         "Missing predictions": num_missing_predictions,
     }
@@ -360,6 +460,7 @@ def run_export_and_eval(
     official_dir = Path(output_dir) if output_dir else Path(data_cfg.working_dir) / "0_results" / f"qasper_official_{method}"
     predictions_path = official_dir / "predictions.jsonl"
     scores_path = official_dir / "official_eval.json"
+    detail_path = official_dir / "official_eval_detail.json"
     export_predictions(
         dataset_path=data_cfg.dataset_path,
         working_dir=data_cfg.working_dir,
@@ -375,6 +476,7 @@ def run_export_and_eval(
         dataset_path=data_cfg.dataset_path,
         predictions_path=str(predictions_path),
         output_path=str(scores_path),
+        detail_output_path=str(detail_path),
         text_evidence_only=text_evidence_only,
     )
     print(json.dumps(scores, ensure_ascii=False, indent=2))
@@ -682,6 +784,9 @@ def _dynamic_evidence_topk(payload: Any, answer_text: str) -> int:
     normalized = normalize_answer(answer_text)
     if normalized in {"unanswerable", "not answerable", "not enough information"}:
         return 0
+    controlled_limit = _controlled_evidence_topk(payload)
+    if controlled_limit is not None:
+        return controlled_limit
     demand = payload.get("demand", {}) if isinstance(payload, dict) else {}
     intent = str(demand.get("intent", "") if isinstance(demand, dict) else "").strip().lower()
     if normalized in {"yes", "no"} or intent == "boolean":
@@ -691,6 +796,21 @@ def _dynamic_evidence_topk(payload: Any, answer_text: str) -> int:
     if len(normalized.split()) > 12:
         return 2
     return 3
+
+
+def _controlled_evidence_topk(payload: Any) -> Optional[int]:
+    if not isinstance(payload, dict):
+        return None
+    controller = payload.get("support_controller")
+    if not isinstance(controller, dict) or not controller.get("enabled"):
+        return None
+    supporting = payload.get("supporting_evidence")
+    if isinstance(supporting, list):
+        return len(supporting)
+    supporting_ids = payload.get("supporting_block_ids")
+    if isinstance(supporting_ids, list):
+        return len(supporting_ids)
+    return 0
 
 
 def _evidence_values(payload: Any) -> List[Any]:

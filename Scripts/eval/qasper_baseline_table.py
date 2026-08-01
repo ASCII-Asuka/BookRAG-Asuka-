@@ -101,6 +101,12 @@ def collect_rows(
             {
                 "Method": method or _method_from_path(path),
                 "Answer F1": _read_metric(payload, "Answer F1", "answer_f1"),
+                "Evidence Precision": _read_metric(
+                    payload, "Evidence Precision", "evidence_precision"
+                ),
+                "Evidence Recall": _read_metric(
+                    payload, "Evidence Recall", "evidence_recall"
+                ),
                 "Evidence F1": _read_metric(payload, "Evidence F1", "evidence_f1"),
                 "Missing": missing,
                 "Path": str(path),
@@ -134,14 +140,24 @@ def collect_from_root(
 
 def format_markdown_table(rows: List[Dict[str, Any]]) -> str:
     lines = [
-        "| Method | Answer F1 | Evidence F1 | Missing |",
-        "|---|---:|---:|---:|",
+        "| Method | Answer F1 | Evidence P | Evidence R | Evidence F1 | Missing |",
+        "|---|---:|---:|---:|---:|---:|",
     ]
     for row in rows:
         answer = "" if row["Answer F1"] is None else f"{row['Answer F1']:.4f}"
+        precision = (
+            ""
+            if row.get("Evidence Precision") is None
+            else f"{row['Evidence Precision']:.4f}"
+        )
+        recall = (
+            "" if row.get("Evidence Recall") is None else f"{row['Evidence Recall']:.4f}"
+        )
         evidence = "" if row["Evidence F1"] is None else f"{row['Evidence F1']:.4f}"
         missing = "" if row["Missing"] is None else str(row["Missing"])
-        lines.append(f"| {row['Method']} | {answer} | {evidence} | {missing} |")
+        lines.append(
+            f"| {row['Method']} | {answer} | {precision} | {recall} | {evidence} | {missing} |"
+        )
     return "\n".join(lines)
 
 

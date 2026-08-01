@@ -94,6 +94,7 @@ class EviBridgeEvalTests(unittest.TestCase):
             result = eval_single_file(str(res_dir), FakeExtractor())
 
         self.assertEqual(result[0]["evidence_f1"], 1.0)
+        self.assertEqual(result[0]["evidence_precision"], 1.0)
         self.assertEqual(result[0]["evidence_recall"], 1.0)
         self.assertEqual(result[0]["path_connectivity"], 0.75)
         self.assertEqual(result[0]["noise_ratio"], 0.1)
@@ -142,6 +143,7 @@ class EviBridgeEvalTests(unittest.TestCase):
             result = eval_single_file(str(res_dir), FakeExtractor())
 
         self.assertEqual(result[0]["evidence_f1"], 1.0)
+        self.assertEqual(result[0]["evidence_precision"], 1.0)
         self.assertEqual(result[0]["evidence_recall"], 1.0)
 
     def test_qasper_doc_result_dir_casts_numeric_doc_uuid_to_string(self):
