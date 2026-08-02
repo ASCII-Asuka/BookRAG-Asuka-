@@ -10,6 +10,7 @@ from Core.rag.base_rag import BaseRAG
 from Core.rag.evibridge_demand import DemandParser, EvidenceDemand
 from Core.rag.evibridge_ppr import TypedPPRResult, run_typed_ppr_with_details, shortest_path_connector_with_paths
 from Core.rag.evibridge_selector import SelectedEvidence, select_budgeted_evidence
+from Core.rag.evibridge_support_pruner import prune_supporting_evidence
 from Core.rag.evibridge_verifier import EvidenceSufficiencyVerifier, SufficiencyVerdict
 
 log = logging.getLogger(__name__)
@@ -1353,6 +1354,141 @@ class EviBridgeRAG(BaseRAG):
                 )
 
         budget = self._controlled_support_budget(answer_short=answer_short, demand=demand)
+        if self.config.support_selection_policy == "coverage_prune":
+            if rerank_failed:
+                fallback_ids = list(anchored_ids)
+                if not fallback_ids:
+                    fallback_ids = [
+                        block_id
+                        for block_id in selected_ids
+                        if block_id in candidate_by_id
+                    ][:1]
+                supporting_evidence = self._payload_for_ids(
+                    candidate_by_id, fallback_ids
+                )
+                added_ids = [
+                    block_id
+                    for block_id in fallback_ids
+                    if block_id not in anchored_ids
+                ]
+                fallback_id_set = set(fallback_ids)
+                self._set_controlled_support(
+                    retrieval_info=retrieval_info,
+                    supporting_evidence=supporting_evidence,
+                    budget=len(supporting_evidence),
+                    requested_ids=requested_ids,
+                    valid_ids=valid_ids,
+                    invalid_ids=invalid_ids,
+                    controller={
+                        "enabled": True,
+                        "policy": self.config.support_completion_policy,
+                        "selection_policy": self.config.support_selection_policy,
+                        "triggered": True,
+                        "trigger_reasons": trigger_reasons,
+                        "short_circuit": None,
+                        "candidate_block_ids": [
+                            int(item["block_id"]) for item in candidate_payload
+                        ],
+                        "anchored_block_ids": anchored_ids,
+                        "added_block_ids": added_ids,
+                        "outside_selected_block_ids": [],
+                        "rerank_attempted": rerank_attempted,
+                        "rerank_failed": True,
+                        "rerank_error": rerank_error,
+                        "fallback_used": True,
+                        "candidate_diagnostics": [
+                            {
+                                "block_id": int(item["block_id"]),
+                                "decision": (
+                                    "accepted"
+                                    if int(item["block_id"]) in fallback_id_set
+                                    else "rejected"
+                                ),
+                                "reason": (
+                                    "anchor"
+                                    if int(item["block_id"]) in set(anchored_ids)
+                                    else (
+                                        "reranker_failure_fallback"
+                                        if int(item["block_id"]) in fallback_id_set
+                                        else "reranker_failure"
+                                    )
+                                ),
+                            }
+                            for item in candidate_payload
+                        ],
+                        "stopping_reason": "reranker_failure_fallback",
+                    },
+                    answer_context=selected_payload,
+                    regeneration_required=False,
+                )
+                return
+
+            pruning = prune_supporting_evidence(
+                question=query,
+                draft_answer=answer_short,
+                intent=demand.intent if demand is not None else "fact",
+                subqueries=list(demand.subqueries if demand is not None else []),
+                candidates=ranked_candidates,
+                anchor_ids=anchored_ids,
+                allowed_types=set(self.config.supporting_evidence_types),
+                max_items=budget,
+                min_normalized_relevance=self.config.support_min_normalized_relevance,
+                redundancy_overlap_threshold=(
+                    self.config.support_redundancy_overlap_threshold
+                ),
+            )
+            chosen_ids = list(pruning["final_ids"])
+            ranked_by_id = {
+                int(item["block_id"]): item
+                for item in ranked_candidates
+                if self._is_support_eligible(item)
+            }
+            supporting_evidence = self._payload_for_ids(ranked_by_id, chosen_ids)
+            added_ids = [
+                block_id for block_id in chosen_ids if block_id not in anchored_ids
+            ]
+            selected_id_set = set(selected_ids)
+            outside_selected_ids = [
+                block_id for block_id in added_ids if block_id not in selected_id_set
+            ]
+            self._set_controlled_support(
+                retrieval_info=retrieval_info,
+                supporting_evidence=supporting_evidence,
+                budget=max(budget, len(anchored_ids)),
+                requested_ids=requested_ids,
+                valid_ids=valid_ids,
+                invalid_ids=invalid_ids,
+                controller={
+                    "enabled": True,
+                    "policy": self.config.support_completion_policy,
+                    "selection_policy": self.config.support_selection_policy,
+                    "triggered": True,
+                    "trigger_reasons": trigger_reasons,
+                    "short_circuit": None,
+                    "candidate_block_ids": [
+                        int(item["block_id"]) for item in candidate_payload
+                    ],
+                    "anchored_block_ids": anchored_ids,
+                    "added_block_ids": added_ids,
+                    "outside_selected_block_ids": outside_selected_ids,
+                    "rerank_attempted": rerank_attempted,
+                    "rerank_failed": rerank_failed,
+                    "rerank_error": rerank_error,
+                    "fallback_used": False,
+                    "min_normalized_relevance": (
+                        self.config.support_min_normalized_relevance
+                    ),
+                    "redundancy_overlap_threshold": (
+                        self.config.support_redundancy_overlap_threshold
+                    ),
+                    "candidate_diagnostics": pruning["candidate_diagnostics"],
+                    "stopping_reason": pruning["stopping_reason"],
+                },
+                answer_context=selected_payload,
+                regeneration_required=False,
+            )
+            return
+
         chosen_ids = list(anchored_ids[: max(int(self.config.supporting_evidence_topk or 4), 1)])
         target = max(budget, len(chosen_ids))
         for item in ranked_candidates:

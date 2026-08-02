@@ -1212,6 +1212,147 @@ class EviBridgeModuleTests(unittest.TestCase):
         self.assertIn("Draft answer: Method B performs better", reranker.calls[0]["query"])
         self.assertTrue(all("type=entity" not in doc for doc in reranker.calls[0]["documents"]))
 
+    def test_coverage_prune_keeps_answer_context_and_skips_regeneration(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+        from Core.rag.evibridge_verifier import SufficiencyVerdict
+
+        reranker = FakeReranker(
+            {
+                "Table 1. Accuracy": 0.99,
+                "Method B compares": 0.8,
+                "Method A uses": 0.2,
+            }
+        )
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                support_completion_policy="weak_only",
+                support_selection_policy="coverage_prune",
+                support_min_normalized_relevance=0.5,
+                support_redundancy_overlap_threshold=0.75,
+                enable_answer_conditioned_support_rerank=True,
+                answer_conditioned_support_topk=20,
+                regenerate_on_support_expansion=False,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+            reranker=reranker,
+        )
+        retrieval_info = {
+            "demand": EvidenceDemand(
+                intent="comparison",
+                subqueries=["Method A score", "Method B score"],
+            ),
+            "verification": SufficiencyVerdict(sufficient=True, next_action="accept"),
+            "selected_payload": [
+                {
+                    "block_id": 1,
+                    "block_type": "paragraph",
+                    "selection_rank": 1,
+                    "evidence_role": "answer_evidence",
+                    "text": "Method A uses retrieval augmented generation.",
+                    "score_parts": {"rerank_rank": 1},
+                },
+                {
+                    "block_id": 2,
+                    "block_type": "paragraph",
+                    "selection_rank": 2,
+                    "evidence_role": "answer_evidence",
+                    "text": "Method B compares retrieval with graph reasoning.",
+                    "score_parts": {"rerank_rank": 2},
+                },
+            ],
+            "typed_ppr_scores": {1: 0.9, 2: 0.8, 3: 0.7, 5: 1.0},
+            "typed_ppr_score_parts": {
+                1: {"rerank_rank": 1},
+                2: {"rerank_rank": 2},
+                3: {"rerank_rank": 3},
+                5: {"rerank_rank": 0},
+            },
+        }
+
+        rag._control_supporting_evidence(
+            query="Compare Method A and Method B.",
+            retrieval_info=retrieval_info,
+            answer_short="Method B performs better than Method A.",
+            supporting_ids=[1],
+        )
+
+        controller = retrieval_info["support_controller"]
+        self.assertEqual(retrieval_info["supporting_block_ids"], [1, 3])
+        self.assertEqual(retrieval_info["answer_context_block_ids"], [1, 2])
+        self.assertFalse(retrieval_info["answer_regeneration"]["required"])
+        self.assertEqual(controller["selection_policy"], "coverage_prune")
+        self.assertEqual(controller["added_block_ids"], [3])
+        self.assertIn("candidate_diagnostics", controller)
+        self.assertEqual(len(reranker.calls), 1)
+
+    def test_coverage_prune_reranker_failure_keeps_only_legal_anchor(self):
+        _stub_rag_provider_imports()
+        from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
+        from Core.rag.evibridge_demand import EvidenceDemand
+        from Core.rag.evibridge_rag import EviBridgeRAG
+        from Core.rag.evibridge_verifier import SufficiencyVerdict
+
+        rag = EviBridgeRAG(
+            config=EviBridgeRAGConfig(
+                support_completion_policy="weak_only",
+                support_selection_policy="coverage_prune",
+                enable_answer_conditioned_support_rerank=True,
+                regenerate_on_support_expansion=False,
+                enable_llm_verifier=False,
+            ),
+            llm=FakeLLM(),
+            evibridge_index=self._build_index(),
+            bm25=None,
+            reranker=FailingReranker(),
+        )
+        retrieval_info = {
+            "demand": EvidenceDemand(intent="comparison"),
+            "verification": SufficiencyVerdict(sufficient=True, next_action="accept"),
+            "selected_payload": [
+                {
+                    "block_id": 1,
+                    "block_type": "paragraph",
+                    "selection_rank": 1,
+                    "evidence_role": "answer_evidence",
+                    "text": "Method A uses retrieval augmented generation.",
+                    "score_parts": {"rerank_rank": 1},
+                },
+                {
+                    "block_id": 2,
+                    "block_type": "paragraph",
+                    "selection_rank": 2,
+                    "evidence_role": "answer_evidence",
+                    "text": "Method B compares retrieval with graph reasoning.",
+                    "score_parts": {"rerank_rank": 2},
+                },
+            ],
+            "typed_ppr_scores": {1: 0.9, 2: 0.8, 3: 0.7},
+            "typed_ppr_score_parts": {
+                1: {"rerank_rank": 1},
+                2: {"rerank_rank": 2},
+                3: {"rerank_rank": 3},
+            },
+        }
+
+        rag._control_supporting_evidence(
+            query="Compare Method A and Method B.",
+            retrieval_info=retrieval_info,
+            answer_short="Method B performs better than Method A.",
+            supporting_ids=[1],
+        )
+
+        controller = retrieval_info["support_controller"]
+        self.assertEqual(retrieval_info["supporting_block_ids"], [1])
+        self.assertTrue(controller["rerank_failed"])
+        self.assertTrue(controller["fallback_used"])
+        self.assertEqual(controller["stopping_reason"], "reranker_failure_fallback")
+
     def test_answer_support_candidate_pool_caps_total_valid_blocks_at_topk(self):
         _stub_rag_provider_imports()
         from Core.configs.rag.evibridge_config import EviBridgeRAGConfig

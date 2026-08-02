@@ -5,6 +5,46 @@ from pathlib import Path
 
 
 class QasperOfficialEvalTests(unittest.TestCase):
+    def test_evidence_recall_at_ks_uses_one_annotation_chosen_at_largest_k(self):
+        from Scripts.eval.qasper_official import evidence_recall_at_ks
+
+        recalls = evidence_recall_at_ks(
+            ranked_evidence=["a", "x", "b", "c"],
+            references=[
+                {"evidence": ["a", "z"]},
+                {"evidence": ["b", "c"]},
+            ],
+            ks=(1, 2, 4),
+        )
+
+        self.assertEqual(recalls, {1: 0.0, 2: 0.0, 4: 1.0})
+
+    def test_official_eval_reports_recall_at_k_when_ranked_evidence_is_present(self):
+        from Scripts.eval.qasper_official import evaluate_qasper_official
+
+        gold = {
+            "q1": [
+                {
+                    "answer": "answer",
+                    "type": "extractive",
+                    "evidence": ["p1", "p2"],
+                }
+            ]
+        }
+        predicted = {
+            "q1": {
+                "answer": "answer",
+                "evidence": ["p1"],
+                "ranked_evidence": ["p1", "noise", "p2"],
+            }
+        }
+
+        scores = evaluate_qasper_official(gold, predicted)
+
+        self.assertEqual(scores["Evidence Recall@5"], 1.0)
+        self.assertEqual(scores["Evidence Recall@10"], 1.0)
+        self.assertEqual(scores["Evidence Recall@20"], 1.0)
+
     def test_official_eval_reports_precision_and_recall_from_first_best_f1_reference(self):
         from Scripts.eval.qasper_official import evaluate_qasper_official
 

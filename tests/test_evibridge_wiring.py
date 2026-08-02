@@ -77,6 +77,27 @@ class EviBridgeWiringTests(unittest.TestCase):
         self.assertEqual(rag.candidate_rerank_topk, 50)
         self.assertEqual(rag.method_suffix, "evibridge_support_controller")
 
+    def test_support_pruned_config_enables_coverage_policy(self):
+        from Core.configs.system_config import load_system_config
+
+        repo_root = Path(__file__).resolve().parents[1]
+        cfg = load_system_config(
+            str(repo_root / "config" / "evibridge_support_pruned.yaml")
+        )
+        rag = cfg.rag.strategy_config
+
+        self.assertEqual(rag.support_selection_policy, "coverage_prune")
+        self.assertEqual(rag.support_min_normalized_relevance, 0.35)
+        self.assertEqual(rag.support_redundancy_overlap_threshold, 0.65)
+        self.assertFalse(rag.regenerate_on_support_expansion)
+        self.assertEqual(rag.method_suffix, "evibridge_support_pruned")
+
+    def test_support_selection_policy_defaults_to_legacy_fill_budget(self):
+        rag = EviBridgeRAGConfig()
+
+        self.assertEqual(rag.support_selection_policy, "fill_budget")
+        self.assertEqual(rag.method_suffix, "evibridge")
+
     def test_hotpotqa_config_keeps_short_answer_extraction_disabled(self):
         from Core.configs.system_config import load_system_config
 

@@ -8,7 +8,7 @@ import string
 import sys
 from collections import Counter
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
@@ -82,6 +82,32 @@ def paragraph_prf_score(
 
 def paragraph_f1_score(prediction: List[str], ground_truth: List[str]) -> float:
     return paragraph_prf_score(prediction, ground_truth)[2]
+
+
+def evidence_recall_at_ks(
+    ranked_evidence: Sequence[Any],
+    references: Sequence[Mapping[str, Any]],
+    ks: Sequence[int] = (5, 10, 20),
+) -> Dict[int, float]:
+    ordered_ks = tuple(
+        dict.fromkeys(max(int(k), 0) for k in ks if int(k) > 0)
+    )
+    if not ordered_ks:
+        return {}
+    priority = tuple(sorted(ordered_ks, reverse=True))
+    best_values = {k: 0.0 for k in ordered_ks}
+    best_key = None
+    for reference in references:
+        ground_truth = list(reference.get("evidence", []) or [])
+        values = {
+            k: paragraph_prf_score(list(ranked_evidence[:k]), ground_truth)[1]
+            for k in ordered_ks
+        }
+        key = tuple(values[k] for k in priority)
+        if best_key is None or key > best_key:
+            best_key = key
+            best_values = values
+    return best_values
 
 
 def export_predictions(
@@ -359,7 +385,7 @@ def evaluate_qasper_official_details(
         else:
             precision, recall, evidence_f1 = 0.0, 0.0, 0.0
         details.append(
-            {
+            detail := {
                 "question_id": question_id,
                 "answer_f1": round(best_answer_f1, 6),
                 "answer_type": answer_type,
@@ -369,6 +395,16 @@ def evaluate_qasper_official_details(
                 "missing_prediction": False,
             }
         )
+        if "ranked_evidence" in prediction:
+            recall_at_ks = evidence_recall_at_ks(
+                prediction.get("ranked_evidence", []) or [], references
+            )
+            detail.update(
+                {
+                    f"evidence_recall_at_{k}": round(value, 6)
+                    for k, value in recall_at_ks.items()
+                }
+            )
     return details
 
 
@@ -387,6 +423,11 @@ def evaluate_qasper_official(
         "none": [],
     }
     num_missing_predictions = 0
+    include_ranked_recall = any(
+        isinstance(value, dict) and "ranked_evidence" in value
+        for value in predicted.values()
+    )
+    recalls_at_k = {5: [], 10: [], 20: []}
 
     for question_id, references in gold.items():
         if question_id not in predicted:
@@ -395,6 +436,9 @@ def evaluate_qasper_official(
             evidence_precisions.append(0.0)
             evidence_recalls.append(0.0)
             max_evidence_f1s.append(0.0)
+            if include_ranked_recall:
+                for values in recalls_at_k.values():
+                    values.append(0.0)
             continue
 
         prediction = predicted[question_id]
@@ -429,11 +473,17 @@ def evaluate_qasper_official(
         evidence_precisions.append(best_precision)
         evidence_recalls.append(best_recall)
         max_evidence_f1s.append(best_f1)
+        if include_ranked_recall:
+            question_recalls = evidence_recall_at_ks(
+                prediction.get("ranked_evidence", []) or [], references
+            )
+            for k in recalls_at_k:
+                recalls_at_k[k].append(question_recalls[k])
 
     def mean(values: List[float]) -> float:
         return sum(values) / len(values) if values else 0.0
 
-    return {
+    result = {
         "Answer F1": round(mean(max_answer_f1s), 6),
         "Answer F1 by type": {
             key: round(mean(value), 6)
@@ -444,6 +494,14 @@ def evaluate_qasper_official(
         "Evidence F1": round(mean(max_evidence_f1s), 6),
         "Missing predictions": num_missing_predictions,
     }
+    if include_ranked_recall:
+        result.update(
+            {
+                f"Evidence Recall@{k}": round(mean(values), 6)
+                for k, values in recalls_at_k.items()
+            }
+        )
+    return result
 
 
 def run_export_and_eval(

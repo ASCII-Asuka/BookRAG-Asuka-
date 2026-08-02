@@ -57,6 +57,11 @@ class EviBridgeRAGConfig(BaseRAGStrategyConfig):
     rerank_batch_size: int = 50
     trust_answer_supporting_ids: bool = True
     support_completion_policy: Literal["always", "weak_only", "none"] = "always"
+    support_selection_policy: Literal["fill_budget", "coverage_prune"] = "fill_budget"
+    support_min_normalized_relevance: float = Field(default=0.5, ge=0.0, le=1.0)
+    support_redundancy_overlap_threshold: float = Field(
+        default=0.75, ge=0.0, le=1.0
+    )
     enable_answer_conditioned_support_rerank: bool = False
     answer_conditioned_support_topk: int = 20
     regenerate_on_support_expansion: bool = False
@@ -101,7 +106,9 @@ class EviBridgeRAGConfig(BaseRAGStrategyConfig):
             suffix = f"{suffix}_{self.ablation_variant}"
         if self.enable_long_context_fallback:
             suffix = f"{suffix}_fallback"
-        if (
+        if self.support_selection_policy == "coverage_prune" and self.ablation_variant == "full":
+            suffix = f"{suffix}_support_pruned"
+        elif (
             self.support_completion_policy != "always"
             and self.ablation_variant == "full"
         ):
