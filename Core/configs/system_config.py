@@ -48,6 +48,7 @@ class SystemConfig(BaseModel):
 
 def load_system_config(path: str = "../configs/default.yaml") -> SystemConfig:
     raw_config = _load_raw_config(Path(path).resolve(), seen=set())
+    _inherit_matching_embedding_credentials(raw_config)
 
     if "rag" in raw_config:
         rag_data = raw_config["rag"]
@@ -55,6 +56,36 @@ def load_system_config(path: str = "../configs/default.yaml") -> SystemConfig:
 
     cfg = SystemConfig(**raw_config)
     return cfg
+
+
+def _inherit_matching_embedding_credentials(raw_config: Dict[str, Any]) -> None:
+    llm_config = raw_config.get("llm")
+    if not isinstance(llm_config, dict):
+        return
+    api_key = llm_config.get("api_key")
+    api_base = llm_config.get("api_base")
+    if not api_key or not api_base or str(api_key).strip().upper() == "TODO":
+        return
+
+    embedding_configs = []
+    vdb_config = raw_config.get("vdb")
+    if isinstance(vdb_config, dict):
+        embedding_configs.append(vdb_config.get("embedding_config"))
+    rag_config = raw_config.get("rag")
+    if isinstance(rag_config, dict):
+        rag_vdb_config = rag_config.get("vdb_config")
+        if isinstance(rag_vdb_config, dict):
+            embedding_configs.append(rag_vdb_config.get("embedding_config"))
+
+    for embedding_config in embedding_configs:
+        if not isinstance(embedding_config, dict):
+            continue
+        if str(embedding_config.get("backend", "")).lower() != "openai":
+            continue
+        if embedding_config.get("api_base") != api_base:
+            continue
+        if not embedding_config.get("api_key"):
+            embedding_config["api_key"] = api_key
 
 
 def _load_raw_config(path: Path, seen: Set[Path]) -> Dict[str, Any]:

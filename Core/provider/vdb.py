@@ -43,13 +43,20 @@ class VectorStore:
 
     def close(self):
         """Release embedding and Chroma references after a document-level run."""
-        if getattr(self, "embedding_model", None) is not None and hasattr(
-            self.embedding_model, "close"
-        ):
-            self.embedding_model.close()
-        self.collection = None
-        self.client = None
-        gc.collect()
+        client = getattr(self, "client", None)
+        try:
+            if getattr(self, "embedding_model", None) is not None and hasattr(
+                self.embedding_model, "close"
+            ):
+                self.embedding_model.close()
+        finally:
+            self.collection = None
+            try:
+                if client is not None and hasattr(client, "close"):
+                    client.close()
+            finally:
+                self.client = None
+                gc.collect()
 
     def add_texts(self, texts: List[str], metadatas: List[dict] = None):
         if not texts:
