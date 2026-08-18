@@ -810,6 +810,66 @@ class BM25BaselineTests(unittest.TestCase):
         self.assertEqual(results[0]["metadata"]["source"], "abstract_only")
         self.assertEqual(results[0]["metadata"]["node_id"], 2)
 
+    def test_vanilla_hotpot_lead_only_returns_sentence_zero_for_every_title(self):
+        from Core.Index.Tree import DocumentTree, NodeType, TreeNode
+        from Core.rag.vanilla_rag import VanillaRAG
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tree = DocumentTree(
+                meta_dict={
+                    "file_name": "hotpot.json",
+                    "file_path": "hotpotqa://question-1",
+                },
+                cfg=SimpleNamespace(save_path=tmp),
+            )
+            expected = []
+            for title_text, sentences in [
+                ("Article A", ["A lead.", "A detail."]),
+                ("Article B", ["B lead.", "B detail."]),
+            ]:
+                title = TreeNode(
+                    {"content": title_text, "page_idx": 0, "pdf_id": 0}
+                )
+                title.type = NodeType.TITLE
+                tree.add_node(title)
+                tree.root_node.add_child(title)
+                for sent_id, sentence in enumerate(sentences):
+                    node = TreeNode(
+                        {
+                            "content": sentence,
+                            "page_idx": 0,
+                            "pdf_id": sent_id,
+                        }
+                    )
+                    node.type = NodeType.TEXT
+                    tree.add_node(node)
+                    title.add_child(node)
+                    if sent_id == 0:
+                        expected.append(node.index_id)
+
+            rag = VanillaRAG(
+                config=SimpleNamespace(
+                    retrieval_method="lead_only",
+                    topk=1,
+                    answer_style="short",
+                ),
+                llm=SimpleNamespace(config=SimpleNamespace(max_tokens=1000)),
+                tree_index=tree,
+            )
+            results = rag._retrieve("question", top_k=1)
+
+        self.assertEqual([item["id"] for item in results], expected)
+        self.assertEqual(
+            [item["metadata"]["hotpot_title"] for item in results],
+            ["Article A", "Article B"],
+        )
+        self.assertTrue(
+            all(item["metadata"]["hotpot_sent_id"] == 0 for item in results)
+        )
+        self.assertTrue(
+            all(item["metadata"]["source"] == "lead_only" for item in results)
+        )
+
     def test_vanilla_full_document_uses_tree_nodes_without_retrieval(self):
         from Core.Index.Tree import DocumentTree, NodeType, TreeNode
         from Core.rag.vanilla_rag import VanillaRAG
@@ -1061,6 +1121,58 @@ class BM25BaselineTests(unittest.TestCase):
                         strategy_config=SimpleNamespace(
                             strategy="vanilla",
                             retrieval_method="abstract_only",
+                        )
+                    ),
+                )
+                dependencies = module.prepare_rag_dependencies(cfg)
+        finally:
+            sys.modules.pop("Core.utils.resource_loader", None)
+            if original_resource_loader is not None:
+                sys.modules["Core.utils.resource_loader"] = original_resource_loader
+            if original_modelscope is sentinel:
+                sys.modules.pop("modelscope", None)
+            else:
+                sys.modules["modelscope"] = original_modelscope
+
+        self.assertIn("tree_index", dependencies)
+
+    def test_lead_only_resource_loader_does_not_require_modelscope(self):
+        from Core.Index.Tree import DocumentTree, NodeType, TreeNode
+
+        sentinel = object()
+        original_modelscope = sys.modules.get("modelscope", sentinel)
+        original_resource_loader = sys.modules.pop("Core.utils.resource_loader", None)
+        sys.modules["modelscope"] = None
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                tree = DocumentTree(
+                    meta_dict={
+                        "file_name": "hotpot.json",
+                        "file_path": "hotpotqa://question-1",
+                    },
+                    cfg=SimpleNamespace(save_path=tmp),
+                )
+                title = TreeNode(
+                    {"content": "Article A", "page_idx": 0, "pdf_id": 1}
+                )
+                title.type = NodeType.TITLE
+                tree.add_node(title)
+                tree.root_node.add_child(title)
+                sentence = TreeNode(
+                    {"content": "Lead sentence.", "page_idx": 0, "pdf_id": 2}
+                )
+                sentence.type = NodeType.TEXT
+                tree.add_node(sentence)
+                title.add_child(sentence)
+                tree.save_to_file()
+
+                module = importlib.import_module("Core.utils.resource_loader")
+                cfg = SimpleNamespace(
+                    save_path=tmp,
+                    rag=SimpleNamespace(
+                        strategy_config=SimpleNamespace(
+                            strategy="vanilla",
+                            retrieval_method="lead_only",
                         )
                     ),
                 )

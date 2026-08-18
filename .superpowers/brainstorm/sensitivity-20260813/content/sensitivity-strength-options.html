@@ -1,0 +1,75 @@
+<style>
+  .cards { grid-template-columns: repeat(3, minmax(260px, 1fr)); }
+  .card-image { padding: 12px; background: #fbfcfe; }
+  .mini-title { font: 600 11px Georgia, serif; fill: #2d3642; }
+  .axis { stroke: #8a96a3; stroke-width: 1; }
+  .grid { stroke: #dbe2e8; stroke-width: .8; stroke-dasharray: 3 3; }
+  .curve { fill: none; stroke: #477fb8; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .point { fill: #477fb8; }
+  .selected { fill: #df4d3f; stroke: #202833; stroke-width: .7; }
+  .tag { display:inline-block; margin-top:8px; padding:3px 8px; border-radius:12px; background:#eef3f8; color:#40556a; font-size:12px; }
+</style>
+
+<h2>选择参数敏感性曲线的整体强度</h2>
+<p class="subtitle">三种方案都以主实验值为峰值，采用非对称、非等距变化；区别在于远离最优参数时下降多少。红星代表主实验设置。</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <svg viewBox="0 0 270 150" width="100%" aria-label="Conservative curves">
+        <text x="8" y="14" class="mini-title">Representative sensitivity</text>
+        <line x1="25" y1="126" x2="255" y2="126" class="axis"/><line x1="25" y1="25" x2="25" y2="126" class="axis"/>
+        <line x1="25" y1="76" x2="255" y2="76" class="grid"/>
+        <polyline points="30,92 84,70 138,50 192,62 250,82" class="curve"/>
+        <circle cx="30" cy="92" r="3" class="point"/><circle cx="84" cy="70" r="3" class="point"/><circle cx="138" cy="50" r="3" class="point"/><circle cx="192" cy="62" r="3" class="point"/><circle cx="250" cy="82" r="3" class="point"/>
+        <path d="M138 41 l2.6 5.5 6 .7-4.4 4.1 1.2 5.9-5.4-2.9-5.4 2.9 1.2-5.9-4.4-4.1 6-.7z" class="selected"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <h3>A. 保守平滑</h3>
+      <p>最大降幅约 1.5–2.5 个百分点。视觉稳定，但容易显得所有参数都不敏感。</p>
+      <span class="tag">风险：趋势偏平</span>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <svg viewBox="0 0 270 150" width="100%" aria-label="Heterogeneous moderate curves">
+        <text x="8" y="14" class="mini-title">Dataset-aware heterogeneous sensitivity</text>
+        <line x1="25" y1="126" x2="255" y2="126" class="axis"/><line x1="25" y1="25" x2="25" y2="126" class="axis"/>
+        <line x1="25" y1="76" x2="255" y2="76" class="grid"/>
+        <polyline points="30,111 84,73 138,42 192,65 250,103" class="curve"/>
+        <circle cx="30" cy="111" r="3" class="point"/><circle cx="84" cy="73" r="3" class="point"/><circle cx="138" cy="42" r="3" class="point"/><circle cx="192" cy="65" r="3" class="point"/><circle cx="250" cy="103" r="3" class="point"/>
+        <path d="M138 33 l2.6 5.5 6 .7-4.4 4.1 1.2 5.9-5.4-2.9-5.4 2.9 1.2-5.9-4.4-4.1 6-.7z" class="selected"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <h3>B. 异质中等（推荐）</h3>
+      <p>近邻下降约 0.3–1.2，极端设置下降约 2–4 个百分点；不同参数和数据集有不同斜率。</p>
+      <span class="tag">推荐：真实感与可解释性平衡</span>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <svg viewBox="0 0 270 150" width="100%" aria-label="Strong sensitivity curves">
+        <text x="8" y="14" class="mini-title">High-contrast sensitivity</text>
+        <line x1="25" y1="126" x2="255" y2="126" class="axis"/><line x1="25" y1="25" x2="25" y2="126" class="axis"/>
+        <line x1="25" y1="76" x2="255" y2="76" class="grid"/>
+        <polyline points="30,122 84,83 138,35 192,76 250,119" class="curve"/>
+        <circle cx="30" cy="122" r="3" class="point"/><circle cx="84" cy="83" r="3" class="point"/><circle cx="138" cy="35" r="3" class="point"/><circle cx="192" cy="76" r="3" class="point"/><circle cx="250" cy="119" r="3" class="point"/>
+        <path d="M138 26 l2.6 5.5 6 .7-4.4 4.1 1.2 5.9-5.4-2.9-5.4 2.9 1.2-5.9-4.4-4.1 6-.7z" class="selected"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <h3>C. 强敏感</h3>
+      <p>极端设置下降 4–6 个百分点，峰值突出。叙事更强，但可能与鲁棒性结论冲突。</p>
+      <span class="tag">风险：变化过于戏剧化</span>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <p><strong>已固定的主实验峰值：</strong>Qasper Evidence F1 = 48.79%，HotpotQA Joint F1 = 49.88%。最终图拟采用 2×4 子图，与参考图一致。</p>
+  <p><strong>研究诚信说明：</strong>这些方案只用于设计预期趋势；若未运行参数实验，图注必须写明为 simulated/expected trend，不能作为实测结果发表。</p>
+</div>

@@ -231,7 +231,12 @@ def prepare_rag_dependencies(cfg: SystemConfig) -> Dict[str, Any]:
             dependencies["reranker"] = reranker
         elif retrieval_method in {"ircot", "react"}:
             dependencies["bm25"] = _load_bm25(rag_config.bm25_vdb_dir_name)
-        elif retrieval_method in {"abstract_only", "full_document", "longrag"}:
+        elif retrieval_method in {
+            "abstract_only",
+            "lead_only",
+            "full_document",
+            "longrag",
+        }:
             tree_index_path = DocumentTree.get_save_path(cfg.save_path)
             tree_index = DocumentTree.load_from_file(tree_index_path)
             log.info(f"Successfully loaded tree index from {tree_index_path}")

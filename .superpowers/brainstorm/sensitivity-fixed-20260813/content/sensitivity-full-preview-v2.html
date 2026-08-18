@@ -1,0 +1,168 @@
+<style>
+  .paper-figure {
+    background: #fff;
+    border: 1px solid #dfe4e9;
+    border-radius: 8px;
+    padding: 18px 18px 12px;
+    box-shadow: 0 2px 12px rgba(28, 38, 48, .06);
+    max-width: 1120px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+  .paper-figure svg { display: block; width: 100%; max-width: 1080px; height: auto; margin: 0 auto; }
+  .paper-figure svg text {
+    font-family: "Times New Roman", "Noto Serif", serif;
+    fill: #111;
+  }
+  .axis { stroke: #111; stroke-width: 1.15; }
+  .grid { stroke: #d2d6da; stroke-width: .8; stroke-dasharray: 3 3; }
+  .curve { fill: none; stroke: #487fb7; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .point { fill: #487fb7; stroke: #487fb7; }
+  .selected-guide { stroke: #e33b32; stroke-width: 1.1; stroke-dasharray: 5 4; }
+  .selected-star { fill: #e33b32 !important; stroke: #111 !important; stroke-width: .85; }
+  .selected-value {
+    fill: #b5231c !important;
+    stroke: #fff !important;
+    stroke-width: 3px;
+    paint-order: stroke fill;
+    stroke-linejoin: round;
+    font-size: 10.5px;
+    font-weight: 700;
+  }
+  .panel-title { font-size: 12px; font-weight: 600; }
+  .tick-label { font-size: 9.8px; }
+  .axis-label { font-size: 11px; }
+  .dataset-label { font-size: 11.5px; font-weight: 600; letter-spacing: .75px; }
+  .panel-letter { font-size: 10px; }
+  .legend { display: flex; justify-content: center; gap: 24px; margin: 2px 0 12px; font-size: 13px; color: #24313d !important; font-weight: 500; }
+  .legend span { color: #24313d !important; opacity: 1 !important; }
+  .legend-line { display: inline-block; width: 24px; height: 3px; background: #487fb7; margin-right: 7px; vertical-align: middle; }
+  .legend-star { color: #e33b32; -webkit-text-stroke: .5px #111; font-size: 17px; margin-right: 5px; vertical-align: -1px; }
+  .figure-note { margin: 12px 4px 0; color: #455361; font-size: 13px; line-height: 1.55; }
+  .math { font-family: "Times New Roman", serif; font-style: italic; }
+  .options { margin-top: 18px; }
+</style>
+
+<h2>方案 B：参数敏感性分析图预览（排版修订版）</h2>
+<p class="subtitle">数据集名称、纵轴指标和单位已分离；参数符号采用数学排版；所有主实验设置统一使用红色五角星。</p>
+
+<div class="paper-figure">
+  <div class="legend">
+    <span><i class="legend-line"></i>Expected trend</span>
+    <span><b class="legend-star">★</b>Main-experiment setting</span>
+  </div>
+  <svg id="sensitivity-chart" viewBox="0 0 1200 500" role="img" aria-label="Parameter sensitivity analysis on Qasper and HotpotQA"></svg>
+  <p class="figure-note"><strong>排版约定：</strong>第一行使用 Qasper 的 Evidence F1，第二行使用 HotpotQA 的 Joint F1；纵轴单位均为百分数。红色虚线和红色五角星仅标记主实验采用的参数值。</p>
+</div>
+
+<div class="options">
+  <div class="option" data-choice="approve-format-v2" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content"><h3>认可修订后的格式</h3><p>下一步生成精确数值表、正式图注和正文分析。</p></div>
+  </div>
+  <div class="option" data-choice="revise-format-v2" onclick="toggleSelect(this)">
+    <div class="letter">↻</div>
+    <div class="content"><h3>继续调整</h3><p>请在对话中指出需要修改的字体、标签或间距。</p></div>
+  </div>
+</div>
+
+<p><strong>说明：</strong>当前除主实验峰值外均为预期趋势占位值，正式投稿前必须替换为真实参数实验结果。</p>
+
+<script>
+(() => {
+  const svg = document.getElementById('sensitivity-chart');
+  const NS = 'http://www.w3.org/2000/svg';
+  const datasets = [
+    {
+      name: 'Qasper', metric: 'Evidence F1', domain: [45, 49], ticks: [45, 46, 47, 48, 49],
+      panels: [
+        { title: 'PPR restart probability', symbol: 'α', xs: ['0.05','0.10','0.15','0.20','0.30'], values: [46.87,47.96,48.79,48.32,47.11], selected: 2 },
+        { title: 'Path-number cap', symbol: 'K', sub: 'path', xs: ['0','1','3','5','7'], values: [45.96,47.62,48.79,48.29,47.44], selected: 2 },
+        { title: 'Evidence-block budget', symbol: 'B', sub: 'blk', xs: ['4','6','8','10','12'], values: [45.52,46.91,48.23,48.79,48.08], selected: 3 },
+        { title: 'Maximum retrieval rounds', symbol: 'R', sub: 'max', xs: ['1','2','3','4'], values: [47.21,48.79,48.64,48.33], selected: 1 }
+      ]
+    },
+    {
+      name: 'HotpotQA', metric: 'Joint F1', domain: [45, 50], ticks: [45,46,47,48,49,50],
+      panels: [
+        { title: 'PPR restart probability', symbol: 'α', xs: ['0.05','0.10','0.15','0.20','0.30'], values: [47.58,48.71,49.88,49.19,46.94], selected: 2 },
+        { title: 'Path-number cap', symbol: 'K', sub: 'path', xs: ['0','1','3','5','7'], values: [45.91,47.76,49.88,49.01,47.69], selected: 2 },
+        { title: 'Evidence-block budget', symbol: 'B', sub: 'blk', xs: ['4','6','8','10','12'], values: [45.71,47.20,49.35,49.88,48.82], selected: 3 },
+        { title: 'Maximum retrieval rounds', symbol: 'R', sub: 'max', xs: ['1','2','3','4'], values: [47.69,49.88,49.58,49.06], selected: 1 }
+      ]
+    }
+  ];
+
+  function el(name, attrs = {}, text = null) {
+    const node = document.createElementNS(NS, name);
+    for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, value);
+    if (text !== null) node.textContent = text;
+    return node;
+  }
+  function addText(parent, x, y, text, cls, anchor='middle') {
+    const node = el('text', {x, y, class: cls, 'text-anchor': anchor}, text);
+    parent.appendChild(node); return node;
+  }
+  function addMathLabel(parent, x, y, symbol, sub) {
+    const t = el('text', {x, y, class:'axis-label', 'text-anchor':'middle', 'font-style':'italic'});
+    t.appendChild(el('tspan', {}, symbol));
+    if (sub) t.appendChild(el('tspan', {'baseline-shift':'sub', 'font-size':'8', 'font-style':'normal'}, sub));
+    parent.appendChild(t);
+  }
+  function starPoints(cx, cy, outer=8, inner=3.5) {
+    const pts=[];
+    for(let i=0;i<10;i++){
+      const r=i%2===0?outer:inner, a=-Math.PI/2+i*Math.PI/5;
+      pts.push(`${cx+Math.cos(a)*r},${cy+Math.sin(a)*r}`);
+    }
+    return pts.join(' ');
+  }
+
+  const panelW=250, gap=33, left=66, plotLeft=42, plotTop=35, plotW=190, plotH=145;
+  datasets.forEach((dataset, row) => {
+    const rowY = row === 0 ? 30 : 278;
+    const rowMid = rowY + plotTop + plotH/2;
+    // Dataset name is the outer row label; the metric is the shared y-axis
+    // label. Extra tracking and separate x positions keep both readable.
+    const datasetLabel = addText(svg, 11, rowMid, dataset.name, 'dataset-label');
+    datasetLabel.setAttribute('transform', `rotate(-90 11 ${rowMid})`);
+    const metric = addText(svg, 31, rowMid, `${dataset.metric} / %`, 'axis-label');
+    metric.setAttribute('transform', `rotate(-90 31 ${rowMid})`);
+
+    dataset.panels.forEach((panel, col) => {
+      const gx = left + col * (panelW + gap);
+      const g = el('g', {transform:`translate(${gx} ${rowY})`}); svg.appendChild(g);
+      const title = el('text', {x:plotLeft+plotW/2, y:12, class:'panel-title', 'text-anchor':'middle'});
+      title.appendChild(el('tspan', {}, panel.title + ' '));
+      title.appendChild(el('tspan', {'font-style':'italic'}, panel.symbol));
+      if(panel.sub) title.appendChild(el('tspan', {'baseline-shift':'sub','font-size':'8','font-style':'normal'}, panel.sub));
+      g.appendChild(title);
+
+      dataset.ticks.forEach(tick => {
+        const y=plotTop+plotH-(tick-dataset.domain[0])/(dataset.domain[1]-dataset.domain[0])*plotH;
+        g.appendChild(el('line',{x1:plotLeft,y1:y,x2:plotLeft+plotW,y2:y,class:'grid'}));
+        addText(g,plotLeft-7,y+3,String(tick),'tick-label','end');
+      });
+      g.appendChild(el('line',{x1:plotLeft,y1:plotTop,x2:plotLeft,y2:plotTop+plotH,class:'axis'}));
+      g.appendChild(el('line',{x1:plotLeft,y1:plotTop+plotH,x2:plotLeft+plotW,y2:plotTop+plotH,class:'axis'}));
+
+      const coords = panel.values.map((v,i) => {
+        const x=plotLeft+(panel.values.length===1?0:i/(panel.values.length-1))*plotW;
+        const y=plotTop+plotH-(v-dataset.domain[0])/(dataset.domain[1]-dataset.domain[0])*plotH;
+        return {x,y,v};
+      });
+      const sel=coords[panel.selected];
+      g.appendChild(el('line',{x1:sel.x,y1:plotTop,x2:sel.x,y2:plotTop+plotH,class:'selected-guide'}));
+      g.appendChild(el('polyline',{points:coords.map(p=>`${p.x},${p.y}`).join(' '),class:'curve'}));
+      coords.forEach((p,i) => {
+        g.appendChild(el('circle',{cx:p.x,cy:p.y,r:3.2,class:'point'}));
+        addText(g,p.x,plotTop+plotH+17,panel.xs[i],'tick-label');
+      });
+      g.appendChild(el('polygon',{points:starPoints(sel.x,sel.y,8,3.6),class:'selected-star'}));
+      addText(g, sel.x + 10, sel.y - 7, sel.v.toFixed(2), 'selected-value', 'start');
+      addMathLabel(g,plotLeft+plotW/2,plotTop+plotH+36,panel.symbol,panel.sub);
+      addText(g,plotLeft+plotW/2,plotTop+plotH+55,`(${String.fromCharCode(97+row*4+col)})`,'panel-letter');
+    });
+  });
+})();
+</script>

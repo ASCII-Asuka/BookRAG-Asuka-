@@ -62,6 +62,8 @@ class VanillaRAG(BaseRAG):
             return self._bm25_rerank(query, top_k=top_k)
         if self.cfg.retrieval_method == "abstract_only":
             return self._abstract_only_context()
+        if self.cfg.retrieval_method == "lead_only":
+            return self._lead_only_context()
         if self.cfg.retrieval_method == "full_document":
             return self._full_document_context()
         if self.cfg.retrieval_method == "longrag":
@@ -203,6 +205,38 @@ class VanillaRAG(BaseRAG):
                     }
                 )
         return docs[: self.topk]
+
+    def _lead_only_context(self) -> List[Dict[str, Any]]:
+        if self.tree_index is None:
+            return []
+        docs: List[Dict[str, Any]] = []
+        for node in self.tree_index.get_nodes(hasRoot=False):
+            text = self._node_text(node)
+            if not text:
+                continue
+            hotpot_metadata = self._hotpot_sentence_metadata(node)
+            if hotpot_metadata.get("hotpot_sent_id") != 0:
+                continue
+            metadata = {
+                "source": "lead_only",
+                "node_id": node.index_id,
+                "source_node_id": node.index_id,
+                "paragraph_id": node.index_id,
+                "evidence_id": node.index_id,
+                "node_type": self._node_type_value(node),
+                "block_type": "paragraph",
+            }
+            metadata.update(self._section_metadata(node))
+            metadata.update(hotpot_metadata)
+            docs.append(
+                {
+                    "id": node.index_id,
+                    "score": 1.0,
+                    "content": text,
+                    "metadata": metadata,
+                }
+            )
+        return docs
 
     def _full_document_context(self) -> List[Dict[str, Any]]:
         if self.tree_index is None:

@@ -19,6 +19,7 @@ class VanillaConfig(BaseRAGStrategyConfig):
         "hybrid",
         "bm25_rerank",
         "abstract_only",
+        "lead_only",
         "full_document",
         "longrag",
         "ircot",
