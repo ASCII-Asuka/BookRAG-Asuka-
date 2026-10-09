@@ -6,6 +6,12 @@ from Core.rag import create_rag_agent
 from Core.rag.base_rag import BaseRAG
 from Core.utils.json_safety import make_json_safe
 from Core.utils.resource_loader import prepare_rag_dependencies
+from Core.utils.run_provenance import (
+    CacheInputMismatchError,
+    RunProvenance,
+    cache_input_validation,
+    runtime_model_metadata,
+)
 
 import json
 from tqdm import tqdm
@@ -27,26 +33,43 @@ def run_rag(
     force_reprocess: bool = False,
     dataset_path: str = None,
     data_df: pd.DataFrame = None,
+    run_metadata: dict = None,
+    runtime_config=None,
+    index_path=None,
 ):
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     log.info(f"Results will be saved to: {output_dir}")
 
-    # load dataset
-    dataset = None
-    if dataset_path and os.path.exists(dataset_path):
-        with open(dataset_path, "r", encoding="utf-8") as f:
-            dataset = json.load(f)
-    elif data_df is not None:
-        # transform data_df into list of dict
-        dataset = data_df.to_dict(orient="records")
-    else:
-        log.error(f"Dataset file not found: {dataset_path}")
-        log.error("Dataframe data not provided")
-        raise FileNotFoundError(f"Dataset file not found: {dataset_path}")
+    start_time = time.time()
+    # The manifest identifies this invocation, including failed input loading.
+    try:
+        if dataset_path and os.path.exists(dataset_path):
+            with open(dataset_path, "r", encoding="utf-8") as f:
+                dataset = json.load(f)
+        elif data_df is not None:
+            dataset = data_df.to_dict(orient="records")
+        else:
+            log.error(f"Dataset file not found: {dataset_path}")
+            log.error("Dataframe data not provided")
+            raise FileNotFoundError(f"Dataset file not found: {dataset_path}")
+    except Exception as error:
+        provenance = RunProvenance(
+            output_dir, None, runtime_config=runtime_config,
+            run_metadata=run_metadata, index_path=index_path,
+            force_reprocess=force_reprocess,
+        )
+        provenance.record_event("failed", reason="dataset_load", error=error)
+        provenance.finish("failed", duration_seconds=time.time() - start_time)
+        raise
+
+    provenance = RunProvenance(
+        output_dir, dataset, runtime_config=runtime_config,
+        run_metadata=run_metadata, index_path=index_path,
+        force_reprocess=force_reprocess,
+    )
 
     results_list = []
-    start_time = time.time()
     load_cnt = 0
     for i, item in enumerate(tqdm(dataset, desc=f"Processing Query")):
         query_index_str = f"query_{i+1:03d}"
@@ -54,78 +77,136 @@ def run_rag(
         query_result_file = query_output_dir / "result.json"
 
         if query_result_file.exists() and not force_reprocess:
+            existing_result = None
             try:
                 with open(query_result_file, "r", encoding="utf-8") as f:
                     existing_result = json.load(f)
-                if existing_result.get("output"):
-                    log.info(f"Skipping {query_index_str}, result already exists.")
-                    results_list.append(existing_result)
-                    load_cnt += 1
-                    continue
-            except (json.JSONDecodeError, KeyError):
+                if not isinstance(existing_result, dict):
+                    raise ValueError("Cached result is not a mapping")
+            except (ValueError, KeyError):
                 log.warning(
                     f"Found corrupted result file for {query_index_str}. Re-processing."
                 )
+            except Exception as error:
+                provenance.record_event(
+                    "failed", index=i, item=item,
+                    query_output_dir=query_output_dir,
+                    reason="cache_read", error=error,
+                )
+                provenance.finish("failed", duration_seconds=time.time() - start_time)
+                raise
+            if isinstance(existing_result, dict) and existing_result.get("output"):
+                cache_validation = cache_input_validation(make_json_safe(item), existing_result)
+                if cache_validation["status"] == "mismatch":
+                    error = CacheInputMismatchError("Cached input mismatch; saved artifacts were preserved")
+                    provenance.record_event(
+                        "failed", index=i, item=item,
+                        query_output_dir=query_output_dir,
+                        origin=existing_result.get("run_provenance"),
+                        reason="cache_input_mismatch", error=error,
+                        cache_validation=cache_validation,
+                    )
+                    provenance.finish("failed", duration_seconds=time.time() - start_time)
+                    raise error
+                log.info(f"Skipping {query_index_str}, result already exists.")
+                results_list.append(existing_result)
+                load_cnt += 1
+                provenance.record_event(
+                    "reused", index=i, item=item,
+                    query_output_dir=query_output_dir,
+                    origin=existing_result.get("run_provenance"),
+                    cache_validation=cache_validation,
+                )
+                continue
 
         query = item.get("question")
         if not query:
             log.warning(f"Skipping item {i} due to missing 'question' field.")
+            provenance.record_event("skipped", index=i, item=item, reason="missing_question")
             continue
 
-        query_output_dir.mkdir(exist_ok=True)
-        answer, retrieved_node_ids = rag_agent.generation(query, query_output_dir)
-
-        current_result = {
-            **item,
-            "output": answer,
-            "retrieved_node_ids": retrieved_node_ids,
-        }
-        retrieved_block_ids = getattr(rag_agent, "last_retrieved_block_ids", None)
-        if retrieved_block_ids is not None:
-            current_result["retrieved_block_ids"] = retrieved_block_ids
-        answer_short = getattr(rag_agent, "last_answer_short", None)
-        if answer_short:
-            current_result["answer_short"] = answer_short
-        answer_rationale = getattr(rag_agent, "last_answer_rationale", None)
-        if answer_rationale:
-            current_result["answer_rationale"] = answer_rationale
-        supporting_block_ids = getattr(rag_agent, "last_supporting_block_ids", None)
-        if supporting_block_ids is not None:
-            current_result["supporting_block_ids"] = supporting_block_ids
-        current_result = make_json_safe(current_result)
-        with open(query_result_file, "w", encoding="utf-8") as f:
-            json.dump(current_result, f, indent=2, ensure_ascii=False, allow_nan=False)
-
-        results_list.append(current_result)
+        # These optional audit fields must come from this call, never an earlier
+        # question or a legacy cache. They do not affect retrieval/generation.
+        try:
+            for name in ("last_generation_provenance", "last_support_context_validation"):
+                if hasattr(rag_agent, name):
+                    setattr(rag_agent, name, None)
+            query_output_dir.mkdir(exist_ok=True)
+            answer, retrieved_node_ids = rag_agent.generation(query, query_output_dir)
+            current_result = {
+                **item,
+                "output": answer,
+                "retrieved_node_ids": retrieved_node_ids,
+                "run_provenance": provenance.result_provenance(item=make_json_safe(item)),
+            }
+            retrieved_block_ids = getattr(rag_agent, "last_retrieved_block_ids", None)
+            if retrieved_block_ids is not None:
+                current_result["retrieved_block_ids"] = retrieved_block_ids
+            answer_short = getattr(rag_agent, "last_answer_short", None)
+            if answer_short:
+                current_result["answer_short"] = answer_short
+            answer_rationale = getattr(rag_agent, "last_answer_rationale", None)
+            if answer_rationale:
+                current_result["answer_rationale"] = answer_rationale
+            supporting_block_ids = getattr(rag_agent, "last_supporting_block_ids", None)
+            if supporting_block_ids is not None:
+                current_result["supporting_block_ids"] = supporting_block_ids
+            for field in ("generation_provenance", "support_context_validation"):
+                value = getattr(rag_agent, "last_" + field, None)
+                if isinstance(value, dict):
+                    current_result[field] = value
+            current_result = make_json_safe(current_result)
+            with open(query_result_file, "w", encoding="utf-8") as f:
+                json.dump(current_result, f, indent=2, ensure_ascii=False, allow_nan=False)
+            results_list.append(current_result)
+            provenance.record_event(
+                "generated", index=i, item=item,
+                query_output_dir=query_output_dir,
+                origin=current_result["run_provenance"],
+            )
+        except Exception as error:
+            provenance.record_event(
+                "failed", index=i, item=item,
+                query_output_dir=query_output_dir, error=error,
+                generation_provenance=getattr(rag_agent, "last_generation_provenance", None),
+            )
+            provenance.finish("failed", duration_seconds=time.time() - start_time)
+            raise
 
     end_time = time.time()
     total_time = end_time - start_time
     log.info(f"RAG processing complete in {total_time:.2f} seconds.")
-    final_res_path = output_dir / "final_results.json"
-    with open(final_res_path, "w", encoding="utf-8") as f:
-        json.dump(
-            make_json_safe(results_list),
-            f,
-            indent=2,
-            ensure_ascii=False,
-            allow_nan=False,
+    try:
+        final_res_path = output_dir / "final_results.json"
+        with open(final_res_path, "w", encoding="utf-8") as f:
+            json.dump(
+                make_json_safe(results_list),
+                f,
+                indent=2,
+                ensure_ascii=False,
+                allow_nan=False,
+            )
+
+        log.info(f"RAG complete. All results are saved to {final_res_path}")
+        rag_agent.close()
+
+        token_tracker = TokenTracker.get_instance()
+        rag_cost = token_tracker.record_stage("rag_cost")
+        log.info(f"The token cost of RAG in the current document: {rag_cost}")
+
+        update_and_save_cost(
+            output_dir=output_dir,
+            new_cost=rag_cost,
+            new_time=total_time,
+            load_cnt=load_cnt,
+            dataset_len=len(dataset),
+            force_reprocess=force_reprocess,
         )
-
-    log.info(f"RAG complete. All results are saved to {final_res_path}")
-    rag_agent.close()
-
-    token_tracker = TokenTracker.get_instance()
-    rag_cost = token_tracker.record_stage("rag_cost")
-    log.info(f"The token cost of RAG in the current document: {rag_cost}")
-
-    update_and_save_cost(
-        output_dir=output_dir,
-        new_cost=rag_cost,
-        new_time=total_time,
-        load_cnt=load_cnt,
-        dataset_len=len(dataset),
-        force_reprocess=force_reprocess,
-    )
+    except Exception as error:
+        provenance.record_event("failed", reason="finalize", error=error)
+        provenance.finish("failed", duration_seconds=time.time() - start_time)
+        raise
+    provenance.finish("complete", duration_seconds=time.time() - start_time)
 
 
 def update_and_save_cost(
@@ -237,10 +318,18 @@ def inference_base(cfg: SystemConfig, dataset_path: str):
         dataset_path=dataset_path,
         output_dir=output_dir,
         force_reprocess=True,
+        runtime_config=cfg,
+        index_path=cfg.save_path,
+        run_metadata={
+            "dataset_name": Path(dataset_path).stem,
+            "strategy": cfg.rag.strategy_config.strategy,
+            "method_suffix": output_dir.name.removeprefix(f"eval_{Path(dataset_path).stem}_"),
+            "models": runtime_model_metadata(cfg),
+        },
     )
 
 
-def inference(cfg: SystemConfig, data_df: pd.DataFrame, dataset_name: str):
+def inference(cfg: SystemConfig, data_df: pd.DataFrame, dataset_name: str, run_metadata: dict = None):
     dependencies = prepare_rag_dependencies(cfg=cfg)
     rag_agent = create_rag_agent(
         strategy_config=cfg.rag.strategy_config,
@@ -254,11 +343,13 @@ def inference(cfg: SystemConfig, data_df: pd.DataFrame, dataset_name: str):
     log.info(f"Using RAG strategy: {rag_strategy}")
     if rag_strategy == "vanilla":
         retrieval_method = cfg.rag.strategy_config.retrieval_method
+        method_suffix = retrieval_method
         output_dir = output_dir = (
             Path(cfg.save_path) / f"eval_{dataset_name}_{retrieval_method}"
         )
     elif rag_strategy == "gbc":
         variant = cfg.rag.strategy_config.variant
+        method_suffix = f"{rag_strategy}_{variant}"
         output_dir = output_dir = (
             Path(cfg.save_path) / f"eval_{dataset_name}_{rag_strategy}_{variant}"
         )
@@ -276,6 +367,7 @@ def inference(cfg: SystemConfig, data_df: pd.DataFrame, dataset_name: str):
             Path(cfg.save_path) / f"eval_{dataset_name}_{method_suffix}"
         )
     else:
+        method_suffix = rag_strategy
         output_dir = output_dir = (
             Path(cfg.save_path) / f"eval_{dataset_name}_{rag_strategy}"
         )
@@ -286,6 +378,15 @@ def inference(cfg: SystemConfig, data_df: pd.DataFrame, dataset_name: str):
         output_dir=output_dir,
         force_reprocess=cfg.rag_force_reprocess,
         data_df=data_df,
+        runtime_config=cfg,
+        index_path=cfg.save_path,
+        run_metadata={
+            **(run_metadata or {}),
+            "dataset_name": dataset_name,
+            "strategy": rag_strategy,
+            "method_suffix": method_suffix,
+            "models": runtime_model_metadata(cfg),
+        },
     )
 
 

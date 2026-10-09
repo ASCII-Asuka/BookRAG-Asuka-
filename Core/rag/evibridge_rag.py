@@ -1,3 +1,4 @@
+import copy
 import json
 import logging
 import re
@@ -8,6 +9,7 @@ from Core.Index.EvidenceBridgeIndex import EvidenceBlock, EvidenceBridgeIndex, e
 from Core.configs.rag.evibridge_config import EviBridgeRAGConfig
 from Core.rag.base_rag import BaseRAG
 from Core.rag.evibridge_demand import DemandParser, EvidenceDemand
+from Core.rag.evibridge_generation_provenance import GenerationRecorder
 from Core.rag.evibridge_ppr import TypedPPRResult, run_typed_ppr_with_details, shortest_path_connector_with_paths
 from Core.rag.evibridge_selector import SelectedEvidence, select_budgeted_evidence
 from Core.rag.evibridge_support_pruner import prune_supporting_evidence
@@ -61,11 +63,15 @@ class EviBridgeRAG(BaseRAG):
                 config.enable_llm_verifier
                 and config.ablation_variant != "wo_verifier_repair"
             ),
+            acceptance_mode=config.verifier_acceptance_mode,
         )
         self.last_retrieved_block_ids: List[int] = []
         self.last_answer_short: str = ""
         self.last_answer_rationale: str = ""
         self.last_supporting_block_ids: List[int] = []
+        self.last_generation_provenance: Dict[str, Any] = {}
+        self.last_support_context_validation: Dict[str, Any] = {}
+        self._generation_recorder: Optional[GenerationRecorder] = None
 
     def _retrieve(self, query: str, **kwargs) -> Dict[str, Any]:
         demand = self.demand_parser.parse(query)
@@ -218,6 +224,15 @@ class EviBridgeRAG(BaseRAG):
                 "selected_block_ids": selected_ids,
                 "selected": self._selected_payload(selected, candidate_score_parts),
                 "verification": verdict.model_dump(),
+                "verification_trace": (
+                    {"schema_version": 1, "decision_source": "ablation_disabled",
+                     "llm_status": "skipped", "skip_reason": "wo_sufficiency_verifier",
+                     "rule_verdict": None, "llm_verdict": None,
+                     "final_verdict": verdict.model_dump()}
+                    if self._ablation_variant() == "wo_sufficiency_verifier"
+                    else copy.deepcopy(getattr(self.verifier, "last_trace", None) or
+                                       {"schema_version": 1, "decision_source": "unknown", "llm_status": "unknown"})
+                ),
                 "connector_paths": connector_paths,
                 "connector_edges": connector_edges,
                 "next_action": verdict.next_action,
@@ -315,6 +330,9 @@ class EviBridgeRAG(BaseRAG):
         )
 
     def generation(self, query: str, query_output_dir: str) -> Tuple[str, List[Any]]:
+        self._generation_recorder = GenerationRecorder()
+        self.last_generation_provenance = {}
+        self.last_support_context_validation = {}
         retrieval_info = self._retrieve(query)
         prompt = self._create_augmented_prompt(
             query=query,
@@ -322,10 +340,9 @@ class EviBridgeRAG(BaseRAG):
             demand=retrieval_info["demand"],
             verification=retrieval_info["verification"],
         )
-        try:
-            answer = self.llm.get_completion(prompt=prompt, json_response=False)
-        except TypeError:
-            answer = self.llm.get_completion(prompt)
+        answer = self._recorded_generation(
+            prompt, retrieval_info["evidence_chain"], "initial", retrieval_info
+        )
         answer_evidence = list(retrieval_info.get("evidence_chain") or [])
         fallback_info = {
             "enabled": bool(self.config.enable_long_context_fallback),
@@ -347,26 +364,27 @@ class EviBridgeRAG(BaseRAG):
                         evidence_items=fallback_context,
                     )
                     try:
-                        answer = self.llm.get_completion(
-                            prompt=fallback_prompt,
-                            json_response=False,
+                        fallback_answer = self._recorded_generation(
+                            fallback_prompt, fallback_context, "fallback", retrieval_info
                         )
-                    except TypeError:
-                        answer = self.llm.get_completion(fallback_prompt)
-                    answer_evidence = fallback_context
-                    self._merge_fallback_context(retrieval_info, fallback_context)
-                    fallback_info = {
-                        "enabled": True,
-                        "used": True,
-                        "trigger": "insufficient_evidence",
-                        "context_block_ids": [
-                            item["block_id"] for item in fallback_context
-                        ],
-                        "estimated_tokens": sum(
-                            len(evidence_tokenize(item.get("text", "")))
-                            for item in fallback_context
-                        ),
-                    }
+                    except Exception as exc:
+                        if self.config.support_context_policy != "strict":
+                            raise
+                        fallback_info.update({"trigger": "generation_failed",
+                                              "error_type": type(exc).__name__})
+                    else:
+                        answer = fallback_answer
+                        answer_evidence = fallback_context
+                        self._merge_fallback_context(retrieval_info, fallback_context)
+                        fallback_info = {
+                            "enabled": True,
+                            "used": True,
+                            "trigger": "insufficient_evidence",
+                            "context_block_ids": [item["block_id"] for item in fallback_context],
+                            "estimated_tokens": sum(
+                                len(evidence_tokenize(item.get("text", ""))) for item in fallback_context
+                            ),
+                        }
                 else:
                     fallback_info["trigger"] = "no_fallback_context"
             else:
@@ -430,6 +448,7 @@ class EviBridgeRAG(BaseRAG):
                 draft_rationale=answer_rationale,
             )
 
+        self._finalize_support_context(retrieval_info, answer_short)
         output_dir = Path(query_output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
         self._save_retrieval_outputs(retrieval_info, output_dir)
@@ -440,6 +459,83 @@ class EviBridgeRAG(BaseRAG):
         self.last_answer_rationale = answer_rationale
         self.last_supporting_block_ids = supporting_ids
         return answer, retrieved_ids
+
+    def _recorded_generation(
+        self, prompt: str, context: List[Dict[str, Any]], stage: str,
+        retrieval_info: Dict[str, Any],
+    ) -> str:
+        if self._generation_recorder is None:
+            self._generation_recorder = GenerationRecorder()
+        try:
+            answer = self._generation_recorder.call(self.llm, prompt, context, stage)
+        finally:
+            self.last_generation_provenance = self._generation_recorder.snapshot()
+        retrieval_info["generation_context"] = copy.deepcopy(self._generation_recorder.context)
+        return answer
+
+    def _finalize_support_context(
+        self, retrieval_info: Dict[str, Any], answer_short: str,
+    ) -> None:
+        context = copy.deepcopy(self._generation_recorder.context)
+        provenance = self._generation_recorder.snapshot()
+        context_ids = [int(item["block_id"]) for item in context if item.get("block_id") is not None]
+        context_by_id = {int(item["block_id"]): item for item in context if self._is_support_eligible(item)}
+        proposed = list(retrieval_info.get("supporting_evidence") or [])
+        outside_ids = list(dict.fromkeys(
+            int(item["block_id"]) for item in proposed if int(item["block_id"]) not in set(context_ids)
+        ))
+        strict = self.config.support_context_policy == "strict"
+        removed = []
+        posthoc = []
+        if strict:
+            kept = []
+            seen = set()
+            for item in proposed:
+                block_id = int(item["block_id"])
+                if block_id not in context_by_id or not self._is_support_eligible(item):
+                    removed.append(block_id)
+                    posthoc.append({**dict(item), "posthoc_reason": "outside_retained_generation_context"
+                                    if block_id not in set(context_ids) else "ineligible_support_type"})
+                    continue
+                if block_id not in seen and not self._is_unanswerable(answer_short):
+                    payload = dict(item)
+                    payload["text"] = context_by_id[block_id].get("text", "")
+                    payload["supporting_rank"] = len(kept) + 1
+                    kept.append(payload)
+                    seen.add(block_id)
+            retrieval_info["supporting_evidence"] = kept
+            retrieval_info["supporting_block_ids"] = [int(item["block_id"]) for item in kept]
+            validation = dict(retrieval_info.get("citation_validation") or {})
+            requested = list(validation.get("requested_ids") or [])
+            validation["valid_ids"] = [x for x in requested if x in context_by_id]
+            validation["invalid_ids"] = [x for x in requested if x not in context_by_id]
+            validation["used_ids"] = [x for x in validation.get("used_ids", []) if x in context_by_id]
+            validation["ignored_ids"] = list(dict.fromkeys(
+                list(validation.get("ignored_ids") or []) + validation["invalid_ids"]
+            ))
+            retrieval_info["citation_validation"] = validation
+        retrieval_info["planned_answer_context_block_ids"] = list(retrieval_info.get("answer_context_block_ids") or [])
+        if strict:
+            retrieval_info["answer_context"] = context
+            retrieval_info["answer_context_block_ids"] = context_ids
+        submitted_ids = list(retrieval_info.get("supporting_block_ids") or [])
+        context_validation = {
+            "schema_version": 1,
+            "policy": self.config.support_context_policy,
+            "context_source": "retained_successful_generation",
+            "retained_stage": provenance["retained_stage"],
+            "context_block_ids": context_ids,
+            "proposed_support_ids": [int(item["block_id"]) for item in proposed],
+            "outside_context_ids": outside_ids,
+            "removed_ids": list(dict.fromkeys(removed)),
+            "submitted_support_ids": submitted_ids,
+            "passed": set(submitted_ids).issubset(set(context_ids)),
+        }
+        retrieval_info["posthoc_supporting_evidence"] = posthoc
+        retrieval_info["generation_provenance"] = provenance
+        retrieval_info["support_context_validation"] = context_validation
+        self.last_generation_provenance = copy.deepcopy(provenance)
+        self.last_support_context_validation = copy.deepcopy(context_validation)
 
     def _regenerate_controlled_answer(
         self,
@@ -471,19 +567,16 @@ class EviBridgeRAG(BaseRAG):
             verification=retrieval_info.get("verification"),
         )
         try:
-            try:
-                final_answer = self.llm.get_completion(
-                    prompt=prompt,
-                    json_response=False,
-                )
-            except TypeError:
-                final_answer = self.llm.get_completion(prompt)
+            final_answer = self._recorded_generation(
+                prompt, context, "regeneration", retrieval_info
+            )
         except Exception as exc:
             regeneration.update(
                 {
                     "used": False,
                     "reason": "generation_failed",
-                    "error": str(exc)[:300],
+                    "error": (type(exc).__name__ if self.config.support_context_policy == "strict"
+                              else str(exc)[:300]),
                 }
             )
             retrieval_info["answer_regeneration"] = regeneration
@@ -1197,6 +1290,10 @@ class EviBridgeRAG(BaseRAG):
                     "doc_id": block.doc_name,
                     "page": block.page,
                     "section_path": " > ".join(block.title_path) or block.section_id,
+                    "section_id": block.section_id,
+                    "metadata": dict(block.metadata or {}),
+                    "hotpot_title": (block.metadata or {}).get("hotpot_title"),
+                    "hotpot_sent_id": (block.metadata or {}).get("hotpot_sent_id"),
                     "block_type": block.block_type,
                     "role": self._role(block, demand),
                     "evidence_role": item.evidence_role,
@@ -1247,7 +1344,11 @@ class EviBridgeRAG(BaseRAG):
         answer_short: str,
         supporting_ids: List[int],
     ) -> None:
-        selected_payload = list(retrieval_info.get("selected_payload") or [])
+        selected_payload = list(
+            retrieval_info["generation_context"]
+            if self.config.support_context_policy == "strict" and "generation_context" in retrieval_info
+            else retrieval_info.get("selected_payload") or []
+        )
         requested_ids = list(dict.fromkeys(int(block_id) for block_id in supporting_ids))
         selected_by_id = {
             int(item["block_id"]): item
@@ -1484,8 +1585,16 @@ class EviBridgeRAG(BaseRAG):
                     "candidate_diagnostics": pruning["candidate_diagnostics"],
                     "stopping_reason": pruning["stopping_reason"],
                 },
-                answer_context=selected_payload,
-                regeneration_required=False,
+                answer_context=(
+                    self._expanded_answer_context(supporting_evidence, selected_payload)
+                    if self.config.support_context_policy == "strict"
+                    and outside_selected_ids and self.config.regenerate_on_support_expansion
+                    else selected_payload
+                ),
+                regeneration_required=bool(
+                    self.config.support_context_policy == "strict"
+                    and outside_selected_ids and self.config.regenerate_on_support_expansion
+                ),
             )
             return
 
@@ -1914,6 +2023,11 @@ class EviBridgeRAG(BaseRAG):
                 "answer_context_block_ids", []
             ),
             "answer_regeneration": retrieval_info.get("answer_regeneration", {}),
+            "planned_answer_context_block_ids": retrieval_info.get("planned_answer_context_block_ids"),
+            "generation_provenance": retrieval_info.get("generation_provenance"),
+            "support_context_validation": retrieval_info.get("support_context_validation"),
+            "posthoc_supporting_evidence": retrieval_info.get("posthoc_supporting_evidence", []),
+            "verification_trace": (retrieval_info.get("iterations") or [{}])[-1].get("verification_trace"),
             "selected": retrieval_info.get("selected_payload", []),
             "selected_bridges": self._bridge_payloads(retrieval_info.get("selected_bridges", [])),
             "verification": retrieval_info["verification"].model_dump()
@@ -1942,6 +2056,11 @@ class EviBridgeRAG(BaseRAG):
                             "answer_regeneration", {}
                         ),
                         "verification": retrieval_payload["verification"],
+                        "verification_trace": retrieval_payload["verification_trace"],
+                        "generation_provenance": retrieval_payload["generation_provenance"],
+                        "support_context_validation": retrieval_payload["support_context_validation"],
+                        "posthoc_supporting_evidence": retrieval_payload["posthoc_supporting_evidence"],
+                        "planned_answer_context_block_ids": retrieval_payload["planned_answer_context_block_ids"],
                         "iterations": retrieval_info["iterations"],
                     },
                     f,

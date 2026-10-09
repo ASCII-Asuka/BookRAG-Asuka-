@@ -90,23 +90,38 @@ BookRAG/GBC 常见产物为 `tree.pkl`、`tree.json`、`graph_data*.json`、`kg_
 
 1. 规则 `_coverage` 是 modality/scope 类型覆盖代理；`_noise` 使用 query 词项重叠代理；不能直接称为语义需求满足率或人工判断的噪声率。
 2. 规则 `_connectivity` 计算有内部邻接边的节点比例；多个不连通分量也可能得到 1，不是最大连通分量比例，也不保证逻辑推理链成立。shortest path 和 selector 的连接奖励不提供全局语义充分性保证。
-3. 规则判 sufficient 时直接返回；hard missing 也直接返回；其余情况可调用 LLM，sanitizer 在允许条件下可以接受其 sufficient=true。**投稿版 p5 写 LLM 不改变 acceptance，与当前代码存在需追溯的差异。**先查实验 commit/config/logs，不能断言历史实验执行了当前逻辑，也不能直接覆盖旧结果。
+3. 规则判 sufficient 时直接返回；hard missing 也直接返回；其余情况可调用 LLM。缺省 `verifier_acceptance_mode=legacy_hybrid` 保留 sanitizer 可接受 LLM sufficient=true 的路径；新增 `rule_only` 固定规则 acceptance、五项数值指标与 noise_warning，允许 LLM 修订诊断。**投稿版 p5 写 LLM 不改变 acceptance，legacy 模式不强制该约束；rule_only 是后续显式模式。**用户确认投稿实验基于最新代码；2026-10-09 对本地两套主实验逐轮复算未发现接受覆盖，不得把潜在代码路径写成已影响投稿结果。完整运行 commit 仍须由运行记录固定，不能仅用现存文档根配置代表历史运行，也不能直接覆盖旧结果。
 4. 支持证据可以在生成后补全、answer-conditioned rerank 或裁剪。ID 属于合法来源只证明可追溯，不证明答案由该证据蕴含；区分生成上下文与后处理支持集。
-5. `config/evibridge_support_pruned.yaml` 使用 coverage_prune，且 `regenerate_on_support_expansion=false`；基础 evibridge 配置当前开启支持扩展再生成。核查具体运行的配置，不把不同 pipeline 混为同一版本。
+5. `config/evibridge_support_pruned.yaml` 使用 coverage_prune，且 `regenerate_on_support_expansion=false`；基础 evibridge 配置当前开启支持扩展再生成。legacy coverage_prune 保留原来不触发再生成的行为；strict 下该开关控制外部补充是否真正再生成，关闭时外部支持仅存 posthoc。核查具体运行的配置，不把不同 pipeline 混为同一版本。
+
+2026-10-09 专项审计（仅主方法，非全部 baseline/消融）：Qasper1005 共1057轮、Hotpot1000 共1004轮，所有接受判定及五项数值指标均与当前规则复算一致；Qasper另有8轮仅 missing_types 诊断标签不同。1811/2735个最终支持块均在按 evidence_chain 和末轮 selected 重建的生成上下文中，且 result/retrieval 支持ID一致。未保存原始服务请求，不据此证明语义蕴含。Hotpot全部1000题缺新版 controller/context/regeneration 字段；核心 verifier/tokenizer/schema 未变，仍可复算规则，但不能把旧输出格式写成当前保存函数已复跑的证据。文档根配置可能被后续消融覆写。汇总见 [专项审计](docs/research/jiis/2026-10-09-consistency-audit.json)，详细边界与后续工作见 JIIS 计划第2.1节。
 
 当前消融除三类边、multi-seed、typed weights、selector、verifier、static_topk 外，还包括 citation_reorder、support_reranker、verifier_repair、implicit_multihop；精确名称以 `ablation_variant` 为准。`wo_sufficiency_verifier` 将检索轮数限制为 1，因此单独此对照不能隔离 verifier 诊断与第二轮候选/计算量的作用。
+
+### 可审计运行模式
+
+2026-10-09 已实现的工程准备见 [实施计划](docs/superpowers/plans/2026-10-09-cose-auditable-execution.md)，不代表语义充分性、校准或期刊候选算法已完成。
+
+- `config/evibridge_auditable.yaml` 继承 support_pruned，显式使用 `rule_only` / `strict`，关闭支持扩展再生成；suffix 为 `evibridge_support_pruned_rule_only_strict_context`。旧配置缺省仍为 legacy，不能将新模式叫作已证明的 conference reproduction。
+- 每轮 `verification_trace` 区分 rule/LLM/final、decision_source、调用尝试/跳过/失败与异常类型；LLM verdict 与最终判定相同不能用于推断没有调用。
+- `evibridge_generation_provenance.py` 记录 initial/fallback/regeneration 的客户端尝试、prompt/response hash、按序块ID和文本hash；只有成功调用更新保留上下文。strict 最终支持集属于保留答案的成功调用上下文，外部补充存 `posthoc_supporting_evidence`，失败再生成保留 draft 上下文。包含关系不证明答案被证据蕴含；记录也不证明服务端实际收到请求或其内部截断行为。
+- `Core/utils/run_provenance.py` 为每次 `run_rag` 创建 `.runs/<UUID>/manifest.json`、逐题 `events.jsonl` 和结束 `summary.json`；manifest 独占创建且不覆写，记录实际配置/源码/输入/常见索引文件及配置指定VDB的指纹、明确 unknown 的版本信息。索引覆盖保守标 partial/unknown，自定义/外部目录位置仅存hash；不称完整依赖锁。数据/索引大文件hash会增加启动I/O。
+- 新 result 链接本次 manifest 与输入指纹；缓存复用只记事件并引用原 run ID，旧 result/retrieval 字节保持不变。缓存输入明确错配时记录失败并停止，缺历史输入字段标partial/unknown；无原 run ID 为 unknown。本次配置不证明旧缓存由它执行，旧文档根配置快照仍是可变兼容文件。配置脱敏，新 provenance 失败记录只保存异常类型；未知历史请求不回填。
+- 独立充分性标注规范见 [sufficiency_annotation.md](docs/research/jiis/sufficiency_annotation.md)。当前历史 validation 仅可用于历史诊断，独立开发/确认评测必须按 Task1/2 另行冻结；空模板和 mock 不是标注结果。
+- 用户已确认两套train未用于调参/配置选择/候选结果查看。本地Qasper train有2593题，与历史主结果题ID/文档ID交集为0；Hotpot仅发现无ID/context/supporting_facts的ReAct简化train，不能用于封闭语料证据pilot。候选核查与未完成项见 [开发数据状态](docs/research/jiis/development_data_status.md)，不据此声称split已冻结。
 
 ## 输出与方法后缀
 
 常见路径：`eval_<dataset>_<method>/query_XXX/{result,retrieval_res,evidence_chain}.json`、`final_results.json`、`token_cost.json`。
 
 - 保留旧 `retrieved_node_ids`，新增字段不得破坏旧评测。
-- `retrieved_block_ids` / selected 记录检索/选择，`supporting_block_ids` 记录提交的支持集；`answer_context_block_ids` 是 controller 记录的答案上下文，可能先于再生成更新，须结合 `answer_regeneration.used`、调用记录或实际 prompt 判断最终模型是否见到。不能仅凭此字段证明 support 属于真实生成上下文；保留 paragraph / title-sentence 来源映射。
+- `retrieved_block_ids` / selected 记录检索/选择，`supporting_block_ids` 记录提交的支持集。legacy 的 `answer_context_block_ids` 可能先于再生成更新；strict 下该字段对应保留成功调用的上下文，另存 `planned_answer_context_block_ids`。使用 `generation_provenance` 与 `support_context_validation` 核对，旧结果缺字段为 unknown；保留 paragraph / title-sentence 来源映射。
 - `retrieval_res.json` 保存 demand/provenance、seed、typed PPR/score parts、connector paths/edges、selected/bridges、verification、iterations、stopping_reason。
 - 支持处理相关字段包括 supporting_evidence/budget、citation_validation、support_controller、answer_extraction、fallback、answer_regeneration；`evidence_chain.json` 保留关联信息。
+- 新输出还保存 verification_trace、generation_provenance、support_context_validation 和 posthoc_supporting_evidence；result 保存 generation/support 摘要和 run_provenance，旧评测字段兼容。
 - verdict 的 missing_types、missing_bridge_types、next_action、next_bridge 与 Pydantic schema / structured prompt 保持一致。
 
-`method_suffix` 规则：从 evibridge 开始，依次追加非 full variant、`_fallback`，再追加 full 对应的 support suffix。无 fallback 时 full + coverage_prune 为 evibridge_support_pruned，full + 非 always completion 为 evibridge_support_controller；组合例为 evibridge_fallback_support_pruned。基础 `config/evibridge.yaml` 当前并非保证输出裸 `evibridge`。推理、评测、分析都使用实际 suffix。
+`method_suffix` 规则：从 evibridge 开始，依次追加非 full variant、`_fallback`，再追加 full 对应的 support suffix；新模式在末尾追加 `_rule_only`、`_strict_context`。无 fallback 时 full + coverage_prune 为 evibridge_support_pruned，full + 非 always completion 为 evibridge_support_controller；组合例为 evibridge_fallback_support_pruned。基础 `config/evibridge.yaml` 当前并非保证输出裸 `evibridge`。推理、评测、分析都使用实际 suffix；旧 closed_loop CLI 不支持新suffix，不直接套用。
 
 ## 数据、预处理与评测协议
 
@@ -134,6 +149,16 @@ BookRAG/GBC 常见产物为 `tree.pkl`、`tree.json`、`graph_data*.json`、`kg_
 
 以下命令在已准备本地数据/模型配置后运行；模板 TODO 必须先填充。单分片显式 1/1。
 
+新模式小样本使用独立开发数据配置、独立 working_dir；先验证输出后再确定实际评测范围，不覆盖会议结果。以下示例中的数据集配置仍需替换成本地开发集配置。
+
+```powershell
+python main.py -c config/evibridge_auditable.yaml -d Scripts/cfg/example-Qasper.yaml --nsplit 1 --num 1 rag
+python -m Scripts.eval.qasper_run_validator --dataset-config Scripts/cfg/example-Qasper.yaml --method evibridge_support_pruned_rule_only_strict_context
+python -m Scripts.eval.qasper_official --dataset-config Scripts/cfg/example-Qasper.yaml --method evibridge_support_pruned_rule_only_strict_context
+```
+
+既有 legacy 路线示例：
+
 ```powershell
 python main.py -c config/evibridge_support_pruned.yaml -d Scripts/cfg/example-Qasper.yaml --nsplit 1 --num 1 index --stage evibridge
 python main.py -c config/evibridge_support_pruned.yaml -d Scripts/cfg/example-Qasper.yaml --nsplit 1 --num 1 rag
@@ -145,7 +170,7 @@ python -m Scripts.eval.qasper_official --dataset-config Scripts/cfg/example-Qasp
 python -m unittest discover -s tests -p 'test_evibridge*.py'
 python -m unittest discover -s tests -p 'test_qasper*.py'
 python -m unittest discover -s tests -p 'test_hotpotqa*.py'
-python -m unittest tests.test_dataset_manifest tests.test_paired_bootstrap tests.test_closed_loop_analysis tests.test_closed_loop_paper
+python -m unittest tests.test_run_provenance tests.test_dataset_manifest tests.test_paired_bootstrap tests.test_closed_loop_analysis tests.test_closed_loop_paper
 ```
 
 baseline 独立运行按各自 README，不使用内部 lightweight 方法冒充官方模型。smoke 可用临时 fake SDK 验证工程链路，不能作为模型质量、真实成本或论文主结果。Windows 使用 PowerShell 路径与后台方式，不直接照搬 bash；后台 Start-Process 使用隐藏窗口。

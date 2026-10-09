@@ -2,7 +2,7 @@
 # 在检索系统选出一批证据之后、将它们发给 LLM 生成最终答案之前，系统需要先做一次“自我反省”：
 # 这批证据真的够回答用户的问题了吗？如果不够，缺了什么？下一步该怎么做（是该顺着表格去扩充，还是顺着语义去寻找实体）？
 # 这个文件就是用来执行这种自我反省逻辑的。它主要分为规则引擎和 LLM 混合验证两个部分
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, Field
 
@@ -219,10 +219,19 @@ class RuleBasedSufficiencyVerifier:
 
 
 class EvidenceSufficiencyVerifier:
-    def __init__(self, llm: Optional[Any] = None, enable_llm: bool = False):
+    def __init__(
+        self,
+        llm: Optional[Any] = None,
+        enable_llm: bool = False,
+        acceptance_mode: Literal["legacy_hybrid", "rule_only"] = "legacy_hybrid",
+    ):
+        if acceptance_mode not in {"legacy_hybrid", "rule_only"}:
+            raise ValueError("Unsupported verifier acceptance mode")
         self.llm = llm
         self.enable_llm = enable_llm
+        self.acceptance_mode = acceptance_mode
         self.rule_verifier = RuleBasedSufficiencyVerifier()
+        self.last_trace: Dict[str, Any] = {}
 
     def verify(
         self,
@@ -231,17 +240,84 @@ class EvidenceSufficiencyVerifier:
         evidence: List[EvidenceBlock],
         bridges: List[EvidenceBridge],
     ) -> SufficiencyVerdict:
-        rule_verdict = self.rule_verifier.verify(query, demand, evidence, bridges)
-        if not self.enable_llm or self.llm is None:
+        self.last_trace = {
+            "schema_version": 1,
+            "acceptance_mode": self.acceptance_mode,
+            "rule_verdict": None,
+            "llm_verdict": None,
+            "final_verdict": None,
+            "decision_source": "rule",
+            "llm_status": "skipped",
+            "llm_call_attempted": False,
+            "skip_reason": None,
+            "error_type": None,
+            "error_stage": None,
+        }
+        try:
+            rule_verdict = self.rule_verifier.verify(query, demand, evidence, bridges)
+        except Exception as error:
+            self.last_trace["skip_reason"] = "rule_error"
+            self.last_trace["error_type"] = type(error).__name__
+            self.last_trace["error_stage"] = "rule"
+            raise
+        self.last_trace["rule_verdict"] = rule_verdict.model_dump(mode="json")
+        self.last_trace["final_verdict"] = rule_verdict.model_dump(mode="json")
+        if not self.enable_llm:
+            self.last_trace["skip_reason"] = "llm_disabled"
             return rule_verdict
-        if rule_verdict.sufficient or set(rule_verdict.missing) & HARD_RULE_MISSING:
+        if self.llm is None:
+            self.last_trace["skip_reason"] = "llm_unavailable"
             return rule_verdict
+        if rule_verdict.sufficient:
+            self.last_trace["skip_reason"] = "rule_sufficient"
+            return rule_verdict
+        if set(rule_verdict.missing) & HARD_RULE_MISSING:
+            self.last_trace["skip_reason"] = "hard_rule_missing"
+            return rule_verdict
+        error_stage = "prompt"
         try:
             prompt = self._prompt(query, demand, evidence, rule_verdict)
+            error_stage = "llm"
+            self.last_trace["llm_call_attempted"] = True
             llm_verdict = self.llm.get_json_completion(prompt, SufficiencyVerdict)
-            return self._sanitize_llm_verdict(llm_verdict, rule_verdict)
-        except Exception:
+            error_stage = "sanitize"
+            self.last_trace["llm_verdict"] = llm_verdict.model_dump(mode="json")
+            if self.acceptance_mode == "rule_only":
+                final_verdict = self._sanitize_rule_only_diagnostics(llm_verdict, rule_verdict)
+            else:
+                final_verdict = self._sanitize_llm_verdict(llm_verdict, rule_verdict)
+                self.last_trace["decision_source"] = "legacy_hybrid"
+            self.last_trace["llm_status"] = "success"
+            self.last_trace["final_verdict"] = final_verdict.model_dump(mode="json")
+            return final_verdict
+        except Exception as error:
+            self.last_trace["llm_status"] = "error"
+            self.last_trace["error_type"] = type(error).__name__
+            self.last_trace["error_stage"] = error_stage
+            self.last_trace["decision_source"] = "rule"
             return rule_verdict
+
+    @staticmethod
+    def _sanitize_rule_only_diagnostics(
+        llm_verdict: SufficiencyVerdict,
+        rule_verdict: SufficiencyVerdict,
+    ) -> SufficiencyVerdict:
+        # Disable the LLM accept path before sanitizing so empty diagnoses retain
+        # the rule's missing evidence and a non-accept repair action.
+        diagnostic_verdict = EvidenceSufficiencyVerifier._sanitize_llm_verdict(
+            llm_verdict.model_copy(update={"sufficient": False}), rule_verdict
+        )
+        return diagnostic_verdict.model_copy(
+            update={
+                "sufficient": rule_verdict.sufficient,
+                "relevance": rule_verdict.relevance,
+                "connectivity": rule_verdict.connectivity,
+                "coverage": rule_verdict.coverage,
+                "specificity": rule_verdict.specificity,
+                "noise": rule_verdict.noise,
+                "noise_warning": rule_verdict.noise_warning,
+            }
+        )
 
     @staticmethod
     def _sanitize_llm_verdict(

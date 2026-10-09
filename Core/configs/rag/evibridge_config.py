@@ -58,6 +58,7 @@ class EviBridgeRAGConfig(BaseRAGStrategyConfig):
     trust_answer_supporting_ids: bool = True
     support_completion_policy: Literal["always", "weak_only", "none"] = "always"
     support_selection_policy: Literal["fill_budget", "coverage_prune"] = "fill_budget"
+    support_context_policy: Literal["legacy", "strict"] = "legacy"
     support_min_normalized_relevance: float = Field(default=0.5, ge=0.0, le=1.0)
     support_redundancy_overlap_threshold: float = Field(
         default=0.75, ge=0.0, le=1.0
@@ -82,6 +83,7 @@ class EviBridgeRAGConfig(BaseRAGStrategyConfig):
     max_context_tokens: int = 4000
     max_iterations: int = 2
     enable_llm_verifier: bool = True
+    verifier_acceptance_mode: Literal["legacy_hybrid", "rule_only"] = "legacy_hybrid"
     enable_short_answer_extraction: bool = False
     enable_long_context_fallback: bool = False
     fallback_max_context_blocks: int = 30
@@ -113,4 +115,8 @@ class EviBridgeRAGConfig(BaseRAGStrategyConfig):
             and self.ablation_variant == "full"
         ):
             suffix = f"{suffix}_support_controller"
+        if self.verifier_acceptance_mode == "rule_only":
+            suffix = f"{suffix}_rule_only"
+        if self.support_context_policy == "strict":
+            suffix = f"{suffix}_strict_context"
         return suffix

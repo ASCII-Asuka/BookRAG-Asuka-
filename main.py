@@ -19,20 +19,14 @@ from Core.construct_index import (
 )
 from Core.inference import inference
 from Core.provider.TokenTracker import TokenTracker
+from Core.utils.run_provenance import file_fingerprint, safe_runtime_config
 
 log = logging.getLogger(__name__)  # Get logger for main
 
 
 def redact_secrets(obj):
-    """Return a copy of nested config data with secret values masked."""
-    if isinstance(obj, dict):
-        return {
-            key: "***REDACTED***" if "api_key" in key.lower() else redact_secrets(value)
-            for key, value in obj.items()
-        }
-    if isinstance(obj, list):
-        return [redact_secrets(item) for item in obj]
-    return obj
+    """Retain the compatibility helper with nested safe runtime redaction."""
+    return safe_runtime_config(obj)
 
 
 def create_args():
@@ -185,12 +179,13 @@ def build_index(config: SystemConfig, stage: str = "all", data_df: pd.DataFrame 
         rebuild_graph_vdb(config)
 
 
-def run_inference(config: SystemConfig, data_df: pd.DataFrame, dataset_name: str):
+def run_inference(config: SystemConfig, data_df: pd.DataFrame, dataset_name: str, run_metadata: dict = None):
     log.info(f"  - run_inference called. Using index from '{config.save_path}'")
     inference(
         cfg=config,
         data_df=data_df,
         dataset_name=dataset_name,
+        run_metadata=run_metadata,
     )
 
 
@@ -317,6 +312,10 @@ def main():
             log.error(f" ERROR: Failed to parse JSON file. Reason: {e}")
             return
 
+        source_dataset_sha256 = file_fingerprint(dataset_cfg.dataset_path)["sha256"]
+        input_manifest_path = getattr(dataset_cfg, "manifest_path", None)
+        input_manifest_sha256 = file_fingerprint(input_manifest_path)["sha256"] if input_manifest_path else None
+
         # 2. Group by document identifiers to find unique documents
         document_groups = df.groupby(["doc_uuid", "doc_path"])
         print(f"  - Found {len(document_groups)} unique documents in the dataset.")
@@ -393,6 +392,8 @@ def main():
                     index_error_list.append((doc_uuid, str(e)))
 
             elif args.command == "rag":
+                # Keep the mutable document-root snapshot for compatibility.
+                # Invocation identity is stored exclusively under eval/.runs/.
                 # For RAG, create a strategy-specific config name
                 # We assume the path to the strategy is like: cfg.rag.strategy_config.strategy
                 rag_strategy = current_config.rag.strategy_config.strategy
@@ -410,6 +411,12 @@ def main():
                         config=current_config,
                         data_df=data_df,
                         dataset_name=dataset_name,
+                        run_metadata={
+                            "command": "rag", "doc_uuid": str(doc_uuid),
+                            "nsplit": args.nsplit, "num": args.num,
+                            "source_dataset_sha256": source_dataset_sha256,
+                            "input_manifest_sha256": input_manifest_sha256,
+                        },
                     )
                 except Exception as e:
                     log.error(f"  - ERROR: Failed to run inference. Reason: {e}")

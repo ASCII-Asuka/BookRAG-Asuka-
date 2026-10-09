@@ -8,7 +8,7 @@
 
 **Tech Stack:** Python、Pydantic、现有 EviBridge/DocumentTree、Qasper/HotpotQA evaluator、unittest、逐题 JSON/JSONL、paired/cluster bootstrap、静态科研图表、JIIS LaTeX。
 
-**核对日期：** 2026-10-09，Asia/Shanghai。**现有依据：** 仓库当前代码、根目录 10 页 CoSE-RAG PDF（用户确认为 BigData2026 投稿版）及下文链接的一手资料。本轮没有复跑真实模型、审核全部 runs 数值或执行期刊投稿。
+**核对日期：** 2026-10-09，Asia/Shanghai。**现有依据：** 仓库当前代码、根目录 10 页 CoSE-RAG PDF（用户确认为 BigData2026 投稿版）及下文链接的一手资料。本轮没有复跑真实模型或执行期刊投稿；已补做两套主方法结果的一致性离线审计（第2.1节），未审核全部 baseline/消融或复算官方质量分数。
 
 ---
 
@@ -30,12 +30,12 @@
 
 | 优先级 | 风险 | 已见依据 | 首要动作 |
 |---|---|---|---|
-| P0 | 方法—代码—实验版本不一致 | p5 写 y=y_rule、LLM不改变接受条件；当前 verifier 在 soft missing 下允许 LLM sufficient=true | 追溯 commit/config/log，再判断是文稿描述问题、后续改动还是需重跑 |
+| P0 | 方法—代码—实验版本不一致 | p5 写 y=y_rule、LLM不改变接受条件；当前 verifier 在 soft missing 下允许 LLM sufficient=true | 专项审计未发现主结果接受覆盖；修复代码对约束的保障并固定运行来源，勿据潜在路径宣称旧结果受影响 |
 | P0 | 充分性未被独立验证 | relevance/coverage/noise 为词面或类型代理；没有充分性误接受/误拒绝、校准结果 | 建立独立充分性标注与反事实诊断 |
 | P0 | 与近期方法重叠 | structured gaps、graph expansion、stateful evidence、stopping 已有直接相关工作 | 写贡献对照表，加入最接近 baseline |
 | P0 | 调参与评测分离不清 | p6 宣称配置预先固定；敏感性却在报告用 validation 上展示，未交代独立开发集 | 固定开发/最终评测 split，追溯搜索记录；不能据此直接指控泄漏 |
 | P1 | verifier 消融混入计算量作用 | w/o verifier 强制一轮，full最多两轮 | 固定第二轮、随机扩展、定向扩展的等预算比较 |
-| P1 | 支持证据后处理与生成证据混淆 | support_pruned 配置不因支持扩展再生成；ID合法不等于蕴含 | 分报 retrieval/context/support；审计证据是否实际可见 |
+| P1 | 支持证据后处理与生成证据混淆 | 当前 support_pruned 可在支持扩展后不再生成；本地主结果未发现上下文外support；ID合法不等于蕴含 | 分报 retrieval/context/support；审计证据是否实际可见 |
 | P1 | 数据范围不足以支撑广义复杂文档能力 | Qasper结构化281篇1005题；Hotpot distractor固定1000题；无本稿真实PDF/视觉实验 | 加入一个真实长PDF任务及解析误差分析 |
 | P1 | 证据噪声和联合质量存在取舍 | Table I：Hotpot SP Precision 61.12 vs HippoRAG2 83.88，Joint F1 49.88 vs 50.23 | 正面分析precision/recall trade-off，优化证据质量而非只扩召回 |
 | P1 | 统计与成本证据不足 | 无CI/重复运行；成本未细分硬件、阶段和离线构建 | 配对/文档聚类统计，完整成本与失败率 |
@@ -44,6 +44,47 @@
 具体提醒：规则 `_connectivity` 是“具有至少一条内部边的节点占比”。a-b 与 c-d 两个独立分量可得 1，不能用它证明全集连通。`_coverage` 检查 modality/scope 类型，不检查问题所需事实是否齐全。稿件 p8 Hotpot 人名案例诊断缺 table/caption，也应回查需求解析和日志，不能只展示修复成功。
 
 投稿版已有七项组件消融、效率、四参数敏感性、两个轨迹案例。新增贡献不应再次登记为“首次补消融/效率/案例”。现有 Qasper Answer F1 相对 LongRAG 的增益为 1.63 个百分点，需统计与稳定性证据；Hotpot Joint F1 未领先，不能概括成所有指标最佳。
+
+### 2.1 两项一致性专项审计（2026-10-09 已执行）
+
+用户确认 BigData 投稿实验基于最新代码。审计保留该确认，并将“当前代码允许的行为”和“本地已保存结果中的行为”分开记录。审计代码基准为 `4c0d4d0fb5df49543d2c95345ba109f9e7741834`，生产代码、原稿与旧实验文件未改，未调用真实模型。
+
+| 检查 | Qasper 主结果 | HotpotQA 主结果 |
+|---|---:|---:|
+| 题目 / 原文档或题内语料 | 1005 / 281 | 1000 / 1000 |
+| 已复算检索轮次 | 1057 | 1004 |
+| 规则拒绝、保存判定接受 | 0 | 0 |
+| 五项数值指标不同于规则复算 | 0 | 0 |
+| 最终支持块总次数 | 1811 | 2735 |
+| 支持块位于重建生成上下文外 | 0 | 0 |
+| result 与 retrieval 支持ID不一致 | 0 | 0 |
+| 题ID缺失 / 重复、来源块缺失、选中块文本不符 | 0 | 0 |
+
+**检查1：主实验未发现 LLM 改变接受判定，但当前代码并不保证稿件的约束。** 复算直接使用当前 tokenizer、schema 和 `RuleBasedSufficiencyVerifier`，逐轮使用保存的 demand、selected IDs 和源索引；规则只计 selected 内部边，使用同一索引全部边不会改变其计算。Qasper 38轮、Hotpot 3轮是可进入 LLM 分支的 soft rejection，均未转为接受。Qasper 8轮的 `missing_types` 从空列表变为 `["noise"]`，其余字段相同；不能概括成所有 verdict 字段完全一致，也不能从结果相同推断没有调用 LLM。历史日志缺 rule/LLM/raw/source/异常的独立记录，实际调用总量为 unknown。
+
+当前 sanitizer 可以接受最简 `{"sufficient":true}`，不复验阈值；本地 mock 28个场景全部通过，其中7个人工反例出现 false→true。它们是代码反例，**不是投稿主实验的发生次数**。JIIS实现应显式区分规则接受模式与新判定模式，保留三个 verdict，按诊断集验证新模式。
+
+**检查2：主实验的最终支持集都在重建的生成上下文中。** 每题以 `evidence_chain.json.evidence_chain` 重建初始 prompt 的证据块，交叉核对末轮 selected、顶层 selected、源索引文本及 result 中的最终 support。两套结果都无 fallback；Qasper全部明确 `answer_regeneration.used=false`。Hotpot全部缺 `answer_context_block_ids`、`answer_regeneration`、`support_controller`，因此不能直接声称新版再生成机制运行过。核心 verifier、tokenizer、demand/schema 及 legacy support 函数与7月31日相应源码相同，旧链路仍可核对。没有原始请求快照，此处是代码与日志重建的包含性结论，不是独立服务请求认证，也不是答案—证据语义蕴含结论。
+
+当前代码仍存在 coverage_prune 扩展 support 却硬置 `regeneration_required=false`、再生成失败后保留计划 context/support、预算截断后无合法引用时沿用旧 support、fallback 保存上下文并集等路径。15个 fake-model 场景、21条断言已复现，实际传给 mock 的 prompt 可核对。上述异常路径在这两套主实验中没有被观察到；不能据此要求全部旧结果重跑。
+
+**来源记录的具体限制。** Hotpot首/中/末样本生成时间为2026-07-31；三个新增保存字段由8月1日的 `ddb787c2e` 加入。这与“运行时采用当时最新版”相容，但不构成已重新序列化为当前版本的证明。Qasper主样本8月3日运行日志是 full/weak_only/coverage_prune/regen=false，其文档根 `rag_config_evibridge.yaml` 后被8月5日 static_topk消融覆写。`main.py`按策略名而非方法后缀保存配置；`Core/inference.py`可复用既有 result；不能用新配置文件日期倒推所有逐题结果重跑。
+
+审计汇总与源码/稿件 hash保存在 [2026-10-09-consistency-audit.json](../../research/jiis/2026-10-09-consistency-audit.json)。忽略目录 `runs/jiis_audit_temp/root/` 保存逐题JSONL、7296项产物hash清单及只读脚本；两个独立mock子目录保存复现输入与调用。大索引、逐题文本、原始配置和临时工具不提交。
+
+**下一步优先级调整：** 先补不可覆写的运行快照和实际成功生成阶段记录，明确代码应保持的两个约束；随后执行Task2的独立语义充分性pilot，量化“规则判充分但缺关键事实”的比例。此次0接受覆盖/0上下文外support的结果降低了这两项对既存主实验的担忧，却尚未证明充分性代理正确。暂不因这两条未触发路径复跑全量模型；只有语义/评分审计或最小修复确实改变运行输出时，才确定重跑范围。
+
+### 2.2 可审计执行的工程准备（2026-10-09）
+
+已按[单独实施计划](2026-10-09-cose-auditable-execution.md)增加显式模式，保留既有配置的默认行为和历史结果。`rule_only`固定规则接受、五项数值指标与noise_warning，LLM仅可修订诊断；`strict`按initial/fallback/regeneration中实际保留的成功客户端调用约束最终支持集。未参与生成的外部补充记录为posthoc；再生成失败保留draft实际上下文。新配置为 `config/evibridge_auditable.yaml`，suffix为 `evibridge_support_pruned_rule_only_strict_context`；它不是已经追溯确认的会议复现模式，也不是待验证的语义充分性期刊策略。
+
+每轮rule/LLM/final轨迹、prompt/response hash、块ID/文本hash已接入。每次`run_rag`在实际输出目录建立独立`.runs/<UUID>/manifest.json`、逐题events及结束summary；新result链接该来源与输入指纹，复用缓存不回填今天的来源，旧来源缺失明确unknown。缓存输入明确错配时记录失败并停止，历史输入缺失记partial/unknown。实际配置/源码/输入/常见索引文件和配置指定VDB以指纹关联，私密配置脱敏，索引覆盖保守标partial/unknown。客户端调用记录不能认证服务端接收/内部截断，支持集包含关系不能证明答案蕴含；旧结果无请求记录仍为unknown。该改动没有补齐会议版全量模型版本、完整环境锁或所有baseline来源。
+
+工程验证已通过EviBridge的121项回归和来源记录的28项新测试；Qasper相关47项通过，Hotpot相关20项中19项通过，固定采样parquet测试因本地缺PyArrow报错，未据此修改无关测试。合成小数据集成smoke确认result/retrieval/evidence_chain轨迹一致、外部支持分列、第二次缓存复用不调用模型且旧字节不变、错配停止、初始生成失败能落失败轨迹。独立spec与最终代码质量review通过；7301项历史文件hash一致。上述验证不含真实模型质量/成本测量，不产生新论文主表数字，完整边界见[验证记录](../../research/jiis/2026-10-09-auditable-execution-verification.md)。
+
+独立诊断的下一项交付是[充分性标注规范](../../research/jiis/sufficiency_annotation.md)及开发/确认评测的分组清单。规范草案和空模板仅完成准备；120个开发源题、真实人工标注、pilot与确认评测尚未执行。优先用独立开发源题小规模预试规范，再冻结版本；不将已看validation包装为新holdout，也不因工程测试通过就增加期刊算法主张。
+
+用户随后确认Qasper train、HotpotQA train均未用于调参/配置选择/候选结果查看。[本地开发数据核查](../../research/jiis/development_data_status.md)显示Qasper train有2593题、与历史主结果题ID/文档ID交集为0，支持下一步按文档准备开发协议；现存Hotpot ReAct简化train缺ID/context/supporting_facts，须补完整train。该清单未冻结split，未生产实际检索状态或人工标签。
 
 ## 3. 一手文献与借鉴方式
 
@@ -123,7 +164,7 @@ Qasper配对bootstrap按文档cluster重采样，保留文档内全部问题及�
 
 ## 6. 可执行任务与验收条件
 
-所有新文件名均为拟新增路径，不代表目前存在。代码任务展开为单独spec和实现计划后执行；下面先规定接口、测试行为和研究验收，避免在尚未确认假设时写死整套算法。
+下文标注“拟新建”的文件仍是后续路径；已完成的审计与工程准备见第2.1/2.2节和单独实施计划。代码任务展开为单独spec和实现计划后执行；下面先规定接口、测试行为和研究验收，避免在尚未确认假设时写死整套算法。
 
 ### Task 0：冻结会议版，审计描述一致性（P0，第1周）
 
@@ -131,8 +172,10 @@ Qasper配对bootstrap按文档cluster重采样，保留文档内全部问题及�
 
 - [ ] 记录稿件PDF SHA256、当时commit（或明确不可追溯）、config hash、dataset/index hash、模型checkpoint、执行命令和逐题覆盖。
 - [ ] 把论文公式/符号映射到实际函数：Rel/Cov/Noise/H、typed weights、score normalization、selector权重、Rmax、support completion/regeneration。
-- [ ] 回查LLM接受覆盖是否实际发生；区分“当前代码差异”与“会议实验版本”。保留原结果，新增审计记录。
-- [ ] 分别检查retrieved/context/support，列出support位于真实生成context外、未再生成、引用无效或重复来源的比例。现有answer_context_block_ids可能在再生成前更新，不能仅用它证明模型实际见到；结合answer_regeneration.used、已保存prompt和调用日志，无法核实时标unknown。后续追加真实generation_prompt_block_ids和prompt hash，保留draft与regeneration的独立来源记录。
+- [x] 回查两套主方法结果的LLM接受覆盖：2061轮未发现覆盖；记录潜在代码反例、8轮诊断标签差异与来源限制，见第2.1节。baseline/消融不纳入本次完成范围。
+- [x] 两套主方法结果的context/support离线包含性与来源一致性审计：4546个支持块均在重建context中，result/retrieval一致，无未知来源或题ID重复。结论限于日志重建，见第2.1节。
+- [x] 为后续新运行增加客户端成功/失败调用、generation_provenance.prompt_block_ids和prompt hash、initial/fallback/regeneration来源及不可覆写manifest；strict区分实际与planned context，缓存来源不回填，见第2.2节。
+- [ ] 完成真实新运行的引用合法性与来源单位重复独立审计；不能仅用旧answer_context_block_ids证明模型见到；历史缺失请求仍为unknown，新增代码不补造历史。
 - [ ] 回查Hotpot人名案例的table/caption诊断；核对原query、demand、verdict、动作与新增证据，不按成功结果倒推诊断正确。
 - [ ] 为审计模块覆盖三种行为：未知版本明确返回unknown；缺题/重复qid直接失败；support-context差异被记录且不静默修补。
 
@@ -154,6 +197,8 @@ Qasper配对bootstrap按文档cluster重采样，保留文档内全部问题及�
 
 **Files:** 拟新建 `Scripts/analysis/jiis_sufficiency_states.py`、`Scripts/eval/jiis_sufficiency_eval.py`、`tests/test_jiis_sufficiency_eval.py`；标注规范存 `docs/research/jiis/sufficiency_annotation.md`；实际文本/标注存runs或获授权的数据发布位置。
 
+- [x] 准备v0.1标注规范与空JSON模板，明确盲审、语义标签、源题分组、反事实核验和undetermined；不代表规范已冻结或有人类标签。
+- [ ] 用独立开发来源的10–20个源题预试规范，保留分歧及修订记录，冻结v1后再正式标注。
 - [ ] 从开发数据选120个源问题（Qasper/Hotpot各60），按类型、跨度、当前accept/reject和回答对错分层；全量统计权重与分层样本结果分开。
 - [ ] 每个源问题生成原始状态、关键原子证据替换、缺中间事实、词面相近干扰、冲突/无答案测试，共最多600个状态；缺适用条件记录原因。
 - [ ] 删除证据时用长度相近干扰替换，控制上下文块数/token；变体的语义不足必须人工确认，不能仅凭删除gold ID贴标签。
@@ -170,13 +215,14 @@ Qasper配对bootstrap按文档cluster重采样，保留文档内全部问题及�
 候选接口：保留旧 `SufficiencyVerdict` 字段，追加version、decision_source、semantic_gap_signals、calibration_id、remaining_budget、stop_reason。gap至少包含自然语言需求、已见原子证据ID、缺失关系/事实、允许桥类型；不得含gold答案。
 
 - [ ] 先把规则代理与语义支持信号分开输出；对claim/facet/hop级信号保留来源ID和undetermined，不把LLM自报confidence视为已校准概率。
-- [ ] 明确两种verifier模式：paper-described-rule-only按稿件描述固定规则接受；journal-candidate按冻结策略接受。只有Task0追溯历史快照后才命名conference-reproduction，不能先验假定当前规则模式就是投稿实验。旧接口和method suffix保持兼容。
+- [x] 增加`legacy_hybrid`与`rule_only`显式接受模式，固定规则接受与独立诊断轨迹；旧接口和suffix兼容，新模式suffix隔离。只有Task0追溯历史快照后才命名conference-reproduction，不能先验假定规则模式就是投稿实验。
+- [ ] 根据Task2证据确定journal-candidate的最小语义策略和冻结规则；现有rule_only不代替校准或语义判定。
 - [ ] 用calibration集合选阈值/分数映射，目标操作点例如误接受风险5%；在确认评测上报告实际值与区间。该目标不是保证，不满足时诚实报告。
 - [ ] 将缺口映射到context/semantic/hierarchy候选动作；按缺口收益、来源关系可靠性、增量真实成本排序，限制搜索次数、候选及上下文预算。
 - [ ] 停止状态区分sufficient、budget_exhausted、no_progress、insufficient/abstain；标准QA主表仍报告全部问题，选择性回答单独报告coverage，不能丢弃拒答题后再称全量F1提升。
 - [ ] 对routing桥与事实支持关系分开评估；不要求每个context/hierarchy邻接边都构成语义蕴含。
 - [ ] 测试：两个独立边对不会被新连通诊断称全集连通；代理覆盖高但缺关键hop不能直接通过语义判定；非法来源ID被拒；所有动作受预算约束；hard失败/LLM异常可审计回退。
-- [ ] 测试支持集增补：实际用于主张的支持证据须在记录的生成上下文内；如需补外部证据，触发可审计再生成/验证或明确标为post-hoc audit，不伪造context包含关系。
+- [x] 测试strict支持集增补：提交支持证据在保留成功生成上下文内；外部证据触发可审计再生成或存posthoc，覆盖失败保留draft、预算裁剪、fallback和无效引用。legacy仅追加诊断，不改变旧支持行为；仍需独立验证语义支持。
 
 **验收：** 新主张精确对应实现和测试。只保留pilot证明有用的模块；若新策略不优于简单阈值/固定扩展，记录负结果，缩减期刊主张。
 
